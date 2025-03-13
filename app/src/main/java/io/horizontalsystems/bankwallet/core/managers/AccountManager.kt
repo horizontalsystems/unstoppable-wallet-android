@@ -17,13 +17,14 @@ import kotlinx.coroutines.launch
 
 class AccountManager(
     private val storage: IAccountsStorage,
-    private val accountCleaner: IAccountCleaner
+    private val accountCleaner: IAccountCleaner,
 ) : IAccountManager {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
-    private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
+    private val _activeAccountStateFlow =
+        MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
     private var currentLevel = Int.MAX_VALUE
 
     override val activeAccountStateFlow = _activeAccountStateFlow
@@ -62,9 +63,7 @@ class AccountManager(
         }
     }
 
-    override fun account(id: String): Account? {
-        return accounts.find { account -> account.id == id }
-    }
+    override fun account(id: String): Account? = accounts.find { account -> account.id == id }
 
     override fun onHandledBackupRequiredNewAccount() {
         _newAccountBackupRequiredFlow.update { null }
@@ -104,7 +103,10 @@ class AccountManager(
         }
     }
 
-    override fun updateAccountLevels(accountIds: List<String>, level: Int) {
+    override fun updateAccountLevels(
+        accountIds: List<String>,
+        level: Int,
+    ) {
         storage.updateLevels(accountIds, level)
     }
 
@@ -169,12 +171,14 @@ class AccountManager(
             storage.clearDeleted()
         }
     }
-
 }
 
 class NoActiveAccount : Exception()
 
-sealed class ActiveAccountState() {
-    class ActiveAccount(val account: Account?) : ActiveAccountState()
+sealed class ActiveAccountState {
+    class ActiveAccount(
+        val account: Account?,
+    ) : ActiveAccountState()
+
     object NotLoaded : ActiveAccountState()
 }

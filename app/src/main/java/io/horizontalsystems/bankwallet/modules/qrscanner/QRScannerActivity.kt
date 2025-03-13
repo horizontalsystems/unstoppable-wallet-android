@@ -66,7 +66,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
 class QRScannerActivity : BaseActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -75,16 +74,19 @@ class QRScannerActivity : BaseActivity() {
                 showPasteButton = intent.getBooleanExtra(SHOW_PASTE_BUTTON, false),
                 onScan = { onScan(it) },
                 onCloseClick = { finish() },
-                onCameraPermissionSettingsClick = { openCameraPermissionSettings() }
+                onCameraPermissionSettingsClick = { openCameraPermissionSettings() },
             )
         }
     }
 
     private fun onScan(address: String?) {
-        setResult(RESULT_OK, Intent().apply {
-            putExtra(ModuleField.SCAN_ADDRESS, address)
-        })
-        //slow down fast transition to new window
+        setResult(
+            RESULT_OK,
+            Intent().apply {
+                putExtra(ModuleField.SCAN_ADDRESS, address)
+            },
+        )
+        // slow down fast transition to new window
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
         }, 1000)
@@ -100,7 +102,10 @@ class QRScannerActivity : BaseActivity() {
     companion object {
         private const val SHOW_PASTE_BUTTON = "show_paste_button_key"
 
-        fun getScanQrIntent(context: Context, showPasteButton: Boolean = false): Intent {
+        fun getScanQrIntent(
+            context: Context,
+            showPasteButton: Boolean = false,
+        ): Intent {
             val options = ScanOptions()
             options.captureActivity = QRScannerActivity::class.java
             options.setOrientationLocked(true)
@@ -113,7 +118,6 @@ class QRScannerActivity : BaseActivity() {
             return intent
         }
     }
-
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -122,7 +126,7 @@ private fun QRScannerScreen(
     showPasteButton: Boolean,
     onScan: (String) -> Unit,
     onCloseClick: () -> Unit,
-    onCameraPermissionSettingsClick: () -> Unit
+    onCameraPermissionSettingsClick: () -> Unit,
 ) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var showPermissionNeededDialog by remember { mutableStateOf(cameraPermissionState.status != PermissionStatus.Granted) }
@@ -135,7 +139,7 @@ private fun QRScannerScreen(
             },
             onCancelClick = {
                 showPermissionNeededDialog = false
-            }
+            },
         )
     }
 
@@ -144,7 +148,7 @@ private fun QRScannerScreen(
             Modifier
                 .fillMaxSize()
                 .background(color = ComposeAppTheme.colors.tyler),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             if (cameraPermissionState.status == PermissionStatus.Granted) {
                 ScannerView(onScan)
@@ -152,23 +156,24 @@ private fun QRScannerScreen(
                 Spacer(
                     Modifier
                         .fillMaxSize()
-                        .background(color = ComposeAppTheme.colors.dark)
+                        .background(color = ComposeAppTheme.colors.dark),
                 )
                 GoToSettingsBox(onCameraPermissionSettingsClick)
             }
 
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .padding(horizontal = 24.dp)
+                        .align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(Modifier.height(24.dp))
                 if (showPasteButton) {
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Send_Button_Paste),
-                        onClick = { onScan(TextHelper.getCopiedText()) }
+                        onClick = { onScan(TextHelper.getCopiedText()) },
                     )
                     Spacer(Modifier.height(16.dp))
                 }
@@ -179,16 +184,17 @@ private fun QRScannerScreen(
                             text = stringResource(R.string.Button_Cancel),
                             maxLines = 1,
                             color = Dark,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                     },
-                    buttonColors = ButtonPrimaryDefaults.textButtonColors(
-                        backgroundColor = SteelLight,
-                        contentColor = ComposeAppTheme.colors.dark,
-                        disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-                        disabledContentColor = ComposeAppTheme.colors.grey50,
-                    ),
-                    onClick = onCloseClick
+                    buttonColors =
+                        ButtonPrimaryDefaults.textButtonColors(
+                            backgroundColor = SteelLight,
+                            contentColor = ComposeAppTheme.colors.dark,
+                            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                            disabledContentColor = ComposeAppTheme.colors.grey50,
+                        ),
+                    onClick = onCloseClick,
                 )
                 Spacer(Modifier.height(48.dp))
             }
@@ -199,17 +205,18 @@ private fun QRScannerScreen(
 @Composable
 private fun ScannerView(onScan: (String) -> Unit) {
     val context = LocalContext.current
-    val barcodeView = remember {
-        CompoundBarcodeView(context).apply {
-            this.initializeFromIntent((context as Activity).intent)
-            this.setStatusText("")
-            this.decodeSingle { result ->
-                result.text?.let { barCodeOrQr ->
-                    onScan.invoke(barCodeOrQr)
+    val barcodeView =
+        remember {
+            CompoundBarcodeView(context).apply {
+                this.initializeFromIntent((context as Activity).intent)
+                this.setStatusText("")
+                this.decodeSingle { result ->
+                    result.text?.let { barCodeOrQr ->
+                        onScan.invoke(barCodeOrQr)
+                    }
                 }
             }
         }
-    }
     AndroidView(factory = { barcodeView })
     LifecycleResumeEffect(Unit) {
         barcodeView.resume()
@@ -223,17 +230,17 @@ private fun ScannerView(onScan: (String) -> Unit) {
 @Composable
 private fun GoToSettingsBox(onCameraPermissionSettingsClick: () -> Unit) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         subhead2_grey(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 40.dp),
-            text = stringResource(R.string.ScanQr_CameraPermissionDeniedText)
+            text = stringResource(R.string.ScanQr_CameraPermissionDeniedText),
         )
         Spacer(Modifier.height(24.dp))
         TextPrimaryButton(
             onClick = onCameraPermissionSettingsClick,
-            title = stringResource(R.string.ScanQr_GoToSettings)
+            title = stringResource(R.string.ScanQr_GoToSettings),
         )
     }
 }
@@ -241,7 +248,7 @@ private fun GoToSettingsBox(onCameraPermissionSettingsClick: () -> Unit) {
 @Composable
 private fun TextPrimaryButton(
     title: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -253,13 +260,12 @@ private fun TextPrimaryButton(
             Modifier
                 .defaultMinSize(
                     minWidth = ButtonPrimaryDefaults.MinWidth,
-                    minHeight = ButtonPrimaryDefaults.MinHeight
-                )
-                .padding(ButtonPrimaryDefaults.ContentPadding)
+                    minHeight = ButtonPrimaryDefaults.MinHeight,
+                ).padding(ButtonPrimaryDefaults.ContentPadding)
                 .clickable(
                     onClick = onClick,
                     interactionSource = interactionSource,
-                    indication = null
+                    indication = null,
                 ),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -268,9 +274,9 @@ private fun TextPrimaryButton(
                     text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = ComposeAppTheme.typography.headline2
+                    style = ComposeAppTheme.typography.headline2,
                 )
-            }
+            },
         )
     }
 }
@@ -283,10 +289,11 @@ private fun PermissionNeededDialog(
     ComposeAppTheme {
         Dialog(onDismissRequest = onCancelClick) {
             Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(color = ComposeAppTheme.colors.lawrence)
-                    .padding(horizontal = 24.dp, vertical = 20.dp)
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(color = ComposeAppTheme.colors.lawrence)
+                        .padding(horizontal = 24.dp, vertical = 20.dp),
             ) {
                 title3_leah(text = stringResource(R.string.ScanQr_CameraPermission_Title))
                 Spacer(Modifier.height(12.dp))
@@ -294,16 +301,16 @@ private fun PermissionNeededDialog(
                 Spacer(Modifier.height(32.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.End,
                 ) {
                     ButtonPrimaryTransparent(
                         onClick = onCancelClick,
-                        title = stringResource(R.string.Button_Cancel)
+                        title = stringResource(R.string.Button_Cancel),
                     )
                     Spacer(Modifier.width(8.dp))
                     ButtonPrimaryYellow(
                         onClick = onOkClick,
-                        title = stringResource(R.string.Button_Ok)
+                        title = stringResource(R.string.Button_Ok),
                     )
                 }
             }

@@ -10,6 +10,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
@@ -22,7 +23,7 @@ android {
         versionCode 128
         versionName "0.42.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resConfigs "de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh"
+        resourceConfigurations += ['de', 'es', 'en', 'fa', 'fr', 'ko', 'pt', 'pt-rBR', 'ru', 'tr', 'zh']
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas".toString())
@@ -48,7 +49,7 @@ android {
         buildConfigField "boolean", "FDROID_BUILD", "false"
 
         ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
 
@@ -185,7 +186,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.12'
+        kotlinCompilerExtensionVersion '1.5.15'
     }
     namespace 'io.horizontalsystems.bankwallet'
     lint {
@@ -256,7 +257,7 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 
     implementation "com.google.android.material:material:$material_version"
 
@@ -270,7 +271,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.code.gson:gson:2.12.1'
     implementation "androidx.biometric:biometric:$biometric_version"
 
     implementation 'com.atlassian.commonmark:commonmark:0.17.0'
@@ -313,7 +314,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:bdd7602'
     // Zcash SDK
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation "cash.z.ecc.android:zcash-android-sdk:2.2.6"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
@@ -332,8 +333,8 @@ dependencies {
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.1'
 
     // UI modules
 
@@ -350,7 +351,7 @@ dependencies {
     ciImplementation project(':subscriptions-dev')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.10.0-rc01'
+    implementation 'androidx.activity:activity-compose:1.10.1'
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
@@ -368,7 +369,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation "androidx.compose.material3:material3:1.3.1"
 
-    def coil_version = "2.6.0"
+    def coil_version = "2.7.0"
     implementation "io.coil-kt:coil-compose:$coil_version"
     implementation "io.coil-kt:coil-svg:$coil_version"
     implementation("io.coil-kt:coil-gif:$coil_version")
@@ -381,13 +382,13 @@ dependencies {
     // UI Tests
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     // optional - Test helpers for LiveData
     testImplementation "junit:junit:$junit_version"
     testImplementation "androidx.arch.core:core-testing:2.2.0"
-    testImplementation "org.mockito:mockito-core:3.3.3"
+    testImplementation "org.mockito:mockito-core:5.16.0"
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.7'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.7'

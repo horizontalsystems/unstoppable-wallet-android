@@ -7,12 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ActionsRow(
-    content: @Composable () -> Unit,
-) {
+fun ActionsRow(content: @Composable () -> Unit) {
     Row(
         modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.End,
     ) {
         content()
     }

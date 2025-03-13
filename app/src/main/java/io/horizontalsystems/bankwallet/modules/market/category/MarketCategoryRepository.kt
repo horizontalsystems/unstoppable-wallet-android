@@ -19,13 +19,19 @@ class MarketCategoryRepository(
     private val cacheValidPeriodInMillis = 5_000 // 5 seconds
 
     @Synchronized
-    private fun getMarketItems(coinCategoryUid: String, forceRefresh: Boolean, baseCurrency: Currency): List<MarketItem> =
+    private fun getMarketItems(
+        coinCategoryUid: String,
+        forceRefresh: Boolean,
+        baseCurrency: Currency,
+    ): List<MarketItem> =
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
-            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code).blockingGet()
+            val marketInfoList =
+                marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code).blockingGet()
 
-            val marketItems = marketInfoList.map { marketInfo ->
-                MarketItem.createFromCoinMarket(marketInfo, baseCurrency)
-            }
+            val marketItems =
+                marketInfoList.map { marketInfo ->
+                    MarketItem.createFromCoinMarket(marketInfo, baseCurrency)
+                }
             cache = marketItems
             cacheTimestamp = System.currentTimeMillis()
 
@@ -40,16 +46,17 @@ class MarketCategoryRepository(
         sortingField: SortingField,
         limit: Int,
         baseCurrency: Currency,
-        forceRefresh: Boolean
+        forceRefresh: Boolean,
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
 
             try {
                 val marketItems = getMarketItems(coinCategoryUid, forceRefresh, baseCurrency)
-                val sortedMarketItems = marketItems
-                    .subList(0, min(marketItems.size, size))
-                    .sort(sortingField)
-                    .subList(0, min(marketItems.size, limit))
+                val sortedMarketItems =
+                    marketItems
+                        .subList(0, min(marketItems.size, size))
+                        .sort(sortingField)
+                        .subList(0, min(marketItems.size, limit))
 
                 emitter.onSuccess(sortedMarketItems)
             } catch (error: Throwable) {

@@ -45,7 +45,7 @@ class SendBitcoinViewModel(
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
     private val address: Address,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
 ) : ViewModelUiState<SendBitcoinUiState>() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -105,21 +105,22 @@ class SendBitcoinViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendBitcoinUiState(
-        availableBalance = amountState.availableBalance,
-        amount = amountState.amount,
-        feeRate = feeRateState.feeRate,
-        address = address,
-        memo = memo,
-        fee = fee,
-        lockTimeInterval = pluginState.lockTimeInterval,
-        addressError = addressState.addressError,
-        amountCaution = amountState.amountCaution,
-        feeRateCaution = feeRateState.feeRateCaution,
-        canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-        showAddressInput = showAddressInput,
-        utxoData = if (utxoExpertModeEnabled) utxoData else null,
-    )
+    override fun createState() =
+        SendBitcoinUiState(
+            availableBalance = amountState.availableBalance,
+            amount = amountState.amount,
+            feeRate = feeRateState.feeRate,
+            address = address,
+            memo = memo,
+            fee = fee,
+            lockTimeInterval = pluginState.lockTimeInterval,
+            addressError = addressState.addressError,
+            amountCaution = amountState.amountCaution,
+            feeRateCaution = feeRateState.feeRateCaution,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
+            showAddressInput = showAddressInput,
+            utxoData = if (utxoExpertModeEnabled) utxoData else null,
+        )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -177,10 +178,11 @@ class SendBitcoinViewModel(
     }
 
     private fun updateUtxoData(usedUtxosSize: Int) {
-        utxoData = SendBitcoinModule.UtxoData(
-            type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
-            value = "$usedUtxosSize / ${adapter.unspentOutputs.size}"
-        )
+        utxoData =
+            SendBitcoinModule.UtxoData(
+                type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
+                value = "$usedUtxosSize / ${adapter.unspentOutputs.size}",
+            )
     }
 
     private fun handleUpdatedAmountState(amountState: SendBitcoinAmountService.State) {
@@ -224,7 +226,7 @@ class SendBitcoinViewModel(
         if (info == null && customUnspentOutputs == null) {
             utxoData = SendBitcoinModule.UtxoData()
         } else if (customUnspentOutputs == null) {
-            //set unspent outputs as auto
+            // set unspent outputs as auto
             updateUtxoData(info?.unspentOutputs?.size ?: 0)
         }
         emitState()
@@ -232,10 +234,12 @@ class SendBitcoinViewModel(
 
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.validAddress!!
-        val contact = contactsRepo.getContactsFiltered(
-            blockchainType,
-            addressQuery = address.hex
-        ).firstOrNull()
+        val contact =
+            contactsRepo
+                .getContactsFiltered(
+                    blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee!!,
@@ -245,7 +249,7 @@ class SendBitcoinViewModel(
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval,
             memo = memo,
-            rbfEnabled = localStorage.rbfEnabled
+            rbfEnabled = localStorage.rbfEnabled,
         )
     }
 
@@ -255,41 +259,43 @@ class SendBitcoinViewModel(
         }
     }
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
-        val logger = logger.getScopedUnique()
-        logger.info("click")
+    private suspend fun send() =
+        withContext(Dispatchers.IO) {
+            val logger = logger.getScopedUnique()
+            logger.info("click")
 
-        try {
-            sendResult = SendResult.Sending
+            try {
+                sendResult = SendResult.Sending
 
-            val transactionRecord = adapter.send(
-                amountState.amount!!,
-                addressState.validAddress!!.hex,
-                memo,
-                feeRateState.feeRate!!,
-                customUnspentOutputs,
-                pluginState.pluginData,
-                btcBlockchainManager.transactionSortMode(adapter.blockchainType),
-                localStorage.rbfEnabled,
-                logger
-            )
+                val transactionRecord =
+                    adapter.send(
+                        amountState.amount!!,
+                        addressState.validAddress!!.hex,
+                        memo,
+                        feeRateState.feeRate!!,
+                        customUnspentOutputs,
+                        pluginState.pluginData,
+                        btcBlockchainManager.transactionSortMode(adapter.blockchainType),
+                        localStorage.rbfEnabled,
+                        logger,
+                    )
 
-            logger.info("success")
-            sendResult = SendResult.Sent(transactionRecord)
+                logger.info("success")
+                sendResult = SendResult.Sent(transactionRecord)
 
-            recentAddressManager.setRecentAddress(address, blockchainType)
-        } catch (e: Throwable) {
-            logger.warning("failed", e)
-            sendResult = SendResult.Failed(createCaution(e))
+                recentAddressManager.setRecentAddress(address, blockchainType)
+            } catch (e: Throwable) {
+                logger.warning("failed", e)
+                sendResult = SendResult.Failed(createCaution(e))
+            }
         }
-    }
 
-    private fun createCaution(error: Throwable) = when (error) {
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
-    }
-
+    private fun createCaution(error: Throwable) =
+        when (error) {
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        }
 }
 
 data class SendBitcoinUiState(
@@ -305,5 +311,5 @@ data class SendBitcoinUiState(
     val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val utxoData: SendBitcoinModule.UtxoData?
+    val utxoData: SendBitcoinModule.UtxoData?,
 )

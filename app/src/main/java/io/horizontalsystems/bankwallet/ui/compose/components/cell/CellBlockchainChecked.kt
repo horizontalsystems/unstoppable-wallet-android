@@ -25,20 +25,22 @@ fun CellBlockchainChecked(
 ) {
     CellUniversal(
         borderTop = borderTop,
-        onClick = onToggle
+        onClick = onToggle,
     ) {
         Image(
-            painter = rememberAsyncImagePainter(
-                model = blockchain.type.imageUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_32)
-            ),
+            painter =
+                rememberAsyncImagePainter(
+                    model = blockchain.type.imageUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_32),
+                ),
             contentDescription = null,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
         body_leah(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .weight(1f),
             text = blockchain.name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

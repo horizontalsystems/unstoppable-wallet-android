@@ -34,7 +34,6 @@ class RestoreLocalViewModel(
     private val statPage: StatPage,
     fileName: String?,
 ) : ViewModelUiState<UiState>() {
-
     private var passphrase = ""
     private var passphraseState: DataState.Error? = null
     private var showButtonSpinner = false
@@ -63,18 +62,20 @@ class RestoreLocalViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val gson = GsonBuilder()
-                    .disableHtmlEscaping()
-                    .enableComplexMapKeySerialization()
-                    .create()
+                val gson =
+                    GsonBuilder()
+                        .disableHtmlEscaping()
+                        .enableComplexMapKeySerialization()
+                        .create()
 
-                fullBackup = try {
-                    val backup = gson.fromJson(backupJsonString, FullBackup::class.java)
-                    backup.settings.language // if single walletBackup it will throw exception
-                    backup
-                } catch (ex: Exception) {
-                    null
-                }
+                fullBackup =
+                    try {
+                        val backup = gson.fromJson(backupJsonString, FullBackup::class.java)
+                        backup.settings.language // if single walletBackup it will throw exception
+                        backup
+                    } catch (ex: Exception) {
+                        null
+                    }
 
                 walletBackup = gson.fromJson(backupJsonString, WalletBackup::class.java)
                 manualBackup = walletBackup?.manualBackup ?: false
@@ -85,17 +86,18 @@ class RestoreLocalViewModel(
         }
     }
 
-    override fun createState() = UiState(
-        passphraseState = passphraseState,
-        showButtonSpinner = showButtonSpinner,
-        parseError = parseError,
-        showSelectCoins = showSelectCoins,
-        manualBackup = manualBackup,
-        restored = restored,
-        walletBackupViewItems = walletBackupViewItems,
-        otherBackupViewItems = otherBackupViewItems,
-        showBackupItems = showBackupItems
-    )
+    override fun createState() =
+        UiState(
+            passphraseState = passphraseState,
+            showButtonSpinner = showButtonSpinner,
+            parseError = parseError,
+            showSelectCoins = showSelectCoins,
+            manualBackup = manualBackup,
+            restored = restored,
+            walletBackupViewItems = walletBackupViewItems,
+            otherBackupViewItems = otherBackupViewItems,
+            showBackupItems = showBackupItems,
+        )
 
     fun onChangePassphrase(v: String) {
         passphrase = v
@@ -132,7 +134,8 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState =
+                    DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -144,9 +147,7 @@ class RestoreLocalViewModel(
         }
     }
 
-    fun shouldShowReplaceWarning(): Boolean {
-        return backupProvider.shouldShowReplaceWarning(decryptedFullBackup)
-    }
+    fun shouldShowReplaceWarning(): Boolean = backupProvider.shouldShowReplaceWarning(decryptedFullBackup)
 
     fun restoreFullBackup() {
         decryptedFullBackup?.let { restoreFullBackup(it) }
@@ -165,7 +166,8 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState =
+                    DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -178,7 +180,10 @@ class RestoreLocalViewModel(
     }
 
     @Throws
-    private fun restoreSingleWallet(backup: WalletBackup, accountName: String) {
+    private fun restoreSingleWallet(
+        backup: WalletBackup,
+        accountName: String,
+    ) {
         showButtonSpinner = true
         emitState()
         viewModelScope.launch(Dispatchers.IO) {
@@ -198,7 +203,8 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState =
+                    DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -218,5 +224,4 @@ class RestoreLocalViewModel(
         showBackupItems = false
         emitState()
     }
-
 }

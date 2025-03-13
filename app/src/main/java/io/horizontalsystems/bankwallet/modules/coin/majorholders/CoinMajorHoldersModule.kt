@@ -11,7 +11,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.marketkit.models.Blockchain
 
 object CoinMajorHoldersModule {
-    class Factory(private val coinUid: String, private val blockchain: Blockchain) : ViewModelProvider.Factory {
+    class Factory(
+        private val coinUid: String,
+        private val blockchain: Blockchain,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val factory = CoinViewFactory(App.currencyManager.baseCurrency, App.numberFormatter)

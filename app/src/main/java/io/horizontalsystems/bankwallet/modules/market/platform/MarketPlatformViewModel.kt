@@ -16,13 +16,13 @@ class MarketPlatformViewModel(
     private val repository: MarketPlatformCoinsRepository,
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModelUiState<MarketPlatformUiState>() {
-
-    val sortingFields = listOf(
-        SortingField.HighestCap,
-        SortingField.LowestCap,
-        SortingField.TopGainers,
-        SortingField.TopLosers,
-    )
+    val sortingFields =
+        listOf(
+            SortingField.HighestCap,
+            SortingField.LowestCap,
+            SortingField.TopGainers,
+            SortingField.TopLosers,
+        )
 
     private var sortingField: SortingField = SortingField.HighestCap
     private var viewState: ViewState = ViewState.Loading
@@ -34,12 +34,13 @@ class MarketPlatformViewModel(
         sync()
     }
 
-    override fun createState() = MarketPlatformUiState(
-        viewItems = viewItems,
-        viewState = viewState,
-        sortingField = sortingField,
-        isRefreshing = isRefreshing,
-    )
+    override fun createState() =
+        MarketPlatformUiState(
+            viewItems = viewItems,
+            viewState = viewState,
+            sortingField = sortingField,
+            isRefreshing = isRefreshing,
+        )
 
     fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
@@ -67,11 +68,12 @@ class MarketPlatformViewModel(
     private fun sync(forceRefresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!forceRefresh && cache.isNotEmpty()) {
-                viewItems = cache
-                    .sort(sortingField)
-                    .map { item ->
-                        marketViewItem(item)
-                    }
+                viewItems =
+                    cache
+                        .sort(sortingField)
+                        .map { item ->
+                            marketViewItem(item)
+                        }
                 viewState = ViewState.Success
                 emitState()
             } else {
@@ -93,10 +95,11 @@ class MarketPlatformViewModel(
         emitState()
     }
 
-    private fun marketViewItem(item: MarketItem): MarketViewItem = MarketViewItem.create(
-        marketItem = item,
-        favorited = favoritesManager.getAll().map { it.coinUid }.contains(item.fullCoin.coin.uid)
-    )
+    private fun marketViewItem(item: MarketItem): MarketViewItem =
+        MarketViewItem.create(
+            marketItem = item,
+            favorited = favoritesManager.getAll().map { it.coinUid }.contains(item.fullCoin.coin.uid),
+        )
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
         viewModelScope.launch {

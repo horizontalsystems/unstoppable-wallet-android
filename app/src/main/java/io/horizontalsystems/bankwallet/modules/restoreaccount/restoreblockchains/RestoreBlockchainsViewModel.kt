@@ -20,9 +20,8 @@ import kotlinx.coroutines.rx2.asFlow
 
 class RestoreBlockchainsViewModel(
     private val service: RestoreBlockchainsService,
-    private val clearables: List<Clearable>
+    private val clearables: List<Clearable>,
 ) : ViewModel() {
-
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Blockchain>>>()
     val disableBlockchainLiveData = MutableLiveData<String>()
     var restored by mutableStateOf(false)
@@ -51,17 +50,20 @@ class RestoreBlockchainsViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(
-        item: RestoreBlockchainsService.Item,
-    ) = CoinViewItem(
-        item = item.blockchain,
-        imageSource = ImageSource.Remote(item.blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
-        title = item.blockchain.name,
-        subtitle = item.blockchain.description,
-        enabled = item.enabled,
-        hasSettings = item.hasSettings,
-        hasInfo = false
-    )
+    private fun viewItem(item: RestoreBlockchainsService.Item) =
+        CoinViewItem(
+            item = item.blockchain,
+            imageSource =
+                ImageSource.Remote(
+                    item.blockchain.type.imageUrl,
+                    R.drawable.ic_platform_placeholder_32,
+                ),
+            title = item.blockchain.name,
+            subtitle = item.blockchain.description,
+            enabled = item.enabled,
+            hasSettings = item.hasSettings,
+            hasInfo = false,
+        )
 
     fun enable(blockchain: Blockchain) {
         service.enable(blockchain)

@@ -30,7 +30,6 @@ class TransactionsService(
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
-
     private val _itemsFlow = MutableStateFlow<List<TransactionItem>>(listOf())
     val itemsFlow get() = _itemsFlow.asStateFlow()
 
@@ -57,7 +56,8 @@ class TransactionsService(
             }
         }
         coroutineScope.launch {
-            transactionSyncStateRepository.lastBlockInfoObservable.asFlow()
+            transactionSyncStateRepository.lastBlockInfoObservable
+                .asFlow()
                 .collect { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
@@ -79,14 +79,14 @@ class TransactionsService(
         transactionWallet: TransactionWallet?,
         filterTransactionType: FilterTransactionType,
         blockchain: Blockchain?,
-        contact: Contact?
+        contact: Contact?,
     ) {
         transactionRecordRepository.set(
             transactionWallets,
             transactionWallet,
             filterTransactionType,
             blockchain,
-            contact
+            contact,
         )
 
         transactionSyncStateRepository.setTransactionWallets(transactionWallets)
@@ -125,10 +125,18 @@ class TransactionsService(
     }
 
     @Synchronized
-    private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
+    private fun handleLastBlockInfo(
+        source: TransactionSource,
+        lastBlockInfo: LastBlockInfo,
+    ) {
         var updated = false
         transactionItems.forEachIndexed { index, item ->
-            if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
+            if (item.record.source == source &&
+                item.record.changedBy(
+                    item.lastBlockInfo,
+                    lastBlockInfo,
+                )
+            ) {
                 transactionItems[index] = item.copy(lastBlockInfo = lastBlockInfo)
                 updated = true
             }
@@ -140,7 +148,10 @@ class TransactionsService(
     }
 
     @Synchronized
-    private fun handleUpdatedHistoricalRate(key: HistoricalRateKey, rate: CurrencyValue) {
+    private fun handleUpdatedHistoricalRate(
+        key: HistoricalRateKey,
+        rate: CurrencyValue,
+    ) {
         var updated = false
         for (i in 0 until transactionItems.size) {
             val item = transactionItems[i]
@@ -197,14 +208,15 @@ class TransactionsService(
 
             if (record.spam && spamManager.hideSuspiciousTx) return@forEach
 
-            transactionItem = if (transactionItem == null) {
-                val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
-                val currencyValue = getCurrencyValue(record)
+            transactionItem =
+                if (transactionItem == null) {
+                    val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
+                    val currencyValue = getCurrencyValue(record)
 
-                TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
-            } else {
-                transactionItem.copy(record = record)
-            }
+                    TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
+                } else {
+                    transactionItem.copy(record = record)
+                }
 
             tmpList.add(transactionItem)
         }
@@ -226,7 +238,8 @@ class TransactionsService(
         val decimalValue = record.mainValue?.decimalValue ?: return null
         val coinUid = record.mainValue?.coin?.uid ?: return null
 
-        return rateRepository.getHistoricalRate(HistoricalRateKey(coinUid, record.timestamp))
+        return rateRepository
+            .getHistoricalRate(HistoricalRateKey(coinUid, record.timestamp))
             ?.let { rate -> CurrencyValue(rate.currency, decimalValue * rate.value) }
     }
 
@@ -256,14 +269,17 @@ class TransactionsService(
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
                 if (transactionItem.currencyValue == null) {
                     transactionItem.record.mainValue?.coin?.uid?.let { coinUid ->
-                        rateRepository.fetchHistoricalRate(HistoricalRateKey(coinUid, transactionItem.record.timestamp))
+                        rateRepository.fetchHistoricalRate(
+                            HistoricalRateKey(
+                                coinUid,
+                                transactionItem.record.timestamp,
+                            ),
+                        )
                     }
                 }
             }
         }
     }
 
-    fun getTransactionItem(recordUid: String): TransactionItem? {
-        return transactionItems.find { it.record.uid == recordUid }
-    }
+    fun getTransactionItem(recordUid: String): TransactionItem? = transactionItems.find { it.record.uid == recordUid }
 }

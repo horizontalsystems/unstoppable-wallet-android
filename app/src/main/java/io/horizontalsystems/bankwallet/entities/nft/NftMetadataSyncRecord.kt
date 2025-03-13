@@ -7,5 +7,5 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 data class NftMetadataSyncRecord(
     val blockchainType: BlockchainType,
     val accountId: String,
-    val lastSyncTimestamp: Long
+    val lastSyncTimestamp: Long,
 )

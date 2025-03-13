@@ -64,7 +64,6 @@ fun SendBtcAdvancedSettingsScreen(
     sendBitcoinViewModel: SendBitcoinViewModel,
     amountInputType: AmountInputType,
 ) {
-
     val wallet = sendBitcoinViewModel.wallet
     val sendUiState = sendBitcoinViewModel.uiState
     val feeRateVisible = sendBitcoinViewModel.feeRateChangeable
@@ -96,7 +95,7 @@ fun SendBtcAdvancedSettingsScreen(
                         coroutineScope.launch {
                             modalBottomSheetState.hide()
                         }
-                    }
+                    },
                 )
             },
         ) {
@@ -108,24 +107,25 @@ fun SendBtcAdvancedSettingsScreen(
                         navigationIcon = {
                             HsBackButton(onClick = { navController.popBackStack() })
                         },
-                        menuItems = listOf(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Reset),
-                                onClick = {
-                                    sendBitcoinViewModel.reset()
-                                    viewModel.reset()
-                                }
-                            )
-                        )
+                        menuItems =
+                            listOf(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Button_Reset),
+                                    onClick = {
+                                        sendBitcoinViewModel.reset()
+                                        viewModel.reset()
+                                    },
+                                ),
+                            ),
                     )
-                }
+                },
             ) { paddingValues ->
                 Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .verticalScroll(rememberScrollState())
+                    modifier =
+                        Modifier
+                            .padding(paddingValues)
+                            .verticalScroll(rememberScrollState()),
                 ) {
-
                     VSpacer(12.dp)
                     CellUniversalLawrenceSection(
                         listOf {
@@ -135,9 +135,9 @@ fun SendBtcAdvancedSettingsScreen(
                                 fee = sendUiState.fee,
                                 amountInputType = amountInputType,
                                 rate = rate,
-                                navController = fragmentNavController
+                                navController = fragmentNavController,
                             )
-                        }
+                        },
                     )
 
                     if (feeRateVisible) {
@@ -157,7 +157,7 @@ fun SendBtcAdvancedSettingsScreen(
                             },
                             onClickDecrement = {
                                 sendBitcoinViewModel.decrementFeeRate()
-                            }
+                            },
                         )
                         InfoText(
                             text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
@@ -183,9 +183,9 @@ fun SendBtcAdvancedSettingsScreen(
                                     lockTimeInterval = lockTimeInterval,
                                     onSelect = {
                                         sendBitcoinViewModel.onEnterLockTimeInterval(it)
-                                    }
+                                    },
                                 )
-                            }
+                            },
                         )
                         InfoText(
                             text = stringResource(R.string.Send_Hodler_Description),
@@ -197,9 +197,9 @@ fun SendBtcAdvancedSettingsScreen(
                         listOf {
                             UtxoSwitch(
                                 enabled = viewModel.uiState.utxoExpertModeEnabled,
-                                onChange = { viewModel.setUtxoExpertMode(it) }
+                                onChange = { viewModel.setUtxoExpertMode(it) },
                             )
-                        }
+                        },
                     )
                     InfoText(
                         text = stringResource(R.string.Send_Utxo_Description),
@@ -209,7 +209,7 @@ fun SendBtcAdvancedSettingsScreen(
                     CellUniversalLawrenceSection {
                         RbfSwitch(
                             enabled = viewModel.uiState.rbfEnabled,
-                            onChange = { viewModel.setRbfEnabled(it) }
+                            onChange = { viewModel.setRbfEnabled(it) },
                         )
                     }
 
@@ -219,12 +219,13 @@ fun SendBtcAdvancedSettingsScreen(
 
                     feeRateCaution?.let {
                         FeeRateCaution(
-                            modifier = Modifier.padding(
-                                start = 16.dp,
-                                end = 16.dp,
-                                top = 12.dp
-                            ),
-                            feeRateCaution = it
+                            modifier =
+                                Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    top = 12.dp,
+                                ),
+                            feeRateCaution = it,
                         )
                     }
 
@@ -236,13 +237,17 @@ fun SendBtcAdvancedSettingsScreen(
 }
 
 @Composable
-fun UtxoSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
+fun UtxoSwitch(
+    enabled: Boolean,
+    onChange: (Boolean) -> Unit,
+) {
     RowUniversal(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = { onChange.invoke(!enabled) }
-        ),
+        modifier =
+            Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onChange.invoke(!enabled) },
+            ),
     ) {
         body_leah(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -252,20 +257,24 @@ fun UtxoSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
         HsSwitch(
             modifier = Modifier.padding(end = 16.dp),
             checked = enabled,
-            onCheckedChange = { onChange.invoke(it) }
+            onCheckedChange = { onChange.invoke(it) },
         )
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
 
 @Composable
-fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
+fun RbfSwitch(
+    enabled: Boolean,
+    onChange: (Boolean) -> Unit,
+) {
     RowUniversal(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = { onChange.invoke(!enabled) }
-        ),
+        modifier =
+            Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onChange.invoke(!enabled) },
+            ),
     ) {
         body_leah(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -275,7 +284,7 @@ fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
         HsSwitch(
             modifier = Modifier.padding(end = 16.dp),
             checked = enabled,
-            onCheckedChange = { onChange.invoke(it) }
+            onCheckedChange = { onChange.invoke(it) },
         )
         Spacer(modifier = Modifier.width(16.dp))
     }
@@ -285,13 +294,13 @@ fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
 private fun BottomSheetTransactionOrderSelector(
     items: List<SendBtcAdvancedSettingsModule.SortModeViewItem>,
     onSelect: (TransactionDataSortMode) -> Unit,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_arrow_up_right_12),
         title = stringResource(R.string.BtcBlockchainSettings_TransactionSettings),
         onCloseClick = onCloseClick,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
     ) {
         Spacer(Modifier.height(12.dp))
         CellUniversalLawrenceSection(items, showFrame = true) { item ->
@@ -307,10 +316,11 @@ private fun BottomSheetTransactionOrderSelector(
                     subhead2_grey(text = stringResource(item.mode.description))
                 }
                 Box(
-                    modifier = Modifier
-                        .width(52.dp)
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .width(52.dp)
+                            .fillMaxHeight(),
+                    contentAlignment = Alignment.Center,
                 ) {
                     if (item.selected) {
                         Icon(
@@ -330,32 +340,35 @@ private fun BottomSheetTransactionOrderSelector(
 private fun TransactionDataSortSettings(
     navController: NavController,
     valueTitle: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     HeaderText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionSettings),
         onInfoClick = {
             navController.navigate(TransactionInputsSortInfoPage)
-        })
+        },
+    )
     CellUniversalLawrenceSection(
         listOf {
-            RowUniversal() {
+            RowUniversal {
                 body_leah(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .weight(1f),
-                    text = stringResource(R.string.BtcBlockchainSettings_InputsOutputs)
+                    modifier =
+                        Modifier
+                            .padding(start = 16.dp)
+                            .weight(1f),
+                    text = stringResource(R.string.BtcBlockchainSettings_InputsOutputs),
                 )
                 ButtonSecondaryWithIcon(
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .height(28.dp),
+                    modifier =
+                        Modifier
+                            .padding(end = 16.dp)
+                            .height(28.dp),
                     title = valueTitle,
                     iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                    onClick = onClick
+                    onClick = onClick,
                 )
             }
-        }
+        },
     )
     InfoText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription),
@@ -363,14 +376,17 @@ private fun TransactionDataSortSettings(
 }
 
 @Composable
-fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
+fun FeeRateCaution(
+    modifier: Modifier,
+    feeRateCaution: HSCaution,
+) {
     when (feeRateCaution.type) {
         HSCaution.Type.Error -> {
             TextImportantError(
                 modifier = modifier,
                 icon = R.drawable.ic_attention_20,
                 title = feeRateCaution.getString(),
-                text = feeRateCaution.getDescription() ?: ""
+                text = feeRateCaution.getDescription() ?: "",
             )
         }
 
@@ -379,7 +395,7 @@ fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
                 modifier = modifier,
                 icon = R.drawable.ic_attention_20,
                 title = feeRateCaution.getString(),
-                text = feeRateCaution.getDescription() ?: ""
+                text = feeRateCaution.getDescription() ?: "",
             )
         }
     }

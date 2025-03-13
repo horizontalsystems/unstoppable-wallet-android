@@ -41,9 +41,16 @@ fun NetworkSelectScreen(
     navController: NavController,
     activeAccount: Account,
     fullCoin: FullCoin,
-    onSelect: (Wallet) -> Unit
+    onSelect: (Wallet) -> Unit,
 ) {
-    val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
+    val viewModel =
+        viewModel<NetworkSelectViewModel>(
+            factory =
+                NetworkSelectViewModel.Factory(
+                    activeAccount,
+                    fullCoin,
+                ),
+        )
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -54,18 +61,19 @@ fun NetworkSelectScreen(
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf()
+                menuItems = listOf(),
             )
-        }
+        },
     ) {
         Column(Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoText(
-                    text = stringResource(R.string.Balance_NetworkSelectDescription)
+                    text = stringResource(R.string.Balance_NetworkSelectDescription),
                 )
                 VSpacer(20.dp)
                 CellUniversalLawrenceSection(viewModel.eligibleTokens) { token ->
@@ -79,7 +87,7 @@ fun NetworkSelectScreen(
                                 coroutineScope.launch {
                                     onSelect.invoke(viewModel.getOrCreateWallet(token))
                                 }
-                            }
+                            },
                         )
                     }
                 }
@@ -94,19 +102,21 @@ fun NetworkCell(
     title: String,
     subtitle: String,
     imageUrl: String,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Image(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(32.dp),
-            painter = rememberAsyncImagePainter(
-                model = imageUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_32)
-            ),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(32.dp),
+            painter =
+                rememberAsyncImagePainter(
+                    model = imageUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_32),
+                ),
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
@@ -117,7 +127,7 @@ fun NetworkCell(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }

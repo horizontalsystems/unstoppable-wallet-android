@@ -65,14 +65,15 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 enum class ContactScreenBottomSheetType {
-    DeleteConfirmation, DiscardChangesConfirmation
+    DeleteConfirmation,
+    DiscardChangesConfirmation,
 }
 
 @Composable
 fun ContactScreen(
     viewModel: ContactViewModel,
     onNavigateToBack: () -> Unit,
-    onNavigateToAddress: (ContactAddress?) -> Unit
+    onNavigateToAddress: (ContactAddress?) -> Unit,
 ) {
     val uiState = viewModel.uiState
     val view = LocalView.current
@@ -112,7 +113,7 @@ fun ContactScreen(
                         cautionType = Caution.Type.Error,
                         cancelText = stringResource(R.string.Button_Cancel),
                         onConfirm = viewModel::onDelete,
-                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } },
                     )
                 }
 
@@ -126,7 +127,7 @@ fun ContactScreen(
                         cautionType = Caution.Type.Error,
                         cancelText = stringResource(R.string.Contacts_KeepEditing),
                         onConfirm = onNavigateToBack,
-                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } },
                     )
                 }
             }
@@ -163,41 +164,44 @@ fun ContactScreen(
                             confirmNavigateToBack()
                         }
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Save),
-                            enabled = uiState.saveEnabled,
-                            onClick = viewModel::onSave
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Save),
+                                enabled = uiState.saveEnabled,
+                                onClick = viewModel::onSave,
+                            ),
+                        ),
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(12.dp)
                 FormsInput(
-                    modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .padding(horizontal = 16.dp)
-                        .onGloballyPositioned {
-                            if (uiState.focusOnContactName) {
-                                focusRequester.requestFocus()
-                            }
-                        },
+                    modifier =
+                        Modifier
+                            .focusRequester(focusRequester)
+                            .padding(horizontal = 16.dp)
+                            .onGloballyPositioned {
+                                if (uiState.focusOnContactName) {
+                                    focusRequester.requestFocus()
+                                }
+                            },
                     initial = viewModel.contact.name,
                     pasteEnabled = false,
                     state = uiState.error?.let { DataState.Error(it) },
                     hint = stringResource(R.string.Contacts_NameHint),
-                    onValueChange = viewModel::onNameChange
+                    onValueChange = viewModel::onNameChange,
                 )
 
                 Addresses(
                     addressViewItems = uiState.addressViewItems,
-                    onClickAddress = onNavigateToAddress
+                    onClickAddress = onNavigateToAddress,
                 )
 
                 ActionButtons(
@@ -208,7 +212,7 @@ fun ContactScreen(
                         coroutineScope.launch {
                             modalBottomSheetState.show()
                         }
-                    }
+                    },
                 )
 
                 VSpacer(32.dp)
@@ -227,18 +231,18 @@ fun ConfirmationBottomSheet(
     cautionType: Caution.Type,
     cancelText: String,
     onConfirm: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
 ) {
     BottomSheetHeader(
         iconPainter = iconPainter,
         iconTint = iconTint,
         title = title,
-        onCloseClick = onClose
+        onCloseClick = onClose,
     ) {
         Spacer(modifier = Modifier.height(12.dp))
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = text
+            text = text,
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -246,36 +250,39 @@ fun ConfirmationBottomSheet(
         when (cautionType) {
             Caution.Type.Error -> {
                 ButtonPrimaryRed(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
                     title = confirmText,
                     onClick = {
                         onConfirm()
-                    }
+                    },
                 )
             }
 
             Caution.Type.Warning -> {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
                     title = confirmText,
                     onClick = {
                         onConfirm()
-                    }
+                    },
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
         ButtonPrimaryTransparent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
             title = cancelText,
-            onClick = onClose
+            onClick = onClose,
         )
         Spacer(Modifier.height(32.dp))
     }
@@ -285,7 +292,7 @@ fun ConfirmationBottomSheet(
 private fun ActionButtons(
     onAddAddress: () -> Unit,
     showDelete: Boolean,
-    onDeleteContact: () -> Unit
+    onDeleteContact: () -> Unit,
 ) {
     Spacer(Modifier.height(32.dp))
     CellUniversalLawrenceSection(
@@ -298,20 +305,20 @@ private fun ActionButtons(
                     DeleteContactButton(onDeleteContact)
                 }
             }
-        }
+        },
     )
 }
 
 @Composable
 private fun DeleteContactButton(onClick: () -> Unit) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(R.drawable.ic_delete_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.lucian
+            tint = ComposeAppTheme.colors.lucian,
         )
         body_lucian(
             text = stringResource(R.string.Contacts_DeleteContact),
@@ -322,13 +329,13 @@ private fun DeleteContactButton(onClick: () -> Unit) {
 @Composable
 private fun AddAddressButton(onClick: () -> Unit) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(R.drawable.ic_plus),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.jacob,
         )
         body_jacob(text = stringResource(R.string.Contacts_AddAddress))
     }
@@ -337,7 +344,7 @@ private fun AddAddressButton(onClick: () -> Unit) {
 @Composable
 private fun Addresses(
     addressViewItems: List<AddressViewItem>,
-    onClickAddress: (ContactAddress) -> Unit
+    onClickAddress: (ContactAddress) -> Unit,
 ) {
     if (addressViewItems.isNotEmpty()) {
         Spacer(Modifier.height(32.dp))
@@ -352,20 +359,22 @@ private fun Addresses(
 @Composable
 private fun ContactAddress(
     addressViewItem: AddressViewItem,
-    onClickEdit: () -> Unit
+    onClickEdit: () -> Unit,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClickEdit
+        onClick = onClickEdit,
     ) {
         Image(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp),
-            painter = rememberAsyncImagePainter(
-                model = addressViewItem.blockchain.type.imageUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_32)
-            ),
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp),
+            painter =
+                rememberAsyncImagePainter(
+                    model = addressViewItem.blockchain.type.imageUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_32),
+                ),
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
@@ -376,7 +385,7 @@ private fun ContactAddress(
         Icon(
             painter = painterResource(id = R.drawable.ic_edit_20),
             contentDescription = null,
-            tint = if (addressViewItem.edited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
+            tint = if (addressViewItem.edited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey,
         )
     }
 }

@@ -1,6 +1,6 @@
 package io.horizontalsystems.chartview
 
-//class CurveAnimatorTest {
+// class CurveAnimatorTest {
 //
 //    @Test
 //    fun matchTimestamps3() {
@@ -200,4 +200,4 @@ package io.horizontalsystems.chartview
 //
 //    }
 //
-//}
+// }

@@ -8,16 +8,14 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.Re
 import io.horizontalsystems.hdwalletkit.Language
 
 object RestoreMnemonicNonStandardModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreMnemonicNonStandardViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            RestoreMnemonicNonStandardViewModel(
                 App.accountFactory,
                 App.wordsManager,
                 App.thirdKeyboardStorage,
             ) as T
-        }
     }
 
     data class UiState(

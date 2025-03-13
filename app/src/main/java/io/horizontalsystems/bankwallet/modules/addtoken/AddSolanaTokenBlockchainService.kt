@@ -13,34 +13,31 @@ import io.horizontalsystems.solanakit.transactions.SolanaFmService
 
 class AddSolanaTokenBlockchainService(
     private val blockchain: Blockchain,
-    private val tokenProvider: TokenProvider
+    private val tokenProvider: TokenProvider,
 ) : IAddTokenBlockchainService {
-
-    override fun isValid(reference: String): Boolean {
-        return try {
+    override fun isValid(reference: String): Boolean =
+        try {
             Address(reference)
             true
         } catch (e: Throwable) {
             false
         }
-    }
 
-    override fun tokenQuery(reference: String): TokenQuery {
-        return TokenQuery(blockchain.type, TokenType.Spl(reference))
-    }
+    override fun tokenQuery(reference: String): TokenQuery = TokenQuery(blockchain.type, TokenType.Spl(reference))
 
     override suspend fun token(reference: String): Token {
         val tokenInfo = tokenProvider.getTokenInfo(reference)
         val tokenQuery = tokenQuery(reference)
         return Token(
-            coin = Coin(
-                uid = tokenQuery.customCoinUid,
-                name = tokenInfo.name,
-                code = tokenInfo.symbol
-            ),
+            coin =
+                Coin(
+                    uid = tokenQuery.customCoinUid,
+                    name = tokenInfo.name,
+                    code = tokenInfo.symbol,
+                ),
             blockchain = blockchain,
             type = tokenQuery.tokenType,
-            decimals = tokenInfo.decimals
+            decimals = tokenInfo.decimals,
         )
     }
 
@@ -50,5 +47,4 @@ class AddSolanaTokenBlockchainService(
             return AddSolanaTokenBlockchainService(blockchain, tokenProvider)
         }
     }
-
 }

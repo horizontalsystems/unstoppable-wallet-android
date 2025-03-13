@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.coin
 import java.math.BigDecimal
 
 object CoinInfoMap {
-
-    val data = mapOf(
+    val data =
+        mapOf(
             "\$BASED" to CoinInfo(BigDecimal(100_000), null, "https://based.money"),
             "0chain" to CoinInfo(null, null, "https://0chain.net"),
             "1INCH" to CoinInfo(BigDecimal(1_500_000_000), null, "https://1inch.exchange"),
@@ -27,7 +27,12 @@ object CoinInfoMap {
             "BAL" to CoinInfo(BigDecimal(35_725_000), "20/06/2020", "https://balancer.finance"),
             "BAND" to CoinInfo(BigDecimal(100_000_000), "09/09/2019", "https://bandprotocol.com"),
             "BASE" to CoinInfo(BigDecimal(65_370_936), null, "https://www.baseprotocol.org"),
-            "BAT" to CoinInfo(BigDecimal(1_500_000_000), "31/05/2017", "https://basicattentiontoken.org"),
+            "BAT" to
+                CoinInfo(
+                    BigDecimal(1_500_000_000),
+                    "31/05/2017",
+                    "https://basicattentiontoken.org",
+                ),
             "BCH" to CoinInfo(BigDecimal(21_000_000), "01/08/2017", "https://www.bitcoincash.org"),
             "BID" to CoinInfo(BigDecimal(4_000_000_000), null, "https://bidaochain.com"),
             "BLT" to CoinInfo(BigDecimal(150_000_000), "10/11/2017", "https://bloom.co"),
@@ -52,7 +57,12 @@ object CoinInfoMap {
             "COS" to CoinInfo(BigDecimal(9_400_000_000), null, "https://www.contentos.io"),
             "COVER" to CoinInfo(null, null, "https://www.coverprotocol.com"),
             "CREAM" to CoinInfo(BigDecimal(2_924_547), null, "https://cream.finance"),
-            "CRO" to CoinInfo(BigDecimal(100_000_000_000), "14/11/2019", "https://www.crypto.com/en/chain"),
+            "CRO" to
+                CoinInfo(
+                    BigDecimal(100_000_000_000),
+                    "14/11/2019",
+                    "https://www.crypto.com/en/chain",
+                ),
             "CRPT" to CoinInfo(BigDecimal(99_785_291), "28/09/2017", "https://crypterium.io"),
             "CRV" to CoinInfo(BigDecimal(1_356_236_799), "13/08/2020", "https://www.curve.fi/"),
             "CSAI" to CoinInfo(BigDecimal(17_342_084), "07/05/2019", "https://compound.finance/"),
@@ -106,7 +116,12 @@ object CoinInfoMap {
             "HEZ" to CoinInfo(BigDecimal(100_000_000), null, "https://hermez.io"),
             "HH" to CoinInfo(BigDecimal(100_000_000), null, "https://holyheld.com"),
             "HLAND" to CoinInfo(null, null, "https://htw.land"),
-            "HOT" to CoinInfo(BigDecimal(177_619_433_541), "16/01/2018", "https://thehydrofoundation.com"),
+            "HOT" to
+                CoinInfo(
+                    BigDecimal(177_619_433_541),
+                    "16/01/2018",
+                    "https://thehydrofoundation.com",
+                ),
             "HT" to CoinInfo(BigDecimal(500_000_000), "22/01/2018", "https://www.huobi.pro"),
             "HUSD" to CoinInfo(null, "29/11/2018", "https://www.stcoins.com"),
             "IDEX" to CoinInfo(BigDecimal(1_000_000_000), "28/09/2017", "https://auroradao.com"),
@@ -122,7 +137,12 @@ object CoinInfoMap {
             "LEND" to CoinInfo(BigDecimal(1_299_999_942), "15/08/2017", "https://aave.com"),
             "LGCY" to CoinInfo(null, null, "https://lgcy.network"),
             "LINA" to CoinInfo(BigDecimal(10_000_000_199), "16/09/2020", "https://linear.finance"),
-            "LINK" to CoinInfo(BigDecimal(1_000_000_000), "19/09/2017", "https://link.smartcontract.com"),
+            "LINK" to
+                CoinInfo(
+                    BigDecimal(1_000_000_000),
+                    "19/09/2017",
+                    "https://link.smartcontract.com",
+                ),
             "LON" to CoinInfo(BigDecimal(200_000_000), null, "https://tokenlon.im/lon"),
             "LOOM" to CoinInfo(BigDecimal(1_000_000_000), "03/03/2018", "https://loomx.io"),
             "LPT" to CoinInfo(BigDecimal(22_537_813), "08/11/2018", "https://livepeer.org"),
@@ -258,7 +278,12 @@ object CoinInfoMap {
             "Yf-DAI" to CoinInfo(BigDecimal(21_000_000), null, "https://www.yfdai.finance"),
             "ZAI" to CoinInfo(null, null, "https://zai.finance"),
             "ZEC" to CoinInfo(BigDecimal(21_000_000), "28/10/2016", "https://z.cash"),
-            "ZRX" to CoinInfo(BigDecimal(1_000_000_000), "15/08/2017", "https://www.0xproject.com/#home"),
+            "ZRX" to
+                CoinInfo(
+                    BigDecimal(1_000_000_000),
+                    "15/08/2017",
+                    "https://www.0xproject.com/#home",
+                ),
             "eXRD" to CoinInfo(BigDecimal(4_410_000_000), null, "https://www.radixdlt.com"),
             "imBTC" to CoinInfo(BigDecimal(21_000_000), null, "https://tokenlon.im/imbtc#"),
             "pBTC" to CoinInfo(BigDecimal(21_000_000), null, "https://ptokens.io"),
@@ -272,11 +297,11 @@ object CoinInfoMap {
             "MX" to CoinInfo(null, null, "https://www.mxc.ceo"),
             "GT" to CoinInfo(null, null, "https://gatechain.io"),
             "FTT" to CoinInfo(null, null, "https://indexed.finance"),
+        )
 
-
-            )
-
-
-    data class CoinInfo(val supply: BigDecimal?, val startDate: String?, val website: String?)
-;
+    data class CoinInfo(
+        val supply: BigDecimal?,
+        val startDate: String?,
+        val website: String?,
+    )
 }

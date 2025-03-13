@@ -62,12 +62,19 @@ import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
+
     fun startAdapterManager()
+
     suspend fun refresh()
+
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
+
     fun getAdapterForToken(token: Token): IAdapter?
+
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
+
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
+
     fun refreshByWallet(wallet: Wallet)
 }
 
@@ -137,9 +144,15 @@ interface ILocalStorage {
 }
 
 interface IRestoreSettingsStorage {
-    fun restoreSettings(accountId: String, blockchainTypeUid: String): List<RestoreSettingRecord>
+    fun restoreSettings(
+        accountId: String,
+        blockchainTypeUid: String,
+    ): List<RestoreSettingRecord>
+
     fun restoreSettings(accountId: String): List<RestoreSettingRecord>
+
     fun save(restoreSettingRecords: List<RestoreSettingRecord>)
+
     fun deleteAllRestoreSettings(accountId: String)
 }
 
@@ -158,16 +171,30 @@ interface IAccountManager {
     val newAccountBackupRequiredFlow: StateFlow<Account?>
 
     fun setActiveAccountId(activeAccountId: String?)
+
     fun account(id: String): Account?
+
     fun save(account: Account)
+
     fun import(accounts: List<Account>)
+
     fun update(account: Account)
+
     fun delete(id: String)
+
     fun clear()
+
     fun clearAccounts()
+
     fun onHandledBackupRequiredNewAccount()
+
     fun setLevel(level: Int)
-    fun updateAccountLevels(accountIds: List<String>, level: Int)
+
+    fun updateAccountLevels(
+        accountIds: List<String>,
+        level: Int,
+    )
+
     fun updateMaxLevel(level: Int)
 }
 
@@ -182,69 +209,123 @@ interface IAccountFactory {
         type: AccountType,
         origin: AccountOrigin,
         backedUp: Boolean,
-        fileBackedUp: Boolean
+        fileBackedUp: Boolean,
     ): Account
-    fun watchAccount(name: String, type: AccountType): Account
+
+    fun watchAccount(
+        name: String,
+        type: AccountType,
+    ): Account
+
     fun getNextWatchAccountName(): String
+
     fun getNextAccountName(): String
+
     fun getNextCexAccountName(cexType: CexType): String
 }
 
 interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
+
     fun save(wallets: List<Wallet>)
+
     fun delete(wallets: List<Wallet>)
+
     fun handle(newEnabledWallets: List<EnabledWallet>)
+
     fun clear()
 }
 
 interface IRandomProvider {
-    fun getRandomNumbers(count: Int, maxIndex: Int): List<Int>
+    fun getRandomNumbers(
+        count: Int,
+        maxIndex: Int,
+    ): List<Int>
 }
 
 interface INetworkManager {
-    suspend fun getMarkdown(host: String, path: String): String
-    suspend fun getReleaseNotes(host: String, path: String): JsonObject
-    fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
+    suspend fun getMarkdown(
+        host: String,
+        path: String,
+    ): String
+
+    suspend fun getReleaseNotes(
+        host: String,
+        path: String,
+    ): JsonObject
+
+    fun getTransaction(
+        host: String,
+        path: String,
+        isSafeCall: Boolean,
+    ): Flowable<JsonObject>
+
     fun getTransactionWithPost(
         host: String,
         path: String,
-        body: Map<String, Any>
+        body: Map<String, Any>,
     ): Flowable<JsonObject>
 
-    fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
-    fun getEvmInfo(host: String, path: String): Single<JsonObject>
-    suspend fun registerApp(userId: String, referralCode: String): RegisterAppResponse
+    fun ping(
+        host: String,
+        url: String,
+        isSafeCall: Boolean,
+    ): Flowable<Any>
+
+    fun getEvmInfo(
+        host: String,
+        path: String,
+    ): Single<JsonObject>
+
+    suspend fun registerApp(
+        userId: String,
+        referralCode: String,
+    ): RegisterAppResponse
 }
 
 interface IClipboardManager {
     fun copyText(text: String)
+
     fun getCopiedText(): String
+
     val hasPrimaryClip: Boolean
 }
 
 interface IWordsManager {
     fun validateChecksum(words: List<String>)
+
     fun validateChecksumStrict(words: List<String>)
+
     fun isWordValid(word: String): Boolean
+
     fun isWordPartiallyValid(word: String): Boolean
+
     fun generateWords(count: Int = 12): List<String>
 }
 
 sealed class AdapterState {
     object Synced : AdapterState()
-    data class Syncing(val progress: Int? = null, val lastBlockDate: Date? = null) : AdapterState()
-    data class SearchingTxs(val count: Int) : AdapterState()
-    data class NotSynced(val error: Throwable) : AdapterState()
 
-    override fun toString(): String {
-        return when (this) {
+    data class Syncing(
+        val progress: Int? = null,
+        val lastBlockDate: Date? = null,
+    ) : AdapterState()
+
+    data class SearchingTxs(
+        val count: Int,
+    ) : AdapterState()
+
+    data class NotSynced(
+        val error: Throwable,
+    ) : AdapterState()
+
+    override fun toString(): String =
+        when (this) {
             is Synced -> "Synced"
             is Syncing -> "Syncing ${progress?.let { "${it * 100}" } ?: ""} lastBlockDate: $lastBlockDate"
             is SearchingTxs -> "SearchingTxs count: $count"
             is NotSynced -> "NotSynced ${error.javaClass.simpleName} - message: ${error.message}"
         }
-    }
 }
 
 interface ITransactionsAdapter {
@@ -269,7 +350,7 @@ interface ITransactionsAdapter {
     fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
-        address: String?
+        address: String?,
     ): Flowable<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
@@ -300,45 +381,47 @@ interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
-    suspend fun isAddressActive(address: String): Boolean {
-        return true
-    }
+    suspend fun isAddressActive(address: String): Boolean = true
 
-    fun usedAddresses(change: Boolean): List<UsedAddress> {
-        return listOf()
-    }
+    fun usedAddresses(change: Boolean): List<UsedAddress> = listOf()
 }
 
 @Parcelize
 data class UsedAddress(
     val index: Int,
     val address: String,
-    val explorerUrl: String
-): Parcelable
+    val explorerUrl: String,
+) : Parcelable
 
 interface ISendBitcoinAdapter {
     val unspentOutputs: List<UnspentOutputInfo>
     val balanceData: BalanceData
     val blockchainType: BlockchainType
+
     fun availableBalance(
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
     ): BigDecimal
 
     fun minimumSendAmount(address: String?): BigDecimal?
+
     fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
     ): BitcoinFeeInfo?
 
-    fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
+    fun validate(
+        address: String,
+        pluginData: Map<Byte, IPluginData>?,
+    )
+
     fun send(
         amount: BigDecimal,
         address: String,
@@ -348,7 +431,7 @@ interface ISendBitcoinAdapter {
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
-        logger: AppLogger
+        logger: AppLogger,
     ): BitcoinTransactionRecord?
 }
 
@@ -356,7 +439,10 @@ interface ISendEthereumAdapter {
     val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData
 
-    fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
+    fun getTransactionData(
+        amount: BigDecimal,
+        address: Address,
+    ): TransactionData
 }
 
 interface ISendBinanceAdapter {
@@ -365,7 +451,13 @@ interface ISendBinanceAdapter {
     val fee: BigDecimal
 
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
+
+    fun send(
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+        logger: AppLogger,
+    ): Single<Unit>
 }
 
 interface ISendZcashAdapter {
@@ -373,12 +465,20 @@ interface ISendZcashAdapter {
     val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long
+
+    suspend fun send(
+        amount: BigDecimal,
+        address: String,
+        memo: String,
+        logger: AppLogger,
+    ): Long
 }
 
 interface IAdapter {
     fun start()
+
     fun stop()
+
     fun refresh()
 
     val debugInfo: String
@@ -386,22 +486,46 @@ interface IAdapter {
 
 interface ISendSolanaAdapter {
     val availableBalance: BigDecimal
-    suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
+
+    suspend fun send(
+        amount: BigDecimal,
+        to: SolanaAddress,
+    ): FullTransaction
 }
 
 interface ISendTonAdapter {
     val availableBalance: BigDecimal
-    suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?)
-    suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?) : BigDecimal
+
+    suspend fun send(
+        amount: BigDecimal,
+        address: FriendlyAddress,
+        memo: String?,
+    )
+
+    suspend fun estimateFee(
+        amount: BigDecimal,
+        address: FriendlyAddress,
+        memo: String?,
+    ): BigDecimal
 }
 
 interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData
 
-    suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
-    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
+    suspend fun estimateFee(
+        amount: BigDecimal,
+        to: TronAddress,
+    ): List<Fee>
+
+    suspend fun send(
+        amount: BigDecimal,
+        to: TronAddress,
+        feeLimit: Long?,
+    )
+
     suspend fun isAddressActive(address: TronAddress): Boolean
+
     fun isOwnAddress(address: TronAddress): Boolean
 }
 
@@ -409,24 +533,45 @@ interface IAccountsStorage {
     val isAccountsEmpty: Boolean
 
     fun getActiveAccountId(level: Int): String?
-    fun setActiveAccountId(level: Int, id: String?)
+
+    fun setActiveAccountId(
+        level: Int,
+        id: String?,
+    )
+
     fun allAccounts(accountsMinLevel: Int): List<Account>
+
     fun save(account: Account)
+
     fun update(account: Account)
+
     fun delete(id: String)
+
     fun getNonBackedUpCount(): Flowable<Int>
+
     fun clear()
+
     fun getDeletedAccountIds(): List<String>
+
     fun clearDeleted()
-    fun updateLevels(accountIds: List<String>, level: Int)
+
+    fun updateLevels(
+        accountIds: List<String>,
+        level: Int,
+    )
+
     fun updateMaxLevel(level: Int)
 }
 
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
+
     fun enabledWallets(accountId: String): List<EnabledWallet>
+
     fun save(enabledWallets: List<EnabledWallet>)
+
     fun delete(enabledWallets: List<EnabledWallet>)
+
     fun deleteAll()
 }
 
@@ -435,10 +580,18 @@ interface IWalletManager {
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
 
     fun save(wallets: List<Wallet>)
+
     fun saveEnabledWallets(enabledWallets: List<EnabledWallet>)
+
     fun delete(wallets: List<Wallet>)
+
     fun clear()
-    fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
+
+    fun handle(
+        newWallets: List<Wallet>,
+        deletedWallets: List<Wallet>,
+    )
+
     fun getWallets(account: Account): List<Wallet>
 }
 
@@ -448,7 +601,7 @@ interface IAppNumberFormatter {
         minimumFractionDigits: Int,
         maximumFractionDigits: Int,
         prefix: String = "",
-        suffix: String = ""
+        suffix: String = "",
     ): String
 
     fun formatCoinFull(
@@ -460,23 +613,23 @@ interface IAppNumberFormatter {
     fun formatCoinShort(
         value: BigDecimal,
         code: String?,
-        coinDecimals: Int
+        coinDecimals: Int,
     ): String
 
     fun formatNumberShort(
         value: BigDecimal,
-        maximumFractionDigits: Int
+        maximumFractionDigits: Int,
     ): String
 
     fun formatFiatFull(
         value: BigDecimal,
-        symbol: String
+        symbol: String,
     ): String
 
     fun formatFiatShort(
         value: BigDecimal,
         symbol: String,
-        currencyDecimals: Int
+        currencyDecimals: Int,
     ): String
 
     fun formatValueAsDiff(value: Value): String
@@ -484,7 +637,8 @@ interface IAppNumberFormatter {
 
 interface IFeeRateProvider {
     val feeRateChangeable: Boolean get() = false
-    suspend fun getFeeRates() : FeeRates
+
+    suspend fun getFeeRates(): FeeRates
 }
 
 interface IAddressParser {
@@ -497,9 +651,13 @@ interface IAccountCleaner {
 
 interface ITorManager {
     fun start()
+
     fun stop(): Single<Boolean>
+
     fun setTorAsEnabled()
+
     fun setTorAsDisabled()
+
     val isTorEnabled: Boolean
     val torStatusFlow: StateFlow<TorStatus>
 }
@@ -508,7 +666,9 @@ interface IRateAppManager {
     val showRateAppFlow: Flow<Boolean>
 
     fun onBalancePageActive()
+
     fun onBalancePageInactive()
+
     fun onAppLaunch()
 }
 
@@ -520,6 +680,7 @@ interface ITermsManager {
     val termsAcceptedSignalFlow: Flow<Boolean>
     val terms: List<TermsModule.TermType>
     val allTermsAccepted: Boolean
+
     fun acceptTerms()
 }
 

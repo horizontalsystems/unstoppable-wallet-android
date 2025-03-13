@@ -26,14 +26,15 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
     private var errorMessage: String? = null
     private var showSpinner = false
 
-    override fun createState() = UiState(
-        connectEnabled = !(apiKey.isNullOrBlank() || secretKey.isNullOrBlank()),
-        accountCreated = accountCreated,
-        apiKey = apiKey,
-        secretKey = secretKey,
-        errorMessage = errorMessage,
-        showSpinner = showSpinner
-    )
+    override fun createState() =
+        UiState(
+            connectEnabled = !(apiKey.isNullOrBlank() || secretKey.isNullOrBlank()),
+            accountCreated = accountCreated,
+            apiKey = apiKey,
+            secretKey = secretKey,
+            errorMessage = errorMessage,
+            showSpinner = showSpinner,
+        )
 
     fun onEnterApiKey(v: String) {
         apiKey = v
@@ -46,11 +47,12 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
     }
 
     fun onScannedData(data: String) {
-        val apiCredentials = try {
-            gson.fromJson(data, BinanceCexApiCredentials::class.java)
-        } catch (error: Throwable) {
-            null
-        }
+        val apiCredentials =
+            try {
+                gson.fromJson(data, BinanceCexApiCredentials::class.java)
+            } catch (error: Throwable) {
+                null
+            }
 
         val scannedApiKey = apiCredentials?.apiKey
         val scannedSecretKey = apiCredentials?.secretKey
@@ -90,17 +92,21 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
         }
     }
 
-    private fun createAccount(binanceApiKey: String, binanceSecretKey: String) {
+    private fun createAccount(
+        binanceApiKey: String,
+        binanceSecretKey: String,
+    ) {
         val cexType = CexType.Binance(binanceApiKey, binanceSecretKey)
         val name = accountFactory.getNextCexAccountName(cexType)
 
-        val account = accountFactory.account(
-            name,
-            AccountType.Cex(cexType = cexType),
-            AccountOrigin.Restored,
-            true,
-            false,
-        )
+        val account =
+            accountFactory.account(
+                name,
+                AccountType.Cex(cexType = cexType),
+                AccountOrigin.Restored,
+                true,
+                false,
+            )
 
         accountManager.save(account)
 
@@ -110,7 +116,7 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
     data class BinanceCexApiCredentials(
         val apiKey: String?,
         val secretKey: String?,
-        val comment: String?
+        val comment: String?,
     )
 
     class UiState(
@@ -119,6 +125,6 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
         val apiKey: String?,
         val secretKey: String?,
         val errorMessage: String?,
-        val showSpinner: Boolean
+        val showSpinner: Boolean,
     )
 }

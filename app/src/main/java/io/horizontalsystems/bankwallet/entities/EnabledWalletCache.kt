@@ -7,14 +7,16 @@ import java.math.BigDecimal
 
 @Entity(
     primaryKeys = ["tokenQueryId", "accountId"],
-    foreignKeys = [ForeignKey(
-        entity = AccountRecord::class,
-        parentColumns = ["id"],
-        childColumns = ["accountId"],
-        onUpdate = ForeignKey.CASCADE,
-        onDelete = ForeignKey.CASCADE,
-        deferred = true
-    )]
+    foreignKeys = [
+        ForeignKey(
+            entity = AccountRecord::class,
+            parentColumns = ["id"],
+            childColumns = ["accountId"],
+            onUpdate = ForeignKey.CASCADE,
+            onDelete = ForeignKey.CASCADE,
+            deferred = true,
+        ),
+    ],
 )
 data class EnabledWalletCache(
     val tokenQueryId: String,

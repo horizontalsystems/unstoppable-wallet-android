@@ -29,14 +29,15 @@ interface ISwapSlippageService {
 }
 
 class SwapSlippageViewModel(
-    private val service: ISwapSlippageService
-) : ViewModel(), IVerifiedInputViewModel {
-
+    private val service: ISwapSlippageService,
+) : ViewModel(),
+    IVerifiedInputViewModel {
     override val inputButtons: List<InputButton>
-        get() = service.recommendedSlippages.map {
-            val slippageStr = it.toPlainString()
-            InputButton("$slippageStr%", slippageStr)
-        }
+        get() =
+            service.recommendedSlippages.map {
+                val slippageStr = it.toPlainString()
+                InputButton("$slippageStr%", slippageStr)
+            }
 
     override val inputFieldPlaceholder: String?
         get() = service.defaultSlippage.toPlainString()
@@ -58,14 +59,17 @@ class SwapSlippageViewModel(
     private fun sync() {
         val error = service.slippageError?.localizedMessage
 
-        val caution = when {
-            error != null -> Caution(error, Caution.Type.Error)
-            service.unusualSlippage -> Caution(
-                Translator.getString(R.string.SwapSettings_Warning_UnusualSlippage),
-                Caution.Type.Warning
-            )
-            else -> null
-        }
+        val caution =
+            when {
+                error != null -> Caution(error, Caution.Type.Error)
+                service.unusualSlippage ->
+                    Caution(
+                        Translator.getString(R.string.SwapSettings_Warning_UnusualSlippage),
+                        Caution.Type.Warning,
+                    )
+
+                else -> null
+            }
         errorState = SwapSettingsModule.getState(caution)
     }
 

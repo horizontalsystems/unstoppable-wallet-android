@@ -7,7 +7,6 @@ import androidx.room.Query
 
 @Dao
 interface ProFeaturesDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(sessionKeyRow: ProFeaturesSessionKey)
 
@@ -19,5 +18,4 @@ interface ProFeaturesDao {
 
     @Query("DELETE FROM ProFeaturesSessionKey")
     fun clear()
-
 }

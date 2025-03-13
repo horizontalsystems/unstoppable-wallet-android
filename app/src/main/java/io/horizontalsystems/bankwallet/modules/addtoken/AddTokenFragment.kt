@@ -48,12 +48,10 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
 
 class AddTokenFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         AddTokenNavHost(navController)
     }
-
 }
 
 private const val AddTokenPage = "add_token"
@@ -62,7 +60,7 @@ private const val BlockchainSelectorPage = "blockchain_selector"
 @Composable
 private fun AddTokenNavHost(
     fragmentNavController: NavController,
-    viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
+    viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory()),
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -73,14 +71,14 @@ private fun AddTokenNavHost(
             AddTokenScreen(
                 navController = navController,
                 closeScreen = { fragmentNavController.popBackStack() },
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composablePage(BlockchainSelectorPage) {
             AddTokenBlockchainSelectorScreen(
                 blockchains = viewModel.blockchains,
                 selectedBlockchain = viewModel.selectedBlockchain,
-                navController = navController
+                navController = navController,
             )
         }
     }
@@ -95,7 +93,9 @@ private fun AddTokenScreen(
     navController.currentBackStackEntry
         ?.savedStateHandle
         ?.getStateFlow<List<Blockchain>>(BlockchainSelectorResult, emptyList())
-        ?.collectAsState()?.value?.let { selectedItems ->
+        ?.collectAsState()
+        ?.value
+        ?.let { selectedItems ->
             if (selectedItems.isNotEmpty()) {
                 viewModel.onBlockchainSelect(selectedItems.first())
                 navController.currentBackStackEntry
@@ -123,51 +123,54 @@ private fun AddTokenScreen(
                 navigationIcon = {
                     HsBackButton(onClick = closeScreen)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Add),
-                        onClick = viewModel::onAddClick,
-                        enabled = uiState.addButtonEnabled
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Add),
+                            onClick = viewModel::onAddClick,
+                            enabled = uiState.addButtonEnabled,
+                        ),
+                    ),
             )
         },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(innerPaddings)
+                    .verticalScroll(rememberScrollState()),
         ) {
             VSpacer(12.dp)
 
             CellUniversalLawrenceSection(
                 listOf {
                     RowUniversal(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        onClick = { navController.navigate(BlockchainSelectorPage) }
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                        onClick = { navController.navigate(BlockchainSelectorPage) },
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_blocks_24),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                         HSpacer(16.dp)
                         body_leah(
                             text = stringResource(R.string.AddToken_Blockchain),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         subhead1_grey(
                             text = viewModel.selectedBlockchain.name,
-                            modifier = Modifier.padding(horizontal = 8.dp)
+                            modifier = Modifier.padding(horizontal = 8.dp),
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.ic_down_arrow_20),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey
+                            tint = ComposeAppTheme.colors.grey,
                         )
                     }
-                }
+                },
             )
 
             VSpacer(32.dp)
@@ -190,27 +193,32 @@ private fun AddTokenScreen(
                         {
                             TitleValueCell(
                                 stringResource(R.string.AddToken_CoinName),
-                                tokenInfo.token.coin.name
+                                tokenInfo.token.coin.name,
                             )
-                        }, {
+                        },
+                        {
                             TitleValueCell(
                                 stringResource(R.string.AddToken_CoinCode),
-                                tokenInfo.token.coin.code
+                                tokenInfo.token.coin.code,
                             )
-                        }, {
+                        },
+                        {
                             TitleValueCell(
                                 stringResource(R.string.AddToken_Decimals),
-                                tokenInfo.token.decimals.toString()
+                                tokenInfo.token.decimals.toString(),
                             )
-                        }
-                    )
+                        },
+                    ),
                 )
             }
         }
     }
 }
 
-private fun getState(caution: Caution?, loading: Boolean) = when (caution?.type) {
+private fun getState(
+    caution: Caution?,
+    loading: Boolean,
+) = when (caution?.type) {
     Caution.Type.Error -> DataState.Error(Exception(caution.text))
     Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
     null -> if (loading) DataState.Loading else null

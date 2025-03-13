@@ -14,25 +14,28 @@ class ActionApprove(
     private val requiredAllowance: BigDecimal,
     private val spenderAddress: String,
     private val tokenIn: Token,
-    override val inProgress: Boolean
+    override val inProgress: Boolean,
 ) : ISwapProviderAction {
-
     @Composable
     override fun getTitle() = stringResource(R.string.Swap_Unlock)
 
     @Composable
     override fun getTitleInProgress() = stringResource(R.string.Swap_Unlocking)
 
-    override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
-        val approveData = Eip20ApproveFragment.Input(
-            tokenIn,
-            requiredAllowance,
-            spenderAddress
-        )
+    override fun execute(
+        navController: NavController,
+        onActionCompleted: () -> Unit,
+    ) {
+        val approveData =
+            Eip20ApproveFragment.Input(
+                tokenIn,
+                requiredAllowance,
+                spenderAddress,
+            )
 
         navController.slideFromBottomForResult<Eip20ApproveConfirmFragment.Result>(
             R.id.eip20ApproveFragment,
-            approveData
+            approveData,
         ) {
             onActionCompleted.invoke()
         }

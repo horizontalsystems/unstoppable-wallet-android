@@ -16,26 +16,33 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
 
 object MetricsPageModule {
-
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val metricsType: MetricsType) : ViewModelProvider.Factory {
+    class Factory(
+        private val metricsType: MetricsType,
+    ) : ViewModelProvider.Factory {
         private val globalMarketRepository by lazy {
             GlobalMarketRepository(App.marketKit)
         }
 
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 MetricsPageViewModel::class.java -> {
                     MetricsPageViewModel(metricsType, App.currencyManager, App.marketKit) as T
                 }
+
                 ChartViewModel::class.java -> {
-                    val chartService = MetricsPageChartService(App.currencyManager, metricsType, globalMarketRepository)
+                    val chartService =
+                        MetricsPageChartService(
+                            App.currencyManager,
+                            metricsType,
+                            globalMarketRepository,
+                        )
                     val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
-        }
     }
 
     @Immutable
@@ -58,4 +65,3 @@ object MetricsPageModule {
         val sortDescending: Boolean,
     )
 }
-

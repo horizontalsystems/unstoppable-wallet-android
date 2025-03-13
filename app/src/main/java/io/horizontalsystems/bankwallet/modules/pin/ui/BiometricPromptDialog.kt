@@ -12,13 +12,15 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.BiometricPromptUtils.c
 @Composable
 fun BiometricPromptDialog(
     onSuccess: (BiometricPrompt.AuthenticationResult) -> Unit,
-    onError: (Int) -> Unit
+    onError: (Int) -> Unit,
 ) {
-    val promptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle(stringResource(R.string.BiometricAuth_DialogTitle))
-        .setNegativeButtonText(stringResource(R.string.Button_Cancel))
-        .setConfirmationRequired(false)
-        .build()
+    val promptInfo =
+        BiometricPrompt.PromptInfo
+            .Builder()
+            .setTitle(stringResource(R.string.BiometricAuth_DialogTitle))
+            .setNegativeButtonText(stringResource(R.string.Button_Cancel))
+            .setConfirmationRequired(false)
+            .build()
 
     val context = LocalContext.current as? FragmentActivity
 

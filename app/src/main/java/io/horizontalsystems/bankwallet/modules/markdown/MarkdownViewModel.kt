@@ -22,7 +22,6 @@ class MarkdownViewModel(
     private val contentUrl: String,
     private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
-
     var markdownBlocks by mutableStateOf<List<MarkdownBlock>>(listOf())
         private set
 
@@ -37,8 +36,7 @@ class MarkdownViewModel(
                 if (connectivityManager.isConnected && viewState is ViewState.Error) {
                     retry()
                 }
-            }
-            .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     fun retry() {
@@ -79,5 +77,4 @@ class MarkdownViewModel(
         val url = URL(contentUrl)
         return networkManager.getMarkdown("${url.protocol}://${url.host}", contentUrl)
     }
-
 }

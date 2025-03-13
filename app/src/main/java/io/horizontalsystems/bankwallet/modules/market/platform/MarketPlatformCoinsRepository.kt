@@ -15,7 +15,7 @@ import java.math.BigDecimal
 class MarketPlatformCoinsRepository(
     private val platform: Platform,
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: CurrencyManager
+    private val currencyManager: CurrencyManager,
 ) {
     private var itemsCache: List<MarketItem>? = null
 
@@ -26,25 +26,27 @@ class MarketPlatformCoinsRepository(
     ) = withContext(Dispatchers.IO) {
         val currentCache = itemsCache
 
-        val items = if (forceRefresh || currentCache == null) {
-            val currency = currencyManager.baseCurrency
-            val marketInfoItems = marketKit
-                .topPlatformCoinListSingle(platform.uid, currency.code)
-                .await()
+        val items =
+            if (forceRefresh || currentCache == null) {
+                val currency = currencyManager.baseCurrency
+                val marketInfoItems =
+                    marketKit
+                        .topPlatformCoinListSingle(platform.uid, currency.code)
+                        .await()
 
-            marketInfoItems.map { marketInfo ->
-                MarketItem(
-                    fullCoin = marketInfo.fullCoin,
-                    volume = CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
-                    rate = CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
-                    diff = marketInfo.priceChange24h,
-                    marketCap = CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO),
-                    rank = marketInfo.marketCapRank
-                )
+                marketInfoItems.map { marketInfo ->
+                    MarketItem(
+                        fullCoin = marketInfo.fullCoin,
+                        volume = CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
+                        rate = CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
+                        diff = marketInfo.priceChange24h,
+                        marketCap = CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO),
+                        rank = marketInfo.marketCapRank,
+                    )
+                }
+            } else {
+                currentCache
             }
-        } else {
-            currentCache
-        }
 
         itemsCache = items
 
@@ -52,5 +54,4 @@ class MarketPlatformCoinsRepository(
             limit?.let { sortedList.take(it) } ?: sortedList
         }
     }
-
 }

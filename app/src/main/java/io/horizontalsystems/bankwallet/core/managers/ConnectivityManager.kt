@@ -16,15 +16,18 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-
-class ConnectivityManager(backgroundManager: BackgroundManager) {
-
+class ConnectivityManager(
+    backgroundManager: BackgroundManager,
+) {
     private val connectivityManager: ConnectivityManager by lazy {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
     private val scope = CoroutineScope(Dispatchers.Default)
     private val _networkAvailabilityFlow =
-        MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<Boolean>(
+            extraBufferCapacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
 
     val networkAvailabilityFlow = _networkAvailabilityFlow.asSharedFlow()
 
@@ -42,11 +45,13 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
                     BackgroundManagerState.EnterForeground -> {
                         willEnterForeground()
                     }
+
                     BackgroundManagerState.EnterBackground -> {
                         didEnterBackground()
                     }
+
                     BackgroundManagerState.AllActivitiesDestroyed -> {
-                        //do nothing
+                        // do nothing
                     }
                 }
             }
@@ -58,7 +63,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
         try {
             connectivityManager.unregisterNetworkCallback(callback)
         } catch (e: Exception) {
-            //was not registered, or already unregistered
+            // was not registered, or already unregistered
         }
         connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
     }
@@ -67,7 +72,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
         try {
             connectivityManager.unregisterNetworkCallback(callback)
         } catch (e: Exception) {
-            //already unregistered
+            // already unregistered
         }
     }
 
@@ -85,14 +90,16 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
         hasConnection = true
         val capabilities = connectivityManager.getNetworkCapabilities(network)
         hasValidInternet = capabilities?.let {
-            it.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) && it.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            it.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                it.hasCapability(
+                    NetworkCapabilities.NET_CAPABILITY_VALIDATED,
+                )
         } ?: false
 
         return hasValidInternet
     }
 
     inner class ConnectionStatusCallback : ConnectivityManager.NetworkCallback() {
-
         private val activeNetworks: MutableList<Network> = mutableListOf()
 
         override fun onLost(network: Network) {
@@ -102,10 +109,14 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
             updatedConnectionState()
         }
 
-        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities,
+        ) {
             super.onCapabilitiesChanged(network, networkCapabilities)
-            hasValidInternet = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            hasValidInternet =
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
             updatedConnectionState()
         }
 
@@ -117,7 +128,6 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
             hasConnection = activeNetworks.isNotEmpty()
             updatedConnectionState()
         }
-
     }
 
     private fun updatedConnectionState() {
@@ -128,5 +138,4 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
             _networkAvailabilityFlow.tryEmit(isConnected)
         }
     }
-
 }

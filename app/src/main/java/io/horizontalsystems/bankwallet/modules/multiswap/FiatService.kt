@@ -13,7 +13,9 @@ import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatService.State>() {
+class FiatService(
+    private val marketKit: MarketKitWrapper,
+) : ServiceState<FiatService.State>() {
     private var currency: Currency? = null
     private var token: Token? = null
     private var amount: BigDecimal? = null
@@ -23,39 +25,47 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
     private var coinPriceUpdatesJob: Job? = null
     private var coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    override fun createState() = State(
-        coinPrice = coinPrice,
-        amount = amount,
-        fiatAmount = fiatAmount
-    )
+    override fun createState() =
+        State(
+            coinPrice = coinPrice,
+            amount = amount,
+            fiatAmount = fiatAmount,
+        )
 
     private fun refreshCoinPrice() {
-        coinPrice = token?.let { token ->
-            currency?.code?.let { currency ->
-                marketKit.coinPrice(token.coin.uid, currency)
+        coinPrice =
+            token?.let { token ->
+                currency?.code?.let { currency ->
+                    marketKit.coinPrice(token.coin.uid, currency)
+                }
             }
-        }
         resubscribeForCoinPrice()
     }
 
     private fun refreshFiatAmount() {
-        fiatAmount = amount?.let { amount ->
-            coinPrice?.let { coinPrice ->
-                currency?.let { currency ->
-                    (amount * coinPrice.value).setScale(currency.decimal, RoundingMode.DOWN).stripTrailingZeros()
+        fiatAmount =
+            amount?.let { amount ->
+                coinPrice?.let { coinPrice ->
+                    currency?.let { currency ->
+                        (amount * coinPrice.value)
+                            .setScale(currency.decimal, RoundingMode.DOWN)
+                            .stripTrailingZeros()
+                    }
                 }
             }
-        }
     }
 
     private fun refreshAmount() {
-        amount = fiatAmount?.let { fiatAmount ->
-            coinPrice?.let { coinPrice ->
-                token?.let { token ->
-                    fiatAmount.divide(coinPrice.value, token.decimals, RoundingMode.DOWN).stripTrailingZeros()
+        amount =
+            fiatAmount?.let { fiatAmount ->
+                coinPrice?.let { coinPrice ->
+                    token?.let { token ->
+                        fiatAmount
+                            .divide(coinPrice.value, token.decimals, RoundingMode.DOWN)
+                            .stripTrailingZeros()
+                    }
                 }
             }
-        }
     }
 
     private fun resubscribeForCoinPrice() {
@@ -63,16 +73,18 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
         val currency = currency ?: return
 
         token?.let { platformCoin ->
-            coinPriceUpdatesJob = coroutineScope.launch {
-                marketKit.coinPriceObservable("swap", platformCoin.coin.uid, currency.code)
-                    .asFlow()
-                    .collect {
-                        coinPrice = it
+            coinPriceUpdatesJob =
+                coroutineScope.launch {
+                    marketKit
+                        .coinPriceObservable("swap", platformCoin.coin.uid, currency.code)
+                        .asFlow()
+                        .collect {
+                            coinPrice = it
 
-                        refreshFiatAmount()
-                        emitState()
-                    }
-            }
+                            refreshFiatAmount()
+                            emitState()
+                        }
+                }
         }
     }
 
@@ -119,6 +131,6 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
     data class State(
         val amount: BigDecimal?,
         val fiatAmount: BigDecimal?,
-        val coinPrice: CoinPrice?
+        val coinPrice: CoinPrice?,
     )
 }

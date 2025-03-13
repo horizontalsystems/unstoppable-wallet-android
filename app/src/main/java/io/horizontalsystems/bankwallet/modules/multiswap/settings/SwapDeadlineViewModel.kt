@@ -31,9 +31,9 @@ interface ISwapDeadlineService {
 }
 
 class SwapDeadlineViewModel(
-    private val service: ISwapDeadlineService
-) : ViewModel(), IVerifiedInputViewModel {
-
+    private val service: ISwapDeadlineService,
+) : ViewModel(),
+    IVerifiedInputViewModel {
     var errorState by mutableStateOf<DataState.Error?>(null)
         private set
 
@@ -46,12 +46,12 @@ class SwapDeadlineViewModel(
             return listOf(
                 InputButton(
                     Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes),
-                    lowerMinutes
+                    lowerMinutes,
                 ),
                 InputButton(
                     Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes),
-                    upperMinutes
-                )
+                    upperMinutes,
+                ),
             )
         }
 
@@ -70,9 +70,10 @@ class SwapDeadlineViewModel(
     }
 
     private fun sync() {
-        val caution = service.deadlineError?.localizedMessage?.let { localizedMessage ->
-            Caution(localizedMessage, Caution.Type.Error)
-        }
+        val caution =
+            service.deadlineError?.localizedMessage?.let { localizedMessage ->
+                Caution(localizedMessage, Caution.Type.Error)
+            }
         errorState = getState(caution)
     }
 
@@ -80,13 +81,9 @@ class SwapDeadlineViewModel(
         service.setDeadline(text?.toLongOrNull()?.times(60) ?: service.defaultDeadline)
     }
 
-    override fun isValid(text: String?): Boolean {
-        return text.isNullOrBlank() || text.toLongOrNull() != null
-    }
+    override fun isValid(text: String?): Boolean = text.isNullOrBlank() || text.toLongOrNull() != null
 
-    private fun toMinutes(seconds: Long): String {
-        return floor(seconds / 60.0).toLong().toString()
-    }
+    private fun toMinutes(seconds: Long): String = floor(seconds / 60.0).toLong().toString()
 }
 
 interface IVerifiedInputViewModel {
@@ -96,5 +93,6 @@ interface IVerifiedInputViewModel {
     val inputFieldPlaceholder: String? get() = null
 
     fun onChangeText(text: String?) = Unit
+
     fun isValid(text: String?): Boolean = true
 }

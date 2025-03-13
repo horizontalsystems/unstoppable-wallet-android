@@ -8,12 +8,11 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.Sho
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 object PrivateKeysModule {
-
-    class Factory(private val account: Account) : ViewModelProvider.Factory {
+    class Factory(
+        private val account: Account,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PrivateKeysViewModel(account, App.evmBlockchainManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = PrivateKeysViewModel(account, App.evmBlockchainManager) as T
     }
 
     data class ViewState(
@@ -24,6 +23,6 @@ object PrivateKeysModule {
 
     data class ExtendedKey(
         val hdKey: HDExtendedKey,
-        val displayKeyType: ShowExtendedKeyModule.DisplayKeyType
+        val displayKeyType: ShowExtendedKeyModule.DisplayKeyType,
     )
 }

@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 
-class RecoveryPhraseViewModel(account: Account) : ViewModel() {
+class RecoveryPhraseViewModel(
+    account: Account,
+) : ViewModel() {
     val words: List<String>
     private val seed: ByteArray?
 
@@ -20,9 +22,10 @@ class RecoveryPhraseViewModel(account: Account) : ViewModel() {
     init {
         if (account.type is AccountType.Mnemonic) {
             words = account.type.words
-            wordsNumbered = words.mapIndexed { index, word ->
-                RecoveryPhraseModule.WordNumbered(word, index + 1)
-            }
+            wordsNumbered =
+                words.mapIndexed { index, word ->
+                    RecoveryPhraseModule.WordNumbered(word, index + 1)
+                }
             passphrase = account.type.passphrase
             seed = account.type.seed
         } else {
@@ -30,5 +33,4 @@ class RecoveryPhraseViewModel(account: Account) : ViewModel() {
             seed = null
         }
     }
-
 }

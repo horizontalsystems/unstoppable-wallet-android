@@ -41,7 +41,7 @@ fun SendTonScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
-    riskyAddress: Boolean
+    riskyAddress: Boolean,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -54,11 +54,11 @@ fun SendTonScreen(
     val amountInputType = amountInputModeViewModel.inputType
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
-    )
+    val paymentAddressViewModel =
+        viewModel<AddressParserViewModel>(
+            factory = AddressParserModule.Factory(wallet.token, amount),
+        )
     val amountUnique = paymentAddressViewModel.amountUnique
-
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
@@ -69,13 +69,13 @@ fun SendTonScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
         ) {
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),
                     value = uiState.address.hex,
-                    riskyAddress = riskyAddress
+                    riskyAddress = riskyAddress,
                 ) {
                     navController.popBackStack()
                 }
@@ -98,7 +98,7 @@ fun SendTonScreen(
                 },
                 inputType = amountInputType,
                 rate = viewModel.coinRate,
-                amountUnique = amountUnique
+                amountUnique = amountUnique,
             )
 
             VSpacer(8.dp)
@@ -108,7 +108,7 @@ fun SendTonScreen(
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = availableBalance,
                 amountInputType = amountInputType,
-                rate = viewModel.coinRate
+                rate = viewModel.coinRate,
             )
 
             VSpacer(16.dp)
@@ -124,13 +124,14 @@ fun SendTonScreen(
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
                 navController = navController,
-                viewState = if (feeInProgress) ViewState.Loading else null
+                viewState = if (feeInProgress) ViewState.Loading else null,
             )
 
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                 title = stringResource(R.string.Button_Next),
                 onClick = {
                     if (riskyAddress) {
@@ -138,8 +139,8 @@ fun SendTonScreen(
                         navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
                             R.id.addressRiskyBottomSheetAlert,
                             AddressRiskyBottomSheetAlert.Input(
-                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                            )
+                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText),
+                            ),
                         ) {
                             openConfirm(navController, sendEntryPointDestId)
                         }
@@ -147,7 +148,7 @@ fun SendTonScreen(
                         openConfirm(navController, sendEntryPointDestId)
                     }
                 },
-                enabled = proceedEnabled
+                enabled = proceedEnabled,
             )
         }
     }
@@ -155,13 +156,13 @@ fun SendTonScreen(
 
 private fun openConfirm(
     navController: NavController,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
     navController.slideFromRight(
         R.id.sendConfirmation,
         SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Ton,
-            sendEntryPointDestId
-        )
+            sendEntryPointDestId,
+        ),
     )
 }

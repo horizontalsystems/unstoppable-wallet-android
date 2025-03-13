@@ -5,7 +5,11 @@ import io.horizontalsystems.bankwallet.core.App
 import java.math.BigDecimal
 
 @Composable
-fun coinAmountString(value: BigDecimal?, coinCode: String, sign: String): String {
+fun coinAmountString(
+    value: BigDecimal?,
+    coinCode: String,
+    sign: String,
+): String {
 //    if (hideAmount) return "*****"
     if (value == null) return "---"
 
@@ -13,7 +17,10 @@ fun coinAmountString(value: BigDecimal?, coinCode: String, sign: String): String
 }
 
 @Composable
-fun fiatAmountString(value: BigDecimal?, fiatSymbol: String): String {
+fun fiatAmountString(
+    value: BigDecimal?,
+    fiatSymbol: String,
+): String {
 //    if (hideAmount) return "*****"
     if (value == null) return "---"
 

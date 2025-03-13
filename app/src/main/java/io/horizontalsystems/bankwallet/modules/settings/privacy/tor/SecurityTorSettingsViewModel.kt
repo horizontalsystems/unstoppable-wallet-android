@@ -15,7 +15,6 @@ class SecurityTorSettingsViewModel(
     private val torManager: ITorManager,
     private val pinComponent: IPinComponent,
 ) : ViewModel() {
-
     private val logger = AppLogger("SecurityTorSettingsViewModel")
 
     var torCheckEnabled by mutableStateOf(torManager.isTorEnabled)
@@ -61,5 +60,4 @@ class SecurityTorSettingsViewModel(
     fun resetSwitch() {
         torCheckEnabled = torManager.isTorEnabled
     }
-
 }

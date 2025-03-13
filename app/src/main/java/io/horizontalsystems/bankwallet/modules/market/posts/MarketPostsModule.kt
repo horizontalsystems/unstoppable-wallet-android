@@ -5,15 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
 object MarketPostsModule {
-
     class Factory : ViewModelProvider.Factory {
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val postsService = MarketPostService(App.marketKit, App.backgroundManager)
             return MarketPostsViewModel(postsService) as T
         }
-
     }
 
     data class PostViewItem(
@@ -21,7 +18,6 @@ object MarketPostsModule {
         val title: String,
         val body: String,
         val timeAgo: String,
-        val url: String
+        val url: String,
     )
-
 }

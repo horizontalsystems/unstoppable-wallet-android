@@ -19,9 +19,8 @@ import kotlinx.coroutines.rx2.await
 class FaqRepository(
     private val faqManager: FaqManager,
     private val connectivityManager: ConnectivityManager,
-    private val languageManager: LanguageManager
+    private val languageManager: LanguageManager,
 ) {
-
     val faqList: Observable<DataState<List<FaqSection>>>
         get() = faqListSubject
 
@@ -50,18 +49,20 @@ class FaqRepository(
 
         coroutineScope.launch {
             try {
-                val faqMaps = retryWhen(
-                    times = retryLimit,
-                    predicate = { it is AssertionError }
-                ) {
-                    faqManager.getFaqList().await()
-                }
+                val faqMaps =
+                    retryWhen(
+                        times = retryLimit,
+                        predicate = { it is AssertionError },
+                    ) {
+                        faqManager.getFaqList().await()
+                    }
 
-                val faqSections = getByLocalLanguage(
-                    faqMaps,
-                    languageManager.currentLocale.language,
-                    languageManager.fallbackLocale.language
-                )
+                val faqSections =
+                    getByLocalLanguage(
+                        faqMaps,
+                        languageManager.currentLocale.language,
+                        languageManager.fallbackLocale.language,
+                    )
                 faqListSubject.onNext(DataState.Success(faqSections))
             } catch (e: Throwable) {
                 faqListSubject.onNext(DataState.Error(e))
@@ -72,15 +73,15 @@ class FaqRepository(
     private fun getByLocalLanguage(
         faqMultiLanguage: List<FaqMap>,
         language: String,
-        fallbackLanguage: String
-    ) =
-        faqMultiLanguage.map { sectionMultiLang ->
-            val categoryTitle = sectionMultiLang.section[language]
+        fallbackLanguage: String,
+    ) = faqMultiLanguage.map { sectionMultiLang ->
+        val categoryTitle =
+            sectionMultiLang.section[language]
                 ?: sectionMultiLang.section[fallbackLanguage]
                 ?: ""
-            val sectionItems =
-                sectionMultiLang.items.mapNotNull { it[language] ?: it[fallbackLanguage] }
+        val sectionItems =
+            sectionMultiLang.items.mapNotNull { it[language] ?: it[fallbackLanguage] }
 
-            FaqSection(categoryTitle, sectionItems)
-        }
+        FaqSection(categoryTitle, sectionItems)
+    }
 }

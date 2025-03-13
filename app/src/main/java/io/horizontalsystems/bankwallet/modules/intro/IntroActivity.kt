@@ -40,12 +40,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import kotlinx.coroutines.launch
 
 class IntroActivity : BaseActivity() {
-
     val viewModel by viewModels<IntroViewModel> { IntroModule.Factory() }
 
     private val nightMode by lazy {
         val uiMode =
-            App.instance.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
+            App.instance.resources
+                ?.configuration
+                ?.uiMode
+                ?.and(Configuration.UI_MODE_NIGHT_MASK)
         uiMode == Configuration.UI_MODE_NIGHT_YES
     }
 
@@ -63,11 +65,14 @@ class IntroActivity : BaseActivity() {
             context.startActivity(intent)
         }
     }
-
 }
 
 @Composable
-private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
+private fun IntroScreen(
+    viewModel: IntroViewModel,
+    nightMode: Boolean,
+    closeActivity: () -> Unit,
+) {
     val pageCount = 3
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }
     ComposeAppTheme {
@@ -89,36 +94,38 @@ private fun StaticContent(
     viewModel: IntroViewModel,
     pagerState: PagerState,
     closeActivity: () -> Unit,
-    pageCount: Int
+    pageCount: Int,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.weight(2f))
         Spacer(Modifier.height(326.dp))
         Spacer(Modifier.weight(1f))
         SliderIndicator(
             total = pageCount,
-            current = pagerState.currentPage
+            current = pagerState.currentPage,
         )
         Spacer(Modifier.weight(1f))
-        //Text
+        // Text
         Column(
-            modifier = Modifier
-                .height(120.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .height(120.dp)
+                    .fillMaxWidth(),
         ) {
             val title = viewModel.slides[pagerState.currentPage].title
             Crossfade(targetState = title) { titleRes ->
                 title3_leah(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
                     text = stringResource(titleRes),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
             Spacer(Modifier.height(16.dp))
@@ -126,18 +133,20 @@ private fun StaticContent(
             Crossfade(targetState = subtitle) { subtitleRes ->
                 body_grey(
                     text = stringResource(subtitleRes),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 48.dp),
-                    textAlign = TextAlign.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 48.dp),
+                    textAlign = TextAlign.Center,
                 )
             }
         }
         Spacer(Modifier.weight(2f))
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
             title = stringResource(R.string.Button_Next),
             onClick = {
                 if (pagerState.currentPage + 1 < pageCount) {
@@ -148,9 +157,9 @@ private fun StaticContent(
                     viewModel.onStartClicked()
                     MainModule.start(context)
                     closeActivity()
-
                 }
-            })
+            },
+        )
         Spacer(Modifier.height(60.dp))
     }
 }
@@ -158,11 +167,11 @@ private fun StaticContent(
 @Composable
 private fun SlidingContent(
     slideData: IntroModule.IntroSliderData,
-    nightMode: Boolean
+    nightMode: Boolean,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.weight(2f))
         Image(
@@ -171,10 +180,10 @@ private fun SlidingContent(
             contentDescription = null,
         )
         Spacer(Modifier.weight(1f))
-        //switcher
+        // switcher
         Spacer(Modifier.height(30.dp))
         Spacer(Modifier.weight(1f))
-        //Text
+        // Text
         Spacer(Modifier.height(120.dp))
         Spacer(Modifier.weight(2f))
         Spacer(Modifier.height(110.dp))

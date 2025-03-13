@@ -1,7 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -17,14 +22,16 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
-fun CoinTweetsScreen(
-    fullCoin: FullCoin
-) {
+fun CoinTweetsScreen(fullCoin: FullCoin) {
     val viewModel = viewModel<CoinTweetsViewModel>(factory = CoinTweetsModule.Factory(fullCoin))
 
     val items by viewModel.itemsLiveData.observeAsState(listOf())
@@ -41,17 +48,19 @@ fun CoinTweetsScreen(
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 ViewState.Success -> {
                     if (items.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.CoinPage_Twitter_NoTweets),
-                            icon = R.drawable.ic_no_tweets
+                            icon = R.drawable.ic_no_tweets,
                         )
                     } else {
                         LazyColumn(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxSize(),
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxSize(),
                         ) {
                             items(items) { tweet: TweetViewItem ->
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -62,22 +71,27 @@ fun CoinTweetsScreen(
 
                             item {
                                 Box(
-                                    modifier = Modifier
-                                        .padding(vertical = 32.dp)
-                                        .fillMaxWidth(),
-                                    contentAlignment = Alignment.Center
+                                    modifier =
+                                        Modifier
+                                            .padding(vertical = 32.dp)
+                                            .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     ButtonSecondaryDefault(
                                         title = stringResource(id = R.string.CoinPage_Twitter_SeeOnTwitter),
                                         onClick = {
-                                            LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
-                                        }
+                                            LinkHelper.openLinkInAppBrowser(
+                                                context,
+                                                viewModel.twitterPageUrl,
+                                            )
+                                        },
                                     )
                                 }
                             }
                         }
                     }
                 }
+
                 is ViewState.Error -> {
                     if (viewState.t is TweetsProvider.UserNotFound) {
                         Box(modifier = Modifier.fillMaxSize()) {
@@ -90,6 +104,7 @@ fun CoinTweetsScreen(
                         ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                     }
                 }
+
                 null -> {}
             }
         }

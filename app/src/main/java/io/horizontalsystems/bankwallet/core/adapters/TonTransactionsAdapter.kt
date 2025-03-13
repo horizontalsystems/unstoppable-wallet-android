@@ -27,7 +27,6 @@ class TonTransactionsAdapter(
     tonKitWrapper: TonKitWrapper,
     private val tonTransactionConverter: TonTransactionConverter,
 ) : ITransactionsAdapter {
-
     private val tonKit = tonKitWrapper.tonKit
 
     override val explorerTitle = "tonviewer.com"
@@ -46,21 +45,27 @@ class TonTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> = try {
-        val tagQuery = getTagQuery(token, transactionType, address)
-        val beforeLt = (from as TonTransactionRecord?)?.lt
+    ): Single<List<TransactionRecord>> =
+        try {
+            val tagQuery = getTagQuery(token, transactionType, address)
+            val beforeLt = (from as TonTransactionRecord?)?.lt
 
-        rxSingle {
-            tonKit.events(tagQuery, beforeLt, limit = limit)
-                .map {
-                    tonTransactionConverter.createTransactionRecord(it)
-                }
+            rxSingle {
+                tonKit
+                    .events(tagQuery, beforeLt, limit = limit)
+                    .map {
+                        tonTransactionConverter.createTransactionRecord(it)
+                    }
+            }
+        } catch (e: NotSupportedException) {
+            Single.just(listOf())
         }
-    } catch (e: NotSupportedException) {
-        Single.just(listOf())
-    }
 
-    private fun getTagQuery(token: Token?, transactionType: FilterTransactionType, address: String?): TagQuery {
+    private fun getTagQuery(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ): TagQuery {
         var platform: Tag.Platform? = null
         var jettonAddress: Address? = null
 
@@ -73,19 +78,20 @@ class TonTransactionsAdapter(
             jettonAddress = Address.parse(tokenType.address)
         }
 
-        val tagType = when (transactionType) {
-            All -> null
-            Incoming -> Tag.Type.Incoming
-            Outgoing -> Tag.Type.Outgoing
-            Swap -> Tag.Type.Swap
-            Approve -> throw NotSupportedException()
-        }
+        val tagType =
+            when (transactionType) {
+                All -> null
+                Incoming -> Tag.Type.Incoming
+                Outgoing -> Tag.Type.Outgoing
+                Swap -> Tag.Type.Swap
+                Approve -> throw NotSupportedException()
+            }
 
         return TagQuery(
             tagType,
             platform,
             jettonAddress,
-            address?.let { Address.parse(it) }
+            address?.let { Address.parse(it) },
         )
     }
 
@@ -93,25 +99,22 @@ class TonTransactionsAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = try {
-        val tagQuery = getTagQuery(token, transactionType, address)
+    ): Flowable<List<TransactionRecord>> =
+        try {
+            val tagQuery = getTagQuery(token, transactionType, address)
 
-        tonKit
-            .eventFlow(tagQuery)
-            .map { eventInfo ->
-                eventInfo.events.map {
-                    tonTransactionConverter.createTransactionRecord(it)
-                }
-            }
-            .asFlowable()
+            tonKit
+                .eventFlow(tagQuery)
+                .map { eventInfo ->
+                    eventInfo.events.map {
+                        tonTransactionConverter.createTransactionRecord(it)
+                    }
+                }.asFlowable()
+        } catch (e: NotSupportedException) {
+            Flowable.empty()
+        }
 
-    } catch (e: NotSupportedException) {
-        Flowable.empty()
-    }
-
-    override fun getTransactionUrl(transactionHash: String): String {
-        return "https://tonviewer.com/transaction/$transactionHash"
-    }
+    override fun getTransactionUrl(transactionHash: String): String = "https://tonviewer.com/transaction/$transactionHash"
 
     class NotSupportedException : Exception()
 }

@@ -14,14 +14,16 @@ import io.reactivex.subjects.PublishSubject
 
 class RestoreSettingsService(
     private val manager: RestoreSettingsManager,
-    private val zcashBirthdayProvider: ZcashBirthdayProvider
-    ) : Clearable {
-
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
+) : Clearable {
     val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
     val rejectApproveSettingsObservable = PublishSubject.create<Token>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(token: Token, account: Account? = null) {
+    fun approveSettings(
+        token: Token,
+        account: Account? = null,
+    ) {
         val blockchainType = token.blockchainType
 
         if (account != null && account.origin == AccountOrigin.Created) {
@@ -35,10 +37,11 @@ class RestoreSettingsService(
             return
         }
 
-        val existingSettings = account?.let { manager.settings(it, blockchainType) } ?: RestoreSettings()
+        val existingSettings =
+            account?.let { manager.settings(it, blockchainType) } ?: RestoreSettings()
 
-        if (blockchainType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
-            && existingSettings.birthdayHeight == null
+        if (blockchainType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight) &&
+            existingSettings.birthdayHeight == null
         ) {
             requestObservable.onNext(Request(token, RequestType.BirthdayHeight))
             return
@@ -47,17 +50,25 @@ class RestoreSettingsService(
         approveSettingsObservable.onNext(TokenWithSettings(token, RestoreSettings()))
     }
 
-    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
+    fun save(
+        settings: RestoreSettings,
+        account: Account,
+        blockchainType: BlockchainType,
+    ) {
         manager.save(settings, account, blockchainType)
     }
 
-    fun enter(zcashConfig: ZCashConfig, token: Token) {
+    fun enter(
+        zcashConfig: ZCashConfig,
+        token: Token,
+    ) {
         val settings = RestoreSettings()
         settings.birthdayHeight =
-            if (zcashConfig.restoreAsNew)
+            if (zcashConfig.restoreAsNew) {
                 zcashBirthdayProvider.getLatestCheckpointBlockHeight()
-            else
+            } else {
                 zcashConfig.birthdayHeight?.toLongOrNull()
+            }
 
         val tokenWithSettings = TokenWithSettings(token, settings)
         approveSettingsObservable.onNext(tokenWithSettings)
@@ -69,9 +80,17 @@ class RestoreSettingsService(
 
     override fun clear() = Unit
 
-    data class TokenWithSettings(val token: Token, val settings: RestoreSettings)
-    data class Request(val token: Token, val requestType: RequestType)
+    data class TokenWithSettings(
+        val token: Token,
+        val settings: RestoreSettings,
+    )
+
+    data class Request(
+        val token: Token,
+        val requestType: RequestType,
+    )
+
     enum class RequestType {
-        BirthdayHeight
+        BirthdayHeight,
     }
 }

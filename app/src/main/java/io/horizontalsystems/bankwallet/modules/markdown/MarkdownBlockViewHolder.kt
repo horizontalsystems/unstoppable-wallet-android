@@ -23,12 +23,15 @@ import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
 
-abstract class MarkdownBlockViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+abstract class MarkdownBlockViewHolder(
+    itemView: View,
+) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: MarkdownBlock)
 }
 
-class ViewHolderFooter(private val binding: ViewHolderMarkdownFooterBinding) :
-    MarkdownBlockViewHolder(binding.root) {
+class ViewHolderFooter(
+    private val binding: ViewHolderMarkdownFooterBinding,
+) : MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Footer) return
 
@@ -36,8 +39,9 @@ class ViewHolderFooter(private val binding: ViewHolderMarkdownFooterBinding) :
     }
 }
 
-class ViewHolderH1(private val binding: ViewHolderMarkdownH1Binding) :
-    MarkdownBlockViewHolder(binding.root) {
+class ViewHolderH1(
+    private val binding: ViewHolderMarkdownH1Binding,
+) : MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading1) return
 
@@ -45,8 +49,9 @@ class ViewHolderH1(private val binding: ViewHolderMarkdownH1Binding) :
     }
 }
 
-class ViewHolderH2(private val binding: ViewHolderMarkdownH2Binding) :
-    MarkdownBlockViewHolder(binding.root) {
+class ViewHolderH2(
+    private val binding: ViewHolderMarkdownH2Binding,
+) : MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading2) return
 
@@ -54,8 +59,9 @@ class ViewHolderH2(private val binding: ViewHolderMarkdownH2Binding) :
     }
 }
 
-class ViewHolderH3(private val binding: ViewHolderMarkdownH3Binding) :
-    MarkdownBlockViewHolder(binding.root) {
+class ViewHolderH3(
+    private val binding: ViewHolderMarkdownH3Binding,
+) : MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading3) return
 
@@ -63,13 +69,15 @@ class ViewHolderH3(private val binding: ViewHolderMarkdownH3Binding) :
     }
 }
 
-class ViewHolderImage(private val binding: ViewHolderMarkdownImageBinding) :
-    MarkdownBlockViewHolder(binding.root) {
-    private val ratios = mapOf(
-        "l" to "4:3",
-        "p" to "9:16",
-        "s" to "1:1"
-    )
+class ViewHolderImage(
+    private val binding: ViewHolderMarkdownImageBinding,
+) : MarkdownBlockViewHolder(binding.root) {
+    private val ratios =
+        mapOf(
+            "l" to "4:3",
+            "p" to "9:16",
+            "s" to "1:1",
+        )
 
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Image) return
@@ -87,16 +95,24 @@ class ViewHolderImage(private val binding: ViewHolderMarkdownImageBinding) :
         }
 
         binding.image.load(item.destination) {
-            listener(object : ImageRequest.Listener {
-                override fun onSuccess(request: ImageRequest, result: SuccessResult) {
-                    super.onSuccess(request, result)
-                    binding.placeholder.isVisible = false
-                }
-            })
+            listener(
+                object : ImageRequest.Listener {
+                    override fun onSuccess(
+                        request: ImageRequest,
+                        result: SuccessResult,
+                    ) {
+                        super.onSuccess(request, result)
+                        binding.placeholder.isVisible = false
+                    }
+                },
+            )
         }
     }
 
-    private fun setConstraints(destination: String, mainImage: Boolean) {
+    private fun setConstraints(
+        destination: String,
+        mainImage: Boolean,
+    ) {
         val baseName = FilenameUtils.getBaseName(URL(destination).path)
         val suffix = baseName.split("-").last()
 
@@ -106,7 +122,7 @@ class ViewHolderImage(private val binding: ViewHolderMarkdownImageBinding) :
         set.setMargin(
             binding.image.id,
             TOP,
-            if (mainImage) 0 else LayoutHelper.dp(12f, binding.wrapper.context)
+            if (mainImage) 0 else LayoutHelper.dp(12f, binding.wrapper.context),
         )
         set.applyTo(binding.wrapper)
     }
@@ -115,7 +131,7 @@ class ViewHolderImage(private val binding: ViewHolderMarkdownImageBinding) :
 class ViewHolderParagraph(
     private val binding: ViewHolderMarkdownParagraphBinding,
     private val listener: MarkdownContentAdapter.Listener,
-    private val handleRelativeUrl: Boolean
+    private val handleRelativeUrl: Boolean,
 ) : MarkdownBlockViewHolder(binding.root) {
     private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, binding.wrapper.context)
     private val listItemIndent = LayoutHelper.dp(24f, binding.wrapper.context)
@@ -140,21 +156,24 @@ class ViewHolderParagraph(
         listItem(item)
     }
 
-    private fun handleLinkToGuideInApp(strBuilder: SpannableStringBuilder, span: URLSpan) {
+    private fun handleLinkToGuideInApp(
+        strBuilder: SpannableStringBuilder,
+        span: URLSpan,
+    ) {
         if (!span.url.endsWith("md")) return
 
         val start = strBuilder.getSpanStart(span)
         val end = strBuilder.getSpanEnd(span)
         val flags = strBuilder.getSpanFlags(span)
-        val clickable = object : ClickableSpan() {
-            override fun onClick(view: View) {
-                listener.onClick(span.url)
+        val clickable =
+            object : ClickableSpan() {
+                override fun onClick(view: View) {
+                    listener.onClick(span.url)
+                }
             }
-        }
         strBuilder.setSpan(clickable, start, end, flags)
         strBuilder.removeSpan(span)
     }
-
 
     private fun listItem(item: MarkdownBlock) {
         val leftPadding = if (item.listItem) listItemIndent else 0

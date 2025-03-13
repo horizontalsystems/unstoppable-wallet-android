@@ -24,7 +24,7 @@ fun GraphicLine(
     minValue: Float = data.minOf { it.value },
     maxValue: Float = data.maxOf { it.value },
     color: Color,
-    selectedItemKey: Long? = null
+    selectedItemKey: Long? = null,
 ) {
     val dotColor = ComposeAppTheme.colors.leah
     Canvas(
@@ -60,13 +60,13 @@ fun GraphicLine(
                 drawPath(
                     linePath,
                     color,
-                    style = Stroke(1.dp.toPx())
+                    style = Stroke(1.dp.toPx()),
                 )
                 dotPosition?.let {
                     drawCircle(dotColor, 5.dp.toPx(), center = it)
                 }
             }
-        }
+        },
     )
 }
 
@@ -79,13 +79,14 @@ fun GraphicLineWithGradient(
     maxValue: Float,
     color: Color,
     gradientColors: Pair<Color, Color>,
-    selectedItemKey: Long?
+    selectedItemKey: Long?,
 ) {
     val dotColor = ComposeAppTheme.colors.leah
     Canvas(
-        modifier = Modifier
-            .height(120.dp)
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .height(120.dp)
+                .fillMaxWidth(),
         onDraw = {
             var dotPosition: Offset? = null
 
@@ -124,20 +125,20 @@ fun GraphicLineWithGradient(
                 drawPath(
                     linePath,
                     color,
-                    style = Stroke(1.dp.toPx())
+                    style = Stroke(1.dp.toPx()),
                 )
                 drawPath(
                     gradientPath,
                     Brush.verticalGradient(
                         0.00f to gradientColors.first,
                         1.00f to gradientColors.second,
-                        tileMode = TileMode.Repeated
+                        tileMode = TileMode.Repeated,
                     ),
                 )
                 dotPosition?.let {
                     drawCircle(dotColor, 5.dp.toPx(), center = it)
                 }
             }
-        }
+        },
     )
 }

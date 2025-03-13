@@ -38,7 +38,6 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class Eip20ApproveFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -50,25 +49,30 @@ class Eip20ApproveFragment : BaseComposeFragment() {
     data class Input(
         val token: Token,
         val requiredAllowance: BigDecimal,
-        val spenderAddress: String
+        val spenderAddress: String,
     ) : Parcelable
 }
 
 @Composable
-fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment.Input) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
+fun Eip20ApproveScreen(
+    navController: NavController,
+    input: Eip20ApproveFragment.Input,
+) {
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.eip20ApproveFragment)
+        }
 
-
-    val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-        factory = Eip20ApproveViewModel.Factory(
-            input.token,
-            input.requiredAllowance,
-            input.spenderAddress,
+    val viewModel =
+        viewModel<Eip20ApproveViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+            factory =
+                Eip20ApproveViewModel.Factory(
+                    input.token,
+                    input.requiredAllowance,
+                    input.spenderAddress,
+                ),
         )
-    )
 
     val uiState = viewModel.uiState
 
@@ -76,21 +80,23 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
         topBar = {
             AppBar(
                 title = stringResource(R.string.Swap_Unlock_PageTitle),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = navController::popBackStack,
+                        ),
+                    ),
             )
         },
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         viewModel.freeze()
@@ -105,42 +111,44 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             VSpacer(height = 12.dp)
             headline1_leah(
                 text = stringResource(R.string.Swap_Unlock_Subtitle),
-                modifier = Modifier.padding(horizontal = 32.dp)
+                modifier = Modifier.padding(horizontal = 32.dp),
             )
             VSpacer(height = 24.dp)
 
             SectionUniversalLawrence {
                 val setOnlyRequired = { viewModel.setAllowanceMode(AllowanceMode.OnlyRequired) }
                 CellUniversal(
-                    onClick = setOnlyRequired
+                    onClick = setOnlyRequired,
                 ) {
                     HsCheckbox(
                         checked = uiState.allowanceMode == AllowanceMode.OnlyRequired,
-                        onCheckedChange = { setOnlyRequired.invoke() }
+                        onCheckedChange = { setOnlyRequired.invoke() },
                     )
                     HSpacer(width = 16.dp)
-                    val coinValue = CoinValue(
-                        uiState.token,
-                        uiState.requiredAllowance
-                    ).getFormattedFull()
+                    val coinValue =
+                        CoinValue(
+                            uiState.token,
+                            uiState.requiredAllowance,
+                        ).getFormattedFull()
                     subhead2_leah(text = coinValue)
                 }
 
                 val setUnlimited = { viewModel.setAllowanceMode(AllowanceMode.Unlimited) }
                 CellUniversal(
                     borderTop = true,
-                    onClick = setUnlimited
+                    onClick = setUnlimited,
                 ) {
                     HsCheckbox(
                         checked = uiState.allowanceMode == AllowanceMode.Unlimited,
-                        onCheckedChange = { setUnlimited.invoke() }
+                        onCheckedChange = { setUnlimited.invoke() },
                     )
                     HSpacer(width = 16.dp)
                     subhead2_leah(text = stringResource(id = R.string.Swap_Unlock_Unlimited))

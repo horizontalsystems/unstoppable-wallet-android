@@ -45,9 +45,10 @@ fun ReceiveTokenSelectScreen(
     onCoinClick: (Wallet) -> Unit,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<ReceiveTokenSelectViewModel>(
-        factory = ReceiveTokenSelectViewModel.Factory(activeAccount)
-    )
+    val viewModel =
+        viewModel<ReceiveTokenSelectViewModel>(
+            factory = ReceiveTokenSelectViewModel.Factory(activeAccount),
+        )
     val fullCoins = viewModel.uiState.fullCoins
     val coroutineScope = rememberCoroutineScope()
 
@@ -61,9 +62,9 @@ fun ReceiveTokenSelectScreen(
                 onClose = onBackPress,
                 onSearchTextChanged = { text ->
                     viewModel.updateFilter(text)
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {
             item {
@@ -81,7 +82,10 @@ fun ReceiveTokenSelectScreen(
                         coinIconPlaceholder = fullCoin.iconPlaceholder,
                         onClick = {
                             coroutineScope.launch {
-                                when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
+                                when (
+                                    val coinActiveWalletsType =
+                                        viewModel.getCoinForReceiveType(fullCoin)
+                                ) {
                                     CoinForReceiveType.MultipleAddressTypes -> {
                                         onMultipleAddressesClick.invoke(coin.uid)
                                     }
@@ -101,7 +105,7 @@ fun ReceiveTokenSelectScreen(
                                     null -> Unit
                                 }
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -119,44 +123,46 @@ fun ReceiveCoin(
     coinIconUrl: String,
     alternativeCoinIconUrl: String?,
     coinIconPlaceholder: Int,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
+        onClick = onClick,
     ) {
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp),
         )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 body_leah(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 16.dp),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(end = 16.dp),
                     text = coinCode,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             VSpacer(3.dp)
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 subhead2_grey(
                     text = coinName,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }

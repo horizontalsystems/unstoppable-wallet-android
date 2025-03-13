@@ -9,12 +9,16 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class ISendTransactionService: ServiceState<SendTransactionServiceState>() {
+abstract class ISendTransactionService : ServiceState<SendTransactionServiceState>() {
     abstract fun start(coroutineScope: CoroutineScope)
+
     abstract fun setSendTransactionData(data: SendTransactionData)
+
     @Composable
     abstract fun GetSettingsContent(navController: NavController)
-    abstract suspend fun sendTransaction() : SendTransactionResult
+
+    abstract suspend fun sendTransaction(): SendTransactionResult
+
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
 }
 
@@ -23,5 +27,5 @@ data class SendTransactionServiceState(
     val cautions: List<CautionViewItem>,
     val sendable: Boolean,
     val loading: Boolean,
-    val fields: List<DataField>
+    val fields: List<DataField>,
 )

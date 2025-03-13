@@ -15,9 +15,7 @@ class SetDuressPinIntroViewModel(
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SetDuressPinIntroViewModel(App.systemInfoManager, App.accountManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            SetDuressPinIntroViewModel(App.systemInfoManager, App.accountManager) as T
     }
-
 }

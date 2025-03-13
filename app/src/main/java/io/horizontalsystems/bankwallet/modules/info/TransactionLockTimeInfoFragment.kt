@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import kotlinx.parcelize.Parcelize
 
 class TransactionLockTimeInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -33,33 +32,36 @@ class TransactionLockTimeInfoFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val lockTime: String) : Parcelable
+    data class Input(
+        val lockTime: String,
+    ) : Parcelable
 }
 
 @Composable
 private fun InfoScreen(
     lockDate: String,
-    navController: NavController
+    navController: NavController,
 ) {
-
     val description = stringResource(R.string.Info_LockTime_Description, lockDate)
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = { navController.popBackStack() },
+                        ),
+                    ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoHeader(R.string.Info_LockTime_Title)
                 InfoTextBody(description)

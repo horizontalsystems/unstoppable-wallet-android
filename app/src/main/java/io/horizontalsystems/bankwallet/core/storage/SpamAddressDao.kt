@@ -29,6 +29,8 @@ interface SpamAddressDao {
     fun insert(spamAddress: SpamScanState)
 
     @Query("SELECT * FROM SpamScanState WHERE blockchainType = :blockchainType AND accountId = :accountId")
-    fun getSpamScanState(blockchainType: BlockchainType, accountId: String): SpamScanState?
-
+    fun getSpamScanState(
+        blockchainType: BlockchainType,
+        accountId: String,
+    ): SpamScanState?
 }

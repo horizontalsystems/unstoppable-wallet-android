@@ -37,7 +37,7 @@ class SpamManager(
     private val coinManager: ICoinManager,
     private val spamAddressStorage: SpamAddressStorage,
     marketKitWrapper: MarketKitWrapper,
-    appConfigProvider: AppConfigProvider
+    appConfigProvider: AppConfigProvider,
 ) {
     private val coinValueLimits = appConfigProvider.spamCoinValueLimits
     private val coins = marketKitWrapper.fullCoins(coinValueLimits.map { it.key })
@@ -52,14 +52,14 @@ class SpamManager(
 
     fun isSpam(
         incomingEvents: List<TransferEvent>,
-        outgoingEvents: List<TransferEvent>
+        outgoingEvents: List<TransferEvent>,
     ): Boolean {
         val allEvents = incomingEvents + outgoingEvents
         return allEvents.all { spamEvent(it) }
     }
 
-    private fun spamEvent(event: TransferEvent): Boolean {
-        return when (val eventValue = event.value) {
+    private fun spamEvent(event: TransferEvent): Boolean =
+        when (val eventValue = event.value) {
             is TransactionValue.CoinValue -> {
                 spamValue(eventValue.coinCode, eventValue.value)
             }
@@ -70,22 +70,27 @@ class SpamManager(
 
             else -> true
         }
-    }
 
-    private fun spamValue(coinCode: String, value: BigDecimal): Boolean {
-        return if (stableCoinCodes.contains(coinCode)) {
+    private fun spamValue(
+        coinCode: String,
+        value: BigDecimal,
+    ): Boolean =
+        if (stableCoinCodes.contains(coinCode)) {
             value < negligibleValue
         } else {
             value <= BigDecimal.ZERO
         }
-    }
 
     fun updateFilterHideSuspiciousTx(hide: Boolean) {
         localStorage.hideSuspiciousTransactions = hide
         hideSuspiciousTx = hide
     }
 
-    private fun scanSpamAddresses(fullTransaction: FullTransaction, userAddress: Address, spamConfig: SpamConfig): List<Address> {
+    private fun scanSpamAddresses(
+        fullTransaction: FullTransaction,
+        userAddress: Address,
+        spamConfig: SpamConfig,
+    ): List<Address> {
         val transaction = fullTransaction.transaction
         val baseCoinValue = spamConfig.baseCoinValue
         val coinsMap = spamConfig.coinsMap
@@ -106,7 +111,8 @@ class SpamManager(
                 } else if (transaction.to != userAddress) {
                     val spamAddresses = mutableListOf<Address>()
 
-                    val internalTransactions = decoration.internalTransactions.filter { it.to == userAddress }
+                    val internalTransactions =
+                        decoration.internalTransactions.filter { it.to == userAddress }
                     val totalIncomingValue = internalTransactions.sumOf { it.value }
                     val addresses = internalTransactions.map { it.from }
 
@@ -114,35 +120,45 @@ class SpamManager(
                         spamAddresses.addAll(addresses)
                     }
 
-                    val eip20Transfers = decoration.eventInstances.filterIsInstance<TransferEventInstance>()
+                    val eip20Transfers =
+                        decoration.eventInstances.filterIsInstance<TransferEventInstance>()
                     for (transfer in eip20Transfers) {
-                        val query = TokenQuery(blockchainType, TokenType.Eip20(transfer.contractAddress.hex))
+                        val query =
+                            TokenQuery(
+                                blockchainType,
+                                TokenType.Eip20(transfer.contractAddress.hex),
+                            )
 
                         val minValue = coinsMap[transfer.contractAddress]
 
-                        val isSpam = if (minValue != null) {
-                            transfer.value <= minValue
-                        } else if (coinManager.getToken(query) != null) {
-                            transfer.value == BigInteger.ZERO
-                        } else {
-                            true
-                        }
+                        val isSpam =
+                            if (minValue != null) {
+                                transfer.value <= minValue
+                            } else if (coinManager.getToken(query) != null) {
+                                transfer.value == BigInteger.ZERO
+                            } else {
+                                true
+                            }
 
                         if (isSpam) {
-                            val counterpartyAddress = if (transfer.from == userAddress) transfer.to else transfer.from
+                            val counterpartyAddress =
+                                if (transfer.from == userAddress) transfer.to else transfer.from
                             spamAddresses.add(counterpartyAddress)
                         } else {
                             return emptyList()
                         }
                     }
 
-                    val eip721Transfers = decoration.eventInstances.filterIsInstance<Eip721TransferEventInstance>()
-                    val eip1155Transfers = decoration.eventInstances.filterIsInstance<Eip1155TransferEventInstance>()
+                    val eip721Transfers =
+                        decoration.eventInstances.filterIsInstance<Eip721TransferEventInstance>()
+                    val eip1155Transfers =
+                        decoration.eventInstances.filterIsInstance<Eip1155TransferEventInstance>()
 
-                    return if (eip721Transfers.isNotEmpty() || eip1155Transfers.isNotEmpty())
+                    return if (eip721Transfers.isNotEmpty() || eip1155Transfers.isNotEmpty()) {
                         emptyList()
-                    else
+                    } else {
                         spamAddresses
+                    }
                 }
             }
 
@@ -152,12 +168,16 @@ class SpamManager(
         return emptyList()
     }
 
-    private fun scaleUp(value: Double, decimals: Int): BigInteger {
-        return BigDecimal(value).movePointRight(decimals).toBigInteger()
-    }
+    private fun scaleUp(
+        value: Double,
+        decimals: Int,
+    ): BigInteger = BigDecimal(value).movePointRight(decimals).toBigInteger()
 
     private fun spamConfig(blockchainType: BlockchainType): SpamConfig {
-        val tokens = coins.map { coin -> coin.tokens.filter { it.blockchainType == blockchainType } }.flatten()
+        val tokens =
+            coins
+                .map { coin -> coin.tokens.filter { it.blockchainType == blockchainType } }
+                .flatten()
         var baseCoinValue = BigInteger.ZERO
 
         val coinsMap = mutableMapOf<Address, BigInteger>()
@@ -184,7 +204,10 @@ class SpamManager(
         return SpamConfig(baseCoinValue, coinsMap, blockchainType)
     }
 
-    fun subscribeToKitStart(evmKitManager: EvmKitManager, blockchainType: BlockchainType) {
+    fun subscribeToKitStart(
+        evmKitManager: EvmKitManager,
+        blockchainType: BlockchainType,
+    ) {
         coroutineScope.launch {
             evmKitManager.kitStartedObservable
                 .asFlow()
@@ -196,53 +219,72 @@ class SpamManager(
         }
     }
 
-    fun find(address: String): SpamAddress? {
-        return spamAddressStorage.findByAddress(address)
-    }
+    fun find(address: String): SpamAddress? = spamAddressStorage.findByAddress(address)
 
-    fun isSpam(transactionHash: ByteArray): Boolean {
-        return spamAddressStorage.isSpam(transactionHash)
-    }
+    fun isSpam(transactionHash: ByteArray): Boolean = spamAddressStorage.isSpam(transactionHash)
 
-    private fun handleEvmKitStarted(evmKitManager: EvmKitManager?, blockchainType: BlockchainType) {
+    private fun handleEvmKitStarted(
+        evmKitManager: EvmKitManager?,
+        blockchainType: BlockchainType,
+    ) {
         val evmKitWrapper = evmKitManager?.evmKitWrapper ?: return
         val currentAccount = evmKitManager.currentAccount ?: return
 
         val spamConfig = spamConfig(blockchainType)
 
-        transactionSubscriptionJob = coroutineScope.launch {
-            evmKitWrapper.evmKit.allTransactionsFlowable.asFlow().cancellable()
-                .collect { (fullTransactions, _) ->
-                    handle(fullTransactions, evmKitWrapper.evmKit.receiveAddress, spamConfig)
-                }
-        }
+        transactionSubscriptionJob =
+            coroutineScope.launch {
+                evmKitWrapper.evmKit.allTransactionsFlowable
+                    .asFlow()
+                    .cancellable()
+                    .collect { (fullTransactions, _) ->
+                        handle(fullTransactions, evmKitWrapper.evmKit.receiveAddress, spamConfig)
+                    }
+            }
 
         sync(evmKitWrapper.evmKit, currentAccount, spamConfig)
     }
 
-    private fun sync(evmKit: EthereumKit, account: Account, spamConfig: SpamConfig) {
-        val spamScanState = spamAddressStorage.getSpamScanState(spamConfig.blockchainType, account.id)
+    private fun sync(
+        evmKit: EthereumKit,
+        account: Account,
+        spamConfig: SpamConfig,
+    ) {
+        val spamScanState =
+            spamAddressStorage.getSpamScanState(spamConfig.blockchainType, account.id)
 
-        val fullTransactions = evmKit.getFullTransactionsAfterSingle(spamScanState?.lastTransactionHash).blockingGet()
+        val fullTransactions =
+            evmKit.getFullTransactionsAfterSingle(spamScanState?.lastTransactionHash).blockingGet()
         val lastTransactionHash = handle(fullTransactions, evmKit.receiveAddress, spamConfig)
 
         lastTransactionHash?.let {
-            spamAddressStorage.save(SpamScanState(spamConfig.blockchainType, account.id, lastTransactionHash))
+            spamAddressStorage.save(
+                SpamScanState(
+                    spamConfig.blockchainType,
+                    account.id,
+                    lastTransactionHash,
+                ),
+            )
         }
     }
 
-    private fun handle(fullTransactions: List<FullTransaction>, userAddress: Address, spamConfig: SpamConfig): ByteArray? {
+    private fun handle(
+        fullTransactions: List<FullTransaction>,
+        userAddress: Address,
+        spamConfig: SpamConfig,
+    ): ByteArray? {
         val spamAddresses = mutableListOf<SpamAddress>()
 
         fullTransactions.forEach { fullTransaction ->
-            val addresses = scanSpamAddresses(fullTransaction, userAddress, spamConfig).map { address ->
-                SpamAddress(
-                    transactionHash = fullTransaction.transaction.hash,
-                    address = address.hex.uppercase(),
-                    domain = null,
-                    blockchainType = spamConfig.blockchainType
-                )
-            }
+            val addresses =
+                scanSpamAddresses(fullTransaction, userAddress, spamConfig).map { address ->
+                    SpamAddress(
+                        transactionHash = fullTransaction.transaction.hash,
+                        address = address.hex.uppercase(),
+                        domain = null,
+                        blockchainType = spamConfig.blockchainType,
+                    )
+                }
             spamAddresses.addAll(addresses)
         }
 
@@ -251,11 +293,12 @@ class SpamManager(
         } catch (_: Throwable) {
         }
 
-        val sortedTransactions = fullTransactions.map { it.transaction }.sortedWith(
-            compareBy<Transaction> { it.timestamp }
-                .thenBy { it.transactionIndex }
-                .thenBy { it.hash.toHexString() }
-        )
+        val sortedTransactions =
+            fullTransactions.map { it.transaction }.sortedWith(
+                compareBy<Transaction> { it.timestamp }
+                    .thenBy { it.transactionIndex }
+                    .thenBy { it.hash.toHexString() },
+            )
 
         return sortedTransactions.lastOrNull()?.hash
     }

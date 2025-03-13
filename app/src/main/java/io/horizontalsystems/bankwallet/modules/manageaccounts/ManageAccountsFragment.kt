@@ -41,7 +41,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
 class ManageAccountsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<ManageAccountsModule.Mode>(navController) { input ->
@@ -51,7 +50,10 @@ class ManageAccountsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
+fun ManageAccountsScreen(
+    navController: NavController,
+    mode: ManageAccountsModule.Mode,
+) {
     BackupAlert(navController)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
@@ -66,7 +68,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = stringResource(R.string.ManageAccounts_Title),
-            navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
+            navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) },
         )
 
         LazyColumn(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -85,39 +87,65 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     }
                 }
 
-                val args = when (mode) {
-                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(R.id.manageAccountsFragment, false)
-                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(R.id.manageAccountsFragment, true)
-                }
+                val args =
+                    when (mode) {
+                        ManageAccountsModule.Mode.Manage ->
+                            ManageAccountsModule.Input(
+                                R.id.manageAccountsFragment,
+                                false,
+                            )
 
-                val actions = listOf(
-                    ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                        navController.navigateWithTermsAccepted {
-                            navController.slideFromRight(R.id.createAccountFragment, args)
-
-                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
-                        }
-                    },
-                    ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                        navController.slideFromRight(R.id.importWalletFragment, args)
-
-                        stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
-                    },
-                    ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
-                        navController.slideFromRight(R.id.watchAddressFragment, args)
-
-                        stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
+                        ManageAccountsModule.Mode.Switcher ->
+                            ManageAccountsModule.Input(
+                                R.id.manageAccountsFragment,
+                                true,
+                            )
                     }
-                )
+
+                val actions =
+                    listOf(
+                        ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.createAccountFragment, args)
+
+                                stat(
+                                    page = StatPage.ManageWallets,
+                                    event = StatEvent.Open(StatPage.NewWallet),
+                                )
+                            }
+                        },
+                        ActionViewItem(
+                            R.drawable.ic_download_20,
+                            R.string.ManageAccounts_ImportWallet,
+                        ) {
+                            navController.slideFromRight(R.id.importWalletFragment, args)
+
+                            stat(
+                                page = StatPage.ManageWallets,
+                                event = StatEvent.Open(StatPage.ImportWallet),
+                            )
+                        },
+                        ActionViewItem(
+                            R.drawable.icon_binocule_20,
+                            R.string.ManageAccounts_WatchAddress,
+                        ) {
+                            navController.slideFromRight(R.id.watchAddressFragment, args)
+
+                            stat(
+                                page = StatPage.ManageWallets,
+                                event = StatEvent.Open(StatPage.WatchWallet),
+                            )
+                        },
+                    )
                 CellUniversalLawrenceSection(actions) {
                     RowUniversal(
-                        onClick = it.callback
+                        onClick = it.callback,
                     ) {
                         Icon(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             painter = painterResource(id = it.icon),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.jacob
+                            tint = ComposeAppTheme.colors.jacob,
                         )
                         body_jacob(text = stringResource(id = it.title))
                     }
@@ -130,14 +158,18 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 }
 
 @Composable
-private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
+private fun AccountsSection(
+    accounts: List<AccountViewItem>,
+    viewModel: ManageAccountsViewModel,
+    navController: NavController,
+) {
     CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
         RowUniversal(
             onClick = {
                 viewModel.onSelect(accountViewItem)
 
                 stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
-            }
+            },
         ) {
             HsRadioButton(
                 modifier = Modifier.padding(horizontal = 4.dp),
@@ -145,7 +177,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 onClick = {
                     viewModel.onSelect(accountViewItem)
                     stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
-                }
+                },
             )
             Column(modifier = Modifier.weight(1f)) {
                 body_leah(text = accountViewItem.title)
@@ -157,7 +189,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                     subhead2_grey(
                         text = accountViewItem.subtitle,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 1,
                     )
                 }
             }
@@ -165,7 +197,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 Icon(
                     painter = painterResource(id = R.drawable.icon_binocule_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
 
@@ -182,11 +214,11 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             ButtonSecondaryCircle(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 icon = icon,
-                tint = iconTint
+                tint = iconTint,
             ) {
                 navController.slideFromRight(
                     R.id.manageAccountFragment,
-                    ManageAccountFragment.Input(accountViewItem.accountId)
+                    ManageAccountFragment.Input(accountViewItem.accountId),
                 )
 
                 stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ManageWallet))

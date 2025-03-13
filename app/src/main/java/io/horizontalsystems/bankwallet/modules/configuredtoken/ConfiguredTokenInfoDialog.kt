@@ -43,27 +43,29 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
                 ConfiguredTokenInfo(navController, navController.requireInput<Token>())
             }
         }
-    }
 }
 
 @Composable
-private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
-    val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
+private fun ConfiguredTokenInfo(
+    navController: NavController,
+    token: Token,
+) {
+    val viewModel =
+        viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 
     ComposeAppTheme {
@@ -71,28 +73,49 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
             subtitle = uiState.subtitle,
-            onCloseClick = { navController.popBackStack() }
+            onCloseClick = { navController.popBackStack() },
         ) {
             when (val tokenInfoType = uiState.tokenInfoType) {
                 is ConfiguredTokenInfoType.Contract -> {
                     ContractInfo(tokenInfoType)
                 }
+
                 ConfiguredTokenInfoType.Bch -> {
                     body_leah(
                         text = stringResource(id = R.string.ManageCoins_BchTypeDescription),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                        modifier =
+                            Modifier.padding(
+                                start = 32.dp,
+                                top = 12.dp,
+                                end = 32.dp,
+                                bottom = 24.dp,
+                            ),
                     )
                 }
+
                 is ConfiguredTokenInfoType.Bips -> {
                     body_leah(
-                        text = stringResource(R.string.ManageCoins_BipsDescription, tokenInfoType.blockchainName, tokenInfoType.blockchainName, tokenInfoType.blockchainName),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                        text =
+                            stringResource(
+                                R.string.ManageCoins_BipsDescription,
+                                tokenInfoType.blockchainName,
+                                tokenInfoType.blockchainName,
+                                tokenInfoType.blockchainName,
+                            ),
+                        modifier =
+                            Modifier.padding(
+                                start = 32.dp,
+                                top = 12.dp,
+                                end = 32.dp,
+                                bottom = 24.dp,
+                            ),
                     )
                 }
+
                 is ConfiguredTokenInfoType.BirthdayHeight -> {
                     CellUniversalLawrenceSection(showFrame = true) {
                         RowUniversal(
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp),
                         ) {
                             val view = LocalView.current
                             val clipboardManager = LocalClipboardManager.current
@@ -107,11 +130,12 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
                                 onClick = {
                                     clipboardManager.setText(AnnotatedString(birthdayHeight))
                                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                }
+                                },
                             )
                         }
                     }
                 }
+
                 null -> Unit
             }
             Spacer(Modifier.height(32.dp))
@@ -126,15 +150,16 @@ private fun ContractInfo(tokenInfoType: ConfiguredTokenInfoType.Contract) {
     InfoText(text = stringResource(id = R.string.ManageCoins_ContractAddress))
     CellUniversalLawrenceSection(showFrame = true) {
         RowUniversal(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             Image(
                 modifier = Modifier.size(32.dp),
-                painter = rememberAsyncImagePainter(
-                    model = tokenInfoType.platformImageUrl,
-                    error = painterResource(R.drawable.ic_platform_placeholder_32)
-                ),
-                contentDescription = "platform"
+                painter =
+                    rememberAsyncImagePainter(
+                        model = tokenInfoType.platformImageUrl,
+                        error = painterResource(R.drawable.ic_platform_placeholder_32),
+                    ),
+                contentDescription = "platform",
             )
             HSpacer(16.dp)
             subhead2_leah(
@@ -149,7 +174,7 @@ private fun ContractInfo(tokenInfoType: ConfiguredTokenInfoType.Contract) {
                     contentDescription = stringResource(R.string.Button_Browser),
                     onClick = {
                         LinkHelper.openLinkInAppBrowser(context, it)
-                    }
+                    },
                 )
             }
         }

@@ -19,6 +19,7 @@ interface ICoreApp {
 
 interface IEncryptionManager {
     fun encrypt(data: String): String
+
     fun decrypt(data: String): String
 }
 
@@ -37,19 +38,36 @@ interface IPinComponent {
     val pinSetFlowable: Flowable<Unit>
 
     fun willEnterForeground()
+
     fun didEnterBackground()
+
     fun setPin(pin: String)
+
     fun setDuressPin(pin: String)
+
     fun disablePin()
+
     fun disableDuressPin()
+
     fun isDuressPinSet(): Boolean
+
     fun unlock(pin: String): Boolean
+
     fun validateCurrentLevel(pin: String): Boolean
+
     fun onBiometricUnlock()
+
     fun initDefaultPinLevel()
+
     fun lock()
+
     fun updateLastExitDateBeforeRestart()
-    fun isUnique(pin: String, forDuress: Boolean): Boolean
+
+    fun isUnique(
+        pin: String,
+        forDuress: Boolean,
+    ): Boolean
+
     fun keepUnlocked()
 }
 
@@ -69,12 +87,15 @@ interface IThirdKeyboard {
 
 interface IKeyStoreManager {
     fun validateKeyStore()
+
     fun removeKey()
+
     fun resetApp(reason: String)
 }
 
 interface IKeyStoreCleaner {
     var encryptedSampleText: String?
+
     fun cleanApp()
 }
 

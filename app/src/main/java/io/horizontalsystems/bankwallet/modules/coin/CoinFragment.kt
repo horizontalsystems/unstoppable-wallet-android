@@ -37,7 +37,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class CoinFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -45,22 +44,25 @@ class CoinFragment : BaseComposeFragment() {
                 input.coinUid,
                 coinViewModel(input.coinUid),
                 navController,
-                childFragmentManager
+                childFragmentManager,
             )
         }
     }
 
-    private fun coinViewModel(coinUid: String): CoinViewModel? = try {
-        val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) {
-            CoinModule.Factory(coinUid)
+    private fun coinViewModel(coinUid: String): CoinViewModel? =
+        try {
+            val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) {
+                CoinModule.Factory(coinUid)
+            }
+            viewModel
+        } catch (e: Exception) {
+            null
         }
-        viewModel
-    } catch (e: Exception) {
-        null
-    }
 
     @Parcelize
-    data class Input(val coinUid: String) : Parcelable
+    data class Input(
+        val coinUid: String,
+    ) : Parcelable
 }
 
 @Composable
@@ -68,7 +70,7 @@ fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
     navController: NavController,
-    fragmentManager: FragmentManager
+    fragmentManager: FragmentManager,
 ) {
     if (coinViewModel != null) {
         CoinTabs(coinViewModel, navController, fragmentManager)
@@ -81,7 +83,7 @@ fun CoinScreen(
 fun CoinTabs(
     viewModel: CoinViewModel,
     navController: NavController,
-    fragmentManager: FragmentManager
+    fragmentManager: FragmentManager,
 ) {
     val tabs = viewModel.tabs
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
@@ -96,55 +98,58 @@ fun CoinTabs(
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = buildList {
-                    if (viewModel.isWatchlistEnabled) {
-                        if (viewModel.isFavorite) {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
-                                    icon = R.drawable.ic_heart_filled_24,
-                                    tint = ComposeAppTheme.colors.jacob,
-                                    onClick = {
-                                        viewModel.onUnfavoriteClick()
+                menuItems =
+                    buildList {
+                        if (viewModel.isWatchlistEnabled) {
+                            if (viewModel.isFavorite) {
+                                add(
+                                    MenuItem(
+                                        title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
+                                        icon = R.drawable.ic_heart_filled_24,
+                                        tint = ComposeAppTheme.colors.jacob,
+                                        onClick = {
+                                            viewModel.onUnfavoriteClick()
 
-                                        stat(
-                                            page = StatPage.CoinPage,
-                                            event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid)
-                                        )
-                                    }
+                                            stat(
+                                                page = StatPage.CoinPage,
+                                                event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid),
+                                            )
+                                        },
+                                    ),
                                 )
-                            )
-                        } else {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.CoinPage_Favorite),
-                                    icon = R.drawable.ic_heart_24,
-                                    tint = ComposeAppTheme.colors.grey,
-                                    onClick = {
-                                        viewModel.onFavoriteClick()
+                            } else {
+                                add(
+                                    MenuItem(
+                                        title = TranslatableString.ResString(R.string.CoinPage_Favorite),
+                                        icon = R.drawable.ic_heart_24,
+                                        tint = ComposeAppTheme.colors.grey,
+                                        onClick = {
+                                            viewModel.onFavoriteClick()
 
-                                        stat(
-                                            page = StatPage.CoinPage,
-                                            event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid)
-                                        )
-                                    }
+                                            stat(
+                                                page = StatPage.CoinPage,
+                                                event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid),
+                                            )
+                                        },
+                                    ),
                                 )
-                            )
+                            }
                         }
-                    }
-                }
+                    },
             )
-        }
+        },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .navigationBarsPadding()
+            modifier =
+                Modifier
+                    .padding(innerPaddings)
+                    .navigationBarsPadding(),
         ) {
             val selectedTab = tabs[pagerState.currentPage]
-            val tabItems = tabs.map {
-                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
-            }
+            val tabItems =
+                tabs.map {
+                    TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+                }
             Tabs(tabItems, onClick = { tab ->
                 coroutineScope.launch {
                     pagerState.scrollToPage(tab.ordinal)
@@ -155,13 +160,13 @@ fun CoinTabs(
 
             HorizontalPager(
                 state = pagerState,
-                userScrollEnabled = false
+                userScrollEnabled = false,
             ) { page ->
                 when (tabs[page]) {
                     CoinModule.Tab.Overview -> {
                         CoinOverviewScreen(
                             fullCoin = viewModel.fullCoin,
-                            navController = navController
+                            navController = navController,
                         )
                     }
 
@@ -173,7 +178,7 @@ fun CoinTabs(
                         CoinAnalyticsScreen(
                             fullCoin = viewModel.fullCoin,
                             navController = navController,
-                            fragmentManager = fragmentManager
+                            fragmentManager = fragmentManager,
                         )
                     }
                 }
@@ -189,7 +194,10 @@ fun CoinTabs(
 }
 
 @Composable
-fun CoinNotFound(coinUid: String, navController: NavController) {
+fun CoinNotFound(
+    coinUid: String,
+    navController: NavController,
+) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
@@ -197,15 +205,15 @@ fun CoinNotFound(coinUid: String, navController: NavController) {
                 title = coinUid,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
         },
         content = {
             ListEmptyView(
                 paddingValues = it,
                 text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),
-                icon = R.drawable.ic_not_available
+                icon = R.drawable.ic_not_available,
             )
-        }
+        },
     )
 }

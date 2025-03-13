@@ -50,7 +50,7 @@ fun CoinListOrderable(
     showReorderArrows: Boolean = false,
     preItems: LazyListScope.() -> Unit,
     enableManualOrder: () -> Unit,
-    onReorder: (from: Int, to: Int) -> Unit
+    onReorder: (from: Int, to: Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -65,21 +65,21 @@ fun CoinListOrderable(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(
-                        onClick = { onReorder.invoke(index, index - 1) }
+                        onClick = { onReorder.invoke(index, index - 1) },
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_big_up_20),
                             tint = ComposeAppTheme.colors.grey,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                     IconButton(
-                        onClick = { onReorder.invoke(index, index + 1) }
+                        onClick = { onReorder.invoke(index, index + 1) },
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_big_down_20),
                             tint = ComposeAppTheme.colors.grey,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
 
@@ -97,33 +97,38 @@ fun CoinListOrderable(
                 }
             } else {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Max)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max),
                 ) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
-                            .align(Alignment.CenterEnd)
-                            .width(100.dp)
-                            .clickable {
-                                if (item.favorited) {
-                                    onRemoveFavorite(item.coinUid)
-                                } else {
-                                    onAddFavorite(item.coinUid)
-                                }
-                                coroutineScope.launch {
-                                    delay(200)
-                                    revealedCardId = null
-                                }
-                            },
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                                .align(Alignment.CenterEnd)
+                                .width(100.dp)
+                                .clickable {
+                                    if (item.favorited) {
+                                        onRemoveFavorite(item.coinUid)
+                                    } else {
+                                        onAddFavorite(item.coinUid)
+                                    }
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        revealedCardId = null
+                                    }
+                                },
+                        contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             painter = painterResource(id = if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
                             tint = ComposeAppTheme.colors.claude,
-                            contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
+                            contentDescription =
+                                stringResource(
+                                    if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite,
+                                ),
                         )
                     }
                     DraggableCardSimple(
@@ -154,14 +159,14 @@ fun CoinListOrderable(
                                     if (canReorder) {
                                         enableManualOrder()
                                     }
-                                }
+                                },
                             )
-                        }
+                        },
                     )
                     Divider(
                         thickness = 1.dp,
                         color = ComposeAppTheme.colors.steel10,
-                        modifier = Modifier.align(Alignment.BottomCenter)
+                        modifier = Modifier.align(Alignment.BottomCenter),
                     )
                 }
             }

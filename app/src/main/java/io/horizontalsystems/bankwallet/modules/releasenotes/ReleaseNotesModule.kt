@@ -7,14 +7,13 @@ import io.horizontalsystems.bankwallet.core.App
 object ReleaseNotesModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReleaseNotesViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            ReleaseNotesViewModel(
                 App.networkManager,
                 App.releaseNotesManager.releaseNotesUrl,
                 App.connectivityManager,
                 App.releaseNotesManager,
-                App.appConfigProvider
+                App.appConfigProvider,
             ) as T
-        }
     }
 }

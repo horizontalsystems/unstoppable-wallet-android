@@ -12,7 +12,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class IndicatorSettingsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -27,21 +26,21 @@ class IndicatorSettingsFragment : BaseComposeFragment() {
                     ChartIndicatorSetting.IndicatorType.MA -> {
                         EmaSettingsScreen(
                             navController = navController,
-                            indicatorSetting = indicatorSetting
+                            indicatorSetting = indicatorSetting,
                         )
                     }
 
                     ChartIndicatorSetting.IndicatorType.RSI -> {
                         RsiSettingsScreen(
                             navController = navController,
-                            indicatorSetting = indicatorSetting
+                            indicatorSetting = indicatorSetting,
                         )
                     }
 
                     ChartIndicatorSetting.IndicatorType.MACD -> {
                         MacdSettingsScreen(
                             navController = navController,
-                            indicatorSetting = indicatorSetting
+                            indicatorSetting = indicatorSetting,
                         )
                     }
                 }
@@ -50,5 +49,7 @@ class IndicatorSettingsFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val indicatorId: String) : Parcelable
+    data class Input(
+        val indicatorId: String,
+    ) : Parcelable
 }

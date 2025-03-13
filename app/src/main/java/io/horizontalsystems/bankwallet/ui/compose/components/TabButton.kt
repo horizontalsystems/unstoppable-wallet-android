@@ -23,7 +23,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
@@ -60,23 +59,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsTabRowDefaults.Divider
+import io.horizontalsystems.bankwallet.ui.compose.components.HsTabRowDefaults.Indicator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun TabButtonSecondaryTransparent(
     title: String,
     onSelect: () -> Unit,
     selected: Boolean = false,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     TabBox(
         colors = TabDefaults.textButtonColors(),
         content = { Text(title) },
         selected = selected,
         enabled = enabled,
-        onSelect = onSelect
+        onSelect = onSelect,
     )
 }
 
@@ -93,39 +93,42 @@ fun TabBox(
 ) {
     Box {
         val contentColor by if (enabled) colors.contentColor(selected) else colors.contentColorDisabled()
-        val backgroundColor by if (enabled) colors.backgroundColor(selected) else colors.backgroundColor(
-            false
-        )
+        val backgroundColor by if (enabled) {
+            colors.backgroundColor(selected)
+        } else {
+            colors.backgroundColor(
+                false,
+            )
+        }
         Surface(
             onClick = onSelect,
             color = backgroundColor,
             shape = shape,
             contentColor = contentColor,
-            enabled = enabled
+            enabled = enabled,
         ) {
             // Text is a predefined composable that does exactly what you'd expect it to -
             // display text on the screen. It allows you to customize its appearance using the
             // style property.
             CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
                 ProvideTextStyle(
-                    value = ComposeAppTheme.typography.captionSB
+                    value = ComposeAppTheme.typography.captionSB,
                 ) {
                     Row(
                         Modifier
                             .defaultMinSize(
                                 minWidth = TabDefaults.MinWidth,
-                                minHeight = TabDefaults.MinHeight
-                            )
-                            .height(TabDefaults.MinHeight)
+                                minHeight = TabDefaults.MinHeight,
+                            ).height(TabDefaults.MinHeight)
                             .padding(
                                 PaddingValues(
                                     start = 0.dp,
                                     end = 0.dp,
-                                )
+                                ),
                             ),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
-                        content = content
+                        content = content,
                     )
                 }
             }
@@ -133,8 +136,8 @@ fun TabBox(
     }
 }
 
-//Customized version of ScrollableTabRow
-//needed to make
+// Customized version of ScrollableTabRow
+// needed to make
 @Composable
 @UiComposable
 fun HsPeriodsScrollableTabRow(
@@ -143,45 +146,52 @@ fun HsPeriodsScrollableTabRow(
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     edgePadding: Dp = HsTabRowDefaults.ScrollableTabRowPadding,
-    indicator: @Composable @UiComposable
+    indicator:
+        @Composable @UiComposable
         (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
         HsTabRowDefaults.Indicator(
-            Modifier.hsTabIndicatorOffset(tabPositions[selectedTabIndex])
+            Modifier.hsTabIndicatorOffset(tabPositions[selectedTabIndex]),
         )
     },
-    divider: @Composable @UiComposable () -> Unit =
+    divider:
+        @Composable @UiComposable
+        () -> Unit =
         @Composable {
             TabRowDefaults.Divider()
         },
-    tabs: @Composable @UiComposable () -> Unit
+    tabs:
+        @Composable @UiComposable
+        () -> Unit,
 ) {
     Surface(
         modifier = modifier,
         color = backgroundColor,
-        contentColor = contentColor
+        contentColor = contentColor,
     ) {
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
-        val scrollableTabData = remember(scrollState, coroutineScope) {
-            HsScrollableTabData(
-                scrollState = scrollState,
-                coroutineScope = coroutineScope
-            )
-        }
+        val scrollableTabData =
+            remember(scrollState, coroutineScope) {
+                HsScrollableTabData(
+                    scrollState = scrollState,
+                    coroutineScope = coroutineScope,
+                )
+            }
         SubcomposeLayout(
             Modifier
                 .fillMaxWidth()
                 .wrapContentSize(align = Alignment.CenterStart)
                 .horizontalScroll(scrollState)
                 .selectableGroup()
-                .clipToBounds()
+                .clipToBounds(),
         ) { constraints ->
             val minTabWidth = 40.dp.roundToPx()
             val padding = edgePadding.roundToPx()
             val tabConstraints = constraints.copy(minWidth = minTabWidth)
 
-            val tabPlaceables = subcompose(HsTabSlots.Tabs, tabs)
-                .fastMap { it.measure(tabConstraints) }
+            val tabPlaceables =
+                subcompose(HsTabSlots.Tabs, tabs)
+                    .fastMap { it.measure(tabConstraints) }
 
             var layoutWidth = padding * 2
             var layoutHeight = 0
@@ -204,13 +214,14 @@ fun HsPeriodsScrollableTabRow(
                 // The divider is measured with its own height, and width equal to the total width
                 // of the tab row, and then placed on top of the tabs.
                 subcompose(HsTabSlots.Divider, divider).fastForEach {
-                    val placeable = it.measure(
-                        constraints.copy(
-                            minHeight = 0,
-                            minWidth = layoutWidth,
-                            maxWidth = layoutWidth
+                    val placeable =
+                        it.measure(
+                            constraints.copy(
+                                minHeight = 0,
+                                minWidth = layoutWidth,
+                                maxWidth = layoutWidth,
+                            ),
                         )
-                    )
                     placeable.placeRelative(0, layoutHeight - placeable.height)
                 }
 
@@ -226,38 +237,38 @@ fun HsPeriodsScrollableTabRow(
                     density = this@SubcomposeLayout,
                     edgeOffset = padding,
                     tabPositions = tabPositions,
-                    selectedTab = selectedTabIndex
+                    selectedTab = selectedTabIndex,
                 )
             }
         }
     }
 }
 
-private fun Modifier.hsTabIndicatorOffset(
-    currentTabPosition: TabPosition
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "tabIndicatorOffset"
-        value = currentTabPosition
+private fun Modifier.hsTabIndicatorOffset(currentTabPosition: TabPosition): Modifier =
+    composed(
+        inspectorInfo =
+            debugInspectorInfo {
+                name = "tabIndicatorOffset"
+                value = currentTabPosition
+            },
+    ) {
+        val currentTabWidth by animateDpAsState(
+            targetValue = currentTabPosition.width,
+            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+        )
+        val indicatorOffset by animateDpAsState(
+            targetValue = currentTabPosition.left,
+            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+        )
+        fillMaxWidth()
+            .wrapContentSize(Alignment.BottomStart)
+            .offset(x = indicatorOffset)
+            .width(currentTabWidth)
     }
-) {
-    val currentTabWidth by animateDpAsState(
-        targetValue = currentTabPosition.width,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-    )
-    val indicatorOffset by animateDpAsState(
-        targetValue = currentTabPosition.left,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-    )
-    fillMaxWidth()
-        .wrapContentSize(Alignment.BottomStart)
-        .offset(x = indicatorOffset)
-        .width(currentTabWidth)
-}
 
 private class HsScrollableTabData(
     private val scrollState: ScrollState,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
 ) {
     private var selectedTab: Int? = null
 
@@ -265,7 +276,7 @@ private class HsScrollableTabData(
         density: Density,
         edgeOffset: Int,
         tabPositions: List<TabPosition>,
-        selectedTab: Int
+        selectedTab: Int,
     ) {
         // Animate if the new tab is different from the old tab, or this is called for the first
         // time (i.e selectedTab is `null`).
@@ -279,7 +290,7 @@ private class HsScrollableTabData(
                     coroutineScope.launch {
                         scrollState.animateScrollTo(
                             calculatedOffset,
-                            animationSpec = ScrollableTabRowScrollSpec
+                            animationSpec = ScrollableTabRowScrollSpec,
                         )
                     }
                 }
@@ -290,23 +301,27 @@ private class HsScrollableTabData(
     private fun TabPosition.hsCalculateTabOffset(
         density: Density,
         edgeOffset: Int,
-        tabPositions: List<TabPosition>
-    ): Int = with(density) {
-        val totalTabRowWidth = tabPositions.last().right.roundToPx() + edgeOffset
-        val visibleWidth = totalTabRowWidth - scrollState.maxValue
-        val tabOffset = left.roundToPx()
-        val scrollerCenter = visibleWidth / 2
-        val tabWidth = width.roundToPx()
-        val centeredTabOffset = tabOffset - (scrollerCenter - tabWidth / 2)
-        // How much space we have to scroll. If the visible width is <= to the total width, then
-        // we have no space to scroll as everything is always visible.
-        val availableSpace = (totalTabRowWidth - visibleWidth).coerceAtLeast(0)
-        return centeredTabOffset.coerceIn(0, availableSpace)
-    }
+        tabPositions: List<TabPosition>,
+    ): Int =
+        with(density) {
+            val totalTabRowWidth = tabPositions.last().right.roundToPx() + edgeOffset
+            val visibleWidth = totalTabRowWidth - scrollState.maxValue
+            val tabOffset = left.roundToPx()
+            val scrollerCenter = visibleWidth / 2
+            val tabWidth = width.roundToPx()
+            val centeredTabOffset = tabOffset - (scrollerCenter - tabWidth / 2)
+            // How much space we have to scroll. If the visible width is <= to the total width, then
+            // we have no space to scroll as everything is always visible.
+            val availableSpace = (totalTabRowWidth - visibleWidth).coerceAtLeast(0)
+            return centeredTabOffset.coerceIn(0, availableSpace)
+        }
 }
 
 @Immutable
-class TabPosition internal constructor(val left: Dp, val width: Dp) {
+class TabPosition internal constructor(
+    val left: Dp,
+    val width: Dp,
+) {
     val right: Dp get() = left + width
 
     override fun equals(other: Any?): Boolean {
@@ -325,9 +340,7 @@ class TabPosition internal constructor(val left: Dp, val width: Dp) {
         return result
     }
 
-    override fun toString(): String {
-        return "TabPosition(left=$left, right=$right, width=$width)"
-    }
+    override fun toString(): String = "TabPosition(left=$left, right=$right, width=$width)"
 }
 
 object HsTabRowDefaults {
@@ -343,7 +356,7 @@ object HsTabRowDefaults {
     fun Divider(
         modifier: Modifier = Modifier,
         thickness: Dp = DividerThickness,
-        color: Color = LocalContentColor.current.copy(alpha = DividerOpacity)
+        color: Color = LocalContentColor.current.copy(alpha = DividerOpacity),
     ) {
         androidx.compose.material.Divider(modifier = modifier, thickness = thickness, color = color)
     }
@@ -360,13 +373,13 @@ object HsTabRowDefaults {
     fun Indicator(
         modifier: Modifier = Modifier,
         height: Dp = IndicatorHeight,
-        color: Color = LocalContentColor.current
+        color: Color = LocalContentColor.current,
     ) {
         Box(
             modifier
                 .fillMaxWidth()
                 .height(height)
-                .background(color = color)
+                .background(color = color),
         )
     }
 
@@ -377,27 +390,27 @@ object HsTabRowDefaults {
      * @param currentTabPosition [TabPosition] of the currently selected tab. This is used to
      * calculate the offset of the indicator this modifier is applied to, as well as its width.
      */
-    fun Modifier.tabIndicatorOffset(
-        currentTabPosition: androidx.compose.material.TabPosition
-    ): Modifier = composed(
-        inspectorInfo = debugInspectorInfo {
-            name = "tabIndicatorOffset"
-            value = currentTabPosition
+    fun Modifier.tabIndicatorOffset(currentTabPosition: androidx.compose.material.TabPosition): Modifier =
+        composed(
+            inspectorInfo =
+                debugInspectorInfo {
+                    name = "tabIndicatorOffset"
+                    value = currentTabPosition
+                },
+        ) {
+            val currentTabWidth by animateDpAsState(
+                targetValue = currentTabPosition.width,
+                animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+            )
+            val indicatorOffset by animateDpAsState(
+                targetValue = currentTabPosition.left,
+                animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+            )
+            fillMaxWidth()
+                .wrapContentSize(Alignment.BottomStart)
+                .offset(x = indicatorOffset)
+                .width(currentTabWidth)
         }
-    ) {
-        val currentTabWidth by animateDpAsState(
-            targetValue = currentTabPosition.width,
-            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-        )
-        val indicatorOffset by animateDpAsState(
-            targetValue = currentTabPosition.left,
-            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-        )
-        fillMaxWidth()
-            .wrapContentSize(Alignment.BottomStart)
-            .offset(x = indicatorOffset)
-            .width(currentTabWidth)
-    }
 
     /**
      * Default opacity for the color of [Divider]
@@ -420,25 +433,26 @@ object HsTabRowDefaults {
     val ScrollableTabRowPadding = 52.dp
 }
 
-private val ScrollableTabRowScrollSpec: AnimationSpec<Float> = tween(
-    durationMillis = 250,
-    easing = FastOutSlowInEasing
-)
+private val ScrollableTabRowScrollSpec: AnimationSpec<Float> =
+    tween(
+        durationMillis = 250,
+        easing = FastOutSlowInEasing,
+    )
 
 private enum class HsTabSlots {
     Tabs,
     Divider,
-    Indicator
+    Indicator,
 }
 
 object TabDefaults {
     private val ButtonHorizontalPadding = 16.dp
 
-    val ContentPadding = PaddingValues(
-        start = ButtonHorizontalPadding,
-        end = ButtonHorizontalPadding,
-    )
-
+    val ContentPadding =
+        PaddingValues(
+            start = ButtonHorizontalPadding,
+            end = ButtonHorizontalPadding,
+        )
 
     /**
      * The default min width applied for the [Button].
@@ -459,13 +473,14 @@ object TabDefaults {
         selectedBackgroundColor: Color = ComposeAppTheme.colors.yellowD,
         selectedContentColor: Color = ComposeAppTheme.colors.dark,
         disabledContentColor: Color = ComposeAppTheme.colors.grey50,
-    ): DefaultTabColors = DefaultTabColors(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        selectedBackgroundColor = selectedBackgroundColor,
-        selectedContentColor = selectedContentColor,
-        disabledContentColor = disabledContentColor
-    )
+    ): DefaultTabColors =
+        DefaultTabColors(
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
+            selectedBackgroundColor = selectedBackgroundColor,
+            selectedContentColor = selectedContentColor,
+            disabledContentColor = disabledContentColor,
+        )
 }
 
 @Immutable
@@ -474,22 +489,16 @@ class DefaultTabColors(
     private val contentColor: Color,
     private val selectedBackgroundColor: Color,
     private val selectedContentColor: Color,
-    private val disabledContentColor: Color
+    private val disabledContentColor: Color,
 ) {
     @Composable
-    fun backgroundColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) selectedBackgroundColor else backgroundColor)
-    }
+    fun backgroundColor(enabled: Boolean): State<Color> = rememberUpdatedState(if (enabled) selectedBackgroundColor else backgroundColor)
 
     @Composable
-    fun contentColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) selectedContentColor else contentColor)
-    }
+    fun contentColor(enabled: Boolean): State<Color> = rememberUpdatedState(if (enabled) selectedContentColor else contentColor)
 
     @Composable
-    fun contentColorDisabled(): State<Color> {
-        return rememberUpdatedState(disabledContentColor)
-    }
+    fun contentColorDisabled(): State<Color> = rememberUpdatedState(disabledContentColor)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -29,18 +29,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 
 class PrivateKeysFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Account>(navController) { account ->
             ManageAccountScreen(navController, account)
         }
     }
-
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, account: Account) {
+fun ManageAccountScreen(
+    navController: NavController,
+    account: Account,
+) {
     val viewModel = viewModel<PrivateKeysViewModel>(factory = PrivateKeysModule.Factory(account))
 
     Scaffold(
@@ -50,28 +51,32 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 title = stringResource(R.string.PrivateKeys_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(12.dp))
             viewModel.viewState.evmPrivateKey?.let { key ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_EvmPrivateKey),
-                    description = stringResource(R.string.PrivateKeys_EvmPrivateKeyDescription)
+                    description = stringResource(R.string.PrivateKeys_EvmPrivateKeyDescription),
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
                             R.id.evmPrivateKeyFragment,
-                            EvmPrivateKeyFragment.Input(key)
+                            EvmPrivateKeyFragment.Input(key),
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.EvmPrivateKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.EvmPrivateKey),
+                        )
                     }
                 }
             }
@@ -85,11 +90,14 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             R.id.showExtendedKeyFragment,
                             ShowExtendedKeyFragment.Input(
                                 key.hdKey,
-                                key.displayKeyType
-                            )
+                                key.displayKeyType,
+                            ),
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.Bip32RootKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.Bip32RootKey),
+                        )
                     }
                 }
             }
@@ -101,10 +109,13 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     navController.authorizedAction {
                         navController.slideFromRight(
                             R.id.showExtendedKeyFragment,
-                            ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
+                            ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType),
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.AccountExtendedPrivateKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.AccountExtendedPrivateKey),
+                        )
                     }
                 }
             }

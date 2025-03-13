@@ -12,8 +12,9 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
-
+class FaqViewModel(
+    private val repository: FaqRepository,
+) : ViewModel() {
     var sections by mutableStateOf<List<FaqSection>>(listOf())
         private set
     var selectedSection by mutableStateOf<FaqSection?>(null)

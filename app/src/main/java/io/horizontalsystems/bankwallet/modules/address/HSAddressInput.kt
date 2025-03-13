@@ -25,10 +25,11 @@ fun HSAddressInput(
     onError: ((Throwable?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null,
 ) {
-    val viewModel = viewModel<AddressViewModel>(
-        factory = AddressInputModule.FactoryToken(tokenQuery, coinCode, initial),
-        key = "address_view_model_${tokenQuery.id}"
-    )
+    val viewModel =
+        viewModel<AddressViewModel>(
+            factory = AddressInputModule.FactoryToken(tokenQuery, coinCode, initial),
+            key = "address_view_model_${tokenQuery.id}",
+        )
 
     HSAddressInput(
         modifier = modifier,
@@ -37,7 +38,7 @@ fun HSAddressInput(
         textPreprocessor = textPreprocessor,
         navController = navController,
         onError = onError,
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
     )
 }
 

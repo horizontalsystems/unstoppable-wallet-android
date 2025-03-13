@@ -37,15 +37,14 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class SendFragment : BaseFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             try {
                 val navController = findNavController()
@@ -67,7 +66,8 @@ class SendFragment : BaseFragment() {
                     BlockchainType.BitcoinCash,
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
-                    BlockchainType.Dash -> {
+                    BlockchainType.Dash,
+                    -> {
                         val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {
                             factory
@@ -80,7 +80,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel = amountInputModeViewModel,
                                 sendEntryPointDestId = sendEntryPointDestId,
                                 amount = amount,
-                                riskyAddress = riskyAddress
+                                riskyAddress = riskyAddress,
                             )
                         }
                     }
@@ -98,7 +98,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel = amountInputModeViewModel,
                                 sendEntryPointDestId = sendEntryPointDestId,
                                 amount = amount,
-                                riskyAddress = riskyAddress
+                                riskyAddress = riskyAddress,
                             )
                         }
                     }
@@ -112,7 +112,8 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ZkSync,
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
-                    BlockchainType.ArbitrumOne -> {
+                    BlockchainType.ArbitrumOne,
+                    -> {
                         setContent {
                             SendEvmScreen(
                                 title = title,
@@ -123,7 +124,7 @@ class SendFragment : BaseFragment() {
                                 amount = amount,
                                 hideAddress = hideAddress,
                                 riskyAddress = riskyAddress,
-                                sendEntryPointDestId = sendEntryPointDestId
+                                sendEntryPointDestId = sendEntryPointDestId,
                             )
                         }
                     }
@@ -139,7 +140,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel = amountInputModeViewModel,
                                 sendEntryPointDestId = sendEntryPointDestId,
                                 amount = amount,
-                                riskyAddress = riskyAddress
+                                riskyAddress = riskyAddress,
                             )
                         }
                     }
@@ -155,7 +156,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 amount,
-                                riskyAddress = riskyAddress
+                                riskyAddress = riskyAddress,
                             )
                         }
                     }
@@ -171,7 +172,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel = amountInputModeViewModel,
                                 sendEntryPointDestId = sendEntryPointDestId,
                                 amount = amount,
-                                riskyAddress = riskyAddress
+                                riskyAddress = riskyAddress,
                             )
                         }
                     }
@@ -182,7 +183,6 @@ class SendFragment : BaseFragment() {
                 findNavController().popBackStack()
             }
         }
-    }
 
     @Parcelize
     data class Input(
@@ -192,6 +192,6 @@ class SendFragment : BaseFragment() {
         val address: Address,
         val riskyAddress: Boolean = false,
         val amount: BigDecimal? = null,
-        val hideAddress: Boolean = false
+        val hideAddress: Boolean = false,
     ) : Parcelable
 }

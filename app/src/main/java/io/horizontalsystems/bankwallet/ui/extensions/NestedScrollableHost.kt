@@ -57,7 +57,10 @@ class NestedScrollableHost : FrameLayout {
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop
     }
 
-    private fun canChildScroll(orientation: Int, delta: Float): Boolean {
+    private fun canChildScroll(
+        orientation: Int,
+        delta: Float,
+    ): Boolean {
         val direction = -delta.sign.toInt()
         return when (orientation) {
             0 -> child?.canScrollHorizontally(direction) ?: false

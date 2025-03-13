@@ -13,9 +13,8 @@ open class TronTransactionRecord(
     baseToken: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
-    spam: Boolean = false
-) :
-    TransactionRecord(
+    spam: Boolean = false,
+) : TransactionRecord(
         uid = transaction.hashString,
         transactionHash = transaction.hashString,
         transactionIndex = 0,
@@ -24,21 +23,24 @@ open class TronTransactionRecord(
         timestamp = transaction.timestamp / 1000,
         failed = transaction.isFailed,
         spam = spam,
-        source = source
+        source = source,
     ) {
-
     val fee: TransactionValue?
 
     init {
         val feeAmount: Long? = transaction.fee
-        fee = if (feeAmount != null) {
-            val feeDecimal = feeAmount.toBigDecimal()
-                .movePointLeft(baseToken.decimals).stripTrailingZeros()
+        fee =
+            if (feeAmount != null) {
+                val feeDecimal =
+                    feeAmount
+                        .toBigDecimal()
+                        .movePointLeft(baseToken.decimals)
+                        .stripTrailingZeros()
 
-            TransactionValue.CoinValue(baseToken, feeDecimal)
-        } else {
-            null
-        }
+                TransactionValue.CoinValue(baseToken, feeDecimal)
+            } else {
+                null
+            }
     }
 
     override fun status(lastBlockHeight: Int?): TransactionStatus {
@@ -65,5 +67,4 @@ open class TronTransactionRecord(
             else -> return TransactionStatus.Pending
         }
     }
-
 }

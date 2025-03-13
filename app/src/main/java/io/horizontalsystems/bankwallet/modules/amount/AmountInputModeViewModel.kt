@@ -12,21 +12,21 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 class AmountInputModeViewModel(
     private val localStorage: ILocalStorage,
     private val xRateService: XRateService,
-    private val coinUid: String
+    private val coinUid: String,
 ) : ViewModel() {
-
     private var hasXRate = xRateService.getRate(coinUid) != null
 
     var inputType by mutableStateOf(
         when {
             hasXRate -> localStorage.amountInputType ?: AmountInputType.COIN
             else -> AmountInputType.COIN
-        }
+        },
     )
         private set
 
     init {
-        xRateService.getRateFlow(coinUid)
+        xRateService
+            .getRateFlow(coinUid)
             .onFirstWith(viewModelScope) {
                 hasXRate = true
             }
@@ -49,4 +49,3 @@ class AmountInputModeViewModel(
         localStorage.amountInputType = inputType
     }
 }
-

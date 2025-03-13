@@ -7,10 +7,11 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitWrapper
 import io.horizontalsystems.solanakit.Signer
 
 abstract class BaseSolanaAdapter(
-        solanaKitWrapper: SolanaKitWrapper,
-        val decimal: Int
-) : IAdapter, IBalanceAdapter, IReceiveAdapter {
-
+    solanaKitWrapper: SolanaKitWrapper,
+    val decimal: Int,
+) : IAdapter,
+    IBalanceAdapter,
+    IReceiveAdapter {
     val solanaKit = solanaKitWrapper.solanaKit
     protected val signer: Signer? = solanaKitWrapper.signer
 
@@ -31,5 +32,4 @@ abstract class BaseSolanaAdapter(
     companion object {
         const val confirmationsThreshold: Int = 12
     }
-
 }

@@ -35,22 +35,22 @@ fun DataFieldFee(
             subhead2_grey(text = title)
 
             Image(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable(
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(title, infoText)
-                            )
-                        },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp)
+                        .clickable(
+                            onClick = {
+                                navController.slideFromBottom(
+                                    R.id.feeSettingsInfoDialog,
+                                    FeeSettingsInfoDialog.Input(title, infoText),
+                                )
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ),
                 painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = ""
+                contentDescription = "",
             )
-
         },
         value = {
             Column(horizontalAlignment = Alignment.End) {
@@ -58,6 +58,6 @@ fun DataFieldFee(
                 VSpacer(height = 1.dp)
                 subhead2_grey(text = secondary)
             }
-        }
+        },
     )
 }

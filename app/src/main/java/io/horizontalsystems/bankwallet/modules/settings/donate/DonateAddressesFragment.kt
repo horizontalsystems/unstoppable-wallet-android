@@ -38,20 +38,16 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 
 class DonateAddressesFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         DonateScreen(
-            onBackPress = { navController.popBackStack() }
+            onBackPress = { navController.popBackStack() },
         )
     }
-
 }
 
 @Composable
-fun DonateScreen(
-    onBackPress: () -> Unit
-) {
+fun DonateScreen(onBackPress: () -> Unit) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
@@ -61,13 +57,14 @@ fun DonateScreen(
                     HsBackButton(onClick = onBackPress)
                 },
             )
-        }
+        },
     ) {
         Column(Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(12.dp)
                 App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
@@ -75,7 +72,7 @@ fun DonateScreen(
                         coinImageUrl = blockchainType.imageUrl,
                         coinName = blockchainType.title,
                         address = address,
-                        chainUid = blockchainType.uid
+                        chainUid = blockchainType.uid,
                     )
                     VSpacer(24.dp)
                 }
@@ -91,12 +88,12 @@ private fun DonateAddress(
     coinImageUrl: String,
     coinName: String,
     address: String,
-    chainUid: String
+    chainUid: String,
 ) {
     val localView = LocalView.current
 
     InfoText(text = coinName.uppercase())
-    CellUniversalLawrenceSection() {
+    CellUniversalLawrenceSection {
         RowUniversal(
             modifier = Modifier.padding(horizontal = 16.dp),
             onClick = {
@@ -104,15 +101,16 @@ private fun DonateAddress(
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
 
                 stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
-            }
+            },
         ) {
             Image(
                 modifier = Modifier.size(32.dp),
-                painter = rememberAsyncImagePainter(
-                    model = coinImageUrl,
-                    error = painterResource(R.drawable.ic_platform_placeholder_32)
-                ),
-                contentDescription = "platform"
+                painter =
+                    rememberAsyncImagePainter(
+                        model = coinImageUrl,
+                        error = painterResource(R.drawable.ic_platform_placeholder_32),
+                    ),
+                contentDescription = "platform",
             )
             HSpacer(16.dp)
             subhead2_leah(
@@ -129,7 +127,7 @@ private fun DonateAddress(
                     HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
 
                     stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
-                }
+                },
             )
         }
     }

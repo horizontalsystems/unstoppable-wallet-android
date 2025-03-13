@@ -29,13 +29,14 @@ class AddressViewModel(
     private val addressHandlerFactory: AddressHandlerFactory,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
-    definedAddresses: List<ContactAddress>?
+    definedAddresses: List<ContactAddress>?,
 ) : ViewModelUiState<AddressViewModel.UiState>() {
-
-    private val title = if (contactAddress == null)
-        TranslatableString.ResString(R.string.Contacts_AddAddress)
-    else
-        TranslatableString.PlainString(contactAddress.blockchain.name)
+    private val title =
+        if (contactAddress == null) {
+            TranslatableString.ResString(R.string.Contacts_AddAddress)
+        } else {
+            TranslatableString.PlainString(contactAddress.blockchain.name)
+        }
     private var address = contactAddress?.address ?: ""
     private val editingAddress = contactAddress
     private var addressState: DataState<Address>? =
@@ -43,26 +44,29 @@ class AddressViewModel(
     private val availableBlockchains: List<Blockchain>
 
     init {
-        availableBlockchains = if (contactAddress == null) {
-            val allBlockchainTypes = EvmBlockchainManager.blockchainTypes + listOf(
-                BlockchainType.Bitcoin,
-                BlockchainType.BitcoinCash,
-                BlockchainType.Dash,
-                BlockchainType.Litecoin,
-                BlockchainType.Zcash,
-                BlockchainType.Solana,
-                BlockchainType.ECash,
-                BlockchainType.Tron,
-                BlockchainType.Ton,
-            )
-            val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
-            val availableBlockchainUids =
-                allBlockchainTypes.filter { !definedBlockchainTypes.contains(it) }.map { it.uid }
+        availableBlockchains =
+            if (contactAddress == null) {
+                val allBlockchainTypes =
+                    EvmBlockchainManager.blockchainTypes +
+                        listOf(
+                            BlockchainType.Bitcoin,
+                            BlockchainType.BitcoinCash,
+                            BlockchainType.Dash,
+                            BlockchainType.Litecoin,
+                            BlockchainType.Zcash,
+                            BlockchainType.Solana,
+                            BlockchainType.ECash,
+                            BlockchainType.Tron,
+                            BlockchainType.Ton,
+                        )
+                val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
+                val availableBlockchainUids =
+                    allBlockchainTypes.filter { !definedBlockchainTypes.contains(it) }.map { it.uid }
 
-            marketKit.blockchains(availableBlockchainUids).sortedBy { it.type.order }
-        } else {
-            listOf()
-        }
+                marketKit.blockchains(availableBlockchainUids).sortedBy { it.type.order }
+            } else {
+                listOf()
+            }
     }
 
     private var blockchain = contactAddress?.blockchain ?: availableBlockchains.first()
@@ -97,39 +101,45 @@ class AddressViewModel(
             return
         }
 
-        validationJob = viewModelScope.launch {
-            addressState = DataState.Loading
-            emitState()
+        validationJob =
+            viewModelScope.launch {
+                addressState = DataState.Loading
+                emitState()
 
-            addressState = try {
-                val parsedAddress = parseAddress(addressParser, address.trim())
-                ensureActive()
-                contactsRepository.validateAddress(
-                    contactUid,
-                    ContactAddress(blockchain, parsedAddress.hex)
-                )
-                DataState.Success(parsedAddress)
-            } catch (error: Throwable) {
-                ensureActive()
-                DataState.Error(error)
+                addressState =
+                    try {
+                        val parsedAddress = parseAddress(addressParser, address.trim())
+                        ensureActive()
+                        contactsRepository.validateAddress(
+                            contactUid,
+                            ContactAddress(blockchain, parsedAddress.hex),
+                        )
+                        DataState.Success(parsedAddress)
+                    } catch (error: Throwable) {
+                        ensureActive()
+                        DataState.Error(error)
+                    }
+                emitState()
             }
-            emitState()
-        }
     }
 
-    override fun createState() = UiState(
-        headerTitle = title,
-        editingAddress = editingAddress,
-        addressState = addressState,
-        address = address,
-        blockchain = blockchain,
-        canChangeBlockchain = editingAddress == null,
-        showDelete = editingAddress != null,
-        availableBlockchains = availableBlockchains,
-        doneEnabled = addressState is DataState.Success
-    )
+    override fun createState() =
+        UiState(
+            headerTitle = title,
+            editingAddress = editingAddress,
+            addressState = addressState,
+            address = address,
+            blockchain = blockchain,
+            canChangeBlockchain = editingAddress == null,
+            showDelete = editingAddress != null,
+            availableBlockchains = availableBlockchains,
+            doneEnabled = addressState is DataState.Success,
+        )
 
-    private suspend fun parseAddress(addressParser: AddressParserChain, value: String): Address =
+    private suspend fun parseAddress(
+        addressParser: AddressParserChain,
+        value: String,
+    ): Address =
         withContext(Dispatchers.IO) {
             try {
                 val resolvedAddress = addressParser.getAddressFromDomain(value)?.hex ?: value
@@ -139,7 +149,10 @@ class AddressViewModel(
             }
         }
 
-    private fun parse(value: String, supportedHandlers: List<IAddressHandler>): Address {
+    private fun parse(
+        value: String,
+        supportedHandlers: List<IAddressHandler>,
+    ): Address {
         if (supportedHandlers.isEmpty()) {
             throw AddressValidationException.Unsupported(blockchain.name)
         }
@@ -160,6 +173,6 @@ class AddressViewModel(
         val canChangeBlockchain: Boolean,
         val showDelete: Boolean,
         val availableBlockchains: List<Blockchain>,
-        val doneEnabled: Boolean
+        val doneEnabled: Boolean,
     )
 }

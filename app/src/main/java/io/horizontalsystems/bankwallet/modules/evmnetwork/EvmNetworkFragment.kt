@@ -70,14 +70,12 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 
 class EvmNetworkFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Blockchain>(navController) { input ->
             EvmNetworkNavHost(navController, input)
         }
     }
-
 }
 
 private const val EvmNetworkPage = "evm_network"
@@ -86,7 +84,7 @@ private const val AddRpcPage = "add_rpc"
 @Composable
 private fun EvmNetworkNavHost(
     fragmentNavController: NavController,
-    blockchain: Blockchain
+    blockchain: Blockchain,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -103,7 +101,7 @@ private fun EvmNetworkNavHost(
         composablePopup(AddRpcPage) {
             AddRpcScreen(
                 navController = navController,
-                blockchain = blockchain
+                blockchain = blockchain,
             )
         }
     }
@@ -115,9 +113,10 @@ private fun EvmNetworkScreen(
     blockchain: Blockchain,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<EvmNetworkViewModel>(
-        factory = EvmNetworkModule.Factory(blockchain)
-    )
+    val viewModel =
+        viewModel<EvmNetworkViewModel>(
+            factory = EvmNetworkModule.Factory(blockchain),
+        )
     var revealedCardId by remember { mutableStateOf<String?>(null) }
     val view = LocalView.current
 
@@ -127,36 +126,38 @@ private fun EvmNetworkScreen(
                 title = viewModel.title,
                 navigationIcon = {
                     Image(
-                        painter = rememberAsyncImagePainter(
-                            model = viewModel.blockchain.type.imageUrl,
-                            error = painterResource(R.drawable.ic_platform_placeholder_32)
-                        ),
+                        painter =
+                            rememberAsyncImagePainter(
+                                model = viewModel.blockchain.type.imageUrl,
+                                error = painterResource(R.drawable.ic_platform_placeholder_32),
+                            ),
                         contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 14.dp)
-                            .size(24.dp)
+                        modifier =
+                            Modifier
+                                .padding(start = 14.dp)
+                                .size(24.dp),
                     )
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            onBackPress.invoke()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                onBackPress.invoke()
+                            },
+                        ),
+                    ),
             )
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-
                 item {
                     VSpacer(12.dp)
                     subhead2_grey(
                         modifier = Modifier.padding(horizontal = 32.dp),
-                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription),
                     )
                     VSpacer(32.dp)
                 }
@@ -166,7 +167,10 @@ private fun EvmNetworkScreen(
                         BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectSyncSource(item.syncSource)
 
-                            stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.SwitchEvmSource(blockchain.uid, item.name))
+                            stat(
+                                page = StatPage.BlockchainSettingsEvm,
+                                event = StatEvent.SwitchEvmSource(blockchain.uid, item.name),
+                            )
                         }
                     }
                 }
@@ -178,7 +182,10 @@ private fun EvmNetworkScreen(
                         onClick = { syncSource ->
                             viewModel.onSelectSyncSource(syncSource)
 
-                            stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.SwitchEvmSource(blockchain.uid, "custom"))
+                            stat(
+                                page = StatPage.BlockchainSettingsEvm,
+                                event = StatEvent.SwitchEvmSource(blockchain.uid, "custom"),
+                            )
                         },
                         onReveal = { id ->
                             if (revealedCardId != id) {
@@ -187,12 +194,15 @@ private fun EvmNetworkScreen(
                         },
                         onConceal = {
                             revealedCardId = null
-                        }
+                        },
                     ) {
                         viewModel.onRemoveCustomRpc(it)
                         HudHelper.showErrorMessage(view, R.string.Hud_Removed)
 
-                        stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.DeleteCustomEvmSource(blockchain.uid))
+                        stat(
+                            page = StatPage.BlockchainSettingsEvm,
+                            event = StatEvent.DeleteCustomEvmSource(blockchain.uid),
+                        )
                     }
                 }
 
@@ -201,7 +211,10 @@ private fun EvmNetworkScreen(
                     AddButton {
                         navController.navigate(AddRpcPage)
 
-                        stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid))
+                        stat(
+                            page = StatPage.BlockchainSettingsEvm,
+                            event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid),
+                        )
                     }
                 }
             }
@@ -215,7 +228,7 @@ private fun LazyListScope.CustomRpcListSection(
     onClick: (EvmSyncSource) -> Unit,
     onReveal: (String) -> Unit,
     onConceal: () -> Unit,
-    onDelete: (EvmSyncSource) -> Unit
+    onDelete: (EvmSyncSource) -> Unit,
 ) {
     item {
         Spacer(Modifier.height(32.dp))
@@ -228,14 +241,15 @@ private fun LazyListScope.CustomRpcListSection(
         val shape = getShape(items.size, index)
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             ActionsRow(
                 content = {
                     HsIconButton(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(88.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .width(88.dp),
                         onClick = { onDelete(item.syncSource) },
                         content = {
                             Icon(
@@ -243,7 +257,7 @@ private fun LazyListScope.CustomRpcListSection(
                                 tint = Color.Gray,
                                 contentDescription = "delete",
                             )
-                        }
+                        },
                     )
                 },
             )
@@ -258,18 +272,16 @@ private fun LazyListScope.CustomRpcListSection(
                         shape = shape,
                         showDivider = showDivider,
                         item = item,
-                        onItemClick = onClick
+                        onItemClick = onClick,
                     )
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-private fun AddButton(
-    onClick: () -> Unit
-) {
+private fun AddButton(onClick: () -> Unit) {
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal(
@@ -280,14 +292,14 @@ private fun AddButton(
                     painter = painterResource(R.drawable.ic_plus),
                     modifier = Modifier.size(24.dp),
                     tint = ComposeAppTheme.colors.jacob,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Spacer(Modifier.width(16.dp))
                 body_jacob(
-                    text = stringResource(R.string.EvmNetwork_AddNew)
+                    text = stringResource(R.string.EvmNetwork_AddNew),
                 )
             }
-        }
+        },
     )
 }
 
@@ -296,35 +308,37 @@ fun RpcCell(
     shape: Shape,
     showDivider: Boolean = false,
     item: EvmNetworkViewModel.ViewItem,
-    onItemClick: (EvmSyncSource) -> Unit
+    onItemClick: (EvmSyncSource) -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(shape)
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable {
-                onItemClick.invoke(item.syncSource)
-            },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(shape)
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable {
+                    onItemClick.invoke(item.syncSource)
+                },
+        contentAlignment = Alignment.Center,
     ) {
         if (showDivider) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
         Row(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                val title = when {
-                    item.name.isNotBlank() -> item.name
-                    else -> stringResource(id = R.string.WalletConnect_Unnamed)
-                }
+                val title =
+                    when {
+                        item.name.isNotBlank() -> item.name
+                        else -> stringResource(id = R.string.WalletConnect_Unnamed)
+                    }
 
                 body_leah(
                     text = title,
@@ -337,7 +351,7 @@ fun RpcCell(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_checkmark_20),
                     tint = ComposeAppTheme.colors.jacob,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }

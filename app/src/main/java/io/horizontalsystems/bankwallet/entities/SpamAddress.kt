@@ -8,5 +8,5 @@ class SpamAddress(
     val transactionHash: ByteArray,
     val address: String,
     val domain: String?,
-    val blockchainType: BlockchainType?
+    val blockchainType: BlockchainType?,
 )

@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.core.hideKeyboard
 
 class MainActivity : BaseActivity() {
-
     private val viewModel by viewModels<MainActivityViewModel> {
         MainActivityViewModel.Factory()
     }
@@ -61,9 +60,11 @@ class MainActivity : BaseActivity() {
                     is Wallet.Model.SessionRequest -> {
                         navController.slideFromBottom(R.id.wcRequestFragment)
                     }
+
                     is Wallet.Model.SessionProposal -> {
                         navController.slideFromBottom(R.id.wcSessionFragment)
                     }
+
                     else -> {}
                 }
 
@@ -87,24 +88,25 @@ class MainActivity : BaseActivity() {
         viewModel.setIntent(intent)
     }
 
-    private fun validate() = try {
-        viewModel.validate()
-    } catch (e: MainScreenValidationError.NoSystemLock) {
-        KeyStoreActivity.startForNoSystemLock(this)
-        finish()
-    } catch (e: MainScreenValidationError.KeyInvalidated) {
-        KeyStoreActivity.startForInvalidKey(this)
-        finish()
-    } catch (e: MainScreenValidationError.UserAuthentication) {
-        KeyStoreActivity.startForUserAuthentication(this)
-        finish()
-    } catch (e: MainScreenValidationError.Welcome) {
-        IntroActivity.start(this)
-        finish()
-    } catch (e: MainScreenValidationError.Unlock) {
-        LockScreenActivity.start(this)
-    } catch (e: MainScreenValidationError.KeystoreRuntimeException) {
-        Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
-        finish()
-    }
+    private fun validate() =
+        try {
+            viewModel.validate()
+        } catch (e: MainScreenValidationError.NoSystemLock) {
+            KeyStoreActivity.startForNoSystemLock(this)
+            finish()
+        } catch (e: MainScreenValidationError.KeyInvalidated) {
+            KeyStoreActivity.startForInvalidKey(this)
+            finish()
+        } catch (e: MainScreenValidationError.UserAuthentication) {
+            KeyStoreActivity.startForUserAuthentication(this)
+            finish()
+        } catch (e: MainScreenValidationError.Welcome) {
+            IntroActivity.start(this)
+            finish()
+        } catch (e: MainScreenValidationError.Unlock) {
+            LockScreenActivity.start(this)
+        } catch (e: MainScreenValidationError.KeystoreRuntimeException) {
+            Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
+            finish()
+        }
 }

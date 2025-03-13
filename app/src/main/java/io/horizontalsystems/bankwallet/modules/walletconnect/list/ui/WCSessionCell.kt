@@ -41,46 +41,50 @@ fun WCSessionCell(
     navController: NavController,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(shape)
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable {
-                navController.slideFromBottom(
-                    R.id.wcSessionFragment,
-                    WCSessionModule.Input(session.sessionTopic)
-                )
-            },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(shape)
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable {
+                    navController.slideFromBottom(
+                        R.id.wcSessionFragment,
+                        WCSessionModule.Input(session.sessionTopic),
+                    )
+                },
+        contentAlignment = Alignment.Center,
     ) {
         if (showDivider) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
         Row(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                painter = rememberAsyncImagePainter(
-                    model = session.imageUrl,
-                    error = painterResource(R.drawable.ic_platform_placeholder_24)
-                ),
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                painter =
+                    rememberAsyncImagePainter(
+                        model = session.imageUrl,
+                        error = painterResource(R.drawable.ic_platform_placeholder_24),
+                    ),
                 contentDescription = null,
             )
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                val title = when {
-                    session.title.isNotBlank() -> session.title
-                    else -> stringResource(id = R.string.WalletConnect_Unnamed)
-                }
+                val title =
+                    when {
+                        session.title.isNotBlank() -> session.title
+                        else -> stringResource(id = R.string.WalletConnect_Unnamed)
+                    }
 
                 body_leah(
                     text = title,
@@ -92,12 +96,12 @@ fun WCSessionCell(
             if (session.pendingRequestsCount > 0) {
                 BadgeText(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    text = session.pendingRequestsCount.toString()
+                    text = session.pendingRequestsCount.toString(),
                 )
             }
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }

@@ -39,7 +39,6 @@ data class ChartData(
                 }
 
                 is ChartIndicator.MovingAverage -> {
-
                 }
             }
         }
@@ -76,33 +75,32 @@ data class ChartData(
         items.last().timestamp
     }
 
-    fun valuesByTimestamp(): LinkedHashMap<Long, Float> {
-        return LinkedHashMap(
+    fun valuesByTimestamp(): LinkedHashMap<Long, Float> =
+        LinkedHashMap(
             items.associate { item ->
                 item.timestamp to item.value
-            }
+            },
         )
-    }
 
-    fun volumeByTimestamp(): LinkedHashMap<Long, Float> {
-        return LinkedHashMap(
-            items.mapNotNull { item ->
-                item.volume?.let {
-                    item.timestamp to it
-                }
-            }.toMap()
+    fun volumeByTimestamp(): LinkedHashMap<Long, Float> =
+        LinkedHashMap(
+            items
+                .mapNotNull { item ->
+                    item.volume?.let {
+                        item.timestamp to it
+                    }
+                }.toMap(),
         )
-    }
 
-    fun dominanceByTimestamp(): LinkedHashMap<Long, Float> {
-        return LinkedHashMap(
-            items.mapNotNull { item ->
-                item.dominance?.let {
-                    item.timestamp to it
-                }
-            }.toMap()
+    fun dominanceByTimestamp(): LinkedHashMap<Long, Float> =
+        LinkedHashMap(
+            items
+                .mapNotNull { item ->
+                    item.dominance?.let {
+                        item.timestamp to it
+                    }
+                }.toMap(),
         )
-    }
 
     fun diff(): BigDecimal {
         val values = items.map { it.value }
@@ -118,12 +116,10 @@ data class ChartData(
 
         return try {
             ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             BigDecimal.ZERO
         }
     }
 
-    fun sum(): BigDecimal {
-        return items.map { it.value }.sum().toBigDecimal()
-    }
+    fun sum(): BigDecimal = items.map { it.value }.sum().toBigDecimal()
 }

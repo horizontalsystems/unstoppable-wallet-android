@@ -17,7 +17,7 @@ import kotlinx.coroutines.rx2.await
 class CoinTreasuriesService(
     val coin: Coin,
     private val repository: CoinTreasuriesRepository,
-    private val currencyManager: CurrencyManager
+    private val currencyManager: CurrencyManager,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -52,7 +52,15 @@ class CoinTreasuriesService(
     private fun fetch(forceRefresh: Boolean) {
         coroutineScope.launch {
             try {
-                val coinTreasuries = repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh).await()
+                val coinTreasuries =
+                    repository
+                        .coinTreasuriesSingle(
+                            coin.uid,
+                            currency.code,
+                            treasuryType,
+                            sortDescending,
+                            forceRefresh,
+                        ).await()
                 stateSubject.onNext(DataState.Success(coinTreasuries))
             } catch (e: Throwable) {
                 stateSubject.onNext(DataState.Error(e))

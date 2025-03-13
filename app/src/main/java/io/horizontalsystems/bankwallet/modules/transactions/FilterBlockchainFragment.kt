@@ -38,15 +38,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.marketkit.models.Blockchain
 
 class FilterBlockchainFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
+        val viewModel: TransactionsViewModel? =
+            try {
+                navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
+            } catch (e: IllegalStateException) {
+                Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
+                null
+            }
 
         if (viewModel == null) {
             navController.popBackStack(R.id.filterBlockchainFragment, true)
@@ -57,9 +57,11 @@ class FilterBlockchainFragment : BaseComposeFragment() {
     }
 }
 
-
 @Composable
-fun FilterBlockchainScreen(navController: NavController, viewModel: TransactionsViewModel) {
+fun FilterBlockchainScreen(
+    navController: NavController,
+    viewModel: TransactionsViewModel,
+) {
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -68,11 +70,11 @@ fun FilterBlockchainScreen(navController: NavController, viewModel: Transactions
                 title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
                 navigationIcon = {
                     HsBackButton(onClick = navController::popBackStack)
-                }
+                },
             )
             filterBlockchains?.let { blockchains ->
                 LazyColumn(
-                    contentPadding = PaddingValues(bottom = 32.dp)
+                    contentPadding = PaddingValues(bottom = 32.dp),
                 ) {
                     items(blockchains) { filterItem ->
                         BlockchainCell(viewModel, filterItem, navController)
@@ -87,35 +89,38 @@ fun FilterBlockchainScreen(navController: NavController, viewModel: Transactions
 private fun BlockchainCell(
     viewModel: TransactionsViewModel,
     filterItem: Filter<Blockchain?>,
-    navController: NavController
+    navController: NavController,
 ) {
     CellMultilineClear(borderTop = true) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    viewModel.onEnterFilterBlockchain(filterItem)
-                    navController.popBackStack()
-                }
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        viewModel.onEnterFilterBlockchain(filterItem)
+                        navController.popBackStack()
+                    }.padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             val blockchain = filterItem.item
             if (blockchain != null) {
                 Image(
-                    painter = rememberAsyncImagePainter(
-                        model = blockchain.type.imageUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_32)
-                    ),
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(32.dp),
-                    contentDescription = null
+                    painter =
+                        rememberAsyncImagePainter(
+                            model = blockchain.type.imageUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_32),
+                        ),
+                    modifier =
+                        Modifier
+                            .padding(end = 16.dp)
+                            .size(32.dp),
+                    contentDescription = null,
                 )
                 body_leah(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .weight(1f),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .weight(1f),
                     text = blockchain.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -123,10 +128,11 @@ private fun BlockchainCell(
             } else {
                 Image(
                     painter = painterResource(R.drawable.icon_24_circle_coin),
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(24.dp),
-                    contentDescription = null
+                    modifier =
+                        Modifier
+                            .padding(end = 16.dp)
+                            .size(24.dp),
+                    contentDescription = null,
                 )
                 body_leah(text = stringResource(R.string.Transactions_Filter_AllBlockchains))
             }
@@ -135,7 +141,7 @@ private fun BlockchainCell(
                 Icon(
                     painter = painterResource(R.drawable.icon_20_check_1),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.jacob,
                 )
             }
         }

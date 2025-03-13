@@ -34,11 +34,12 @@ class BalanceCexViewModel(
     private val xRateRepository: BalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
     private val cexProviderManager: CexProviderManager,
-) : ViewModelUiState<UiState>(), ITotalBalance by totalBalance {
-
+) : ViewModelUiState<UiState>(),
+    ITotalBalance by totalBalance {
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
-    val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
+    val sortTypes =
+        listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     private var sortType = localStorage.sortType
 
     private val currency by xRateRepository::baseCurrency
@@ -84,13 +85,14 @@ class BalanceCexViewModel(
         balanceCexRepository.start()
     }
 
-    override fun createState()= UiState(
-        isRefreshing = isRefreshing,
-        viewItems = viewItems,
-        sortType = sortType,
-        isActiveScreen = isActiveScreen,
-        withdrawEnabled = withdrawEnabled,
-    )
+    override fun createState() =
+        UiState(
+            isRefreshing = isRefreshing,
+            viewItems = viewItems,
+            sortType = sortType,
+            isActiveScreen = isActiveScreen,
+            withdrawEnabled = withdrawEnabled,
+        )
 
     private fun handleCexProvider(cexProvider: ICexProvider?) {
         balanceCexRepository.setCexProvider(cexProvider)
@@ -101,11 +103,12 @@ class BalanceCexViewModel(
             val viewItem = viewItems[i]
             viewItem.coin?.uid?.let { coinUid ->
                 if (latestRates.containsKey(coinUid)) {
-                    viewItems[i] = createBalanceCexViewItem(
-                        cexAsset = viewItem.cexAsset,
-                        latestRate = latestRates[coinUid],
-                        adapterState = viewItem.adapterState
-                    )
+                    viewItems[i] =
+                        createBalanceCexViewItem(
+                            cexAsset = viewItem.cexAsset,
+                            latestRate = latestRates[coinUid],
+                            adapterState = viewItem.adapterState,
+                        )
                 }
             }
         }
@@ -118,7 +121,6 @@ class BalanceCexViewModel(
         emitState()
     }
 
-
     private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
         refreshViewItems()
@@ -130,20 +132,33 @@ class BalanceCexViewModel(
         val latestRates = xRateRepository.getLatestRates()
 
         viewItems.replaceAll { viewItem ->
-            createBalanceCexViewItem(viewItem.cexAsset, viewItem.coin?.uid?.let { latestRates[it] }, viewItem.adapterState)
+            createBalanceCexViewItem(
+                viewItem.cexAsset,
+                viewItem.coin?.uid?.let { latestRates[it] },
+                viewItem.adapterState,
+            )
         }
     }
 
-    private fun handleUpdatedItems(items: List<CexAsset>?, adapterState: AdapterState) {
+    private fun handleUpdatedItems(
+        items: List<CexAsset>?,
+        adapterState: AdapterState,
+    ) {
         if (items != null) {
             isActiveScreen = true
 
             xRateRepository.setCoinUids(items.mapNotNull { it.coin?.uid })
             val latestRates = xRateRepository.getLatestRates()
 
-            viewItems = items.map { cexAsset ->
-                createBalanceCexViewItem(cexAsset, cexAsset.coin?.let { latestRates[it.uid] }, adapterState)
-            }.toMutableList()
+            viewItems =
+                items
+                    .map { cexAsset ->
+                        createBalanceCexViewItem(
+                            cexAsset,
+                            cexAsset.coin?.let { latestRates[it.uid] },
+                            adapterState,
+                        )
+                    }.toMutableList()
 
             sortItems()
         } else {
@@ -161,33 +176,31 @@ class BalanceCexViewModel(
     }
 
     private fun refreshTotalBalance() {
-        val totalServiceItems = viewItems.map {
-            TotalService.BalanceItem(
-                it.cexAsset.freeBalance + it.cexAsset.lockedBalance,
-                false,
-                it.coinPrice
-            )
-
-        }
+        val totalServiceItems =
+            viewItems.map {
+                TotalService.BalanceItem(
+                    it.cexAsset.freeBalance + it.cexAsset.lockedBalance,
+                    false,
+                    it.coinPrice,
+                )
+            }
         totalBalance.setTotalServiceItems(totalServiceItems)
     }
 
     private fun createBalanceCexViewItem(
         cexAsset: CexAsset,
         latestRate: CoinPrice?,
-        adapterState: AdapterState
-    ): BalanceCexViewItem {
-        return balanceViewItemFactory.cexViewItem(
+        adapterState: AdapterState,
+    ): BalanceCexViewItem =
+        balanceViewItemFactory.cexViewItem(
             cexAsset = cexAsset,
             currency = currency,
             latestRate = latestRate,
             hideBalance = balanceHidden,
             balanceViewType = balanceViewType,
             fullFormat = false,
-            adapterState
-
+            adapterState,
         )
-    }
 
     private fun sortItems() {
         viewItems = balanceCexSorter.sort(viewItems, sortType).toMutableList()
@@ -231,7 +244,7 @@ data class UiState(
     val viewItems: List<BalanceCexViewItem>,
     val sortType: BalanceSortType,
     val isActiveScreen: Boolean,
-    val withdrawEnabled: Boolean
+    val withdrawEnabled: Boolean,
 )
 
 data class BalanceCexViewItem(
@@ -252,7 +265,7 @@ data class BalanceCexViewItem(
     val syncingProgress: SyncingProgress,
     val failedIconVisible: Boolean,
     val errorMessage: String?,
-    val adapterState: AdapterState
+    val adapterState: AdapterState,
 ) {
     val fiatValue by lazy { coinPrice?.value?.let { cexAsset.freeBalance.times(it) } }
 }

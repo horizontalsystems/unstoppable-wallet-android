@@ -20,23 +20,26 @@ fun MessageToSign(message: String) {
 
     VSpacer(24.dp)
     HeaderText(text = stringResource(id = R.string.WalletConnect_SignMessageRequest_ShowMessageTitle).uppercase())
-    CellUniversalLawrenceSection(buildList {
-        add {
-            val formatted = formatJson(message)
-            caption_leah(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        TextHelper.copyText(formatted)
-                        HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                    },
-                text = formatted
-            )
-        }
-    })
+    CellUniversalLawrenceSection(
+        buildList {
+            add {
+                val formatted = formatJson(message)
+                caption_leah(
+                    modifier =
+                        Modifier
+                            .padding(16.dp)
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = null,
+                            ) {
+                                TextHelper.copyText(formatted)
+                                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                            },
+                    text = formatted,
+                )
+            }
+        },
+    )
 }
 
 private fun formatJson(text: String): String {

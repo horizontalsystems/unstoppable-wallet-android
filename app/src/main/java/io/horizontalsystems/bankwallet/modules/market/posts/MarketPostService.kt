@@ -27,14 +27,15 @@ class MarketPostService(
 
     private fun fetchPosts() {
         job?.cancel()
-        job = coroutineScope.launch {
-            try {
-                val posts = marketKit.postsSingle().await()
-                stateSubject.onNext(DataState.Success(posts))
-            } catch (e: Throwable) {
-                stateSubject.onNext(DataState.Error(e))
+        job =
+            coroutineScope.launch {
+                try {
+                    val posts = marketKit.postsSingle().await()
+                    stateSubject.onNext(DataState.Success(posts))
+                } catch (e: Throwable) {
+                    stateSubject.onNext(DataState.Error(e))
+                }
             }
-        }
     }
 
     fun start() {

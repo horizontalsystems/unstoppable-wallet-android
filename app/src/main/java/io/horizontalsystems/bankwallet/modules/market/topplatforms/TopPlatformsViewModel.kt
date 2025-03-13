@@ -17,19 +17,20 @@ class TopPlatformsViewModel(
     private val currencyManager: CurrencyManager,
     timeDuration: TimeDuration?,
 ) : ViewModelUiState<TopPlatformsModule.UiState>() {
+    val sortingOptions =
+        listOf(
+            SortingField.HighestCap,
+            SortingField.LowestCap,
+            SortingField.TopGainers,
+            SortingField.TopLosers,
+        )
 
-    val sortingOptions = listOf(
-        SortingField.HighestCap,
-        SortingField.LowestCap,
-        SortingField.TopGainers,
-        SortingField.TopLosers
-    )
-
-    val periods = listOf(
-        TimeDuration.SevenDay,
-        TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
-    )
+    val periods =
+        listOf(
+            TimeDuration.SevenDay,
+            TimeDuration.ThirtyDay,
+            TimeDuration.ThreeMonths,
+        )
 
     private var sortingField = SortingField.TopGainers
 
@@ -40,7 +41,6 @@ class TopPlatformsViewModel(
     private var viewState: ViewState = ViewState.Loading
 
     private var isRefreshing = false
-
 
     init {
         viewModelScope.launch {
@@ -54,24 +54,24 @@ class TopPlatformsViewModel(
         }
     }
 
-    override fun createState(): TopPlatformsModule.UiState {
-        return TopPlatformsModule.UiState(
+    override fun createState(): TopPlatformsModule.UiState =
+        TopPlatformsModule.UiState(
             sortingField = sortingField,
             timePeriod = timePeriod,
             viewItems = viewItems,
             viewState = viewState,
-            isRefreshing = isRefreshing
+            isRefreshing = isRefreshing,
         )
-    }
 
     private suspend fun sync(forceRefresh: Boolean = false) {
         try {
-            val topPlatformItems = repository.get(
-                sortingField,
-                timePeriod,
-                currencyManager.baseCurrency.code,
-                forceRefresh
-            )
+            val topPlatformItems =
+                repository.get(
+                    sortingField,
+                    timePeriod,
+                    currencyManager.baseCurrency.code,
+                    forceRefresh,
+                )
             viewItems = getViewItems(topPlatformItems)
             viewState = ViewState.Success
         } catch (e: Throwable) {
@@ -80,25 +80,26 @@ class TopPlatformsViewModel(
         emitState()
     }
 
-    private fun getViewItems(topPlatformItems: List<TopPlatformItem>): List<TopPlatformViewItem> {
-        return topPlatformItems.map { item ->
+    private fun getViewItems(topPlatformItems: List<TopPlatformItem>): List<TopPlatformViewItem> =
+        topPlatformItems.map { item ->
             TopPlatformViewItem(
                 platform = item.platform,
-                subtitle = Translator.getString(
-                    R.string.MarketTopPlatforms_Protocols,
-                    item.protocols
-                ),
-                marketCap = App.numberFormatter.formatFiatShort(
-                    item.marketCap,
-                    currencyManager.baseCurrency.symbol,
-                    2
-                ),
+                subtitle =
+                    Translator.getString(
+                        R.string.MarketTopPlatforms_Protocols,
+                        item.protocols,
+                    ),
+                marketCap =
+                    App.numberFormatter.formatFiatShort(
+                        item.marketCap,
+                        currencyManager.baseCurrency.symbol,
+                        2,
+                    ),
                 marketCapDiff = item.changeDiff,
                 rank = item.rank.toString(),
                 rankDiff = item.rankDiff,
             )
         }
-    }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
         viewModelScope.launch {

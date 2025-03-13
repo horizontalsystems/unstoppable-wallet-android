@@ -26,7 +26,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 @Composable
 fun AboutPreview() {
     ComposeAppTheme {
-        About(text = "Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency")
+        About(
+            text = "Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency",
+        )
     }
 }
 
@@ -38,22 +40,24 @@ fun About(text: String) {
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
         ) {
             DescriptionMarkdown(
                 text = text,
             )
             Row(
                 modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 subhead2_jacob(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp),
                     text = stringResource(id = R.string.CoinPage_AiGeneratedText),
                 )
             }

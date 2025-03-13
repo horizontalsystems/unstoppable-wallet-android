@@ -2,11 +2,23 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -22,10 +34,10 @@ fun BottomSheetsElementsButtons(
     buttonPrimaryText: String,
     onClickPrimary: () -> Unit,
     buttonDefaultText: String? = null,
-    onClickDefault: (() -> Unit)? = null
+    onClickDefault: (() -> Unit)? = null,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Divider(
             thickness = 1.dp,
@@ -33,20 +45,22 @@ fun BottomSheetsElementsButtons(
         )
         Spacer(modifier = Modifier.height(15.dp))
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
             title = buttonPrimaryText,
-            onClick = onClickPrimary
+            onClick = onClickPrimary,
         )
         buttonDefaultText?.let {
             Spacer(modifier = Modifier.height(16.dp))
             ButtonPrimaryDefault(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
                 title = buttonDefaultText,
-                onClick = onClickDefault ?: {}
+                onClick = onClickDefault ?: {},
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -60,12 +74,11 @@ fun BottomSheetsElementsInput(onValueChange: (String) -> Unit) {
             hint = stringResource(R.string.Restore_ZCash_Birthday_Hint),
             pasteEnabled = false,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            textPreprocessor = object : TextPreprocessor {
-                override fun process(text: String): String {
-                    return text.replace("[^0-9]".toRegex(), "")
-                }
-            },
-            onValueChange = onValueChange
+            textPreprocessor =
+                object : TextPreprocessor {
+                    override fun process(text: String): String = text.replace("[^0-9]".toRegex(), "")
+                },
+            onValueChange = onValueChange,
         )
     }
 }
@@ -80,7 +93,7 @@ fun BottomSheetsElementsText(text: String) {
 
         subhead2_grey(
             modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
-            text = text
+            text = text,
         )
     }
 }
@@ -90,18 +103,19 @@ fun BottomSheetsElementsHeader(
     icon: Painter,
     title: String,
     subtitle: String,
-    onClickClose: () -> Unit
+    onClickClose: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 9.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 9.dp),
     ) {
         Image(
             modifier = Modifier.size(24.dp),
             painter = icon,
-            contentDescription = null
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column {
@@ -111,30 +125,30 @@ fun BottomSheetsElementsHeader(
         }
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            modifier = Modifier
-                .size(24.dp)
-                .clickable(onClick = onClickClose),
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .clickable(onClick = onClickClose),
             painter = painterResource(R.drawable.icon_24_close_3),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }
 
 @Composable
-fun BottomSheetsElementsCheckbox(
-    onCheckedChange: (Boolean) -> Unit
-) {
+fun BottomSheetsElementsCheckbox(onCheckedChange: (Boolean) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10,
         )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 14.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 14.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             var checked by remember { mutableStateOf(false) }
             HsCheckbox(
@@ -142,7 +156,7 @@ fun BottomSheetsElementsCheckbox(
                 onCheckedChange = {
                     checked = it
                     onCheckedChange.invoke(it)
-                }
+                },
             )
             Spacer(modifier = Modifier.width(16.dp))
             subhead2_leah(text = stringResource(R.string.Restore_ZCash_RestoreAsNew))

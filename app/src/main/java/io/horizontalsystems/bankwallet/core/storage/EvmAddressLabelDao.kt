@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import io.horizontalsystems.bankwallet.entities.EvmAddressLabel
 
 @Dao
 interface EvmAddressLabelDao {
-
     @Query("SELECT * FROM EvmAddressLabel WHERE address = :address")
     fun get(address: String): EvmAddressLabel?
 
@@ -20,5 +23,4 @@ interface EvmAddressLabelDao {
         clear()
         labels.forEach { insert(it) }
     }
-
 }

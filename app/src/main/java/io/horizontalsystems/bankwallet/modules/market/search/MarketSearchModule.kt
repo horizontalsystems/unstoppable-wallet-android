@@ -9,16 +9,14 @@ import java.math.BigDecimal
 import javax.annotation.concurrent.Immutable
 
 object MarketSearchModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MarketSearchViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            MarketSearchViewModel(
                 App.marketFavoritesManager,
                 MarketSearchService(App.marketKit),
                 MarketDiscoveryService(App.marketKit, App.localStorage),
             ) as T
-        }
     }
 
     sealed class DiscoveryItem {
@@ -26,16 +24,18 @@ object MarketSearchModule {
 
         class Category(
             val coinCategory: CoinCategory,
-            val marketData: CategoryMarketData? = null
+            val marketData: CategoryMarketData? = null,
         ) : DiscoveryItem()
     }
 
     @Immutable
-    class CoinItem(val fullCoin: FullCoin, val favourited: Boolean)
+    class CoinItem(
+        val fullCoin: FullCoin,
+        val favourited: Boolean,
+    )
 
     data class CategoryMarketData(
         val marketCap: String? = null,
-        val diff: BigDecimal? = null
+        val diff: BigDecimal? = null,
     )
-
 }

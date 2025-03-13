@@ -9,8 +9,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
-
+class BackgroundManager(
+    application: Application,
+) : Application.ActivityLifecycleCallbacks {
     private val scope = CoroutineScope(Dispatchers.Default)
     private val _stateFlow: MutableSharedFlow<BackgroundManagerState> = MutableSharedFlow()
     val stateFlow: SharedFlow<BackgroundManagerState>
@@ -38,7 +39,7 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         foregroundActivityCount--
 
         if (foregroundActivityCount == 0) {
-            //App is in background
+            // App is in background
             scope.launch {
                 _stateFlow.emit(BackgroundManagerState.EnterBackground)
             }
@@ -46,7 +47,10 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
     }
 
     @Synchronized
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+    override fun onActivityCreated(
+        activity: Activity,
+        savedInstanceState: Bundle?,
+    ) {
         aliveActivityCount++
     }
 
@@ -65,10 +69,15 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
 
     override fun onActivityResumed(p0: Activity) {}
 
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-
+    override fun onActivitySaveInstanceState(
+        activity: Activity,
+        outState: Bundle,
+    ) {
+    }
 }
 
 enum class BackgroundManagerState {
-    EnterForeground, EnterBackground, AllActivitiesDestroyed
+    EnterForeground,
+    EnterBackground,
+    AllActivitiesDestroyed,
 }

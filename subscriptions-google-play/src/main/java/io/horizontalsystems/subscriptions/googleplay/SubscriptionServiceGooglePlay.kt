@@ -44,16 +44,18 @@ import kotlin.coroutines.resumeWithException
 
 class SubscriptionServiceGooglePlay(
     context: Context,
-) : SubscriptionService, PurchasesUpdatedListener {
-
+) : SubscriptionService,
+    PurchasesUpdatedListener {
     override var predefinedSubscriptions: List<Subscription> = listOf()
     private var inProgressPurchaseResult: CancellableContinuation<HSPurchase?>? = null
 
-    private val billingClient = BillingClient.newBuilder(context)
-        .setListener(this)
-        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
-        // Configure other settings.
-        .build()
+    private val billingClient =
+        BillingClient
+            .newBuilder(context)
+            .setListener(this)
+            .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+            // Configure other settings.
+            .build()
 
     private var productDetailsResult: ProductDetailsResult? = null
 
@@ -70,19 +72,21 @@ class SubscriptionServiceGooglePlay(
     }
 
     private fun startConnection() {
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    coroutineScope.launch {
-                        fetchAndHandleUserPurchases()
+        billingClient.startConnection(
+            object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        coroutineScope.launch {
+                            fetchAndHandleUserPurchases()
+                        }
                     }
                 }
-            }
 
-            override fun onBillingServiceDisconnected() {
-                billingServiceDisconnected = true
-            }
-        })
+                override fun onBillingServiceDisconnected() {
+                    billingServiceDisconnected = true
+                }
+            },
+        )
     }
 
     override suspend fun onResume() {
@@ -100,8 +104,10 @@ class SubscriptionServiceGooglePlay(
         }
 
         Log.e("AAA", "fetchAndHandleUserPurchases")
-        val params = QueryPurchasesParams.newBuilder()
-            .setProductType(BillingClient.ProductType.SUBS)
+        val params =
+            QueryPurchasesParams
+                .newBuilder()
+                .setProductType(BillingClient.ProductType.SUBS)
 
         val purchasesResult = billingClient.queryPurchasesAsync(params.build())
 
@@ -114,37 +120,41 @@ class SubscriptionServiceGooglePlay(
         }
     }
 
-    override fun isActionAllowed(paidAction: IPaidAction) = activeSubscriptions.any {
-        it.subscription.actions.contains(paidAction)
-    }
+    override fun isActionAllowed(paidAction: IPaidAction) =
+        activeSubscriptions.any {
+            it.subscription.actions.contains(paidAction)
+        }
 
     override fun getBasePlans(subscriptionId: String): List<BasePlan> {
-        val productDetails = productDetailsResult?.productDetailsList?.firstOrNull {
-            it.productId == subscriptionId
-        }
+        val productDetails =
+            productDetailsResult?.productDetailsList?.firstOrNull {
+                it.productId == subscriptionId
+            }
 
         val map = mutableMapOf<String, List<BasePlan>>()
 
         val subscriptionOfferDetails = productDetails?.subscriptionOfferDetails
         subscriptionOfferDetails?.forEach { details ->
-            val pricingPhases = buildList {
-                details.pricingPhases.pricingPhaseList.forEach {
-                    add(
-                        PricingPhase(
-                            formattedPrice = it.formattedPrice,
-                            billingPeriod = it.billingPeriod,
-                            priceAmountMicros = it.priceAmountMicros,
-                            priceCurrencyCode = it.priceCurrencyCode,
+            val pricingPhases =
+                buildList {
+                    details.pricingPhases.pricingPhaseList.forEach {
+                        add(
+                            PricingPhase(
+                                formattedPrice = it.formattedPrice,
+                                billingPeriod = it.billingPeriod,
+                                priceAmountMicros = it.priceAmountMicros,
+                                priceCurrencyCode = it.priceCurrencyCode,
+                            ),
                         )
-                    )
+                    }
                 }
-            }
 
-            map[details.basePlanId] = (map[details.basePlanId] ?: listOf()) + BasePlan(
-                id = details.basePlanId,
-                pricingPhases = pricingPhases,
-                offerToken = details.offerToken
-            )
+            map[details.basePlanId] = (map[details.basePlanId] ?: listOf()) +
+                BasePlan(
+                    id = details.basePlanId,
+                    pricingPhases = pricingPhases,
+                    offerToken = details.offerToken,
+                )
         }
 
         return map.map { (_, u) ->
@@ -153,9 +163,10 @@ class SubscriptionServiceGooglePlay(
     }
 
     private fun getPlanWithBestOffer(plans: List<BasePlan>): BasePlan {
-        val bestPhaseByPlans = plans.associateWith {
-            getBestPricingPhase(it.pricingPhases)
-        }
+        val bestPhaseByPlans =
+            plans.associateWith {
+                getBestPricingPhase(it.pricingPhases)
+            }
 
         return getBestBasePlan(bestPhaseByPlans)
     }
@@ -173,29 +184,34 @@ class SubscriptionServiceGooglePlay(
 
     private fun getBestBasePlan(bestPhaseByPlans: Map<BasePlan, PricingPhase>): BasePlan {
         // Find the BasePlan with the best (lowest) PricingPhase
-        return bestPhaseByPlans.entries.reduce { bestEntry, currentEntry ->
-            val bestPhase = bestEntry.value
-            val currentPhase = currentEntry.value
+        return bestPhaseByPlans.entries
+            .reduce { bestEntry, currentEntry ->
+                val bestPhase = bestEntry.value
+                val currentPhase = currentEntry.value
 
-            when {
-                currentPhase.priceAmountMicros < bestPhase.priceAmountMicros -> currentEntry
-                currentPhase.priceAmountMicros == bestPhase.priceAmountMicros && currentPhase.numberOfDays > bestPhase.numberOfDays -> currentEntry
-                else -> bestEntry
-            }
-        }.key
+                when {
+                    currentPhase.priceAmountMicros < bestPhase.priceAmountMicros -> currentEntry
+                    currentPhase.priceAmountMicros == bestPhase.priceAmountMicros && currentPhase.numberOfDays > bestPhase.numberOfDays -> currentEntry
+                    else -> bestEntry
+                }
+            }.key
     }
 
     override suspend fun getSubscriptions(): List<Subscription> {
         val ids = predefinedSubscriptions.map { it.id }
-        val productList = ids.map {
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId(it)
-                .setProductType(BillingClient.ProductType.SUBS)
+        val productList =
+            ids.map {
+                QueryProductDetailsParams.Product
+                    .newBuilder()
+                    .setProductId(it)
+                    .setProductType(BillingClient.ProductType.SUBS)
+                    .build()
+            }
+        val params =
+            QueryProductDetailsParams
+                .newBuilder()
+                .setProductList(productList)
                 .build()
-        }
-        val params = QueryProductDetailsParams.newBuilder()
-            .setProductList(productList)
-            .build()
 
         productDetailsResult = billingClient.queryProductDetails(params)
 
@@ -208,44 +224,53 @@ class SubscriptionServiceGooglePlay(
         }
     }
 
-    override fun getActiveSubscriptions(): List<UserSubscription> {
-        return activeSubscriptions
-    }
+    override fun getActiveSubscriptions(): List<UserSubscription> = activeSubscriptions
 
     override fun launchManageSubscriptionScreen(context: Context) {
         val subscriptionId = activeSubscriptions.firstOrNull()?.subscription?.id ?: return
 
         val packageName = "io.horizontalsystems.bankwallet"
-        val s = "https://play.google.com/store/account/subscriptions?sku=${subscriptionId}&package=$packageName"
-        val intent = Intent(ACTION_VIEW, Uri.parse(s)).apply {
-            // The URL should either launch directly in a non-browser app (if it's
-            // the default) or in the disambiguation dialog.
-            addCategory(CATEGORY_BROWSABLE)
-            flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_REQUIRE_NON_BROWSER
-        }
+        val s =
+            "https://play.google.com/store/account/subscriptions?sku=$subscriptionId&package=$packageName"
+        val intent =
+            Intent(ACTION_VIEW, Uri.parse(s)).apply {
+                // The URL should either launch directly in a non-browser app (if it's
+                // the default) or in the disambiguation dialog.
+                addCategory(CATEGORY_BROWSABLE)
+                flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_REQUIRE_NON_BROWSER
+            }
         context.startActivity(intent)
     }
 
-    override suspend fun launchPurchaseFlow(subscriptionId: String, offerToken: String, activity: Activity): HSPurchase? {
-        val productDetails = productDetailsResult?.productDetailsList?.find {
-            it.productId == subscriptionId
-        }
+    override suspend fun launchPurchaseFlow(
+        subscriptionId: String,
+        offerToken: String,
+        activity: Activity,
+    ): HSPurchase? {
+        val productDetails =
+            productDetailsResult?.productDetailsList?.find {
+                it.productId == subscriptionId
+            }
         checkNotNull(productDetails)
 
-        val productDetailsParamsList = listOf(
-            BillingFlowParams.ProductDetailsParams.newBuilder()
-                // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
-                .setProductDetails(productDetails)
-                // For One-time product, "setOfferToken" method shouldn't be called.
-                // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
-                // for a list of offers that are available to the user
-                .setOfferToken(offerToken)
-                .build()
-        )
+        val productDetailsParamsList =
+            listOf(
+                BillingFlowParams.ProductDetailsParams
+                    .newBuilder()
+                    // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
+                    .setProductDetails(productDetails)
+                    // For One-time product, "setOfferToken" method shouldn't be called.
+                    // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
+                    // for a list of offers that are available to the user
+                    .setOfferToken(offerToken)
+                    .build(),
+            )
 
-        val billingFlowParams = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(productDetailsParamsList)
-            .build()
+        val billingFlowParams =
+            BillingFlowParams
+                .newBuilder()
+                .setProductDetailsParamsList(productDetailsParamsList)
+                .build()
 
         val billingResult = billingClient.launchBillingFlow(activity, billingFlowParams)
 
@@ -257,17 +282,27 @@ class SubscriptionServiceGooglePlay(
         }
     }
 
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
+    override fun onPurchasesUpdated(
+        billingResult: BillingResult,
+        purchases: List<Purchase>?,
+    ) {
         inProgressPurchaseResult?.let {
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
                     it.resume(HSPurchase(HSPurchase.Status.Purchased))
                 }
+
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
                     it.resume(null)
                 }
+
                 else -> {
-                    it.resumeWithException(HSPurchaseFailure(billingResult.responseCode.toString(), billingResult.debugMessage))
+                    it.resumeWithException(
+                        HSPurchaseFailure(
+                            billingResult.responseCode.toString(),
+                            billingResult.debugMessage,
+                        ),
+                    )
                 }
             }
 
@@ -296,10 +331,13 @@ class SubscriptionServiceGooglePlay(
             if (purchase.isAcknowledged) {
                 addAcknowledgedPurchase(purchase)
             } else {
-                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
+                val acknowledgePurchaseParams =
+                    AcknowledgePurchaseParams
+                        .newBuilder()
+                        .setPurchaseToken(purchase.purchaseToken)
 
-                val billingResult = billingClient.acknowledgePurchase(acknowledgePurchaseParams.build())
+                val billingResult =
+                    billingClient.acknowledgePurchase(acknowledgePurchaseParams.build())
 
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     addAcknowledgedPurchase(purchase)
@@ -317,7 +355,7 @@ class SubscriptionServiceGooglePlay(
                     ?.let {
                         UserSubscription(it, purchase.purchaseToken)
                     }
-            }
+            },
         )
     }
 }

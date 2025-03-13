@@ -17,10 +17,10 @@ import io.horizontalsystems.solanakit.models.FullTransaction
 import java.math.BigDecimal
 
 class SolanaTransactionConverter(
-        private val coinManager: ICoinManager,
-        private val source: TransactionSource,
-        private val baseToken: Token,
-        solanaKitWrapper: SolanaKitWrapper
+    private val coinManager: ICoinManager,
+    private val source: TransactionSource,
+    private val baseToken: Token,
+    solanaKitWrapper: SolanaKitWrapper,
 ) {
     private val userAddress = solanaKitWrapper.solanaKit.receiveAddress
 
@@ -31,12 +31,28 @@ class SolanaTransactionConverter(
 
         transaction.amount?.let {
             if (transaction.from == userAddress) {
-                val transactionValue = TransactionValue.CoinValue(baseToken, it.multiply(BigDecimal.valueOf(-1)).movePointLeft(baseToken.decimals))
-                outgoingTransfers.add(SolanaTransactionRecord.Transfer(transaction.to, transactionValue))
+                val transactionValue =
+                    TransactionValue.CoinValue(
+                        baseToken,
+                        it.multiply(BigDecimal.valueOf(-1)).movePointLeft(baseToken.decimals),
+                    )
+                outgoingTransfers.add(
+                    SolanaTransactionRecord.Transfer(
+                        transaction.to,
+                        transactionValue,
+                    ),
+                )
             } else if (transaction.to == userAddress) {
-                val transactionValue = TransactionValue.CoinValue(baseToken, it.movePointLeft(baseToken.decimals))
-                incomingTransfers.add(SolanaTransactionRecord.Transfer(transaction.from, transactionValue))
-            } else {}
+                val transactionValue =
+                    TransactionValue.CoinValue(baseToken, it.movePointLeft(baseToken.decimals))
+                incomingTransfers.add(
+                    SolanaTransactionRecord.Transfer(
+                        transaction.from,
+                        transactionValue,
+                    ),
+                )
+            } else {
+            }
         }
 
         for (fullTokenTransfer in fullTransaction.tokenTransfers) {
@@ -45,16 +61,24 @@ class SolanaTransactionConverter(
             val query = TokenQuery(BlockchainType.Solana, TokenType.Spl(tokenTransfer.mintAddress))
             val token = coinManager.getToken(query)
 
-            val transactionValue = when {
-                token != null -> TransactionValue.CoinValue(token, tokenTransfer.amount.movePointLeft(token.decimals))
-                mintAccount.isNft -> TransactionValue.NftValue(
-                    NftUid.Solana(mintAccount.address),
-                    tokenTransfer.amount,
-                    mintAccount.name,
-                    mintAccount.symbol
-                )
-                else -> TransactionValue.RawValue(value = tokenTransfer.amount.toBigInteger())
-            }
+            val transactionValue =
+                when {
+                    token != null ->
+                        TransactionValue.CoinValue(
+                            token,
+                            tokenTransfer.amount.movePointLeft(token.decimals),
+                        )
+
+                    mintAccount.isNft ->
+                        TransactionValue.NftValue(
+                            NftUid.Solana(mintAccount.address),
+                            tokenTransfer.amount,
+                            mintAccount.name,
+                            mintAccount.symbol,
+                        )
+
+                    else -> TransactionValue.RawValue(value = tokenTransfer.amount.toBigInteger())
+                }
 
             if (tokenTransfer.incoming) {
                 incomingTransfers.add(SolanaTransactionRecord.Transfer(null, transactionValue))
@@ -66,16 +90,35 @@ class SolanaTransactionConverter(
         return when {
             (incomingTransfers.size == 1 && outgoingTransfers.isEmpty()) -> {
                 val transfer = incomingTransfers.first()
-                SolanaIncomingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value)
+                SolanaIncomingTransactionRecord(
+                    transaction,
+                    baseToken,
+                    source,
+                    transfer.address,
+                    transfer.value,
+                )
             }
 
             (incomingTransfers.isEmpty() && outgoingTransfers.size == 1) -> {
                 val transfer = outgoingTransfers.first()
-                SolanaOutgoingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value, transfer.address == userAddress)
+                SolanaOutgoingTransactionRecord(
+                    transaction,
+                    baseToken,
+                    source,
+                    transfer.address,
+                    transfer.value,
+                    transfer.address == userAddress,
+                )
             }
 
-            else -> SolanaUnknownTransactionRecord(transaction, baseToken, source, incomingTransfers, outgoingTransfers)
+            else ->
+                SolanaUnknownTransactionRecord(
+                    transaction,
+                    baseToken,
+                    source,
+                    incomingTransfers,
+                    outgoingTransfers,
+                )
         }
     }
-
 }

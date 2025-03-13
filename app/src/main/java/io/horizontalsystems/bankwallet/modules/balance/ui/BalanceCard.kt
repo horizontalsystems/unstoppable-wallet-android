@@ -58,16 +58,16 @@ fun BalanceCardSwipable(
     onClickSyncError: () -> Unit,
     onDisable: () -> Unit,
 ) {
-
     Box(
         modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         HsIconButton(
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd)
-                .width(88.dp),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.CenterEnd)
+                    .width(88.dp),
             onClick = onDisable,
             content = {
                 Icon(
@@ -75,7 +75,7 @@ fun BalanceCardSwipable(
                     tint = Color.Gray,
                     contentDescription = "delete",
                 )
-            }
+            },
         )
 
         DraggableCardSimple(
@@ -88,9 +88,9 @@ fun BalanceCardSwipable(
                 BalanceCard(
                     onClick = onClick,
                     onClickSyncError = onClickSyncError,
-                    viewItem = viewItem
+                    viewItem = viewItem,
                 )
-            }
+            },
         )
     }
 }
@@ -99,73 +99,78 @@ fun BalanceCardSwipable(
 fun BalanceCard(
     onClick: () -> Unit,
     onClickSyncError: () -> Unit,
-    viewItem: BalanceViewItem2
+    viewItem: BalanceViewItem2,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClick,
+                ),
     ) {
         BalanceCardInner(
             viewItem = viewItem,
             type = BalanceCardSubtitleType.Rate,
-            onClickSyncError = onClickSyncError
+            onClickSyncError = onClickSyncError,
         )
     }
 }
 
 enum class BalanceCardSubtitleType {
-    Rate, CoinName
+    Rate,
+    CoinName,
 }
 
 @Composable
 fun BalanceCardInner(
     viewItem: BalanceViewItem2,
     type: BalanceCardSubtitleType,
-    onClickSyncError: (() -> Unit)? = null
+    onClickSyncError: (() -> Unit)? = null,
 ) {
     CellMultilineClear(height = 64.dp) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             WalletIcon(viewItem, onClickSyncError)
             Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                verticalArrangement = Arrangement.Center,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(
                         modifier = Modifier.weight(weight = 1f),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         body_leah(
                             text = viewItem.wallet.coin.code,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                         if (!viewItem.badge.isNullOrBlank()) {
                             Box(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.jeremy)
+                                modifier =
+                                    Modifier
+                                        .padding(start = 8.dp)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(ComposeAppTheme.colors.jeremy),
                             ) {
                                 Text(
-                                    modifier = Modifier.padding(
-                                        start = 4.dp,
-                                        end = 4.dp,
-                                        bottom = 1.dp
-                                    ),
+                                    modifier =
+                                        Modifier.padding(
+                                            start = 4.dp,
+                                            end = 4.dp,
+                                            bottom = 1.dp,
+                                        ),
                                     text = viewItem.badge,
                                     color = ComposeAppTheme.colors.bran,
                                     style = ComposeAppTheme.typography.microSB,
@@ -252,55 +257,65 @@ fun BalanceCardInner(
 @Composable
 private fun WalletIcon(
     viewItem: BalanceViewItem2,
-    onClickSyncError: (() -> Unit)?
+    onClickSyncError: (() -> Unit)?,
 ) {
     Box(
-        modifier = Modifier
-            .width(64.dp)
-            .fillMaxHeight(),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .width(64.dp)
+                .fillMaxHeight(),
+        contentAlignment = Alignment.Center,
     ) {
         viewItem.syncingProgress.progress?.let { progress ->
             AndroidView(
-                modifier = Modifier
-                    .size(52.dp),
+                modifier =
+                    Modifier
+                        .size(52.dp),
                 factory = { context ->
                     RotatingCircleProgressView(context)
                 },
                 update = { view ->
-                    val color = when (viewItem.syncingProgress.dimmed) {
-                        true -> R.color.grey_50
-                        false -> R.color.grey
-                    }
+                    val color =
+                        when (viewItem.syncingProgress.dimmed) {
+                            true -> R.color.grey_50
+                            false -> R.color.grey
+                        }
                     view.setProgressColored(progress, view.context.getColor(color))
-                }
+                },
             )
         }
         if (viewItem.failedIconVisible) {
-            val clickableModifier = if (onClickSyncError != null) {
-                Modifier.clickable(onClick = onClickSyncError)
-            } else {
-                Modifier
-            }
+            val clickableModifier =
+                if (onClickSyncError != null) {
+                    Modifier.clickable(onClick = onClickSyncError)
+                } else {
+                    Modifier
+                }
 
             Image(
-                modifier = Modifier
-                    .size(32.dp)
-                    .then(clickableModifier),
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .then(clickableModifier),
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             )
         } else {
             CoinImage(
                 token = viewItem.wallet.token,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
             )
         }
     }
 }
 
-fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navController: NavController, view: View) {
+fun onSyncErrorClicked(
+    viewItem: BalanceViewItem2,
+    viewModel: BalanceViewModel,
+    navController: NavController,
+    view: View,
+) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
             val wallet = syncErrorDetails.wallet
@@ -308,7 +323,7 @@ fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, 
 
             navController.slideFromBottom(
                 R.id.syncErrorDialog,
-                SyncErrorDialog.Input(wallet, errorMessage)
+                SyncErrorDialog.Input(wallet, errorMessage),
             )
         }
 

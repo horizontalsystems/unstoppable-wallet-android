@@ -16,9 +16,8 @@ data class MarketViewItem(
     val marketDataValue: MarketDataValue,
     val rank: String?,
     val favorited: Boolean,
-    val signal: Advice? = null
+    val signal: Advice? = null,
 ) {
-
     val coinUid: String
         get() = fullCoin.coin.uid
 
@@ -37,36 +36,31 @@ data class MarketViewItem(
     val iconPlaceHolder: Int
         get() = fullCoin.iconPlaceholder
 
-    fun areItemsTheSame(other: MarketViewItem): Boolean {
-        return fullCoin.coin == other.fullCoin.coin
-    }
+    fun areItemsTheSame(other: MarketViewItem): Boolean = fullCoin.coin == other.fullCoin.coin
 
-    fun areContentsTheSame(other: MarketViewItem): Boolean {
-        return this == other
-    }
+    fun areContentsTheSame(other: MarketViewItem): Boolean = this == other
 
     companion object {
         fun create(
             marketItem: MarketItem,
             favorited: Boolean = false,
-            advice: Advice? = null
-        ): MarketViewItem {
-            return MarketViewItem(
+            advice: Advice? = null,
+        ): MarketViewItem =
+            MarketViewItem(
                 marketItem.fullCoin,
                 App.numberFormatter.formatFiatShort(
                     marketItem.marketCap.value,
                     marketItem.marketCap.currency.symbol,
-                    2
+                    2,
                 ),
                 App.numberFormatter.formatFiatFull(
                     marketItem.rate.value,
-                    marketItem.rate.currency.symbol
+                    marketItem.rate.currency.symbol,
                 ),
                 MarketDataValue.Diff(marketItem.diff),
                 marketItem.rank?.toString(),
                 favorited,
-                advice
+                advice,
             )
-        }
     }
 }

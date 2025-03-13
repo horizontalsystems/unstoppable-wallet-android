@@ -54,7 +54,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun CreateAccountAdvancedScreen(
     onBackClick: () -> Unit,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
 ) {
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
@@ -65,13 +65,16 @@ fun CreateAccountAdvancedScreen(
                 contenView = view,
                 resId = R.string.Hud_Text_Created,
                 icon = R.drawable.icon_add_to_wallet_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
 
-            stat(page = StatPage.NewWalletAdvanced, event = StatEvent.CreateWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.NewWalletAdvanced,
+                event = StatEvent.CreateWallet(accountType.statAccountType),
+            )
         }
     }
 
@@ -82,15 +85,16 @@ fun CreateAccountAdvancedScreen(
         if (showMnemonicSizeSelectorDialog) {
             SelectorDialogCompose(
                 title = stringResource(R.string.CreateWallet_Mnemonic),
-                items = viewModel.mnemonicKinds.map {
-                    SelectorItem(it.titleLong, it == viewModel.selectedKind, it)
-                },
+                items =
+                    viewModel.mnemonicKinds.map {
+                        SelectorItem(it.titleLong, it == viewModel.selectedKind, it)
+                    },
                 onDismissRequest = {
                     showMnemonicSizeSelectorDialog = false
                 },
                 onSelectItem = {
                     viewModel.setMnemonicKind(it)
-                }
+                },
             )
         }
         Column {
@@ -99,19 +103,21 @@ fun CreateAccountAdvancedScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onBackClick)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = { viewModel.createAccount() },
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Create),
+                            onClick = { viewModel.createAccount() },
+                        ),
+                    ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Spacer(Modifier.height(12.dp))
                 HeaderText(stringResource(id = R.string.ManageAccount_Name))
@@ -120,7 +126,7 @@ fun CreateAccountAdvancedScreen(
                     initial = viewModel.accountName,
                     pasteEnabled = false,
                     hint = viewModel.defaultAccountName,
-                    onValueChange = viewModel::onChangeAccountName
+                    onValueChange = viewModel::onChangeAccountName,
                 )
                 Spacer(Modifier.height(32.dp))
                 CellUniversalLawrenceSection(
@@ -129,18 +135,20 @@ fun CreateAccountAdvancedScreen(
                             kind = viewModel.selectedKind,
                             showMnemonicSizeSelectorDialog = {
                                 showMnemonicSizeSelectorDialog = true
-                            }
+                            },
                         )
-                    }
+                    },
                 )
 
                 Spacer(Modifier.height(32.dp))
-                CellUniversalLawrenceSection(listOf {
-                    PassphraseCell(
-                        enabled = viewModel.passphraseEnabled,
-                        onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
-                    )
-                })
+                CellUniversalLawrenceSection(
+                    listOf {
+                        PassphraseCell(
+                            enabled = viewModel.passphraseEnabled,
+                            onCheckedChange = { viewModel.setPassphraseEnabledState(it) },
+                        )
+                    },
+                )
 
                 if (viewModel.passphraseEnabled) {
                     Spacer(Modifier.height(24.dp))
@@ -153,7 +161,7 @@ fun CreateAccountAdvancedScreen(
                         hide = hidePassphrase,
                         onToggleHide = {
                             hidePassphrase = !hidePassphrase
-                        }
+                        },
                     )
                     Spacer(Modifier.height(16.dp))
                     FormsInputPassword(
@@ -165,12 +173,12 @@ fun CreateAccountAdvancedScreen(
                         hide = hidePassphrase,
                         onToggleHide = {
                             hidePassphrase = !hidePassphrase
-                        }
+                        },
                     )
                     Spacer(Modifier.height(12.dp))
                     D1(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        text = stringResource(R.string.CreateWallet_PassphraseDescription)
+                        text = stringResource(R.string.CreateWallet_PassphraseDescription),
                     )
                 }
                 Spacer(Modifier.height(32.dp))
@@ -182,22 +190,22 @@ fun CreateAccountAdvancedScreen(
 @Composable
 private fun MnemonicNumberCell(
     kind: CreateAccountModule.Kind,
-    showMnemonicSizeSelectorDialog: () -> Unit
+    showMnemonicSizeSelectorDialog: () -> Unit,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalPadding = 0.dp,
-        onClick = { showMnemonicSizeSelectorDialog() }
+        onClick = { showMnemonicSizeSelectorDialog() },
     ) {
         Icon(
             modifier = Modifier.padding(vertical = 12.dp),
             painter = painterResource(id = R.drawable.ic_key_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
         B2(
             text = stringResource(R.string.CreateWallet_Mnemonic),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(Modifier.weight(1f))
         subhead1_grey(
@@ -207,7 +215,7 @@ private fun MnemonicNumberCell(
             modifier = Modifier.padding(start = 4.dp),
             painter = painterResource(id = R.drawable.ic_down_arrow_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }
@@ -215,20 +223,20 @@ private fun MnemonicNumberCell(
 @Composable
 fun MnemonicLanguageCell(
     language: Language,
-    showLanguageSelectorDialog: () -> Unit
+    showLanguageSelectorDialog: () -> Unit,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = showLanguageSelectorDialog
+        onClick = showLanguageSelectorDialog,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_globe_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
         B2(
             text = stringResource(R.string.CreateWallet_Wordlist),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(Modifier.weight(1f))
         subhead1_grey(
@@ -238,13 +246,16 @@ fun MnemonicLanguageCell(
             modifier = Modifier.padding(start = 4.dp),
             painter = painterResource(id = R.drawable.ic_down_arrow_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }
 
 @Composable
-fun PassphraseCell(enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
+fun PassphraseCell(
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = { onCheckedChange(!enabled) },
@@ -252,19 +263,20 @@ fun PassphraseCell(enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
         Icon(
             painter = painterResource(id = R.drawable.ic_key_phrase_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
         body_leah(
             text = stringResource(R.string.Passphrase),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp, end = 8.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp, end = 8.dp),
         )
         HsSwitch(
             checked = enabled,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
         )
     }
 }

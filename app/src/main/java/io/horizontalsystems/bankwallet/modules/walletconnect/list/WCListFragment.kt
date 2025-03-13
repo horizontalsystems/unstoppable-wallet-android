@@ -9,16 +9,17 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsS
 import kotlinx.parcelize.Parcelize
 
 class WCListFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
         WCSessionsScreen(
             navController,
-            input?.deepLinkUri
+            input?.deepLinkUri,
         )
     }
 
     @Parcelize
-    data class Input(val deepLinkUri: String) : Parcelable
+    data class Input(
+        val deepLinkUri: String,
+    ) : Parcelable
 }

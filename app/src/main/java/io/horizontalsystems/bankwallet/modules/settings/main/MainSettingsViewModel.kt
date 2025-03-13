@@ -33,7 +33,6 @@ class MainSettingsViewModel(
     private val languageManager: LanguageManager,
     private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<MainSettingUiState>() {
-
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
@@ -67,7 +66,6 @@ class MainSettingsViewModel(
 
     private val isPinSet: Boolean
         get() = pinComponent.isPinSet
-
 
     private var wcCounterType: CounterType? = null
     private var wcSessionsCount = walletConnectSessionCount
@@ -120,8 +118,8 @@ class MainSettingsViewModel(
         syncCounter()
     }
 
-    override fun createState(): MainSettingUiState {
-        return MainSettingUiState(
+    override fun createState(): MainSettingUiState =
+        MainSettingUiState(
             currentLanguage = currentLanguageDisplayName,
             baseCurrencyCode = baseCurrencyCode,
             appWebPageLink = appWebPageLink,
@@ -136,7 +134,6 @@ class MainSettingsViewModel(
             showPremiumBanner = showPremiumBanner,
             hasSubscription = hasSubscription,
         )
-    }
 
     private fun syncCounter() {
         if (wcPendingRequestCount > 0) {

@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun InfoH3(text: String) {
     headline2_jacob(
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-        text = text
+        text = text,
     )
 }
 
@@ -23,16 +23,16 @@ fun InfoH3(text: String) {
 fun InfoH1(text: String) {
     Column(
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-    ){
+    ) {
         Text(
             text = text,
             style = ComposeAppTheme.typography.title2,
-            color = ComposeAppTheme.colors.leah
+            color = ComposeAppTheme.colors.leah,
         )
         Spacer(Modifier.height(8.dp))
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.grey50
+            color = ComposeAppTheme.colors.grey50,
         )
     }
 }

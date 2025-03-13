@@ -15,28 +15,28 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
 
 object TvlModule {
-
     @Suppress("UNCHECKED_CAST")
     class Factory : ViewModelProvider.Factory {
         private val globalMarketRepository: GlobalMarketRepository by lazy {
             GlobalMarketRepository(App.marketKit)
         }
 
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 TvlViewModel::class.java -> {
                     val service = TvlService(App.currencyManager, globalMarketRepository)
                     val tvlViewItemFactory = TvlViewItemFactory()
                     TvlViewModel(service, tvlViewItemFactory) as T
                 }
+
                 TvlChartViewModel::class.java -> {
                     val chartService = TvlChartService(App.currencyManager, globalMarketRepository)
                     val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
                     TvlChartViewModel(chartService, chartNumberFormatter) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
-        }
     }
 
     data class MarketTvlItem(
@@ -47,14 +47,14 @@ object TvlModule {
         val tvl: CurrencyValue,
         val diff: CurrencyValue?,
         val diffPercent: BigDecimal?,
-        val rank: String
+        val rank: String,
     )
 
     @Immutable
     data class TvlData(
         val chainSelect: Select<Chain>,
         val sortDescending: Boolean,
-        val coinTvlViewItems: List<CoinTvlViewItem>
+        val coinTvlViewItems: List<CoinTvlViewItem>,
     )
 
     @Immutable
@@ -68,26 +68,39 @@ object TvlModule {
         val tvl: CurrencyValue,
         val tvlChangePercent: BigDecimal?,
         val tvlChangeAmount: CurrencyValue?,
-        val rank: String
+        val rank: String,
     )
 
     enum class Chain : WithTranslatableTitle {
-        All, Ethereum, Solana, Binance, Avalanche, Terra, Fantom, Arbitrum, Polygon;
+        All,
+        Ethereum,
+        Solana,
+        Binance,
+        Avalanche,
+        Terra,
+        Fantom,
+        Arbitrum,
+        Polygon,
+        ;
 
         override val title: TranslatableString
-            get() = when (this) {
-                All -> TranslatableString.ResString(R.string.MarketGlobalMetrics_ChainSelectorAll)
-                else -> TranslatableString.PlainString(name)
-            }
+            get() =
+                when (this) {
+                    All -> TranslatableString.ResString(R.string.MarketGlobalMetrics_ChainSelectorAll)
+                    else -> TranslatableString.PlainString(name)
+                }
     }
 
     enum class TvlDiffType {
-        Percent, Currency
+        Percent,
+        Currency,
     }
 
     sealed class SelectorDialogState {
         object Closed : SelectorDialogState()
-        class Opened(val select: Select<Chain>) : SelectorDialogState()
-    }
 
+        class Opened(
+            val select: Select<Chain>,
+        ) : SelectorDialogState()
+    }
 }

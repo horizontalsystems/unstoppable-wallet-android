@@ -1,12 +1,12 @@
-//package io.horizontalsystems.bankwallet.modules.send
+// package io.horizontalsystems.bankwallet.modules.send
 //
-//import io.horizontalsystems.bankwallet.entities.*
-//import org.junit.Assert
-//import org.junit.Before
-//import org.junit.Test
-//import java.math.BigDecimal
+// import io.horizontalsystems.bankwallet.entities.*
+// import org.junit.Assert
+// import org.junit.Before
+// import org.junit.Test
+// import java.math.BigDecimal
 //
-//class StateViewItemFactoryTest {
+// class StateViewItemFactoryTest {
 //
 //    private val factory = ConfirmationViewItemFactory()
 //    private val state = SendModule.State(8, SendModule.InputType.COIN)
@@ -187,4 +187,4 @@
 //        Assert.assertEquals(null, viewItem?.totalInfo)
 //    }
 //
-//}
+// }

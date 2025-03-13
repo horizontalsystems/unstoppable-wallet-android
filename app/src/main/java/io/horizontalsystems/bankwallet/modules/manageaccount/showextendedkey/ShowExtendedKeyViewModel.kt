@@ -24,11 +24,19 @@ class ShowExtendedKeyViewModel(
     private val keyChain: HDKeychain,
     val displayKeyType: DisplayKeyType,
     purpose: HDWallet.Purpose,
-    extendedKeyCoinType: ExtendedKeyCoinType
+    extendedKeyCoinType: ExtendedKeyCoinType,
 ) : ViewModel() {
     val purposes = HDWallet.Purpose.values()
     val blockchains: Array<Blockchain>
-        get() = if (purpose != HDWallet.Purpose.BIP44) arrayOf(Blockchain.Bitcoin, Blockchain.Litecoin) else Blockchain.values()
+        get() =
+            if (purpose != HDWallet.Purpose.BIP44) {
+                arrayOf(
+                    Blockchain.Bitcoin,
+                    Blockchain.Litecoin,
+                )
+            } else {
+                Blockchain.values()
+            }
     val accounts = 0..5
 
     var purpose: HDWallet.Purpose by mutableStateOf(purpose)
@@ -39,27 +47,42 @@ class ShowExtendedKeyViewModel(
         private set
 
     val title: TranslatableString
-        get() = when (displayKeyType) {
-            is DisplayKeyType.AccountPrivateKey -> TranslatableString.ResString(R.string.AccountExtendedPrivateKey_Short)
-            is DisplayKeyType.AccountPublicKey -> TranslatableString.ResString(R.string.AccountExtendedPublicKey_Short)
-            DisplayKeyType.Bip32RootKey -> TranslatableString.ResString(R.string.Bip32RootKey)
-        }
+        get() =
+            when (displayKeyType) {
+                is DisplayKeyType.AccountPrivateKey -> TranslatableString.ResString(R.string.AccountExtendedPrivateKey_Short)
+                is DisplayKeyType.AccountPublicKey -> TranslatableString.ResString(R.string.AccountExtendedPublicKey_Short)
+                DisplayKeyType.Bip32RootKey -> TranslatableString.ResString(R.string.Bip32RootKey)
+            }
 
     val extendedKey: String
         get() {
-            val key = if (displayKeyType.isDerivable)
-                keyChain.getKeyByPath("m/${purpose.value}'/${blockchain.coinType}'/$account'")
-            else
-                keyChain.getKeyByPath("m")
-            val version = HDExtendedKeyVersion.initFrom(purpose, blockchain.extendedKeyCoinType, displayKeyType.isPrivate)
-            return if (displayKeyType.isPrivate) key.serializePrivate(version.value) else key.serializePublic(version.value)
+            val key =
+                if (displayKeyType.isDerivable) {
+                    keyChain.getKeyByPath("m/${purpose.value}'/${blockchain.coinType}'/$account'")
+                } else {
+                    keyChain.getKeyByPath("m")
+                }
+            val version =
+                HDExtendedKeyVersion.initFrom(
+                    purpose,
+                    blockchain.extendedKeyCoinType,
+                    displayKeyType.isPrivate,
+                )
+            return if (displayKeyType.isPrivate) {
+                key.serializePrivate(version.value)
+            } else {
+                key.serializePublic(
+                    version.value,
+                )
+            }
         }
 
-    private val statPage = when (displayKeyType) {
-        is DisplayKeyType.AccountPrivateKey -> StatPage.AccountExtendedPrivateKey
-        is DisplayKeyType.AccountPublicKey -> StatPage.AccountExtendedPublicKey
-        DisplayKeyType.Bip32RootKey -> StatPage.Bip32RootKey
-    }
+    private val statPage =
+        when (displayKeyType) {
+            is DisplayKeyType.AccountPrivateKey -> StatPage.AccountExtendedPrivateKey
+            is DisplayKeyType.AccountPublicKey -> StatPage.AccountExtendedPublicKey
+            DisplayKeyType.Bip32RootKey -> StatPage.Bip32RootKey
+        }
 
     fun set(purpose: HDWallet.Purpose) {
         this.purpose = purpose
@@ -88,23 +111,29 @@ class ShowExtendedKeyViewModel(
     }
 
     private val Blockchain.extendedKeyCoinType: ExtendedKeyCoinType
-        get() = when (this) {
-            Blockchain.Litecoin -> ExtendedKeyCoinType.Litecoin
-            Blockchain.Bitcoin,
-            Blockchain.BitcoinCash,
-            Blockchain.Dash -> ExtendedKeyCoinType.Bitcoin
-        }
+        get() =
+            when (this) {
+                Blockchain.Litecoin -> ExtendedKeyCoinType.Litecoin
+                Blockchain.Bitcoin,
+                Blockchain.BitcoinCash,
+                Blockchain.Dash,
+                -> ExtendedKeyCoinType.Bitcoin
+            }
 
     private val ExtendedKeyCoinType.blockchain: Blockchain
-        get() = when (this) {
-            ExtendedKeyCoinType.Bitcoin -> Blockchain.Bitcoin
-            ExtendedKeyCoinType.Litecoin -> Blockchain.Litecoin
-        }
+        get() =
+            when (this) {
+                ExtendedKeyCoinType.Bitcoin -> Blockchain.Bitcoin
+                ExtendedKeyCoinType.Litecoin -> Blockchain.Litecoin
+            }
 
-    enum class Blockchain(val title: String, val coinType: Int) {
+    enum class Blockchain(
+        val title: String,
+        val coinType: Int,
+    ) {
         Bitcoin("Bitcoin", MainNet().coinType),
         BitcoinCash("Bitcoin Cash", MainNetBitcoinCash().coinType),
         Litecoin("Litecoin", MainNetLitecoin().coinType),
-        Dash("Dash", MainNetDash().coinType)
+        Dash("Dash", MainNetDash().coinType),
     }
 }

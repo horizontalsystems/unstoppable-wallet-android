@@ -13,21 +13,21 @@ import java.time.Duration
 
 class MarketWidgetWorker(
     private val context: Context,
-    workerParameters: WorkerParameters
+    workerParameters: WorkerParameters,
 ) : CoroutineWorker(context, workerParameters) {
-
     companion object {
         private const val updatePeriodMillis: Long = 15 * 60 * 1000 // 15 minutes
         private const val workName = "widget_update_work"
 
         fun enqueueWork(context: Context) {
             val manager = WorkManager.getInstance(context)
-            val requestBuilder = PeriodicWorkRequestBuilder<MarketWidgetWorker>(Duration.ofMillis(updatePeriodMillis))
+            val requestBuilder =
+                PeriodicWorkRequestBuilder<MarketWidgetWorker>(Duration.ofMillis(updatePeriodMillis))
 
             manager.enqueueUniquePeriodicWork(
                 workName,
                 ExistingPeriodicWorkPolicy.UPDATE,
-                requestBuilder.build()
+                requestBuilder.build(),
             )
         }
 
@@ -48,7 +48,10 @@ class MarketWidgetWorker(
             return false
         }
 
-        private fun getWidgetIds(context: Context, appWidgetManager: AppWidgetManager): IntArray {
+        private fun getWidgetIds(
+            context: Context,
+            appWidgetManager: AppWidgetManager,
+        ): IntArray {
             val widgetComponent = ComponentName(context, MarketWidgetReceiver::class.java)
             return appWidgetManager.getAppWidgetIds(widgetComponent)
         }
@@ -64,5 +67,4 @@ class MarketWidgetWorker(
         }
         return Result.success()
     }
-
 }

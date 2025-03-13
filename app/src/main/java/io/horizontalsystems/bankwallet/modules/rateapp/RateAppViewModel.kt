@@ -3,8 +3,9 @@ package io.horizontalsystems.bankwallet.modules.rateapp
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 
-class RateAppViewModel(private val rateAppManager: IRateAppManager) : ViewModel() {
-
+class RateAppViewModel(
+    private val rateAppManager: IRateAppManager,
+) : ViewModel() {
     fun onBalancePageActive() {
         rateAppManager.onBalancePageActive()
     }
@@ -12,5 +13,4 @@ class RateAppViewModel(private val rateAppManager: IRateAppManager) : ViewModel(
     fun onBalancePageInactive() {
         rateAppManager.onBalancePageInactive()
     }
-
 }

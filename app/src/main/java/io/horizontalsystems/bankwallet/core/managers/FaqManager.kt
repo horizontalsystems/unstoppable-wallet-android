@@ -20,7 +20,6 @@ import java.lang.reflect.Type
 import java.net.URL
 
 object FaqManager {
-
     private val faqListUrl = App.appConfigProvider.faqUrl
 
     const val faqPathMigrationRequired = "management/migration_required.md"
@@ -28,27 +27,36 @@ object FaqManager {
     const val faqPathPrivateKeys = "management/what-are-private-keys-mnemonic-phrase-wallet-seed.md"
     const val faqPathDefiRisks = "defi/defi-risks.md"
 
-    private fun getFaqUrl(faqPath: String, language: String): String =
-        URL(URL(faqListUrl), "faq/$language/$faqPath").toString()
+    private fun getFaqUrl(
+        faqPath: String,
+        language: String,
+    ): String = URL(URL(faqListUrl), "faq/$language/$faqPath").toString()
 
-    private val gson = GsonBuilder()
-        .setDateFormat("yyyy-MM-dd")
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .registerTypeAdapter(Faq::class.java, FaqDeserializer(faqListUrl))
-        .create()
+    private val gson =
+        GsonBuilder()
+            .setDateFormat("yyyy-MM-dd")
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .registerTypeAdapter(Faq::class.java, FaqDeserializer(faqListUrl))
+            .create()
 
-    fun showFaqPage(navController: NavController, path: String, language: String = "en") {
+    fun showFaqPage(
+        navController: NavController,
+        path: String,
+        language: String = "en",
+    ) {
         navController.slideFromBottom(
             R.id.markdownFragment,
-            MarkdownFragment.Input(getFaqUrl(path, language), true, true)
+            MarkdownFragment.Input(getFaqUrl(path, language), true, true),
         )
     }
 
-    fun getFaqList(): Single<List<FaqMap>> {
-        return Single.fromCallable {
-            val request = Request.Builder()
-                .url(faqListUrl)
-                .build()
+    fun getFaqList(): Single<List<FaqMap>> =
+        Single.fromCallable {
+            val request =
+                Request
+                    .Builder()
+                    .url(faqListUrl)
+                    .build()
 
             val response = OkHttpClient().newCall(request).execute()
 
@@ -58,22 +66,25 @@ object FaqManager {
 
             list
         }
-    }
 
-    class FaqDeserializer(faqUrl: String) : JsonDeserializer<Faq> {
+    class FaqDeserializer(
+        faqUrl: String,
+    ) : JsonDeserializer<Faq> {
         private val faqUrlObj = URL(faqUrl)
 
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Faq {
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type,
+            context: JsonDeserializationContext,
+        ): Faq {
             val jsonObject = json.asJsonObject
 
             return Faq(
                 jsonObject["title"].asString,
-                absolutify(jsonObject["markdown"].asString)
+                absolutify(jsonObject["markdown"].asString),
             )
         }
 
-        private fun absolutify(relativeUrl: String?): String {
-            return URL(faqUrlObj, relativeUrl).toString()
-        }
+        private fun absolutify(relativeUrl: String?): String = URL(faqUrlObj, relativeUrl).toString()
     }
 }

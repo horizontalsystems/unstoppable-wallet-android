@@ -5,21 +5,26 @@ import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.bankwallet.entities.EnabledWalletCache
 import io.horizontalsystems.bankwallet.entities.Wallet
 
-class BalanceCache(private val dao: EnabledWalletsCacheDao) {
+class BalanceCache(
+    private val dao: EnabledWalletsCacheDao,
+) {
     private var cacheMap: Map<String, BalanceData>
 
     init {
         cacheMap = convertToCacheMap(dao.getAll())
     }
 
-    private fun convertToCacheMap(list: List<EnabledWalletCache>): Map<String, BalanceData> {
-        return list.map {
-            val key = listOf(it.tokenQueryId, it.accountId).joinToString()
-            key to BalanceData(it.balance, it.balanceLocked)
-        }.toMap()
-    }
+    private fun convertToCacheMap(list: List<EnabledWalletCache>): Map<String, BalanceData> =
+        list
+            .map {
+                val key = listOf(it.tokenQueryId, it.accountId).joinToString()
+                key to BalanceData(it.balance, it.balanceLocked)
+            }.toMap()
 
-    fun setCache(wallet: Wallet, balanceData: BalanceData) {
+    fun setCache(
+        wallet: Wallet,
+        balanceData: BalanceData,
+    ) {
         setCache(mapOf(wallet to balanceData))
     }
 
@@ -29,17 +34,17 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
     }
 
     fun setCache(balancesData: Map<Wallet, BalanceData>) {
-        val list = balancesData.map { (wallet, balanceData) ->
-            EnabledWalletCache(
-                wallet.token.tokenQuery.id,
-                wallet.account.id,
-                balanceData.available,
-                balanceData.timeLocked
-            )
-        }
+        val list =
+            balancesData.map { (wallet, balanceData) ->
+                EnabledWalletCache(
+                    wallet.token.tokenQuery.id,
+                    wallet.account.id,
+                    balanceData.available,
+                    balanceData.timeLocked,
+                )
+            }
         cacheMap = cacheMap + convertToCacheMap(list)
 
         dao.insertAll(list)
     }
-
 }

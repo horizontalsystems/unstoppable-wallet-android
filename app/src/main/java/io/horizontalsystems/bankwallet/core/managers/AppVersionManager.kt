@@ -3,13 +3,12 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.core.ISystemInfoManager
-import java.util.*
+import java.util.Date
 
 class AppVersionManager(
-        private val systemInfoManager: ISystemInfoManager,
-        private val localStorage: ILocalStorage
+    private val systemInfoManager: ISystemInfoManager,
+    private val localStorage: ILocalStorage,
 ) {
-
     fun storeAppVersion() {
         val versions = localStorage.appVersions.toMutableList()
         val lastVersion = versions.lastOrNull()
@@ -19,5 +18,4 @@ class AppVersionManager(
             localStorage.appVersions = versions
         }
     }
-
 }

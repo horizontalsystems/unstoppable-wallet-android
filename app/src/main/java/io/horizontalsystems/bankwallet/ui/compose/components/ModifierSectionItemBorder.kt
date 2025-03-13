@@ -14,22 +14,26 @@ import kotlin.math.ceil
 import kotlin.math.min
 
 enum class SectionItemPosition {
-    First, Last, Middle, Single
+    First,
+    Last,
+    Middle,
+    Single,
 }
 
 fun Modifier.sectionItemBorder(
     width: Dp,
     color: Color,
     cornerRadius: Dp,
-    position: SectionItemPosition
+    position: SectionItemPosition,
 ) = then(
     drawWithCache {
         val brush = SolidColor(color)
         val cornerRadiusPx = cornerRadius.toPx()
-        val strokeWidthPx = min(
-            if (width == Dp.Hairline) 1f else ceil(width.toPx()),
-            ceil(size.minDimension / 2)
-        )
+        val strokeWidthPx =
+            min(
+                if (width == Dp.Hairline) 1f else ceil(width.toPx()),
+                ceil(size.minDimension / 2),
+            )
 
         val arcSize = Size(cornerRadiusPx * 2, cornerRadiusPx * 2)
 
@@ -38,22 +42,25 @@ fun Modifier.sectionItemBorder(
                 SectionItemPosition.First -> {
                     drawFirstItemBorder(strokeWidthPx, brush, arcSize)
                 }
+
                 SectionItemPosition.Last -> {
                     drawLastItemBorder(strokeWidthPx, brush, arcSize)
                 }
+
                 SectionItemPosition.Middle -> {
                     drawMiddleItemBorder(strokeWidthPx, brush)
                 }
-                SectionItemPosition.Single -> { }
+
+                SectionItemPosition.Single -> {}
             }
             drawContent()
         }
-    }
+    },
 )
 
 private fun ContentDrawScope.drawMiddleItemBorder(
     strokeWidthPx: Float,
-    brush: Brush
+    brush: Brush,
 ) {
     val halfStroke = strokeWidthPx / 2
 
@@ -74,7 +81,7 @@ private fun ContentDrawScope.drawMiddleItemBorder(
 private fun ContentDrawScope.drawLastItemBorder(
     strokeWidthPx: Float,
     brush: Brush,
-    arcSize: Size
+    arcSize: Size,
 ) {
     val halfStroke = strokeWidthPx / 2
     drawArc(
@@ -91,7 +98,11 @@ private fun ContentDrawScope.drawLastItemBorder(
         startAngle = 0f,
         sweepAngle = 90f,
         useCenter = false,
-        topLeft = Offset(size.width - arcSize.width - halfStroke, size.height - arcSize.height - halfStroke),
+        topLeft =
+            Offset(
+                size.width - arcSize.width - halfStroke,
+                size.height - arcSize.height - halfStroke,
+            ),
         size = arcSize,
         style = Stroke(strokeWidthPx),
     )
@@ -118,7 +129,7 @@ private fun ContentDrawScope.drawLastItemBorder(
 private fun ContentDrawScope.drawFirstItemBorder(
     strokeWidthPx: Float,
     brush: Brush,
-    arcSize: Size
+    arcSize: Size,
 ) {
     val halfStroke = strokeWidthPx / 2
 

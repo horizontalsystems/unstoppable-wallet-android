@@ -46,7 +46,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 @Composable
 fun WCSessionList(
     viewModel: WalletConnectListViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = WalletConnectListUiState())
     var revealedCardId by remember { mutableStateOf<String?>(null) }
@@ -70,7 +70,7 @@ fun WCSessionList(
             onConceal = {
                 revealedCardId = null
             },
-            onDelete = { viewModel.onDelete(it) }
+            onDelete = { viewModel.onDelete(it) },
         )
         item {
             if (uiState.sessionViewItems.isNotEmpty()) {
@@ -83,13 +83,13 @@ fun WCSessionList(
             item {
                 CellSingleLineLawrenceSection {
                     Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                navController.slideFromRight(R.id.wcPairingsFragment)
-                            }
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .clickable {
+                                    navController.slideFromRight(R.id.wcPairingsFragment)
+                                }.padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         body_leah(text = stringResource(R.string.WalletConnect_Pairings))
                         Spacer(modifier = Modifier.weight(1f))
@@ -97,7 +97,7 @@ fun WCSessionList(
                         Spacer(modifier = Modifier.width(8.dp))
                         Image(
                             painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }
@@ -113,21 +113,22 @@ private fun LazyListScope.WCSection(
     revealedCardId: String?,
     onReveal: (String) -> Unit,
     onConceal: () -> Unit,
-    onDelete: (String) -> Unit
+    onDelete: (String) -> Unit,
 ) {
     itemsIndexed(viewItems, key = { _, item -> item.sessionTopic }) { index, item ->
         val showDivider = showDivider(viewItems.size, index)
         val shape = getShape(viewItems.size, index)
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             ActionsRow(
                 content = {
                     HsIconButton(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(88.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .width(88.dp),
                         onClick = { onDelete(item.sessionTopic) },
                         content = {
                             Icon(
@@ -135,7 +136,7 @@ private fun LazyListScope.WCSection(
                                 tint = Color.Gray,
                                 contentDescription = "delete",
                             )
-                        }
+                        },
                     )
                 },
             )
@@ -150,22 +151,30 @@ private fun LazyListScope.WCSection(
                         shape = shape,
                         showDivider = showDivider,
                         session = item,
-                        navController = navController
+                        navController = navController,
                     )
-                }
+                },
             )
         }
     }
 }
 
-fun getShape(itemsCount: Int, index: Int): Shape = when {
-    itemsCount == 1 -> RoundedCornerShape(12.dp)
-    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
-    0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
-    else -> RoundedCornerShape(0.dp)
-}
+fun getShape(
+    itemsCount: Int,
+    index: Int,
+): Shape =
+    when {
+        itemsCount == 1 -> RoundedCornerShape(12.dp)
+        itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
+        0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
+        else -> RoundedCornerShape(0.dp)
+    }
 
-fun showDivider(itemsCount: Int, index: Int): Boolean = when {
-    itemsCount == 1 || index == 0 -> false
-    else -> true
-}
+fun showDivider(
+    itemsCount: Int,
+    index: Int,
+): Boolean =
+    when {
+        itemsCount == 1 || index == 0 -> false
+        else -> true
+    }

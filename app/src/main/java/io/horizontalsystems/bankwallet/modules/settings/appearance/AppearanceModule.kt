@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon.values
+import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval.entries
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
 object AppearanceModule {
-
-    class Factory() : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val launchScreenService = LaunchScreenService(App.localStorage)
@@ -26,10 +27,12 @@ object AppearanceModule {
             ) as T
         }
     }
-
 }
 
-enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle {
+enum class AppIcon(
+    val icon: Int,
+    val titleText: String,
+) : WithTranslatableTitle {
     Main(R.drawable.launcher_main_preview, "Main"),
     Dark(R.drawable.launcher_dark_preview, "Dark"),
     Mono(R.drawable.launcher_mono_preview, "Mono"),
@@ -44,7 +47,8 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     Doge(R.drawable.launcher_doge_preview, "Doge"),
     Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad"),
     Plflag(R.drawable.launcher_plflag_preview, "Plflag"),
-    Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad");
+    Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad"),
+    ;
 
     override val title: TranslatableString
         get() = TranslatableString.PlainString(titleText)
@@ -52,25 +56,31 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     val launcherName: String
         get() = "${App.instance.packageName}.${this.name}LauncherAlias"
 
-
     companion object {
         private val map = values().associateBy(AppIcon::name)
         private val titleMap = values().associateBy(AppIcon::titleText)
 
         fun fromString(type: String?): AppIcon? = map[type]
+
         fun fromTitle(title: String?): AppIcon? = titleMap[title]
     }
 }
 
-enum class PriceChangeInterval(val raw: String, override val title: TranslatableString): WithTranslatableTitle {
+enum class PriceChangeInterval(
+    val raw: String,
+    override val title: TranslatableString,
+) : WithTranslatableTitle {
     @SerializedName("hour_24")
     LAST_24H("hour_24", TranslatableString.ResString(R.string.Market_PriceChange_24H)),
+
     @SerializedName("midnight_utc")
-    FROM_UTC_MIDNIGHT("midnight_utc", TranslatableString.ResString(R.string.Market_PriceChange_Utc));
+    FROM_UTC_MIDNIGHT(
+        "midnight_utc",
+        TranslatableString.ResString(R.string.Market_PriceChange_Utc),
+    ),
+    ;
 
     companion object {
-        fun fromRaw(raw: String): PriceChangeInterval? {
-            return entries.find { it.raw == raw }
-        }
+        fun fromRaw(raw: String): PriceChangeInterval? = entries.find { it.raw == raw }
     }
 }

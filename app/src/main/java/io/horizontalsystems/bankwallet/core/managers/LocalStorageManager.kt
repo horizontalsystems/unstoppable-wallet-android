@@ -35,9 +35,12 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class LocalStorageManager(
-    private val preferences: SharedPreferences
-) : ILocalStorage, IPinSettingsStorage, ILockoutStorage, IThirdKeyboard, IMarketStorage {
-
+    private val preferences: SharedPreferences,
+) : ILocalStorage,
+    IPinSettingsStorage,
+    ILockoutStorage,
+    IThirdKeyboard,
+    IMarketStorage {
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val BASE_CURRENCY_CODE = "base_currency_code"
@@ -79,7 +82,8 @@ class LocalStorageManager(
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
-    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
+    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
+        "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
     private val APP_ID = "app_id"
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
@@ -95,7 +99,11 @@ class LocalStorageManager(
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
 
-    private val _marketSignalsStateChangedFlow =  MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _marketSignalsStateChangedFlow =
+        MutableSharedFlow<Boolean>(
+            extraBufferCapacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
     override val marketSignalsStateChangedFlow = _marketSignalsStateChangedFlow
 
     private val gson by lazy { Gson() }
@@ -107,13 +115,14 @@ class LocalStorageManager(
         }
 
     override var amountInputType: AmountInputType?
-        get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
-            try {
-                AmountInputType.valueOf(it)
-            } catch (e: IllegalArgumentException) {
-                null
+        get() =
+            preferences.getString(SEND_INPUT_TYPE, null)?.let {
+                try {
+                    AmountInputType.valueOf(it)
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
             }
-        }
         set(value) {
             val editor = preferences.edit()
             when (value) {
@@ -125,7 +134,10 @@ class LocalStorageManager(
     override var marketSearchRecentCoinUids: List<String>
         get() = preferences.getString("marketSearchRecentCoinUids", null)?.split(",") ?: listOf()
         set(value) {
-            preferences.edit().putString("marketSearchRecentCoinUids", value.joinToString(",")).apply()
+            preferences
+                .edit()
+                .putString("marketSearchRecentCoinUids", value.joinToString(","))
+                .apply()
         }
 
     override var zcashAccountIds: Set<String>
@@ -154,6 +166,7 @@ class LocalStorageManager(
                     preferences.edit().putString(APP_ID, newId).apply()
                     newId
                 }
+
                 else -> id
             }
         }
@@ -190,8 +203,9 @@ class LocalStorageManager(
 
     override var sortType: BalanceSortType
         get() {
-            val sortString = preferences.getString(SORT_TYPE, null)
-                ?: BalanceSortType.Value.getAsString()
+            val sortString =
+                preferences.getString(SORT_TYPE, null)
+                    ?: BalanceSortType.Value.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {
@@ -226,20 +240,22 @@ class LocalStorageManager(
     }
 
     override var currentTheme: ThemeType
-        get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) }
-            ?: ThemeType.System
+        get() =
+            preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) }
+                ?: ThemeType.System
         set(themeType) {
             preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
 
     override var balanceViewType: BalanceViewType?
-        get() = preferences.getString("balanceViewType", null)?.let {
-            try {
-                BalanceViewType.valueOf(it)
-            } catch (e: IllegalArgumentException) {
-                null
+        get() =
+            preferences.getString("balanceViewType", null)?.let {
+                try {
+                    BalanceViewType.valueOf(it)
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
             }
-        }
         set(value) {
             if (value != null) {
                 preferences.edit().putString("balanceViewType", value.name).apply()
@@ -298,20 +314,21 @@ class LocalStorageManager(
             preferences.edit().putString(PIN, value).apply()
         }
 
-    //used only in db migration
+    // used only in db migration
     override var syncMode: SyncMode?
-        get() = preferences.getString(SYNC_MODE, null)?.let {
-            try {
-                SyncMode.valueOf(it)
-            } catch (e: IllegalArgumentException) {
-                null
+        get() =
+            preferences.getString(SYNC_MODE, null)?.let {
+                try {
+                    SyncMode.valueOf(it)
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
             }
-        }
         set(syncMode) {
             preferences.edit().putString(SYNC_MODE, syncMode?.value).apply()
         }
 
-    //used only in db migration
+    // used only in db migration
     override var bitcoinDerivation: AccountType.Derivation?
         get() {
             val derivationString = preferences.getString(BITCOIN_DERIVATION, null)
@@ -325,9 +342,10 @@ class LocalStorageManager(
 
     override var torEnabled: Boolean
         get() = preferences.getBoolean(TOR_ENABLED, false)
+
         @SuppressLint("ApplySharedPref")
         set(enabled) {
-            //keep using commit() for synchronous storing
+            // keep using commit() for synchronous storing
             preferences.edit().putBoolean(TOR_ENABLED, enabled).commit()
         }
 
@@ -368,9 +386,10 @@ class LocalStorageManager(
         }
 
     override var currentMarketTab: MarketModule.Tab?
-        get() = preferences.getString(MARKET_CURRENT_TAB, null)?.let {
-            MarketModule.Tab.fromString(it)
-        }
+        get() =
+            preferences.getString(MARKET_CURRENT_TAB, null)?.let {
+                MarketModule.Tab.fromString(it)
+            }
         set(value) {
             preferences.edit().putString(MARKET_CURRENT_TAB, value?.name).apply()
         }
@@ -406,33 +425,37 @@ class LocalStorageManager(
         }
 
     override var launchPage: LaunchPage?
-        get() = preferences.getString(LAUNCH_PAGE, null)?.let {
-            LaunchPage.fromString(it)
-        }
+        get() =
+            preferences.getString(LAUNCH_PAGE, null)?.let {
+                LaunchPage.fromString(it)
+            }
         set(value) {
             preferences.edit().putString(LAUNCH_PAGE, value?.name).apply()
         }
 
     override var appIcon: AppIcon?
-        get() = preferences.getString(APP_ICON, null)?.let {
-            AppIcon.fromString(it)
-        }
+        get() =
+            preferences.getString(APP_ICON, null)?.let {
+                AppIcon.fromString(it)
+            }
         set(value) {
             preferences.edit().putString(APP_ICON, value?.name).apply()
         }
 
     override var mainTab: MainModule.MainNavigation?
-        get() = preferences.getString(MAIN_TAB, null)?.let {
-            MainModule.MainNavigation.fromString(it)
-        }
+        get() =
+            preferences.getString(MAIN_TAB, null)?.let {
+                MainModule.MainNavigation.fromString(it)
+            }
         set(value) {
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
         }
 
     override var marketFavoritesSorting: WatchlistSorting?
-        get() = preferences.getString(MARKET_FAVORITES_SORTING, null)?.let {
-            WatchlistSorting.valueOf(it)
-        }
+        get() =
+            preferences.getString(MARKET_FAVORITES_SORTING, null)?.let {
+                WatchlistSorting.valueOf(it)
+            }
         set(value) {
             preferences.edit().putString(MARKET_FAVORITES_SORTING, value?.name).apply()
         }
@@ -447,15 +470,21 @@ class LocalStorageManager(
         }
 
     override var marketFavoritesManualSortingOrder: List<String>
-        get() = preferences.getString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, null)?.split(",") ?: listOf()
+        get() =
+            preferences.getString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, null)?.split(",")
+                ?: listOf()
         set(value) {
-            preferences.edit().putString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, value.joinToString(",")).apply()
+            preferences
+                .edit()
+                .putString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, value.joinToString(","))
+                .apply()
         }
 
     override var marketFavoritesPeriod: TimeDuration?
-        get() = preferences.getString(MARKET_FAVORITES_TIME_DURATION, null)?.let {
-            TimeDuration.entries.find { period -> period.name == it }
-        }
+        get() =
+            preferences.getString(MARKET_FAVORITES_TIME_DURATION, null)?.let {
+                TimeDuration.entries.find { period -> period.name == it }
+            }
         set(value) {
             preferences.edit().putString(MARKET_FAVORITES_TIME_DURATION, value?.name).apply()
         }
@@ -506,15 +535,21 @@ class LocalStorageManager(
     override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
 
     override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
-        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()
+        get() =
+            preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf())
+                ?: setOf()
         set(value) {
-            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
+            preferences
+                .edit()
+                .putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value)
+                .apply()
         }
 
     override var autoLockInterval: AutoLockInterval
-        get() = preferences.getString(APP_AUTO_LOCK_INTERVAL, null)?.let {
-            AutoLockInterval.fromRaw(it)
-        } ?: AutoLockInterval.AFTER_1_MIN
+        get() =
+            preferences.getString(APP_AUTO_LOCK_INTERVAL, null)?.let {
+                AutoLockInterval.fromRaw(it)
+            } ?: AutoLockInterval.AFTER_1_MIN
         set(value) {
             preferences.edit().putString(APP_AUTO_LOCK_INTERVAL, value.raw).apply()
         }
@@ -541,9 +576,10 @@ class LocalStorageManager(
         }
 
     override var priceChangeInterval: PriceChangeInterval
-        get() = preferences.getString(PRICE_CHANGE_INTERVAL, null)?.let {
-            PriceChangeInterval.fromRaw(it)
-        } ?: PriceChangeInterval.LAST_24H
+        get() =
+            preferences.getString(PRICE_CHANGE_INTERVAL, null)?.let {
+                PriceChangeInterval.fromRaw(it)
+            } ?: PriceChangeInterval.LAST_24H
         set(value) {
             preferences.edit().putString(PRICE_CHANGE_INTERVAL, value.raw).apply()
 
@@ -553,12 +589,14 @@ class LocalStorageManager(
     override val priceChangeIntervalFlow = MutableStateFlow(priceChangeInterval)
 
     override var uiStatsEnabled: Boolean?
-        get() = when {
-            preferences.contains(UI_STATS_ENABLED) -> {
-                preferences.getBoolean(UI_STATS_ENABLED, false)
+        get() =
+            when {
+                preferences.contains(UI_STATS_ENABLED) -> {
+                    preferences.getBoolean(UI_STATS_ENABLED, false)
+                }
+
+                else -> null
             }
-            else -> null
-        }
         set(value) {
             val editor = preferences.edit()
             if (value == null) {

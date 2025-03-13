@@ -16,7 +16,6 @@ class PinSetViewModel(
     private val pinComponent: IPinComponent,
     private val forDuress: Boolean,
 ) : ViewModelUiState<PinSetViewState>() {
-
     private var enteredPin = ""
     private var submittedPin = ""
 
@@ -25,13 +24,14 @@ class PinSetViewModel(
     private var reverseSlideAnimation = false
     private var error: String? = null
 
-    override fun createState() = PinSetViewState(
-        stage = stage,
-        enteredCount = enteredPin.length,
-        finished = finished,
-        reverseSlideAnimation = reverseSlideAnimation,
-        error = error,
-    )
+    override fun createState() =
+        PinSetViewState(
+            stage = stage,
+            enteredCount = enteredPin.length,
+            finished = finished,
+            reverseSlideAnimation = reverseSlideAnimation,
+            error = error,
+        )
 
     fun onDelete() {
         if (enteredPin.isNotEmpty()) {
@@ -74,6 +74,7 @@ class PinSetViewModel(
                     emitState()
                 }
             }
+
             submittedPin.isNotEmpty() -> {
                 if (submittedPin == enteredPin) {
                     try {
@@ -107,5 +108,4 @@ class PinSetViewModel(
             emitState()
         }
     }
-
 }

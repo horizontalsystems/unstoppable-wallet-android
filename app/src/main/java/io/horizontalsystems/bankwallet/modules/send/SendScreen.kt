@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 fun SendScreen(
     title: String,
     onBack: () -> Unit,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
@@ -23,7 +23,7 @@ fun SendScreen(
             navigationIcon = {
                 HsBackButton(onClick = onBack)
             },
-            menuItems = listOf()
+            menuItems = listOf(),
         )
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

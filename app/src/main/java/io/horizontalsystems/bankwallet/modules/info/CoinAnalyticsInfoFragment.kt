@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 
 class CoinAnalyticsInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<AnalyticInfo>(navController) { input ->
@@ -35,7 +34,7 @@ class CoinAnalyticsInfoFragment : BaseComposeFragment() {
 @Composable
 private fun CoinAnalyticsInfoScreen(
     analyticsInfo: AnalyticInfo,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
 ) {
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -46,9 +45,10 @@ private fun CoinAnalyticsInfoScreen(
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoHeader(analyticsInfo.title)
                 AnalyticsInfoBody(analyticsInfo)

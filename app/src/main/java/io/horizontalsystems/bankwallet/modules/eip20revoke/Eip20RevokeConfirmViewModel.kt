@@ -39,22 +39,25 @@ class Eip20RevokeConfirmViewModel(
     private val currency = currencyManager.baseCurrency
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var fiatAmount: BigDecimal? = null
-    private val contact = contactsRepository.getContactsFiltered(
-        blockchainType = token.blockchainType,
-        addressQuery = spenderAddress
-    ).firstOrNull()
+    private val contact =
+        contactsRepository
+            .getContactsFiltered(
+                blockchainType = token.blockchainType,
+                addressQuery = spenderAddress,
+            ).firstOrNull()
 
-    override fun createState() = Eip20RevokeUiState(
-        token = token,
-        allowance = allowance,
-        networkFee = sendTransactionState.networkFee,
-        cautions = sendTransactionState.cautions,
-        currency = currency,
-        fiatAmount = fiatAmount,
-        spenderAddress = spenderAddress,
-        contact = contact,
-        revokeEnabled = sendTransactionState.sendable
-    )
+    override fun createState() =
+        Eip20RevokeUiState(
+            token = token,
+            allowance = allowance,
+            networkFee = sendTransactionState.networkFee,
+            cautions = sendTransactionState.cautions,
+            currency = currency,
+            fiatAmount = fiatAmount,
+            spenderAddress = spenderAddress,
+            contact = contact,
+            revokeEnabled = sendTransactionState.sendable,
+        )
 
     val uuid = UUID.randomUUID().toString()
 
@@ -87,12 +90,18 @@ class Eip20RevokeConfirmViewModel(
         checkNotNull(eip20Adapter)
 
         val transactionData = eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
-        sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+        sendTransactionService.setSendTransactionData(
+            SendTransactionData.Evm(
+                transactionData,
+                null,
+            ),
+        )
     }
 
-    suspend fun revoke() = withContext(Dispatchers.Default) {
-        sendTransactionService.sendTransaction()
-    }
+    suspend fun revoke() =
+        withContext(Dispatchers.Default) {
+            sendTransactionService.sendTransaction()
+        }
 
     class Factory(
         private val token: Token,
@@ -112,7 +121,7 @@ class Eip20RevokeConfirmViewModel(
                 sendTransactionService,
                 App.currencyManager,
                 FiatService(App.marketKit),
-                App.contactsRepository
+                App.contactsRepository,
             ) as T
         }
     }

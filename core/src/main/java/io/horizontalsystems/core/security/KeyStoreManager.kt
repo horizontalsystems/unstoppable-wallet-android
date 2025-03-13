@@ -20,8 +20,8 @@ class KeyStoreManager(
     private val keyAlias: String,
     private val keyStoreCleaner: IKeyStoreCleaner,
     private val logger: Logger,
-) : IKeyStoreManager, IKeyProvider {
-
+) : IKeyStoreManager,
+    IKeyProvider {
     private val ANDROID_KEY_STORE = "AndroidKeyStore"
     private val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
     private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
@@ -30,7 +30,11 @@ class KeyStoreManager(
     private val keyStore: KeyStore
 
     interface Logger {
-        fun warning(message: String, e: Throwable)
+        fun warning(
+            message: String,
+            e: Throwable,
+        )
+
         fun info(message: String)
     }
 
@@ -45,7 +49,7 @@ class KeyStoreManager(
                 return it as SecretKey
             }
         } catch (ex: UnrecoverableKeyException) {
-            //couldn't get key due to exception
+            // couldn't get key due to exception
         }
         return createKey()
     }
@@ -90,20 +94,21 @@ class KeyStoreManager(
         val keyGenerator =
             KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
 
-        val builder = KeyGenParameterSpec.Builder(
-            keyAlias,
-            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-        )
-            .setBlockModes(BLOCK_MODE)
-            .setUserAuthenticationRequired(true)
-            .setRandomizedEncryptionRequired(false)
-            .setEncryptionPaddings(PADDING)
+        val builder =
+            KeyGenParameterSpec
+                .Builder(
+                    keyAlias,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
+                ).setBlockModes(BLOCK_MODE)
+                .setUserAuthenticationRequired(true)
+                .setRandomizedEncryptionRequired(false)
+                .setEncryptionPaddings(PADDING)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             builder.setUserAuthenticationParameters(
                 AUTH_DURATION_SEC,
                 KeyProperties.AUTH_DEVICE_CREDENTIAL
-                        or KeyProperties.AUTH_BIOMETRIC_STRONG
+                    or KeyProperties.AUTH_BIOMETRIC_STRONG,
             )
         } else {
             @Suppress("DEPRECATION")
@@ -124,10 +129,10 @@ class KeyStoreManager(
             keyStoreCleaner.encryptedSampleText = text
         }
     }
-
 }
 
 sealed class KeyStoreValidationError : Error() {
     class UserNotAuthenticated : KeyStoreValidationError()
+
     class KeyIsInvalid : KeyStoreValidationError()
 }

@@ -21,25 +21,26 @@ fun CoinScreenTitle(
     marketCapRank: Int?,
     coinIconUrl: String,
     alternativeCoinIconUrl: String?,
-    iconPlaceholder: Int?
+    iconPlaceholder: Int?,
 ) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = iconPlaceholder,
-            modifier = Modifier.size(32.dp).clip(CircleShape)
+            modifier = Modifier.size(32.dp).clip(CircleShape),
         )
 
         body_grey(
             text = coinName,
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f),
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
 
         marketCapRank?.let { marketCapRank ->
@@ -60,7 +61,7 @@ fun CoinScreenTitlePreviewNoRank() {
             marketCapRank = null,
             coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
             alternativeCoinIconUrl = null,
-            iconPlaceholder = null
+            iconPlaceholder = null,
         )
     }
 }
@@ -74,7 +75,7 @@ fun CoinScreenTitlePreviewLongTitle() {
             marketCapRank = 123,
             coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
             alternativeCoinIconUrl = null,
-            iconPlaceholder = null
+            iconPlaceholder = null,
         )
     }
 }
@@ -88,7 +89,7 @@ fun CoinScreenTitlePreviewShortTitle() {
             marketCapRank = 1,
             coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
             alternativeCoinIconUrl = null,
-            iconPlaceholder = null
+            iconPlaceholder = null,
         )
     }
 }

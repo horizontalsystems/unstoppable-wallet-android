@@ -10,17 +10,16 @@ import kotlinx.parcelize.Parcelize
 object ShowExtendedKeyModule {
     class Factory(
         private val extendedRootKey: HDExtendedKey,
-        private val displayKeyType: DisplayKeyType
+        private val displayKeyType: DisplayKeyType,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ShowExtendedKeyViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            ShowExtendedKeyViewModel(
                 keyChain = HDKeychain(extendedRootKey.key),
                 displayKeyType = displayKeyType,
                 purpose = extendedRootKey.purposes.first(),
-                extendedKeyCoinType = extendedRootKey.coinTypes.first()
+                extendedKeyCoinType = extendedRootKey.coinTypes.first(),
             ) as T
-        }
     }
 
     @Parcelize
@@ -29,23 +28,29 @@ object ShowExtendedKeyModule {
         object Bip32RootKey : DisplayKeyType()
 
         @Parcelize
-        class AccountPrivateKey(val derivable: Boolean) : DisplayKeyType()
+        class AccountPrivateKey(
+            val derivable: Boolean,
+        ) : DisplayKeyType()
 
         @Parcelize
-        class AccountPublicKey(val derivable: Boolean) : DisplayKeyType()
+        class AccountPublicKey(
+            val derivable: Boolean,
+        ) : DisplayKeyType()
 
         val isDerivable: Boolean
-            get() = when (this) {
-                is AccountPrivateKey -> derivable
-                is AccountPublicKey -> derivable
-                Bip32RootKey -> false
-            }
+            get() =
+                when (this) {
+                    is AccountPrivateKey -> derivable
+                    is AccountPublicKey -> derivable
+                    Bip32RootKey -> false
+                }
 
         val isPrivate: Boolean
-            get() = when (this) {
-                is AccountPrivateKey -> true
-                is AccountPublicKey -> false
-                Bip32RootKey -> true
-            }
+            get() =
+                when (this) {
+                    is AccountPrivateKey -> true
+                    is AccountPublicKey -> false
+                    Bip32RootKey -> true
+                }
     }
 }

@@ -31,19 +31,20 @@ class MarketTopCoinsViewModel(
     private val currencyManager: CurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModelUiState<MarketTopCoinsUiState>() {
-
-    private val periods = listOf(
-        TimeDuration.OneDay,
-        TimeDuration.SevenDay,
-        TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
-    )
-    private val sortingFields = listOf(
-        SortingField.HighestCap,
-        SortingField.LowestCap,
-        SortingField.TopGainers,
-        SortingField.TopLosers,
-    )
+    private val periods =
+        listOf(
+            TimeDuration.OneDay,
+            TimeDuration.SevenDay,
+            TimeDuration.ThirtyDay,
+            TimeDuration.ThreeMonths,
+        )
+    private val sortingFields =
+        listOf(
+            SortingField.HighestCap,
+            SortingField.LowestCap,
+            SortingField.TopGainers,
+            SortingField.TopLosers,
+        )
     private val topMarkets = TopMarket.entries
     private val baseCurrency get() = currencyManager.baseCurrency
 
@@ -53,17 +54,18 @@ class MarketTopCoinsViewModel(
     private var period = periods[0]
     private var favoriteCoinUids: List<String> = listOf()
 
-    override fun createState() = MarketTopCoinsUiState(
-        isRefreshing = isRefreshing,
-        viewState = viewState,
-        viewItems = viewItems,
-        topMarkets = topMarkets,
-        topMarket = topMarket,
-        sortingFields = sortingFields,
-        sortingField = sortingField,
-        periods = periods,
-        period = period,
-    )
+    override fun createState() =
+        MarketTopCoinsUiState(
+            isRefreshing = isRefreshing,
+            viewState = viewState,
+            viewItems = viewItems,
+            topMarkets = topMarkets,
+            topMarket = topMarket,
+            sortingFields = sortingFields,
+            sortingField = sortingField,
+            periods = periods,
+            period = period,
+        )
 
     private var marketInfoList: List<MarketInfo>? = null
     private var marketItemList: List<MarketItem>? = null
@@ -124,28 +126,31 @@ class MarketTopCoinsViewModel(
     }
 
     private fun refreshMarketItemList() {
-        marketItemList = marketInfoList?.map { marketInfo ->
-            MarketItem.createFromCoinMarket(
-                marketInfo,
-                baseCurrency,
-                period.period,
-            )
-        }
+        marketItemList =
+            marketInfoList?.map { marketInfo ->
+                MarketItem.createFromCoinMarket(
+                    marketInfo,
+                    baseCurrency,
+                    period.period,
+                )
+            }
     }
 
     private fun refreshSortedMarketItems() {
-        sortedMarketItems = marketItemList?.let { list ->
-            list
-                .subList(0, min(list.size, topMarket.value))
-                .sort(sortingField)
-        }
+        sortedMarketItems =
+            marketItemList?.let { list ->
+                list
+                    .subList(0, min(list.size, topMarket.value))
+                    .sort(sortingField)
+            }
     }
 
     private fun refreshViewItems() {
         sortedMarketItems?.let { list ->
-            viewItems = list.map {
-                MarketViewItem.create(it, favoriteCoinUids.contains(it.fullCoin.coin.uid))
-            }
+            viewItems =
+                list.map {
+                    MarketViewItem.create(it, favoriteCoinUids.contains(it.fullCoin.coin.uid))
+                }
         }
     }
 
@@ -221,15 +226,14 @@ class MarketTopCoinsViewModel(
         private val sortingField: SortingField,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MarketTopCoinsViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            MarketTopCoinsViewModel(
                 topMarket,
                 sortingField,
                 App.marketKit,
                 App.currencyManager,
-                App.marketFavoritesManager
+                App.marketFavoritesManager,
             ) as T
-        }
     }
 }
 

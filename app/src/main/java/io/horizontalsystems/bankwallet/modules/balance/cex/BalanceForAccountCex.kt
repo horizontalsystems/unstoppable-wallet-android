@@ -64,7 +64,10 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountViewItem) {
+fun BalanceForAccountCex(
+    navController: NavController,
+    accountViewItem: AccountViewItem,
+) {
     val viewModel = viewModel<BalanceCexViewModel>(factory = BalanceModule.FactoryCex())
     val uiState = viewModel.uiState
     val totalState = viewModel.totalUiState
@@ -79,25 +82,25 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                 AppBar(
                     title = {
                         BalanceTitleRow(navController, accountViewItem.name)
-                    }
+                    },
                 )
-            }
+            },
         ) { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
-
                 HSSwipeRefresh(
                     refreshing = uiState.isRefreshing,
-                    onRefresh = viewModel::onRefresh
+                    onRefresh = viewModel::onRefresh,
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        state = rememberSaveable(
-                            accountViewItem.id,
-                            uiState.sortType,
-                            saver = LazyListState.Saver
-                        ) {
-                            LazyListState()
-                        }
+                        state =
+                            rememberSaveable(
+                                accountViewItem.id,
+                                uiState.sortType,
+                                saver = LazyListState.Saver,
+                            ) {
+                                LazyListState()
+                            },
                     ) {
                         item {
                             TotalBalanceRow(
@@ -109,15 +112,16 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                 onClickSubtitle = {
                                     viewModel.toggleTotalType()
                                     HudHelper.vibrate(context)
-                                }
+                                },
                             )
                         }
 
                         item {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 16.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 16.dp),
                             ) {
                                 ButtonPrimaryYellow(
                                     modifier = Modifier.weight(1f),
@@ -133,7 +137,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                     title = stringResource(R.string.Balance_Deposit),
                                     onClick = {
                                         navController.slideFromRight(R.id.depositCexFragment)
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -151,7 +155,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                     BalanceSortingSelector(
                                         sortType = uiState.sortType,
                                         sortTypes = viewModel.sortTypes,
-                                        onSelectSortType = viewModel::onSelectSortType
+                                        onSelectSortType = viewModel::onSelectSortType,
                                     )
                                 }
                             }
@@ -170,64 +174,67 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
     }
 }
 
-
 @Composable
 fun BalanceCardCex(
     navController: NavController,
-    viewItem: BalanceCexViewItem
+    viewItem: BalanceCexViewItem,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = {
-                    navController.slideFromRight(
-                        R.id.cexAssetFragment,
-                        viewItem.cexAsset
-                    )
-                }
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.cexAssetFragment,
+                            viewItem.cexAsset,
+                        )
+                    },
+                ),
     ) {
         CellMultilineClear(height = 64.dp) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 WalletIconCex(viewItem)
                 Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(1f),
-                    verticalArrangement = Arrangement.Center
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(1f),
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Row(
                             modifier = Modifier.weight(weight = 1f),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             body_leah(
                                 text = viewItem.coinCode,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
                             if (!viewItem.badge.isNullOrBlank()) {
                                 Box(
-                                    modifier = Modifier
-                                        .padding(start = 8.dp)
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .background(ComposeAppTheme.colors.jeremy)
+                                    modifier =
+                                        Modifier
+                                            .padding(start = 8.dp)
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .background(ComposeAppTheme.colors.jeremy),
                                 ) {
                                     Text(
-                                        modifier = Modifier.padding(
-                                            start = 4.dp,
-                                            end = 4.dp,
-                                            bottom = 1.dp
-                                        ),
+                                        modifier =
+                                            Modifier.padding(
+                                                start = 4.dp,
+                                                end = 4.dp,
+                                                bottom = 1.dp,
+                                            ),
                                         text = viewItem.badge,
                                         color = ComposeAppTheme.colors.bran,
                                         style = ComposeAppTheme.typography.microSB,
@@ -295,51 +302,59 @@ fun BalanceCardCex(
 }
 
 @Composable
-fun WalletIconCex(
-    viewItem: BalanceCexViewItem
-) {
+fun WalletIconCex(viewItem: BalanceCexViewItem) {
     Box(
-        modifier = Modifier
-            .width(64.dp)
-            .fillMaxHeight(),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .width(64.dp)
+                .fillMaxHeight(),
+        contentAlignment = Alignment.Center,
     ) {
         viewItem.syncingProgress.progress?.let { progress ->
             AndroidView(
-                modifier = Modifier
-                    .size(52.dp),
+                modifier =
+                    Modifier
+                        .size(52.dp),
                 factory = { context ->
                     RotatingCircleProgressView(context)
                 },
                 update = { view ->
-                    val color = when (viewItem.syncingProgress.dimmed) {
-                        true -> R.color.grey_50
-                        false -> R.color.grey
-                    }
+                    val color =
+                        when (viewItem.syncingProgress.dimmed) {
+                            true -> R.color.grey_50
+                            false -> R.color.grey
+                        }
                     view.setProgressColored(progress, view.context.getColor(color))
-                }
+                },
             )
         }
         if (viewItem.failedIconVisible) {
             val view = LocalView.current
-            val clickableModifier = if (viewItem.errorMessage != null) {
-                Modifier.clickable(onClick = { HudHelper.showErrorMessage(view, viewItem.errorMessage) })
-            } else {
-                Modifier
-            }
+            val clickableModifier =
+                if (viewItem.errorMessage != null) {
+                    Modifier.clickable(onClick = {
+                        HudHelper.showErrorMessage(
+                            view,
+                            viewItem.errorMessage,
+                        )
+                    })
+                } else {
+                    Modifier
+                }
 
             Image(
-                modifier = Modifier
-                    .size(32.dp)
-                    .then(clickableModifier),
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .then(clickableModifier),
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             )
         } else {
             CoinImage(
                 coin = viewItem.coin,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
             )
         }
     }

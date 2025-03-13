@@ -40,7 +40,7 @@ class CurveAnimatorBars(
             endTimestamp = frameMaxKey,
             minValue = frameMinValue,
             maxValue = frameMaxValue,
-        )
+        ),
     )
         private set
 
@@ -90,15 +90,17 @@ class CurveAnimatorBars(
             frameMinValue = targetMinValue
             frameMaxValue = targetMaxValue
         } else {
-            frameValues = LinkedHashMap(
-                combinedKeys.map { key ->
-                    val fromValue = fromValues.getOrDefault(key, fromMinValue / 10)
-                    val targetValue = targetValues.getOrDefault(key, targetMinValue / 10)
-                    val frameValue = changeByPercentage(fromValue, targetValue, animatedFraction)
+            frameValues =
+                LinkedHashMap(
+                    combinedKeys
+                        .map { key ->
+                            val fromValue = fromValues.getOrDefault(key, fromMinValue / 10)
+                            val targetValue = targetValues.getOrDefault(key, targetMinValue / 10)
+                            val frameValue = changeByPercentage(fromValue, targetValue, animatedFraction)
 
-                    key to frameValue
-                }.toMap()
-            )
+                            key to frameValue
+                        }.toMap(),
+                )
             frameMinKey = changeByPercentage(fromMinKey, targetMinKey, animatedFraction)
             frameMaxKey = changeByPercentage(fromMaxKey, targetMaxKey, animatedFraction)
             frameMinValue = changeByPercentage(fromMinValue, targetMinValue, animatedFraction)
@@ -109,21 +111,30 @@ class CurveAnimatorBars(
     }
 
     private fun emitState() {
-        state = UiState(
-            values = frameValues,
-            startTimestamp = frameMinKey,
-            endTimestamp = frameMaxKey,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-        )
+        state =
+            UiState(
+                values = frameValues,
+                startTimestamp = frameMinKey,
+                endTimestamp = frameMaxKey,
+                minValue = frameMinValue,
+                maxValue = frameMaxValue,
+            )
     }
 
-    private fun changeByPercentage(fromValue: Float, targetValue: Float, percentage: Float): Float {
+    private fun changeByPercentage(
+        fromValue: Float,
+        targetValue: Float,
+        percentage: Float,
+    ): Float {
         val change = targetValue - fromValue
         return fromValue + change * percentage
     }
 
-    private fun changeByPercentage(fromValue: Long, targetValue: Long, percentage: Float): Long {
+    private fun changeByPercentage(
+        fromValue: Long,
+        targetValue: Long,
+        percentage: Float,
+    ): Long {
         val change = targetValue - fromValue
         return (fromValue + change * percentage).toLong()
     }

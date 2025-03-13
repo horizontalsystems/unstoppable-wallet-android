@@ -49,75 +49,76 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SendEvmProcessingFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         SendEvmProcessingScreen(navController)
     }
-
 }
 
 @Composable
-private fun SendEvmProcessingScreen(
-    navController: NavController
-) {
+private fun SendEvmProcessingScreen(navController: NavController) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                        ),
+                    ),
             )
         },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier.padding(innerPaddings)
+            modifier = Modifier.padding(innerPaddings),
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(12.dp)
                 Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .background(
-                            color = ComposeAppTheme.colors.raina,
-                            shape = CircleShape
-                        ),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(100.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .background(
+                                color = ComposeAppTheme.colors.raina,
+                                shape = CircleShape,
+                            ),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         modifier = Modifier.size(48.dp),
                         painter = painterResource(R.drawable.ic_checkmark_48),
                         contentDescription = "checkmark",
-                        tint = ComposeAppTheme.colors.remus
+                        tint = ComposeAppTheme.colors.remus,
                     )
                 }
                 VSpacer(32.dp)
                 headline1_leah(
                     stringResource(R.string.Send_Processing),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 48.dp),
-                    textAlign = TextAlign.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 48.dp),
+                    textAlign = TextAlign.Center,
                 )
                 VSpacer(12.dp)
                 subhead2_grey(
                     text = stringResource(R.string.Send_Processing_Description),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 48.dp),
-                    textAlign = TextAlign.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 48.dp),
+                    textAlign = TextAlign.Center,
                 )
                 VSpacer(32.dp)
                 TransactionDataView(
@@ -137,7 +138,7 @@ private fun SendEvmProcessingScreen(
                         TransactionInfoSpeedUpCell(
                             transactionHash = "txhash",
                             blockchainType = BlockchainType.fromUid("ethereum"),
-                            navController = navController
+                            navController = navController,
                         )
                         Divider(
                             thickness = 1.dp,
@@ -146,7 +147,7 @@ private fun SendEvmProcessingScreen(
                         TransactionInfoCancelCell(
                             transactionHash = "txhash",
                             blockchainType = BlockchainType.fromUid("ethereum"),
-                            navController = navController
+                            navController = navController,
                         )
                     }
                     InfoText(
@@ -156,12 +157,12 @@ private fun SendEvmProcessingScreen(
             }
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
                     title = stringResource(R.string.Button_Done),
                     onClick = {
-
                     },
                 )
             }
@@ -180,20 +181,22 @@ fun TransactionDataView(
     progress: Float? = null,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.tyler)
-            .padding(vertical = 12.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.tyler)
+                .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(44.dp),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(44.dp),
+            contentAlignment = Alignment.Center,
         ) {
             progress?.let { progress ->
                 HSCircularProgressIndicator(progress)
@@ -201,38 +204,41 @@ fun TransactionDataView(
             HsImage(
                 url = coinIconUrl,
                 placeholder = coinIconPlaceholder,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .clip(CircleShape),
             )
         }
         Column {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(end = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 body_leah(
                     text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 body_lucian(coinAmount)
             }
             VSpacer(3.dp)
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(end = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 subhead2_grey(
                     text = subtitle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 fiatAmount?.let {
                     subhead2_grey(it)

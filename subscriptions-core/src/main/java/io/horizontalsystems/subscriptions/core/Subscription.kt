@@ -6,7 +6,7 @@ data class Subscription(
     val id: String,
     val name: String,
     val description: String,
-    val actions: List<IPaidAction>
+    val actions: List<IPaidAction>,
 )
 
 data class BasePlan(
@@ -31,7 +31,7 @@ data class PricingPhase(
 
 data class UserSubscription(
     val subscription: Subscription,
-    val purchaseToken: String
+    val purchaseToken: String,
 )
 
 fun Period.numberOfDays() = years * 365 + months * 30 + days

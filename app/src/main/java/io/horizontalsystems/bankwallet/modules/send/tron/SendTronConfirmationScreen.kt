@@ -68,13 +68,14 @@ fun SendTronConfirmationScreen(
     navController: NavController,
     sendViewModel: SendTronViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
-    val closeUntilDestId = if (sendEntryPointDestId == 0) {
-        R.id.sendXFragment
-    } else {
-        sendEntryPointDestId
-    }
+    val closeUntilDestId =
+        if (sendEntryPointDestId == 0) {
+            R.id.sendXFragment
+        } else {
+            sendEntryPointDestId
+        }
     val confirmationData = sendViewModel.confirmationData ?: return
 
     val uiState = sendViewModel.uiState
@@ -105,7 +106,7 @@ fun SendTronConfirmationScreen(
             HudHelper.showInProcessMessage(
                 view,
                 R.string.Send_Sending,
-                SnackbarDuration.INDEFINITE
+                SnackbarDuration.INDEFINITE,
             )
         }
 
@@ -113,7 +114,7 @@ fun SendTronConfirmationScreen(
             HudHelper.showSuccessMessage(
                 view,
                 R.string.Send_Success,
-                SnackbarDuration.LONG
+                SnackbarDuration.LONG,
             )
         }
 
@@ -132,7 +133,7 @@ fun SendTronConfirmationScreen(
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-        //additional close for cases when user closes app immediately after sending
+        // additional close for cases when user closes app immediately after sending
         if (sendResult is SendResult.Sent) {
             navController.popBackStack(closeUntilDestId, true)
         }
@@ -144,115 +145,133 @@ fun SendTronConfirmationScreen(
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
-            menuItems = listOf()
+            menuItems = listOf(),
         )
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 106.dp)
+                modifier =
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = 106.dp),
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
-                val topSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        SectionTitleCell(
-                            stringResource(R.string.Send_Confirmation_YouSend),
-                            coin.name,
-                            R.drawable.ic_arrow_up_right_12
-                        )
-                    }
-                    add {
-                        val coinAmount = App.numberFormatter.formatCoinFull(
-                            amount,
-                            coin.code,
-                            coinMaxAllowedDecimals
-                        )
-
-                        val currencyAmount = rate?.let { rate ->
-                            rate.copy(value = amount.times(rate.value))
-                                .getFormattedFull()
-                        }
-
-                        ConfirmAmountCell(currencyAmount, coinAmount, coin)
-                    }
-                    add {
-                        TransactionInfoAddressCell(
-                            title = stringResource(R.string.Send_Confirmation_To),
-                            value = address.hex,
-                            showAdd = contact == null,
-                            blockchainType = blockchainType,
-                            navController = navController,
-                            onCopy = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
-                            },
-                            onAddToExisting = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
-                            },
-                            onAddToNew = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
-                            }
-                        )
-                    }
-                    contact?.let {
+                val topSectionItems =
+                    buildList<@Composable () -> Unit> {
                         add {
-                            TransactionInfoContactCell(name = contact.name)
+                            SectionTitleCell(
+                                stringResource(R.string.Send_Confirmation_YouSend),
+                                coin.name,
+                                R.drawable.ic_arrow_up_right_12,
+                            )
+                        }
+                        add {
+                            val coinAmount =
+                                App.numberFormatter.formatCoinFull(
+                                    amount,
+                                    coin.code,
+                                    coinMaxAllowedDecimals,
+                                )
+
+                            val currencyAmount =
+                                rate?.let { rate ->
+                                    rate
+                                        .copy(value = amount.times(rate.value))
+                                        .getFormattedFull()
+                                }
+
+                            ConfirmAmountCell(currencyAmount, coinAmount, coin)
+                        }
+                        add {
+                            TransactionInfoAddressCell(
+                                title = stringResource(R.string.Send_Confirmation_To),
+                                value = address.hex,
+                                showAdd = contact == null,
+                                blockchainType = blockchainType,
+                                navController = navController,
+                                onCopy = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Copy(StatEntity.Address),
+                                    )
+                                },
+                                onAddToExisting = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                    )
+                                },
+                                onAddToNew = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactNew),
+                                    )
+                                },
+                            )
+                        }
+                        contact?.let {
+                            add {
+                                TransactionInfoContactCell(name = contact.name)
+                            }
                         }
                     }
-                }
 
                 CellUniversalLawrenceSection(topSectionItems)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRawWithViewState(
-                            title = stringResource(R.string.FeeInfo_TronFee_Title),
-                            info = stringResource(R.string.FeeInfo_TronFee_Description),
-                            coinCode = feeCoin.code,
-                            coinDecimal = feeCoinMaxAllowedDecimals,
-                            fee = fee,
-                            viewState = feeViewState,
-                            amountInputType = amountInputType,
-                            rate = feeCoinRate,
-                            navController = navController
-                        )
-                    }
-
-                    activationFee?.let {
+                val bottomSectionItems =
+                    buildList<@Composable () -> Unit> {
                         add {
-                            HSFeeRaw(
-                                title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
-                                info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
+                            HSFeeRawWithViewState(
+                                title = stringResource(R.string.FeeInfo_TronFee_Title),
+                                info = stringResource(R.string.FeeInfo_TronFee_Description),
                                 coinCode = feeCoin.code,
                                 coinDecimal = feeCoinMaxAllowedDecimals,
-                                fee = it,
+                                fee = fee,
+                                viewState = feeViewState,
                                 amountInputType = amountInputType,
                                 rate = feeCoinRate,
-                                navController = navController
+                                navController = navController,
                             )
                         }
-                    }
 
-                    resourcesConsumed?.let {
-                        add {
-                            ResourcesConsumed(
-                                title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
-                                value = it,
-                                info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
-                                navController = navController
-                            )
+                        activationFee?.let {
+                            add {
+                                HSFeeRaw(
+                                    title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
+                                    info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
+                                    coinCode = feeCoin.code,
+                                    coinDecimal = feeCoinMaxAllowedDecimals,
+                                    fee = it,
+                                    amountInputType = amountInputType,
+                                    rate = feeCoinRate,
+                                    navController = navController,
+                                )
+                            }
+                        }
+
+                        resourcesConsumed?.let {
+                            add {
+                                ResourcesConsumed(
+                                    title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
+                                    value = it,
+                                    info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
+                                    navController = navController,
+                                )
+                            }
+                        }
+
+                        if (!memo.isNullOrBlank()) {
+                            add {
+                                MemoCell(memo)
+                            }
                         }
                     }
-
-                    if (!memo.isNullOrBlank()) {
-                        add {
-                            MemoCell(memo)
-                        }
-                    }
-                }
 
                 CellUniversalLawrenceSection(bottomSectionItems)
 
@@ -262,18 +281,18 @@ fun SendTronConfirmationScreen(
             }
 
             SendButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                 sendResult = sendResult,
                 onClickSend = {
                     sendViewModel.onClickSend()
 
                     stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
                 },
-                enabled = sendEnabled
+                enabled = sendEnabled,
             )
         }
     }
@@ -284,39 +303,44 @@ private fun InactiveAddressWarningItem(navController: NavController) {
     val title = stringResource(R.string.Tron_AddressNotActive_Title)
     val info = stringResource(R.string.Tron_AddressNotActive_Info)
     RowUniversal(
-        modifier = Modifier
-            .clickable(
-                onClick = {
-                    navController.slideFromBottom(
-                        R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.Input(title, info)
-                    )
-                },
-                interactionSource = MutableInteractionSource(),
-                indication = null
-            )
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .clickable(
+                    onClick = {
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.Input(title, info),
+                        )
+                    },
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                ).padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         subhead2_jacob(text = stringResource(R.string.Tron_AddressNotActive_Warning))
 
         Image(
             modifier = Modifier.padding(horizontal = 8.dp),
             painter = painterResource(id = R.drawable.ic_info_20),
-            contentDescription = ""
+            contentDescription = "",
         )
     }
 }
 
 @Composable
-private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit, enabled: Boolean) {
+private fun SendButton(
+    modifier: Modifier,
+    sendResult: SendResult?,
+    onClickSend: () -> Unit,
+    enabled: Boolean,
+) {
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Sending),
                 onClick = { },
-                enabled = false
+                enabled = false,
             )
         }
 
@@ -325,7 +349,7 @@ private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend:
                 modifier = modifier,
                 title = stringResource(R.string.Send_Success),
                 onClick = { },
-                enabled = false
+                enabled = false,
             )
         }
 
@@ -334,7 +358,7 @@ private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend:
                 modifier = modifier,
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
                 onClick = onClickSend,
-                enabled = enabled
+                enabled = enabled,
             )
         }
     }
@@ -345,7 +369,7 @@ private fun ResourcesConsumed(
     title: String,
     value: String,
     info: String,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -356,13 +380,14 @@ private fun ResourcesConsumed(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(
-                    R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(title, info)
+                    R.id.feeSettingsInfoDialog,
+                    FeeSettingsInfoDialog.Input(title, info),
                 )
-            }
+            },
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_info_20),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -370,7 +395,7 @@ private fun ResourcesConsumed(
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
     }
 }
@@ -382,8 +407,9 @@ private fun Cautions(cautions: List<HSCaution>) {
     val modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         cautions.forEach { caution ->
 
@@ -393,7 +419,7 @@ private fun Cautions(cautions: List<HSCaution>) {
                         modifier = modifier,
                         text = caution.getString(),
                         title = stringResource(R.string.Error),
-                        icon = R.drawable.ic_attention_20
+                        icon = R.drawable.ic_attention_20,
                     )
                 }
 
@@ -402,7 +428,7 @@ private fun Cautions(cautions: List<HSCaution>) {
                         modifier = modifier,
                         text = caution.getString(),
                         title = stringResource(R.string.Alert_TitleWarning),
-                        icon = R.drawable.ic_attention_20
+                        icon = R.drawable.ic_attention_20,
                     )
                 }
             }

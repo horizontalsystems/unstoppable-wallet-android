@@ -10,6 +10,6 @@ interface ISwapSetting {
     fun GetContent(
         navController: NavController,
         onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
+        onValueChange: (Any?) -> Unit,
     )
 }

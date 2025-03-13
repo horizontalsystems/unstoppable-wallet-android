@@ -32,11 +32,13 @@ class SwapSettingsFragment : BaseComposeFragment() {
 @Composable
 private fun SwapProviderSettingsScreen(navController: NavController) {
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
-    val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry!!,
-    )
+    val swapViewModel =
+        viewModel<SwapViewModel>(
+            viewModelStoreOwner = previousBackStackEntry!!,
+        )
 
-    val viewModel = viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory(swapViewModel.getSettings()))
+    val viewModel =
+        viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory(swapViewModel.getSettings()))
 
     val uiState = viewModel.uiState
 
@@ -52,15 +54,16 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
                     title = stringResource(id = R.string.SwapSettings_Apply),
                     enabled = uiState.applyEnabled,
                     onClick = {
                         swapViewModel.onUpdateSettings(viewModel.getSettings())
                         navController.popBackStack()
-                    }
+                    },
                 )
             }
         },
@@ -84,7 +87,7 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                         },
                         onValueChange = {
                             viewModel.onSettingEnter(settingId, it)
-                        }
+                        },
                     )
                 }
             }

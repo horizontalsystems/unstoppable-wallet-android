@@ -38,7 +38,7 @@ class SendZCashViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val address: Address,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
 ) : ViewModelUiState<SendZCashUiState>() {
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -76,16 +76,17 @@ class SendZCashViewModel(
         }
     }
 
-    override fun createState() = SendZCashUiState(
-        fee = fee,
-        availableBalance = amountState.availableBalance,
-        addressError = addressState.addressError,
-        amountCaution = amountState.amountCaution,
-        memoIsAllowed = memoState.memoIsAllowed,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        address = address
-    )
+    override fun createState() =
+        SendZCashUiState(
+            fee = fee,
+            availableBalance = amountState.availableBalance,
+            addressError = addressState.addressError,
+            amountCaution = amountState.amountCaution,
+            memoIsAllowed = memoState.memoIsAllowed,
+            canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput,
+            address = address,
+        )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -123,10 +124,12 @@ class SendZCashViewModel(
 
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.address!!
-        val contact = contactsRepo.getContactsFiltered(
-            blockchainType,
-            addressQuery = address.hex
-        ).firstOrNull()
+        val contact =
+            contactsRepo
+                .getContactsFiltered(
+                    blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee,
@@ -134,7 +137,7 @@ class SendZCashViewModel(
             contact = contact,
             coin = wallet.coin,
             feeCoin = wallet.coin,
-            memo = memoState.memo
+            memo = memoState.memo,
         )
     }
 
@@ -144,35 +147,38 @@ class SendZCashViewModel(
         }
     }
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
-        val logger = logger.getScopedUnique()
-        logger.info("click")
+    private suspend fun send() =
+        withContext(Dispatchers.IO) {
+            val logger = logger.getScopedUnique()
+            logger.info("click")
 
-        try {
-            sendResult = SendResult.Sending
+            try {
+                sendResult = SendResult.Sending
 
-            val send = adapter.send(
-                amountState.amount!!,
-                addressState.address!!.hex,
-                memoState.memo,
-                logger
-            )
+                val send =
+                    adapter.send(
+                        amountState.amount!!,
+                        addressState.address!!.hex,
+                        memoState.memo,
+                        logger,
+                    )
 
-            logger.info("success")
-            sendResult = SendResult.Sent()
+                logger.info("success")
+                sendResult = SendResult.Sent()
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Zcash)
-        } catch (e: Throwable) {
-            logger.warning("failed", e)
-            sendResult = SendResult.Failed(createCaution(e))
+                recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Zcash)
+            } catch (e: Throwable) {
+                logger.warning("failed", e)
+                sendResult = SendResult.Failed(createCaution(e))
+            }
         }
-    }
 
-    private fun createCaution(error: Throwable) = when (error) {
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
-    }
+    private fun createCaution(error: Throwable) =
+        when (error) {
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        }
 }
 
 data class SendZCashUiState(

@@ -30,7 +30,7 @@ fun AddressFormatSelectScreen(
     addressFormatItems: List<AddressFormatItem>,
     description: String,
     onSelect: (Wallet) -> Unit,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -40,17 +40,18 @@ fun AddressFormatSelectScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 },
-                menuItems = listOf()
+                menuItems = listOf(),
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             InfoText(
-                text = stringResource(R.string.Balance_Receive_AddressFormatDescription)
+                text = stringResource(R.string.Balance_Receive_AddressFormatDescription),
             )
             VSpacer(20.dp)
             CellUniversalLawrenceSection(addressFormatItems) { item ->
@@ -60,14 +61,14 @@ fun AddressFormatSelectScreen(
                         subtitle = item.subtitle,
                         onClick = {
                             onSelect.invoke(item.wallet)
-                        }
+                        },
                     )
                 }
             }
             VSpacer(32.dp)
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = description
+                text = description,
             )
         }
     }
@@ -77,15 +78,16 @@ fun AddressFormatSelectScreen(
 fun AddressFormatCell(
     title: String,
     subtitle: String,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp),
         ) {
             body_leah(text = title)
             subhead2_grey(text = subtitle)
@@ -94,9 +96,13 @@ fun AddressFormatCell(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }
 
-data class AddressFormatItem(val title: String, val subtitle: String, val wallet: Wallet)
+data class AddressFormatItem(
+    val title: String,
+    val subtitle: String,
+    val wallet: Wallet,
+)

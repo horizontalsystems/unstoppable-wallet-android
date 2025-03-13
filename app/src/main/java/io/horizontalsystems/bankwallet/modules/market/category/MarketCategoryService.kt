@@ -32,7 +32,8 @@ class MarketCategoryService(
 
     private var marketItems: List<MarketItem> = listOf()
 
-    val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> = BehaviorSubject.create()
+    val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
+        BehaviorSubject.create()
 
     var topMarket: TopMarket = topMarket
         private set
@@ -42,10 +43,12 @@ class MarketCategoryService(
         private set
 
     val coinCategoryName: String get() = coinCategory.name
-    val coinCategoryDescription: String get() = coinCategory.description[languageManager.currentLocaleTag]
-        ?: coinCategory.description["en"]
-        ?: coinCategory.description.keys.firstOrNull()
-        ?: ""
+    val coinCategoryDescription: String
+        get() =
+            coinCategory.description[languageManager.currentLocaleTag]
+                ?: coinCategory.description["en"]
+                ?: coinCategory.description.keys.firstOrNull()
+                ?: ""
     val coinCategoryImageUrl: String get() = coinCategory.imageUrl
 
     fun setSortingField(sortingField: SortingField) {
@@ -55,28 +58,30 @@ class MarketCategoryService(
 
     private fun sync(forceRefresh: Boolean) {
         syncJob?.cancel()
-        syncJob = coroutineScope.launch {
-            try {
-                marketItems = marketCategoryRepository
-                    .get(
-                        coinCategory.uid,
-                        topMarket.value,
-                        sortingField,
-                        topMarket.value,
-                        currencyManager.baseCurrency,
-                        forceRefresh
-                    )
-                    .await()
-                syncItems()
-            } catch (e: Throwable) {
-                stateObservable.onNext(DataState.Error(e))
+        syncJob =
+            coroutineScope.launch {
+                try {
+                    marketItems =
+                        marketCategoryRepository
+                            .get(
+                                coinCategory.uid,
+                                topMarket.value,
+                                sortingField,
+                                topMarket.value,
+                                currencyManager.baseCurrency,
+                                forceRefresh,
+                            ).await()
+                    syncItems()
+                } catch (e: Throwable) {
+                    stateObservable.onNext(DataState.Error(e))
+                }
             }
-        }
     }
 
     private fun syncItems() {
         val favorites = favoritesManager.getAll().map { it.coinUid }
-        val items = marketItems.map { MarketItemWrapper(it, favorites.contains(it.fullCoin.coin.uid)) }
+        val items =
+            marketItems.map { MarketItemWrapper(it, favorites.contains(it.fullCoin.coin.uid)) }
         stateObservable.onNext(DataState.Success(items))
     }
 

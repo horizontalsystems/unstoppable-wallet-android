@@ -14,16 +14,16 @@ import io.reactivex.Single
 
 object MarketFiltersModule {
     class Factory : ViewModelProvider.Factory {
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MarketFiltersService(App.marketKit, App.currencyManager.baseCurrency)
             return MarketFiltersViewModel(service) as T
         }
-
     }
 
-    enum class FilterDropdown(val titleResId: Int){
+    enum class FilterDropdown(
+        val titleResId: Int,
+    ) {
         CoinSet(R.string.Market_Filter_ChooseSet),
         MarketCap(R.string.Market_Filter_MarketCap),
         TradingVolume(R.string.Market_Filter_Volume),
@@ -33,19 +33,25 @@ object MarketFiltersModule {
         PriceCloseTo(R.string.Market_Filter_PriceCloseTo),
     }
 
-    data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)
+    data class BlockchainViewItem(
+        val blockchain: Blockchain,
+        val checked: Boolean,
+    )
 }
 
-enum class FilterTradingSignal(@StringRes val titleResId: Int) {
+enum class FilterTradingSignal(
+    @StringRes val titleResId: Int,
+) {
     StrongBuy(R.string.Market_Filter_StrongBuy),
     Buy(R.string.Market_Filter_Buy),
     Neutral(R.string.Market_Filter_Neutral),
     Sell(R.string.Market_Filter_Sell),
     StrongSell(R.string.Market_Filter_StrongSell),
-    CriticalTrade(R.string.Market_Filter_RiskToTrade);
+    CriticalTrade(R.string.Market_Filter_RiskToTrade),
+    ;
 
-    fun getAdvices(): List<Advice> {
-        return when (this) {
+    fun getAdvices(): List<Advice> =
+        when (this) {
             StrongSell -> listOf(Advice.StrongSell)
             Sell -> listOf(Advice.Sell)
             Neutral -> listOf(Advice.Neutral)
@@ -53,13 +59,12 @@ enum class FilterTradingSignal(@StringRes val titleResId: Int) {
             StrongBuy -> listOf(Advice.StrongBuy)
             CriticalTrade -> listOf(Advice.Overbought, Advice.Oversold)
         }
-    }
 }
 
 enum class CoinList(
     val itemsCount: Int,
     @StringRes val titleResId: Int,
-    @StringRes val descriptionResId: Int
+    @StringRes val descriptionResId: Int,
 ) {
     Top100(100, R.string.Market_Filter_Top_100, R.string.Market_Filter_Top_100_Description),
     Top200(200, R.string.Market_Filter_Top_200, R.string.Market_Filter_Top_200_Description),
@@ -71,7 +76,10 @@ enum class CoinList(
     Top2500(2500, R.string.Market_Filter_Top_2500, R.string.Market_Filter_Top_2500_Description),
 }
 
-enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>) {
+enum class Range(
+    @StringRes val titleResId: Int,
+    val values: Pair<Long?, Long?>,
+) {
     Range_0_5M(R.string.Market_Filter_Range_0_5M, Pair(null, 5_000_000)),
     Range_5M_20M(R.string.Market_Filter_Range_5M_20M, Pair(5_000_000, 20_000_000)),
     Range_20M_100M(R.string.Market_Filter_Range_20M_100M, Pair(20_000_000, 100_000_000)),
@@ -97,82 +105,100 @@ enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>)
     Range_500M_2B(R.string.Market_Filter_Range_500M_2B, Pair(500_000_000, 2_000_000_000)),
     Range_10B_100B(R.string.Market_Filter_Range_10B_100B, Pair(10_000_000_000, 100_000_000_000)),
     Range_100B_500B(R.string.Market_Filter_Range_100B_500B, Pair(100_000_000_000, 500_000_000_000)),
-    Range_500B_More(R.string.Market_Filter_Range_500B_More, Pair(500_000_000_000, null));
+    Range_500B_More(R.string.Market_Filter_Range_500B_More, Pair(500_000_000_000, null)),
+    ;
 
     companion object {
-        fun valuesByCurrency(currencyCode: String) = when (currencyCode) {
-            "USD",
-            "EUR",
-            "GBP",
-            "AUD",
-            "CAD",
-            "CHF",
-            "SGD",
-            -> listOf(
-                Range_0_5M,
-                Range_5M_20M,
-                Range_20M_100M,
-                Range_100M_1B,
-                Range_1B_5B,
-                Range_5B_More,
-            )
-            "JPY",
-            -> listOf(
-                Range_0_500M,
-                Range_500M_2B,
-                Range_2B_10B,
-                Range_10B_100B,
-                Range_100B_500B,
-                Range_500B_More,
-            )
-            "BRL",
-            "CNY",
-            "HKD",
-            -> listOf(
-                Range_0_50M,
-                Range_50M_200M,
-                Range_200M_1B,
-                Range_1B_10B,
-                Range_10B_50B,
-                Range_50B_More,
-            )
-            "ILS",
-            -> listOf(
-                Range_0_10M,
-                Range_10M_40M,
-                Range_40M_200M,
-                Range_200M_2B,
-                Range_2B_10B,
-                Range_10B_More,
-            )
-            "RUB",
-            -> listOf(
-                Range_0_500M,
-                Range_500M_2B,
-                Range_2B_10B,
-                Range_10B_100B,
-                Range_100B_500B,
-                Range_500B_More,
-            )
-            else -> listOf()
-        }
+        fun valuesByCurrency(currencyCode: String) =
+            when (currencyCode) {
+                "USD",
+                "EUR",
+                "GBP",
+                "AUD",
+                "CAD",
+                "CHF",
+                "SGD",
+                ->
+                    listOf(
+                        Range_0_5M,
+                        Range_5M_20M,
+                        Range_20M_100M,
+                        Range_100M_1B,
+                        Range_1B_5B,
+                        Range_5B_More,
+                    )
+
+                "JPY",
+                ->
+                    listOf(
+                        Range_0_500M,
+                        Range_500M_2B,
+                        Range_2B_10B,
+                        Range_10B_100B,
+                        Range_100B_500B,
+                        Range_500B_More,
+                    )
+
+                "BRL",
+                "CNY",
+                "HKD",
+                ->
+                    listOf(
+                        Range_0_50M,
+                        Range_50M_200M,
+                        Range_200M_1B,
+                        Range_1B_10B,
+                        Range_10B_50B,
+                        Range_50B_More,
+                    )
+
+                "ILS",
+                ->
+                    listOf(
+                        Range_0_10M,
+                        Range_10M_40M,
+                        Range_40M_200M,
+                        Range_200M_2B,
+                        Range_2B_10B,
+                        Range_10B_More,
+                    )
+
+                "RUB",
+                ->
+                    listOf(
+                        Range_0_500M,
+                        Range_500M_2B,
+                        Range_2B_10B,
+                        Range_10B_100B,
+                        Range_100B_500B,
+                        Range_500B_More,
+                    )
+
+                else -> listOf()
+            }
     }
 }
 
-enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
+enum class TimePeriod(
+    @StringRes val titleResId: Int,
+) : WithTranslatableTitle {
     TimePeriod_1D(R.string.Market_Filter_TimePeriod_1D),
     TimePeriod_1W(R.string.Market_Filter_TimePeriod_1W),
     TimePeriod_2W(R.string.Market_Filter_TimePeriod_2W),
     TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M),
     TimePeriod_3M(R.string.Market_Filter_TimePeriod_3M),
     TimePeriod_6M(R.string.Market_Filter_TimePeriod_6M),
-    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y);
+    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y),
+    ;
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)
 }
 
-enum class PriceCloseTo(val titleResId: Int, val descriptionResId: Int) {
+enum class PriceCloseTo(
+    val titleResId: Int,
+    val descriptionResId: Int,
+) {
     Ath(R.string.Market_Filter_ATH, R.string.Market_Filter_ATH_Description),
     Atl(R.string.Market_Filter_ATL, R.string.Market_Filter_ATL_Description),
 }
@@ -180,61 +206,71 @@ enum class PriceCloseTo(val titleResId: Int, val descriptionResId: Int) {
 enum class PriceChange(
     @StringRes val titleResId: Int,
     val color: TextColor,
-    val values: Pair<Long?, Long?>
+    val values: Pair<Long?, Long?>,
 ) {
     Positive_10_plus(
         R.string.Market_Filter_PriceChange_Positive_10_plus,
         TextColor.Remus,
-        Pair(10, null)
+        Pair(10, null),
     ),
     Positive_25_plus(
         R.string.Market_Filter_PriceChange_Positive_25_plus,
         TextColor.Remus,
-        Pair(25, null)
+        Pair(25, null),
     ),
     Positive_50_plus(
         R.string.Market_Filter_PriceChange_Positive_50_plus,
         TextColor.Remus,
-        Pair(50, null)
+        Pair(50, null),
     ),
     Positive_100_plus(
         R.string.Market_Filter_PriceChange_Positive_100_plus,
         TextColor.Remus,
-        Pair(100, null)
+        Pair(100, null),
     ),
     Negative_10_minus(
         R.string.Market_Filter_PriceChange_Negative_10_minus,
         TextColor.Lucian,
-        Pair(null, -10)
+        Pair(null, -10),
     ),
     Negative_25_minus(
         R.string.Market_Filter_PriceChange_Negative_25_minus,
         TextColor.Lucian,
-        Pair(null, -25)
+        Pair(null, -25),
     ),
     Negative_50_minus(
         R.string.Market_Filter_PriceChange_Negative_50_minus,
         TextColor.Lucian,
-        Pair(null, -50)
+        Pair(null, -50),
     ),
     Negative_75_minus(
         R.string.Market_Filter_PriceChange_Negative_75_minus,
         TextColor.Lucian,
-        Pair(null, -75)
+        Pair(null, -75),
     ),
 }
 
-enum class TextColor{
-    Remus, Lucian, Grey, Leah
+enum class TextColor {
+    Remus,
+    Lucian,
+    Grey,
+    Leah,
 }
 
-data class SectorItem(val id: Int, val title: String)
+data class SectorItem(
+    val id: Int,
+    val title: String,
+)
 
-class FilterViewItemWrapper<T>(val title: String?, val item: T) {
-    override fun equals(other: Any?) = when {
-        other !is FilterViewItemWrapper<*> -> false
-        else -> item == other.item
-    }
+class FilterViewItemWrapper<T>(
+    val title: String?,
+    val item: T,
+) {
+    override fun equals(other: Any?) =
+        when {
+            other !is FilterViewItemWrapper<*> -> false
+            else -> item == other.item
+        }
 
     override fun hashCode(): Int {
         var result = title.hashCode()
@@ -243,9 +279,7 @@ class FilterViewItemWrapper<T>(val title: String?, val item: T) {
     }
 
     companion object {
-        fun <T>getAny(): FilterViewItemWrapper<T?> {
-            return FilterViewItemWrapper(null, null)
-        }
+        fun <T> getAny(): FilterViewItemWrapper<T?> = FilterViewItemWrapper(null, null)
     }
 }
 

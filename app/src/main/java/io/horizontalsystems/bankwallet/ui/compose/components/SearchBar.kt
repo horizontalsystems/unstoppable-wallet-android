@@ -49,21 +49,21 @@ fun SearchBar(
     onClose: () -> Unit,
     onSearchTextChanged: (String) -> Unit = {},
 ) {
-
     var searchMode by remember { mutableStateOf(searchModeInitial) }
     var showClearButton by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     var searchText by remember { mutableStateOf("") }
 
     TopAppBar(
-        modifier = Modifier
-            .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-            .height(64.dp),
+        modifier =
+            Modifier
+                .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+                .height(64.dp),
         title = {
             title3_leah(
                 text = if (searchMode) "" else title,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -81,17 +81,18 @@ fun SearchBar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = stringResource(R.string.Button_Back),
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.jacob,
                 )
             }
         },
         actions = {
             if (searchMode) {
                 OutlinedTextField(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 2.dp)
-                        .focusRequester(focusRequester),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(vertical = 2.dp)
+                            .focusRequester(focusRequester),
                     value = searchText,
                     onValueChange = {
                         searchText = it
@@ -102,28 +103,30 @@ fun SearchBar(
                         body_grey50(
                             text = searchHintText,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                     },
                     textStyle = ComposeAppTheme.typography.body,
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = ComposeAppTheme.colors.jacob,
-                        textColor = ComposeAppTheme.colors.leah
-                    ),
+                    colors =
+                        TextFieldDefaults.textFieldColors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            backgroundColor = Color.Transparent,
+                            cursorColor = ComposeAppTheme.colors.jacob,
+                            textColor = ComposeAppTheme.colors.leah,
+                        ),
                     maxLines = 1,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        keyboardController?.hide()
-                    }),
+                    keyboardActions =
+                        KeyboardActions(onDone = {
+                            keyboardController?.hide()
+                        }),
                     trailingIcon = {
                         AnimatedVisibility(
                             visible = showClearButton,
                             enter = fadeIn(),
-                            exit = fadeOut()
+                            exit = fadeOut(),
                         ) {
                             HsIconButton(onClick = {
                                 searchText = ""
@@ -133,10 +136,9 @@ fun SearchBar(
                                 Icon(
                                     painter = painterResource(R.drawable.ic_close),
                                     contentDescription = stringResource(R.string.Button_Cancel),
-                                    tint = ComposeAppTheme.colors.jacob
+                                    tint = ComposeAppTheme.colors.jacob,
                                 )
                             }
-
                         }
                     },
                 )
@@ -160,23 +162,24 @@ fun SearchBar(
                             onClick = menuItem.onClick,
                             description = menuItem.title.getString(),
                             enabled = menuItem.enabled,
-                            tint = menuItem.tint
+                            tint = menuItem.tint,
                         )
                     } else {
                         Text(
-                            modifier = Modifier
-                                .padding(end = 16.dp)
-                                .clickable(
-                                    enabled = menuItem.enabled,
-                                    onClick = menuItem.onClick
-                                ),
+                            modifier =
+                                Modifier
+                                    .padding(end = 16.dp)
+                                    .clickable(
+                                        enabled = menuItem.enabled,
+                                        onClick = menuItem.onClick,
+                                    ),
                             text = menuItem.title.getString(),
                             style = ComposeAppTheme.typography.headline2,
-                            color = if (menuItem.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.yellow50
+                            color = if (menuItem.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.yellow50,
                         )
                     }
                 }
             }
-        })
-
+        },
+    )
 }

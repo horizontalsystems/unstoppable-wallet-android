@@ -45,7 +45,7 @@ class SendTronViewModel(
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
     private val address: Address,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
 ) : ViewModelUiState<SendUiState>() {
     val logger: AppLogger = AppLogger("send-tron")
 
@@ -94,17 +94,18 @@ class SendTronViewModel(
         }
     }
 
-    override fun createState() = SendUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        proceedEnabled = amountState.canBeSend && addressState.canBeSend,
-        sendEnabled = feeState is FeeState.Success && cautions.isEmpty(),
-        feeViewState = feeState.viewState,
-        cautions = cautions,
-        showAddressInput = showAddressInput,
-        address = address
-    )
+    override fun createState() =
+        SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            proceedEnabled = amountState.canBeSend && addressState.canBeSend,
+            sendEnabled = feeState is FeeState.Success && cautions.isEmpty(),
+            feeViewState = feeState.viewState,
+            cautions = cautions,
+            showAddressInput = showAddressInput,
+            address = address,
+        )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -118,22 +119,25 @@ class SendTronViewModel(
 
     fun onNavigateToConfirmation() {
         val address = addressState.address!!
-        val contact = contactsRepo.getContactsFiltered(
-            blockchainType = blockchainType,
-            addressQuery = address.hex
-        ).firstOrNull()
+        val contact =
+            contactsRepo
+                .getContactsFiltered(
+                    blockchainType = blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
 
-        confirmationData = SendTronConfirmationData(
-            amount = amountState.amount!!,
-            fee = null,
-            activationFee = null,
-            resourcesConsumed = null,
-            address = address,
-            contact = contact,
-            coin = wallet.coin,
-            feeCoin = feeToken.coin,
-            isInactiveAddress = addressState.isInactiveAddress
-        )
+        confirmationData =
+            SendTronConfirmationData(
+                amount = amountState.amount!!,
+                fee = null,
+                activationFee = null,
+                resourcesConsumed = null,
+                address = address,
+                contact = contact,
+                coin = wallet.coin,
+                feeCoin = feeToken.coin,
+                isInactiveAddress = addressState.isInactiveAddress,
+            )
 
         viewModelScope.launch {
             estimateFee()
@@ -147,31 +151,32 @@ class SendTronViewModel(
         val totalFee = confirmationData.fee ?: return
         val availableBalance = adapter.trxBalanceData.available
 
-        cautions = if (trxAmount + totalFee > availableBalance) {
-            listOf(
-                HSCaution(
-                    TranslatableString.PlainString(
-                        Translator.getString(
-                            R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                            feeToken.coin.code
-                        )
-                    )
+        cautions =
+            if (trxAmount + totalFee > availableBalance) {
+                listOf(
+                    HSCaution(
+                        TranslatableString.PlainString(
+                            Translator.getString(
+                                R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
+                                feeToken.coin.code,
+                            ),
+                        ),
+                    ),
                 )
-            )
-        } else if (sendToken == feeToken && confirmationData.amount <= BigDecimal.ZERO) {
-            listOf(
-                HSCaution(
-                    TranslatableString.PlainString(
-                        Translator.getString(
-                            R.string.Tron_ZeroAmountTrxNotAllowed,
-                            sendToken.coin.code
-                        )
-                    )
+            } else if (sendToken == feeToken && confirmationData.amount <= BigDecimal.ZERO) {
+                listOf(
+                    HSCaution(
+                        TranslatableString.PlainString(
+                            Translator.getString(
+                                R.string.Tron_ZeroAmountTrxNotAllowed,
+                                sendToken.coin.code,
+                            ),
+                        ),
+                    ),
                 )
-            )
-        } else {
-            listOf()
-        }
+            } else {
+                listOf()
+            }
         emitState()
     }
 
@@ -191,7 +196,8 @@ class SendTronViewModel(
             fees.forEach { fee ->
                 when (fee) {
                     is Fee.AccountActivation -> {
-                        activationFee = fee.feeInSuns.toBigDecimal().movePointLeft(feeToken.decimals)
+                        activationFee =
+                            fee.feeInSuns.toBigDecimal().movePointLeft(feeToken.decimals)
                     }
 
                     is Fee.Bandwidth -> {
@@ -199,17 +205,19 @@ class SendTronViewModel(
                     }
 
                     is Fee.Energy -> {
-                        val formattedEnergy = App.numberFormatter.formatNumberShort(fee.required.toBigDecimal(), 0)
+                        val formattedEnergy =
+                            App.numberFormatter.formatNumberShort(fee.required.toBigDecimal(), 0)
                         energy = "$formattedEnergy Energy"
                     }
                 }
             }
 
-            val resourcesConsumed = if (bandwidth != null) {
-                bandwidth + (energy?.let { " \n + $it" } ?: "")
-            } else {
-                energy
-            }
+            val resourcesConsumed =
+                if (bandwidth != null) {
+                    bandwidth + (energy?.let { " \n + $it" } ?: "")
+                } else {
+                    energy
+                }
 
             feeState = FeeState.Success(fees)
             emitState()
@@ -219,12 +227,13 @@ class SendTronViewModel(
             val isMaxAmount = amountState.availableBalance == amountState.amount!!
             val adjustedAmount = if (sendToken == feeToken && isMaxAmount) amount - fee else amount
 
-            confirmationData = confirmationData?.copy(
-                amount = adjustedAmount,
-                fee = fee,
-                activationFee = activationFee,
-                resourcesConsumed = resourcesConsumed
-            )
+            confirmationData =
+                confirmationData?.copy(
+                    amount = adjustedAmount,
+                    fee = fee,
+                    activationFee = activationFee,
+                    resourcesConsumed = resourcesConsumed,
+                )
         } catch (error: Throwable) {
             logger.warning("estimate error", error)
 
@@ -232,7 +241,8 @@ class SendTronViewModel(
             feeState = FeeState.Error(error)
             emitState()
 
-            confirmationData = confirmationData?.copy(fee = null, activationFee = null, resourcesConsumed = null)
+            confirmationData =
+                confirmationData?.copy(fee = null, activationFee = null, resourcesConsumed = null)
         }
     }
 
@@ -244,34 +254,34 @@ class SendTronViewModel(
         }
     }
 
-    fun hasConnection(): Boolean {
-        return connectivityManager.isConnected
-    }
+    fun hasConnection(): Boolean = connectivityManager.isConnected
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
-        try {
-            val confirmationData = confirmationData ?: return@withContext
-            sendResult = SendResult.Sending
-            logger.info("sending tx")
+    private suspend fun send() =
+        withContext(Dispatchers.IO) {
+            try {
+                val confirmationData = confirmationData ?: return@withContext
+                sendResult = SendResult.Sending
+                logger.info("sending tx")
 
-            val amount = confirmationData.amount
-            adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
+                val amount = confirmationData.amount
+                adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
-            sendResult = SendResult.Sent()
-            logger.info("success")
+                sendResult = SendResult.Sent()
+                logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)
-        } catch (e: Throwable) {
-            sendResult = SendResult.Failed(createCaution(e))
-            logger.warning("failed", e)
+                recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)
+            } catch (e: Throwable) {
+                sendResult = SendResult.Failed(createCaution(e))
+                logger.warning("failed", e)
+            }
         }
-    }
 
-    private fun createCaution(error: Throwable) = when (error) {
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
-    }
+    private fun createCaution(error: Throwable) =
+        when (error) {
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        }
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
@@ -288,22 +298,30 @@ class SendTronViewModel(
 
 sealed class FeeState {
     object Loading : FeeState()
-    data class Success(val fees: List<Fee>) : FeeState()
-    data class Error(val error: Throwable) : FeeState()
+
+    data class Success(
+        val fees: List<Fee>,
+    ) : FeeState()
+
+    data class Error(
+        val error: Throwable,
+    ) : FeeState()
 
     val viewState: ViewState
-        get() = when (this) {
-            is Error -> ViewState.Error(error)
-            Loading -> ViewState.Loading
-            is Success -> ViewState.Success
-        }
+        get() =
+            when (this) {
+                is Error -> ViewState.Error(error)
+                Loading -> ViewState.Loading
+                is Success -> ViewState.Success
+            }
 
     val feeLimit: Long?
-        get() = when (this) {
-            is Error -> null
-            Loading -> null
-            is Success -> {
-                (fees.find { it is Fee.Energy } as? Fee.Energy)?.feeInSuns
+        get() =
+            when (this) {
+                is Error -> null
+                Loading -> null
+                is Success -> {
+                    (fees.find { it is Fee.Energy } as? Fee.Energy)?.feeInSuns
+                }
             }
-        }
 }

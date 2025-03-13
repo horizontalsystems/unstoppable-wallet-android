@@ -19,8 +19,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 @Composable
 fun QuoteInfoRow(
     borderTop: Boolean = false,
-    title: @Composable() (RowScope.() -> Unit),
-    value: @Composable() (RowScope.() -> Unit),
+    title:
+        @Composable()
+        (RowScope.() -> Unit),
+    value:
+        @Composable()
+        (RowScope.() -> Unit),
 ) {
     CellUniversal(borderTop = borderTop) {
         title.invoke(this)
@@ -42,9 +46,9 @@ fun QuoteInfoRowPreview() {
             value = {
                 subhead2_leah(
                     text = "0x7A04536a50d12952f69E071e4c92693939db86b5",
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
                 )
-            }
+            },
         )
     }
 }

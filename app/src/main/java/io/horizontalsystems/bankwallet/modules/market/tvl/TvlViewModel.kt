@@ -24,7 +24,6 @@ class TvlViewModel(
     private val service: TvlService,
     private val tvlViewItemFactory: TvlViewItemFactory,
 ) : ViewModel() {
-
     private var tvlDiffType: TvlDiffType = TvlDiffType.Percent
         set(value) {
             field = value
@@ -38,11 +37,12 @@ class TvlViewModel(
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val chainSelectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
-    var header = MarketModule.Header(
-        title = Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
-        description = Translator.getString(R.string.MarketGlobalMetrics_TvlInDefiDescription),
-        icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/tvl@3x.png")
-    )
+    var header =
+        MarketModule.Header(
+            title = Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
+            description = Translator.getString(R.string.MarketGlobalMetrics_TvlInDefiDescription),
+            icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/tvl@3x.png"),
+        )
 
     init {
         viewModelScope.launch {
@@ -63,7 +63,12 @@ class TvlViewModel(
 
     private fun syncTvlItems(tvlItems: List<TvlModule.MarketTvlItem>) {
         tvlLiveData.postValue(
-            tvlViewItemFactory.tvlData(service.chain, service.chains, service.sortDescending, tvlItems)
+            tvlViewItemFactory.tvlData(
+                service.chain,
+                service.chains,
+                service.sortDescending,
+                tvlItems,
+            ),
         )
     }
 
@@ -90,14 +95,18 @@ class TvlViewModel(
     }
 
     fun onToggleTvlDiffType() {
-        tvlDiffType = if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
+        tvlDiffType =
+            if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
 
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField(tvlDiffType.statType))
+        stat(
+            page = StatPage.GlobalMetricsTvlInDefi,
+            event = StatEvent.ToggleTvlField(tvlDiffType.statType),
+        )
     }
 
     fun onClickChainSelector() {
         chainSelectorDialogStateLiveData.postValue(
-            SelectorDialogState.Opened(Select(service.chain, service.chains))
+            SelectorDialogState.Opened(Select(service.chain, service.chains)),
         )
     }
 

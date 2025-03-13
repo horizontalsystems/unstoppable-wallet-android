@@ -39,9 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MarketFavoritesScreen(
-    navController: NavController
-) {
+fun MarketFavoritesScreen(navController: NavController) {
     val viewModel = viewModel<MarketFavoritesViewModel>(factory = MarketFavoritesModule.Factory())
     val uiState = viewModel.uiState
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
@@ -55,12 +53,16 @@ fun MarketFavoritesScreen(
         onRefresh = {
             viewModel.refresh()
 
-            stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.Refresh)
-        }
+            stat(
+                page = StatPage.Markets,
+                section = StatSection.Watchlist,
+                event = StatEvent.Refresh,
+            )
+        },
     ) {
         Crossfade(
             targetState = uiState.viewState,
-            label = ""
+            label = "",
         ) { viewState ->
             when (viewState) {
                 ViewState.Loading -> {
@@ -75,7 +77,7 @@ fun MarketFavoritesScreen(
                     if (uiState.viewItems.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.Market_Tab_Watchlist_EmptyList),
-                            icon = R.drawable.ic_heart_24
+                            icon = R.drawable.ic_heart_24,
                         )
                     } else {
                         CoinListOrderable(
@@ -85,13 +87,21 @@ fun MarketFavoritesScreen(
                             onRemoveFavorite = { uid ->
                                 viewModel.removeFromFavorites(uid)
 
-                                stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.RemoveFromWatchlist(uid))
+                                stat(
+                                    page = StatPage.Markets,
+                                    section = StatSection.Watchlist,
+                                    event = StatEvent.RemoveFromWatchlist(uid),
+                                )
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
 
-                                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.OpenCoin(coinUid))
+                                stat(
+                                    page = StatPage.Markets,
+                                    section = StatSection.Watchlist,
+                                    event = StatEvent.OpenCoin(coinUid),
+                                )
                             },
                             onReorder = { from, to ->
                                 viewModel.reorder(from, to)
@@ -111,7 +121,7 @@ fun MarketFavoritesScreen(
                                             uiState.sortingField.titleResId,
                                             onOptionClick = {
                                                 openSortingSelector = true
-                                            }
+                                            },
                                         )
                                         if (uiState.sortingField == WatchlistSorting.Manual) {
                                             HSpacer(width = 12.dp)
@@ -128,7 +138,7 @@ fun MarketFavoritesScreen(
                                             uiState.period.titleResId,
                                             onOptionClick = {
                                                 openPeriodSelector = true
-                                            }
+                                            },
                                         )
                                         HSpacer(width = 12.dp)
                                         SignalButton(
@@ -136,7 +146,7 @@ fun MarketFavoritesScreen(
                                             onToggle = {
                                                 if (it) {
                                                     navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                                        R.id.marketSignalsFragment
+                                                        R.id.marketSignalsFragment,
                                                     ) {
                                                         if (it.enabled) {
                                                             viewModel.showSignals()
@@ -145,11 +155,12 @@ fun MarketFavoritesScreen(
                                                 } else {
                                                     viewModel.hideSignals()
                                                 }
-                                            })
+                                            },
+                                        )
                                         HSpacer(width = 16.dp)
                                     }
                                 }
-                            }
+                            },
                         )
                         if (scrollToTopAfterUpdate) {
                             scrollToTopAfterUpdate = false
@@ -170,11 +181,15 @@ fun MarketFavoritesScreen(
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectSortingField(selected)
 
-                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.Markets,
+                    section = StatSection.Watchlist,
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                )
             },
             onDismiss = {
                 openSortingSelector = false
-            }
+            },
         )
     }
     if (openPeriodSelector) {
@@ -186,29 +201,35 @@ fun MarketFavoritesScreen(
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectPeriod(selected)
 
-                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.Markets,
+                    section = StatSection.Watchlist,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                )
             },
             onDismiss = {
                 openPeriodSelector = false
-            }
+            },
         )
     }
-
 }
 
 @Composable
-private fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
+private fun SignalButton(
+    turnedOn: Boolean,
+    onToggle: (Boolean) -> Unit,
+) {
     val title = stringResource(id = R.string.Market_Signals)
     val onClick = { onToggle.invoke(!turnedOn) }
     if (turnedOn) {
         ButtonSecondaryYellow(
             title = title,
-            onClick = onClick
+            onClick = onClick,
         )
     } else {
         ButtonSecondaryDefault(
             title = title,
-            onClick = onClick
+            onClick = onClick,
         )
     }
 }

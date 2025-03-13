@@ -18,9 +18,8 @@ class MarketViewModel(
     private val marketStorage: IMarketStorage,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
-    localStorage: ILocalStorage
+    localStorage: ILocalStorage,
 ) : ViewModelUiState<MarketModule.UiState>() {
-
     val tabs = Tab.entries.toTypedArray()
     private var currency = currencyManager.baseCurrency
 
@@ -45,11 +44,12 @@ class MarketViewModel(
         }
     }
 
-    override fun createState() = MarketModule.UiState(
-        selectedTab = selectedTab,
-        marketGlobal = marketGlobal,
-        currency = currency
-    )
+    override fun createState() =
+        MarketModule.UiState(
+            selectedTab = selectedTab,
+            marketGlobal = marketGlobal,
+            currency = currency,
+        )
 
     fun onSelect(tab: Tab) {
         selectedTab = tab
@@ -57,8 +57,9 @@ class MarketViewModel(
         emitState()
     }
 
-    private fun getInitialTab(launchPage: LaunchPage?) = when (launchPage) {
-        LaunchPage.Watchlist -> Tab.Watchlist
-        else -> marketStorage.currentMarketTab ?: Tab.Coins
-    }
+    private fun getInitialTab(launchPage: LaunchPage?) =
+        when (launchPage) {
+            LaunchPage.Watchlist -> Tab.Watchlist
+            else -> marketStorage.currentMarketTab ?: Tab.Coins
+        }
 }

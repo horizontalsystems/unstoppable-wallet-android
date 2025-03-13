@@ -47,10 +47,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 @Composable
-fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequestEntity) {
-    val viewModel = viewModel<TonConnectNewViewModel>(initializer = {
-        TonConnectNewViewModel(requestEntity)
-    })
+fun TonConnectNewScreen(
+    navController: NavController,
+    requestEntity: DAppRequestEntity,
+) {
+    val viewModel =
+        viewModel<TonConnectNewViewModel>(initializer = {
+            TonConnectNewViewModel(requestEntity)
+        })
 
     val context = LocalContext.current
     val uiState = viewModel.uiState
@@ -73,13 +77,14 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
         topBar = {
             AppBar(
                 title = stringResource(R.string.TonConnect_Title),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = { navController.popBackStack() },
+                        ),
+                    ),
             )
         },
         bottomBar = {
@@ -89,43 +94,46 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
                         onClick = viewModel::connect,
-                        enabled = uiState.connectEnabled
+                        enabled = uiState.connectEnabled,
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Cancel),
-                        onClick = viewModel::reject
+                        onClick = viewModel::reject,
                     )
                 }
             }
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Row(
-                modifier = Modifier.padding(
-                    top = 12.dp,
-                    start = 24.dp,
-                    end = 24.dp,
-                    bottom = 24.dp
-                ),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier.padding(
+                        top = 12.dp,
+                        start = 24.dp,
+                        end = 24.dp,
+                        bottom = 24.dp,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
-                    modifier = Modifier
-                        .size(72.dp)
-                        .clip(RoundedCornerShape(15.dp)),
-                    painter = rememberAsyncImagePainter(
-                        model = uiState.manifest?.iconUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_24)
-                    ),
+                    modifier =
+                        Modifier
+                            .size(72.dp)
+                            .clip(RoundedCornerShape(15.dp)),
+                    painter =
+                        rememberAsyncImagePainter(
+                            model = uiState.manifest?.iconUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_24),
+                        ),
                     contentDescription = null,
                 )
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
                     text = uiState.manifest?.name ?: "",
                     style = ComposeAppTheme.typography.headline1,
-                    color = ComposeAppTheme.colors.leah
+                    color = ComposeAppTheme.colors.leah,
                 )
             }
 
@@ -133,20 +141,20 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
             if (showSortTypeSelectorDialog) {
                 SelectorDialogCompose(
                     title = stringResource(R.string.TonConnect_ChooseWallet),
-                    items = uiState.accounts.map { account ->
-                        SelectorItem(
-                            title = account.name,
-                            selected = account == uiState.account,
-                            item = account,
-                        )
-                    },
+                    items =
+                        uiState.accounts.map { account ->
+                            SelectorItem(
+                                title = account.name,
+                                selected = account == uiState.account,
+                                item = account,
+                            )
+                        },
                     onDismissRequest = {
                         showSortTypeSelectorDialog = false
                     },
-                    onSelectItem = viewModel::onSelectAccount
+                    onSelectItem = viewModel::onSelectAccount,
                 )
             }
-
 
             CellUniversalLawrenceSection(
                 buildList<@Composable () -> Unit> {
@@ -157,14 +165,15 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                     add {
                         DropDownCell(
                             stringResource(R.string.TonConnect_Wallet),
-                            uiState.account?.name ?: stringResource(R.string.TonConnect_ChooseWallet),
+                            uiState.account?.name
+                                ?: stringResource(R.string.TonConnect_ChooseWallet),
                             enabled = true,
                             onSelect = {
                                 showSortTypeSelectorDialog = true
-                            }
+                            },
                         )
                     }
-                }
+                },
             )
 
             Spacer(Modifier.height(12.dp))
@@ -172,12 +181,14 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
             if (uiState.error != null) {
                 TextImportantError(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = uiState.error.message?.nullIfBlank() ?: uiState.error.javaClass.simpleName
+                    text =
+                        uiState.error.message?.nullIfBlank()
+                            ?: uiState.error.javaClass.simpleName,
                 )
             } else {
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.WalletConnect_Approve_Hint)
+                    text = stringResource(R.string.WalletConnect_Approve_Hint),
                 )
             }
 

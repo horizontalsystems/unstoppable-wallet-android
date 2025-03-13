@@ -11,9 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainSettingsViewModel(
-    private val service: BlockchainSettingsService
+    private val service: BlockchainSettingsService,
 ) : ViewModel() {
-
     var btcLikeChains by mutableStateOf<List<BlockchainSettingsModule.BlockchainViewItem>>(listOf())
         private set
 
@@ -37,37 +36,42 @@ class BlockchainSettingsViewModel(
 
     private fun sync(blockchainItems: List<BlockchainSettingsModule.BlockchainItem>) {
         viewModelScope.launch {
-            btcLikeChains = blockchainItems
-                .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Btc>()
-                .map { item ->
-                    BlockchainSettingsModule.BlockchainViewItem(
-                        title = item.blockchain.name,
-                        subtitle = Translator.getString(item.restoreMode.title),
-                        imageUrl = item.blockchain.type.imageUrl,
-                        blockchainItem = item
-                    )
-                }
-
-            otherChains = blockchainItems
-                .filterNot { it is BlockchainSettingsModule.BlockchainItem.Btc }
-                .mapNotNull { item ->
-                    when (item) {
-                        is BlockchainSettingsModule.BlockchainItem.Evm -> BlockchainSettingsModule.BlockchainViewItem(
+            btcLikeChains =
+                blockchainItems
+                    .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Btc>()
+                    .map { item ->
+                        BlockchainSettingsModule.BlockchainViewItem(
                             title = item.blockchain.name,
-                            subtitle = item.syncSource.name,
+                            subtitle = Translator.getString(item.restoreMode.title),
                             imageUrl = item.blockchain.type.imageUrl,
-                            blockchainItem = item
+                            blockchainItem = item,
                         )
-                        is BlockchainSettingsModule.BlockchainItem.Solana -> BlockchainSettingsModule.BlockchainViewItem(
-                            title = item.blockchain.name,
-                            subtitle = item.rpcSource.name,
-                            imageUrl = item.blockchain.type.imageUrl,
-                            blockchainItem = item
-                        )
-                        else -> null
                     }
-                }
+
+            otherChains =
+                blockchainItems
+                    .filterNot { it is BlockchainSettingsModule.BlockchainItem.Btc }
+                    .mapNotNull { item ->
+                        when (item) {
+                            is BlockchainSettingsModule.BlockchainItem.Evm ->
+                                BlockchainSettingsModule.BlockchainViewItem(
+                                    title = item.blockchain.name,
+                                    subtitle = item.syncSource.name,
+                                    imageUrl = item.blockchain.type.imageUrl,
+                                    blockchainItem = item,
+                                )
+
+                            is BlockchainSettingsModule.BlockchainItem.Solana ->
+                                BlockchainSettingsModule.BlockchainViewItem(
+                                    title = item.blockchain.name,
+                                    subtitle = item.rpcSource.name,
+                                    imageUrl = item.blockchain.type.imageUrl,
+                                    blockchainItem = item,
+                                )
+
+                            else -> null
+                        }
+                    }
         }
     }
-
 }

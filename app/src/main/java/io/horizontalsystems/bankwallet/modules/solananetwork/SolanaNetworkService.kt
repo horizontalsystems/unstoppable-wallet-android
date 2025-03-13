@@ -8,7 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class SolanaNetworkService(
-        private val rpcSourceManager: SolanaRpcSourceManager,
+    private val rpcSourceManager: SolanaRpcSourceManager,
 ) : Clearable {
     private val disposables = CompositeDisposable()
 
@@ -30,9 +30,10 @@ class SolanaNetworkService(
     private fun syncItems() {
         val currentRpcSourceName = currentRpcSource.name
 
-        items = rpcSourceManager.allRpcSources.map { rpcSource ->
-            Item(rpcSource, rpcSource.name == currentRpcSourceName)
-        }
+        items =
+            rpcSourceManager.allRpcSources.map { rpcSource ->
+                Item(rpcSource, rpcSource.name == currentRpcSourceName)
+            }
     }
 
     val itemsObservable: Observable<List<Item>>
@@ -50,6 +51,8 @@ class SolanaNetworkService(
         disposables.clear()
     }
 
-    data class Item(val rpcSource: RpcSource, val selected: Boolean)
-
+    data class Item(
+        val rpcSource: RpcSource,
+        val selected: Boolean,
+    )
 }

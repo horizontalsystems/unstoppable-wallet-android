@@ -15,8 +15,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.Executors
 
-class TorManager(context: Context, val localStorage: ILocalStorage) : ITorManager, TorOperator.Listener {
-
+class TorManager(
+    context: Context,
+    val localStorage: ILocalStorage,
+) : ITorManager,
+    TorOperator.Listener {
     private val logger = AppLogger("tor status")
     private val _torStatusFlow = MutableStateFlow(TorStatus.Closed)
     override val torStatusFlow = _torStatusFlow
@@ -61,26 +64,24 @@ class TorManager(context: Context, val localStorage: ILocalStorage) : ITorManage
         _torStatusFlow.update { getStatus(torInfo) }
     }
 
-    private fun getStatus(torInfo: Tor.Info): TorStatus {
-        return when (torInfo.connection.status) {
+    private fun getStatus(torInfo: Tor.Info): TorStatus =
+        when (torInfo.connection.status) {
             ConnectionStatus.CONNECTED -> TorStatus.Connected
             ConnectionStatus.CONNECTING -> TorStatus.Connecting
             ConnectionStatus.CLOSED -> TorStatus.Closed
             ConnectionStatus.FAILED -> TorStatus.Failed
         }
-    }
 
     private fun enableProxy() {
         TorConnectionManager.setSystemProxy(
             true,
             TorConstants.IP_LOCALHOST,
             TorConstants.HTTP_PROXY_PORT_DEFAULT,
-            TorConstants.SOCKS_PROXY_PORT_DEFAULT
+            TorConstants.SOCKS_PROXY_PORT_DEFAULT,
         )
     }
 
     private fun disableProxy() {
         TorConnectionManager.disableSystemProxy()
     }
-
 }

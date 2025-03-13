@@ -7,14 +7,9 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 
 class CoinManager(
     private val marketKit: MarketKitWrapper,
-    private val walletManager: IWalletManager
+    private val walletManager: IWalletManager,
 ) : ICoinManager {
+    override fun getToken(query: TokenQuery): Token? = marketKit.token(query) ?: customToken(query)
 
-    override fun getToken(query: TokenQuery): Token? {
-        return marketKit.token(query) ?: customToken(query)
-    }
-
-    private fun customToken(tokenQuery: TokenQuery): Token? {
-        return walletManager.activeWallets.find { it.token.tokenQuery == tokenQuery }?.token
-    }
+    private fun customToken(tokenQuery: TokenQuery): Token? = walletManager.activeWallets.find { it.token.tokenQuery == tokenQuery }?.token
 }

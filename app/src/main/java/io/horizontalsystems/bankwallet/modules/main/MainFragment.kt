@@ -80,12 +80,13 @@ class MainFragment : BaseComposeFragment() {
         val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
 
         backStackEntry?.let {
-            val viewModel = ViewModelProvider(backStackEntry.viewModelStore,  TransactionsModule.Factory())
-                .get(TransactionsViewModel::class.java)
+            val viewModel =
+                ViewModelProvider(backStackEntry.viewModelStore, TransactionsModule.Factory())
+                    .get(TransactionsViewModel::class.java)
             MainScreenWithRootedDeviceCheck(
                 transactionsViewModel = viewModel,
                 navController = navController,
-                mainActivityViewModel = mainActivityViewModel
+                mainActivityViewModel = mainActivityViewModel,
             )
         } ?: run {
             // Back stack entry doesn't exist, restart activity
@@ -103,9 +104,9 @@ class MainFragment : BaseComposeFragment() {
                 override fun handleOnBackPressed() {
                     requireActivity().moveTaskToBack(true)
                 }
-            })
+            },
+        )
     }
-
 }
 
 @Composable
@@ -113,7 +114,7 @@ private fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
     navController: NavController,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
-    mainActivityViewModel: MainActivityViewModel
+    mainActivityViewModel: MainActivityViewModel,
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
@@ -127,7 +128,7 @@ private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
     transactionsViewModel: TransactionsViewModel,
     fragmentNavController: NavController,
-    viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
+    viewModel: MainViewModel = viewModel(factory = MainModule.Factory()),
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     LaunchedEffect(activityIntent) {
@@ -157,14 +158,17 @@ private fun MainScreen(
                         modalBottomSheetState.hide()
                         viewModel.onSelect(it)
 
-                        stat(page = StatPage.SwitchWallet, event = StatEvent.Select(StatEntity.Wallet))
+                        stat(
+                            page = StatPage.SwitchWallet,
+                            event = StatEvent.Select(StatEntity.Wallet),
+                        )
                     }
                 },
                 onCancelClick = {
                     coroutineScope.launch {
                         modalBottomSheetState.hide()
                     }
-                }
+                },
             )
         },
     ) {
@@ -177,7 +181,7 @@ private fun MainScreen(
                     }
                     HsBottomNavigation(
                         backgroundColor = ComposeAppTheme.colors.tyler,
-                        elevation = 10.dp
+                        elevation = 10.dp,
                     ) {
                         uiState.mainNavItems.forEach { item ->
                             HsBottomNavigationItem(
@@ -185,7 +189,7 @@ private fun MainScreen(
                                     BadgedIcon(item.badge) {
                                         Icon(
                                             painter = painterResource(item.mainNavItem.iconRes),
-                                            contentDescription = stringResource(item.mainNavItem.titleRes)
+                                            contentDescription = stringResource(item.mainNavItem.titleRes),
                                         )
                                     }
                                 },
@@ -198,7 +202,7 @@ private fun MainScreen(
 
                                     stat(
                                         page = StatPage.Main,
-                                        event = StatEvent.SwitchTab(item.mainNavItem.statTab)
+                                        event = StatEvent.SwitchTab(item.mainNavItem.statTab),
                                     )
                                 },
                                 onLongClick = {
@@ -208,16 +212,16 @@ private fun MainScreen(
 
                                             stat(
                                                 page = StatPage.Main,
-                                                event = StatEvent.Open(StatPage.SwitchWallet)
+                                                event = StatEvent.Open(StatPage.SwitchWallet),
                                             )
                                         }
                                     }
-                                }
+                                },
                             )
                         }
                     }
                 }
-            }
+            },
         ) {
             BackHandler(enabled = modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
@@ -233,15 +237,16 @@ private fun MainScreen(
                     modifier = Modifier.weight(1f),
                     state = pagerState,
                     userScrollEnabled = false,
-                    verticalAlignment = Alignment.Top
+                    verticalAlignment = Alignment.Top,
                 ) { page ->
                     when (uiState.mainNavItems[page].mainNavItem) {
                         MainNavigation.Market -> MarketScreen(fragmentNavController)
                         MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                        MainNavigation.Transactions -> TransactionsScreen(
-                            fragmentNavController,
-                            transactionsViewModel
-                        )
+                        MainNavigation.Transactions ->
+                            TransactionsScreen(
+                                fragmentNavController,
+                                transactionsViewModel,
+                            )
 
                         MainNavigation.Settings -> SettingsScreen(fragmentNavController)
                     }
@@ -255,7 +260,7 @@ private fun MainScreen(
         LaunchedEffect(Unit) {
             fragmentNavController.slideFromBottom(
                 R.id.releaseNotesFragment,
-                ReleaseNotesFragment.Input(true)
+                ReleaseNotesFragment.Input(true),
             )
             viewModel.whatsNewShown()
         }
@@ -268,7 +273,7 @@ private fun MainScreen(
                 RateAppManager.openPlayMarket(context)
                 viewModel.closeRateDialog()
             },
-            onCancelClick = { viewModel.closeRateDialog() }
+            onCancelClick = { viewModel.closeRateDialog() },
         )
     }
 
@@ -282,7 +287,7 @@ private fun MainScreen(
                 val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
                 fragmentNavController.slideFromBottom(
                     R.id.backupRequiredDialog,
-                    BackupRequiredDialog.Input(wcSupportState.account, text)
+                    BackupRequiredDialog.Input(wcSupportState.account, text),
                 )
 
                 stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
@@ -291,7 +296,7 @@ private fun MainScreen(
             is SupportState.NotSupported -> {
                 fragmentNavController.slideFromBottom(
                     R.id.wcAccountTypeNotSupportedDialog,
-                    WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription)
+                    WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription),
                 )
             }
 
@@ -305,7 +310,7 @@ private fun MainScreen(
             delay(500)
             fragmentNavController.slideFromRight(
                 deepLinkPage.navigationId,
-                deepLinkPage.input
+                deepLinkPage.input,
             )
             viewModel.deeplinkPageHandled()
         }
@@ -318,15 +323,17 @@ private fun MainScreen(
 
 @Composable
 private fun HideContentBox(contentHidden: Boolean) {
-    val backgroundModifier = if (contentHidden) {
-        Modifier.background(ComposeAppTheme.colors.tyler)
-    } else {
-        Modifier
-    }
+    val backgroundModifier =
+        if (contentHidden) {
+            Modifier.background(ComposeAppTheme.colors.tyler)
+        } else {
+            Modifier
+        }
     Box(
         Modifier
             .fillMaxSize()
-            .then(backgroundModifier))
+            .then(backgroundModifier),
+    )
 }
 
 @Composable
@@ -342,22 +349,23 @@ private fun BadgedIcon(
                         text = badge.number.toString(),
                     )
                 },
-                content = icon
+                content = icon,
             )
 
         MainModule.BadgeType.BadgeDot ->
             BadgedBox(
                 badge = {
                     Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .background(
-                                ComposeAppTheme.colors.lucian,
-                                shape = RoundedCornerShape(4.dp)
-                            )
+                        modifier =
+                            Modifier
+                                .size(8.dp)
+                                .background(
+                                    ComposeAppTheme.colors.lucian,
+                                    shape = RoundedCornerShape(4.dp),
+                                ),
                     ) { }
                 },
-                content = icon
+                content = icon,
             )
 
         else -> {
@@ -368,10 +376,9 @@ private fun BadgedIcon(
     }
 }
 
-fun NavController.safeGetBackStackEntry(destinationId: Int): NavBackStackEntry? {
-    return try {
+fun NavController.safeGetBackStackEntry(destinationId: Int): NavBackStackEntry? =
+    try {
         this.getBackStackEntry(destinationId)
     } catch (e: IllegalArgumentException) {
         null
     }
-}

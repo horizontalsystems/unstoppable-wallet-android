@@ -49,7 +49,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val viewModel = getViewModel()
@@ -62,8 +61,8 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
         SearchResultsScreen(viewModel, navController)
     }
 
-    private fun getViewModel(): MarketFiltersResultViewModel? {
-        return try {
+    private fun getViewModel(): MarketFiltersResultViewModel? =
+        try {
             val marketSearchFilterViewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment)
             val viewModel by viewModels<MarketFiltersResultViewModel> {
                 MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
@@ -72,24 +71,21 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
         } catch (e: RuntimeException) {
             null
         }
-    }
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
-
     val uiState = viewModel.uiState
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
     Surface(
         color = ComposeAppTheme.colors.tyler,
-        modifier = Modifier.navigationBarsPadding()
+        modifier = Modifier.navigationBarsPadding(),
     ) {
         Column {
             AppBar(
@@ -118,7 +114,7 @@ private fun SearchResultsScreen(
 
                                 stat(
                                     page = StatPage.AdvancedSearchResults,
-                                    event = StatEvent.AddToWatchlist(uid)
+                                    event = StatEvent.AddToWatchlist(uid),
                                 )
                             },
                             onRemoveFavorite = { uid ->
@@ -126,7 +122,7 @@ private fun SearchResultsScreen(
 
                                 stat(
                                     page = StatPage.AdvancedSearchResults,
-                                    event = StatEvent.RemoveFromWatchlist(uid)
+                                    event = StatEvent.RemoveFromWatchlist(uid),
                                 )
                             },
                             onCoinClick = { coinUid ->
@@ -135,7 +131,7 @@ private fun SearchResultsScreen(
 
                                 stat(
                                     page = StatPage.AdvancedSearchResults,
-                                    event = StatEvent.OpenCoin(coinUid)
+                                    event = StatEvent.OpenCoin(coinUid),
                                 )
                             },
                             preItems = {
@@ -146,7 +142,7 @@ private fun SearchResultsScreen(
                                             uiState.sortingField.titleResId,
                                             onOptionClick = {
                                                 openSortingSelector = true
-                                            }
+                                            },
                                         )
                                         HSpacer(width = 12.dp)
                                         SignalButton(
@@ -154,7 +150,7 @@ private fun SearchResultsScreen(
                                             onToggle = {
                                                 if (it) {
                                                     navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                                        R.id.marketSignalsFragment
+                                                        R.id.marketSignalsFragment,
                                                     ) {
                                                         if (it.enabled) {
                                                             viewModel.showSignals()
@@ -163,11 +159,12 @@ private fun SearchResultsScreen(
                                                 } else {
                                                     viewModel.hideSignals()
                                                 }
-                                            })
+                                            },
+                                        )
                                         HSpacer(width = 16.dp)
                                     }
                                 }
-                            }
+                            },
                         )
                         if (scrollToTopAfterUpdate) {
                             scrollToTopAfterUpdate = false
@@ -187,44 +184,48 @@ private fun SearchResultsScreen(
                     },
                     onDismiss = {
                         openSortingSelector = false
-                    }
+                    },
                 )
             }
-
         }
     }
 }
 
 @Composable
-private fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
+private fun SignalButton(
+    turnedOn: Boolean,
+    onToggle: (Boolean) -> Unit,
+) {
     val title = stringResource(id = R.string.Market_Signals)
     val onClick = { onToggle.invoke(!turnedOn) }
-    val buttonColors = if (turnedOn) {
-        ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        )
-    } else {
-        SecondaryButtonDefaults.buttonColors()
-    }
+    val buttonColors =
+        if (turnedOn) {
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.yellowD,
+                contentColor = ComposeAppTheme.colors.dark,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            )
+        } else {
+            SecondaryButtonDefaults.buttonColors()
+        }
     ButtonSecondary(
         onClick = onClick,
-        contentPadding = PaddingValues(
-            start = 10.dp,
-            end = 16.dp,
-        ),
+        contentPadding =
+            PaddingValues(
+                start = 10.dp,
+                end = 16.dp,
+            ),
         buttonColors = buttonColors,
         content = {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier.padding(end = 2.dp),
                     painter = painterResource(R.drawable.ic_star_filled_20),
                     contentDescription = null,
-                    tint = if (turnedOn) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob
+                    tint = if (turnedOn) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
                 )
                 Text(
                     text = title,

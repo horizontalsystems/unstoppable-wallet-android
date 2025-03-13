@@ -35,13 +35,13 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.parcelize.Parcelize
 
 class CoinAuditsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
-            val viewModel = viewModel<CoinAuditsViewModel>(
-                factory = CoinAuditsModule.Factory(input.audits)
-            )
+            val viewModel =
+                viewModel<CoinAuditsViewModel>(
+                    factory = CoinAuditsModule.Factory(input.audits),
+                )
             CoinAuditsScreen(
                 viewModel = viewModel,
                 onPressBack = {
@@ -49,20 +49,22 @@ class CoinAuditsFragment : BaseComposeFragment() {
                 },
                 onClickReportUrl = {
                     LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
+                },
             )
         }
     }
 
     @Parcelize
-    data class Input(val audits: List<CoinAuditsModule.AuditParcelable>) : Parcelable
+    data class Input(
+        val audits: List<CoinAuditsModule.AuditParcelable>,
+    ) : Parcelable
 }
 
 @Composable
 private fun CoinAuditsScreen(
     viewModel: CoinAuditsViewModel,
     onPressBack: () -> Unit,
-    onClickReportUrl: (url: String) -> Unit
+    onClickReportUrl: (url: String) -> Unit,
 ) {
     val uiState = viewModel.uiState
 
@@ -75,12 +77,12 @@ private fun CoinAuditsScreen(
                     HsBackButton(onClick = onPressBack)
                 },
             )
-        }
+        },
     ) {
         Column(
             Modifier
                 .padding(it)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             LazyColumn(modifier = Modifier.weight(1f)) {
                 uiState.auditors.forEach { viewItem ->
@@ -92,7 +94,7 @@ private fun CoinAuditsScreen(
                             CoinAudit(auditViewItem) {
                                 auditViewItem.reportUrl?.let {
                                     onClickReportUrl(
-                                        it
+                                        it,
                                     )
                                 }
                             }
@@ -108,7 +110,10 @@ private fun CoinAuditsScreen(
 }
 
 @Composable
-fun CoinAuditHeader(name: String, logoUrl: String) {
+fun CoinAuditHeader(
+    name: String,
+    logoUrl: String,
+) {
     Divider(
         thickness = 1.dp,
         color = ComposeAppTheme.colors.steel10,
@@ -116,13 +121,14 @@ fun CoinAuditHeader(name: String, logoUrl: String) {
     VSpacer(height = 14.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         HsImage(
             url = logoUrl,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp),
         )
         body_leah(text = name)
     }
@@ -130,20 +136,24 @@ fun CoinAuditHeader(name: String, logoUrl: String) {
 }
 
 @Composable
-fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit) {
+fun CoinAudit(
+    auditViewItem: CoinAuditsModule.AuditViewItem,
+    onClick: () -> Unit,
+) {
     Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick, enabled = auditViewItem.reportUrl != null)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .clickable(onClick = onClick, enabled = auditViewItem.reportUrl != null)
+                .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
             body_leah(text = auditViewItem.date ?: "")
             subhead2_grey(
                 text = auditViewItem.name,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
 

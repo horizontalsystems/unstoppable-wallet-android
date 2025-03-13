@@ -52,12 +52,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 
 @Composable
-fun ActionButton(title: Int, onClick: () -> Unit) {
+fun ActionButton(
+    title: Int,
+    onClick: () -> Unit,
+) {
     ButtonsGroupWithShade {
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
             title = stringResource(title),
             onClick = onClick,
         )
@@ -68,34 +72,36 @@ fun ActionButton(title: Int, onClick: () -> Unit) {
 fun HidableContent(
     content: String,
     hideScreenText: String? = null,
-    onToggleHidden: (() -> Unit)? = null
+    onToggleHidden: (() -> Unit)? = null,
 ) {
     var hidden by remember { mutableStateOf(hideScreenText != null) }
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-            .clickable(enabled = hideScreenText != null, onClick = {
-                hidden = !hidden
-                onToggleHidden?.invoke()
-            })
-    ) {
-
-        D2(
-            modifier = Modifier
+        modifier =
+            Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 24.dp),
-            text = content
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+                .clickable(enabled = hideScreenText != null, onClick = {
+                    hidden = !hidden
+                    onToggleHidden?.invoke()
+                }),
+    ) {
+        D2(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 24.dp),
+            text = content,
         )
 
         if (hideScreenText != null && hidden) {
             Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(ComposeAppTheme.colors.tyler),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .matchParentSize()
+                        .background(ComposeAppTheme.colors.tyler),
+                contentAlignment = Alignment.Center,
             ) {
                 subhead2_grey(hideScreenText)
             }
@@ -107,12 +113,12 @@ fun HidableContent(
 fun KeyActionItem(
     title: String,
     description: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal(
-                onClick = onClick
+                onClick = onClick,
             ) {
                 Spacer(modifier = Modifier.width(16.dp))
                 body_leah(
@@ -122,47 +128,53 @@ fun KeyActionItem(
                 Icon(
                     painter = painterResource(id = io.horizontalsystems.bankwallet.R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
-        })
+        },
+    )
     InfoText(text = description)
     Spacer(Modifier.height(20.dp))
 }
 
 @Composable
-fun ConfirmCopyBottomSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
+fun ConfirmCopyBottomSheet(
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.RecoveryPhrase_CopyWarning_Title),
-        onCloseClick = onCancel
+        onCloseClick = onCancel,
     ) {
         Spacer(modifier = Modifier.height(12.dp))
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Text)
+            text = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Text),
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         ButtonPrimaryRed(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
             title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
-            onClick = onConfirm
+            onClick = onConfirm,
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         ButtonPrimaryTransparent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
             title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Cancel),
-            onClick = onCancel
+            onClick = onCancel,
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -170,29 +182,34 @@ fun ConfirmCopyBottomSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
 }
 
 @Composable
-fun PassphraseCell(passphrase: String, hidden: Boolean) {
+fun PassphraseCell(
+    passphrase: String,
+    hidden: Boolean,
+) {
     if (passphrase.isNotBlank()) {
         CellSingleLineLawrenceSection(
             listOf {
                 Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_key_phrase_20),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
+                        tint = ComposeAppTheme.colors.grey,
                     )
                     D1(
                         text = stringResource(R.string.ShowKey_Passphrase),
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
                     Spacer(Modifier.weight(1f))
                     C2(text = if (hidden) "*****" else passphrase)
                 }
-            })
+            },
+        )
         Spacer(Modifier.height(32.dp))
     }
 }
@@ -202,32 +219,34 @@ fun PassphraseCell(passphrase: String, hidden: Boolean) {
 fun SeedPhraseList(
     wordsNumbered: List<RecoveryPhraseModule.WordNumbered>,
     hidden: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-            .clickable(
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+                .clickable(
+                    onClick = onClick,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                ),
     ) {
         FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
             maxItemsInEachRow = 4,
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             wordsNumbered.forEach { word ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 6.dp)
+                    modifier = Modifier.padding(horizontal = 6.dp),
                 ) {
                     D7(text = word.number.toString())
                     HSpacer(8.dp)
@@ -238,10 +257,11 @@ fun SeedPhraseList(
 
         if (hidden) {
             Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(ComposeAppTheme.colors.tyler),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .matchParentSize()
+                        .background(ComposeAppTheme.colors.tyler),
+                contentAlignment = Alignment.Center,
             ) {
                 subhead2_grey(text = stringResource(R.string.RecoveryPhrase_ShowPhrase))
             }

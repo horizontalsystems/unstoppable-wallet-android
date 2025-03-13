@@ -48,7 +48,8 @@ class SetDuressPinIntroFragment : BaseComposeFragment() {
 
 @Composable
 fun SetDuressPinIntroScreen(navController: NavController) {
-    val viewModel = viewModel<SetDuressPinIntroViewModel>(factory = SetDuressPinIntroViewModel.Factory())
+    val viewModel =
+        viewModel<SetDuressPinIntroViewModel>(factory = SetDuressPinIntroViewModel.Factory())
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -59,30 +60,31 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
-        }
+        },
     ) {
         Column(
             Modifier
                 .fillMaxHeight()
                 .padding(it)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             InfoText(
                 text = stringResource(R.string.DuressPin_Description),
-                paddingBottom = 32.dp
+                paddingBottom = 32.dp,
             )
             HeaderText(text = stringResource(R.string.DuressPin_Notes))
 
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp)),
             ) {
                 if (viewModel.biometricAuthSupported) {
                     NotesCell(
                         icon = painterResource(id = R.drawable.icon_touch_id_24),
                         title = stringResource(id = R.string.DuressPin_Notes_Biometrics_Title),
-                        description = stringResource(id = R.string.DuressPin_Notes_Biometrics_Description)
+                        description = stringResource(id = R.string.DuressPin_Notes_Biometrics_Description),
                     )
                 }
 
@@ -90,21 +92,22 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                     icon = painterResource(id = R.drawable.ic_passcode),
                     title = stringResource(id = R.string.DuressPin_Notes_PasscodeDisabling_Title),
                     description = stringResource(id = R.string.DuressPin_Notes_PasscodeDisabling_Description),
-                    borderTop = true
+                    borderTop = true,
                 )
                 NotesCell(
                     icon = painterResource(id = R.drawable.ic_edit_24),
                     title = stringResource(id = R.string.DuressPin_Notes_PasscodeChange_Title),
                     description = stringResource(id = R.string.DuressPin_Notes_PasscodeChange_Description),
-                    borderTop = true
+                    borderTop = true,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Continue),
                     onClick = {
                         if (viewModel.shouldShowSelectAccounts) {
@@ -120,18 +123,23 @@ fun SetDuressPinIntroScreen(navController: NavController) {
 }
 
 @Composable
-private fun NotesCell(icon: Painter, title: String, description: String, borderTop: Boolean = false) {
+private fun NotesCell(
+    icon: Painter,
+    title: String,
+    description: String,
+    borderTop: Boolean = false,
+) {
     Box {
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
 
         RowUniversal(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
@@ -148,4 +156,3 @@ private fun NotesCell(icon: Painter, title: String, description: String, borderT
         }
     }
 }
-

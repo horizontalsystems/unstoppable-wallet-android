@@ -26,47 +26,49 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 
 @Composable
-fun PremiumSubscribedScreen(
-    onCloseClick: () -> Unit
-) {
+fun PremiumSubscribedScreen(onCloseClick: () -> Unit) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             TitleCenteredTopBar(
                 title = stringResource(R.string.Premium_Title),
-                onCloseClick = onCloseClick
+                onCloseClick = onCloseClick,
             )
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
         ) {
             RadialBackground()
             Column {
                 Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier =
+                        Modifier
+                            .padding(paddingValues)
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     VSpacer(24.dp)
                     Image(
                         painter = painterResource(id = R.drawable.prem_star_launch),
                         contentDescription = null,
-                        modifier = Modifier
-                            .height(200.dp)
-                            .fillMaxWidth()
+                        modifier =
+                            Modifier
+                                .height(200.dp)
+                                .fillMaxWidth(),
                     )
                     VSpacer(24.dp)
                     headline1_leah(
                         text = stringResource(R.string.Premium_ThankYouForSubscription),
                         textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 44.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 44.dp),
                     )
                     VSpacer(12.dp)
                     body_jacob(
@@ -78,7 +80,7 @@ fun PremiumSubscribedScreen(
                 Column(
                     Modifier
                         .padding(horizontal = 24.dp)
-                        .padding(bottom = 44.dp)
+                        .padding(bottom = 44.dp),
                 ) {
                     ButtonPrimaryCustomColor(
                         modifier = Modifier.fillMaxWidth(),
@@ -97,7 +99,7 @@ fun PremiumSubscribedScreen(
 fun PremiumSubscribedScreenPreview() {
     ComposeAppTheme {
         PremiumSubscribedScreen(
-            onCloseClick = {}
+            onCloseClick = {},
         )
     }
 }

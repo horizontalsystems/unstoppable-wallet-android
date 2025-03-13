@@ -8,9 +8,8 @@ import kotlinx.coroutines.launch
 
 class DetectorsViewModel(
     private val title: String,
-    private val detectors: List<IssueParcelable>
+    private val detectors: List<IssueParcelable>,
 ) : ViewModelUiState<DetectorsModule.UiState>() {
-
     var coreIssues = emptyList<IssueViewItem>()
     var generalIssues = emptyList<IssueViewItem>()
 
@@ -33,46 +32,50 @@ class DetectorsViewModel(
         }
     }
 
-    override fun createState() = DetectorsModule.UiState(
-        title = title,
-        coreIssues = coreIssues,
-        generalIssues = generalIssues
-    )
+    override fun createState() =
+        DetectorsModule.UiState(
+            title = title,
+            coreIssues = coreIssues,
+            generalIssues = generalIssues,
+        )
 
     fun toggleExpandGeneral(id: Int) {
-        generalIssues = generalIssues.map {
-            if (it.id == id) {
-                it.copy(expanded = !it.expanded)
-            } else {
-                it
+        generalIssues =
+            generalIssues.map {
+                if (it.id == id) {
+                    it.copy(expanded = !it.expanded)
+                } else {
+                    it
+                }
             }
-        }
         emitState()
     }
 
     fun toggleExpandCore(id: Int) {
-        coreIssues = coreIssues.map {
-            if (it.id == id) {
-                it.copy(expanded = !it.expanded)
-            } else {
-                it
+        coreIssues =
+            coreIssues.map {
+                if (it.id == id) {
+                    it.copy(expanded = !it.expanded)
+                } else {
+                    it
+                }
             }
-        }
         emitState()
     }
 
-    private fun sortIssuesByImpact(issues: List<IssueParcelable>): List<IssueViewItem> {
-        return issues.sortedWith(compareByDescending { issue ->
-            issue.issues?.getOrNull(0)?.impact?.let { impact ->
-                when (impact) {
-                    "Critical" -> 5
-                    "High" -> 4
-                    "Low" -> 3
-                    "Informational" -> 2
-                    else -> 1
-                }
-            } ?: 0
-        }).map { IssueViewItem(it.description.hashCode(), it) }
-    }
-
+    private fun sortIssuesByImpact(issues: List<IssueParcelable>): List<IssueViewItem> =
+        issues
+            .sortedWith(
+                compareByDescending { issue ->
+                    issue.issues?.getOrNull(0)?.impact?.let { impact ->
+                        when (impact) {
+                            "Critical" -> 5
+                            "High" -> 4
+                            "Low" -> 3
+                            "Informational" -> 2
+                            else -> 1
+                        }
+                    } ?: 0
+                },
+            ).map { IssueViewItem(it.description.hashCode(), it) }
 }

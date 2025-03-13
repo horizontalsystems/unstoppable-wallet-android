@@ -56,9 +56,10 @@ import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 
 class ResendBitcoinFragment : BaseComposeFragment() {
-
     @Parcelize
-    data class Input(val optionType: SpeedUpCancelType) : Parcelable
+    data class Input(
+        val optionType: SpeedUpCancelType,
+    ) : Parcelable
 
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
 
@@ -70,7 +71,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
         ResendBitcoinModule.Factory(
             input.optionType,
             transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord,
-            transactionInfoViewModel.source
+            transactionInfoViewModel.source,
         )
     }
 
@@ -80,14 +81,14 @@ class ResendBitcoinFragment : BaseComposeFragment() {
 
         ResendBitcoinScreen(
             navController = navController,
-            resendViewModel = resendViewModel
+            resendViewModel = resendViewModel,
         )
     }
 
     @Composable
     private fun ResendBitcoinScreen(
         navController: NavController,
-        resendViewModel: ResendBitcoinViewModel
+        resendViewModel: ResendBitcoinViewModel,
     ) {
         val closeUntilDestId = R.id.transactionInfoFragment
         val uiState = resendViewModel.uiState
@@ -98,7 +99,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                 HudHelper.showInProcessMessage(
                     view,
                     R.string.Send_Sending,
-                    SnackbarDuration.INDEFINITE
+                    SnackbarDuration.INDEFINITE,
                 )
             }
 
@@ -106,7 +107,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                 HudHelper.showSuccessMessage(
                     view,
                     R.string.Send_Success,
-                    SnackbarDuration.LONG
+                    SnackbarDuration.LONG,
                 )
             }
 
@@ -125,7 +126,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
         }
 
         LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-            //additional close for cases when user closes app immediately after sending
+            // additional close for cases when user closes app immediately after sending
             if (uiState.sendResult is SendResult.Sent) {
                 navController.popBackStack(closeUntilDestId, true)
             }
@@ -137,91 +138,108 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf()
+                menuItems = listOf(),
             )
 
             Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 106.dp)
+                modifier =
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = 106.dp),
             ) {
                 VSpacer(height = 12.dp)
-                val topSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        SectionTitleCell(
-                            stringResource(R.string.Send_Confirmation_YouSend),
-                            uiState.coin.name,
-                            R.drawable.ic_arrow_up_right_12
-                        )
-                    }
-                    add {
-                        val coinAmount = App.numberFormatter.formatCoinFull(
-                            uiState.amount,
-                            uiState.coin.code,
-                            uiState.coinMaxAllowedDecimals
-                        )
-
-                        val currencyAmount = uiState.coinRate?.let { rate ->
-                            rate.copy(value = uiState.amount.times(rate.value))
-                                .getFormattedFull()
+                val topSectionItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SectionTitleCell(
+                                stringResource(R.string.Send_Confirmation_YouSend),
+                                uiState.coin.name,
+                                R.drawable.ic_arrow_up_right_12,
+                            )
                         }
+                        add {
+                            val coinAmount =
+                                App.numberFormatter.formatCoinFull(
+                                    uiState.amount,
+                                    uiState.coin.code,
+                                    uiState.coinMaxAllowedDecimals,
+                                )
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
-                    }
-                    add {
-                        TransactionInfoAddressCell(
-                            title = stringResource(uiState.addressTitleResId),
-                            value = uiState.address.hex,
-                            showAdd = uiState.contact == null,
-                            blockchainType = uiState.blockchainType,
-                            navController = navController,
-                            onCopy = {
-                                stat(page = StatPage.Resend, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
-                            },
-                            onAddToExisting = {
-                                stat(page = StatPage.Resend, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
-                            },
-                            onAddToNew = {
-                                stat(page = StatPage.Resend, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                            val currencyAmount =
+                                uiState.coinRate?.let { rate ->
+                                    rate
+                                        .copy(value = uiState.amount.times(rate.value))
+                                        .getFormattedFull()
+                                }
+
+                            ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
+                        }
+                        add {
+                            TransactionInfoAddressCell(
+                                title = stringResource(uiState.addressTitleResId),
+                                value = uiState.address.hex,
+                                showAdd = uiState.contact == null,
+                                blockchainType = uiState.blockchainType,
+                                navController = navController,
+                                onCopy = {
+                                    stat(
+                                        page = StatPage.Resend,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Copy(StatEntity.Address),
+                                    )
+                                },
+                                onAddToExisting = {
+                                    stat(
+                                        page = StatPage.Resend,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                    )
+                                },
+                                onAddToNew = {
+                                    stat(
+                                        page = StatPage.Resend,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactNew),
+                                    )
+                                },
+                            )
+                        }
+                        uiState.contact?.let {
+                            add {
+                                TransactionInfoContactCell(name = it.name)
                             }
-                        )
-                    }
-                    uiState.contact?.let {
+                        }
+                        if (uiState.lockTimeInterval != null) {
+                            add {
+                                HSHodler(lockTimeInterval = uiState.lockTimeInterval)
+                            }
+                        }
+
                         add {
-                            TransactionInfoContactCell(name = it.name)
+                            TitleAndValueCell(
+                                title = stringResource(R.string.TransactionInfoOptions_Rbf_ReplacedTransactions),
+                                value = uiState.replacedTransactionHashes.size.toString(),
+                            )
                         }
                     }
-                    if (uiState.lockTimeInterval != null) {
-                        add {
-                            HSHodler(lockTimeInterval = uiState.lockTimeInterval)
-                        }
-                    }
-
-                    add {
-                        TitleAndValueCell(
-                            title = stringResource(R.string.TransactionInfoOptions_Rbf_ReplacedTransactions),
-                            value = uiState.replacedTransactionHashes.size.toString()
-                        )
-                    }
-
-                }
 
                 CellUniversalLawrenceSection(topSectionItems)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRaw(
-                            coinCode = uiState.feeCoin.code,
-                            coinDecimal = uiState.coinMaxAllowedDecimals,
-                            fee = uiState.fee,
-                            amountInputType = AmountInputType.COIN,
-                            rate = uiState.coinRate,
-                            navController = navController
-                        )
+                val bottomSectionItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            HSFeeRaw(
+                                coinCode = uiState.feeCoin.code,
+                                coinDecimal = uiState.coinMaxAllowedDecimals,
+                                fee = uiState.fee,
+                                amountInputType = AmountInputType.COIN,
+                                rate = uiState.coinRate,
+                                navController = navController,
+                            )
+                        }
                     }
-                }
 
                 CellUniversalLawrenceSection(bottomSectionItems)
 
@@ -241,26 +259,27 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                     },
                     onClickDecrement = {
                         resendViewModel.decrementMinFee()
-                    }
+                    },
                 )
 
                 uiState.feeCaution?.let {
                     FeeRateCaution(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp),
-                        feeRateCaution = it
+                        feeRateCaution = it,
                     )
                 }
             }
 
             Spacer(modifier = Modifier.weight(1f))
             ResendButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                 titleResId = uiState.sendButtonTitleResId,
-                error =  uiState.feeCaution?.type == HSCaution.Type.Error,
+                error = uiState.feeCaution?.type == HSCaution.Type.Error,
                 sendResult = uiState.sendResult,
-                onClickSend = resendViewModel::onClickSend
+                onClickSend = resendViewModel::onClickSend,
             )
         }
     }
@@ -271,7 +290,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
         titleResId: Int,
         error: Boolean,
         sendResult: SendResult?,
-        onClickSend: () -> Unit
+        onClickSend: () -> Unit,
     ) {
         when (sendResult) {
             SendResult.Sending -> {
@@ -279,7 +298,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                     modifier = modifier,
                     title = stringResource(R.string.Send_Sending),
                     onClick = { },
-                    enabled = false
+                    enabled = false,
                 )
             }
 
@@ -288,7 +307,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                     modifier = modifier,
                     title = stringResource(R.string.Send_Success),
                     onClick = { },
-                    enabled = false
+                    enabled = false,
                 )
             }
 
@@ -297,7 +316,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                     modifier = modifier,
                     title = stringResource(titleResId),
                     onClick = onClickSend,
-                    enabled = !error
+                    enabled = !error,
                 )
             }
         }

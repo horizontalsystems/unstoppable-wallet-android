@@ -27,9 +27,8 @@ class MainActivityViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
     private val localStorage: ILocalStorage,
-    private val tonConnectManager: TonConnectManager
+    private val tonConnectManager: TonConnectManager,
 ) : ViewModel() {
-
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
     val tcSendRequest = MutableLiveData<SignTransaction?>()
@@ -109,8 +108,8 @@ class MainActivityViewModel(
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainActivityViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            MainActivityViewModel(
                 App.userManager,
                 App.accountManager,
                 App.pinComponent,
@@ -119,15 +118,19 @@ class MainActivityViewModel(
                 App.localStorage,
                 App.tonConnectManager,
             ) as T
-        }
     }
 }
 
 sealed class MainScreenValidationError : Exception() {
     class Welcome : MainScreenValidationError()
+
     class Unlock : MainScreenValidationError()
+
     class NoSystemLock : MainScreenValidationError()
+
     class KeyInvalidated : MainScreenValidationError()
+
     class UserAuthentication : MainScreenValidationError()
+
     class KeystoreRuntimeException : MainScreenValidationError()
 }

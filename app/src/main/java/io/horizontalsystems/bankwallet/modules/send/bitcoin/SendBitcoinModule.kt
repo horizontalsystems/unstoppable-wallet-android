@@ -18,13 +18,15 @@ object SendBitcoinModule {
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
-            (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
+            (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter)
+                ?: throw IllegalStateException("SendBitcoinAdapter is null")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
             val feeService = SendBitcoinFeeService(adapter)
             val feeRateService = SendBitcoinFeeRateService(provider)
-            val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
+            val amountService =
+                SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
             val addressService = SendBitcoinAddressService(adapter)
             val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
             return SendBitcoinViewModel(
@@ -41,7 +43,7 @@ object SendBitcoinModule {
                 !hideAddress,
                 App.localStorage,
                 address,
-                App.recentAddressManager
+                App.recentAddressManager,
             ) as T
         }
     }
@@ -53,7 +55,6 @@ object SendBitcoinModule {
 
     enum class UtxoType {
         Auto,
-        Manual
+        Manual,
     }
-
 }

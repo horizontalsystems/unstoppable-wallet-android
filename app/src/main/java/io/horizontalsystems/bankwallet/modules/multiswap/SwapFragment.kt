@@ -107,12 +107,16 @@ class SwapFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapScreen(navController: NavController, tokenIn: Token?) {
+fun SwapScreen(
+    navController: NavController,
+    tokenIn: Token?,
+) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
-    val viewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory(tokenIn)
-    )
+    val viewModel =
+        viewModel<SwapViewModel>(
+            viewModelStoreOwner = currentBackStackEntry!!,
+            factory = SwapViewModel.Factory(tokenIn),
+        )
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
@@ -122,7 +126,10 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         onClickCoinFrom = {
             navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
+                SwapSelectCoinFragment.Input(
+                    uiState.tokenOut,
+                    context.getString(R.string.Swap_YouPay),
+                ),
             ) {
                 viewModel.onSelectTokenIn(it)
             }
@@ -130,7 +137,10 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         onClickCoinTo = {
             navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))
+                SwapSelectCoinFragment.Input(
+                    uiState.tokenIn,
+                    context.getString(R.string.Swap_YouGet),
+                ),
             ) {
                 viewModel.onSelectTokenOut(it)
             }
@@ -165,7 +175,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
-        navController = navController
+        navController = navController,
     )
 }
 
@@ -204,13 +214,14 @@ private fun SwapScreenInner(
                 navigationIcon = {
                     HsBackButton(onClick = onClickClose)
                 },
-                menuItems = buildList {
-                    uiState.timeRemainingProgress?.let { timeRemainingProgress ->
-                        add(
-                            MenuItemTimeoutIndicator(timeRemainingProgress)
-                        )
-                    }
-                }
+                menuItems =
+                    buildList {
+                        uiState.timeRemainingProgress?.let { timeRemainingProgress ->
+                            add(
+                                MenuItemTimeoutIndicator(timeRemainingProgress),
+                            )
+                        }
+                    },
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -219,13 +230,17 @@ private fun SwapScreenInner(
         val keyboardState by observeKeyboardState()
         var amountInputHasFocus by remember { mutableStateOf(false) }
 
-        Box(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()) {
-            Column(
-                modifier = Modifier
+        Box(
+            modifier =
+                Modifier
                     .padding(it)
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize(),
+        ) {
+            Column(
+                modifier =
+                    Modifier
+                        .padding(it)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(height = 12.dp)
                 SwapInput(
@@ -253,85 +268,93 @@ private fun SwapScreenInner(
 
                 when (val currentStep = uiState.currentStep) {
                     is SwapStep.InputRequired -> {
-                        val title = when (currentStep.inputType) {
-                            InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
-                            InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
-                            InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
-                        }
+                        val title =
+                            when (currentStep.inputType) {
+                                InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
+                                InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
+                                InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
+                            }
 
                         ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
                             title = title,
                             enabled = false,
-                            onClick = {}
+                            onClick = {},
                         )
                     }
 
                     SwapStep.Quoting -> {
                         ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
                             title = stringResource(R.string.Swap_Quoting),
                             enabled = false,
                             loadingIndicator = true,
-                            onClick = {}
+                            onClick = {},
                         )
                     }
 
                     is SwapStep.Error -> {
-                        val errorText = when (val error = currentStep.error) {
-                            SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
-                            is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
-                            is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
-                            is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
-                            is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
-                            is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
-                            is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
-                            is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
-                            else -> error.message ?: error.javaClass.simpleName
-                        }
+                        val errorText =
+                            when (val error = currentStep.error) {
+                                SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                                is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
+                                is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                                is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
+                                is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
+                                is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
+                                is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
+                                is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
+                                else -> error.message ?: error.javaClass.simpleName
+                            }
 
                         ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
                             title = errorText,
                             enabled = false,
-                            onClick = {}
+                            onClick = {},
                         )
                     }
 
                     is SwapStep.ActionRequired -> {
                         val action = currentStep.action
-                        val title = if (action.inProgress) {
-                            action.getTitleInProgress()
-                        } else {
-                            action.getTitle()
-                        }
+                        val title =
+                            if (action.inProgress) {
+                                action.getTitleInProgress()
+                            } else {
+                                action.getTitle()
+                            }
 
                         ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
                             title = title,
                             enabled = !action.inProgress,
                             onClick = {
                                 onActionStarted.invoke()
                                 action.execute(navController, onActionCompleted)
-                            }
+                            },
                         )
                     }
 
                     SwapStep.Proceed -> {
                         ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
                             title = stringResource(R.string.Swap_Proceed),
-                            onClick = onClickNext
+                            onClick = onClickNext,
                         )
                     }
                 }
@@ -340,8 +363,18 @@ private fun SwapScreenInner(
                 if (quote != null) {
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
-                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut, StatPage.Swap)
-                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
+                        PriceField(
+                            quote.tokenIn,
+                            quote.tokenOut,
+                            quote.amountIn,
+                            quote.amountOut,
+                            StatPage.Swap,
+                        )
+                        PriceImpactField(
+                            uiState.priceImpact,
+                            uiState.priceImpactLevel,
+                            navController,
+                        )
                         quote.fields.forEach {
                             it.GetContent(navController, false)
                         }
@@ -358,14 +391,18 @@ private fun SwapScreenInner(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         icon = R.drawable.ic_attention_20,
                         title = stringResource(id = R.string.Swap_PriceImpact),
-                        text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
+                        text =
+                            stringResource(
+                                id = R.string.Swap_PriceImpactTooHigh,
+                                uiState.error.providerTitle ?: "",
+                            ),
                     )
                 } else if (uiState.currentStep is SwapStep.ActionRequired) {
                     uiState.currentStep.action.getDescription()?.let { actionDescription ->
                         VSpacer(height = 12.dp)
                         TextImportantWarning(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            text = actionDescription
+                            text = actionDescription,
                         )
                     }
                 }
@@ -373,18 +410,17 @@ private fun SwapScreenInner(
                 VSpacer(height = 32.dp)
             }
 
-
             if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
                 val hasNonZeroBalance =
                     uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
                 Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        // Add IME (keyboard) padding to push content above keyboard
-                        .windowInsetsPadding(
-                            WindowInsets.ime
-                        )
-                        .systemBarsPadding()
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            // Add IME (keyboard) padding to push content above keyboard
+                            .windowInsetsPadding(
+                                WindowInsets.ime,
+                            ).systemBarsPadding(),
                 ) {
                     SuggestionsBar(
                         modifier = Modifier.align(Alignment.BottomCenter),
@@ -405,20 +441,24 @@ private fun SwapScreenInner(
 }
 
 @Composable
-private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
+private fun AvailableBalanceField(
+    tokenIn: Token?,
+    availableBalance: BigDecimal?,
+) {
     QuoteInfoRow(
         title = {
             subhead2_grey(text = stringResource(R.string.Swap_AvailableBalance))
         },
         value = {
-            val text = if (tokenIn != null && availableBalance != null) {
-                CoinValue(tokenIn, availableBalance).getFormattedFull()
-            } else {
-                "-"
-            }
+            val text =
+                if (tokenIn != null && availableBalance != null) {
+                    CoinValue(tokenIn, availableBalance).getFormattedFull()
+                } else {
+                    "-"
+                }
 
             subhead2_leah(text = text)
-        }
+        },
     )
 }
 
@@ -426,7 +466,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: PriceImpactLevel?,
-    navController: NavController
+    navController: NavController,
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 
@@ -438,32 +478,36 @@ fun PriceImpactField(
             subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
 
             Image(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable(
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
-                            )
-                        },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    )
-                ,
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp)
+                        .clickable(
+                            onClick = {
+                                navController.slideFromBottom(
+                                    R.id.feeSettingsInfoDialog,
+                                    FeeSettingsInfoDialog.Input(infoTitle, infoText),
+                                )
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ),
                 painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = ""
+                contentDescription = "",
             )
         },
         value = {
             Text(
-                text = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString()),
+                text =
+                    stringResource(
+                        R.string.Swap_Percent,
+                        (priceImpact * BigDecimal.valueOf(-1)).toPlainString(),
+                    ),
                 style = ComposeAppTheme.typography.subhead2,
                 color = getPriceImpactColor(priceImpactLevel),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
-        }
+        },
     )
 }
 
@@ -474,9 +518,10 @@ private fun ProviderField(
     onClickProviderSettings: () -> Unit,
 ) {
     HSRow(
-        modifier = Modifier
-            .height(40.dp)
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .height(40.dp)
+                .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         borderBottom = true,
     ) {
@@ -485,28 +530,35 @@ private fun ProviderField(
                 Image(
                     modifier = Modifier.size(24.dp),
                     painter = painterResource(swapProvider.icon),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             },
             text = {
                 subhead1_leah(text = swapProvider.title)
             },
-            onClickSelect = onClickProvider
+            onClickSelect = onClickProvider,
         )
         HFillSpacer(minWidth = 16.dp)
         Icon(
-            modifier = Modifier.clickable(
-                onClick = onClickProviderSettings
-            ),
+            modifier =
+                Modifier.clickable(
+                    onClick = onClickProviderSettings,
+                ),
             painter = painterResource(R.drawable.ic_manage_2),
             contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }
 
 @Composable
-fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
+fun PriceField(
+    tokenIn: Token,
+    tokenOut: Token,
+    amountIn: BigDecimal,
+    amountOut: BigDecimal,
+    statPage: StatPage,
+) {
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
@@ -516,33 +568,35 @@ fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut:
         },
         value = {
             Row(
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = {
-                            showRegularPrice = !showRegularPrice
+                modifier =
+                    Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                showRegularPrice = !showRegularPrice
 
-                            stat(page = statPage, event = StatEvent.TogglePrice)
-                        }
-                    ),
+                                stat(page = statPage, event = StatEvent.TogglePrice)
+                            },
+                        ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 subhead2_leah(
-                    text = if (showRegularPrice) {
-                        swapPriceUIHelper.priceStr
-                    } else {
-                        swapPriceUIHelper.priceInvStr
-                    }
+                    text =
+                        if (showRegularPrice) {
+                            swapPriceUIHelper.priceStr
+                        } else {
+                            swapPriceUIHelper.priceInvStr
+                        },
                 )
                 HSpacer(width = 8.dp)
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
                     contentDescription = "invert price",
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
-        }
+        },
     )
 }
 
@@ -566,13 +620,14 @@ private fun SwapInput(
     onFocusChanged: (FocusState) -> Unit,
 ) {
     Box(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(18.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
         ) {
             SwapCoinInputIn(
                 coinAmount = amountIn,
@@ -583,7 +638,7 @@ private fun SwapInput(
                 fiatAmountInputEnabled = fiatAmountInputEnabled,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom,
-                onFocusChanged = onFocusChanged
+                onFocusChanged = onFocusChanged,
             )
             SwapCoinInputTo(
                 coinAmount = amountOut,
@@ -592,18 +647,18 @@ private fun SwapInput(
                 fiatPriceImpactLevel = fiatPriceImpactLevel,
                 currency = currency,
                 token = tokenOut,
-                onClickCoin = onClickCoinTo
+                onClickCoin = onClickCoinTo,
             )
         }
         Divider(
             modifier = Modifier.align(Alignment.Center),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
+            color = ComposeAppTheme.colors.steel10,
         )
         ButtonSecondaryCircle(
             modifier = Modifier.align(Alignment.Center),
             icon = R.drawable.ic_arrow_down_20,
-            onClick = onSwitchPairs
+            onClick = onSwitchPairs,
         )
     }
 }
@@ -621,22 +676,23 @@ private fun SwapCoinInputIn(
     onFocusChanged: (FocusState) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .onFocusChanged(onFocusChanged)
-            .padding(horizontal = 16.dp, vertical = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .onFocusChanged(onFocusChanged)
+                .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
             AmountInput(
                 value = coinAmount,
-                onValueChange = onValueChange
+                onValueChange = onValueChange,
             )
             VSpacer(height = 3.dp)
             FiatAmountInput(
                 value = fiatAmount,
                 currency = currency,
                 onValueChange = onFiatValueChange,
-                enabled = fiatAmountInputEnabled
+                enabled = fiatAmountInputEnabled,
             )
         }
         HSpacer(width = 8.dp)
@@ -655,9 +711,10 @@ private fun SwapCoinInputTo(
     onClickCoin: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
             if (coinAmount == null) {
@@ -666,7 +723,7 @@ private fun SwapCoinInputTo(
                 headline1_leah(
                     text = coinAmount.toPlainString(),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             VSpacer(height = 3.dp)
@@ -678,11 +735,15 @@ private fun SwapCoinInputTo(
                     fiatPriceImpact?.let { diff ->
                         HSpacer(width = 4.dp)
                         Text(
-                            text = stringResource(R.string.Swap_FiatPriceImpact, diff.toPlainString()),
+                            text =
+                                stringResource(
+                                    R.string.Swap_FiatPriceImpact,
+                                    diff.toPlainString(),
+                                ),
                             style = ComposeAppTheme.typography.body,
                             color = getPriceImpactColor(fiatPriceImpactLevel),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -702,7 +763,7 @@ private fun CoinSelector(
         icon = {
             CoinImage(
                 token = token,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
             )
         },
         text = {
@@ -710,13 +771,15 @@ private fun CoinSelector(
                 Column {
                     subhead1_leah(text = token.coin.code)
                     VSpacer(height = 1.dp)
-                    micro_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                    micro_grey(
+                        text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
+                    )
                 }
             } else {
                 subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
             }
         },
-        onClickSelect = onClickCoin
+        onClickSelect = onClickCoin,
     )
 }
 
@@ -737,25 +800,28 @@ fun FiatAmountInput(
             value = text,
             onValueChange = {
                 try {
-                    val amount = if (it.isBlank()) {
-                        null
-                    } else {
-                        it.toBigDecimal()
-                    }
+                    val amount =
+                        if (it.isBlank()) {
+                            null
+                        } else {
+                            it.toBigDecimal()
+                        }
                     text = it
                     onValueChange.invoke(amount)
                 } catch (e: Exception) {
-
                 }
             },
             enabled = enabled,
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.grey, textStyle = ComposeAppTheme.typography.body
-            ),
+            textStyle =
+                ColoredTextStyle(
+                    color = ComposeAppTheme.colors.grey,
+                    textStyle = ComposeAppTheme.typography.body,
+                ),
             singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                ),
             cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
@@ -769,17 +835,22 @@ fun FiatAmountInput(
 
 @Composable
 private fun Selector(
-    icon: @Composable() (RowScope.() -> Unit),
-    text: @Composable() (RowScope.() -> Unit),
+    icon:
+        @Composable()
+        (RowScope.() -> Unit),
+    text:
+        @Composable()
+        (RowScope.() -> Unit),
     onClickSelect: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onClickSelect,
-        ),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClickSelect,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         icon.invoke(this)
         HSpacer(width = 8.dp)
@@ -788,7 +859,7 @@ private fun Selector(
         Icon(
             painter = painterResource(R.drawable.ic_arrow_big_down_20),
             contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }
@@ -797,7 +868,7 @@ private fun Selector(
 fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
-    focusRequester: FocusRequester = FocusRequester()
+    focusRequester: FocusRequester = FocusRequester(),
 ) {
     var amount by rememberSaveable {
         mutableStateOf(value)
@@ -820,25 +891,27 @@ fun AmountInput(
     }
 
     BasicTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester)
-            .onFocusChanged {
-                setCursorToEndOnFocused = it.isFocused
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    setCursorToEndOnFocused = it.isFocused
 
-                if (!it.isFocused) {
-                    textFieldValue = textFieldValue.copy(selection = TextRange.Zero)
-                }
-            },
+                    if (!it.isFocused) {
+                        textFieldValue = textFieldValue.copy(selection = TextRange.Zero)
+                    }
+                },
         value = textFieldValue,
         onValueChange = { newValue ->
             try {
                 val text = newValue.text
-                amount = if (text.isBlank()) {
-                    null
-                } else {
-                    text.toBigDecimal()
-                }
+                amount =
+                    if (text.isBlank()) {
+                        null
+                    } else {
+                        text.toBigDecimal()
+                    }
 
                 if (!setCursorToEndOnFocused) {
                     textFieldValue = newValue
@@ -849,16 +922,18 @@ fun AmountInput(
 
                 onValueChange.invoke(amount)
             } catch (e: Exception) {
-
             }
         },
-        textStyle = ColoredTextStyle(
-            color = ComposeAppTheme.colors.leah, textStyle = ComposeAppTheme.typography.headline1
-        ),
+        textStyle =
+            ColoredTextStyle(
+                color = ComposeAppTheme.colors.leah,
+                textStyle = ComposeAppTheme.typography.headline1,
+            ),
         singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
-        ),
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+            ),
         cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
@@ -870,12 +945,12 @@ fun AmountInput(
 }
 
 @Composable
-fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
-    return when (priceImpactLevel) {
+fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color =
+    when (priceImpactLevel) {
         PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
         PriceImpactLevel.Warning,
-        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+        PriceImpactLevel.Forbidden,
+        -> ComposeAppTheme.colors.lucian
 
         else -> ComposeAppTheme.colors.grey
     }
-}

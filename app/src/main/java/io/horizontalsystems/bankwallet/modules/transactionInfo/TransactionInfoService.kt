@@ -49,21 +49,24 @@ class TransactionInfoService(
     private val nftMetadataService: NftMetadataService,
     balanceHidden: Boolean,
 ) {
-
     val transactionHash: String get() = transactionRecord.transactionHash
     val source: TransactionSource get() = transactionRecord.source
 
     private val _transactionInfoItemFlow = MutableStateFlow<TransactionInfoItem?>(null)
     val transactionInfoItemFlow = _transactionInfoItemFlow.filterNotNull()
 
-    var transactionInfoItem = TransactionInfoItem(
-        transactionRecord,
-        adapter.lastBlockInfo,
-        TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
-        mapOf(),
-        mapOf(),
-        balanceHidden
-    )
+    var transactionInfoItem =
+        TransactionInfoItem(
+            transactionRecord,
+            adapter.lastBlockInfo,
+            TransactionInfoModule.ExplorerData(
+                adapter.explorerTitle,
+                adapter.getTransactionUrl(transactionRecord.transactionHash),
+            ),
+            mapOf(),
+            mapOf(),
+            balanceHidden,
+        )
         private set(value) {
             field = value
             _transactionInfoItemFlow.update { value }
@@ -73,88 +76,118 @@ class TransactionInfoService(
         get() {
             val coinUids = mutableListOf<String?>()
 
-            val txCoinTypes = when (val tx = transactionRecord) {
-                is TonTransactionRecord -> buildList {
-                    add(tx.mainValue?.coinUid)
-                    add(tx.fee.coinUid)
+            val txCoinTypes =
+                when (val tx = transactionRecord) {
+                    is TonTransactionRecord ->
+                        buildList {
+                            add(tx.mainValue?.coinUid)
+                            add(tx.fee.coinUid)
 
-                    tx.actions.forEach { action ->
-                        val actionType = action.type
-                        when (actionType) {
-                            is TonTransactionRecord.Action.Type.Burn -> {
-                                add(actionType.value.coinUid)
+                            tx.actions.forEach { action ->
+                                val actionType = action.type
+                                when (actionType) {
+                                    is TonTransactionRecord.Action.Type.Burn -> {
+                                        add(actionType.value.coinUid)
+                                    }
+
+                                    is TonTransactionRecord.Action.Type.ContractCall -> {
+                                        add(actionType.value.coinUid)
+                                    }
+
+                                    is TonTransactionRecord.Action.Type.Mint -> {
+                                        add(actionType.value.coinUid)
+                                    }
+
+                                    is TonTransactionRecord.Action.Type.Receive -> {
+                                        add(actionType.value.coinUid)
+                                    }
+
+                                    is TonTransactionRecord.Action.Type.Send -> {
+                                        add(actionType.value.coinUid)
+                                    }
+
+                                    is TonTransactionRecord.Action.Type.Swap -> {
+                                        add(actionType.valueIn.coinUid)
+                                        add(actionType.valueOut.coinUid)
+                                    }
+
+                                    is TonTransactionRecord.Action.Type.ContractDeploy,
+                                    is TonTransactionRecord.Action.Type.Unsupported,
+                                    -> Unit
+                                }
                             }
-                            is TonTransactionRecord.Action.Type.ContractCall -> {
-                                add(actionType.value.coinUid)
-                            }
-                            is TonTransactionRecord.Action.Type.Mint -> {
-                                add(actionType.value.coinUid)
-                            }
-                            is TonTransactionRecord.Action.Type.Receive -> {
-                                add(actionType.value.coinUid)
-                            }
-                            is TonTransactionRecord.Action.Type.Send -> {
-                                add(actionType.value.coinUid)
-                            }
-                            is TonTransactionRecord.Action.Type.Swap -> {
-                                add(actionType.valueIn.coinUid)
-                                add(actionType.valueOut.coinUid)
-                            }
-                            is TonTransactionRecord.Action.Type.ContractDeploy,
-                            is TonTransactionRecord.Action.Type.Unsupported -> Unit
                         }
+
+                    is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
+                    is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
+                    is SwapTransactionRecord ->
+                        listOf(
+                            tx.fee,
+                            tx.valueIn,
+                            tx.valueOut,
+                        ).map { it?.coinUid }
+
+                    is UnknownSwapTransactionRecord ->
+                        listOf(
+                            tx.fee,
+                            tx.valueIn,
+                            tx.valueOut,
+                        ).map { it?.coinUid }
+
+                    is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
+                    is ContractCallTransactionRecord -> {
+                        val tempCoinUidList = mutableListOf<String>()
+                        tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                        tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                        tempCoinUidList
                     }
+
+                    is ExternalContractCallTransactionRecord -> {
+                        val tempCoinUidList = mutableListOf<String>()
+                        tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                        tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                        tempCoinUidList
+                    }
+
+                    is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
+                    is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
+                    is SolanaIncomingTransactionRecord -> listOf(tx.value.coinUid)
+                    is SolanaOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
+                    is SolanaUnknownTransactionRecord -> {
+                        val tempCoinUidList = mutableListOf<String>()
+                        tempCoinUidList.addAll(tx.incomingTransfers.map { it.value.coinUid })
+                        tempCoinUidList.addAll(tx.outgoingTransfers.map { it.value.coinUid })
+                        tempCoinUidList
+                    }
+
+                    is TronOutgoingTransactionRecord -> {
+                        listOf(tx.value.coinUid, tx.fee?.coinUid)
+                    }
+
+                    is TronIncomingTransactionRecord -> {
+                        listOf(tx.value.coinUid)
+                    }
+
+                    is TronApproveTransactionRecord -> {
+                        listOf(tx.value.coinUid, tx.fee?.coinUid)
+                    }
+
+                    is TronContractCallTransactionRecord -> {
+                        val tempCoinUidList = mutableListOf<String>()
+                        tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                        tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                        tempCoinUidList
+                    }
+
+                    is TronExternalContractCallTransactionRecord -> {
+                        val tempCoinUidList = mutableListOf<String>()
+                        tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                        tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                        tempCoinUidList
+                    }
+
+                    else -> emptyList()
                 }
-                is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is SwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
-                is UnknownSwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
-                is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is ContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
-                }
-                is ExternalContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
-                }
-                is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
-                is SolanaIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is SolanaOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is SolanaUnknownTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingTransfers.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingTransfers.map { it.value.coinUid })
-                    tempCoinUidList
-                }
-                is TronOutgoingTransactionRecord -> {
-                    listOf(tx.value.coinUid, tx.fee?.coinUid)
-                }
-                is TronIncomingTransactionRecord -> {
-                    listOf(tx.value.coinUid)
-                }
-                is TronApproveTransactionRecord -> {
-                    listOf(tx.value.coinUid, tx.fee?.coinUid)
-                }
-                is TronContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
-                }
-                is TronExternalContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
-                }
-                else -> emptyList()
-            }
 
             (transactionRecord as? EvmTransactionRecord)?.let { transactionRecord ->
                 if (!transactionRecord.foreignTransaction) {
@@ -173,36 +206,40 @@ class TransactionInfoService(
             return coinUids.filterNotNull().filter { it.isNotBlank() }.distinct()
         }
 
-    suspend fun start() = withContext(Dispatchers.IO) {
-        _transactionInfoItemFlow.update { transactionInfoItem }
+    suspend fun start() =
+        withContext(Dispatchers.IO) {
+            _transactionInfoItemFlow.update { transactionInfoItem }
 
-        launch {
-            adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All, null).asFlow()
-                .collect { transactionRecords ->
-                    val record = transactionRecords.find { it == transactionRecord }
+            launch {
+                adapter
+                    .getTransactionRecordsFlowable(null, FilterTransactionType.All, null)
+                    .asFlow()
+                    .collect { transactionRecords ->
+                        val record = transactionRecords.find { it == transactionRecord }
 
-                    if (record != null) {
-                        handleRecordUpdate(record)
+                        if (record != null) {
+                            handleRecordUpdate(record)
+                        }
                     }
-                }
-        }
-
-        launch {
-            adapter.lastBlockUpdatedFlowable.asFlow()
-                .collect {
-                    handleLastBlockUpdate()
-                }
-        }
-
-        launch {
-            nftMetadataService.assetsBriefMetadataFlow.collect {
-                handleNftMetadata(it)
             }
-        }
 
-        fetchRates()
-        fetchNftMetadata()
-    }
+            launch {
+                adapter.lastBlockUpdatedFlowable
+                    .asFlow()
+                    .collect {
+                        handleLastBlockUpdate()
+                    }
+            }
+
+            launch {
+                nftMetadataService.assetsBriefMetadataFlow.collect {
+                    handleNftMetadata(it)
+                }
+            }
+
+            fetchRates()
+            fetchNftMetadata()
+        }
 
     private suspend fun fetchNftMetadata() {
         val nftUids = transactionRecord.nftUids
@@ -215,27 +252,34 @@ class TransactionInfoService(
         }
     }
 
-    private suspend fun fetchRates() = withContext(Dispatchers.IO) {
-        val coinUids = coinUidsForRates
-        val timestamp = transactionRecord.timestamp
+    private suspend fun fetchRates() =
+        withContext(Dispatchers.IO) {
+            val coinUids = coinUidsForRates
+            val timestamp = transactionRecord.timestamp
 
-        val rates = coinUids.mapNotNull { coinUid ->
-            try {
-                val rate = marketKit
-                    .coinHistoricalPriceSingle(coinUid, currencyManager.baseCurrency.code, timestamp)
-                    .await()
-                if (rate != BigDecimal.ZERO) {
-                    Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, rate))
-                } else {
-                    null
-                }
-            } catch (error: Exception) {
-                null
-            }
-        }.toMap()
+            val rates =
+                coinUids
+                    .mapNotNull { coinUid ->
+                        try {
+                            val rate =
+                                marketKit
+                                    .coinHistoricalPriceSingle(
+                                        coinUid,
+                                        currencyManager.baseCurrency.code,
+                                        timestamp,
+                                    ).await()
+                            if (rate != BigDecimal.ZERO) {
+                                Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, rate))
+                            } else {
+                                null
+                            }
+                        } catch (error: Exception) {
+                            null
+                        }
+                    }.toMap()
 
-        handleRates(rates)
-    }
+            handleRates(rates)
+        }
 
     @Synchronized
     private fun handleLastBlockUpdate() {
@@ -257,8 +301,5 @@ class TransactionInfoService(
         transactionInfoItem = transactionInfoItem.copy(nftMetadata = nftMetadata)
     }
 
-    fun getRawTransaction(): String? {
-        return adapter.getRawTransaction(transactionRecord.transactionHash)
-    }
-
+    fun getRawTransaction(): String? = adapter.getRawTransaction(transactionRecord.transactionHash)
 }

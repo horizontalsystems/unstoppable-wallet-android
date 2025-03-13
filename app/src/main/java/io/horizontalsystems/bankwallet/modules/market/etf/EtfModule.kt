@@ -16,12 +16,9 @@ import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 
 object EtfModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return EtfViewModel(App.currencyManager, App.marketKit) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = EtfViewModel(App.currencyManager, App.marketKit) as T
     }
 
     @Immutable
@@ -36,7 +33,7 @@ object EtfModule {
 
     data class RankedEtf(
         val etf: Etf,
-        val rank: Int
+        val rank: Int,
     )
 
     @Immutable
@@ -51,13 +48,15 @@ object EtfModule {
         val currency: Currency,
     )
 
-    enum class SortBy(@StringRes val titleResId: Int): WithTranslatableTitle {
+    enum class SortBy(
+        @StringRes val titleResId: Int,
+    ) : WithTranslatableTitle {
         HighestAssets(R.string.MarketEtf_HighestAssets),
         LowestAssets(R.string.MarketEtf_LowestAssets),
         Inflow(R.string.MarketEtf_Inflow),
-        Outflow(R.string.MarketEtf_Outflow);
+        Outflow(R.string.MarketEtf_Outflow),
+        ;
 
         override val title = TranslatableString.ResString(titleResId)
     }
 }
-

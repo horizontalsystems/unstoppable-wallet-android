@@ -1,23 +1,23 @@
-//package io.horizontalsystems.bankwallet.modules.send
+// package io.horizontalsystems.bankwallet.modules.send
 //
-//import com.nhaarman.mockito_kotlin.*
-//import io.horizontalsystems.bankwallet.core.*
-//import io.horizontalsystems.bankwallet.entities.*
-//import io.horizontalsystems.bankwallet.modules.RxBaseTest
-//import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-//import io.reactivex.Flowable
-//import io.reactivex.Single
-//import io.reactivex.plugins.RxJavaPlugins
-//import io.reactivex.schedulers.TestScheduler
-//import org.junit.Assert
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mockito.mock
-//import java.math.BigDecimal
-//import java.math.RoundingMode
-//import java.util.concurrent.TimeUnit
+// import com.nhaarman.mockito_kotlin.*
+// import io.horizontalsystems.bankwallet.core.*
+// import io.horizontalsystems.bankwallet.entities.*
+// import io.horizontalsystems.bankwallet.modules.RxBaseTest
+// import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+// import io.reactivex.Flowable
+// import io.reactivex.Single
+// import io.reactivex.plugins.RxJavaPlugins
+// import io.reactivex.schedulers.TestScheduler
+// import org.junit.Assert
+// import org.junit.Before
+// import org.junit.Test
+// import org.mockito.Mockito.mock
+// import java.math.BigDecimal
+// import java.math.RoundingMode
+// import java.util.concurrent.TimeUnit
 //
-//class SendInteractorTest {
+// class SendInteractorTest {
 //
 //    private val delegate = mock(SendModule.IInteractorDelegate::class.java)
 //    private val localStorage = mock(ILocalStorage::class.java)
@@ -528,4 +528,4 @@
 //        verify(delegate, atLeastOnce()).didRateRetrieve(rate)
 //    }
 //
-//}
+// }

@@ -22,25 +22,23 @@ class BitcoinIncomingTransactionRecord(
     amount: BigDecimal,
     val from: String?,
     memo: String?,
-    source: TransactionSource
+    source: TransactionSource,
 ) : BitcoinTransactionRecord(
-    uid = uid,
-    transactionHash = transactionHash,
-    transactionIndex = transactionIndex,
-    blockHeight = blockHeight,
-    confirmationsThreshold = confirmationsThreshold,
-    timestamp = timestamp,
-    fee = fee?.let { TransactionValue.CoinValue(token, it) },
-    failed = failed,
-    lockInfo = lockInfo,
-    conflictingHash = conflictingHash,
-    showRawTransaction = showRawTransaction,
-    memo = memo,
-    source = source
-) {
-
+        uid = uid,
+        transactionHash = transactionHash,
+        transactionIndex = transactionIndex,
+        blockHeight = blockHeight,
+        confirmationsThreshold = confirmationsThreshold,
+        timestamp = timestamp,
+        fee = fee?.let { TransactionValue.CoinValue(token, it) },
+        failed = failed,
+        lockInfo = lockInfo,
+        conflictingHash = conflictingHash,
+        showRawTransaction = showRawTransaction,
+        memo = memo,
+        source = source,
+    ) {
     val value: TransactionValue = TransactionValue.CoinValue(token, amount)
 
     override val mainValue = value
-
 }

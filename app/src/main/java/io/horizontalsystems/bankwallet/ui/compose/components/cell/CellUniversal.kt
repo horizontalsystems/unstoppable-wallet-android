@@ -32,7 +32,9 @@ fun CellUniversal(
     paddingHorizontal: Dp = 16.dp,
     onClick: (() -> Unit)? = null,
     color: Color? = null,
-    content: @Composable() (RowScope.() -> Unit),
+    content:
+        @Composable()
+        (RowScope.() -> Unit),
 ) {
     var modifier: Modifier = Modifier.fillMaxWidth()
 
@@ -49,17 +51,18 @@ fun CellUniversal(
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
 
         Row(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 48.dp)
-                .padding(vertical = paddingVertical, horizontal = paddingHorizontal),
+            modifier =
+                Modifier
+                    .defaultMinSize(minHeight = 48.dp)
+                    .padding(vertical = paddingVertical, horizontal = paddingHorizontal),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            content = content
+            content = content,
         )
     }
 }
@@ -69,78 +72,92 @@ fun CellUniversalFixedHeight(
     borderTop: Boolean = true,
     height: Dp,
     paddingHorizontal: Dp = 16.dp,
-    content: @Composable() (RowScope.() -> Unit),
+    content:
+        @Composable()
+        (RowScope.() -> Unit),
 ) {
     Box {
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
 
         Row(
-            modifier = Modifier
-                .height(height)
-                .padding(horizontal = paddingHorizontal),
+            modifier =
+                Modifier
+                    .height(height)
+                    .padding(horizontal = paddingHorizontal),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            content = content
+            content = content,
         )
     }
 }
 
 @Composable
 fun SectionPremiumUniversalLawrence(
-    content: @Composable() (ColumnScope.() -> Unit),
+    content:
+        @Composable()
+        (ColumnScope.() -> Unit),
 ) {
     SectionPremiumUniversal(
         backgroundColor = ComposeAppTheme.colors.lawrence,
-        content = content
+        content = content,
     )
 }
 
 @Composable
 fun SectionUniversalLawrence(
-    content: @Composable() (ColumnScope.() -> Unit),
+    content:
+        @Composable()
+        (ColumnScope.() -> Unit),
 ) {
     SectionUniversal(
         backgroundColor = ComposeAppTheme.colors.lawrence,
-        content = content
+        content = content,
     )
 }
 
 @Composable
 private fun SectionPremiumUniversal(
     backgroundColor: Color,
-    content: @Composable() (ColumnScope.() -> Unit),
+    content:
+        @Composable()
+        (ColumnScope.() -> Unit),
 ) {
-    val brush = Brush.horizontalGradient(
-        0.0f to Color(0xFFFFD000),
-        1.0f to Color(0xFFFFA800),
-    )
+    val brush =
+        Brush.horizontalGradient(
+            0.0f to Color(0xFFFFD000),
+            1.0f to Color(0xFFFFA800),
+        )
 
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(0.5.dp, brush, RoundedCornerShape(12.dp))
-            .background(backgroundColor),
-        content = content
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(0.5.dp, brush, RoundedCornerShape(12.dp))
+                .background(backgroundColor),
+        content = content,
     )
 }
 
 @Composable
 private fun SectionUniversal(
     backgroundColor: Color,
-    content: @Composable() (ColumnScope.() -> Unit),
+    content:
+        @Composable()
+        (ColumnScope.() -> Unit),
 ) {
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(backgroundColor),
-        content = content
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(backgroundColor),
+        content = content,
     )
 }

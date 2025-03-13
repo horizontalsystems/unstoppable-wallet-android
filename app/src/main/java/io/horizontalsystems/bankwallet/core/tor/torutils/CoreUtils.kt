@@ -6,7 +6,6 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 
-
 object FileUtils {
     fun setExecutable(fileBin: File) {
         fileBin.setReadable(true)
@@ -17,7 +16,6 @@ object FileUtils {
 }
 
 object ProcessUtils {
-
     @Throws(IOException::class)
     fun findProcessId(processName: String): Int {
         val procPs: Process = Runtime.getRuntime().exec(TorConstants.SHELL_CMD_PS)
@@ -25,13 +23,12 @@ object ProcessUtils {
         var line: String? = reader.readLine()
 
         while (line != null) {
-
             if (line.contains(processName)) {
                 val lineParts = line.split("\\s+".toRegex()).toTypedArray()
                 return try {
-                    lineParts[1].toInt() //for most devices it is the second
+                    lineParts[1].toInt() // for most devices it is the second
                 } catch (e: NumberFormatException) {
-                    lineParts[0].toInt() //but for samsungs it is the first
+                    lineParts[0].toInt() // but for samsungs it is the first
                 } finally {
                     try {
                         procPs.destroy()
@@ -52,11 +49,13 @@ object ProcessUtils {
     }
 
     @Throws(Exception::class)
-    fun killProcess(fileProcBin: File, signal: String) {
+    fun killProcess(
+        fileProcBin: File,
+        signal: String,
+    ) {
         var procId: Int
         var killAttempts = 0
         while (findProcessId(fileProcBin.name).also { procId = it } != -1) {
-
             killAttempts++
             val pidString = procId.toString()
 
@@ -69,16 +68,21 @@ object ProcessUtils {
 
             try {
                 Thread.sleep(1000)
-            } catch (e: InterruptedException) { // ignored
+            } catch (e: InterruptedException) {
+                // ignored
             }
 
-            if (killAttempts > 4)
+            if (killAttempts > 4) {
                 throw Exception("Cannot kill: " + fileProcBin.absolutePath)
+            }
         }
     }
 
     @Throws(Exception::class)
-    fun killProcess(pidString: String, signal: String) {
+    fun killProcess(
+        pidString: String,
+        signal: String,
+    ) {
         try {
             Runtime.getRuntime().exec("kill $signal $pidString")
         } catch (ioe: IOException) {

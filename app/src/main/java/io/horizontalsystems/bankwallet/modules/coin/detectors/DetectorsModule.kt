@@ -11,28 +11,28 @@ object DetectorsModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val title: String,
-        private val detectors: List<IssueParcelable>
+        private val detectors: List<IssueParcelable>,
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DetectorsViewModel(title, detectors) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = DetectorsViewModel(title, detectors) as T
     }
 
     data class UiState(
         val title: String,
         val coreIssues: List<IssueViewItem>,
-        val generalIssues: List<IssueViewItem>
+        val generalIssues: List<IssueViewItem>,
     )
 
-    enum class DetectorsTab(@StringRes val titleResId: Int) {
+    enum class DetectorsTab(
+        @StringRes val titleResId: Int,
+    ) {
         Token(R.string.Detectors_TokenDetectors),
-        General(R.string.Detectors_GeneralDetectors);
+        General(R.string.Detectors_GeneralDetectors),
     }
 
     data class IssueViewItem(
         val id: Int,
         val issue: IssueParcelable,
-        val expanded: Boolean = false
+        val expanded: Boolean = false,
     )
 }
 

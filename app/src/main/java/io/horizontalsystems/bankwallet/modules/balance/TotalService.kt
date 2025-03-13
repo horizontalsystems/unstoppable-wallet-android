@@ -24,20 +24,21 @@ class TotalService(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val baseTokenManager: BaseTokenManager,
-    private val balanceHiddenManager: BalanceHiddenManager
+    private val balanceHiddenManager: BalanceHiddenManager,
 ) {
     private var balanceHidden = balanceHiddenManager.balanceHidden
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
     private var dimmed = false
 
-    private val _stateFlow: MutableStateFlow<State> = MutableStateFlow(
-        State.Visible(
-            currencyValue = totalCurrencyValue,
-            coinValue = totalCoinValue,
-            dimmed = dimmed
+    private val _stateFlow: MutableStateFlow<State> =
+        MutableStateFlow(
+            State.Visible(
+                currencyValue = totalCurrencyValue,
+                coinValue = totalCoinValue,
+                dimmed = dimmed,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     private var baseToken: Token? = null
@@ -114,38 +115,46 @@ class TotalService(
     }
 
     private fun refreshCoinPrice() {
-        coinPrice = baseToken?.let {
-            marketKit.coinPrice(it.coin.uid, currency.code)
-        }
+        coinPrice =
+            baseToken?.let {
+                marketKit.coinPrice(it.coin.uid, currency.code)
+            }
     }
 
     private fun resubscribeForCoinPrice() {
         coinPriceUpdatesJob?.cancel()
 
         baseToken?.let { platformCoin ->
-            coinPriceUpdatesJob = coroutineScope.launch {
-                marketKit.coinPriceObservable("total", platformCoin.coin.uid, currency.code)
-                    .asFlow()
-                    .collect {
-                        coinPrice = it
+            coinPriceUpdatesJob =
+                coroutineScope.launch {
+                    marketKit
+                        .coinPriceObservable("total", platformCoin.coin.uid, currency.code)
+                        .asFlow()
+                        .collect {
+                            coinPrice = it
 
-                        refreshTotalCoinValue()
+                            refreshTotalCoinValue()
 
-                        emitState()
-                    }
-            }
+                            emitState()
+                        }
+                }
         }
     }
 
     private fun refreshTotalCurrencyValue() {
-        totalCurrencyValue = items?.let { items ->
-            var total = BigDecimal.ZERO
-            items.forEach { item ->
-                total = total.add(item.coinPrice?.value?.let { item.value.times(it) } ?: BigDecimal.ZERO)
-            }
+        totalCurrencyValue =
+            items?.let { items ->
+                var total = BigDecimal.ZERO
+                items.forEach { item ->
+                    total =
+                        total.add(
+                            item.coinPrice?.value?.let { item.value.times(it) }
+                                ?: BigDecimal.ZERO,
+                        )
+                }
 
-            CurrencyValue(currency, total)
-        }
+                CurrencyValue(currency, total)
+            }
     }
 
     private fun refreshTotalCoinValue() {
@@ -153,15 +162,16 @@ class TotalService(
         val tmpCoinPrice = coinPrice
         val tmpBaseToken = baseToken
 
-        totalCoinValue = when {
-            tmpTotalCurrencyValue == null -> null
-            tmpCoinPrice == null -> null
-            tmpBaseToken == null -> null
-            else -> {
-                val value = tmpTotalCurrencyValue.value / tmpCoinPrice.value
-                CoinValue(tmpBaseToken, value)
+        totalCoinValue =
+            when {
+                tmpTotalCurrencyValue == null -> null
+                tmpCoinPrice == null -> null
+                tmpBaseToken == null -> null
+                else -> {
+                    val value = tmpTotalCurrencyValue.value / tmpCoinPrice.value
+                    CoinValue(tmpBaseToken, value)
+                }
             }
-        }
     }
 
     private fun refreshDimmed() {
@@ -180,7 +190,7 @@ class TotalService(
                 State.Visible(
                     currencyValue = totalCurrencyValue,
                     coinValue = totalCoinValue,
-                    dimmed = dimmed
+                    dimmed = dimmed,
                 )
             }
         }
@@ -189,14 +199,14 @@ class TotalService(
     data class BalanceItem(
         val value: BigDecimal,
         val isValuePending: Boolean,
-        val coinPrice: CoinPrice?
+        val coinPrice: CoinPrice?,
     )
 
     sealed class State {
         data class Visible(
             val currencyValue: CurrencyValue?,
             val coinValue: CoinValue?,
-            val dimmed: Boolean
+            val dimmed: Boolean,
         ) : State()
 
         object Hidden : State()

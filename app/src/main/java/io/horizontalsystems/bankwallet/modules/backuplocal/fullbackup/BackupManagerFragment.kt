@@ -43,7 +43,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BackupManagerFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         BackupManagerScreen(
@@ -59,20 +58,26 @@ class BackupManagerFragment : BaseComposeFragment() {
                             false,
                             jsonString,
                             fileName,
-                            StatPage.ImportFullFromFiles
-                        )
+                            StatPage.ImportFullFromFiles,
+                        ),
                     )
 
-                    stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ImportFullFromFiles))
+                    stat(
+                        page = StatPage.BackupManager,
+                        event = StatEvent.Open(StatPage.ImportFullFromFiles),
+                    )
                 }
             },
             onCreateBackup = {
                 navController.authorizedAction {
                     navController.slideFromRight(R.id.backupLocalFragment)
 
-                    stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ExportFullToFiles))
+                    stat(
+                        page = StatPage.BackupManager,
+                        event = StatEvent.Open(StatPage.ExportFullToFiles),
+                    )
                 }
-            }
+            },
         )
     }
 }
@@ -87,28 +92,29 @@ private fun BackupManagerScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let { uriNonNull ->
-            context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
-                try {
-                    inputStream.bufferedReader().use { br ->
-                        val jsonString = br.readText()
-                        //validate json format
-                        BackupFileValidator().validate(jsonString)
+    val restoreLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let { uriNonNull ->
+                context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
+                    try {
+                        inputStream.bufferedReader().use { br ->
+                            val jsonString = br.readText()
+                            // validate json format
+                            BackupFileValidator().validate(jsonString)
 
-                        val fileName = context.getFileName(uriNonNull)
-                        onRestoreBackup(jsonString, fileName)
-                    }
-                } catch (e: Throwable) {
-                    //show json parsing error
-                    coroutineScope.launch {
-                        delay(300)
-                        bottomSheetState.show()
+                            val fileName = context.getFileName(uriNonNull)
+                            onRestoreBackup(jsonString, fileName)
+                        }
+                    } catch (e: Throwable) {
+                        // show json parsing error
+                        coroutineScope.launch {
+                            delay(300)
+                            bottomSheetState.show()
+                        }
                     }
                 }
             }
         }
-    }
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -128,9 +134,9 @@ private fun BackupManagerScreen(
                 },
                 onClose = {
                     coroutineScope.launch { bottomSheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -141,7 +147,7 @@ private fun BackupManagerScreen(
                         HsBackButton(onClick = onBackClick)
                     },
                 )
-            }
+            },
         ) {
             Column(modifier = Modifier.padding(it)) {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -153,7 +159,7 @@ private fun BackupManagerScreen(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     painter = painterResource(R.drawable.ic_download_20),
                                     contentDescription = null,
-                                    tint = ComposeAppTheme.colors.jacob
+                                    tint = ComposeAppTheme.colors.jacob,
                                 )
                                 body_jacob(text = stringResource(R.string.BackupManager_RestoreBackup))
                             }
@@ -165,12 +171,12 @@ private fun BackupManagerScreen(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     painter = painterResource(R.drawable.ic_plus),
                                     contentDescription = null,
-                                    tint = ComposeAppTheme.colors.jacob
+                                    tint = ComposeAppTheme.colors.jacob,
                                 )
                                 body_jacob(text = stringResource(R.string.BackupManager_CreateBackup))
                             }
                         }
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))

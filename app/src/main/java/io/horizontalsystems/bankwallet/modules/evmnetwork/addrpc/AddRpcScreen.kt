@@ -41,28 +41,30 @@ fun AddRpcScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ComposeAppTheme.colors.tyler)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(ComposeAppTheme.colors.tyler),
     ) {
         AppBar(
             title = stringResource(R.string.AddEvmSyncSource_AddRPCSource),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = {
-                        navController.popBackStack()
-                    }
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        },
+                    ),
+                ),
         )
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
         ) {
-
             Spacer(modifier = Modifier.height(12.dp))
 
             HeaderText(stringResource(id = R.string.AddEvmSyncSource_RpcUrl))
@@ -71,7 +73,7 @@ fun AddRpcScreen(
                 qrScannerEnabled = true,
                 onValueChange = viewModel::onEnterRpcUrl,
                 hint = "",
-                state = getState(viewModel.viewState.urlCaution)
+                state = getState(viewModel.viewState.urlCaution),
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -80,16 +82,17 @@ fun AddRpcScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 qrScannerEnabled = true,
                 onValueChange = viewModel::onEnterBasicAuth,
-                hint = ""
+                hint = "",
             )
             Spacer(Modifier.height(60.dp))
         }
 
         ButtonsGroupWithShade {
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.Button_Add),
                 onClick = { viewModel.onAddClick() },
             )
@@ -97,8 +100,9 @@ fun AddRpcScreen(
     }
 }
 
-private fun getState(caution: Caution?) = when (caution?.type) {
-    Caution.Type.Error -> DataState.Error(Exception(caution.text))
-    Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
-    null -> null
-}
+private fun getState(caution: Caution?) =
+    when (caution?.type) {
+        Caution.Type.Error -> DataState.Error(Exception(caution.text))
+        Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
+        null -> null
+    }

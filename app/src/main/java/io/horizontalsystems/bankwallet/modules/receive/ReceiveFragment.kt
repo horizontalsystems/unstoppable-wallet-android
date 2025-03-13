@@ -41,7 +41,6 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedV
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ReceiveFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Wallet>(navController) { wallet ->
@@ -62,18 +61,18 @@ object ReceiveRoutes {
 @Composable
 fun ReceiveScreen(
     wallet: Wallet?,
-    fragmentNavController: NavController
+    fragmentNavController: NavController,
 ) {
     val startDestination = if (wallet != null) RECEIVE_ADDRESS_SCREEN else COIN_SELECT_SCREEN
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = "receive_screen"
+        startDestination = "receive_screen",
     ) {
         navigation(
             startDestination = startDestination,
-            route = "receive_screen"
+            route = "receive_screen",
         ) {
             composablePage(RECEIVE_ADDRESS_SCREEN) { entry ->
                 val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
@@ -84,7 +83,8 @@ fun ReceiveScreen(
                     return@composablePage
                 }
 
-                val addressViewModel = viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(walletNonNull))
+                val addressViewModel =
+                    viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(walletNonNull))
                 val context = LocalContext.current
 
                 ReceiveAddressScreen(
@@ -93,18 +93,25 @@ fun ReceiveScreen(
                     onErrorClick = { addressViewModel.onErrorClick() },
                     setAmount = { amount -> addressViewModel.setAmount(amount) },
                     onShareClick = { address ->
-                        context.startActivity(Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, address)
-                            type = "text/plain"
-                        })
+                        context.startActivity(
+                            Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, address)
+                                type = "text/plain"
+                            },
+                        )
                     },
                     showUsedAddresses = { usedAddresses, usedChangeAddresses ->
-                        viewModel.usedAddressesParams = UsedAddressesParams(walletNonNull.coin.name, usedAddresses, usedChangeAddresses)
+                        viewModel.usedAddressesParams =
+                            UsedAddressesParams(
+                                walletNonNull.coin.name,
+                                usedAddresses,
+                                usedChangeAddresses,
+                            )
                         navController.navigate(USED_ADDRESSES_SCREEN)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),
-                    closeModule = { fragmentNavController.popBackStack() }
+                    closeModule = { fragmentNavController.popBackStack() },
                 )
             }
             composablePage(USED_ADDRESSES_SCREEN) { entry ->
@@ -150,16 +157,17 @@ fun ReceiveScreen(
                     CloseWithMessage(fragmentNavController)
                     return@composablePage
                 }
-                val bchAddressViewModel = viewModel<BchAddressTypeSelectViewModel>(
-                    factory = BchAddressTypeSelectViewModel.Factory(coinUid)
-                )
+                val bchAddressViewModel =
+                    viewModel<BchAddressTypeSelectViewModel>(
+                        factory = BchAddressTypeSelectViewModel.Factory(coinUid),
+                    )
                 AddressFormatSelectScreen(
                     addressFormatItems = bchAddressViewModel.items,
                     description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
                     onSelect = { wallet ->
                         onSelectWallet(wallet, viewModel, navController)
                     },
-                    onBackPress = navigateBack(fragmentNavController, navController)
+                    onBackPress = navigateBack(fragmentNavController, navController),
                 )
             }
             composablePage(DERIVATION_SELECT_SCREEN) { entry ->
@@ -169,16 +177,17 @@ fun ReceiveScreen(
                     CloseWithMessage(fragmentNavController)
                     return@composablePage
                 }
-                val derivationViewModel = viewModel<DerivationSelectViewModel>(
-                    factory = DerivationSelectViewModel.Factory(coinUid)
-                )
+                val derivationViewModel =
+                    viewModel<DerivationSelectViewModel>(
+                        factory = DerivationSelectViewModel.Factory(coinUid),
+                    )
                 AddressFormatSelectScreen(
                     addressFormatItems = derivationViewModel.items,
                     description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),
                     onSelect = { wallet ->
                         onSelectWallet(wallet, viewModel, navController)
                     },
-                    onBackPress = navigateBack(fragmentNavController, navController)
+                    onBackPress = navigateBack(fragmentNavController, navController),
                 )
             }
             composablePage(NETWORK_SELECT_SCREEN) { entry ->
@@ -195,14 +204,18 @@ fun ReceiveScreen(
                     fullCoin = fullCoin,
                     onSelect = { wallet ->
                         onSelectWallet(wallet, viewModel, navController)
-                    }
+                    },
                 )
             }
         }
     }
 }
 
-private fun onSelectWallet(wallet: Wallet, viewModel: ReceiveSharedViewModel, navController: NavController) {
+private fun onSelectWallet(
+    wallet: Wallet,
+    viewModel: ReceiveSharedViewModel,
+    navController: NavController,
+) {
     viewModel.wallet = wallet
     navController.navigate(RECEIVE_ADDRESS_SCREEN)
 
@@ -216,20 +229,23 @@ fun CloseWithMessage(navController: NavController) {
     navController.popBackStack()
 }
 
-fun navigateBack(fragmentNavController: NavController, navController: NavHostController): () -> Unit = {
-    val result = navController.popBackStack()
-    if (!result) {
-        fragmentNavController.popBackStack()
+fun navigateBack(
+    fragmentNavController: NavController,
+    navController: NavHostController,
+): () -> Unit =
+    {
+        val result = navController.popBackStack()
+        if (!result) {
+            fragmentNavController.popBackStack()
+        }
     }
-}
 
 @Composable
-inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
-    navController: NavHostController,
-): T {
+inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavHostController): T {
     val navGraphRoute = destination.parent?.route ?: return viewModel()
-    val parentEntry = remember(this) {
-        navController.getBackStackEntry(navGraphRoute)
-    }
+    val parentEntry =
+        remember(this) {
+            navController.getBackStackEntry(navGraphRoute)
+        }
     return viewModel(parentEntry)
 }

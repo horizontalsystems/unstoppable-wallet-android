@@ -13,32 +13,32 @@ import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-
 class MarketFiltersService(
     private val marketKit: MarketKitWrapper,
-    private val baseCurrency: Currency
+    private val baseCurrency: Currency,
 ) : IMarketListFetcher {
-    private val blockchainTypes = listOf(
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Avalanche,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.Unsupported("harmony-shard-0"),
-        BlockchainType.Unsupported("huobi-token"),
-        BlockchainType.Unsupported("iotex"),
-        BlockchainType.Unsupported("moonriver"),
-        BlockchainType.Unsupported("okex-chain"),
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.Polygon,
-        BlockchainType.Unsupported("solana"),
-        BlockchainType.Unsupported("sora"),
-        BlockchainType.Unsupported("tomochain"),
-        BlockchainType.Unsupported("xdai"),
-    )
+    private val blockchainTypes =
+        listOf(
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.ArbitrumOne,
+            BlockchainType.Avalanche,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.Unsupported("harmony-shard-0"),
+            BlockchainType.Unsupported("huobi-token"),
+            BlockchainType.Unsupported("iotex"),
+            BlockchainType.Unsupported("moonriver"),
+            BlockchainType.Unsupported("okex-chain"),
+            BlockchainType.Optimism,
+            BlockchainType.Base,
+            BlockchainType.ZkSync,
+            BlockchainType.Polygon,
+            BlockchainType.Unsupported("solana"),
+            BlockchainType.Unsupported("sora"),
+            BlockchainType.Unsupported("tomochain"),
+            BlockchainType.Unsupported("xdai"),
+        )
     private var cache: List<MarketInfo>? = null
 
     val blockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
@@ -62,8 +62,8 @@ class MarketFiltersService(
     var filterSolidDex = false
     var filterGoodDistribution = false
 
-    override fun fetchAsync(): Single<List<MarketItem>> {
-        return getTopMarketList()
+    override fun fetchAsync(): Single<List<MarketItem>> =
+        getTopMarketList()
             .map { coinMarkets ->
                 coinMarkets.map {
                     val coinMarket = it.value
@@ -71,39 +71,38 @@ class MarketFiltersService(
                     MarketItem.createFromCoinMarket(coinMarket, baseCurrency, filterPeriod)
                 }
             }
-    }
 
     fun clearCache() {
         cache = null
     }
 
-    suspend fun fetchNumberOfItems(): Int {
-        return getTopMarketList().await().size
-    }
+    suspend fun fetchNumberOfItems(): Int = getTopMarketList().await().size
 
-    suspend fun getSectors(): List<SectorItem> {
-        return marketKit.categoriesSingle().blockingGet().map { coinCategory ->
+    suspend fun getSectors(): List<SectorItem> =
+        marketKit.categoriesSingle().blockingGet().map { coinCategory ->
             SectorItem(coinCategory.id, coinCategory.name)
         }
-    }
 
     private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
-        val topMarketListAsync = if (cache != null) {
-            Single.just(cache)
-        } else {
-            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
-                .doOnSuccess {
-                    cache = it
-                }
-        }
+        val topMarketListAsync =
+            if (cache != null) {
+                Single.just(cache)
+            } else {
+                marketKit
+                    .advancedMarketInfosSingle(coinCount, baseCurrency.code)
+                    .doOnSuccess {
+                        cache = it
+                    }
+            }
 
         return topMarketListAsync
             .map {
-                it.mapIndexed { index, coinMarket ->
-                    index to coinMarket
-                }.filter {
-                    filterCoinMarket(it.second)
-                }.toMap()
+                it
+                    .mapIndexed { index, coinMarket ->
+                        index to coinMarket
+                    }.filter {
+                        filterCoinMarket(it.second)
+                    }.toMap()
             }
     }
 
@@ -112,24 +111,27 @@ class MarketFiltersService(
         val totalVolume = marketInfo.totalVolume ?: return false
         val priceChangeValue = marketInfo.priceChangeValue(filterPeriod) ?: return false
 
-        return filterByRange(filterMarketCap, marketCap.toLong())
-                && filterByRange(filterVolume, totalVolume.toLong())
-                && inBlockchain(marketInfo.fullCoin.tokens)
-                && inSectors(marketInfo.categoryIds, sectorIds)
-                && filterByRange(filterPriceChange, priceChangeValue.toLong())
-                && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
-                && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
-                && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
-                && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
-                && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
-                && (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true)
-                && (!filterSolidCex || marketInfo.solidCex == true)
-                && (!filterSolidDex || marketInfo.solidDex == true)
-                && (!filterGoodDistribution || marketInfo.goodDistribution == true)
-                && inAdvice(marketInfo.advice)
+        return filterByRange(filterMarketCap, marketCap.toLong()) &&
+            filterByRange(filterVolume, totalVolume.toLong()) &&
+            inBlockchain(marketInfo.fullCoin.tokens) &&
+            inSectors(marketInfo.categoryIds, sectorIds) &&
+            filterByRange(filterPriceChange, priceChangeValue.toLong()) &&
+            (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage)) &&
+            (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage)) &&
+            (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin")) &&
+            (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum")) &&
+            (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin")) &&
+            (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true) &&
+            (!filterSolidCex || marketInfo.solidCex == true) &&
+            (!filterSolidDex || marketInfo.solidDex == true) &&
+            (!filterGoodDistribution || marketInfo.goodDistribution == true) &&
+            inAdvice(marketInfo.advice)
     }
 
-    private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
+    private fun filterByRange(
+        filter: Pair<Long?, Long?>?,
+        value: Long?,
+    ): Boolean {
         if (filter == null) return true
 
         filter.first?.let { min ->
@@ -147,26 +149,29 @@ class MarketFiltersService(
         return true
     }
 
-    private fun marketInfo(coinUid: String): MarketInfo? =
-        cache?.firstOrNull { it.fullCoin.coin.uid == coinUid }
+    private fun marketInfo(coinUid: String): MarketInfo? = cache?.firstOrNull { it.fullCoin.coin.uid == coinUid }
 
-    private fun outperformed(value: BigDecimal?, coinUid: String): Boolean {
+    private fun outperformed(
+        value: BigDecimal?,
+        coinUid: String,
+    ): Boolean {
         if (value == null) return false
         val coinMarket = marketInfo(coinUid) ?: return false
 
         return (coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO) < value
     }
 
-    private fun closeToAllTime(value: BigDecimal?): Boolean {
-        return value != null && value.abs() < BigDecimal.TEN
-    }
+    private fun closeToAllTime(value: BigDecimal?): Boolean = value != null && value.abs() < BigDecimal.TEN
 
     private fun inAdvice(tokenAdvice: Advice?): Boolean {
         if (filterTradingSignal.isEmpty()) return true
         return filterTradingSignal.contains(tokenAdvice)
     }
 
-    private fun inSectors(ids: List<Int>?, selectedSectorIds: List<Int>): Boolean {
+    private fun inSectors(
+        ids: List<Int>?,
+        selectedSectorIds: List<Int>,
+    ): Boolean {
         if (selectedSectorIds.isEmpty()) return true
         if (ids == null) return false
         return ids.intersect(selectedSectorIds.toSet()).isNotEmpty()

@@ -57,9 +57,10 @@ import java.math.BigDecimal
 @Composable
 fun TopPlatforms(
     navController: NavController,
-    viewModel: TopPlatformsViewModel = viewModel(
-        factory = TopPlatformsModule.Factory(null)
-    ),
+    viewModel: TopPlatformsViewModel =
+        viewModel(
+            factory = TopPlatformsModule.Factory(null),
+        ),
 ) {
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
@@ -72,8 +73,12 @@ fun TopPlatforms(
             onRefresh = {
                 viewModel.refresh()
 
-                stat(page = StatPage.Markets, section = StatSection.Platforms, event = StatEvent.Refresh)
-            }
+                stat(
+                    page = StatPage.Markets,
+                    section = StatSection.Platforms,
+                    event = StatEvent.Refresh,
+                )
+            },
         ) {
             Crossfade(uiState.viewState, label = "") { state ->
                 when (state) {
@@ -84,7 +89,7 @@ fun TopPlatforms(
                     is ViewState.Error -> {
                         ListErrorView(
                             stringResource(R.string.SyncError),
-                            viewModel::onErrorClick
+                            viewModel::onErrorClick,
                         )
                     }
 
@@ -97,13 +102,13 @@ fun TopPlatforms(
                                 onItemClick = {
                                     navController.slideFromRight(
                                         R.id.marketPlatformFragment,
-                                        it
+                                        it,
                                     )
 
                                     stat(
                                         page = StatPage.Markets,
                                         section = StatSection.Platforms,
-                                        event = StatEvent.OpenPlatform(it.uid)
+                                        event = StatEvent.OpenPlatform(it.uid),
                                     )
                                 },
                                 preItems = {
@@ -114,19 +119,19 @@ fun TopPlatforms(
                                                 uiState.sortingField.titleResId,
                                                 onOptionClick = {
                                                     openSortingSelector = true
-                                                }
+                                                },
                                             )
                                             HSpacer(width = 12.dp)
                                             OptionController(
                                                 uiState.timePeriod.titleResId,
                                                 onOptionClick = {
                                                     openPeriodSelector = true
-                                                }
+                                                },
                                             )
                                             HSpacer(width = 16.dp)
                                         }
                                     }
-                                }
+                                },
                             )
                         }
                     }
@@ -134,7 +139,7 @@ fun TopPlatforms(
             }
         }
     }
-    //Dialogs
+    // Dialogs
     if (openPeriodSelector) {
         AlertGroup(
             R.string.CoinPage_Period,
@@ -145,10 +150,10 @@ fun TopPlatforms(
                 stat(
                     page = StatPage.Markets,
                     section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
                 )
             },
-            { openPeriodSelector = false }
+            { openPeriodSelector = false },
         )
     }
     if (openSortingSelector) {
@@ -161,10 +166,10 @@ fun TopPlatforms(
                 stat(
                     page = StatPage.Markets,
                     section = StatSection.Platforms,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
+                    event = StatEvent.SwitchSortType(selected.statSortType),
                 )
             },
-            { openSortingSelector = false }
+            { openSortingSelector = false },
         )
     }
 }
@@ -175,15 +180,16 @@ private fun TopPlatformsList(
     sortingField: SortingField,
     timeDuration: TimeDuration,
     onItemClick: (Platform) -> Unit,
-    preItems: LazyListScope.() -> Unit
+    preItems: LazyListScope.() -> Unit,
 ) {
-    val state = rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
-        LazyListState(0, 0)
-    }
+    val state =
+        rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
+            LazyListState(0, 0)
+        }
 
     LazyColumn(
         state = state,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         preItems.invoke(this)
         items(viewItems) { item ->
@@ -197,15 +203,15 @@ private fun TopPlatformSecondRow(
     subtitle: String,
     marketDataValue: MarketDataValue?,
     rank: String,
-    rankDiff: BigDecimal?
+    rankDiff: BigDecimal?,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         BadgeWithDiff(
             modifier = Modifier.padding(end = 8.dp),
             text = rank,
-            diff = rankDiff
+            diff = rankDiff,
         )
         subhead2_grey(
             text = subtitle,
@@ -219,17 +225,21 @@ private fun TopPlatformSecondRow(
 }
 
 @Composable
-fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) {
+fun TopPlatformItem(
+    item: TopPlatformViewItem,
+    onItemClick: (Platform) -> Unit,
+) {
     SectionItemBorderedRowUniversalClear(
         borderBottom = true,
-        onClick = { onItemClick(item.platform) }
+        onClick = { onItemClick(item.platform) },
     ) {
         HsImage(
             url = item.iconUrl,
             placeholder = item.iconPlaceHolder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp),
         )
         Column(modifier = Modifier.fillMaxWidth()) {
             MarketCoinFirstRow(item.platform.name, item.marketCap)
@@ -238,7 +248,7 @@ fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) 
                 subtitle = item.subtitle,
                 marketDataValue = MarketDataValue.Diff(item.marketCapDiff),
                 rank = item.rank.toString(),
-                rankDiff = item.rankDiff?.toBigDecimal()
+                rankDiff = item.rankDiff?.toBigDecimal(),
             )
         }
     }

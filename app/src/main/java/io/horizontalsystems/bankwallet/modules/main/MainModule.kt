@@ -10,15 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation.values
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            MainViewModel(
                 App.pinComponent,
                 App.rateAppManager,
                 App.backupManager,
@@ -30,10 +30,12 @@ object MainModule {
                 App.wcManager,
                 App.networkManager,
             ) as T
-        }
     }
 
-    fun start(context: Context, data: Uri? = null) {
+    fun start(
+        context: Context,
+        data: Uri? = null,
+    ) {
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         intent.data = data
@@ -55,22 +57,29 @@ object MainModule {
 
     sealed class BadgeType {
         object BadgeDot : BadgeType()
-        class BadgeNumber(val number: Int) : BadgeType()
+
+        class BadgeNumber(
+            val number: Int,
+        ) : BadgeType()
     }
 
     data class NavigationViewItem(
         val mainNavItem: MainNavigation,
         val selected: Boolean,
         val enabled: Boolean,
-        val badge: BadgeType? = null
+        val badge: BadgeType? = null,
     )
 
     @Parcelize
-    enum class MainNavigation(val iconRes: Int, val titleRes: Int) : Parcelable {
+    enum class MainNavigation(
+        val iconRes: Int,
+        val titleRes: Int,
+    ) : Parcelable {
         Market(R.drawable.ic_market_24, R.string.Market_Title),
         Balance(R.drawable.ic_wallet_24, R.string.Balance_Title),
         Transactions(R.drawable.ic_transactions, R.string.Transactions_Title),
-        Settings(R.drawable.ic_settings, R.string.Settings_Title);
+        Settings(R.drawable.ic_settings, R.string.Settings_Title),
+        ;
 
         companion object {
             private val map = values().associateBy(MainNavigation::name)
@@ -88,11 +97,11 @@ object MainModule {
         val showWhatsNew: Boolean,
         val activeWallet: Account?,
         val torEnabled: Boolean,
-        val wcSupportState: WCManager.SupportState?
+        val wcSupportState: WCManager.SupportState?,
     )
 }
 
 data class DeeplinkPage(
     val navigationId: Int,
-    val input: Parcelable
+    val input: Parcelable,
 )

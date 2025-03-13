@@ -6,7 +6,12 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,25 +33,23 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
 @Composable
-fun TorStatusView(
-    viewModel: TorConnectionViewModel = viewModel(factory = TorConnectionModule.Factory())
-) {
-
+fun TorStatusView(viewModel: TorConnectionViewModel = viewModel(factory = TorConnectionModule.Factory())) {
     val animatedSize by animateDpAsState(
         targetValue = if (viewModel.torViewState.torIsActive) 20.dp else 50.dp,
-        animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+        animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing),
     )
 
     Divider(
         thickness = 1.dp,
         color = ComposeAppTheme.colors.steel10,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(animatedSize),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(animatedSize),
+        contentAlignment = Alignment.Center,
     ) {
         if (viewModel.torViewState.torIsActive) {
             val startColor = ComposeAppTheme.colors.remus
@@ -61,10 +64,12 @@ fun TorStatusView(
                 textColor.animateTo(endTextColor, animationSpec = tween(250, easing = LinearEasing))
             }
             Box(
-                modifier = Modifier.fillMaxWidth()
-                    .fillMaxSize()
-                    .background(color.value),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxSize()
+                        .background(color.value),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(R.string.Tor_TorIsActive),
@@ -74,10 +79,11 @@ fun TorStatusView(
             }
         } else {
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -90,7 +96,7 @@ fun TorStatusView(
                 if (viewModel.torViewState.showRetryButton) {
                     ButtonSecondaryTransparent(
                         title = stringResource(R.string.Button_Retry).toUpperCase(Locale.current),
-                        onClick = { viewModel.restartTor() }
+                        onClick = { viewModel.restartTor() },
                     )
                 }
             }

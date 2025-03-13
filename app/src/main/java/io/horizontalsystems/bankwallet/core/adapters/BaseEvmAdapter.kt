@@ -12,9 +12,11 @@ import java.math.BigInteger
 abstract class BaseEvmAdapter(
     final override val evmKitWrapper: EvmKitWrapper,
     val decimal: Int,
-    val coinManager: ICoinManager
-) : IAdapter, ISendEthereumAdapter, IBalanceAdapter, IReceiveAdapter {
-
+    val coinManager: ICoinManager,
+) : IAdapter,
+    ISendEthereumAdapter,
+    IBalanceAdapter,
+    IReceiveAdapter {
     val evmKit = evmKitWrapper.evmKit
 
     override val debugInfo: String
@@ -25,13 +27,15 @@ abstract class BaseEvmAdapter(
 
     // ISendEthereumAdapter
 
-    protected fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
-        return amount.movePointLeft(decimals).stripTrailingZeros()
-    }
+    protected fun scaleDown(
+        amount: BigDecimal,
+        decimals: Int = decimal,
+    ): BigDecimal = amount.movePointLeft(decimals).stripTrailingZeros()
 
-    protected fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
-        return amount.movePointRight(decimals).toBigInteger()
-    }
+    protected fun scaleUp(
+        amount: BigDecimal,
+        decimals: Int = decimal,
+    ): BigInteger = amount.movePointRight(decimals).toBigInteger()
 
     // IReceiveAdapter
 
@@ -41,7 +45,10 @@ abstract class BaseEvmAdapter(
     override val isMainNet: Boolean
         get() = evmKit.chain.isMainNet
 
-    protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
+    protected fun balanceInBigDecimal(
+        balance: BigInteger?,
+        decimal: Int,
+    ): BigDecimal {
         balance?.toBigDecimal()?.let {
             return scaleDown(it, decimal)
         } ?: return BigDecimal.ZERO
@@ -50,5 +57,4 @@ abstract class BaseEvmAdapter(
     companion object {
         const val confirmationsThreshold: Int = 12
     }
-
 }

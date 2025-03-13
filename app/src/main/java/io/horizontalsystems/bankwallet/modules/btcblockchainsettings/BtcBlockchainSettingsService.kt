@@ -11,9 +11,8 @@ import io.reactivex.subjects.BehaviorSubject
 
 class BtcBlockchainSettingsService(
     val blockchain: Blockchain,
-    private val btcBlockchainManager: BtcBlockchainManager
+    private val btcBlockchainManager: BtcBlockchainManager,
 ) {
-
     private val hasChangesSubject = BehaviorSubject.create<Boolean>()
     val hasChangesObservable: Observable<Boolean>
         get() = hasChangesSubject
@@ -28,7 +27,10 @@ class BtcBlockchainSettingsService(
         if (restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
             btcBlockchainManager.save(restoreMode, blockchain.type)
 
-            stat(page = StatPage.BlockchainSettingsBtc, event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode))
+            stat(
+                page = StatPage.BlockchainSettingsBtc,
+                event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode),
+            )
         }
     }
 

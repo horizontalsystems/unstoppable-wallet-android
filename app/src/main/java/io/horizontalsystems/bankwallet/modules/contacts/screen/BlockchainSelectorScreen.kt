@@ -28,7 +28,7 @@ fun BlockchainSelectorScreen(
     blockchains: List<Blockchain>,
     selectedBlockchain: Blockchain,
     onSelectBlockchain: (Blockchain) -> Unit,
-    onNavigateToBack: () -> Unit
+    onNavigateToBack: () -> Unit,
 ) {
     var selectedItem by remember { mutableStateOf(selectedBlockchain) }
 
@@ -41,12 +41,13 @@ fun BlockchainSelectorScreen(
                 },
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler
+        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(12.dp))
             SectionUniversalLawrence {
@@ -54,7 +55,7 @@ fun BlockchainSelectorScreen(
                     CellBlockchainChecked(
                         borderTop = index != 0,
                         blockchain = item,
-                        checked = selectedItem == item
+                        checked = selectedItem == item,
                     ) {
                         selectedItem = item
                         onSelectBlockchain(item)

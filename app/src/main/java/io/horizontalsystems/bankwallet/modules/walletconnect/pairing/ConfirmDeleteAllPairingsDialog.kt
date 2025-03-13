@@ -29,24 +29,24 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 ConfirmDeleteAllScreen(findNavController())
             }
         }
-    }
 
     @Parcelize
-    data class Result(val confirmed: Boolean) : Parcelable
+    data class Result(
+        val confirmed: Boolean,
+    ) : Parcelable
 }
 
 @Composable
@@ -58,22 +58,23 @@ fun ConfirmDeleteAllScreen(navController: NavController) {
             title = stringResource(R.string.WalletConnect_DeleteAllPairs),
             onCloseClick = {
                 navController.popBackStack()
-            }
+            },
         ) {
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(R.string.WalletConnect_Pairings_ConfirmationDeleteAll)
+                text = stringResource(R.string.WalletConnect_Pairings_ConfirmationDeleteAll),
             )
             Spacer(Modifier.height(20.dp))
             ButtonPrimaryRed(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.WalletConnect_Pairings_Delete),
                 onClick = {
                     navController.setNavigationResultX(ConfirmDeleteAllPairingsDialog.Result(true))
                     navController.popBackStack()
-                }
+                },
             )
             Spacer(Modifier.height(32.dp))
         }

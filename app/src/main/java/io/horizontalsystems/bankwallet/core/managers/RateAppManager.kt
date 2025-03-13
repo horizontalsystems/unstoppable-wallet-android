@@ -18,12 +18,11 @@ import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.time.Instant
 
-
 class RateAppManager(
-        private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager,
-        private val localStorage: ILocalStorage) : IRateAppManager {
-
+    private val walletManager: IWalletManager,
+    private val adapterManager: IAdapterManager,
+    private val localStorage: ILocalStorage,
+) : IRateAppManager {
     private val _showRateFlow = MutableStateFlow(false)
     override val showRateAppFlow = _showRateFlow.filterNotNull()
 
@@ -45,8 +44,9 @@ class RateAppManager(
                 balance = it.balanceData.available
             }
 
-            if (balance > BigDecimal.ZERO)
+            if (balance > BigDecimal.ZERO) {
                 break
+            }
         }
 
         if (walletManager.activeWallets.size >= MIN_COINS_COUNT && balance > BigDecimal.ZERO) {
@@ -76,7 +76,7 @@ class RateAppManager(
             return
         }
 
-        if(!isCountdownPassed){
+        if (!isCountdownPassed) {
             startCountdownChecker()
         }
     }
@@ -97,7 +97,6 @@ class RateAppManager(
     }
 
     companion object {
-
         fun openPlayMarket(context: Context) {
             try {
                 ContextCompat.startActivity(context, getPlayMarketAppIntent(), null)
@@ -110,12 +109,12 @@ class RateAppManager(
 
         private fun getPlayMarketAppIntent(): Intent {
             val uri =
-                Uri.parse("market://details?id=io.horizontalsystems.bankwallet")  //context.packageName
+                Uri.parse("market://details?id=io.horizontalsystems.bankwallet") // context.packageName
             val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
-            goToMarketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+            goToMarketIntent.addFlags(
+                Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT,
+            )
             return goToMarketIntent
         }
-
     }
-
 }

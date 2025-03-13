@@ -10,7 +10,6 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.solanakit.models.RpcSource
 
 object BlockchainSettingsModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -19,7 +18,7 @@ object BlockchainSettingsModule {
                     App.btcBlockchainManager,
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
-                    App.solanaRpcSourceManager
+                    App.solanaRpcSourceManager,
                 )
             return BlockchainSettingsViewModel(service) as T
         }
@@ -29,7 +28,7 @@ object BlockchainSettingsModule {
         val title: String,
         val subtitle: String,
         val imageUrl: String,
-        val blockchainItem: BlockchainItem
+        val blockchainItem: BlockchainItem,
     )
 
     sealed class BlockchainItem {
@@ -37,21 +36,20 @@ object BlockchainSettingsModule {
 
         class Btc(
             override val blockchain: Blockchain,
-            val restoreMode: BtcRestoreMode
+            val restoreMode: BtcRestoreMode,
         ) : BlockchainItem()
 
         class Evm(
             override val blockchain: Blockchain,
-            val syncSource: EvmSyncSource
+            val syncSource: EvmSyncSource,
         ) : BlockchainItem()
 
         class Solana(
             override val blockchain: Blockchain,
-            val rpcSource: RpcSource
+            val rpcSource: RpcSource,
         ) : BlockchainItem()
 
         val order
             get() = blockchain.type.order
     }
-
 }

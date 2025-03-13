@@ -27,34 +27,38 @@ class TransactionSpeedUpCancelViewModel(
     private val transactionHash: String,
     private val evmKitWrapper: EvmKitWrapper,
     private val optionType: SpeedUpCancelType,
-    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory
+    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
 ) : ViewModelUiState<TransactionSpeedUpCancelUiState>() {
+    val title: String =
+        when (optionType) {
+            SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)
+            SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Title)
+        }
 
-    val title: String = when (optionType) {
-        SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)
-        SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Title)
-    }
+    val buttonTitle: String =
+        when (optionType) {
+            SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Button)
+            SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Button)
+        }
 
-    val buttonTitle: String = when (optionType) {
-        SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Button)
-        SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Button)
-    }
-
-    private var sendTransactionState: SendTransactionServiceState = sendTransactionService.stateFlow.value
+    private var sendTransactionState: SendTransactionServiceState =
+        sendTransactionService.stateFlow.value
     private var error: Throwable? = null
     private var sectionViewItems: List<SectionViewItem> = listOf()
 
-    override fun createState() = TransactionSpeedUpCancelUiState(
-        sendTransactionState = sendTransactionState,
-        sectionViewItems = sectionViewItems,
-        error = error,
-        sendEnabled = error == null && sendTransactionState.sendable
-    )
+    override fun createState() =
+        TransactionSpeedUpCancelUiState(
+            sendTransactionState = sendTransactionState,
+            sectionViewItems = sectionViewItems,
+            error = error,
+            sendEnabled = error == null && sendTransactionState.sendable,
+        )
 
     init {
-        val fullTransaction = evmKitWrapper.evmKit
-            .getFullTransactions(listOf(transactionHash.hexStringToByteArray()))
-            .first()
+        val fullTransaction =
+            evmKitWrapper.evmKit
+                .getFullTransactions(listOf(transactionHash.hexStringToByteArray()))
+                .first()
 
         fullTransaction.transaction.nonce?.let {
             sendTransactionService.fixNonce(it)
@@ -65,26 +69,28 @@ class TransactionSpeedUpCancelViewModel(
 
             emitState()
         } else {
-            val transactionData = when (optionType) {
-                SpeedUpCancelType.SpeedUp -> {
-                    val transaction = fullTransaction.transaction
-                    TransactionData(transaction.to!!, transaction.value!!, transaction.input!!)
+            val transactionData =
+                when (optionType) {
+                    SpeedUpCancelType.SpeedUp -> {
+                        val transaction = fullTransaction.transaction
+                        TransactionData(transaction.to!!, transaction.value!!, transaction.input!!)
+                    }
+
+                    SpeedUpCancelType.Cancel -> {
+                        TransactionData(
+                            evmKitWrapper.evmKit.receiveAddress,
+                            BigInteger.ZERO,
+                            byteArrayOf(),
+                        )
+                    }
                 }
 
-                SpeedUpCancelType.Cancel -> {
-                    TransactionData(
-                        evmKitWrapper.evmKit.receiveAddress,
-                        BigInteger.ZERO,
-                        byteArrayOf()
-                    )
-                }
-            }
-
-            sectionViewItems = sendEvmTransactionViewItemFactory.getItems(
-                transactionData,
-                null,
-                sendTransactionService.decorate(transactionData)
-            )
+            sectionViewItems =
+                sendEvmTransactionViewItemFactory.getItems(
+                    transactionData,
+                    null,
+                    sendTransactionService.decorate(transactionData),
+                )
             emitState()
 
             viewModelScope.launch {
@@ -95,13 +101,19 @@ class TransactionSpeedUpCancelViewModel(
             }
 
             sendTransactionService.start(viewModelScope)
-            sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+            sendTransactionService.setSendTransactionData(
+                SendTransactionData.Evm(
+                    transactionData,
+                    null,
+                ),
+            )
         }
     }
 
-    suspend fun send() = withContext(Dispatchers.Default) {
-        sendTransactionService.sendTransaction()
-    }
+    suspend fun send() =
+        withContext(Dispatchers.Default) {
+            sendTransactionService.sendTransaction()
+        }
 
     class Factory(
         private val blockchainType: BlockchainType,
@@ -112,19 +124,21 @@ class TransactionSpeedUpCancelViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val sendTransactionService = SendTransactionServiceEvm(blockchainType)
             val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
-            val coinServiceFactory = EvmCoinServiceFactory(
-                feeToken,
-                App.marketKit,
-                App.currencyManager,
-                App.coinManager
-            )
+            val coinServiceFactory =
+                EvmCoinServiceFactory(
+                    feeToken,
+                    App.marketKit,
+                    App.currencyManager,
+                    App.coinManager,
+                )
 
-            val sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
-                App.evmLabelManager,
-                coinServiceFactory,
-                App.contactsRepository,
-                blockchainType
-            )
+            val sendEvmTransactionViewItemFactory =
+                SendEvmTransactionViewItemFactory(
+                    App.evmLabelManager,
+                    coinServiceFactory,
+                    App.contactsRepository,
+                    blockchainType,
+                )
 
             val evmKitWrapper =
                 App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
@@ -134,7 +148,7 @@ class TransactionSpeedUpCancelViewModel(
                 transactionHash,
                 evmKitWrapper,
                 optionType,
-                sendEvmTransactionViewItemFactory
+                sendEvmTransactionViewItemFactory,
             ) as T
         }
     }
@@ -144,7 +158,7 @@ data class TransactionSpeedUpCancelUiState(
     val sendTransactionState: SendTransactionServiceState,
     val sectionViewItems: List<SectionViewItem>,
     val error: Throwable?,
-    val sendEnabled: Boolean
+    val sendEnabled: Boolean,
 )
 
 class TransactionAlreadyInBlock : Exception()

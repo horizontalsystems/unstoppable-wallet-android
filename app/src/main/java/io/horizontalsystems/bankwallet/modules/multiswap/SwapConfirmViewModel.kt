@@ -33,7 +33,7 @@ class SwapConfirmViewModel(
     private val fiatServiceOutMin: FiatService,
     val sendTransactionService: ISendTransactionService,
     private val timerService: TimerService,
-    private val priceImpactService: PriceImpactService
+    private val priceImpactService: PriceImpactService,
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -140,16 +140,17 @@ class SwapConfirmViewModel(
 
         if (cautions.isEmpty()) {
             priceImpactState.priceImpactCaution?.let { hsCaution ->
-                cautions = listOf(
-                    CautionViewItem(
-                        hsCaution.s.toString(),
-                        hsCaution.description.toString(),
-                        when (hsCaution.type) {
-                            HSCaution.Type.Error -> CautionViewItem.Type.Error
-                            HSCaution.Type.Warning -> CautionViewItem.Type.Warning
-                        }
+                cautions =
+                    listOf(
+                        CautionViewItem(
+                            hsCaution.s.toString(),
+                            hsCaution.description.toString(),
+                            when (hsCaution.type) {
+                                HSCaution.Type.Error -> CautionViewItem.Type.Error
+                                HSCaution.Type.Warning -> CautionViewItem.Type.Warning
+                            },
+                        ),
                     )
-                )
             }
         }
 
@@ -192,7 +193,14 @@ class SwapConfirmViewModel(
     private fun fetchFinalQuote() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
+                val finalQuote =
+                    swapProvider.fetchFinalQuote(
+                        tokenIn,
+                        tokenOut,
+                        amountIn,
+                        swapSettings,
+                        sendTransactionSettings,
+                    )
 
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
@@ -210,32 +218,37 @@ class SwapConfirmViewModel(
         }
     }
 
-    suspend fun swap() = withContext(Dispatchers.Default) {
-        stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
+    suspend fun swap() =
+        withContext(Dispatchers.Default) {
+            stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
-        sendTransactionService.sendTransaction()
-    }
+            sendTransactionService.sendTransaction()
+        }
 
     companion object {
-        fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
-            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn.blockchainType)
+        fun init(
+            quote: SwapProviderQuote,
+            settings: Map<String, Any?>,
+        ): CreationExtras.() -> SwapConfirmViewModel =
+            {
+                val sendTransactionService =
+                    SendTransactionServiceFactory.create(quote.tokenIn.blockchainType)
 
-            SwapConfirmViewModel(
-                quote.provider,
-                quote.swapQuote,
-                settings,
-                App.currencyManager,
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                sendTransactionService,
-                TimerService(),
-                PriceImpactService()
-            )
-        }
+                SwapConfirmViewModel(
+                    quote.provider,
+                    quote.swapQuote,
+                    settings,
+                    App.currencyManager,
+                    FiatService(App.marketKit),
+                    FiatService(App.marketKit),
+                    FiatService(App.marketKit),
+                    sendTransactionService,
+                    TimerService(),
+                    PriceImpactService(),
+                )
+            }
     }
 }
-
 
 data class SwapConfirmUiState(
     val expiresIn: Long?,

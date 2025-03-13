@@ -8,10 +8,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarn
 import java.math.BigDecimal
 
 object SwapSettingsModule {
-
     sealed class InvalidSlippageType {
-        class Lower(val min: BigDecimal) : InvalidSlippageType()
-        class Higher(val max: BigDecimal) : InvalidSlippageType()
+        class Lower(
+            val min: BigDecimal,
+        ) : InvalidSlippageType()
+
+        class Higher(
+            val max: BigDecimal,
+        ) : InvalidSlippageType()
     }
 
     sealed class SwapSettingsError : Exception() {
@@ -23,26 +27,29 @@ object SwapSettingsModule {
             override fun getLocalizedMessage() = Translator.getString(R.string.SwapSettings_Error_DeadlineZero)
         }
 
-        class InvalidSlippage(val invalidSlippageType: InvalidSlippageType) : SwapSettingsError() {
-            override fun getLocalizedMessage(): String {
-                return when (invalidSlippageType) {
+        class InvalidSlippage(
+            val invalidSlippageType: InvalidSlippageType,
+        ) : SwapSettingsError() {
+            override fun getLocalizedMessage(): String =
+                when (invalidSlippageType) {
                     is InvalidSlippageType.Lower -> Translator.getString(R.string.SwapSettings_Error_SlippageTooLow)
-                    is InvalidSlippageType.Higher -> Translator.getString(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
+                    is InvalidSlippageType.Higher ->
+                        Translator.getString(
+                            R.string.SwapSettings_Error_SlippageTooHigh,
+                            invalidSlippageType.max,
+                        )
                 }
-            }
         }
 
         object InvalidAddress : SwapSettingsError() {
-            override fun getLocalizedMessage(): String {
-                return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
-            }
+            override fun getLocalizedMessage(): String = Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
         }
     }
 
-    fun getState(caution: Caution?) = when (caution?.type) {
-        Caution.Type.Error -> DataState.Error(Exception(caution.text))
-        Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
-        null -> null
-    }
-
+    fun getState(caution: Caution?) =
+        when (caution?.type) {
+            Caution.Type.Error -> DataState.Error(Exception(caution.text))
+            Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
+            null -> null
+        }
 }

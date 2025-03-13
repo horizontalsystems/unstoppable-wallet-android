@@ -12,11 +12,12 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
 object MarketPlatformModule {
-
-    class Factory(private val platform: Platform) : ViewModelProvider.Factory {
+    class Factory(
+        private val platform: Platform,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 MarketPlatformViewModel::class.java -> {
                     val repository =
                         MarketPlatformCoinsRepository(platform, App.marketKit, App.currencyManager)
@@ -29,15 +30,13 @@ object MarketPlatformModule {
                     val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
-        }
-
     }
 
     data class Menu(
         val sortingFieldSelect: Select<SortingField>,
-        val marketFieldSelect: Select<MarketField>
+        val marketFieldSelect: Select<MarketField>,
     )
-
 }

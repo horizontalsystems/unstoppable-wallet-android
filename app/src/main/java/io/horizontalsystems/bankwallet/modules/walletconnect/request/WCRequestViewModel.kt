@@ -33,7 +33,6 @@ class WCNewRequestViewModel(
     private val accountManager: IAccountManager,
     private val evmBlockchainManager: EvmBlockchainManager,
 ) : ViewModel() {
-
     val blockchain: Blockchain? by lazy {
         val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return@lazy null
         val chainId = getChainData(sessionChainId)?.chain?.id ?: return@lazy null
@@ -55,12 +54,13 @@ class WCNewRequestViewModel(
             }
 
             SessionRequestUI.Content(
-                peerUI = PeerUI(
-                    peerName = sessionRequest.peerMetaData?.name ?: "",
-                    peerIcon = sessionRequest.peerMetaData?.icons?.firstOrNull() ?: "",
-                    peerUri = sessionRequest.peerMetaData?.url ?: "",
-                    peerDescription = sessionRequest.peerMetaData?.description ?: "",
-                ),
+                peerUI =
+                    PeerUI(
+                        peerName = sessionRequest.peerMetaData?.name ?: "",
+                        peerIcon = sessionRequest.peerMetaData?.icons?.firstOrNull() ?: "",
+                        peerUri = sessionRequest.peerMetaData?.url ?: "",
+                        peerDescription = sessionRequest.peerMetaData?.description ?: "",
+                    ),
                 topic = sessionRequest.topic,
                 requestId = sessionRequest.request.id,
                 param = getParam(sessionRequest),
@@ -137,26 +137,27 @@ class WCNewRequestViewModel(
         return suspendCoroutine { continuation ->
             val sessionRequest = sessionRequest as? SessionRequestUI.Content
             if (sessionRequest != null) {
-                val result = when (sessionRequest.method) {
-                    ETH_SIGN_METHOD -> {
-                        val message = sessionRequest.param.hexStringToByteArray()
-                        if (message.size == 32) {
-                            signer.signByteArrayLegacy(message = message)
-                        } else {
-                            signer.signByteArray(message = message)
+                val result =
+                    when (sessionRequest.method) {
+                        ETH_SIGN_METHOD -> {
+                            val message = sessionRequest.param.hexStringToByteArray()
+                            if (message.size == 32) {
+                                signer.signByteArrayLegacy(message = message)
+                            } else {
+                                signer.signByteArray(message = message)
+                            }
                         }
-                    }
 
-                    PERSONAL_SIGN_METHOD -> {
-                        signer.signByteArray(message = sessionRequest.param.toByteArray())
-                    }
+                        PERSONAL_SIGN_METHOD -> {
+                            signer.signByteArray(message = sessionRequest.param.toByteArray())
+                        }
 
-                    TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4 -> {
-                        signer.signTypedData(rawJsonMessage = sessionRequest.param)
-                    }
+                        TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4 -> {
+                            signer.signTypedData(rawJsonMessage = sessionRequest.param)
+                        }
 
-                    else -> throw Exception("Unsupported Chain")
-                }
+                        else -> throw Exception("Unsupported Chain")
+                    }
 
                 WCDelegate.respondPendingRequest(
                     sessionRequest.requestId,
@@ -169,14 +170,14 @@ class WCNewRequestViewModel(
                     onErrorResult = {
                         continuation.resumeWithException(it)
                         clearSessionRequest()
-                    }
+                    },
                 )
             }
         }
     }
 
-    suspend fun reject() {
-        return suspendCoroutine { continuation ->
+    suspend fun reject() =
+        suspendCoroutine { continuation ->
             val sessionRequest = sessionRequest as? SessionRequestUI.Content
             if (sessionRequest != null) {
                 WCDelegate.rejectRequest(
@@ -189,17 +190,15 @@ class WCNewRequestViewModel(
                     onErrorResult = {
                         clearSessionRequest()
                         continuation.resumeWithException(it)
-                    }
+                    },
                 )
             }
         }
-    }
 
-    class Factory() : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCNewRequestViewModel(App.accountManager, App.evmBlockchainManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            WCNewRequestViewModel(App.accountManager, App.evmBlockchainManager) as T
     }
 }
 
@@ -219,7 +218,7 @@ sealed class SessionRequestUI {
 @Parcelize
 data class WCChainData(
     val chain: Chain,
-    val address: String?
+    val address: String?,
 ) : Parcelable
 
 data class PeerUI(

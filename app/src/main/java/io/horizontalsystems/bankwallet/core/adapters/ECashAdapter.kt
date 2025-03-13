@@ -18,16 +18,17 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 class ECashAdapter(
-        override val kit: ECashKit,
-        syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager,
-        wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, 2), ECashKit.Listener, ISendBitcoinAdapter {
-
+    override val kit: ECashKit,
+    syncMode: BitcoinCore.SyncMode,
+    backgroundManager: BackgroundManager,
+    wallet: Wallet,
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, 2),
+    ECashKit.Listener,
+    ISendBitcoinAdapter {
     constructor(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager
+        backgroundManager: BackgroundManager,
     ) : this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
 
     init {
@@ -38,7 +39,8 @@ class ECashAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal =
+        BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // ECashKit Listener
@@ -47,8 +49,7 @@ class ECashAdapter(
     override val explorerTitle: String
         get() = "blockchair.com"
 
-    override fun getTransactionUrl(transactionHash: String): String =
-        "https://blockchair.com/ecash/transaction/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String = "https://blockchair.com/ecash/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -62,7 +63,10 @@ class ECashAdapter(
         setState(state)
     }
 
-    override fun onTransactionsUpdate(inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
+    override fun onTransactionsUpdate(
+        inserted: List<TransactionInfo>,
+        updated: List<TransactionInfo>,
+    ) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -86,12 +90,21 @@ class ECashAdapter(
     override val blockchainType = BlockchainType.ECash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/ecash/address/${it.address}") }
+        kit.usedAddresses(change).map {
+            UsedAddress(
+                it.index,
+                it.address,
+                "https://blockchair.com/ecash/address/${it.address}",
+            )
+        }
 
     companion object {
         private const val confirmationsThreshold = 1
 
-        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): ECashKit {
+        private fun createKit(
+            wallet: Wallet,
+            syncMode: BitcoinCore.SyncMode,
+        ): ECashKit {
             val account = wallet.account
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
@@ -101,9 +114,10 @@ class ECashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = ECashKit.NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 is AccountType.Mnemonic -> {
                     return ECashKit(
                         context = App.instance,
@@ -112,9 +126,10 @@ class ECashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = ECashKit.NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 is AccountType.BitcoinAddress -> {
                     return ECashKit(
                         context = App.instance,
@@ -122,12 +137,12 @@ class ECashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = ECashKit.NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 else -> throw UnsupportedAccountException()
             }
-
         }
 
         fun clear(walletId: String) {

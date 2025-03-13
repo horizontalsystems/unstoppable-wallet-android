@@ -30,10 +30,13 @@ class TokenBalanceViewModel(
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
-
-    private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
+    private val title =
+        wallet.token.coin.code +
+            wallet.token.badge
+                ?.let { " ($it)" }
+                .orEmpty()
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
@@ -70,39 +73,48 @@ class TokenBalanceViewModel(
         }
     }
 
-    override fun createState() = TokenBalanceUiState(
-        title = title,
-        balanceViewItem = balanceViewItem,
-        transactions = transactions,
-    )
+    override fun createState() =
+        TokenBalanceUiState(
+            title = title,
+            balanceViewItem = balanceViewItem,
+            transactions = transactions,
+        )
 
     private fun updateTransactions(items: List<TransactionItem>) {
-        transactions = items
-            .map { transactionViewItem2Factory.convertToViewItemCached(it) }
-            .groupBy { it.formattedDate }
+        transactions =
+            items
+                .map { transactionViewItem2Factory.convertToViewItemCached(it) }
+                .groupBy { it.formattedDate }
 
         emitState()
     }
 
     private fun updateBalanceViewItem(balanceItem: BalanceModule.BalanceItem) {
-        val balanceViewItem = balanceViewItemFactory.viewItem(
-            balanceItem,
-            balanceService.baseCurrency,
-            balanceHiddenManager.balanceHidden,
-            wallet.account.isWatchAccount,
-            BalanceViewType.CoinThenFiat
-        )
+        val balanceViewItem =
+            balanceViewItemFactory.viewItem(
+                balanceItem,
+                balanceService.baseCurrency,
+                balanceHiddenManager.balanceHidden,
+                wallet.account.isWatchAccount,
+                BalanceViewType.CoinThenFiat,
+            )
 
-        this.balanceViewItem = balanceViewItem.copy(
-            primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.wallet.coin.code)
-        )
+        this.balanceViewItem =
+            balanceViewItem.copy(
+                primaryValue =
+                    balanceViewItem.primaryValue.copy(
+                        value =
+                            balanceViewItem.primaryValue.value + " " + balanceViewItem.wallet.coin.code,
+                    ),
+            )
 
         emitState()
     }
 
     @Throws(BackupRequiredError::class, IllegalStateException::class)
     fun getWalletForReceive(): Wallet {
-        val account = accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
+        val account =
+            accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
             account.hasAnyBackup -> return wallet
             else -> throw BackupRequiredError(account, wallet.coin.name)
@@ -123,15 +135,20 @@ class TokenBalanceViewModel(
         balanceHiddenManager.toggleBalanceHidden()
     }
 
-    fun getSyncErrorDetails(viewItem: BalanceViewItem): BalanceViewModel.SyncError = when {
-        connectivityManager.isConnected -> BalanceViewModel.SyncError.Dialog(viewItem.wallet, viewItem.errorMessage)
-        else -> BalanceViewModel.SyncError.NetworkNotAvailable()
-    }
+    fun getSyncErrorDetails(viewItem: BalanceViewItem): BalanceViewModel.SyncError =
+        when {
+            connectivityManager.isConnected ->
+                BalanceViewModel.SyncError.Dialog(
+                    viewItem.wallet,
+                    viewItem.errorMessage,
+                )
+
+            else -> BalanceViewModel.SyncError.NetworkNotAvailable()
+        }
 
     override fun onCleared() {
         super.onCleared()
 
         balanceService.clear()
     }
-
 }

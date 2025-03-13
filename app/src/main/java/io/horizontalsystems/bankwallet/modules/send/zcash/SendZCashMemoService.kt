@@ -12,12 +12,13 @@ class SendZCashMemoService {
     private var addressType: ZcashAdapter.ZCashAddressType? = null
     private var memoIsAllowed = addressType == ZcashAdapter.ZCashAddressType.Shielded
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            memo = if (memoIsAllowed) memo else "",
-            memoIsAllowed = memoIsAllowed
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                memo = if (memoIsAllowed) memo else "",
+                memoIsAllowed = memoIsAllowed,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     fun setMemo(memo: String) {
@@ -30,7 +31,7 @@ class SendZCashMemoService {
         _stateFlow.update {
             State(
                 memo = if (memoIsAllowed) memo else "",
-                memoIsAllowed = memoIsAllowed
+                memoIsAllowed = memoIsAllowed,
             )
         }
     }
@@ -49,6 +50,6 @@ class SendZCashMemoService {
 
     data class State(
         val memo: String,
-        val memoIsAllowed: Boolean
+        val memoIsAllowed: Boolean,
     )
 }

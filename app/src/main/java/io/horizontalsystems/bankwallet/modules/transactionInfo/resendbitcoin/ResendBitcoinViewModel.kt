@@ -34,15 +34,12 @@ import java.net.UnknownHostException
 class ResendBitcoinViewModel(
     private val type: SpeedUpCancelType,
     private val transactionRecord: BitcoinOutgoingTransactionRecord,
-
     private val replacementInfo: ReplacementTransactionInfo?,
-
     private val adapter: BitcoinBaseAdapter,
     private val feeRateProvider: IFeeRateProvider,
     private val xRateService: XRateService,
     private val contactsRepo: ContactsRepository,
 ) : ViewModelUiState<ResendBitcoinUiState>() {
-
     private val titleResId: Int
     private val sendButtonTitleResId: Int
     private val addressTitleResId: Int
@@ -86,7 +83,8 @@ class ResendBitcoinViewModel(
                 val feeRates = feeRateProvider.getFeeRates()
                 val feeRange = replacementInfo.feeRange
                 recommendedFee = replacementInfo.replacementTxMinSize * feeRates.recommended
-                val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
+                val minFee =
+                    recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
 
                 updateReplacementTransaction(minFee)
             } else {
@@ -106,10 +104,11 @@ class ResendBitcoinViewModel(
         try {
             this.minFee = minFee
 
-            val (replacementTransaction, bitcoinTransactionRecord) = when (type) {
-                SpeedUpCancelType.SpeedUp -> adapter.speedUpTransaction(transactionHash, minFee)
-                SpeedUpCancelType.Cancel -> adapter.cancelTransaction(transactionHash, minFee)
-            }
+            val (replacementTransaction, bitcoinTransactionRecord) =
+                when (type) {
+                    SpeedUpCancelType.SpeedUp -> adapter.speedUpTransaction(transactionHash, minFee)
+                    SpeedUpCancelType.Cancel -> adapter.cancelTransaction(transactionHash, minFee)
+                }
 
             this.replacementTransaction = replacementTransaction
             this.record = bitcoinTransactionRecord as BitcoinOutgoingTransactionRecord
@@ -122,27 +121,33 @@ class ResendBitcoinViewModel(
         emitState()
     }
 
-    private fun createCaution(error: Throwable) = when (error) {
-        BuildError.FeeTooLow -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_FeeTooLow))
-        BuildError.RbfNotEnabled -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_NotEnabled))
-        is BuildError.InvalidTransaction,
-        BuildError.UnableToReplace,
-        BuildError.NoPreviousOutput -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_UnableToReplace))
+    private fun createCaution(error: Throwable) =
+        when (error) {
+            BuildError.FeeTooLow -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_FeeTooLow))
+            BuildError.RbfNotEnabled -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_NotEnabled))
+            is BuildError.InvalidTransaction,
+            BuildError.UnableToReplace,
+            BuildError.NoPreviousOutput,
+            -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_UnableToReplace))
 
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
-    }
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        }
 
     override fun createState(): ResendBitcoinUiState {
         val address = Address(hex = record.to!!)
-        val contact = contactsRepo.getContactsFiltered(blockchainType = blockchainType, addressQuery = address.hex).firstOrNull()
+        val contact =
+            contactsRepo
+                .getContactsFiltered(
+                    blockchainType = blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
 
         return ResendBitcoinUiState(
             titleResId = titleResId,
             sendButtonTitleResId = sendButtonTitleResId,
             type = type,
-
             coin = token.coin,
             feeCoin = token.coin,
             amount = record.value.decimalValue!!.abs(),
@@ -151,16 +156,17 @@ class ResendBitcoinViewModel(
             addressTitleResId = addressTitleResId,
             contact = contact,
             lockTimeInterval = record.lockInfo?.lockTimeInterval,
-
             coinMaxAllowedDecimals = coinMaxAllowedDecimals,
             fiatMaxAllowedDecimals = fiatMaxAllowedDecimals,
             blockchainType = blockchainType,
             coinRate = coinRate,
             sendResult = sendResult,
             feeCaution = feeCaution,
-
             minFee = minFee,
-            replacedTransactionHashes = replacementTransaction?.replacedTransactionHashes ?: listOf(transactionRecord.transactionHash)
+            replacedTransactionHashes =
+                replacementTransaction?.replacedTransactionHashes ?: listOf(
+                    transactionRecord.transactionHash,
+                ),
         )
     }
 
@@ -210,7 +216,6 @@ class ResendBitcoinViewModel(
             emitState()
         }
     }
-
 }
 
 data class ResendBitcoinUiState(
@@ -218,7 +223,6 @@ data class ResendBitcoinUiState(
     val titleResId: Int,
     val sendButtonTitleResId: Int,
     val type: SpeedUpCancelType,
-
     val coin: Coin,
     val feeCoin: Coin,
     val amount: BigDecimal,
@@ -227,14 +231,12 @@ data class ResendBitcoinUiState(
     val addressTitleResId: Int,
     val contact: Contact?,
     val lockTimeInterval: LockTimeInterval? = null,
-
     val coinMaxAllowedDecimals: Int,
     val fiatMaxAllowedDecimals: Int,
     val blockchainType: BlockchainType,
     val coinRate: CurrencyValue?,
     val feeCaution: HSCaution?,
     val sendResult: SendResult?,
-
     val minFee: Long,
-    val replacedTransactionHashes: List<String>
+    val replacedTransactionHashes: List<String>,
 )

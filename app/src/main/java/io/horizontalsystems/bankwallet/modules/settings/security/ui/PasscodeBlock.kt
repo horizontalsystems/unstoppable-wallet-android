@@ -35,76 +35,79 @@ fun PasscodeBlock(
     val uiState = viewModel.uiState
 
     VSpacer(height = 8.dp)
-    CellUniversalLawrenceSection(buildList<@Composable () -> Unit> {
-        add {
-            SecurityCenterCell(
-                start = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_passcode),
-                        tint = ComposeAppTheme.colors.jacob,
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = null,
-                    )
-                },
-                center = {
-                    val text = if (uiState.pinEnabled) {
-                        R.string.SettingsSecurity_EditPin
-                    } else {
-                        R.string.SettingsSecurity_EnablePin
-                    }
-                    body_jacob(
-                        text = stringResource(text),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                end = {
-                    if (!uiState.pinEnabled) {
-                        Image(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_attention_red_20),
-                            contentDescription = null,
-                        )
-                    }
-                },
-                onClick = {
-                    if (!uiState.pinEnabled) {
-                        navController.slideFromRight(R.id.setPinFragment)
-                    } else {
-                        navController.authorizedAction {
-                            navController.slideFromRight(R.id.editPinFragment)
-                        }
-                    }
-                }
-            )
-        }
-        if (uiState.pinEnabled) {
+    CellUniversalLawrenceSection(
+        buildList<@Composable () -> Unit> {
             add {
                 SecurityCenterCell(
                     start = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_delete_20),
-                            tint = ComposeAppTheme.colors.lucian,
+                            painter = painterResource(R.drawable.ic_passcode),
+                            tint = ComposeAppTheme.colors.jacob,
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
                         )
                     },
                     center = {
-                        body_lucian(
-                            text = stringResource(R.string.SettingsSecurity_DisablePin),
+                        val text =
+                            if (uiState.pinEnabled) {
+                                R.string.SettingsSecurity_EditPin
+                            } else {
+                                R.string.SettingsSecurity_EnablePin
+                            }
+                        body_jacob(
+                            text = stringResource(text),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
                     },
-                    onClick = {
-                        navController.authorizedAction {
-                            viewModel.disablePin()
+                    end = {
+                        if (!uiState.pinEnabled) {
+                            Image(
+                                modifier = Modifier.size(20.dp),
+                                painter = painterResource(id = R.drawable.ic_attention_red_20),
+                                contentDescription = null,
+                            )
                         }
-                    }
+                    },
+                    onClick = {
+                        if (!uiState.pinEnabled) {
+                            navController.slideFromRight(R.id.setPinFragment)
+                        } else {
+                            navController.authorizedAction {
+                                navController.slideFromRight(R.id.editPinFragment)
+                            }
+                        }
+                    },
                 )
             }
-        }
-    })
+            if (uiState.pinEnabled) {
+                add {
+                    SecurityCenterCell(
+                        start = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_delete_20),
+                                tint = ComposeAppTheme.colors.lucian,
+                                modifier = Modifier.size(24.dp),
+                                contentDescription = null,
+                            )
+                        },
+                        center = {
+                            body_lucian(
+                                text = stringResource(R.string.SettingsSecurity_DisablePin),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        },
+                        onClick = {
+                            navController.authorizedAction {
+                                viewModel.disablePin()
+                            }
+                        },
+                    )
+                }
+            }
+        },
+    )
 
     if (uiState.pinEnabled) {
         VSpacer(32.dp)
@@ -116,9 +119,9 @@ fun PasscodeBlock(
                     value = stringResource(uiState.autoLockIntervalName),
                     onClick = {
                         navController.slideFromRight(R.id.autoLockIntervalsFragment)
-                    }
+                    },
                 )
-            }
+            },
         )
     }
 
@@ -154,7 +157,7 @@ fun PasscodeBlock(
                             }
                         },
                     )
-                }
+                },
             )
         }
     }

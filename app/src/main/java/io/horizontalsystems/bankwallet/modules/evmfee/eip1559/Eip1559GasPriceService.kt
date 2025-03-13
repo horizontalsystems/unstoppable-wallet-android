@@ -26,9 +26,8 @@ class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
     private val refreshSignalFlowable: Flowable<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
-    initialGasPrice: GasPrice.Eip1559? = null
+    initialGasPrice: GasPrice.Eip1559? = null,
 ) : IEvmGasPriceService() {
-
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val blocksCount: Long = 10
     private val rewardPercentile = listOf(50)
@@ -36,7 +35,8 @@ class Eip1559GasPriceService(
 
     private val minBaseFee: Long? = minGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
     private val minPriorityFee: Long? = minGasPrice?.maxPriorityFeePerGas
-    private val initialBaseFee: Long? = initialGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
+    private val initialBaseFee: Long? =
+        initialGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
     private val initialPriorityFee: Long? = initialGasPrice?.maxPriorityFeePerGas
 
     private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
@@ -60,7 +60,7 @@ class Eip1559GasPriceService(
         gasProvider: Eip1559GasPriceProvider,
         evmKit: EthereumKit,
         minGasPrice: GasPrice.Eip1559? = null,
-        initialGasPrice: GasPrice.Eip1559? = null
+        initialGasPrice: GasPrice.Eip1559? = null,
     ) : this(gasProvider, evmKit.lastBlockHeightFlowable, minGasPrice, initialGasPrice)
 
     override fun start() {
@@ -87,21 +87,25 @@ class Eip1559GasPriceService(
                 syncRecommended()
             }
         } else {
-            state = DataState.Success(
-                GasPriceInfo(
-                    gasPrice = recommendedGasPrice,
-                    gasPriceDefault = recommendedGasPrice,
-                    default = true,
-                    warnings = listOf(),
-                    errors = listOf()
+            state =
+                DataState.Success(
+                    GasPriceInfo(
+                        gasPrice = recommendedGasPrice,
+                        gasPriceDefault = recommendedGasPrice,
+                        default = true,
+                        warnings = listOf(),
+                        errors = listOf(),
+                    ),
                 )
-            )
 
             emitState()
         }
     }
 
-    fun setGasPrice(maxFee: Long, priorityFee: Long) {
+    fun setGasPrice(
+        maxFee: Long,
+        priorityFee: Long,
+    ) {
         recommendedGasPriceSelected = false
 
         val newGasPrice = GasPrice.Eip1559(maxFee, priorityFee)
@@ -110,31 +114,37 @@ class Eip1559GasPriceService(
         emitState()
     }
 
-    private fun validatedGasPriceInfoState(gasPrice: GasPrice): DataState<GasPriceInfo> {
-        return try {
+    private fun validatedGasPriceInfoState(gasPrice: GasPrice): DataState<GasPriceInfo> =
+        try {
             DataState.Success(validatedGasPriceInfo(gasPrice))
         } catch (error: Throwable) {
             DataState.Error(error)
         }
-    }
 
     @Throws
     private fun validatedGasPriceInfo(gasPrice: GasPrice): GasPriceInfo {
-        val gasPriceEip1559 = (gasPrice as? GasPrice.Eip1559)
-            ?: throw FeeSettingsError.InvalidGasPriceType("Expected EIP1559, received Legacy")
+        val gasPriceEip1559 =
+            (gasPrice as? GasPrice.Eip1559)
+                ?: throw FeeSettingsError.InvalidGasPriceType("Expected EIP1559, received Legacy")
 
         val recommendedGasPrice = recommendedGasPrice
         val warnings = mutableListOf<Warning>()
         val errors = mutableListOf<Throwable>()
 
         if (recommendedGasPrice != null) {
-            val recommendedBaseFee = recommendedGasPrice.maxFeePerGas - recommendedGasPrice.maxPriorityFeePerGas
-            val tip = min(gasPriceEip1559.maxFeePerGas - recommendedBaseFee, gasPriceEip1559.maxPriorityFeePerGas)
+            val recommendedBaseFee =
+                recommendedGasPrice.maxFeePerGas - recommendedGasPrice.maxPriorityFeePerGas
+            val tip =
+                min(
+                    gasPriceEip1559.maxFeePerGas - recommendedBaseFee,
+                    gasPriceEip1559.maxPriorityFeePerGas,
+                )
 
             when {
                 tip < riskOfStuckBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
                     warnings.add(FeeSettingsWarning.RiskOfGettingStuck)
                 }
+
                 tip > overpricingBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
                     warnings.add(FeeSettingsWarning.Overpricing)
                 }
@@ -146,13 +156,19 @@ class Eip1559GasPriceService(
             gasPriceDefault = recommendedGasPrice ?: gasPriceEip1559,
             default = recommendedGasPriceSelected,
             warnings = warnings,
-            errors = errors
+            errors = errors,
         )
     }
 
     private suspend fun syncRecommended() {
         try {
-            val feeHistory = gasProvider.feeHistorySingle(blocksCount, DefaultBlockParameter.Latest, rewardPercentile).await()
+            val feeHistory =
+                gasProvider
+                    .feeHistorySingle(
+                        blocksCount,
+                        DefaultBlockParameter.Latest,
+                        rewardPercentile,
+                    ).await()
             handle(feeHistory)
         } catch (error: Throwable) {
             handle(error)
@@ -174,7 +190,8 @@ class Eip1559GasPriceService(
         val recommendedPriorityFee = max(recommendedPriorityFee(feeHistory), minPriorityFee ?: 0)
         currentPriorityFee = recommendedPriorityFee
 
-        val newRecommendGasPrice = GasPrice.Eip1559(recommendedBaseFee + recommendedPriorityFee, recommendedPriorityFee)
+        val newRecommendGasPrice =
+            GasPrice.Eip1559(recommendedBaseFee + recommendedPriorityFee, recommendedPriorityFee)
 
         recommendedGasPrice = newRecommendGasPrice
 
@@ -190,7 +207,8 @@ class Eip1559GasPriceService(
     }
 
     private fun recommendedBaseFee(feeHistory: FeeHistory): Long {
-        val lastNRecommendedBaseFeesList = feeHistory.baseFeePerGas.takeLast(lastNRecommendedBaseFees)
+        val lastNRecommendedBaseFeesList =
+            feeHistory.baseFeePerGas.takeLast(lastNRecommendedBaseFees)
         return lastNRecommendedBaseFeesList.max()
     }
 
@@ -203,9 +221,10 @@ class Eip1559GasPriceService(
                 priorityFeesCount += 1
             }
         }
-        return if (priorityFeesCount > 0)
+        return if (priorityFeesCount > 0) {
             priorityFeesSum / priorityFeesCount
-        else
+        } else {
             0
+        }
     }
 }

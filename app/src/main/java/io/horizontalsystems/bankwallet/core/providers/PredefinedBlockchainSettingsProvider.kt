@@ -8,15 +8,18 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 class PredefinedBlockchainSettingsProvider(
     private val manager: RestoreSettingsManager,
-    private val zcashBirthdayProvider: ZcashBirthdayProvider
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
 ) {
-
-    fun prepareNew(account: Account, blockchainType: BlockchainType) {
+    fun prepareNew(
+        account: Account,
+        blockchainType: BlockchainType,
+    ) {
         val settings = RestoreSettings()
         when (blockchainType) {
             BlockchainType.Zcash -> {
                 settings.birthdayHeight = zcashBirthdayProvider.getLatestCheckpointBlockHeight()
             }
+
             else -> {}
         }
         if (settings.isNotEmpty()) {

@@ -13,14 +13,15 @@ class SendEvmAddressService {
     private var addressError: Throwable? = null
     private var evmAddress: EvmAddress? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            address = address,
-            evmAddress = evmAddress,
-            addressError = addressError,
-            canBeSend = evmAddress != null,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                address = address,
+                evmAddress = evmAddress,
+                addressError = addressError,
+                canBeSend = evmAddress != null,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     fun setAddress(address: Address?) {
@@ -39,7 +40,8 @@ class SendEvmAddressService {
         try {
             evmAddress = EvmAddress(address.hex)
         } catch (e: Exception) {
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError =
+                Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 
@@ -49,7 +51,7 @@ class SendEvmAddressService {
                 address = address,
                 evmAddress = evmAddress,
                 addressError = addressError,
-                canBeSend = evmAddress != null
+                canBeSend = evmAddress != null,
             )
         }
     }
@@ -58,6 +60,6 @@ class SendEvmAddressService {
         val address: Address?,
         val evmAddress: EvmAddress?,
         val addressError: Throwable?,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

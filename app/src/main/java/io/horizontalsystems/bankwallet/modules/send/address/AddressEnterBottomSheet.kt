@@ -27,37 +27,39 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 fun AddressEnterInfoBottomSheet(
     checkType: AddressCheckType,
     hideBottomSheet: () -> Unit,
-    bottomSheetState: SheetState
+    bottomSheetState: SheetState,
 ) {
-    val title = when (checkType) {
-        AddressCheckType.Phishing -> R.string.Send_Address_PhishingCheck
-        AddressCheckType.Blacklist -> R.string.Send_Address_BlacklistCheck
-        AddressCheckType.Sanction -> R.string.Send_Address_SanctionCheck
-    }
+    val title =
+        when (checkType) {
+            AddressCheckType.Phishing -> R.string.Send_Address_PhishingCheck
+            AddressCheckType.Blacklist -> R.string.Send_Address_BlacklistCheck
+            AddressCheckType.Sanction -> R.string.Send_Address_SanctionCheck
+        }
 
     ModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        containerColor = ComposeAppTheme.colors.transparent,
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_info_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
             title = stringResource(title),
             titleColor = ComposeAppTheme.colors.leah,
-            onCloseClick = hideBottomSheet
+            onCloseClick = hideBottomSheet,
         ) {
             Column(
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 24.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(vertical = 12.dp, horizontal = 24.dp)
+                        .fillMaxWidth(),
             ) {
                 InfoBlock(checkType)
                 VSpacer(36.dp)
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Close),
-                    onClick = hideBottomSheet
+                    onClick = hideBottomSheet,
                 )
                 VSpacer(32.dp)
             }
@@ -67,74 +69,86 @@ fun AddressEnterInfoBottomSheet(
 
 @Composable
 fun InfoBlock(checkType: AddressCheckType) {
-    val info1 = when (checkType) {
-        AddressCheckType.Phishing -> AnnotatedString(stringResource(R.string.Send_Address_PhishingCheck_Info1))
+    val info1 =
+        when (checkType) {
+            AddressCheckType.Phishing -> AnnotatedString(stringResource(R.string.Send_Address_PhishingCheck_Info1))
 
-        AddressCheckType.Blacklist -> highlightText(
-            text = stringResource(R.string.Send_Address_BlacklistCheck_Info1),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = "Hashdit.io",
-            highlightColor = ComposeAppTheme.colors.jacob
-        )
+            AddressCheckType.Blacklist ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_BlacklistCheck_Info1),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = "Hashdit.io",
+                    highlightColor = ComposeAppTheme.colors.jacob,
+                )
 
-        AddressCheckType.Sanction -> highlightText(
-            text = stringResource(R.string.Send_Address_SanctionCheck_Info1),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = "Chainalysis.com",
-            highlightColor = ComposeAppTheme.colors.jacob
-        )
-    }
+            AddressCheckType.Sanction ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_SanctionCheck_Info1),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = "Chainalysis.com",
+                    highlightColor = ComposeAppTheme.colors.jacob,
+                )
+        }
 
-    val info2 = when (checkType) {
-        AddressCheckType.Phishing -> highlightText(
-            text = stringResource(R.string.Send_Address_PhishingCheck_Info2),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = stringResource(R.string.Send_Address_Error_Clear),
-            highlightColor = ComposeAppTheme.colors.remus
-        )
+    val info2 =
+        when (checkType) {
+            AddressCheckType.Phishing ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_PhishingCheck_Info2),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = stringResource(R.string.Send_Address_Error_Clear),
+                    highlightColor = ComposeAppTheme.colors.remus,
+                )
 
-        AddressCheckType.Blacklist -> highlightText(
-            text = stringResource(R.string.Send_Address_BlacklistCheck_Info2),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = stringResource(R.string.Send_Address_Error_Clear),
-            highlightColor = ComposeAppTheme.colors.remus
-        )
+            AddressCheckType.Blacklist ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_BlacklistCheck_Info2),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = stringResource(R.string.Send_Address_Error_Clear),
+                    highlightColor = ComposeAppTheme.colors.remus,
+                )
 
-        AddressCheckType.Sanction -> highlightText(
-            text = stringResource(R.string.Send_Address_SanctionCheck_Info2),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = stringResource(R.string.Send_Address_Error_Clear),
-            highlightColor = ComposeAppTheme.colors.remus
-        )
-    }
+            AddressCheckType.Sanction ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_SanctionCheck_Info2),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = stringResource(R.string.Send_Address_Error_Clear),
+                    highlightColor = ComposeAppTheme.colors.remus,
+                )
+        }
 
-    val info3 = when (checkType) {
-        AddressCheckType.Phishing -> highlightText(
-            text = stringResource(R.string.Send_Address_PhishingCheck_Info3),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = stringResource(R.string.Send_Address_Error_Detected),
-            highlightColor = ComposeAppTheme.colors.lucian
-        )
+    val info3 =
+        when (checkType) {
+            AddressCheckType.Phishing ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_PhishingCheck_Info3),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = stringResource(R.string.Send_Address_Error_Detected),
+                    highlightColor = ComposeAppTheme.colors.lucian,
+                )
 
-        AddressCheckType.Blacklist -> highlightText(
-            text = stringResource(R.string.Send_Address_BlacklistCheck_Info3),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = stringResource(R.string.Send_Address_Error_Detected),
-            highlightColor = ComposeAppTheme.colors.lucian
-        )
+            AddressCheckType.Blacklist ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_BlacklistCheck_Info3),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = stringResource(R.string.Send_Address_Error_Detected),
+                    highlightColor = ComposeAppTheme.colors.lucian,
+                )
 
-        AddressCheckType.Sanction -> highlightText(
-            text = stringResource(R.string.Send_Address_SanctionCheck_Info3),
-            textColor = ComposeAppTheme.colors.leah,
-            highlightPart = stringResource(R.string.Send_Address_Error_Detected),
-            highlightColor = ComposeAppTheme.colors.lucian
-        )
-    }
+            AddressCheckType.Sanction ->
+                highlightText(
+                    text = stringResource(R.string.Send_Address_SanctionCheck_Info3),
+                    textColor = ComposeAppTheme.colors.leah,
+                    highlightPart = stringResource(R.string.Send_Address_Error_Detected),
+                    highlightColor = ComposeAppTheme.colors.lucian,
+                )
+        }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
     ) {
         Text(
             text = info1,

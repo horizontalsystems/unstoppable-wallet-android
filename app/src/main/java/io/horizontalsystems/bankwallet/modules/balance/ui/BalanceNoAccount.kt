@@ -35,33 +35,36 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 @Composable
 fun BalanceNoAccount(navController: NavController) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(
-                    color = ComposeAppTheme.colors.raina,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(100.dp)
+                    .background(
+                        color = ComposeAppTheme.colors.raina,
+                        shape = CircleShape,
+                    ),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 modifier = Modifier.size(48.dp),
                 painter = painterResource(R.drawable.icon_add_to_wallet_24),
                 contentDescription = "",
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
         Spacer(Modifier.height(32.dp))
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 48.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 48.dp),
             title = stringResource(R.string.ManageAccounts_CreateNewWallet),
             onClick = {
                 navController.navigateWithTermsAccepted {
@@ -69,13 +72,14 @@ fun BalanceNoAccount(navController: NavController) {
 
                     stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
                 }
-            }
+            },
         )
         Spacer(modifier = Modifier.height(16.dp))
         ButtonPrimaryDefault(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 48.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 48.dp),
             title = stringResource(R.string.ManageAccounts_ImportWallet),
             onClick = {
                 navController.navigateWithTermsAccepted {
@@ -83,20 +87,20 @@ fun BalanceNoAccount(navController: NavController) {
 
                     stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
                 }
-            }
+            },
         )
         Spacer(modifier = Modifier.height(16.dp))
         ButtonPrimaryTransparent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 48.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 48.dp),
             title = stringResource(R.string.ManageAccounts_WatchAddress),
             onClick = {
                 navController.slideFromRight(R.id.watchAddressFragment)
 
                 stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
-            }
+            },
         )
-
     }
 }

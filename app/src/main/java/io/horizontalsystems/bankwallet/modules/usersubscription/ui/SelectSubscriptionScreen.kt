@@ -54,11 +54,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun SelectSubscriptionScreen(
     navController: NavController,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
 ) {
-    val viewModel = viewModel<BuySubscriptionViewModel> {
-        BuySubscriptionViewModel()
-    }
+    val viewModel =
+        viewModel<BuySubscriptionViewModel> {
+            BuySubscriptionViewModel()
+        }
 
     val uiState = viewModel.uiState
     val subscription = uiState.subscription
@@ -78,39 +79,42 @@ fun SelectSubscriptionScreen(
         topBar = {
             TitleCenteredTopBar(
                 title = stringResource(R.string.Premium_Title),
-                onCloseClick = onCloseClick
+                onCloseClick = onCloseClick,
             )
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .navigationBarsPadding()
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .navigationBarsPadding()
+                    .fillMaxSize(),
         ) {
             RadialBackground()
 
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxSize()
-                    .padding(bottom = 70.dp)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize()
+                        .padding(bottom = 70.dp)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(24.dp)
                 Image(
                     painter = painterResource(id = R.drawable.prem_star_launch),
                     contentDescription = null,
-                    modifier = Modifier
-                        .height(200.dp)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .height(200.dp)
+                            .fillMaxWidth(),
                 )
                 VSpacer(24.dp)
                 ActionText()
                 VSpacer(24.dp)
                 if (subscription != null) {
                     Column(
-                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                        modifier = Modifier.clip(RoundedCornerShape(12.dp)),
                     ) {
                         PlanItems(
                             items = subscription.actions,
@@ -120,31 +124,34 @@ fun SelectSubscriptionScreen(
                                     isInfoBottomSheetVisible = true
                                     infoModalBottomSheetState.show()
                                 }
-                            }
+                            },
                         )
                     }
                     VSpacer(32.dp)
                     headline2_leah(
                         text = stringResource(R.string.Premium_HighlyRatedSecurity),
                         textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 32.dp),
                     )
                     VSpacer(24.dp)
                     Image(
                         painter = painterResource(id = R.drawable.security_rate_image),
                         contentDescription = null,
-                        modifier = Modifier
-                            .height(112.dp)
-                            .fillMaxWidth()
+                        modifier =
+                            Modifier
+                                .height(112.dp)
+                                .fillMaxWidth(),
                     )
                     subhead2_grey(
                         text = stringResource(R.string.Premium_ApprovedBy),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp, vertical = 16.dp),
-                        textAlign = TextAlign.Center
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 32.dp, vertical = 16.dp),
+                        textAlign = TextAlign.Center,
                     )
                     Row(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -153,17 +160,17 @@ fun SelectSubscriptionScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.bitcoin_logo),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah
+                            tint = ComposeAppTheme.colors.leah,
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.wallet_scrutiny_logo),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah
+                            tint = ComposeAppTheme.colors.leah,
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.certik_logo),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah
+                            tint = ComposeAppTheme.colors.leah,
                         )
                     }
                     VSpacer(24.dp)
@@ -179,33 +186,37 @@ fun SelectSubscriptionScreen(
                     VSpacer(52.dp)
                 }
             }
-            val buttonTitle = if (hasFreeTrial) {
-                stringResource(R.string.Premium_TryForFree)
-            } else {
-                stringResource(R.string.Premium_Upgrade)
-            }
+            val buttonTitle =
+                if (hasFreeTrial) {
+                    stringResource(R.string.Premium_TryForFree)
+                } else {
+                    stringResource(R.string.Premium_Upgrade)
+                }
 
             Column(
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter),
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(24.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                listOf(
-                                    ComposeAppTheme.colors.transparent,
-                                    ComposeAppTheme.colors.tyler
-                                )
-                            )
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(24.dp)
+                            .background(
+                                brush =
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            ComposeAppTheme.colors.transparent,
+                                            ComposeAppTheme.colors.tyler,
+                                        ),
+                                    ),
+                            ),
                 )
                 Column(
-                    modifier = Modifier
-                        .background(ComposeAppTheme.colors.tyler)
-                        .padding(horizontal = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier =
+                        Modifier
+                            .background(ComposeAppTheme.colors.tyler)
+                            .padding(horizontal = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     ButtonPrimaryCustomColor(
                         modifier = Modifier.fillMaxWidth(),
@@ -240,7 +251,7 @@ fun SelectSubscriptionScreen(
                         }
                         isPlanSelectBottomSheetVisible = false
                         HudHelper.showErrorMessage(view, it.message ?: "Error")
-                    }
+                    },
                 )
             }
             if (isInfoBottomSheetVisible) {
@@ -256,7 +267,7 @@ fun SelectSubscriptionScreen(
                             }
                             infoBottomSheetAction = null
                             isInfoBottomSheetVisible = false
-                        }
+                        },
                     )
                 }
             }
@@ -266,20 +277,22 @@ fun SelectSubscriptionScreen(
 
 @Composable
 private fun ActionText() {
-    val text = highlightText(
-        text = stringResource(R.string.Premium_UpgradeText),
-        textColor = ComposeAppTheme.colors.leah,
-        highlightPart = stringResource(R.string.Premium_Title),
-        highlightColor = ComposeAppTheme.colors.jacob
-    )
+    val text =
+        highlightText(
+            text = stringResource(R.string.Premium_UpgradeText),
+            textColor = ComposeAppTheme.colors.leah,
+            highlightPart = stringResource(R.string.Premium_Title),
+            highlightColor = ComposeAppTheme.colors.jacob,
+        )
     Text(
         text = text,
         style = ComposeAppTheme.typography.headline1,
         color = ComposeAppTheme.colors.leah,
         textAlign = TextAlign.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
     )
 }
 

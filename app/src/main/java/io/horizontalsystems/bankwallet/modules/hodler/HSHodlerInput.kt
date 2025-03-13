@@ -33,30 +33,32 @@ import io.horizontalsystems.hodler.LockTimeInterval
 fun HSHodlerInput(
     lockTimeIntervals: List<LockTimeInterval?>,
     lockTimeInterval: LockTimeInterval?,
-    onSelect: (LockTimeInterval?) -> Unit
+    onSelect: (LockTimeInterval?) -> Unit,
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }
     if (showSelectorDialog) {
         SelectorDialogCompose(
             title = stringResource(R.string.Send_DialogSpeed),
-            items = lockTimeIntervals.map {
-                SelectorItem(stringResource(it.stringResId()), it == lockTimeInterval, it)
-            },
+            items =
+                lockTimeIntervals.map {
+                    SelectorItem(stringResource(it.stringResId()), it == lockTimeInterval, it)
+                },
             onDismissRequest = {
                 showSelectorDialog = false
             },
             onSelectItem = {
                 onSelect.invoke(it)
-            }
+            },
         )
     }
 
     RowUniversal(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = { showSelectorDialog = true }
-        ),
+        modifier =
+            Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { showSelectorDialog = true },
+            ),
     ) {
         body_leah(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -74,9 +76,7 @@ fun HSHodlerInput(
 }
 
 @Composable
-fun HSHodler(
-    lockTimeInterval: LockTimeInterval,
-) {
+fun HSHodler(lockTimeInterval: LockTimeInterval) {
     RowUniversal {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -101,7 +101,7 @@ private fun Preview_HSHodlerInput() {
         HSHodlerInput(
             listOf(LockTimeInterval.hour, LockTimeInterval.halfYear),
             LockTimeInterval.halfYear,
-            {}
+            {},
         )
     }
 }

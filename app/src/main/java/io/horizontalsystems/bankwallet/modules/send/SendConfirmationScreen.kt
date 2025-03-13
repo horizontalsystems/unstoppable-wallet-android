@@ -78,20 +78,21 @@ fun SendConfirmationScreen(
     memo: String?,
     rbfEnabled: Boolean?,
     onClickSend: () -> Unit,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
-    val closeUntilDestId = if (sendEntryPointDestId == 0) {
-        R.id.sendXFragment
-    } else {
-        sendEntryPointDestId
-    }
+    val closeUntilDestId =
+        if (sendEntryPointDestId == 0) {
+            R.id.sendXFragment
+        } else {
+            sendEntryPointDestId
+        }
     val view = LocalView.current
     when (sendResult) {
         SendResult.Sending -> {
             HudHelper.showInProcessMessage(
                 view,
                 R.string.Send_Sending,
-                SnackbarDuration.INDEFINITE
+                SnackbarDuration.INDEFINITE,
             )
         }
 
@@ -99,12 +100,15 @@ fun SendConfirmationScreen(
             HudHelper.showSuccessMessage(
                 view,
                 R.string.Send_Success,
-                SnackbarDuration.LONG
+                SnackbarDuration.LONG,
             )
         }
 
         is SendResult.Failed -> {
-            HudHelper.showErrorMessage(view, sendResult.caution.getDescription() ?: sendResult.caution.getString())
+            HudHelper.showErrorMessage(
+                view,
+                sendResult.caution.getDescription() ?: sendResult.caution.getString(),
+            )
         }
 
         null -> Unit
@@ -129,125 +133,148 @@ fun SendConfirmationScreen(
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
-            menuItems = listOf()
+            menuItems = listOf(),
         )
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 106.dp)
+                modifier =
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = 106.dp),
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
-                val topSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        SectionTitleCell(
-                            stringResource(R.string.Send_Confirmation_YouSend),
-                            coin.name,
-                            R.drawable.ic_arrow_up_right_12
-                        )
-                    }
-                    add {
-                        val coinAmount = App.numberFormatter.formatCoinFull(
-                            amount,
-                            coin.code,
-                            coinMaxAllowedDecimals
-                        )
-
-                        val currencyAmount = rate?.let { rate ->
-                            rate.copy(value = amount.times(rate.value))
-                                .getFormattedFull()
+                val topSectionItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SectionTitleCell(
+                                stringResource(R.string.Send_Confirmation_YouSend),
+                                coin.name,
+                                R.drawable.ic_arrow_up_right_12,
+                            )
                         }
+                        add {
+                            val coinAmount =
+                                App.numberFormatter.formatCoinFull(
+                                    amount,
+                                    coin.code,
+                                    coinMaxAllowedDecimals,
+                                )
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, coin)
-                    }
-                    add {
-                        TransactionInfoAddressCell(
-                            title = stringResource(R.string.Send_Confirmation_To),
-                            value = address.hex,
-                            showAdd = contact == null,
-                            blockchainType = blockchainType,
-                            navController = navController,
-                            onCopy = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
-                            },
-                            onAddToExisting = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
-                            },
-                            onAddToNew = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                            val currencyAmount =
+                                rate?.let { rate ->
+                                    rate
+                                        .copy(value = amount.times(rate.value))
+                                        .getFormattedFull()
+                                }
+
+                            ConfirmAmountCell(currencyAmount, coinAmount, coin)
+                        }
+                        add {
+                            TransactionInfoAddressCell(
+                                title = stringResource(R.string.Send_Confirmation_To),
+                                value = address.hex,
+                                showAdd = contact == null,
+                                blockchainType = blockchainType,
+                                navController = navController,
+                                onCopy = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Copy(StatEntity.Address),
+                                    )
+                                },
+                                onAddToExisting = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                    )
+                                },
+                                onAddToNew = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactNew),
+                                    )
+                                },
+                            )
+                        }
+                        contact?.let {
+                            add {
+                                TransactionInfoContactCell(name = contact.name)
                             }
-                        )
-                    }
-                    contact?.let {
-                        add {
-                            TransactionInfoContactCell(name = contact.name)
                         }
-                    }
-                    if (lockTimeInterval != null) {
-                        add {
-                            HSHodler(lockTimeInterval = lockTimeInterval)
+                        if (lockTimeInterval != null) {
+                            add {
+                                HSHodler(lockTimeInterval = lockTimeInterval)
+                            }
                         }
-                    }
 
-                    if (rbfEnabled == false) {
-                        add {
-                            TransactionInfoRbfCell(rbfEnabled)
+                        if (rbfEnabled == false) {
+                            add {
+                                TransactionInfoRbfCell(rbfEnabled)
+                            }
                         }
                     }
-                }
 
                 CellUniversalLawrenceSection(topSectionItems)
 
                 Spacer(modifier = Modifier.height(28.dp))
 
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRaw(
-                            coinCode = feeCoin.code,
-                            coinDecimal = feeCoinMaxAllowedDecimals,
-                            fee = fee,
-                            amountInputType = amountInputType,
-                            rate = feeCoinRate,
-                            navController = navController
-                        )
-                    }
-                    if (!memo.isNullOrBlank()) {
+                val bottomSectionItems =
+                    buildList<@Composable () -> Unit> {
                         add {
-                            MemoCell(memo)
+                            HSFeeRaw(
+                                coinCode = feeCoin.code,
+                                coinDecimal = feeCoinMaxAllowedDecimals,
+                                fee = fee,
+                                amountInputType = amountInputType,
+                                rate = feeCoinRate,
+                                navController = navController,
+                            )
+                        }
+                        if (!memo.isNullOrBlank()) {
+                            add {
+                                MemoCell(memo)
+                            }
                         }
                     }
-                }
 
                 CellUniversalLawrenceSection(bottomSectionItems)
             }
 
             SendButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                 sendResult = sendResult,
                 onClickSend = {
                     onClickSend()
 
                     stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit) {
+fun SendButton(
+    modifier: Modifier,
+    sendResult: SendResult?,
+    onClickSend: () -> Unit,
+) {
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Sending),
                 onClick = { },
-                enabled = false
+                enabled = false,
             )
         }
 
@@ -256,7 +283,7 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
                 modifier = modifier,
                 title = stringResource(R.string.Send_Success),
                 onClick = { },
-                enabled = false
+                enabled = false,
             )
         }
 
@@ -265,26 +292,30 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
                 modifier = modifier,
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
                 onClick = onClickSend,
-                enabled = true
+                enabled = true,
             )
         }
     }
 }
 
 @Composable
-fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
+fun ConfirmAmountCell(
+    fiatAmount: String?,
+    coinAmount: String,
+    coin: Coin,
+) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             coin = coin,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
         subhead2_leah(
             modifier = Modifier.padding(start = 16.dp),
             text = coinAmount,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.weight(1f))
         subhead1_grey(text = fiatAmount ?: "")
@@ -304,7 +335,7 @@ fun MemoCell(value: String) {
         subhead1Italic_leah(
             text = value,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

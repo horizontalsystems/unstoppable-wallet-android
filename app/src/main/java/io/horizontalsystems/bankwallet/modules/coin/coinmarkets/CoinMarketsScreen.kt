@@ -50,9 +50,7 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
 
 @Composable
-fun CoinMarketsScreen(
-    fullCoin: FullCoin
-) {
+fun CoinMarketsScreen(fullCoin: FullCoin) {
     val viewModel = viewModel<CoinMarketsViewModel>(factory = CoinMarketsModule.Factory(fullCoin))
 
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
@@ -65,16 +63,18 @@ fun CoinMarketsScreen(
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
+
                 ViewState.Success -> {
                     viewItems?.let { items ->
                         Column(modifier = Modifier.fillMaxSize()) {
                             if (items.isEmpty()) {
                                 ListEmptyView(
                                     text = stringResource(R.string.CoinPage_NoDataAvailable),
-                                    icon = R.drawable.ic_no_data
+                                    icon = R.drawable.ic_no_data,
                                 )
                             } else {
                                 CoinMarketsMenu(
@@ -91,6 +91,7 @@ fun CoinMarketsScreen(
                         }
                     }
                 }
+
                 null -> {}
             }
         }
@@ -102,7 +103,6 @@ fun CoinMarketsMenu(
     menuVerified: Select<VerifiedType>,
     onToggleVerified: (VerifiedType) -> Unit,
 ) {
-
     var verifiedType by remember { mutableStateOf(menuVerified) }
 
     HeaderSorting(borderTop = true, borderBottom = true) {
@@ -113,7 +113,7 @@ fun CoinMarketsMenu(
             onSelect = {
                 onToggleVerified.invoke(it)
                 verifiedType = Select(it, verifiedType.options)
-            }
+            },
         )
     }
 }
@@ -135,7 +135,7 @@ fun CoinMarketList(
                 item.volumeToken,
                 MarketDataValue.Volume(item.volumeFiat),
                 item.tradeUrl,
-                item.badge
+                item.badge,
             )
         }
         item {
@@ -157,28 +157,31 @@ fun CoinMarketCell(
     volumeToken: String,
     marketDataValue: MarketDataValue,
     tradeUrl: String?,
-    badge: TranslatableString?
+    badge: TranslatableString?,
 ) {
     val context = LocalContext.current
     SectionItemBorderedRowUniversalClear(
-        onClick = tradeUrl?.let {
-            { LinkHelper.openLinkInAppBrowser(context, it) }
-        },
-        borderBottom = true
+        onClick =
+            tradeUrl?.let {
+                { LinkHelper.openLinkInAppBrowser(context, it) }
+            },
+        borderBottom = true,
     ) {
         Image(
-            painter = rememberAsyncImagePainter(
-                model = iconUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_24)
-            ),
+            painter =
+                rememberAsyncImagePainter(
+                    model = iconUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_24),
+                ),
             contentDescription = null,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
-                .clip(RoundedCornerShape(8.dp)),
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
         )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             MarketCoinFirstRow(name, volumeToken, badge = badge?.getString())
             Spacer(modifier = Modifier.height(3.dp))

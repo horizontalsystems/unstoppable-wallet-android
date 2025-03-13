@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 import io.horizontalsystems.marketkit.models.FullCoin
 
 class ReceiveSharedViewModel : ViewModel() {
-
     var wallet: Wallet? = null
     var coinUid: String? = null
     var usedAddressesParams: UsedAddressesParams? = null
@@ -20,5 +19,4 @@ class ReceiveSharedViewModel : ViewModel() {
         val coinUid = coinUid ?: return null
         return App.marketKit.fullCoins(listOf(coinUid)).firstOrNull()
     }
-
 }

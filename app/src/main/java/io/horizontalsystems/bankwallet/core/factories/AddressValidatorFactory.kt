@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.modules.send.address.ZcashAddressValidato
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object AddressValidatorFactory {
-
     fun get(wallet: Wallet): EnterAddressValidator {
         val adapter = App.adapterManager.getAdapterForWallet(wallet)
 
@@ -24,13 +23,18 @@ object AddressValidatorFactory {
             BlockchainType.BitcoinCash,
             BlockchainType.ECash,
             BlockchainType.Litecoin,
-            BlockchainType.Dash -> {
-                val sendAdapter = (adapter as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendAdapter is null")
+            BlockchainType.Dash,
+            -> {
+                val sendAdapter =
+                    (adapter as? ISendBitcoinAdapter)
+                        ?: throw IllegalStateException("SendAdapter is null")
                 BitcoinAddressValidator(sendAdapter)
             }
 
             BlockchainType.Zcash -> {
-                val sendAdapter = (adapter as? ISendZcashAdapter) ?: throw IllegalStateException("SendAdapter is null")
+                val sendAdapter =
+                    (adapter as? ISendZcashAdapter)
+                        ?: throw IllegalStateException("SendAdapter is null")
                 ZcashAddressValidator(sendAdapter)
             }
 
@@ -43,7 +47,8 @@ object AddressValidatorFactory {
             BlockchainType.ZkSync,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
-            BlockchainType.ArbitrumOne -> {
+            BlockchainType.ArbitrumOne,
+            -> {
                 EvmAddressValidator()
             }
 
@@ -52,7 +57,9 @@ object AddressValidatorFactory {
             }
 
             BlockchainType.Tron -> {
-                val sendAdapter = (adapter as? ISendTronAdapter) ?: throw IllegalStateException("SendAdapter is null")
+                val sendAdapter =
+                    (adapter as? ISendTronAdapter)
+                        ?: throw IllegalStateException("SendAdapter is null")
                 TronAddressValidator(sendAdapter, wallet.token)
             }
 
@@ -63,5 +70,4 @@ object AddressValidatorFactory {
             is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${wallet.token.blockchainType}")
         }
     }
-
 }

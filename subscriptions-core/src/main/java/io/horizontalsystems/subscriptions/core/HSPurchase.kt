@@ -1,10 +1,11 @@
 package io.horizontalsystems.subscriptions.core
 
 data class HSPurchase(
-    val status: Status
+    val status: Status,
 ) {
     enum class Status {
-        Pending, Purchased
+        Pending,
+        Purchased,
     }
 }
 

@@ -48,31 +48,31 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
 class BaseCurrencySettingsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         BaseCurrencyScreen(navController)
     }
-
 }
 
 @Composable
 private fun BaseCurrencyScreen(
     navController: NavController,
-    viewModel: BaseCurrencySettingsViewModel = viewModel(
-        factory = BaseCurrencySettingsModule.Factory()
-    )
+    viewModel: BaseCurrencySettingsViewModel =
+        viewModel(
+            factory = BaseCurrencySettingsModule.Factory(),
+        ),
 ) {
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden,
-        confirmValueChange = {
-            if (it == ModalBottomSheetValue.Hidden) {
-                viewModel.closeDisclaimer()
-            }
-            true
-        }
-    )
+    val sheetState =
+        rememberModalBottomSheetState(
+            ModalBottomSheetValue.Hidden,
+            confirmValueChange = {
+                if (it == ModalBottomSheetValue.Hidden) {
+                    viewModel.closeDisclaimer()
+                }
+                true
+            },
+        )
 
     if (viewModel.closeScreen) {
         navController.popBackStack()
@@ -89,10 +89,11 @@ private fun BaseCurrencyScreen(
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             WarningBottomSheet(
-                text = stringResource(
-                    R.string.SettingsCurrency_DisclaimerText,
-                    viewModel.disclaimerCurrencies
-                ),
+                text =
+                    stringResource(
+                        R.string.SettingsCurrency_DisclaimerText,
+                        viewModel.disclaimerCurrencies,
+                    ),
                 onCloseClick = {
                     viewModel.closeDisclaimer()
                     scope.launch { sheetState.hide() }
@@ -100,9 +101,9 @@ private fun BaseCurrencyScreen(
                 onOkClick = {
                     viewModel.onAcceptDisclaimer()
                     scope.launch { sheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -111,15 +112,15 @@ private fun BaseCurrencyScreen(
                     title = stringResource(R.string.SettingsCurrency_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
-                    }
+                    },
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
                     .padding(paddingValues)
-                    .navigationBarsPadding()
+                    .navigationBarsPadding(),
             ) {
                 VSpacer(12.dp)
                 CellUniversalLawrenceSection(viewModel.popularItems) { item ->
@@ -127,19 +128,19 @@ private fun BaseCurrencyScreen(
                         item.currency.code,
                         item.currency.symbol,
                         item.currency.flag,
-                        item.selected
+                        item.selected,
                     ) { viewModel.onSelectBaseCurrency(item.currency) }
                 }
                 VSpacer(24.dp)
                 HeaderText(
-                    stringResource(R.string.SettingsCurrency_Other)
+                    stringResource(R.string.SettingsCurrency_Other),
                 )
                 CellUniversalLawrenceSection(viewModel.otherItems) { item ->
                     CurrencyCell(
                         item.currency.code,
                         item.currency.symbol,
                         item.currency.flag,
-                        item.selected
+                        item.selected,
                     ) { viewModel.onSelectBaseCurrency(item.currency) }
                 }
                 VSpacer(24.dp)
@@ -152,33 +153,35 @@ private fun BaseCurrencyScreen(
 private fun WarningBottomSheet(
     text: String,
     onCloseClick: () -> Unit,
-    onOkClick: () -> Unit
+    onOkClick: () -> Unit,
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         title = stringResource(R.string.SettingsCurrency_DisclaimerTitle),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            text = text
+            text = text,
         )
 
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, top = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 20.dp),
             title = stringResource(id = R.string.Button_Change),
-            onClick = onOkClick
+            onClick = onOkClick,
         )
 
         ButtonPrimaryTransparent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
             title = stringResource(id = R.string.Button_Cancel),
-            onClick = onCloseClick
+            onClick = onCloseClick,
         )
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -190,17 +193,18 @@ private fun CurrencyCell(
     subtitle: String,
     icon: Int,
     checked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Image(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(32.dp),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(32.dp),
             painter = painterResource(icon),
-            contentDescription = null
+            contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
             body_leah(
@@ -216,10 +220,11 @@ private fun CurrencyCell(
             )
         }
         Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .width(52.dp)
+                    .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
         ) {
             if (checked) {
                 Icon(

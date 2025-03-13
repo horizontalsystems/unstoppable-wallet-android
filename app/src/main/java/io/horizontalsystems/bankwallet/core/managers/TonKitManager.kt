@@ -66,17 +66,18 @@ class TonKitManager(
 
         if (this.tonKitWrapper == null) {
             val accountType = account.type
-            this.tonKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account)
-                }
+            this.tonKitWrapper =
+                when (accountType) {
+                    is AccountType.Mnemonic -> {
+                        createKitInstance(accountType, account)
+                    }
 
-                is AccountType.TonAddress -> {
-                    createKitInstance(accountType, account)
-                }
+                    is AccountType.TonAddress -> {
+                        createKitInstance(accountType, account)
+                    }
 
-                else -> throw UnsupportedAccountException()
-            }
+                    else -> throw UnsupportedAccountException()
+                }
             scope.launch {
                 start()
             }
@@ -105,7 +106,8 @@ class TonKitManager(
         accountType: AccountType.Mnemonic,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
+        val kit =
+            TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -114,7 +116,8 @@ class TonKitManager(
         accountType: AccountType.TonAddress,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
+        val kit =
+            TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -139,16 +142,17 @@ class TonKitManager(
 
     private suspend fun start() {
         tonKitWrapper?.tonKit?.start()
-        job = scope.launch {
-            backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    tonKitWrapper?.tonKit?.let { kit ->
-                        delay(1000)
-                        kit.refresh()
+        job =
+            scope.launch {
+                backgroundManager.stateFlow.collect { state ->
+                    if (state == BackgroundManagerState.EnterForeground) {
+                        tonKitWrapper?.tonKit?.let { kit ->
+                            delay(1000)
+                            kit.refresh()
+                        }
                     }
                 }
             }
-        }
     }
 }
 
@@ -158,9 +162,8 @@ object TonHelper {
         rates: Map<String, CurrencyValue>,
         blockchainType: BlockchainType,
         hideAmount: Boolean,
-        showHistoricalRate: Boolean
+        showHistoricalRate: Boolean,
     ): List<TransactionInfoViewItem> {
-
         val itemsForAction = mutableListOf<TransactionInfoViewItem>()
 
         when (val actionType = action.type) {
@@ -173,15 +176,15 @@ object TonHelper {
                         hideAmount = hideAmount,
                         sentToSelf = actionType.sentToSelf,
                         blockchainType = blockchainType,
-                        showHistoricalRate = showHistoricalRate
-                    )
+                        showHistoricalRate = showHistoricalRate,
+                    ),
                 )
                 actionType.comment?.let {
                     itemsForAction.add(
                         Value(
                             Translator.getString(R.string.TransactionInfo_Memo),
-                            it
-                        )
+                            it,
+                        ),
                     )
                 }
             }
@@ -194,15 +197,15 @@ object TonHelper {
                         coinPrice = rates[actionType.value.coinUid],
                         hideAmount = hideAmount,
                         blockchainType = blockchainType,
-                        showHistoricalRate = showHistoricalRate
-                    )
+                        showHistoricalRate = showHistoricalRate,
+                    ),
                 )
                 actionType.comment?.let {
                     itemsForAction.add(
                         Value(
                             Translator.getString(R.string.TransactionInfo_Memo),
-                            it
-                        )
+                            it,
+                        ),
                     )
                 }
             }
@@ -215,7 +218,7 @@ object TonHelper {
                         coinPrice = rates[actionType.value.coinUid],
                         hideAmount = hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
             }
 
@@ -227,7 +230,7 @@ object TonHelper {
                         coinPrice = rates[actionType.value.coinUid],
                         hideAmount = hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
             }
 
@@ -239,8 +242,8 @@ object TonHelper {
                         rates = rates,
                         amount = null,
                         hideAmount = hideAmount,
-                        hasRecipient = false
-                    )
+                        hasRecipient = false,
+                    ),
                 )
             }
 
@@ -250,9 +253,8 @@ object TonHelper {
                         leftValue = Translator.getString(R.string.Transactions_ContractDeploy),
                         rightValue = actionType.interfaces.joinToString(),
                         icon = null,
-                    )
+                    ),
                 )
-
             }
 
             is TonTransactionRecord.Action.Type.ContractCall -> {
@@ -261,7 +263,7 @@ object TonHelper {
                         leftValue = Translator.getString(R.string.Transactions_ContractCall),
                         rightValue = actionType.operation,
                         icon = TransactionViewItem.Icon.Platform(blockchainType).iconRes,
-                    )
+                    ),
                 )
 
                 itemsForAction.add(
@@ -270,8 +272,8 @@ object TonHelper {
                         actionType.address,
                         false,
                         blockchainType,
-                        StatSection.AddressTo
-                    )
+                        StatSection.AddressTo,
+                    ),
                 )
 
                 itemsForAction.addAll(
@@ -281,7 +283,7 @@ object TonHelper {
                         coinPrice = rates[actionType.value.coinUid],
                         hideAmount = hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
             }
 
@@ -295,27 +297,29 @@ object TonHelper {
         }
 
         return itemsForAction
-
-
     }
 }
 
-class TonKitWrapper(val tonKit: TonKit)
+class TonKitWrapper(
+    val tonKit: TonKit,
+)
 
-fun TonKit.statusInfo() = buildMap {
-    put("Sync State", syncStateFlow.value.toAdapterState())
-    put("Event Sync State", eventSyncStateFlow.value.toAdapterState())
-    put("Jetton Sync State", jettonSyncStateFlow.value.toAdapterState())
-}
+fun TonKit.statusInfo() =
+    buildMap {
+        put("Sync State", syncStateFlow.value.toAdapterState())
+        put("Event Sync State", eventSyncStateFlow.value.toAdapterState())
+        put("Jetton Sync State", jettonSyncStateFlow.value.toAdapterState())
+    }
 
 val Jetton.tokenType
     get() = TokenType.Jetton(address.toUserFriendly(true))
 
-fun SyncState.toAdapterState(): AdapterState = when (this) {
-    is SyncState.NotSynced -> AdapterState.NotSynced(error)
-    is SyncState.Synced -> AdapterState.Synced
-    is SyncState.Syncing -> AdapterState.Syncing()
-}
+fun SyncState.toAdapterState(): AdapterState =
+    when (this) {
+        is SyncState.NotSynced -> AdapterState.NotSynced(error)
+        is SyncState.Synced -> AdapterState.Synced
+        is SyncState.Syncing -> AdapterState.Syncing()
+    }
 
 fun AccountType.toTonWalletFullAccess(): TonWallet.FullAccess {
     val toTonWallet = toTonWallet()
@@ -323,19 +327,21 @@ fun AccountType.toTonWalletFullAccess(): TonWallet.FullAccess {
     return toTonWallet as? TonWallet.FullAccess ?: throw IllegalArgumentException("Watch Only")
 }
 
-fun AccountType.toTonWallet() = when (this) {
-    is AccountType.Mnemonic -> {
-        val hdWallet = HDWallet(seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
-        val privateKey = hdWallet.privateKey(0)
-        var privateKeyBytes = privateKey.privKeyBytes
-        if (privateKeyBytes.size > 32) {
-            privateKeyBytes = privateKeyBytes.copyOfRange(1, privateKeyBytes.size)
+fun AccountType.toTonWallet() =
+    when (this) {
+        is AccountType.Mnemonic -> {
+            val hdWallet = HDWallet(seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
+            val privateKey = hdWallet.privateKey(0)
+            var privateKeyBytes = privateKey.privKeyBytes
+            if (privateKeyBytes.size > 32) {
+                privateKeyBytes = privateKeyBytes.copyOfRange(1, privateKeyBytes.size)
+            }
+            TonWallet.Seed(privateKeyBytes)
         }
-        TonWallet.Seed(privateKeyBytes)
 
+        is AccountType.TonAddress -> {
+            TonWallet.WatchOnly(address)
+        }
+
+        else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to TonKit.WalletType")
     }
-    is AccountType.TonAddress -> {
-        TonWallet.WatchOnly(address)
-    }
-    else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to TonKit.WalletType")
-}

@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 
 class AutoLockIntervalsViewModel(
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
 ) : ViewModel() {
-
     private val autoLockInterval: AutoLockInterval
         get() = localStorage.autoLockInterval
 
@@ -14,7 +13,8 @@ class AutoLockIntervalsViewModel(
         localStorage.autoLockInterval = autoLockInterval
     }
 
-    val intervals = AutoLockInterval.values().map {
-        AutoLockModule.AutoLockIntervalViewItem(it, it == autoLockInterval)
-    }
+    val intervals =
+        AutoLockInterval.values().map {
+            AutoLockModule.AutoLockIntervalViewItem(it, it == autoLockInterval)
+        }
 }

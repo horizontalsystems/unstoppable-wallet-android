@@ -8,9 +8,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 
 object ManageWalletsModule {
-
     class Factory : ViewModelProvider.Factory {
-
         private val restoreSettingsService by lazy {
             RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
@@ -23,21 +21,25 @@ object ManageWalletsModule {
                 App.accountManager.activeAccount?.let { account ->
                     FullCoinsProvider(App.marketKit, account)
                 },
-                activeAccount
+                activeAccount,
             )
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 RestoreSettingsViewModel::class.java -> {
-                    RestoreSettingsViewModel(restoreSettingsService, listOf(restoreSettingsService)) as T
+                    RestoreSettingsViewModel(
+                        restoreSettingsService,
+                        listOf(restoreSettingsService),
+                    ) as T
                 }
+
                 ManageWalletsViewModel::class.java -> {
                     ManageWalletsViewModel(manageWalletsService, listOf(manageWalletsService)) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
-        }
     }
 }

@@ -28,55 +28,54 @@ import org.commonmark.node.Heading
 import org.commonmark.node.Paragraph
 
 @Composable
-fun DescriptionMarkdown(
-    text: String,
-) {
+fun DescriptionMarkdown(text: String) {
     val context = LocalContext.current
     val markdownRender = remember { buildMarkwon(context) }
     AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
         factory = {
             TextView(it)
         },
         update = { aboutText ->
             val aboutTextSpanned = markdownRender.toMarkdown(text)
             aboutText.text = removeLinkSpans(aboutTextSpanned)
-        }
+        },
     )
 }
 
-private fun buildMarkwon(context: Context): Markwon {
-    return Markwon.builder(context)
-        .usePlugin(object : AbstractMarkwonPlugin() {
-
-            override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                builder.setFactory(Heading::class.java) { _, props: RenderProps ->
-                    val level = CoreProps.HEADING_LEVEL.require(props)
-                    if (level == 1) {
+private fun buildMarkwon(context: Context): Markwon =
+    Markwon
+        .builder(context)
+        .usePlugin(
+            object : AbstractMarkwonPlugin() {
+                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                    builder.setFactory(Heading::class.java) { _, props: RenderProps ->
+                        val level = CoreProps.HEADING_LEVEL.require(props)
+                        if (level == 1) {
+                            arrayOf(
+                                TextAppearanceSpan(context, R.style.Title3NoColor),
+                                ForegroundColorSpan(context.getColor(R.color.leah)),
+                            )
+                        } else {
+                            arrayOf(
+                                TextAppearanceSpan(context, R.style.Headline2),
+                                ForegroundColorSpan(context.getColor(R.color.leah)),
+                            )
+                        }
+                    }
+                    builder.setFactory(Paragraph::class.java) { _, _ ->
                         arrayOf(
-                            TextAppearanceSpan(context, R.style.Title3NoColor),
-                            ForegroundColorSpan(context.getColor(R.color.leah))
-                        )
-                    } else {
-                        arrayOf(
-                            TextAppearanceSpan(context, R.style.Headline2),
-                            ForegroundColorSpan(context.getColor(R.color.leah))
+                            LastLineSpacingSpan(LayoutHelper.dp(24f, context)),
+                            TextAppearanceSpan(context, R.style.Subhead2),
+                            ForegroundColorSpan(context.getColor(R.color.grey)),
                         )
                     }
                 }
-                builder.setFactory(Paragraph::class.java) { _, _ ->
-                    arrayOf(
-                        LastLineSpacingSpan(LayoutHelper.dp(24f, context)),
-                        TextAppearanceSpan(context, R.style.Subhead2),
-                        ForegroundColorSpan(context.getColor(R.color.grey))
-                    )
-                }
-            }
-        })
-        .build()
-}
+            },
+        ).build()
 
 private fun removeLinkSpans(spanned: Spanned): Spannable {
     val spannable = SpannableString(spanned)

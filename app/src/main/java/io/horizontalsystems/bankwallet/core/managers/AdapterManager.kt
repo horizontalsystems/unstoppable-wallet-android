@@ -25,9 +25,8 @@ class AdapterManager(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
-    private val tonKitManager: TonKitManager
+    private val tonKitManager: TonKitManager,
 ) : IAdapterManager {
-
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
@@ -53,7 +52,10 @@ class AdapterManager(
         }
         for (blockchain in evmBlockchainManager.allBlockchains) {
             coroutineScope.launch {
-                evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
+                evmBlockchainManager
+                    .getEvmKitManager(blockchain.type)
+                    .evmKitUpdatedObservable
+                    .asFlow()
                     .collect {
                         handleUpdatedKit(blockchain.type)
                     }
@@ -62,9 +64,10 @@ class AdapterManager(
     }
 
     private fun handleUpdatedKit(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchain.type == blockchainType
-        }
+        val wallets =
+            adaptersMap.keys().toList().filter {
+                it.token.blockchain.type == blockchainType
+            }
 
         if (wallets.isEmpty()) return
 
@@ -77,9 +80,10 @@ class AdapterManager(
     }
 
     private fun handleUpdatedRestoreMode(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchainType == blockchainType
-        }
+        val wallets =
+            adaptersMap.keys().toList().filter {
+                it.token.blockchainType == blockchainType
+            }
 
         if (wallets.isEmpty()) return
 
@@ -95,7 +99,11 @@ class AdapterManager(
         adaptersMap.values.forEach { it.refresh() }
 
         for (blockchain in evmBlockchainManager.allBlockchains) {
-            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
+            evmBlockchainManager
+                .getEvmKitManager(blockchain.type)
+                .evmKitWrapper
+                ?.evmKit
+                ?.refresh()
         }
 
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
@@ -135,29 +143,26 @@ class AdapterManager(
         val blockchain = evmBlockchainManager.getBlockchain(wallet.token)
 
         if (blockchain != null) {
-            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
+            evmBlockchainManager
+                .getEvmKitManager(blockchain.type)
+                .evmKitWrapper
+                ?.evmKit
+                ?.refresh()
         } else {
             adaptersMap[wallet]?.refresh()
         }
     }
 
-    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
-        return adaptersMap[wallet]
-    }
+    override fun getAdapterForWallet(wallet: Wallet): IAdapter? = adaptersMap[wallet]
 
-    override fun getAdapterForToken(token: Token): IAdapter? {
-        return walletManager.activeWallets.firstOrNull { it.token == token }
+    override fun getAdapterForToken(token: Token): IAdapter? =
+        walletManager.activeWallets
+            .firstOrNull { it.token == token }
             ?.let { wallet ->
                 adaptersMap[wallet]
             }
-    }
 
-    override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
-        return adaptersMap[wallet]?.let { it as? IBalanceAdapter }
-    }
+    override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? = adaptersMap[wallet]?.let { it as? IBalanceAdapter }
 
-    override fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter? {
-        return adaptersMap[wallet]?.let { it as? IReceiveAdapter }
-    }
-
+    override fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter? = adaptersMap[wallet]?.let { it as? IReceiveAdapter }
 }

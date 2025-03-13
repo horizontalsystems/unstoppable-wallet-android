@@ -12,7 +12,7 @@ import java.math.BigDecimal
 
 data class SwapSettingSlippage(
     val settings: Map<String, Any?>,
-    val defaultSlippage: BigDecimal
+    val defaultSlippage: BigDecimal,
 ) : ISwapSetting {
     override val id = "slippage"
 
@@ -24,11 +24,12 @@ data class SwapSettingSlippage(
     override fun GetContent(
         navController: NavController,
         onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
+        onValueChange: (Any?) -> Unit,
     ) {
-        val viewModel = viewModel<SwapSlippageViewModel>(initializer = {
-            SwapSlippageViewModel(SwapSlippageService(value, defaultSlippage))
-        })
+        val viewModel =
+            viewModel<SwapSlippageViewModel>(initializer = {
+                SwapSlippageViewModel(SwapSlippageService(value, defaultSlippage))
+            })
         val error = viewModel.errorState?.error
 
         LaunchedEffect(error) {
@@ -43,7 +44,7 @@ data class SwapSettingSlippage(
             viewModel.inputFieldPlaceholder,
             viewModel.initialValue,
             viewModel.inputButtons,
-            error
+            error,
         ) {
             viewModel.onChangeText(it)
 
@@ -54,9 +55,8 @@ data class SwapSettingSlippage(
 
 class SwapSlippageService(
     override val initialSlippage: BigDecimal?,
-    override val defaultSlippage: BigDecimal
+    override val defaultSlippage: BigDecimal,
 ) : ISwapSlippageService {
-
     private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("50"))
     private val usualHighestSlippage = BigDecimal(5)
     private var slippage: BigDecimal = initialSlippage ?: defaultSlippage
@@ -70,24 +70,28 @@ class SwapSlippageService(
     override fun setSlippage(value: BigDecimal) {
         slippage = value
 
-        slippageError = when {
-            slippage.compareTo(BigDecimal.ZERO) == 0 -> {
-                SwapSettingsModule.SwapSettingsError.ZeroSlippage
+        slippageError =
+            when {
+                slippage.compareTo(BigDecimal.ZERO) == 0 -> {
+                    SwapSettingsModule.SwapSettingsError.ZeroSlippage
+                }
+
+                slippage > limitSlippageBounds.upper -> {
+                    SwapSettingsModule.SwapSettingsError.InvalidSlippage(
+                        SwapSettingsModule.InvalidSlippageType.Higher(limitSlippageBounds.upper),
+                    )
+                }
+
+                slippage < limitSlippageBounds.lower -> {
+                    SwapSettingsModule.SwapSettingsError.InvalidSlippage(
+                        SwapSettingsModule.InvalidSlippageType.Lower(limitSlippageBounds.lower),
+                    )
+                }
+
+                else -> {
+                    null
+                }
             }
-            slippage > limitSlippageBounds.upper -> {
-                SwapSettingsModule.SwapSettingsError.InvalidSlippage(
-                    SwapSettingsModule.InvalidSlippageType.Higher(limitSlippageBounds.upper)
-                )
-            }
-            slippage < limitSlippageBounds.lower -> {
-                SwapSettingsModule.SwapSettingsError.InvalidSlippage(
-                    SwapSettingsModule.InvalidSlippageType.Lower(limitSlippageBounds.lower)
-                )
-            }
-            else -> {
-                null
-            }
-        }
 
         slippageChangeObservable.onNext(Unit)
     }

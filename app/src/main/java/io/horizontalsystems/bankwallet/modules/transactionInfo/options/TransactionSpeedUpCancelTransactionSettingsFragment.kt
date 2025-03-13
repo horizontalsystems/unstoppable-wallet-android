@@ -16,13 +16,15 @@ class TransactionSpeedUpCancelTransactionSettingsFragment : BaseComposeFragment(
 
 @Composable
 fun TransactionSpeedUpCancelTransactionSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
-    }
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
+        }
 
-    val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+    val viewModel =
+        viewModel<TransactionSpeedUpCancelViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+        )
 
     val sendTransactionService = viewModel.sendTransactionService
 

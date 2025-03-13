@@ -24,9 +24,8 @@ fun MarkdownContent(
     onRetryClick: () -> Unit,
     onUrlClick: (String) -> Unit,
 ) {
-
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
@@ -35,9 +34,11 @@ fun MarkdownContent(
                         onRetryClick()
                     }
                 }
+
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 ViewState.Success -> {
                     AndroidView(
                         modifier = Modifier.weight(1f),
@@ -46,31 +47,38 @@ fun MarkdownContent(
                                 layoutParams =
                                     ViewGroup.LayoutParams(
                                         ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
                                     )
                                 layoutManager = LinearLayoutManager(context)
-                                adapter = MarkdownContentAdapter(
-                                    handleRelativeUrl = handleRelativeUrl,
-                                    listener = object : MarkdownContentAdapter.Listener {
-                                        override fun onClick(url: String) {
-                                            onUrlClick(url)
-                                        }
-                                    }).also { it.submitList(markdownBlocks) }
+                                adapter =
+                                    MarkdownContentAdapter(
+                                        handleRelativeUrl = handleRelativeUrl,
+                                        listener =
+                                            object : MarkdownContentAdapter.Listener {
+                                                override fun onClick(url: String) {
+                                                    onUrlClick(url)
+                                                }
+                                            },
+                                    ).also { it.submitList(markdownBlocks) }
                             }
                         },
                         update = { recyclerview ->
                             recyclerview.apply {
-                                adapter = MarkdownContentAdapter(
-                                    handleRelativeUrl = handleRelativeUrl,
-                                    listener = object : MarkdownContentAdapter.Listener {
-                                        override fun onClick(url: String) {
-                                            onUrlClick(url)
-                                        }
-                                    }).also { it.submitList(markdownBlocks) }
+                                adapter =
+                                    MarkdownContentAdapter(
+                                        handleRelativeUrl = handleRelativeUrl,
+                                        listener =
+                                            object : MarkdownContentAdapter.Listener {
+                                                override fun onClick(url: String) {
+                                                    onUrlClick(url)
+                                                }
+                                            },
+                                    ).also { it.submitList(markdownBlocks) }
                             }
-                        }
+                        },
                     )
                 }
+
                 null -> {}
             }
         }

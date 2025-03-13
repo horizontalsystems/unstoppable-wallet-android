@@ -12,24 +12,22 @@ class HsButtonColors(
     private val backgroundColor: Color,
     private val contentColor: Color,
     private val disabledBackgroundColor: Color,
-    private val disabledContentColor: Color
+    private val disabledContentColor: Color,
 ) : ButtonColors {
     @Composable
     override fun backgroundColor(enabled: Boolean): State<Color> =
         rememberUpdatedState(if (enabled) backgroundColor else disabledBackgroundColor)
 
     @Composable
-    override fun contentColor(enabled: Boolean): State<Color> =
-        rememberUpdatedState(if (enabled) contentColor else disabledContentColor)
+    override fun contentColor(enabled: Boolean): State<Color> = rememberUpdatedState(if (enabled) contentColor else disabledContentColor)
 
     override fun equals(other: Any?): Boolean {
-
         if (other !is HsButtonColors) return false
 
-        return backgroundColor != other.backgroundColor
-                && contentColor != other.contentColor
-                && disabledBackgroundColor != other.disabledBackgroundColor
-                && disabledContentColor != other.disabledContentColor
+        return backgroundColor != other.backgroundColor &&
+            contentColor != other.contentColor &&
+            disabledBackgroundColor != other.disabledBackgroundColor &&
+            disabledContentColor != other.disabledContentColor
     }
 
     override fun hashCode(): Int {

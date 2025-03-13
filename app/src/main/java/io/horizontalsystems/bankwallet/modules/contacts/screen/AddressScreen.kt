@@ -42,7 +42,7 @@ fun AddressScreen(
     onNavigateToBlockchainSelector: () -> Unit,
     onDone: (ContactAddress) -> Unit,
     onDelete: (ContactAddress) -> Unit,
-    onNavigateToBack: () -> Unit
+    onNavigateToBack: () -> Unit,
 ) {
     val uiState = viewModel.uiState
 
@@ -66,9 +66,9 @@ fun AddressScreen(
                 },
                 onClose = {
                     coroutineScope.launch { modalBottomSheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -78,52 +78,55 @@ fun AddressScreen(
                     navigationIcon = {
                         HsBackButton(onNavigateToBack)
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Done),
-                            enabled = uiState.doneEnabled,
-                            onClick = {
-                                uiState.addressState?.dataOrNull?.let {
-                                    onDone(ContactAddress(uiState.blockchain, it.hex))
-                                }
-                            }
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Done),
+                                enabled = uiState.doneEnabled,
+                                onClick = {
+                                    uiState.addressState?.dataOrNull?.let {
+                                        onDone(ContactAddress(uiState.blockchain, it.hex))
+                                    }
+                                },
+                            ),
+                        ),
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 CellUniversalLawrenceSection(
                     listOf {
                         RowUniversal(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            onClick = if (uiState.canChangeBlockchain) onNavigateToBlockchainSelector else null
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                            onClick = if (uiState.canChangeBlockchain) onNavigateToBlockchainSelector else null,
                         ) {
                             subhead2_grey(
                                 text = stringResource(R.string.AddToken_Blockchain),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
                             )
                             subhead1_leah(
                                 text = uiState.blockchain.name,
-                                modifier = Modifier.padding(horizontal = 8.dp)
+                                modifier = Modifier.padding(horizontal = 8.dp),
                             )
                             if (uiState.canChangeBlockchain) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
                                     contentDescription = null,
-                                    tint = ComposeAppTheme.colors.grey
+                                    tint = ComposeAppTheme.colors.grey,
                                 )
                             }
                         }
-                    }
+                    },
                 )
 
                 VSpacer(32.dp)
@@ -155,19 +158,18 @@ private fun DeleteAddressButton(onClick: () -> Unit) {
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal(
-                onClick = onClick
+                onClick = onClick,
             ) {
                 Icon(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     painter = painterResource(R.drawable.ic_delete_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.lucian
+                    tint = ComposeAppTheme.colors.lucian,
                 )
                 body_lucian(
                     text = stringResource(R.string.Contacts_DeleteAddress),
                 )
             }
-
-        }
+        },
     )
 }

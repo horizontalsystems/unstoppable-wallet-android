@@ -17,8 +17,14 @@ fun InfoText(
     paddingBottom: Dp = 12.dp,
 ) {
     subhead2_grey(
-        modifier = Modifier.padding(start = paddingStart, top = paddingTop, end = paddingEnd, bottom = paddingBottom),
-        text = text
+        modifier =
+            Modifier.padding(
+                start = paddingStart,
+                top = paddingTop,
+                end = paddingEnd,
+                bottom = paddingBottom,
+            ),
+        text = text,
     )
 }
 
@@ -28,6 +34,6 @@ fun InfoTextBody(text: String) {
         modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
         text = text,
         style = ComposeAppTheme.typography.body,
-        color = ComposeAppTheme.colors.bran
+        color = ComposeAppTheme.colors.bran,
     )
 }

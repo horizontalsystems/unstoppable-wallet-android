@@ -9,14 +9,12 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun BoxBorderedTop(
-    content: @Composable () -> Unit
-) {
+fun BoxBorderedTop(content: @Composable () -> Unit) {
     Box {
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
 
         content()

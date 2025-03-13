@@ -17,17 +17,16 @@ import io.horizontalsystems.core.findNavController
 
 abstract class BaseComposeFragment(
     @LayoutRes layoutResId: Int = 0,
-    private val screenshotEnabled: Boolean = true
+    private val screenshotEnabled: Boolean = true,
 ) : Fragment(layoutResId) {
-
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
 
             setContent {
@@ -36,19 +35,19 @@ abstract class BaseComposeFragment(
                 }
             }
         }
-    }
 
     @Composable
     protected inline fun <reified T : Parcelable> withInput(
         navController: NavController,
-        content: @Composable (T) -> Unit
+        content: @Composable (T) -> Unit,
     ) {
-        val input = try {
-            navController.requireInput<T>()
-        } catch (e: NullPointerException) {
-            navController.popBackStack()
-            return
-        }
+        val input =
+            try {
+                navController.requireInput<T>()
+            } catch (e: NullPointerException) {
+                navController.popBackStack()
+                return
+            }
         content(input)
     }
 
@@ -76,5 +75,4 @@ abstract class BaseComposeFragment(
     private fun disallowScreenshot() {
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
-
 }

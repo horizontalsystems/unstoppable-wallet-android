@@ -12,9 +12,10 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
 import java.math.BigDecimal
 
-class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
-    BaseEvmAdapter(evmKitWrapper, decimal, coinManager) {
-
+class EvmAdapter(
+    evmKitWrapper: EvmKitWrapper,
+    coinManager: ICoinManager,
+) : BaseEvmAdapter(evmKitWrapper, decimal, coinManager) {
     // IAdapter
 
     override fun start() {
@@ -52,7 +53,10 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
 
     // ISendEthereumAdapter
 
-    override fun getTransactionData(amount: BigDecimal, address: Address): TransactionData {
+    override fun getTransactionData(
+        amount: BigDecimal,
+        address: Address,
+    ): TransactionData {
         val amountBigInt = amount.movePointRight(decimal).toBigInteger()
         return TransactionData(address, amountBigInt, byteArrayOf())
     }
@@ -61,19 +65,19 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
         const val decimal = 18
 
         fun clear(walletId: String) {
-            val networkTypes = listOf(
-                Chain.Ethereum,
-                Chain.BinanceSmartChain,
-                Chain.Polygon,
-                Chain.Avalanche,
-                Chain.Optimism,
-                Chain.ArbitrumOne,
-                Chain.Gnosis,
-            )
+            val networkTypes =
+                listOf(
+                    Chain.Ethereum,
+                    Chain.BinanceSmartChain,
+                    Chain.Polygon,
+                    Chain.Avalanche,
+                    Chain.Optimism,
+                    Chain.ArbitrumOne,
+                    Chain.Gnosis,
+                )
             networkTypes.forEach {
                 EthereumKit.clear(App.instance, it, walletId)
             }
         }
     }
-
 }

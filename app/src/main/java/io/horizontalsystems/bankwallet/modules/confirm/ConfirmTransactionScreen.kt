@@ -26,8 +26,12 @@ fun ConfirmTransactionScreen(
     onClickBack: () -> Unit,
     onClickSettings: (() -> Unit)?,
     onClickClose: (() -> Unit)?,
-    buttonsSlot: @Composable() (ColumnScope.() -> Unit),
-    content: @Composable() (ColumnScope.() -> Unit)
+    buttonsSlot:
+        @Composable()
+        (ColumnScope.() -> Unit),
+    content:
+        @Composable()
+        (ColumnScope.() -> Unit),
 ) {
     Scaffold(
         topBar = {
@@ -36,26 +40,27 @@ fun ConfirmTransactionScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onClickBack)
                 },
-                menuItems = buildList<MenuItem> {
-                    onClickSettings?.let {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Settings_Title),
-                                icon = R.drawable.ic_manage_2_24,
-                                onClick = onClickSettings
+                menuItems =
+                    buildList<MenuItem> {
+                        onClickSettings?.let {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Settings_Title),
+                                    icon = R.drawable.ic_manage_2_24,
+                                    onClick = onClickSettings,
+                                ),
                             )
-                        )
-                    }
-                    onClickClose?.let {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Close),
-                                icon = R.drawable.ic_close,
-                                onClick = onClickClose
+                        }
+                        onClickClose?.let {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Button_Close),
+                                    icon = R.drawable.ic_close,
+                                    onClick = onClickClose,
+                                ),
                             )
-                        )
-                    }
-                },
+                        }
+                    },
             )
         },
         bottomBar = {
@@ -63,16 +68,17 @@ fun ConfirmTransactionScreen(
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    content = buttonsSlot
+                    content = buttonsSlot,
                 )
             }
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             VSpacer(height = 12.dp)
 

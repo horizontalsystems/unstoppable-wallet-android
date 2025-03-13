@@ -1,6 +1,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -20,7 +20,6 @@
 
         <TextView
             android:id="@+id/snackbarText"
-            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -28,18 +27,19 @@
             android:layout_marginEnd="12dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
-            android:textSize="14sp"
             android:maxLines="4"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             tools:text="Snackbar Text" />
 
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:src="@drawable/ic_attention_24"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="24dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:src="@drawable/ic_attention_24" />
 
         <ProgressBar
             android:id="@+id/snackbarProgressbar"
@@ -47,11 +47,11 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
-            android:visibility="gone"
             android:layout_marginEnd="23.5dp"
             android:backgroundTint="@color/grey"
             android:indeterminate="true"
-            android:indeterminateTint="@color/white" />
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
 
     </LinearLayout>
 

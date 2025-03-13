@@ -15,8 +15,10 @@ import java.io.FileNotFoundException
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class TorOperator(private val torSettings: Tor.Settings, private val listener: Listener) : TorControl.Listener {
-
+class TorOperator(
+    private val torSettings: Tor.Settings,
+    private val listener: Listener,
+) : TorControl.Listener {
     interface Listener {
         fun statusUpdate(torInfo: Tor.Info)
     }
@@ -29,36 +31,34 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     fun start() {
-
         try {
             resManager = TorResourceManager(torSettings)
             val fileTorBin = resManager.installResources()
             val success = fileTorBin != null && fileTorBin.canExecute()
 
             if (success) {
-
                 torInfo.isInstalled = true
                 eventMonitor(torInfo = torInfo, msg = "Tor install success.")
 
-                //-----------------------------
+                // -----------------------------
                 killTorProcess()
-                //-----------------------------
+                // -----------------------------
 
                 if (runTorShellCmd(resManager.fileTor, resManager.fileTorrcCustom)) {
-
                     eventMonitor(msg = "Successfully verified config")
 
                     // Wait for control file creation -> Replace this implementation with RX.
-                    //-----------------------------
+                    // -----------------------------
                     Thread.sleep(100)
-                    //-----------------------------
+                    // -----------------------------
 
-                    torControl = TorControl(
-                        resManager.fileTorControlPort,
-                        torSettings.appDataDir,
-                        this,
-                        torInfo
-                    )
+                    torControl =
+                        TorControl(
+                            resManager.fileTorControlPort,
+                            torSettings.appDataDir,
+                            this,
+                            torInfo,
+                        )
 
                     torInfo.status = EntityStatus.RUNNING
                     eventMonitor(torInfo = torInfo, msg = "Tor started successfully")
@@ -78,7 +78,6 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
             } else {
                 throw FileNotFoundException("Error!!! Tor.so file notfound.")
             }
-
         } catch (e: java.lang.Exception) {
             torInfo.processId = -1
             torInfo.connection.status = ConnectionStatus.FAILED
@@ -87,23 +86,21 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
             eventMonitor(torInfo = torInfo, msg = "Error starting Tor")
             eventMonitor(msg = e.message.toString())
         }
-
     }
 
     override fun statusUpdate(torInfo: Tor.Info) {
         listener.statusUpdate(torInfo)
     }
 
-    fun stop(): Single<Boolean> {
-        return killAllDaemons()
-    }
+    fun stop(): Single<Boolean> = killAllDaemons()
 
-    fun newIdentity(): Boolean {
-        return torControl?.newIdentity() ?: false
-    }
+    fun newIdentity(): Boolean = torControl?.newIdentity() ?: false
 
-    private fun eventMonitor(torInfo: Tor.Info? = null, logLevel: Level = Level.SEVERE, msg: String? = null) {
-
+    private fun eventMonitor(
+        torInfo: Tor.Info? = null,
+        logLevel: Level = Level.SEVERE,
+        msg: String? = null,
+    ) {
         msg?.let {
             logger.log(logLevel, msg)
         }
@@ -115,9 +112,8 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
     }
 
     @Throws(java.lang.Exception::class)
-    private fun killAllDaemons(): Single<Boolean> {
-
-        return Single.create { emitter ->
+    private fun killAllDaemons(): Single<Boolean> =
+        Single.create { emitter ->
 
             try {
                 var result = torControl?.shutdownTor() ?: false
@@ -130,13 +126,15 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
 
                 eventMonitor(torInfo, Level.INFO, "Tor stopped")
                 emitter.onSuccess(result)
-
             } catch (e: java.lang.Exception) {
-                eventMonitor(torInfo, Level.SEVERE, "Tor stopped, but with errors:${e.localizedMessage}")
+                eventMonitor(
+                    torInfo,
+                    Level.SEVERE,
+                    "Tor stopped, but with errors:${e.localizedMessage}",
+                )
                 emitter.onError(e)
             }
         }
-    }
 
     private fun killTorProcess(): Boolean {
         try {
@@ -148,37 +146,44 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
     }
 
     @Throws(Exception::class)
-    private fun runTorShellCmd(fileTor: File, fileTorrc: File): Boolean {
+    private fun runTorShellCmd(
+        fileTor: File,
+        fileTorrc: File,
+    ): Boolean {
         val appCacheHome: File = torSettings.appDataDir
 
         if (!fileTorrc.exists()) {
             eventMonitor(msg = "torrc not installed: " + fileTorrc.canonicalPath)
             return false
         }
-        val torCmdString = (fileTor.canonicalPath
-                + " DataDirectory " + appCacheHome.canonicalPath
-                + " --defaults-torrc " + fileTorrc)
+        val torCmdString = (
+            fileTor.canonicalPath +
+                " DataDirectory " + appCacheHome.canonicalPath +
+                " --defaults-torrc " + fileTorrc
+        )
 
         var exitCode: Int
 
-        exitCode = try {
-            exec("$torCmdString --verify-config")
-        } catch (e: Exception) {
-            eventMonitor(msg = "Tor configuration did not verify: " + e.message + e)
-            return false
-        }
+        exitCode =
+            try {
+                exec("$torCmdString --verify-config")
+            } catch (e: Exception) {
+                eventMonitor(msg = "Tor configuration did not verify: " + e.message + e)
+                return false
+            }
 
         if (exitCode != 0) {
             eventMonitor(msg = "Tor configuration did not verify:$exitCode")
             return false
         }
 
-        exitCode = try {
-            exec(torCmdString)
-        } catch (e: Exception) {
-            eventMonitor(msg = "Tor was unable to start: " + e.message + e)
-            return false
-        }
+        exitCode =
+            try {
+                exec(torCmdString)
+            } catch (e: Exception) {
+                eventMonitor(msg = "Tor was unable to start: " + e.message + e)
+                return false
+            }
 
         if (exitCode != 0) {
             eventMonitor(msg = "Tor did not start. Exit:$exitCode")
@@ -195,7 +200,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
 
         if (!shellResult.isSuccessful) {
             throw Exception(
-                "Error: " + shellResult.exitCode + " ERR=" + shellResult.getStderr() + " OUT=" + shellResult.getStdout()
+                "Error: " + shellResult.exitCode + " ERR=" + shellResult.getStderr() + " OUT=" + shellResult.getStdout(),
             )
         }
 
@@ -203,5 +208,4 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
 
         return shellResult.exitCode
     }
-
 }

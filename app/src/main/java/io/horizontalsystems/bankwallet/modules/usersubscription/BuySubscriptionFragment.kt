@@ -19,11 +19,14 @@ class BuySubscriptionFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SubscriptionNavHost(
             navController = navController,
-            onClose = { navController.popBackStack() })
+            onClose = { navController.popBackStack() },
+        )
     }
 
     @Parcelize
-    data class Input(val action: IPaidAction) : Parcelable
+    data class Input(
+        val action: IPaidAction,
+    ) : Parcelable
 
     @Parcelize
     class Result : Parcelable
@@ -32,7 +35,7 @@ class BuySubscriptionFragment : BaseComposeFragment() {
 @Composable
 fun SubscriptionNavHost(
     navController: NavController,
-    onClose: () -> Unit
+    onClose: () -> Unit,
 ) {
     val navHostController = rememberNavController()
     NavHost(
@@ -42,7 +45,7 @@ fun SubscriptionNavHost(
         composable("select_subscription") {
             SelectSubscriptionScreen(
                 navHostController,
-                onCloseClick = onClose
+                onCloseClick = onClose,
             )
         }
         composablePopup("premium_subscribed_page") {
@@ -50,7 +53,7 @@ fun SubscriptionNavHost(
                 onCloseClick = {
                     navController.setNavigationResultX(BuySubscriptionFragment.Result())
                     onClose()
-                }
+                },
             )
         }
     }

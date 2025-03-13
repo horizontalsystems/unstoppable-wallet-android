@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Transaction as Transaction
 
 class SendEvmSettingsService(
     private val feeService: IEvmFeeService,
-    private val nonceService: SendEvmNonceService
+    private val nonceService: SendEvmNonceService,
 ) {
     private var feeState: DataState<TransactionFeeData>? = null
 
@@ -29,19 +29,20 @@ class SendEvmSettingsService(
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val stateFlow: Flow<DataState<Transaction>> = _stateFlow.asSharedFlow()
 
-    suspend fun start() = withContext(Dispatchers.IO) {
-        launch {
-            feeService.transactionStatusFlow.collect {
-                feeState = it
-                sync()
+    suspend fun start() =
+        withContext(Dispatchers.IO) {
+            launch {
+                feeService.transactionStatusFlow.collect {
+                    feeState = it
+                    sync()
+                }
+            }
+            launch {
+                nonceService.stateFlow.collect {
+                    sync()
+                }
             }
         }
-        launch {
-            nonceService.stateFlow.collect {
-                sync()
-            }
-        }
-    }
 
     fun clear() {
         feeService.clear()
@@ -51,34 +52,38 @@ class SendEvmSettingsService(
         val feeState = feeState
         val nonceState = nonceService.state
 
-        state = when {
-            feeState == DataState.Loading -> DataState.Loading
-            nonceState == DataState.Loading -> DataState.Loading
-            feeState is DataState.Error -> feeState
-            nonceState is DataState.Error -> nonceState
-            feeState is DataState.Success && nonceState is DataState.Success -> {
-                val feeData = feeState.data
-                val nonceData = nonceState.data
+        state =
+            when {
+                feeState == DataState.Loading -> DataState.Loading
+                nonceState == DataState.Loading -> DataState.Loading
+                feeState is DataState.Error -> feeState
+                nonceState is DataState.Error -> nonceState
+                feeState is DataState.Success && nonceState is DataState.Success -> {
+                    val feeData = feeState.data
+                    val nonceData = nonceState.data
 
-                val errors = feeData.errors.ifEmpty { nonceData.errors }
-                val warnings = if (errors.isEmpty())
-                    feeData.warnings.ifEmpty { nonceData.warnings }
-                else
-                    listOf()
+                    val errors = feeData.errors.ifEmpty { nonceData.errors }
+                    val warnings =
+                        if (errors.isEmpty()) {
+                            feeData.warnings.ifEmpty { nonceData.warnings }
+                        } else {
+                            listOf()
+                        }
 
-                DataState.Success(
-                    Transaction(
-                        transactionData = feeData.transactionData,
-                        gasData = feeData.gasData,
-                        nonce = nonceData.nonce,
-                        default = feeData.default && nonceData.default,
-                        warnings = warnings,
-                        errors = errors
+                    DataState.Success(
+                        Transaction(
+                            transactionData = feeData.transactionData,
+                            gasData = feeData.gasData,
+                            nonce = nonceData.nonce,
+                            default = feeData.default && nonceData.default,
+                            warnings = warnings,
+                            errors = errors,
+                        ),
                     )
-                )
+                }
+
+                else -> DataState.Loading
             }
-            else -> DataState.Loading
-        }
     }
 
     suspend fun reset() {
@@ -92,7 +97,6 @@ class SendEvmSettingsService(
         val nonce: Long?,
         val default: Boolean,
         val warnings: List<Warning> = listOf(),
-        val errors: List<Throwable> = listOf()
+        val errors: List<Throwable> = listOf(),
     )
-
 }

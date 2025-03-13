@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import kotlinx.parcelize.Parcelize
 
 class MarkdownFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -30,9 +29,10 @@ class MarkdownFragment : BaseComposeFragment() {
                 onCloseClick = { navController.popBackStack() },
                 onUrlClick = { url ->
                     navController.slideFromRight(
-                        R.id.markdownFragment, Input(url)
+                        R.id.markdownFragment,
+                        Input(url),
                     )
-                }
+                },
             )
         }
     }
@@ -52,36 +52,37 @@ private fun MarkdownScreen(
     markdownUrl: String,
     onCloseClick: () -> Unit,
     onUrlClick: (String) -> Unit,
-    viewModel: MarkdownViewModel = viewModel(factory = MarkdownModule.Factory(markdownUrl))
+    viewModel: MarkdownViewModel = viewModel(factory = MarkdownModule.Factory(markdownUrl)),
 ) {
-
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             if (showAsPopup) {
                 AppBar(
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = onCloseClick
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Close),
+                                icon = R.drawable.ic_close,
+                                onClick = onCloseClick,
+                            ),
+                        ),
                 )
             } else {
                 AppBar(navigationIcon = { HsBackButton(onClick = onCloseClick) })
             }
-        }
+        },
     ) {
         MarkdownContent(
-            modifier = Modifier
-                .padding(it)
-                .navigationBarsPadding(),
+            modifier =
+                Modifier
+                    .padding(it)
+                    .navigationBarsPadding(),
             viewState = viewModel.viewState,
             markdownBlocks = viewModel.markdownBlocks,
             handleRelativeUrl = handleRelativeUrl,
             onRetryClick = { viewModel.retry() },
-            onUrlClick = onUrlClick
+            onUrlClick = onUrlClick,
         )
     }
 }

@@ -16,7 +16,6 @@ class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
 ) : IWalletManager {
-
     override val activeWallets get() = walletsSet.toList()
     override val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
@@ -42,7 +41,10 @@ class WalletManager(
     }
 
     @Synchronized
-    override fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>) {
+    override fun handle(
+        newWallets: List<Wallet>,
+        deletedWallets: List<Wallet>,
+    ) {
         storage.save(newWallets)
         storage.delete(deletedWallets)
 
@@ -52,9 +54,7 @@ class WalletManager(
         notifyActiveWallets()
     }
 
-    override fun getWallets(account: Account): List<Wallet> {
-        return storage.wallets(account)
-    }
+    override fun getWallets(account: Account): List<Wallet> = storage.wallets(account)
 
     override fun clear() {
         storage.clear()
@@ -85,5 +85,4 @@ class WalletManager(
         storage.handle(enabledWallets)
         handleUpdated(accountManager.activeAccount)
     }
-
 }

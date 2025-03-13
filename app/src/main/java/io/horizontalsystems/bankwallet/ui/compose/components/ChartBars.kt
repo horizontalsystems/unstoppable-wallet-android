@@ -37,7 +37,7 @@ fun ChartBars(
         valueMin,
         valueMax,
         color,
-        null
+        null,
     )
 }
 
@@ -50,7 +50,7 @@ fun GraphicBars(
     minValue: Float,
     maxValue: Float,
     color: Color,
-    selectedItemKey: Long?
+    selectedItemKey: Long?,
 ) {
     val dotColor = ComposeAppTheme.colors.leah
 
@@ -83,14 +83,14 @@ fun GraphicBars(
                         start = Offset(x = x, y = 0f),
                         end = Offset(x = x, y = y),
                         color = color,
-                        strokeWidth = barWidth
+                        strokeWidth = barWidth,
                     )
                 }
                 dotPosition?.let {
                     drawCircle(dotColor, 5.dp.toPx(), center = it)
                 }
             }
-        }
+        },
     )
 }
 
@@ -103,7 +103,7 @@ fun GraphicBarsWithNegative(
     minValue: Float = data.minOf { it.value },
     maxValue: Float = data.maxOf { it.value },
     color: Color,
-    colorNegative: Color
+    colorNegative: Color,
 ) {
     Canvas(
         modifier = modifier,
@@ -129,10 +129,10 @@ fun GraphicBarsWithNegative(
                         start = Offset(x = x, y = zeroY),
                         end = Offset(x = x, y = y),
                         color = if (y > zeroY) color else colorNegative,
-                        strokeWidth = barWidth
+                        strokeWidth = barWidth,
                     )
                 }
             }
-        }
+        },
     )
 }

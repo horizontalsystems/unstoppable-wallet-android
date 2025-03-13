@@ -7,10 +7,11 @@ import io.horizontalsystems.bankwallet.core.managers.RandomProvider
 import io.horizontalsystems.bankwallet.entities.Account
 
 object BackupConfirmKeyModule {
-    class Factory(private val account: Account) : ViewModelProvider.Factory {
+    class Factory(
+        private val account: Account,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BackupConfirmKeyViewModel(account, App.accountManager, RandomProvider()) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            BackupConfirmKeyViewModel(account, App.accountManager, RandomProvider()) as T
     }
 }

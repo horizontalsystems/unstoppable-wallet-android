@@ -2,7 +2,14 @@ package io.horizontalsystems.bankwallet.modules.pin.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -28,7 +35,7 @@ fun BiometricDisabledDialog(onClick: () -> Unit) {
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+                .background(ComposeAppTheme.colors.lawrence),
         ) {
             Spacer(Modifier.height(24.dp))
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
@@ -38,12 +45,12 @@ fun BiometricDisabledDialog(onClick: () -> Unit) {
                 Spacer(Modifier.height(44.dp))
                 Row(
                     modifier = Modifier.padding(horizontal = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_touch_id_24),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.lucian
+                        tint = ComposeAppTheme.colors.lucian,
                     )
                     Spacer(Modifier.width(24.dp))
                     body_lucian(text = stringResource(R.string.Unlock_BiometricScannerDisabled_Info))
@@ -51,20 +58,20 @@ fun BiometricDisabledDialog(onClick: () -> Unit) {
             }
             Spacer(Modifier.height(36.dp))
             Box(
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(end = 8.dp, bottom = 8.dp)
-                    .height(36.dp)
-                    .clip(RoundedCornerShape(25.dp))
-                    .clickable { onClick.invoke() },
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .align(Alignment.End)
+                        .padding(end = 8.dp, bottom = 8.dp)
+                        .height(36.dp)
+                        .clip(RoundedCornerShape(25.dp))
+                        .clickable { onClick.invoke() },
+                contentAlignment = Alignment.Center,
             ) {
                 headline2_jacob(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    text = stringResource(R.string.Unlock_Passcode)
+                    text = stringResource(R.string.Unlock_Passcode),
                 )
             }
-
         }
     }
 }

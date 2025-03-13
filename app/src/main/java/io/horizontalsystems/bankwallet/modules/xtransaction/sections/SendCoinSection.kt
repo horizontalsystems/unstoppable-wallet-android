@@ -21,7 +21,7 @@ fun SendCoinSection(
     statPage: StatPage,
     navController: NavController,
     transactionInfoHelper: TransactionInfoHelper,
-    blockchainType: BlockchainType
+    blockchainType: BlockchainType,
 ) {
     TransferCoinSection(
         amountTitle = stringResource(R.string.Send_Confirmation_YouSend),

@@ -48,10 +48,10 @@ fun SlippageAmount(
     initial: String?,
     buttons: List<InputButton>,
     error: Throwable?,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     HeaderText(
-        text = stringResource(R.string.SwapSettings_SlippageTitle)
+        text = stringResource(R.string.SwapSettings_SlippageTitle),
     )
     InputWithButtons(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -59,7 +59,7 @@ fun SlippageAmount(
         initial = initial,
         buttons = buttons,
         state = error?.let { DataState.Error(it) },
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
     )
     InfoText(
         text = stringResource(R.string.SwapSettings_SlippageDescription),
@@ -75,7 +75,7 @@ fun TransactionDeadlineInput(
     onValueChange: (String) -> Unit,
 ) {
     HeaderText(
-        text = stringResource(R.string.SwapSettings_DeadlineTitle)
+        text = stringResource(R.string.SwapSettings_DeadlineTitle),
     )
     InputWithButtons(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -83,7 +83,7 @@ fun TransactionDeadlineInput(
         initial = initial,
         buttons = buttons,
         state = error?.let { DataState.Error(it) },
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
     )
     InfoText(
         text = stringResource(R.string.SwapSettings_DeadlineDescription),
@@ -101,7 +101,7 @@ fun RecipientAddress(
     val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
     App.marketKit.token(tokenQuery)?.let { token ->
         HeaderText(
-            text = stringResource(R.string.SwapSettings_RecipientAddressTitle)
+            text = stringResource(R.string.SwapSettings_RecipientAddressTitle),
         )
         HSAddressInput(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -127,33 +127,37 @@ fun InputWithButtons(
     state: DataState<Any>? = null,
     onValueChange: (String) -> Unit,
 ) {
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
-            } else {
-                ComposeAppTheme.colors.red50
+    val borderColor =
+        when (state) {
+            is DataState.Error -> {
+                if (state.error is FormsInputStateWarning) {
+                    ComposeAppTheme.colors.yellow50
+                } else {
+                    ComposeAppTheme.colors.red50
+                }
             }
-        }
-        else -> ComposeAppTheme.colors.steel20
-    }
 
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
+            else -> ComposeAppTheme.colors.steel20
+        }
+
+    val cautionColor =
+        if (state?.errorOrNull is FormsInputStateWarning) {
+            ComposeAppTheme.colors.jacob
+        } else {
+            ComposeAppTheme.colors.lucian
+        }
 
     Column(modifier = modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                .background(ComposeAppTheme.colors.lawrence)
-                .height(44.dp)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .height(44.dp)
+                    .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
@@ -166,18 +170,20 @@ fun InputWithButtons(
             }
 
             BasicTextField(
-                modifier = Modifier
-                    .padding(vertical = 12.dp)
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .padding(vertical = 12.dp)
+                        .weight(1f),
                 value = textState,
                 onValueChange = { textValue ->
                     textState = textValue
                     onValueChange.invoke(textValue.text)
                 },
-                textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
-                    textStyle = ComposeAppTheme.typography.body
-                ),
+                textStyle =
+                    ColoredTextStyle(
+                        color = ComposeAppTheme.colors.leah,
+                        textStyle = ComposeAppTheme.typography.body,
+                    ),
                 maxLines = 1,
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
@@ -198,7 +204,7 @@ fun InputWithButtons(
                         val text = ""
                         textState = textState.copy(text = text, selection = TextRange(0))
                         onValueChange.invoke(text)
-                    }
+                    },
                 )
             } else {
                 buttons.forEachIndexed { index, button ->
@@ -206,16 +212,16 @@ fun InputWithButtons(
                         modifier = Modifier.padding(end = if (index == buttons.size - 1) 0.dp else 8.dp),
                         title = button.title,
                         onClick = {
-                            textState = textState.copy(
-                                text = button.rawValue,
-                                selection = TextRange(button.rawValue.length)
-                            )
+                            textState =
+                                textState.copy(
+                                    text = button.rawValue,
+                                    selection = TextRange(button.rawValue.length),
+                                )
                             onValueChange.invoke(button.rawValue)
                         },
                     )
                 }
             }
-
         }
 
         state?.errorOrNull?.localizedMessage?.let {
@@ -223,10 +229,13 @@ fun InputWithButtons(
                 modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
                 text = it,
                 color = cautionColor,
-                style = ComposeAppTheme.typography.caption
+                style = ComposeAppTheme.typography.caption,
             )
         }
     }
 }
 
-class InputButton(val title: String, val rawValue: String)
+class InputButton(
+    val title: String,
+    val rawValue: String,
+)

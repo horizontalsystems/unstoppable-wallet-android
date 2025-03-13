@@ -46,23 +46,24 @@ fun ButtonPrimaryDefaultWithIcon(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.leah,
-            contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.leah,
+                contentColor = ComposeAppTheme.colors.claude,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             if (iconTint != null) {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = null,
-                    tint = iconTint
+                    tint = iconTint,
                 )
             } else {
                 Icon(
                     painter = painterResource(icon),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
             HSpacer(width = 8.dp)
@@ -72,7 +73,7 @@ fun ButtonPrimaryDefaultWithIcon(
                 overflow = TextOverflow.Ellipsis,
             )
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -81,19 +82,20 @@ fun ButtonPrimaryDefault(
     modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.leah,
-            contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.leah,
+                contentColor = ComposeAppTheme.colors.claude,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -102,16 +104,16 @@ fun ButtonPrimaryTransparent(
     modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
-
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val contentColor = when {
-        !enabled -> ComposeAppTheme.colors.grey50
-        isPressed -> ComposeAppTheme.colors.grey
-        else -> ComposeAppTheme.colors.leah
-    }
+    val contentColor =
+        when {
+            !enabled -> ComposeAppTheme.colors.grey50
+            isPressed -> ComposeAppTheme.colors.grey
+            else -> ComposeAppTheme.colors.leah
+        }
 
     Surface(
         modifier = modifier,
@@ -119,20 +121,19 @@ fun ButtonPrimaryTransparent(
         contentColor = contentColor,
     ) {
         ProvideTextStyle(
-            value = ComposeAppTheme.typography.headline2
+            value = ComposeAppTheme.typography.headline2,
         ) {
             Row(
                 Modifier
                     .defaultMinSize(
                         minWidth = ButtonPrimaryDefaults.MinWidth,
-                        minHeight = ButtonPrimaryDefaults.MinHeight
-                    )
-                    .padding(ButtonPrimaryDefaults.ContentPadding)
+                        minHeight = ButtonPrimaryDefaults.MinHeight,
+                    ).padding(ButtonPrimaryDefaults.ContentPadding)
                     .clickable(
                         enabled = enabled,
                         onClick = onClick,
                         interactionSource = interactionSource,
-                        indication = null
+                        indication = null,
                     ),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -140,9 +141,9 @@ fun ButtonPrimaryTransparent(
                     Text(
                         text = title,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
-                }
+                },
             )
         }
     }
@@ -154,23 +155,24 @@ fun ButtonPrimaryYellow(
     title: String,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    loadingIndicator: Boolean = false
+    loadingIndicator: Boolean = false,
 ) {
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.yellowD,
+                contentColor = ComposeAppTheme.colors.dark,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             if (loadingIndicator) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
+                    strokeWidth = 2.dp,
                 )
                 HSpacer(width = 8.dp)
             }
@@ -181,7 +183,7 @@ fun ButtonPrimaryYellow(
                 overflow = TextOverflow.Ellipsis,
             )
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -197,23 +199,24 @@ fun ButtonPrimaryYellowWithIcon(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.yellowD,
+                contentColor = ComposeAppTheme.colors.dark,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             if (iconTint != null) {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = null,
-                    tint = iconTint
+                    tint = iconTint,
                 )
             } else {
                 Icon(
                     painter = painterResource(icon),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
             HSpacer(width = 8.dp)
@@ -223,7 +226,7 @@ fun ButtonPrimaryYellowWithIcon(
                 overflow = TextOverflow.Ellipsis,
             )
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -232,19 +235,20 @@ fun ButtonPrimaryRed(
     modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.lucian,
-            contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.lucian,
+                contentColor = ComposeAppTheme.colors.claude,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -254,30 +258,30 @@ fun ButtonPrimaryYellowWithSpinner(
     title: String,
     onClick: () -> Unit,
     showSpinner: Boolean = false,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
-
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.yellowD,
+                contentColor = ComposeAppTheme.colors.dark,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             if (showSpinner) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
+                    strokeWidth = 2.dp,
                 )
             } else {
                 Text(title)
             }
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -286,30 +290,28 @@ fun ButtonPrimaryWrapper(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     ProvideTextStyle(
-        value = ComposeAppTheme.typography.headline2
+        value = ComposeAppTheme.typography.headline2,
     ) {
         Box(
-            modifier = modifier
-                .clip(RoundedCornerShape(25.dp))
-                .defaultMinSize(
-                    minWidth = ButtonPrimaryDefaults.MinWidth,
-                    minHeight = ButtonPrimaryDefaults.MinHeight
-                )
-                .clickable(
-                    enabled = enabled,
-                    onClick = onClick,
-                )
-                .padding(ButtonPrimaryDefaults.ContentPadding),
+            modifier =
+                modifier
+                    .clip(RoundedCornerShape(25.dp))
+                    .defaultMinSize(
+                        minWidth = ButtonPrimaryDefaults.MinWidth,
+                        minHeight = ButtonPrimaryDefaults.MinHeight,
+                    ).clickable(
+                        enabled = enabled,
+                        onClick = onClick,
+                    ).padding(ButtonPrimaryDefaults.ContentPadding),
             contentAlignment = Alignment.Center,
         ) {
             content()
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -321,9 +323,8 @@ fun ButtonPrimary(
     shape: Shape = RoundedCornerShape(25.dp),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
-
     Surface(
         modifier = modifier,
         shape = shape,
@@ -334,18 +335,17 @@ fun ButtonPrimary(
         enabled = enabled,
     ) {
         ProvideTextStyle(
-            value = ComposeAppTheme.typography.headline2
+            value = ComposeAppTheme.typography.headline2,
         ) {
             Row(
                 Modifier
                     .defaultMinSize(
                         minWidth = ButtonPrimaryDefaults.MinWidth,
-                        minHeight = ButtonPrimaryDefaults.MinHeight
-                    )
-                    .padding(contentPadding),
+                        minHeight = ButtonPrimaryDefaults.MinHeight,
+                    ).padding(contentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                content = content
+                content = content,
             )
         }
     }
@@ -354,11 +354,11 @@ fun ButtonPrimary(
 object ButtonPrimaryDefaults {
     private val ButtonHorizontalPadding = 16.dp
 
-    val ContentPadding = PaddingValues(
-        start = ButtonHorizontalPadding,
-        end = ButtonHorizontalPadding
-    )
-
+    val ContentPadding =
+        PaddingValues(
+            start = ButtonHorizontalPadding,
+            end = ButtonHorizontalPadding,
+        )
 
     /**
      * The default min width applied for the [Button].
@@ -378,10 +378,11 @@ object ButtonPrimaryDefaults {
         contentColor: Color,
         disabledBackgroundColor: Color,
         disabledContentColor: Color,
-    ): ButtonColors = HsButtonColors(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        disabledBackgroundColor = disabledBackgroundColor,
-        disabledContentColor = disabledContentColor,
-    )
+    ): ButtonColors =
+        HsButtonColors(
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
+            disabledBackgroundColor = disabledBackgroundColor,
+            disabledContentColor = disabledContentColor,
+        )
 }

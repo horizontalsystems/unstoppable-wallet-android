@@ -31,11 +31,12 @@ fun DraggableCardSimple(
     onConceal: () -> Unit,
     content: @Composable () -> Unit,
 ) {
-    val transitionState = remember {
-        MutableTransitionState(isRevealed).apply {
-            targetState = !isRevealed
+    val transitionState =
+        remember {
+            MutableTransitionState(isRevealed).apply {
+                targetState = !isRevealed
+            }
         }
-    }
     val transition = updateTransition(transitionState, "cardTransition")
 
     val offsetInPx = with(LocalDensity.current) { cardOffset.dp.toPx() }
@@ -47,17 +48,18 @@ fun DraggableCardSimple(
     )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .offset { IntOffset(offsetTransition.roundToInt(), 0) }
-            .pointerInput(key) {
-                detectHorizontalDragGestures { _, dragAmount ->
-                    when {
-                        dragAmount <= -MIN_DRAG_AMOUNT -> onReveal()
-                        dragAmount > MIN_DRAG_AMOUNT -> onConceal()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .offset { IntOffset(offsetTransition.roundToInt(), 0) }
+                .pointerInput(key) {
+                    detectHorizontalDragGestures { _, dragAmount ->
+                        when {
+                            dragAmount <= -MIN_DRAG_AMOUNT -> onReveal()
+                            dragAmount > MIN_DRAG_AMOUNT -> onConceal()
+                        }
                     }
-                }
-            },
+                },
     ) {
         content()
     }

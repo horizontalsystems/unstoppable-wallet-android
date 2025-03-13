@@ -7,16 +7,16 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class NetworkAvailabilityService(
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
 ) : ServiceState<NetworkAvailabilityService.State>() {
-
     private var networkAvailable = connectivityManager.isConnected
     private var error: UnknownHostException? = null
 
-    override fun createState() = State(
-        networkAvailable = networkAvailable,
-        error = error,
-    )
+    override fun createState() =
+        State(
+            networkAvailable = networkAvailable,
+            error = error,
+        )
 
     fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -28,14 +28,18 @@ class NetworkAvailabilityService(
 
     private fun handleUpdatedNetworkState(networkAvailable: Boolean) {
         this.networkAvailable = networkAvailable
-        error = if (!networkAvailable) {
-            UnknownHostException()
-        } else {
-            null
-        }
+        error =
+            if (!networkAvailable) {
+                UnknownHostException()
+            } else {
+                null
+            }
 
         emitState()
     }
 
-    data class State(val networkAvailable: Boolean, val error: UnknownHostException?)
+    data class State(
+        val networkAvailable: Boolean,
+        val error: UnknownHostException?,
+    )
 }

@@ -34,23 +34,36 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 class SelectContactFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         SelectContactScreen(navController, navController.getInput())
     }
 
     @Parcelize
-    data class Input(val selected: Contact?, val blockchainType: BlockchainType?) : Parcelable
+    data class Input(
+        val selected: Contact?,
+        val blockchainType: BlockchainType?,
+    ) : Parcelable
 
     @Parcelize
-    data class Result(val contact: Contact?) : Parcelable
-
+    data class Result(
+        val contact: Contact?,
+    ) : Parcelable
 }
 
 @Composable
-fun SelectContactScreen(navController: NavController, input: SelectContactFragment.Input?) {
-    val viewModel = viewModel<SelectContactViewModel>(initializer = SelectContactViewModel.init(input?.selected, input?.blockchainType))
+fun SelectContactScreen(
+    navController: NavController,
+    input: SelectContactFragment.Input?,
+) {
+    val viewModel =
+        viewModel<SelectContactViewModel>(
+            initializer =
+                SelectContactViewModel.init(
+                    input?.selected,
+                    input?.blockchainType,
+                ),
+        )
     val uiState = viewModel.uiState
 
     Scaffold(
@@ -64,14 +77,14 @@ fun SelectContactScreen(navController: NavController, input: SelectContactFragme
                     HsBackButton(onClick = navController::popBackStack)
                 },
             )
-        }
+        },
     ) {
         if (uiState.items.isEmpty()) {
             Column(modifier = Modifier.padding(it)) {
                 InfoText(text = stringResource(id = R.string.Transactions_Filter_ChooseContact_Hint))
                 InfoErrorMessageDefault(
                     painter = painterResource(id = R.drawable.ic_user_24),
-                    text = stringResource(R.string.Transactions_Filter_ChooseContact_NoSuitableContact)
+                    text = stringResource(R.string.Transactions_Filter_ChooseContact_NoSuitableContact),
                 )
             }
         } else {
@@ -100,16 +113,17 @@ private fun CellContact(
     onClick: () -> Unit,
 ) {
     CellUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
-            painter = if (contact == null) {
-                painterResource(id = R.drawable.icon_paper_contract_24)
-            } else {
-                painterResource(id = R.drawable.ic_user_24)
-            },
+            painter =
+                if (contact == null) {
+                    painterResource(id = R.drawable.icon_paper_contract_24)
+                } else {
+                    painterResource(id = R.drawable.ic_user_24)
+                },
             contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
         HSpacer(width = 16.dp)
         body_leah(text = contact?.name ?: stringResource(id = R.string.SelectContacts_All))
@@ -118,7 +132,7 @@ private fun CellContact(
             Icon(
                 painter = painterResource(id = R.drawable.icon_check_1_24),
                 contentDescription = "selected",
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.jacob,
             )
         }
     }

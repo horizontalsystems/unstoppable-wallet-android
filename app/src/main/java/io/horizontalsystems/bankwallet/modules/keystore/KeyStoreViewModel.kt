@@ -8,9 +8,8 @@ import io.horizontalsystems.core.IKeyStoreManager
 
 class KeyStoreViewModel(
     private val keyStoreManager: IKeyStoreManager,
-    mode: KeyStoreModule.ModeType
+    mode: KeyStoreModule.ModeType,
 ) : ViewModel() {
-
     var showSystemLockWarning by mutableStateOf(false)
         private set
 
@@ -32,10 +31,12 @@ class KeyStoreViewModel(
                 showSystemLockWarning = true
                 keyStoreManager.resetApp("NoSystemLock")
             }
+
             KeyStoreModule.ModeType.InvalidKey -> {
                 showInvalidKeyWarning = true
                 keyStoreManager.resetApp("InvalidKey")
             }
+
             KeyStoreModule.ModeType.UserAuthentication -> {
                 showBiometricPrompt = true
             }
@@ -65,5 +66,4 @@ class KeyStoreViewModel(
     fun closeAppCalled() {
         closeApp = false
     }
-
 }

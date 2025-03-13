@@ -114,15 +114,19 @@ class NumberRoundingTest {
         assertShortLarge("19995000", "20", LargeNumberName.Million)
     }
 
-    private fun assertLessThen(value: String, expectedValue: String, ) {
-        val actual = numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.LessThen
+    private fun assertLessThen(
+        value: String,
+        expectedValue: String,
+    ) {
+        val actual =
+            numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.LessThen
         assertEquals(expectedValue, actual.value.toPlainString())
     }
 
     private fun assertShortLarge(
         value: String,
         expectedValue: String,
-        expectedSuffix: LargeNumberName
+        expectedSuffix: LargeNumberName,
     ) {
         val actual = numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.Large
 
@@ -134,7 +138,8 @@ class NumberRoundingTest {
         value: String,
         expectedValue: String,
     ) {
-        val actual = numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.Regular
+        val actual =
+            numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.Regular
 
         assertEquals(expectedValue, actual.value.toPlainString())
     }

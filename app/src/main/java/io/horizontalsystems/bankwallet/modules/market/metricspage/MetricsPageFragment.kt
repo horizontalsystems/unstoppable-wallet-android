@@ -46,7 +46,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
 
 class MetricsPageFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<MetricsType>(navController) { metricsType ->
@@ -61,7 +60,10 @@ class MetricsPageFragment : BaseComposeFragment() {
         }
     }
 
-    private fun onCoinClick(coinUid: String, navController: NavController) {
+    private fun onCoinClick(
+        coinUid: String,
+        navController: NavController,
+    ) {
         val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
@@ -80,18 +82,19 @@ class MetricsPageFragment : BaseComposeFragment() {
         Column(
             Modifier
                 .background(color = ComposeAppTheme.colors.tyler)
-                .navigationBarsPadding()
+                .navigationBarsPadding(),
         ) {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                        ),
+                    ),
             )
 
             HSSwipeRefresh(
@@ -99,7 +102,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                 onRefresh = {
                     viewModel.refresh()
                     chartViewModel.refresh()
-                }
+                },
             ) {
                 Crossfade(uiState.viewState, label = "") { viewState ->
                     when (viewState) {
@@ -113,7 +116,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                                 onClick = {
                                     viewModel.onErrorClick()
                                     chartViewModel.refresh()
-                                }
+                                },
                             )
                         }
 
@@ -129,7 +132,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                                         DescriptionCard(
                                             header.title,
                                             header.description,
-                                            header.icon
+                                            header.icon,
                                         )
                                     }
                                 }
@@ -144,10 +147,11 @@ class MetricsPageFragment : BaseComposeFragment() {
                                             onClick = {
                                                 viewModel.toggleSorting()
                                             },
-                                            title =uiState.toggleButtonTitle,
-                                            iconRight = painterResource(
-                                                if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                                            ),
+                                            title = uiState.toggleButtonTitle,
+                                            iconRight =
+                                                painterResource(
+                                                    if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                                                ),
                                         )
                                         HSpacer(width = 16.dp)
                                     }
@@ -171,5 +175,4 @@ class MetricsPageFragment : BaseComposeFragment() {
             }
         }
     }
-
 }

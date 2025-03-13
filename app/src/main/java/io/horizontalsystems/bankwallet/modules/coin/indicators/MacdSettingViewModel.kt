@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 
 class MacdSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
-    private val chartIndicatorManager: ChartIndicatorManager
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModelUiState<MacdSettingUiState>() {
     val name = indicatorSetting.name
     val defaultFast = indicatorSetting.defaultData["fast"]
@@ -23,30 +23,30 @@ class MacdSettingViewModel(
     private var signalError: Throwable? = null
     private var finish = false
 
-    override fun createState() = MacdSettingUiState(
-        fast = fast,
-        slow = slow,
-        signal = signal,
-        fastError = fastError,
-        slowError = slowError,
-        signalError = signalError,
-        applyEnabled = applyEnabled(),
-        finish = finish,
-        resetEnabled = resetEnabled()
-    )
+    override fun createState() =
+        MacdSettingUiState(
+            fast = fast,
+            slow = slow,
+            signal = signal,
+            fastError = fastError,
+            slowError = slowError,
+            signalError = signalError,
+            applyEnabled = applyEnabled(),
+            finish = finish,
+            resetEnabled = resetEnabled(),
+        )
 
     private fun applyEnabled(): Boolean {
-        if (fastError != null || slowError != null || signalError != null)
+        if (fastError != null || slowError != null || signalError != null) {
             return false
+        }
 
         return fast != indicatorSetting.extraData["fast"] ||
             slow != indicatorSetting.extraData["slow"] ||
             signal != indicatorSetting.extraData["signal"]
     }
 
-    private fun resetEnabled(): Boolean {
-        return fast != null || slow != null || signal != null
-    }
+    private fun resetEnabled(): Boolean = fast != null || slow != null || signal != null
 
     fun onEnterFast(v: String) {
         fast = v
@@ -82,13 +82,14 @@ class MacdSettingViewModel(
     }
 
     fun save() {
-        val extraData = indicatorSetting.extraData.plus(
-            mapOf(
-                "fast" to fast,
-                "slow" to slow,
-                "signal" to signal,
+        val extraData =
+            indicatorSetting.extraData.plus(
+                mapOf(
+                    "fast" to fast,
+                    "slow" to slow,
+                    "signal" to signal,
+                ),
             )
-        )
         val updated = indicatorSetting.copy(extraData = extraData)
         chartIndicatorManager.update(updated)
 
@@ -104,11 +105,12 @@ class MacdSettingViewModel(
         emitState()
     }
 
-    class Factory(private val indicatorSetting: ChartIndicatorSetting) : ViewModelProvider.Factory {
+    class Factory(
+        private val indicatorSetting: ChartIndicatorSetting,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MacdSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            MacdSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
     }
 }
 

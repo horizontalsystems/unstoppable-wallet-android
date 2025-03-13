@@ -14,7 +14,7 @@ import java.util.UUID
 class TransactionFilterService(
     private val marketKitWrapper: MarketKitWrapper,
     private val transactionAdapterManager: TransactionAdapterManager,
-    private val spamManager: SpamManager
+    private val spamManager: SpamManager,
 ) {
     private var blockchains: List<Blockchain?> = listOf(null)
     private var selectedBlockchain: Blockchain? = null
@@ -26,20 +26,21 @@ class TransactionFilterService(
     private var uniqueId = UUID.randomUUID().toString()
     private var hideSuspiciousTx = spamManager.hideSuspiciousTx
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            blockchains = blockchains,
-            selectedBlockchain = selectedBlockchain,
-            filterTokens = filterTokenList,
-            selectedToken = selectedToken,
-            transactionTypes = transactionTypes,
-            selectedTransactionType = selectedTransactionType,
-            resetEnabled = resetEnabled(),
-            uniqueId = uniqueId,
-            contact = contact,
-            hideSuspiciousTx = hideSuspiciousTx,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                blockchains = blockchains,
+                selectedBlockchain = selectedBlockchain,
+                filterTokens = filterTokenList,
+                selectedToken = selectedToken,
+                transactionTypes = transactionTypes,
+                selectedTransactionType = selectedTransactionType,
+                resetEnabled = resetEnabled(),
+                uniqueId = uniqueId,
+                contact = contact,
+                hideSuspiciousTx = hideSuspiciousTx,
+            ),
         )
-    )
     val stateFlow get() = _stateFlow.asStateFlow()
 
     private fun emitState() {
@@ -62,20 +63,24 @@ class TransactionFilterService(
     fun setWallets(wallets: List<Wallet>) {
         uniqueId = UUID.randomUUID().toString()
 
-        val filterTokens = wallets.map {
-            FilterToken(it.token, it.transactionSource)
-        }
-
-        val additionalFilterTokens = transactionAdapterManager.adaptersMap.map { map ->
-            marketKitWrapper.tokens(map.value.additionalTokenQueries).map {
-                FilterToken(it, map.key)
+        val filterTokens =
+            wallets.map {
+                FilterToken(it.token, it.transactionSource)
             }
-        }.flatten()
+
+        val additionalFilterTokens =
+            transactionAdapterManager.adaptersMap
+                .map { map ->
+                    marketKitWrapper.tokens(map.value.additionalTokenQueries).map {
+                        FilterToken(it, map.key)
+                    }
+                }.flatten()
 
         val combinedTokenAndSources = filterTokens.plus(additionalFilterTokens)
-        val sortedTokenAndSources = combinedTokenAndSources
-            .distinctBy { it.token }
-            .sortedBy { it.token.coin.code }
+        val sortedTokenAndSources =
+            combinedTokenAndSources
+                .distinctBy { it.token }
+                .sortedBy { it.token.coin.code }
 
         filterTokenList = listOf(null) + sortedTokenAndSources
 
@@ -139,12 +144,11 @@ class TransactionFilterService(
         emitState()
     }
 
-    private fun resetEnabled(): Boolean {
-        return selectedToken != null
-                || selectedBlockchain != null
-                || contact != null
-                || !hideSuspiciousTx
-    }
+    private fun resetEnabled(): Boolean =
+        selectedToken != null ||
+            selectedBlockchain != null ||
+            contact != null ||
+            !hideSuspiciousTx
 
     private fun refreshContact() {
         val tmpBlockchain = selectedBlockchain ?: return
@@ -175,5 +179,4 @@ class TransactionFilterService(
         val contact: Contact?,
         val hideSuspiciousTx: Boolean,
     )
-
 }

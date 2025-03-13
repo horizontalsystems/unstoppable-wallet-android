@@ -51,7 +51,7 @@ class TextStyles {
             color = AppWidgetTheme.colors.jacob,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            textAlign = textAlign
+            textAlign = textAlign,
         )
 
     @Composable
@@ -60,7 +60,7 @@ class TextStyles {
             color = AppWidgetTheme.colors.grey,
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
-            textAlign = textAlign
+            textAlign = textAlign,
         )
 
     @Composable
@@ -69,7 +69,7 @@ class TextStyles {
             color = AppWidgetTheme.colors.jacob,
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
-            textAlign = textAlign
+            textAlign = textAlign,
         )
 
     @Composable
@@ -78,32 +78,36 @@ class TextStyles {
             color = AppWidgetTheme.colors.grey,
             fontSize = 10.sp,
             fontWeight = FontWeight.Normal,
-            textAlign = textAlign
+            textAlign = textAlign,
         )
 }
 
 @Composable
-fun AppWidgetTheme(colors: ColorProviders = AppWidgetTheme.colors, content: @Composable () -> Unit) {
+fun AppWidgetTheme(
+    colors: ColorProviders = AppWidgetTheme.colors,
+    content: @Composable () -> Unit,
+) {
     CompositionLocalProvider(LocalColorProviders provides colors) {
         content()
     }
 }
 
-internal val LocalColorProviders = staticCompositionLocalOf {
-    ColorProviders(
-        jacob = ColorProvider(lightPalette.jacob, darkPalette.jacob),
-        remus = ColorProvider(lightPalette.remus, darkPalette.remus),
-        lucian = ColorProvider(lightPalette.lucian, darkPalette.lucian),
-        tyler = ColorProvider(lightPalette.tyler, darkPalette.tyler),
-        bran = ColorProvider(lightPalette.bran, darkPalette.bran),
-        leah = ColorProvider(lightPalette.leah, darkPalette.leah),
-        claude = ColorProvider(lightPalette.claude, darkPalette.claude),
-        lawrence = ColorProvider(lightPalette.lawrence, darkPalette.lawrence),
-        jeremy = ColorProvider(lightPalette.jeremy, darkPalette.jeremy),
-        laguna = ColorProvider(lightPalette.laguna, darkPalette.laguna),
-        raina = ColorProvider(lightPalette.raina, darkPalette.raina),
-    )
-}
+internal val LocalColorProviders =
+    staticCompositionLocalOf {
+        ColorProviders(
+            jacob = ColorProvider(lightPalette.jacob, darkPalette.jacob),
+            remus = ColorProvider(lightPalette.remus, darkPalette.remus),
+            lucian = ColorProvider(lightPalette.lucian, darkPalette.lucian),
+            tyler = ColorProvider(lightPalette.tyler, darkPalette.tyler),
+            bran = ColorProvider(lightPalette.bran, darkPalette.bran),
+            leah = ColorProvider(lightPalette.leah, darkPalette.leah),
+            claude = ColorProvider(lightPalette.claude, darkPalette.claude),
+            lawrence = ColorProvider(lightPalette.lawrence, darkPalette.lawrence),
+            jeremy = ColorProvider(lightPalette.jeremy, darkPalette.jeremy),
+            laguna = ColorProvider(lightPalette.laguna, darkPalette.laguna),
+            raina = ColorProvider(lightPalette.raina, darkPalette.raina),
+        )
+    }
 
 data class ColorProviders(
     val jacob: ColorProvider,
@@ -117,12 +121,11 @@ data class ColorProviders(
     val jeremy: ColorProvider,
     val laguna: ColorProvider,
     val raina: ColorProvider,
-
-    //base colors
-    val grey: ColorProvider = ColorProvider(Grey)
+    // base colors
+    val grey: ColorProvider = ColorProvider(Grey),
 )
 
-//base colors
+// base colors
 val transparent = Color.Transparent
 val dark = Dark
 val light = Light
@@ -149,4 +152,3 @@ val redL = RedL
 val elenaD = Color(0xFF6E7899)
 val red50 = Red50
 val red20 = Red20
-

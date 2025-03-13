@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.parcelize.Parcelize
 
 class CoinReportsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -42,20 +41,22 @@ class CoinReportsFragment : BaseComposeFragment() {
                 },
                 onClickReportUrl = {
                     LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
+                },
             )
         }
     }
 
     @Parcelize
-    data class Input(val coinUid: String) : Parcelable
+    data class Input(
+        val coinUid: String,
+    ) : Parcelable
 }
 
 @Composable
 private fun CoinReportsScreen(
     viewModel: CoinReportsViewModel,
     onClickNavigation: () -> Unit,
-    onClickReportUrl: (url: String) -> Unit
+    onClickReportUrl: (url: String) -> Unit,
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
@@ -68,15 +69,16 @@ private fun CoinReportsScreen(
                 title = stringResource(R.string.CoinPage_Reports),
                 navigationIcon = {
                     HsBackButton(onClick = onClickNavigation)
-                }
+                },
             )
-        }
+        },
     ) { padding ->
         HSSwipeRefresh(
             refreshing = isRefreshing,
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(padding)
+                    .fillMaxSize(),
             onRefresh = viewModel::refresh,
             content = {
                 Crossfade(viewState, label = "") { viewState ->
@@ -88,7 +90,7 @@ private fun CoinReportsScreen(
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
+                                viewModel::onErrorClick,
                             )
                         }
 
@@ -116,7 +118,7 @@ private fun CoinReportsScreen(
                         null -> {}
                     }
                 }
-            }
+            },
         )
     }
 }

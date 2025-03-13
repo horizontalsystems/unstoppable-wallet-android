@@ -43,9 +43,8 @@ class MainViewModel(
     private val localStorage: ILocalStorage,
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
-    private val networkManager: INetworkManager
+    private val networkManager: INetworkManager,
 ) : ViewModelUiState<MainModule.UiState>() {
-
     private var wcPendingRequestsCount = 0
     private var marketsTabEnabled = localStorage.marketsTabEnabledFlow.value
     private var transactionsEnabled = isTransactionsTabEnabled()
@@ -66,20 +65,21 @@ class MainViewModel(
         }
 
     private val items: List<MainNavigation>
-        get() = if (marketsTabEnabled) {
-            listOf(
-                MainNavigation.Market,
-                MainNavigation.Balance,
-                MainNavigation.Transactions,
-                MainNavigation.Settings,
-            )
-        } else {
-            listOf(
-                MainNavigation.Balance,
-                MainNavigation.Transactions,
-                MainNavigation.Settings,
-            )
-        }
+        get() =
+            if (marketsTabEnabled) {
+                listOf(
+                    MainNavigation.Market,
+                    MainNavigation.Balance,
+                    MainNavigation.Transactions,
+                    MainNavigation.Settings,
+                )
+            } else {
+                listOf(
+                    MainNavigation.Balance,
+                    MainNavigation.Transactions,
+                    MainNavigation.Settings,
+                )
+            }
 
     private var selectedTabIndex = getTabIndexToOpen()
     private var deeplinkPage: DeeplinkPage? = null
@@ -153,21 +153,21 @@ class MainViewModel(
         updateTransactionsTabEnabled()
     }
 
-    override fun createState() = MainModule.UiState(
-        selectedTabIndex = selectedTabIndex,
-        deeplinkPage = deeplinkPage,
-        mainNavItems = mainNavItems,
-        showRateAppDialog = showRateAppDialog,
-        contentHidden = contentHidden,
-        showWhatsNew = showWhatsNew,
-        activeWallet = activeWallet,
-        wcSupportState = wcSupportState,
-        torEnabled = torEnabled
-    )
+    override fun createState() =
+        MainModule.UiState(
+            selectedTabIndex = selectedTabIndex,
+            deeplinkPage = deeplinkPage,
+            mainNavItems = mainNavItems,
+            showRateAppDialog = showRateAppDialog,
+            contentHidden = contentHidden,
+            showWhatsNew = showWhatsNew,
+            activeWallet = activeWallet,
+            wcSupportState = wcSupportState,
+            torEnabled = torEnabled,
+        )
 
     private fun isTransactionsTabEnabled(): Boolean =
         !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
-
 
     fun whatsNewShown() {
         showWhatsNew = false
@@ -213,13 +213,15 @@ class MainViewModel(
         emitState()
     }
 
-    private fun navigationItems(): List<MainModule.NavigationViewItem> {
-        return items.mapIndexed { index, mainNavItem ->
+    private fun navigationItems(): List<MainModule.NavigationViewItem> =
+        items.mapIndexed { index, mainNavItem ->
             getNavItem(mainNavItem, index == selectedTabIndex)
         }
-    }
 
-    private fun getNavItem(item: MainNavigation, selected: Boolean) = when (item) {
+    private fun getNavItem(
+        item: MainNavigation,
+        selected: Boolean,
+    ) = when (item) {
         MainNavigation.Market -> {
             MainModule.NavigationViewItem(
                 mainNavItem = item,
@@ -241,7 +243,7 @@ class MainViewModel(
                 mainNavItem = item,
                 selected = selected,
                 enabled = true,
-                badge = settingsBadge
+                badge = settingsBadge,
             )
         }
 
@@ -255,29 +257,32 @@ class MainViewModel(
     }
 
     private fun getTabIndexToOpen(): Int {
-        val tab = when {
-            relaunchBySettingChange -> {
-                relaunchBySettingChange = false
-                MainNavigation.Settings
-            }
+        val tab =
+            when {
+                relaunchBySettingChange -> {
+                    relaunchBySettingChange = false
+                    MainNavigation.Settings
+                }
 
-            !marketsTabEnabled -> {
-                MainNavigation.Balance
-            }
+                !marketsTabEnabled -> {
+                    MainNavigation.Balance
+                }
 
-            else -> getLaunchTab()
-        }
+                else -> getLaunchTab()
+            }
 
         return items.indexOf(tab)
     }
 
-    private fun getLaunchTab(): MainNavigation = when (launchPage) {
-        LaunchPage.Market,
-        LaunchPage.Watchlist -> MainNavigation.Market
+    private fun getLaunchTab(): MainNavigation =
+        when (launchPage) {
+            LaunchPage.Market,
+            LaunchPage.Watchlist,
+            -> MainNavigation.Market
 
-        LaunchPage.Balance -> MainNavigation.Balance
-        LaunchPage.Auto -> currentMainTab
-    }
+            LaunchPage.Balance -> MainNavigation.Balance
+            LaunchPage.Auto -> currentMainTab
+        }
 
     private fun getNavigationDataForDeeplink(deepLink: Uri): Pair<MainNavigation, DeeplinkPage?> {
         var tab = currentMainTab
@@ -302,7 +307,10 @@ class MainViewModel(
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
 
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatform))
+                            stat(
+                                page = StatPage.Widget,
+                                event = StatEvent.Open(StatPage.TopPlatform),
+                            )
                         }
                     }
                 }
@@ -313,16 +321,21 @@ class MainViewModel(
             deeplinkString.startsWith("wc:") -> {
                 wcSupportState = wcManager.getWalletConnectSupportState()
                 if (wcSupportState == WCManager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
+                    deeplinkPage =
+                        DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
             }
 
             deeplinkString.startsWith("unstoppable.money:") ||
-            deeplinkString.startsWith("tc:") -> {
+                deeplinkString.startsWith("tc:") -> {
                 val v = deepLink.getQueryParameter("v")?.toIntOrNull()
                 if (v != null) {
-                    deeplinkPage = DeeplinkPage(R.id.tcListFragment, TonConnectMainFragment.Input(deeplinkString))
+                    deeplinkPage =
+                        DeeplinkPage(
+                            R.id.tcListFragment,
+                            TonConnectMainFragment.Input(deeplinkString),
+                        )
                     tab = MainNavigation.Settings
                 }
             }
@@ -340,12 +353,15 @@ class MainViewModel(
         return Pair(tab, deeplinkPage)
     }
 
-    private fun registerApp(userId: String, referralCode: String) {
+    private fun registerApp(
+        userId: String,
+        referralCode: String,
+    ) {
         viewModelScope.launch {
             try {
                 val response = networkManager.registerApp(userId, referralCode)
                 if (response.success) {
-                    //do nothing
+                    // do nothing
                 } else {
                     Log.e("MainViewModel", "registerApp api fail message: ${response.message}")
                 }
@@ -373,13 +389,14 @@ class MainViewModel(
         val showDotBadge =
             !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
 
-        settingsBadge = if (wcPendingRequestsCount > 0) {
-            MainModule.BadgeType.BadgeNumber(wcPendingRequestsCount)
-        } else if (showDotBadge) {
-            MainModule.BadgeType.BadgeDot
-        } else {
-            null
-        }
+        settingsBadge =
+            if (wcPendingRequestsCount > 0) {
+                MainModule.BadgeType.BadgeNumber(wcPendingRequestsCount)
+            } else if (showDotBadge) {
+                MainModule.BadgeType.BadgeDot
+            } else {
+                null
+            }
         syncNavigation()
     }
 
@@ -395,5 +412,4 @@ class MainViewModel(
         selectedTabIndex = items.indexOf(tab)
         syncNavigation()
     }
-
 }

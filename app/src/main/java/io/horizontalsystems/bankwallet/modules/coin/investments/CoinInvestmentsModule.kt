@@ -7,7 +7,9 @@ import javax.annotation.concurrent.Immutable
 
 object CoinInvestmentsModule {
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
+    class Factory(
+        private val coinUid: String,
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinInvestmentsService(coinUid, App.marketKit, App.currencyManager)
             return CoinInvestmentsViewModel(service, App.numberFormatter) as T
@@ -18,7 +20,7 @@ object CoinInvestmentsModule {
     data class ViewItem(
         val amount: String,
         val info: String,
-        val fundViewItems: List<FundViewItem>
+        val fundViewItems: List<FundViewItem>,
     )
 
     @Immutable
@@ -26,6 +28,6 @@ object CoinInvestmentsModule {
         val name: String,
         val logoUrl: String,
         val isLead: Boolean,
-        val url: String
+        val url: String,
     )
 }

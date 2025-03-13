@@ -10,8 +10,9 @@ import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class MarketPostsViewModel(private val service: MarketPostService) : ViewModel() {
-
+class MarketPostsViewModel(
+    private val service: MarketPostService,
+) : ViewModel() {
     val itemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
@@ -38,15 +39,16 @@ class MarketPostsViewModel(private val service: MarketPostService) : ViewModel()
                 isRefreshingLiveData.postValue(false)
 
                 state.dataOrNull?.let { posts ->
-                    val postViewItems = posts.map {
-                        MarketPostsModule.PostViewItem(
-                            source = it.source.replaceFirstChar(Char::titlecase),
-                            title = it.title,
-                            body = it.body,
-                            timeAgo = getTimeAgo(it.timestamp),
-                            url = it.url
-                        )
-                    }
+                    val postViewItems =
+                        posts.map {
+                            MarketPostsModule.PostViewItem(
+                                source = it.source.replaceFirstChar(Char::titlecase),
+                                title = it.title,
+                                body = it.body,
+                                timeAgo = getTimeAgo(it.timestamp),
+                                url = it.url,
+                            )
+                        }
                     itemsLiveData.postValue(postViewItems)
                 }
 

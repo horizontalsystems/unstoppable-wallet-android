@@ -6,7 +6,6 @@ import io.horizontalsystems.core.helpers.LocaleHelper
 import java.util.Locale
 
 abstract class CoreApp : Application() {
-
     companion object : ICoreApp {
         override lateinit var backgroundManager: BackgroundManager
         override lateinit var encryptionManager: IEncryptionManager
@@ -22,22 +21,18 @@ abstract class CoreApp : Application() {
     }
 
     abstract fun localizedContext(): Context
+
     abstract fun getApplicationSignatures(): List<ByteArray>
+
     abstract val isSwapEnabled: Boolean
 
-    fun localeAwareContext(base: Context): Context {
-        return LocaleHelper.onAttach(base)
-    }
+    fun localeAwareContext(base: Context): Context = LocaleHelper.onAttach(base)
 
-    fun getLocale(): Locale {
-        return LocaleHelper.getLocale(this)
-    }
+    fun getLocale(): Locale = LocaleHelper.getLocale(this)
 
     fun setLocale(currentLocale: Locale) {
         LocaleHelper.setLocale(this, currentLocale)
     }
 
-    fun isLocaleRTL(): Boolean {
-        return LocaleHelper.isRTL(Locale.getDefault())
-    }
+    fun isLocaleRTL(): Boolean = LocaleHelper.isRTL(Locale.getDefault())
 }

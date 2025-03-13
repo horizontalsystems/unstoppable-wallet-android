@@ -11,7 +11,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
-class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) : ViewModelUiState<SwapSelectProviderUiState>() {
+class SwapSelectProviderViewModel(
+    private val quotes: List<SwapProviderQuote>,
+) : ViewModelUiState<SwapSelectProviderUiState>() {
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
 
@@ -22,7 +24,8 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
 
     init {
         viewModelScope.launch {
-            marketKit.coinPriceObservable("swap-providers", token.coin.uid, currency.code)
+            marketKit
+                .coinPriceObservable("swap-providers", token.coin.uid, currency.code)
                 .asFlow()
                 .collect {
                     rate = it.value
@@ -35,34 +38,42 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
     private fun getViewItems(quotes: List<SwapProviderQuote>) =
         quotes.map { quote ->
             val fiatAmount = getFiatValue(quote.amountOut)?.getFormattedFull()
-            val tokenAmount = App.numberFormatter.formatCoinFull(
-                quote.amountOut,
-                quote.tokenOut.coin.code,
-                quote.tokenOut.decimals
-            )
+            val tokenAmount =
+                App.numberFormatter.formatCoinFull(
+                    quote.amountOut,
+                    quote.tokenOut.coin.code,
+                    quote.tokenOut.decimals,
+                )
             QuoteViewItem(quote, fiatAmount, tokenAmount)
         }
 
-    override fun createState() = SwapSelectProviderUiState(
-        quoteViewItems = quoteViewItems
-    )
+    override fun createState() =
+        SwapSelectProviderUiState(
+            quoteViewItems = quoteViewItems,
+        )
 
-    private fun getFiatValue(amount: BigDecimal?): CurrencyValue? {
-        return amount?.let {
-            rate?.multiply(it)
-        }?.let { fiatBalance ->
-            CurrencyValue(currency, fiatBalance)
-        }
-    }
+    private fun getFiatValue(amount: BigDecimal?): CurrencyValue? =
+        amount
+            ?.let {
+                rate?.multiply(it)
+            }?.let { fiatBalance ->
+                CurrencyValue(currency, fiatBalance)
+            }
 
-    class Factory(private val quotes: List<SwapProviderQuote>) : ViewModelProvider.Factory {
+    class Factory(
+        private val quotes: List<SwapProviderQuote>,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectProviderViewModel(quotes) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = SwapSelectProviderViewModel(quotes) as T
     }
 }
 
-data class SwapSelectProviderUiState(val quoteViewItems: List<QuoteViewItem>)
+data class SwapSelectProviderUiState(
+    val quoteViewItems: List<QuoteViewItem>,
+)
 
-data class QuoteViewItem(val quote: SwapProviderQuote, val fiatAmount: String?, val tokenAmount: String)
+data class QuoteViewItem(
+    val quote: SwapProviderQuote,
+    val fiatAmount: String?,
+    val tokenAmount: String,
+)

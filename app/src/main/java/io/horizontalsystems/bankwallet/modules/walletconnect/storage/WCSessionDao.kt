@@ -7,7 +7,6 @@ import androidx.room.Query
 
 @Dao
 interface WCSessionDao {
-
     @Query("SELECT * FROM WalletConnectV2Session")
     fun getAll(): List<WalletConnectV2Session>
 
@@ -22,5 +21,4 @@ interface WCSessionDao {
 
     @Query("DELETE FROM WalletConnectV2Session WHERE accountId NOT IN (:accountIds)")
     fun deleteAllExcept(accountIds: List<String>)
-
 }

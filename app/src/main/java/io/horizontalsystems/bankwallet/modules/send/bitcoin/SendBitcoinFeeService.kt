@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
+class SendBitcoinFeeService(
+    private val adapter: ISendBitcoinAdapter,
+) {
     private val _bitcoinFeeInfoFlow = MutableStateFlow<BitcoinFeeInfo?>(null)
     val bitcoinFeeInfoFlow = _bitcoinFeeInfoFlow.asStateFlow()
 
@@ -28,11 +30,20 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
         val tmpAmount = amount
         val tmpFeeRate = feeRate
 
-        bitcoinFeeInfo = when {
-            tmpAmount == null -> null
-            tmpFeeRate == null -> null
-            else -> adapter.bitcoinFeeInfo(tmpAmount, tmpFeeRate, validAddress?.hex, memo, customUnspentOutputs, pluginData)
-        }
+        bitcoinFeeInfo =
+            when {
+                tmpAmount == null -> null
+                tmpFeeRate == null -> null
+                else ->
+                    adapter.bitcoinFeeInfo(
+                        tmpAmount,
+                        tmpFeeRate,
+                        validAddress?.hex,
+                        memo,
+                        customUnspentOutputs,
+                        pluginData,
+                    )
+            }
     }
 
     private fun emitState() {
@@ -79,5 +90,4 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
         refreshFeeInfo()
         emitState()
     }
-
 }

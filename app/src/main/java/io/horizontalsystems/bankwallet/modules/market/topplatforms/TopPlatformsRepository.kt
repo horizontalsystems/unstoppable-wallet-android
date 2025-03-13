@@ -10,7 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
-class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
+class TopPlatformsRepository(
+    private val marketKit: MarketKitWrapper,
+) {
     private var itemsCache: List<TopPlatform>? = null
 
     suspend fun get(
@@ -22,11 +24,12 @@ class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
     ) = withContext(Dispatchers.IO) {
         val currentCache = itemsCache
 
-        val items = if (forceRefresh || currentCache == null) {
-            marketKit.topPlatformsSingle(currencyCode).await()
-        } else {
-            currentCache
-        }
+        val items =
+            if (forceRefresh || currentCache == null) {
+                marketKit.topPlatformsSingle(currencyCode).await()
+            } else {
+                currentCache
+            }
 
         itemsCache = items
 
@@ -39,48 +42,50 @@ class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
 
     companion object {
         fun getTopPlatformItems(
-                topPlatforms: List<TopPlatform>,
-                timeDuration: TimeDuration
-        ): List<TopPlatformItem> {
-            return topPlatforms.map { platform ->
-                val prevRank = when (timeDuration) {
-                    TimeDuration.OneDay -> null
-                    TimeDuration.SevenDay -> platform.rank1W
-                    TimeDuration.ThirtyDay -> platform.rank1M
-                    TimeDuration.ThreeMonths -> platform.rank3M
-                }
+            topPlatforms: List<TopPlatform>,
+            timeDuration: TimeDuration,
+        ): List<TopPlatformItem> =
+            topPlatforms.map { platform ->
+                val prevRank =
+                    when (timeDuration) {
+                        TimeDuration.OneDay -> null
+                        TimeDuration.SevenDay -> platform.rank1W
+                        TimeDuration.ThirtyDay -> platform.rank1M
+                        TimeDuration.ThreeMonths -> platform.rank3M
+                    }
 
-                val rankDiff = if (prevRank == platform.rank || prevRank == null) {
-                    null
-                } else {
-                    prevRank - platform.rank
-                }
+                val rankDiff =
+                    if (prevRank == platform.rank || prevRank == null) {
+                        null
+                    } else {
+                        prevRank - platform.rank
+                    }
 
-                val marketCapDiff = when (timeDuration) {
-                    TimeDuration.OneDay -> null
-                    TimeDuration.SevenDay -> platform.change1W
-                    TimeDuration.ThirtyDay -> platform.change1M
-                    TimeDuration.ThreeMonths -> platform.change3M
-                }
+                val marketCapDiff =
+                    when (timeDuration) {
+                        TimeDuration.OneDay -> null
+                        TimeDuration.SevenDay -> platform.change1W
+                        TimeDuration.ThirtyDay -> platform.change1M
+                        TimeDuration.ThreeMonths -> platform.change3M
+                    }
 
                 TopPlatformItem(
-                        Platform(platform.blockchain.uid, platform.blockchain.name),
-                        platform.rank,
-                        platform.protocols,
-                        platform.marketCap,
-                        rankDiff,
-                        marketCapDiff
+                    Platform(platform.blockchain.uid, platform.blockchain.name),
+                    platform.rank,
+                    platform.protocols,
+                    platform.marketCap,
+                    rankDiff,
+                    marketCapDiff,
                 )
             }
+    }
+
+    fun List<TopPlatformItem>.sort(sortingField: SortingField) =
+        when (sortingField) {
+            SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap }
+            SortingField.LowestCap -> sortedByNullLast { it.marketCap }
+            SortingField.TopGainers -> sortedByDescendingNullLast { it.changeDiff }
+            SortingField.TopLosers -> sortedByNullLast { it.changeDiff }
+            else -> this
         }
-    }
-
-    fun List<TopPlatformItem>.sort(sortingField: SortingField) = when (sortingField) {
-        SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap }
-        SortingField.LowestCap -> sortedByNullLast { it.marketCap }
-        SortingField.TopGainers -> sortedByDescendingNullLast { it.changeDiff }
-        SortingField.TopLosers -> sortedByNullLast { it.changeDiff }
-        else -> this
-    }
-
 }

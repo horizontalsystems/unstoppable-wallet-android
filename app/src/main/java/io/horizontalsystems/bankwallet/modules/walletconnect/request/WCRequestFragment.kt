@@ -43,7 +43,8 @@ class WCRequestFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val wcRequestViewModel = viewModel<WCNewRequestViewModel>(factory = WCNewRequestViewModel.Factory())
+        val wcRequestViewModel =
+            viewModel<WCNewRequestViewModel>(factory = WCNewRequestViewModel.Factory())
         val composableScope = rememberCoroutineScope()
         when (val sessionRequestUI = wcRequestViewModel.sessionRequest) {
             is SessionRequestUI.Content -> {
@@ -51,10 +52,11 @@ class WCRequestFragment : BaseComposeFragment() {
                     val blockchainType = wcRequestViewModel.blockchain?.type ?: return
                     val transaction =
                         try {
-                            val ethTransaction = Gson().fromJson(
-                                sessionRequestUI.param,
-                                WCEthereumTransaction::class.java
-                            )
+                            val ethTransaction =
+                                Gson().fromJson(
+                                    sessionRequestUI.param,
+                                    WCEthereumTransaction::class.java,
+                                )
                             ethTransaction.getWCTransaction()
                         } catch (e: Throwable) {
                             return
@@ -65,27 +67,29 @@ class WCRequestFragment : BaseComposeFragment() {
                         logger,
                         blockchainType,
                         transaction,
-                        sessionRequestUI.peerUI.peerName
+                        sessionRequestUI.peerUI.peerName,
                     )
                 } else if (sessionRequestUI.method == "eth_signTransaction") {
                     val blockchainType = wcRequestViewModel.blockchain?.type ?: return
 
-                    val transaction = try {
-                        val ethTransaction = Gson().fromJson(
-                            sessionRequestUI.param,
-                            WCEthereumTransaction::class.java
-                        )
-                        ethTransaction.getWCTransaction()
-                    } catch (e: Throwable) {
-                        return
-                    }
+                    val transaction =
+                        try {
+                            val ethTransaction =
+                                Gson().fromJson(
+                                    sessionRequestUI.param,
+                                    WCEthereumTransaction::class.java,
+                                )
+                            ethTransaction.getWCTransaction()
+                        } catch (e: Throwable) {
+                            return
+                        }
 
                     WCSignEthereumTransactionRequestScreen(
                         navController,
                         logger,
                         blockchainType,
                         transaction,
-                        sessionRequestUI.peerUI.peerName
+                        sessionRequestUI.peerUI.peerName,
                     )
                 } else {
                     WCNewSignRequestScreen(
@@ -112,7 +116,7 @@ class WCRequestFragment : BaseComposeFragment() {
                                 }
                             }
                             logger.info("decline request")
-                        }
+                        },
                     )
                 }
             }
@@ -120,28 +124,27 @@ class WCRequestFragment : BaseComposeFragment() {
             is SessionRequestUI.Initial -> {
                 ScreenMessageWithAction(
                     text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
+                    icon = R.drawable.ic_error_48,
                 ) {
                     ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 48.dp)
+                                .fillMaxWidth(),
                         title = stringResource(R.string.Button_Close),
-                        onClick = { navController.popBackStack() }
+                        onClick = { navController.popBackStack() },
                     )
                 }
             }
         }
-
     }
 
     private fun showError(e: Throwable) {
         HudHelper.showErrorMessage(
             requireActivity().findViewById(android.R.id.content),
-            e.message ?: e::class.java.simpleName
+            e.message ?: e::class.java.simpleName,
         )
     }
-
 }
 
 @Composable
@@ -149,26 +152,28 @@ fun WCNewSignRequestScreen(
     sessionRequestUI: SessionRequestUI.Content,
     navController: NavController,
     onAllow: () -> Unit,
-    onDecline: () -> Unit
+    onDecline: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler),
     ) {
         AppBar(
             stringResource(R.string.WalletConnect_SignMessageRequest_Title),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = { navController.popBackStack() }
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() },
+                    ),
+                ),
         )
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .weight(1f)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .fillMaxWidth(),
         ) {
             VSpacer(12.dp)
 
@@ -183,17 +188,15 @@ fun WCNewSignRequestScreen(
 
         ActionButtons(
             onDecline = onDecline,
-            onAllow = onAllow
+            onAllow = onAllow,
         )
-
     }
-
 }
 
 @Composable
 private fun ActionButtons(
     onDecline: () -> Unit = {},
-    onAllow: () -> Unit = {}
+    onAllow: () -> Unit = {},
 ) {
     ButtonsGroupWithShade {
         Column(Modifier.padding(horizontal = 24.dp)) {
@@ -206,7 +209,7 @@ private fun ActionButtons(
             ButtonPrimaryDefault(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Reject),
-                onClick = onDecline
+                onClick = onDecline,
             )
         }
     }
@@ -224,8 +227,8 @@ private fun MessageContent(
                 ViewItem.Value(
                     title = stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
                     value = dApp,
-                    type = ValueType.Regular
-                )
+                    type = ValueType.Regular,
+                ),
             )
         }
         wcChainData?.let {
@@ -234,6 +237,4 @@ private fun MessageContent(
     }
 
     MessageToSign(message)
-
 }
-

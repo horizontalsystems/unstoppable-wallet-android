@@ -7,5 +7,5 @@ import io.horizontalsystems.marketkit.models.Token
 class ContractCreationTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
-    source: TransactionSource
+    source: TransactionSource,
 ) : EvmTransactionRecord(transaction, baseToken, source)

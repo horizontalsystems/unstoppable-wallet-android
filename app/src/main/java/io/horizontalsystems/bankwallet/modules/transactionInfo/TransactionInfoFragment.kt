@@ -49,15 +49,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmoun
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 
 class TransactionInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModelTxs: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
+        val viewModelTxs: TransactionsViewModel? =
+            try {
+                navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
+            } catch (e: IllegalStateException) {
+                Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
+                null
+            }
 
         val transactionRecord = viewModelTxs?.tmpTransactionRecordToShow
         if (transactionRecord == null) {
@@ -71,27 +71,26 @@ class TransactionInfoFragment : BaseComposeFragment() {
 
         TransactionInfoScreen(viewModel, navController)
     }
-
 }
 
 @Composable
 fun TransactionInfoScreen(
     viewModel: TransactionInfoViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
-
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = stringResource(R.string.TransactionInfo_Title),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = {
-                        navController.popBackStack()
-                    }
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        },
+                    ),
+                ),
         )
         TransactionInfo(viewModel, navController)
     }
@@ -100,9 +99,12 @@ fun TransactionInfoScreen(
 @Composable
 fun TransactionInfo(
     viewModel: TransactionInfoViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp),
+    ) {
         items(viewModel.viewItems) { section ->
             TransactionInfoSection(section, navController, viewModel::getRawTransaction)
         }
@@ -113,21 +115,23 @@ fun TransactionInfo(
 fun TransactionInfoSection(
     section: List<TransactionInfoViewItem>,
     navController: NavController,
-    getRawTransaction: () -> String?
+    getRawTransaction: () -> String?,
 ) {
-    //items without background
+    // items without background
     if (section.size == 1) {
         when (val item = section[0]) {
             is TransactionInfoViewItem.WarningMessage -> {
                 WarningMessageCell(item.message)
                 return
             }
+
             is TransactionInfoViewItem.Description -> {
                 DescriptionCell(text = item.text)
                 return
             }
+
             else -> {
-                //do nothing
+                // do nothing
             }
         }
     }
@@ -138,7 +142,11 @@ fun TransactionInfoSection(
                 when (viewItem) {
                     is TransactionInfoViewItem.Transaction -> {
                         add {
-                            SectionTitleCell(title = viewItem.leftValue, value = viewItem.rightValue, iconResId = viewItem.icon)
+                            SectionTitleCell(
+                                title = viewItem.leftValue,
+                                value = viewItem.rightValue,
+                                iconResId = viewItem.icon,
+                            )
                         }
                     }
 
@@ -152,13 +160,20 @@ fun TransactionInfoSection(
                                 alternativeCoinIconUrl = viewItem.alternativeCoinIconUrl,
                                 badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
-                                onClick = viewItem.coinUid?.let {
-                                    {
-                                        navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it))
+                                onClick =
+                                    viewItem.coinUid?.let {
+                                        {
+                                            navController.slideFromRight(
+                                                R.id.coinFragment,
+                                                CoinFragment.Input(it),
+                                            )
 
-                                        stat(page = StatPage.TransactionInfo, event = StatEvent.OpenCoin(it))
-                                    }
-                                }
+                                            stat(
+                                                page = StatPage.TransactionInfo,
+                                                event = StatEvent.OpenCoin(it),
+                                            )
+                                        }
+                                    },
                             )
                         }
                     }
@@ -190,7 +205,7 @@ fun TransactionInfoSection(
                             PriceWithToggleCell(
                                 title = viewItem.title,
                                 valueOne = viewItem.valueTwo,
-                                valueTwo = viewItem.valueOne
+                                valueTwo = viewItem.valueOne,
                             )
                         }
                     }
@@ -204,14 +219,26 @@ fun TransactionInfoSection(
                                 blockchainType = viewItem.blockchainType,
                                 navController = navController,
                                 onCopy = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Copy(StatEntity.Address))
+                                    stat(
+                                        page = StatPage.TransactionInfo,
+                                        section = viewItem.statSection,
+                                        event = StatEvent.Copy(StatEntity.Address),
+                                    )
                                 },
                                 onAddToExisting = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                                    stat(
+                                        page = StatPage.TransactionInfo,
+                                        section = viewItem.statSection,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                    )
                                 },
                                 onAddToNew = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactNew))
-                                }
+                                    stat(
+                                        page = StatPage.TransactionInfo,
+                                        section = viewItem.statSection,
+                                        event = StatEvent.Open(StatPage.ContactNew),
+                                    )
+                                },
                             )
                         }
                     }
@@ -224,7 +251,10 @@ fun TransactionInfoSection(
 
                     is TransactionInfoViewItem.Status -> {
                         add {
-                            TransactionInfoStatusCell(status = viewItem.status, navController = navController)
+                            TransactionInfoStatusCell(
+                                status = viewItem.status,
+                                navController = navController,
+                            )
                         }
                     }
 
@@ -233,14 +263,14 @@ fun TransactionInfoSection(
                             TransactionInfoSpeedUpCell(
                                 transactionHash = viewItem.transactionHash,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                navController = navController,
                             )
                         }
                         add {
                             TransactionInfoCancelCell(
                                 transactionHash = viewItem.transactionHash,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                navController = navController,
                             )
                         }
                     }
@@ -254,7 +284,10 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.Explorer -> {
                         viewItem.url?.let {
                             add {
-                                TransactionInfoExplorerCell(title = viewItem.title, url = viewItem.url)
+                                TransactionInfoExplorerCell(
+                                    title = viewItem.title,
+                                    url = viewItem.url,
+                                )
                             }
                         }
                     }
@@ -267,7 +300,10 @@ fun TransactionInfoSection(
 
                     is TransactionInfoViewItem.LockState -> {
                         add {
-                            TransactionInfoBtcLockCell(lockState = viewItem, navController = navController)
+                            TransactionInfoBtcLockCell(
+                                lockState = viewItem,
+                                navController = navController,
+                            )
                         }
                     }
 
@@ -276,7 +312,7 @@ fun TransactionInfoSection(
                             TransactionInfoDoubleSpendCell(
                                 transactionHash = viewItem.transactionHash,
                                 conflictingHash = viewItem.conflictingHash,
-                                navController = navController
+                                navController = navController,
                             )
                         }
                     }
@@ -288,14 +324,12 @@ fun TransactionInfoSection(
                     }
 
                     is TransactionInfoViewItem.Description -> {
-
                     }
-                    is TransactionInfoViewItem.WarningMessage -> {
 
+                    is TransactionInfoViewItem.WarningMessage -> {
                     }
                 }
             }
-        }
+        },
     )
 }
-

@@ -12,21 +12,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
-class SendTronAddressService(private val adapter: ISendTronAdapter, private val token: Token) {
+class SendTronAddressService(
+    private val adapter: ISendTronAdapter,
+    private val token: Token,
+) {
     private var address: Address? = null
     private var addressError: Throwable? = null
     private var tronAddress: TronAddress? = null
     private var isInactiveAddress: Boolean = false
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            address = address,
-            tronAddress = tronAddress,
-            addressError = addressError,
-            isInactiveAddress = isInactiveAddress,
-            canBeSend = tronAddress != null && (addressError == null || addressError is FormsInputStateWarning)
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                address = address,
+                tronAddress = tronAddress,
+                addressError = addressError,
+                isInactiveAddress = isInactiveAddress,
+                canBeSend = tronAddress != null && (addressError == null || addressError is FormsInputStateWarning),
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     suspend fun setAddress(address: Address?) {
@@ -53,7 +57,8 @@ class SendTronAddressService(private val adapter: ISendTronAdapter, private val 
             tronAddress = validAddress
         } catch (e: Exception) {
             isInactiveAddress = false
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError =
+                Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 
@@ -64,7 +69,7 @@ class SendTronAddressService(private val adapter: ISendTronAdapter, private val 
                 tronAddress = tronAddress,
                 addressError = addressError,
                 isInactiveAddress = isInactiveAddress,
-                canBeSend = tronAddress != null && (addressError == null || addressError is FormsInputStateWarning)
+                canBeSend = tronAddress != null && (addressError == null || addressError is FormsInputStateWarning),
             )
         }
     }
@@ -74,6 +79,6 @@ class SendTronAddressService(private val adapter: ISendTronAdapter, private val 
         val tronAddress: TronAddress?,
         val addressError: Throwable?,
         val isInactiveAddress: Boolean,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

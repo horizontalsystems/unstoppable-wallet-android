@@ -62,7 +62,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class CoinRankFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<RankType>(navController) { type ->
@@ -76,9 +75,10 @@ class CoinRankFragment : BaseComposeFragment() {
 private fun CoinRankScreen(
     type: RankType,
     navController: NavController,
-    viewModel: CoinRankViewModel = viewModel(
-        factory = CoinRankModule.Factory(type)
-    )
+    viewModel: CoinRankViewModel =
+        viewModel(
+            factory = CoinRankModule.Factory(type),
+        ),
 ) {
     val uiState = viewModel.uiState
     val viewItems = viewModel.uiState.rankViewItems
@@ -87,20 +87,21 @@ private fun CoinRankScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = { navController.popBackStack() },
+                        ),
+                    ),
             )
-        }
+        },
     ) { padding ->
         Crossfade(
             targetState = uiState.viewState,
             modifier = Modifier.padding(padding),
-            label = ""
+            label = "",
         ) { viewItemState ->
             when (viewItemState) {
                 ViewState.Loading -> {
@@ -113,13 +114,14 @@ private fun CoinRankScreen(
 
                 ViewState.Success -> {
                     var periodSelect by remember { mutableStateOf(uiState.periodSelect) }
-                    val listState = rememberSaveable(
-                        uiState.periodSelect?.selected,
-                        uiState.sortDescending,
-                        saver = LazyListState.Saver
-                    ) {
-                        LazyListState()
-                    }
+                    val listState =
+                        rememberSaveable(
+                            uiState.periodSelect?.selected,
+                            uiState.sortDescending,
+                            saver = LazyListState.Saver,
+                        ) {
+                            LazyListState()
+                        }
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
@@ -136,7 +138,7 @@ private fun CoinRankScreen(
                                 ButtonSecondaryCircle(
                                     modifier = Modifier.padding(start = 16.dp),
                                     icon = if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
-                                    onClick = { viewModel.toggleSortType() }
+                                    onClick = { viewModel.toggleSortType() },
                                 )
                                 Spacer(Modifier.weight(1f))
                                 periodSelect?.let {
@@ -146,7 +148,7 @@ private fun CoinRankScreen(
                                         onSelect = { selectedDuration ->
                                             viewModel.toggle(selectedDuration)
                                             periodSelect = Select(selectedDuration, it.options)
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -162,7 +164,7 @@ private fun CoinRankScreen(
 private fun LazyListScope.coinRankList(
     items: List<CoinRankModule.RankViewItem>,
     type: RankType,
-    navController: NavController
+    navController: NavController,
 ) {
     item {
         Divider(
@@ -182,7 +184,7 @@ private fun LazyListScope.coinRankList(
                 navController.slideFromRight(R.id.coinFragment, arguments)
 
                 stat(page = type.statPage, event = StatEvent.OpenCoin(item.coinUid))
-            }
+            },
         )
     }
     item {
@@ -197,7 +199,7 @@ private fun CoinRankCell(
     subtitle: String,
     iconUrl: String?,
     value: String? = null,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Column {
         RowUniversal(
@@ -207,32 +209,34 @@ private fun CoinRankCell(
                 modifier = Modifier.width(56.dp),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
-                text = rank
+                text = rank,
             )
             Image(
-                painter = rememberAsyncImagePainter(
-                    model = iconUrl,
-                    error = painterResource(R.drawable.coin_placeholder)
-                ),
+                painter =
+                    rememberAsyncImagePainter(
+                        model = iconUrl,
+                        error = painterResource(R.drawable.coin_placeholder),
+                    ),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                modifier =
+                    Modifier
+                        .padding(end = 16.dp)
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp)),
             )
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 body_leah(
                     text = name,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
                 )
                 VSpacer(1.dp)
                 subhead2_grey(
                     text = subtitle,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
                 )
             }
             value?.let {

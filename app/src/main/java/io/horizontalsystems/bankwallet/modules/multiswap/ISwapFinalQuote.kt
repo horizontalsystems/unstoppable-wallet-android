@@ -24,5 +24,5 @@ data class SwapFinalQuoteEvm(
     override val amountOutMin: BigDecimal,
     override val sendTransactionData: SendTransactionData.Evm,
     override val priceImpact: BigDecimal?,
-    override val fields: List<DataField>
+    override val fields: List<DataField>,
 ) : ISwapFinalQuote

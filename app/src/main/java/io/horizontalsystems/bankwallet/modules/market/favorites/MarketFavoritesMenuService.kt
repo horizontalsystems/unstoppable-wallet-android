@@ -6,9 +6,8 @@ import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 
 class MarketFavoritesMenuService(
     private val localStorage: ILocalStorage,
-    private val marketWidgetManager: MarketWidgetManager
+    private val marketWidgetManager: MarketWidgetManager,
 ) {
-
     var listSorting: WatchlistSorting
         get() = localStorage.marketFavoritesSorting ?: WatchlistSorting.Manual
         set(value) {

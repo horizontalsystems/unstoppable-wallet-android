@@ -14,14 +14,15 @@ class SendSolanaAddressService {
     var solanaAddress: SolanaAddress? = null
         private set
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            address = address,
-            solanaAddress = solanaAddress,
-            addressError = addressError,
-            canBeSend = solanaAddress != null,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                address = address,
+                solanaAddress = solanaAddress,
+                addressError = addressError,
+                canBeSend = solanaAddress != null,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     fun setAddress(address: Address?) {
@@ -40,7 +41,8 @@ class SendSolanaAddressService {
         try {
             solanaAddress = SolanaAddress(address.hex)
         } catch (e: Exception) {
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError =
+                Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 
@@ -50,7 +52,7 @@ class SendSolanaAddressService {
                 address = address,
                 solanaAddress = solanaAddress,
                 addressError = addressError,
-                canBeSend = solanaAddress != null
+                canBeSend = solanaAddress != null,
             )
         }
     }
@@ -59,6 +61,6 @@ class SendSolanaAddressService {
         val address: Address?,
         val solanaAddress: SolanaAddress?,
         val addressError: Throwable?,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

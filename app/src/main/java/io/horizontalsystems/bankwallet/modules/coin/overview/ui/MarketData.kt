@@ -20,11 +20,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 @Preview
 @Composable
 fun MarketDataPreview() {
-    val marketData = listOf(
-        CoinDataItem(title = "Market Cap", value = "$123.34 B", rankLabel = "#555"),
-        CoinDataItem(title = "Trading Volume", value = "112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112 ETH"),
-        CoinDataItem(title = "Inception Date", value = "Jul 23, 2012"),
-    )
+    val marketData =
+        listOf(
+            CoinDataItem(title = "Market Cap", value = "$123.34 B", rankLabel = "#555"),
+            CoinDataItem(
+                title = "Trading Volume",
+                value = "112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112 ETH",
+            ),
+            CoinDataItem(title = "Inception Date", value = "Jul 23, 2012"),
+        )
 
     ComposeAppTheme(darkTheme = false) {
         MarketData(marketData)
@@ -35,10 +39,11 @@ fun MarketDataPreview() {
 fun MarketData(marketData: List<CoinDataItem>) {
     CellSingleLineLawrenceSection(marketData) { marketDataLine ->
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             subhead2_grey(text = marketDataLine.title)
 
@@ -48,13 +53,14 @@ fun MarketData(marketData: List<CoinDataItem>) {
 
             marketDataLine.value?.let { value ->
                 subhead1_leah(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp),
                     text = value,
                     textAlign = TextAlign.End,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }

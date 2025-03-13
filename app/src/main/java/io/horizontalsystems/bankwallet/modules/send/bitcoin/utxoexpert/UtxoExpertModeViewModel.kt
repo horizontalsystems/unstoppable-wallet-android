@@ -21,14 +21,19 @@ class UtxoExpertModeViewModel(
     initialCustomUnspentOutputs: List<UnspentOutputInfo>?,
     xRateService: XRateService,
 ) : ViewModelUiState<UtxoExpertModeModule.UiState>() {
-
     private var unspentOutputViewItems = listOf<UtxoExpertModeModule.UnspentOutputViewItem>()
     private var selectedUnspentOutputs = listOf<String>()
     private var coinRate = xRateService.getRate(token.coin.uid)
-    private var availableBalanceInfo = UtxoExpertModeModule.InfoItem(
-        value = App.numberFormatter.formatCoinFull(BigDecimal.ZERO, token.coin.code, token.decimals),
-        subValue = "",
-    )
+    private var availableBalanceInfo =
+        UtxoExpertModeModule.InfoItem(
+            value =
+                App.numberFormatter.formatCoinFull(
+                    BigDecimal.ZERO,
+                    token.coin.code,
+                    token.decimals,
+                ),
+            subValue = "",
+        )
 
     val customOutputs: List<UnspentOutputInfo>
         get() = adapter.unspentOutputs.filter { selectedUnspentOutputs.contains(getUnspentId(it)) }
@@ -46,13 +51,15 @@ class UtxoExpertModeViewModel(
         emitState()
     }
 
-    override fun createState() = UtxoExpertModeModule.UiState(
-        availableBalanceInfo = availableBalanceInfo,
-        utxoItems = unspentOutputViewItems,
-        unselectAllIsEnabled = selectedUnspentOutputs.isNotEmpty(),
-    )
+    override fun createState() =
+        UtxoExpertModeModule.UiState(
+            availableBalanceInfo = availableBalanceInfo,
+            utxoItems = unspentOutputViewItems,
+            unselectAllIsEnabled = selectedUnspentOutputs.isNotEmpty(),
+        )
 
-    private fun getUnspentId(unspentOutputInfo: UnspentOutputInfo) = "${unspentOutputInfo.transactionHash.toHexString()}-${unspentOutputInfo.outputIndex}"
+    private fun getUnspentId(unspentOutputInfo: UnspentOutputInfo) =
+        "${unspentOutputInfo.transactionHash.toHexString()}-${unspentOutputInfo.outputIndex}"
 
     private fun setAvailableBalanceInfo() {
         var totalCoinValue = BigDecimal.ZERO
@@ -62,44 +69,60 @@ class UtxoExpertModeViewModel(
                 totalCoinValue += utxo.value.toBigDecimal().movePointLeft(token.decimals)
             }
         }
-        availableBalanceInfo = availableBalanceInfo.copy(
-            value = App.numberFormatter.formatCoinFull(totalCoinValue, token.coin.code, token.decimals),
-            subValue = coinRate?.let { rate ->
-                rate.copy(value = totalCoinValue.times(rate.value)).getFormattedFull()
-            } ?: "",
-        )
+        availableBalanceInfo =
+            availableBalanceInfo.copy(
+                value =
+                    App.numberFormatter.formatCoinFull(
+                        totalCoinValue,
+                        token.coin.code,
+                        token.decimals,
+                    ),
+                subValue =
+                    coinRate?.let { rate ->
+                        rate.copy(value = totalCoinValue.times(rate.value)).getFormattedFull()
+                    } ?: "",
+            )
     }
 
     private fun setUnspentOutputViewItems() {
-        unspentOutputViewItems = adapter.unspentOutputs.map { utxo ->
-            val coinValue = utxo.value.toBigDecimal().movePointLeft(token.decimals)
-            val id = getUnspentId(utxo)
-            UtxoExpertModeModule.UnspentOutputViewItem(
-                id = id,
-                outputIndex = utxo.outputIndex,
-                date = DateHelper.shortDate(Date(utxo.timestamp * 1000), "MMM d", "MM/dd/yyyy"),
-                amountToken = App.numberFormatter.formatCoinFull(coinValue, token.coin.code, token.decimals),
-                amountFiat = coinRate?.let { rate ->
-                    rate.copy(value = coinValue.times(rate.value)).getFormattedFull()
-                } ?: "",
-                address = utxo.address ?: "",
-                selected = selectedUnspentOutputs.contains(id),
-            )
-        }
+        unspentOutputViewItems =
+            adapter.unspentOutputs.map { utxo ->
+                val coinValue = utxo.value.toBigDecimal().movePointLeft(token.decimals)
+                val id = getUnspentId(utxo)
+                UtxoExpertModeModule.UnspentOutputViewItem(
+                    id = id,
+                    outputIndex = utxo.outputIndex,
+                    date = DateHelper.shortDate(Date(utxo.timestamp * 1000), "MMM d", "MM/dd/yyyy"),
+                    amountToken =
+                        App.numberFormatter.formatCoinFull(
+                            coinValue,
+                            token.coin.code,
+                            token.decimals,
+                        ),
+                    amountFiat =
+                        coinRate?.let { rate ->
+                            rate.copy(value = coinValue.times(rate.value)).getFormattedFull()
+                        } ?: "",
+                    address = utxo.address ?: "",
+                    selected = selectedUnspentOutputs.contains(id),
+                )
+            }
     }
 
     private fun updateUtxoSelectedState() {
-        unspentOutputViewItems = unspentOutputViewItems.map { utxo ->
-            utxo.copy(selected = selectedUnspentOutputs.contains(utxo.id))
-        }
+        unspentOutputViewItems =
+            unspentOutputViewItems.map { utxo ->
+                utxo.copy(selected = selectedUnspentOutputs.contains(utxo.id))
+            }
     }
 
     fun onUnspentOutputClicked(id: String) {
-        selectedUnspentOutputs = if (selectedUnspentOutputs.contains(id)) {
-            selectedUnspentOutputs.filter { it != id }
-        } else {
-            selectedUnspentOutputs + id
-        }
+        selectedUnspentOutputs =
+            if (selectedUnspentOutputs.contains(id)) {
+                selectedUnspentOutputs.filter { it != id }
+            } else {
+                selectedUnspentOutputs + id
+            }
         updateUtxoSelectedState()
         setAvailableBalanceInfo()
         emitState()
@@ -118,25 +141,22 @@ class UtxoExpertModeViewModel(
         setAvailableBalanceInfo()
         emitState()
     }
-
 }
 
 object UtxoExpertModeModule {
-
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val adapter: ISendBitcoinAdapter,
         private val token: Token,
         private val customUnspentOutputs: List<UnspentOutputInfo>?,
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return UtxoExpertModeViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            UtxoExpertModeViewModel(
                 adapter = adapter,
                 token = token,
                 initialCustomUnspentOutputs = customUnspentOutputs,
-                xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
+                xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
             ) as T
-        }
     }
 
     data class UiState(

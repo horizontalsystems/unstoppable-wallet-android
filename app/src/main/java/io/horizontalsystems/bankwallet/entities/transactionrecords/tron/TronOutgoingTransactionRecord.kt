@@ -11,9 +11,7 @@ class TronOutgoingTransactionRecord(
     source: TransactionSource,
     val to: String,
     val value: TransactionValue,
-    val sentToSelf: Boolean
+    val sentToSelf: Boolean,
 ) : TronTransactionRecord(transaction, baseToken, source) {
-
     override val mainValue = value
-
 }

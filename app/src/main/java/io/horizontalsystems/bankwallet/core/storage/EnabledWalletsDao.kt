@@ -1,11 +1,15 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 
 @Dao
 interface EnabledWalletsDao {
-
     @Query("SELECT * FROM EnabledWallet ORDER BY `walletOrder` ASC")
     fun enabledCoins(): List<EnabledWallet>
 
@@ -25,5 +29,4 @@ interface EnabledWalletsDao {
 
     @Delete
     fun deleteWallets(enabledWallets: List<EnabledWallet>)
-
 }

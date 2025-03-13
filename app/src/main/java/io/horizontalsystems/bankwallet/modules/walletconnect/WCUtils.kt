@@ -14,10 +14,11 @@ object WCUtils {
 
         val chainId = chunks[1].toIntOrNull() ?: return null
         val chain = Chain.values().firstOrNull { it.id == chainId }
-        val address: String? = when {
-            chunks.size >= 3 -> chunks[2]
-            else -> null
-        }
+        val address: String? =
+            when {
+                chunks.size >= 3 -> chunks[2]
+                else -> null
+            }
 
         return chain?.let {
             WCChainData(chain, address)

@@ -38,15 +38,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TopCoins(
-    onCoinClick: (String) -> Unit,
-) {
-    val viewModel = viewModel<MarketTopCoinsViewModel>(
-        factory = MarketTopCoinsViewModel.Factory(
-            TopMarket.Top100,
-            SortingField.TopGainers,
+fun TopCoins(onCoinClick: (String) -> Unit) {
+    val viewModel =
+        viewModel<MarketTopCoinsViewModel>(
+            factory =
+                MarketTopCoinsViewModel.Factory(
+                    TopMarket.Top100,
+                    SortingField.TopGainers,
+                ),
         )
-    )
 
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openTopSelector by rememberSaveable { mutableStateOf(false) }
@@ -61,7 +61,7 @@ fun TopCoins(
             viewModel.refresh()
 
             stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.Refresh)
-        }
+        },
     ) {
         Crossfade(uiState.viewState, label = "") { viewState ->
             when (viewState) {
@@ -87,13 +87,20 @@ fun TopCoins(
                         onAddFavorite = { uid ->
                             viewModel.onAddFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.AddToWatchlist(uid))
-
+                            stat(
+                                page = StatPage.Markets,
+                                section = StatSection.Coins,
+                                event = StatEvent.AddToWatchlist(uid),
+                            )
                         },
                         onRemoveFavorite = { uid ->
                             viewModel.onRemoveFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.RemoveFromWatchlist(uid))
+                            stat(
+                                page = StatPage.Markets,
+                                section = StatSection.Coins,
+                                event = StatEvent.RemoveFromWatchlist(uid),
+                            )
                         },
                         onCoinClick = onCoinClick,
                         preItems = {
@@ -106,26 +113,26 @@ fun TopCoins(
                                         uiState.sortingField.titleResId,
                                         onOptionClick = {
                                             openSortingSelector = true
-                                        }
+                                        },
                                     )
                                     HSpacer(width = 12.dp)
                                     OptionController(
                                         uiState.topMarket.titleResId,
                                         onOptionClick = {
                                             openTopSelector = true
-                                        }
+                                        },
                                     )
                                     HSpacer(width = 12.dp)
                                     OptionController(
                                         uiState.period.titleResId,
                                         onOptionClick = {
                                             openPeriodSelector = true
-                                        }
+                                        },
                                     )
                                     HSpacer(width = 16.dp)
                                 }
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -140,11 +147,15 @@ fun TopCoins(
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.Markets,
+                    section = StatSection.Coins,
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                )
             },
             onDismiss = {
                 openSortingSelector = false
-            }
+            },
         )
     }
     if (openTopSelector) {
@@ -155,11 +166,15 @@ fun TopCoins(
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchMarketTop(it.statMarketTop))
+                stat(
+                    page = StatPage.Markets,
+                    section = StatSection.Coins,
+                    event = StatEvent.SwitchMarketTop(it.statMarketTop),
+                )
             },
             onDismiss = {
                 openTopSelector = false
-            }
+            },
         )
     }
     if (openPeriodSelector) {
@@ -170,11 +185,15 @@ fun TopCoins(
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.Markets,
+                    section = StatSection.Coins,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                )
             },
             onDismiss = {
                 openPeriodSelector = false
-            }
+            },
         )
     }
 }
@@ -182,7 +201,7 @@ fun TopCoins(
 @Composable
 fun OptionController(
     label: Int,
-    onOptionClick: () -> Unit
+    onOptionClick: () -> Unit,
 ) {
     ButtonSecondaryWithIcon(
         modifier = Modifier.height(28.dp),

@@ -12,21 +12,32 @@ import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 class NumberFormatter(
-        private val languageManager: LanguageManager
-        ) : IAppNumberFormatter {
-
+    private val languageManager: LanguageManager,
+) : IAppNumberFormatter {
     private var formatters = ConcurrentHashMap<String, NumberFormat>()
     private val numberRounding = NumberRounding()
 
-    override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
-        val bigDecimalValue = when (value) {
-            is Double -> value.toBigDecimal()
-            is Float -> value.toBigDecimal()
-            is BigDecimal -> value
-            else -> throw UnsupportedOperationException()
-        }
+    override fun format(
+        value: Number,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int,
+        prefix: String,
+        suffix: String,
+    ): String {
+        val bigDecimalValue =
+            when (value) {
+                is Double -> value.toBigDecimal()
+                is Float -> value.toBigDecimal()
+                is BigDecimal -> value
+                else -> throw UnsupportedOperationException()
+            }
 
-        val formatter = getFormatter(languageManager.currentLocale, minimumFractionDigits, maximumFractionDigits)
+        val formatter =
+            getFormatter(
+                languageManager.currentLocale,
+                minimumFractionDigits,
+                maximumFractionDigits,
+            )
 
         val mostLowValue = BigDecimal(BigInteger.ONE, maximumFractionDigits)
 
@@ -37,22 +48,36 @@ class NumberFormatter(
         }
     }
 
-    override fun formatCoinFull(value: BigDecimal, code: String?, coinDecimals: Int): String {
+    override fun formatCoinFull(
+        value: BigDecimal,
+        code: String?,
+        coinDecimals: Int,
+    ): String {
         val rounded = numberRounding.getRoundedCoinFull(value, coinDecimals)
         return formatRounded(rounded = rounded, prefix = null, suffix = code?.let { " $it" })
     }
 
-    override fun formatCoinShort(value: BigDecimal, code: String?, coinDecimals: Int): String {
+    override fun formatCoinShort(
+        value: BigDecimal,
+        code: String?,
+        coinDecimals: Int,
+    ): String {
         val rounded = numberRounding.getRoundedCoinShort(value, coinDecimals)
         return formatRounded(rounded = rounded, prefix = null, suffix = code?.let { " $it" })
     }
 
-    override fun formatNumberShort(value: BigDecimal, maximumFractionDigits: Int): String {
+    override fun formatNumberShort(
+        value: BigDecimal,
+        maximumFractionDigits: Int,
+    ): String {
         val rounded = numberRounding.getRoundedShort(value, maximumFractionDigits)
         return formatRounded(rounded = rounded, prefix = null, suffix = null)
     }
 
-    override fun formatFiatFull(value: BigDecimal, symbol: String): String {
+    override fun formatFiatFull(
+        value: BigDecimal,
+        symbol: String,
+    ): String {
         val rounded = numberRounding.getRoundedCurrencyFull(value)
         return formatRounded(rounded = rounded, prefix = symbol, suffix = null)
     }
@@ -60,13 +85,17 @@ class NumberFormatter(
     override fun formatFiatShort(
         value: BigDecimal,
         symbol: String,
-        currencyDecimals: Int
+        currencyDecimals: Int,
     ): String {
         val rounded = numberRounding.getRoundedCurrencyShort(value, currencyDecimals)
         return formatRounded(rounded = rounded, prefix = symbol, suffix = null)
     }
 
-    private fun formatRounded(rounded: BigDecimalRounded, prefix: String?, suffix: String?): String {
+    private fun formatRounded(
+        rounded: BigDecimalRounded,
+        prefix: String?,
+        suffix: String?,
+    ): String {
         val formatter = getFormatter(languageManager.currentLocale, 0, Int.MAX_VALUE)
         var formattedNumber = formatter.format(rounded.value)
 
@@ -86,7 +115,12 @@ class NumberFormatter(
             LargeNumberName.Quadrillion -> R.string.CoinPage_MarketCap_Quadrillion
             else -> null
         }?.let {
-            formattedNumber = Translator.getString(R.string.LargeNumberFormat, formattedNumber, Translator.getString(it))
+            formattedNumber =
+                Translator.getString(
+                    R.string.LargeNumberFormat,
+                    formattedNumber,
+                    Translator.getString(it),
+                )
         }
 
         suffix?.let {
@@ -96,16 +130,21 @@ class NumberFormatter(
         return formattedNumber
     }
 
-    private fun getFormatter(locale: Locale, minimumFractionDigits: Int, maximumFractionDigits: Int): NumberFormat {
+    private fun getFormatter(
+        locale: Locale,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int,
+    ): NumberFormat {
         val formatterId = "${locale.language}-$minimumFractionDigits-$maximumFractionDigits"
 
         if (formatters[formatterId] == null) {
-            formatters[formatterId] = NumberFormat.getInstance(locale).apply {
-                this.roundingMode = RoundingMode.FLOOR
+            formatters[formatterId] =
+                NumberFormat.getInstance(locale).apply {
+                    this.roundingMode = RoundingMode.FLOOR
 
-                this.minimumFractionDigits = minimumFractionDigits
-                this.maximumFractionDigits = maximumFractionDigits
-            }
+                    this.minimumFractionDigits = minimumFractionDigits
+                    this.maximumFractionDigits = maximumFractionDigits
+                }
         }
 
         return formatters[formatterId] ?: throw Exception("No formatter")
@@ -115,19 +154,24 @@ class NumberFormatter(
         when (value) {
             is Value.Currency -> {
                 val currencyValue = value.currencyValue
-                val formatted = formatFiatShort(currencyValue.value.abs(), currencyValue.currency.symbol, currencyValue.currency.decimal)
+                val formatted =
+                    formatFiatShort(
+                        currencyValue.value.abs(),
+                        currencyValue.currency.symbol,
+                        currencyValue.currency.decimal,
+                    )
                 sign(value.currencyValue.value) + formatted
             }
+
             is Value.Percent -> {
                 format(value.percent.abs(), 0, 2, sign(value.percent), "%")
             }
         }
 
-    private fun sign(value: BigDecimal): String {
-        return when (value.signum()) {
+    private fun sign(value: BigDecimal): String =
+        when (value.signum()) {
             1 -> "+"
             -1 -> "-"
             else -> ""
         }
-    }
 }

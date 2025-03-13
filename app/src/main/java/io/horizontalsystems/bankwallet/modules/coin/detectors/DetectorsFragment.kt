@@ -52,13 +52,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import kotlinx.parcelize.Parcelize
 
 class DetectorsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
-            val viewModel = viewModel<DetectorsViewModel>(
-                factory = DetectorsModule.Factory(input.title, input.issues)
-            )
+            val viewModel =
+                viewModel<DetectorsViewModel>(
+                    factory = DetectorsModule.Factory(input.title, input.issues),
+                )
             DetectorsScreen(
                 viewModel = viewModel,
                 onBackClick = {
@@ -69,8 +69,10 @@ class DetectorsFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val title: String, val issues: List<IssueParcelable>) : Parcelable
-
+    data class Input(
+        val title: String,
+        val issues: List<IssueParcelable>,
+    ) : Parcelable
 }
 
 @Composable
@@ -78,7 +80,6 @@ private fun DetectorsScreen(
     viewModel: DetectorsViewModel,
     onBackClick: () -> Unit,
 ) {
-
     val uiState = viewModel.uiState
 
     Scaffold(
@@ -88,14 +89,15 @@ private fun DetectorsScreen(
                 title = uiState.title,
                 navigationIcon = {
                     HsBackButton(onClick = onBackClick)
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(it)
+                    .fillMaxSize(),
         ) {
             val tabs = DetectorsTab.values()
             var selectedTab by remember { mutableStateOf(DetectorsTab.Token) }
@@ -103,23 +105,26 @@ private fun DetectorsScreen(
             LaunchedEffect(key1 = selectedTab, block = {
                 pagerState.scrollToPage(selectedTab.ordinal)
             })
-            val tabItems = tabs.map {
-                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
-            }
+            val tabItems =
+                tabs.map {
+                    TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+                }
             Tabs(tabItems, onClick = { selectedTab = it })
 
             HorizontalPager(
                 state = pagerState,
-                userScrollEnabled = false
+                userScrollEnabled = false,
             ) { page ->
                 when (tabs[page]) {
-                    DetectorsTab.Token -> IssueList(uiState.coreIssues) { id ->
-                        viewModel.toggleExpandCore(id)
-                    }
+                    DetectorsTab.Token ->
+                        IssueList(uiState.coreIssues) { id ->
+                            viewModel.toggleExpandCore(id)
+                        }
 
-                    DetectorsTab.General -> IssueList(uiState.generalIssues) { id ->
-                        viewModel.toggleExpandGeneral(id)
-                    }
+                    DetectorsTab.General ->
+                        IssueList(uiState.generalIssues) { id ->
+                            viewModel.toggleExpandGeneral(id)
+                        }
                 }
             }
         }
@@ -129,7 +134,7 @@ private fun DetectorsScreen(
 @Composable
 fun IssueList(
     issues: List<DetectorsModule.IssueViewItem>,
-    toggleExpand: (Int) -> Unit = {}
+    toggleExpand: (Int) -> Unit = {},
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -156,7 +161,7 @@ fun IssueList(
 @Composable
 fun DetectorCell(
     issueViewItem: DetectorsModule.IssueViewItem,
-    toggleExpand: (Int) -> Unit
+    toggleExpand: (Int) -> Unit,
 ) {
     val issue = issueViewItem.issue
     val issues = issue.issues ?: emptyList()
@@ -181,7 +186,8 @@ fun DetectorCell(
             }
 
             "Informational",
-            "Optimization" -> {
+            "Optimization",
+            -> {
                 if (issues.isNotEmpty()) {
                     iconResource = R.drawable.ic_warning_24
                     iconTint = ComposeAppTheme.colors.laguna
@@ -193,24 +199,26 @@ fun DetectorCell(
     }
 
     Column(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null
-        ) {
-            toggleExpand.invoke(issueViewItem.id)
-        }
+        modifier =
+            Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) {
+                toggleExpand.invoke(issueViewItem.id)
+            },
     ) {
         RowUniversal(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(ComposeAppTheme.colors.lawrence)
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .padding(horizontal = 16.dp),
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(iconResource),
                 contentDescription = null,
-                tint = iconTint
+                tint = iconTint,
             )
             HSpacer(width = 16.dp)
             if (issue.title != null) {
@@ -226,29 +234,31 @@ fun DetectorCell(
             } else {
                 subhead2_leah(
                     text = issue.description,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
 
             if (issues.isNotEmpty()) {
-                val painter = if (issueViewItem.expanded) {
-                    painterResource(R.drawable.ic_arrow_big_up_20)
-                } else {
-                    painterResource(R.drawable.ic_arrow_big_down_20)
-                }
+                val painter =
+                    if (issueViewItem.expanded) {
+                        painterResource(R.drawable.ic_arrow_big_up_20)
+                    } else {
+                        painterResource(R.drawable.ic_arrow_big_down_20)
+                    }
 
                 HSpacer(width = 8.dp)
                 subhead1_grey(
-                    text = stringResource(
-                        id = R.string.Detectors_IssuesCount,
-                        issues.size
-                    )
+                    text =
+                        stringResource(
+                            id = R.string.Detectors_IssuesCount,
+                            issues.size,
+                        ),
                 )
                 Icon(
                     modifier = Modifier.padding(start = 8.dp),
                     painter = painter,
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }
@@ -256,7 +266,7 @@ fun DetectorCell(
         AnimatedVisibility(
             visible = issueViewItem.expanded,
             enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically()
+            exit = fadeOut() + shrinkVertically(),
         ) {
             Column {
                 issues.forEachIndexed { index, text ->
@@ -268,7 +278,7 @@ fun DetectorCell(
                     }
                     InfoText(
                         text = text.description,
-                        paddingBottom = 32.dp
+                        paddingBottom = 32.dp,
                     )
                 }
             }

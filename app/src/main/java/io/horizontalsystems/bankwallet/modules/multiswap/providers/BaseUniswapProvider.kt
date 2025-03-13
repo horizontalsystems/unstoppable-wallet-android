@@ -31,33 +31,38 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>
+        settings: Map<String, Any?>,
     ): ISwapQuote {
         val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, settings)
 
         val routerAddress = uniswapKit.routerAddress(bestTrade.chain)
         val allowance = getAllowance(tokenIn, routerAddress)
 
-        val fields = buildList {
-            bestTrade.settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
+        val fields =
+            buildList {
+                bestTrade.settingRecipient.value?.let {
+                    add(DataFieldRecipient(it))
+                }
+                bestTrade.settingSlippage.value?.let {
+                    add(DataFieldSlippage(it))
+                }
+                if (allowance != null && allowance < amountIn) {
+                    add(DataFieldAllowance(allowance, tokenIn))
+                }
             }
-            bestTrade.settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
 
         return SwapQuoteUniswap(
             bestTrade.tradeData,
             fields,
-            listOf(bestTrade.settingRecipient, bestTrade.settingSlippage, bestTrade.settingDeadline),
+            listOf(
+                bestTrade.settingRecipient,
+                bestTrade.settingSlippage,
+                bestTrade.settingDeadline,
+            ),
             tokenIn,
             tokenOut,
             amountIn,
-            actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionApprove(allowance, amountIn, routerAddress, tokenIn),
         )
     }
 
@@ -70,31 +75,34 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
     ): ISwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 
-        val bestTrade = fetchBestTrade(
-            tokenIn,
-            tokenOut,
-            amountIn,
-            swapSettings
-        )
+        val bestTrade =
+            fetchBestTrade(
+                tokenIn,
+                tokenOut,
+                amountIn,
+                swapSettings,
+            )
 
-        val transactionData = uniswapKit.transactionData(
-            sendTransactionSettings.receiveAddress,
-            bestTrade.chain,
-            bestTrade.tradeData
-        )
+        val transactionData =
+            uniswapKit.transactionData(
+                sendTransactionSettings.receiveAddress,
+                bestTrade.chain,
+                bestTrade.tradeData,
+            )
 
         val slippage = bestTrade.settingSlippage.valueOrDefault()
         val amountOut = bestTrade.tradeData.amountOut!!
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
-        val fields = buildList {
-            bestTrade.settingRecipient.value?.let {
-                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+        val fields =
+            buildList {
+                bestTrade.settingRecipient.value?.let {
+                    add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+                }
+                bestTrade.settingSlippage.value?.let {
+                    add(DataFieldSlippage(it))
+                }
             }
-            bestTrade.settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
-        }
 
         return SwapFinalQuoteEvm(
             tokenIn,
@@ -104,12 +112,15 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
             amountOutMin,
             SendTransactionData.Evm(transactionData, null),
             bestTrade.tradeData.priceImpact,
-            fields
+            fields,
         )
     }
 
     @Throws
-    private fun uniswapToken(token: Token?, chain: Chain) = when (val tokenType = token?.type) {
+    private fun uniswapToken(
+        token: Token?,
+        chain: Chain,
+    ) = when (val tokenType = token?.type) {
         TokenType.Native -> uniswapKit.etherToken(chain)
         is TokenType.Eip20 -> {
             uniswapKit.token(Address(tokenType.address), token.decimals)
@@ -133,18 +144,21 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
         val settingSlippage = SwapSettingSlippage(settings, TradeOptions.defaultAllowedSlippage)
         val settingDeadline = SwapSettingDeadline(settings, TradeOptions.defaultTtl)
 
-        val tradeOptions = TradeOptions(
-            allowedSlippagePercent = settingSlippage.valueOrDefault(),
-            ttl = settingDeadline.valueOrDefault(),
-            recipient = settingRecipient.getEthereumKitAddress(),
-        )
+        val tradeOptions =
+            TradeOptions(
+                allowedSlippagePercent = settingSlippage.valueOrDefault(),
+                ttl = settingDeadline.valueOrDefault(),
+                recipient = settingRecipient.getEthereumKitAddress(),
+            )
 
-        val swapData = uniswapKit.swapData(
-            rpcSourceHttp,
-            chain,
-            uniswapToken(tokenIn, chain),
-            uniswapToken(tokenOut, chain)
-        ).await()
+        val swapData =
+            uniswapKit
+                .swapData(
+                    rpcSourceHttp,
+                    chain,
+                    uniswapToken(tokenIn, chain),
+                    uniswapToken(tokenOut, chain),
+                ).await()
 
         val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions)
 
@@ -153,7 +167,7 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
             settingSlippage,
             settingDeadline,
             tradeData,
-            chain
+            chain,
         )
     }
 }
@@ -163,5 +177,5 @@ private data class UniswapBestTrade(
     val settingSlippage: SwapSettingSlippage,
     val settingDeadline: SwapSettingDeadline,
     val tradeData: TradeData,
-    val chain: Chain
+    val chain: Chain,
 )

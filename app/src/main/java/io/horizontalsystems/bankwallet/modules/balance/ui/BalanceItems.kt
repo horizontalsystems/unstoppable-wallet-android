@@ -88,7 +88,7 @@ fun NoteWarning(
     modifier: Modifier = Modifier,
     text: String,
     onClick: (() -> Unit),
-    onClose: (() -> Unit)?
+    onClose: (() -> Unit)?,
 ) {
     Note(
         modifier = modifier.clickable(onClick = onClick),
@@ -99,7 +99,7 @@ fun NoteWarning(
         backgroundColor = ComposeAppTheme.colors.yellow20,
         textColor = ComposeAppTheme.colors.jacob,
         iconColor = ComposeAppTheme.colors.jacob,
-        onClose = onClose
+        onClose = onClose,
     )
 }
 
@@ -107,7 +107,7 @@ fun NoteWarning(
 fun NoteError(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: (() -> Unit)
+    onClick: (() -> Unit),
 ) {
     Note(
         modifier = modifier.clickable(onClick = onClick),
@@ -117,7 +117,7 @@ fun NoteError(
         borderColor = ComposeAppTheme.colors.lucian,
         backgroundColor = ComposeAppTheme.colors.red20,
         textColor = ComposeAppTheme.colors.lucian,
-        iconColor = ComposeAppTheme.colors.lucian
+        iconColor = ComposeAppTheme.colors.lucian,
     )
 }
 
@@ -131,35 +131,36 @@ fun Note(
     borderColor: Color,
     backgroundColor: Color,
     textColor: Color,
-    onClose: (() -> Unit)? = null
+    onClose: (() -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-            .background(backgroundColor)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .background(backgroundColor)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                tint = iconColor
+                tint = iconColor,
             )
             Text(
                 modifier = Modifier.weight(1f),
                 text = title,
                 color = textColor,
-                style = ComposeAppTheme.typography.subhead1
+                style = ComposeAppTheme.typography.subhead1,
             )
             onClose?.let {
                 HsIconButton(
                     modifier = Modifier.size(20.dp),
-                    onClick = onClose
+                    onClick = onClose,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_close),
@@ -183,7 +184,7 @@ fun BalanceItems(
     accountViewItem: AccountViewItem,
     navController: NavController,
     uiState: BalanceUiState,
-    totalState: TotalUIState
+    totalState: TotalUIState,
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
     DisposableEffect(true) {
@@ -197,67 +198,73 @@ fun BalanceItems(
     val view = LocalView.current
     var revealedCardId by remember { mutableStateOf<Int?>(null) }
 
-    val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
-        {
-            navController.slideFromRight(
-                R.id.tokenBalanceFragment,
-                it.wallet
-            )
+    val navigateToTokenBalance: (BalanceViewItem2) -> Unit =
+        remember {
+            {
+                navController.slideFromRight(
+                    R.id.tokenBalanceFragment,
+                    it.wallet,
+                )
 
-            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
+                stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
+            }
         }
-    }
 
-    val onClickSyncError: (BalanceViewItem2) -> Unit = remember {
-        {
-            onSyncErrorClicked(
-                it,
-                viewModel,
-                navController,
-                view
-            )
+    val onClickSyncError: (BalanceViewItem2) -> Unit =
+        remember {
+            {
+                onSyncErrorClicked(
+                    it,
+                    viewModel,
+                    navController,
+                    view,
+                )
+            }
         }
-    }
 
-    val onDisable: (BalanceViewItem2) -> Unit = remember {
-        {
-            viewModel.disable(it)
+    val onDisable: (BalanceViewItem2) -> Unit =
+        remember {
+            {
+                viewModel.disable(it)
+            }
         }
-    }
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
-        onRefresh = viewModel::onRefresh
+        onRefresh = viewModel::onRefresh,
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = rememberSaveable(
-                accountViewItem.id,
-                uiState.sortType,
-                saver = LazyListState.Saver
-            ) {
-                LazyListState()
-            }
+            state =
+                rememberSaveable(
+                    accountViewItem.id,
+                    uiState.sortType,
+                    saver = LazyListState.Saver,
+                ) {
+                    LazyListState()
+                },
         ) {
             item {
                 TotalBalanceRow(
                     totalState = totalState,
-                    onClickTitle = remember {
-                        {
-                            viewModel.toggleBalanceVisibility()
-                            HudHelper.vibrate(context)
+                    onClickTitle =
+                        remember {
+                            {
+                                viewModel.toggleBalanceVisibility()
+                                HudHelper.vibrate(context)
 
-                            stat(page = StatPage.Balance, event = StatEvent.ToggleBalanceHidden)
-                        }
-                    },
-                    onClickSubtitle = remember {
-                        {
-                            viewModel.toggleTotalType()
-                            HudHelper.vibrate(context)
+                                stat(page = StatPage.Balance, event = StatEvent.ToggleBalanceHidden)
+                            }
+                        },
+                    onClickSubtitle =
+                        remember {
+                            {
+                                viewModel.toggleTotalType()
+                                HudHelper.vibrate(context)
 
-                            stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
-                        }
-                    }
+                                stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
+                            }
+                        },
                 )
             }
 
@@ -265,7 +272,7 @@ fun BalanceItems(
                 item {
                     Row(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         ButtonPrimaryYellow(
                             modifier = Modifier.weight(1f),
@@ -273,38 +280,51 @@ fun BalanceItems(
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
 
-                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.SendTokenList))
-                            }
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.SendTokenList),
+                                )
+                            },
                         )
                         HSpacer(8.dp)
                         ButtonPrimaryDefault(
                             modifier = Modifier.weight(1f),
                             title = stringResource(R.string.Balance_Receive),
                             onClick = {
-                                when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
+                                when (
+                                    val receiveAllowedState =
+                                        viewModel.getReceiveAllowedState()
+                                ) {
                                     ReceiveAllowedState.Allowed -> {
                                         navController.slideFromRight(R.id.receiveFragment)
 
-                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ReceiveTokenList))
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.ReceiveTokenList),
+                                        )
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
                                         val account = receiveAllowedState.account
-                                        val text = Translator.getString(
-                                            R.string.Balance_Receive_BackupRequired_Description,
-                                            account.name
-                                        )
+                                        val text =
+                                            Translator.getString(
+                                                R.string.Balance_Receive_BackupRequired_Description,
+                                                account.name,
+                                            )
                                         navController.slideFromBottom(
                                             R.id.backupRequiredDialog,
-                                            BackupRequiredDialog.Input(account, text)
+                                            BackupRequiredDialog.Input(account, text),
                                         )
 
-                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.BackupRequired))
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.BackupRequired),
+                                        )
                                     }
 
                                     null -> Unit
                                 }
-                            }
+                            },
                         )
                         if (viewModel.isSwapEnabled) {
                             HSpacer(8.dp)
@@ -314,8 +334,11 @@ fun BalanceItems(
                                 onClick = {
                                     navController.slideFromRight(R.id.multiswap)
 
-                                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
-                                }
+                                    stat(
+                                        page = StatPage.Balance,
+                                        event = StatEvent.Open(StatPage.Swap),
+                                    )
+                                },
                             )
                         }
                     }
@@ -334,7 +357,7 @@ fun BalanceItems(
                 HeaderSorting {
                     BalanceSortingSelector(
                         sortType = uiState.sortType,
-                        sortTypes = uiState.sortTypes
+                        sortTypes = uiState.sortTypes,
                     ) {
                         viewModel.setSortType(it)
                     }
@@ -344,7 +367,7 @@ fun BalanceItems(
                     if (accountViewItem.isWatchAccount) {
                         Image(
                             painter = painterResource(R.drawable.icon_binocule_24),
-                            contentDescription = "binoculars icon"
+                            contentDescription = "binoculars icon",
                         )
                         HSpacer(16.dp)
                     }
@@ -355,8 +378,11 @@ fun BalanceItems(
                         onClick = {
                             navController.slideFromRight(R.id.manageWalletsFragment)
 
-                            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.CoinManager))
-                        }
+                            stat(
+                                page = StatPage.Balance,
+                                event = StatEvent.Open(StatPage.CoinManager),
+                            )
+                        },
                     )
 
                     HSpacer(16.dp)
@@ -368,30 +394,42 @@ fun BalanceItems(
                     HeaderNote.None -> Unit
                     HeaderNote.NonStandardAccount -> {
                         NoteError(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                            modifier =
+                                Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    top = 12.dp,
+                                    bottom = 24.dp,
+                                ),
                             text = stringResource(R.string.AccountRecovery_MigrationRequired),
                             onClick = {
                                 FaqManager.showFaqPage(
                                     navController,
-                                    FaqManager.faqPathMigrationRequired
+                                    FaqManager.faqPathMigrationRequired,
                                 )
-                            }
+                            },
                         )
                     }
 
                     HeaderNote.NonRecommendedAccount -> {
                         NoteWarning(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                            modifier =
+                                Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    top = 12.dp,
+                                    bottom = 24.dp,
+                                ),
                             text = stringResource(R.string.AccountRecovery_MigrationRecommended),
                             onClick = {
                                 FaqManager.showFaqPage(
                                     navController,
-                                    FaqManager.faqPathMigrationRecommended
+                                    FaqManager.faqPathMigrationRecommended,
                                 )
                             },
                             onClose = {
                                 viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
-                            }
+                            },
                         )
                     }
                 }
@@ -406,7 +444,7 @@ fun BalanceItems(
                     items = balanceViewItems,
                     key = {
                         it.wallet.hashCode()
-                    }
+                    },
                 ) { item ->
                     BalanceCardSwipable(
                         viewItem = item,
@@ -427,7 +465,7 @@ fun BalanceItems(
                         },
                         onDisable = {
                             onDisable.invoke(item)
-                        }
+                        },
                     )
                 }
             }
@@ -440,8 +478,8 @@ fun BalanceItems(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
-                openSend.amount
-            )
+                openSend.amount,
+            ),
         )
         viewModel.onSendOpened()
     }
@@ -451,23 +489,24 @@ fun BalanceItems(
 private fun NoCoinsBlock() {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         VSpacer(height = 100.dp)
         Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(
-                    color = ComposeAppTheme.colors.raina,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(100.dp)
+                    .background(
+                        color = ComposeAppTheme.colors.raina,
+                        shape = CircleShape,
+                    ),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 modifier = Modifier.size(48.dp),
                 painter = painterResource(R.drawable.ic_empty_wallet),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
         VSpacer(32.dp)
@@ -485,7 +524,7 @@ private fun NoCoinsBlock() {
 fun BalanceSortingSelector(
     sortType: BalanceSortType,
     sortTypes: List<BalanceSortType>,
-    onSelectSortType: (BalanceSortType) -> Unit
+    onSelectSortType: (BalanceSortType) -> Unit,
 ) {
     var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
 
@@ -494,19 +533,20 @@ fun BalanceSortingSelector(
         iconRight = R.drawable.ic_down_arrow_20,
         onClick = {
             showSortTypeSelectorDialog = true
-        }
+        },
     )
 
     if (showSortTypeSelectorDialog) {
         SelectorDialogCompose(
             title = stringResource(R.string.Balance_Sort_PopupTitle),
-            items = sortTypes.map {
-                SelectorItem(stringResource(it.getTitleRes()), it == sortType, it)
-            },
+            items =
+                sortTypes.map {
+                    SelectorItem(stringResource(it.getTitleRes()), it == sortType, it)
+                },
             onDismissRequest = {
                 showSortTypeSelectorDialog = false
             },
-            onSelectItem = onSelectSortType
+            onSelectItem = onSelectSortType,
         )
     }
 }
@@ -515,7 +555,7 @@ fun BalanceSortingSelector(
 fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
-    onClickSubtitle: () -> Unit
+    onClickSubtitle: () -> Unit,
 ) {
     when (totalState) {
         TotalUIState.Hidden -> {
@@ -524,7 +564,7 @@ fun TotalBalanceRow(
                 body = "*****",
                 dimmed = false,
                 onClickTitle = onClickTitle,
-                onClickSubtitle = onClickSubtitle
+                onClickSubtitle = onClickSubtitle,
             )
         }
 
@@ -557,5 +597,3 @@ fun <T> LazyListScope.wallets(
         VSpacer(height = 10.dp)
     }
 }
-
-

@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class YakAuthorizationViewModel(val service: YakAuthorizationService) : ViewModel() {
-
-    var stateLiveData = MutableLiveData<YakAuthorizationService.State>(YakAuthorizationService.State.Idle)
+class YakAuthorizationViewModel(
+    val service: YakAuthorizationService,
+) : ViewModel() {
+    var stateLiveData =
+        MutableLiveData<YakAuthorizationService.State>(YakAuthorizationService.State.Idle)
 
     init {
         viewModelScope.launch {
@@ -35,5 +37,4 @@ class YakAuthorizationViewModel(val service: YakAuthorizationService) : ViewMode
     fun reset() {
         service.authorizationCanceled()
     }
-
 }

@@ -17,9 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainTokensViewModel(
-    private val service: BlockchainTokensService
+    private val service: BlockchainTokensService,
 ) : ViewModel() {
-
     var showBottomSheetDialog by mutableStateOf(false)
         private set
 
@@ -40,19 +39,25 @@ class BlockchainTokensViewModel(
         val blockchain = request.blockchain
         val selectedTokenIndexes = request.enabledTokens.map { request.tokens.indexOf(it) }
 
-        val config = BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
-            title = blockchain.name,
-            description = Translator.getString(R.string.AddressFormatSettings_Description),
-            selectedIndexes = selectedTokenIndexes,
-            allowEmpty = request.allowEmpty,
-            viewItems = request.tokens.map { token ->
-                BottomSheetSelectorViewItem(
-                    title = token.type.title,
-                    subtitle = token.type.description,
-                )
-            }
-        )
+        val config =
+            BottomSheetSelectorMultipleDialog.Config(
+                icon =
+                    ImageSource.Remote(
+                        blockchain.type.imageUrl,
+                        R.drawable.ic_platform_placeholder_32,
+                    ),
+                title = blockchain.name,
+                description = Translator.getString(R.string.AddressFormatSettings_Description),
+                selectedIndexes = selectedTokenIndexes,
+                allowEmpty = request.allowEmpty,
+                viewItems =
+                    request.tokens.map { token ->
+                        BottomSheetSelectorViewItem(
+                            title = token.type.title,
+                            subtitle = token.type.description,
+                        )
+                    },
+            )
         showBottomSheetDialog = true
         this.config = config
     }
@@ -72,5 +77,4 @@ class BlockchainTokensViewModel(
             service.cancel(currentRequest.blockchain)
         }
     }
-
 }

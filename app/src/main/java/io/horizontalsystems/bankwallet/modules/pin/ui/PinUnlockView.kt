@@ -31,14 +31,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PinUnlock(
-    onSuccess: () -> Unit,
-) {
+fun PinUnlock(onSuccess: () -> Unit) {
     val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
     val uiState = viewModel.uiState
     var showBiometricPrompt by remember {
         mutableStateOf(
-            uiState.fingerScannerEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled
+            uiState.fingerScannerEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled,
         )
     }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
@@ -59,7 +57,7 @@ fun PinUnlock(
                     showBiometricDisabledAlert = true
                 }
                 showBiometricPrompt = false
-            }
+            },
         )
     }
 
@@ -73,25 +71,27 @@ fun PinUnlock(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             Row(
-                modifier = Modifier
-                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-                    .fillMaxWidth()
-                    .height(64.dp),
+                modifier =
+                    Modifier
+                        .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+                        .fillMaxWidth()
+                        .height(64.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 title3_leah(
                     text = stringResource(R.string.Unlock_Title),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(it)
+                    .fillMaxSize(),
         ) {
             PinTopBlock(
                 modifier = Modifier.weight(1f),
@@ -113,7 +113,7 @@ fun PinUnlock(
                 inputState = uiState.inputState,
                 updatePinRandomized = { randomized ->
                     viewModel.updatePinRandomized(randomized)
-                }
+                },
             )
         }
     }

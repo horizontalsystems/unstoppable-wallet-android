@@ -51,9 +51,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 
-
 class ImportWalletFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<ManageAccountsModule.Input>()
@@ -62,55 +60,58 @@ class ImportWalletFragment : BaseComposeFragment() {
 
         ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
     }
-
 }
 
 @Composable
 private fun ImportWalletScreen(
     navController: NavController,
     popUpToInclusiveId: Int,
-    inclusive: Boolean
+    inclusive: Boolean,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let { uriNonNull ->
-            context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
-                try {
-                    inputStream.bufferedReader().use { br ->
-                        val jsonString = br.readText()
-                        //validate json format
-                        BackupFileValidator().validate(jsonString)
+    val restoreLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let { uriNonNull ->
+                context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
+                    try {
+                        inputStream.bufferedReader().use { br ->
+                            val jsonString = br.readText()
+                            // validate json format
+                            BackupFileValidator().validate(jsonString)
 
-                        navController.navigateWithTermsAccepted {
-                            val fileName = context.getFileName(uriNonNull)
-                            navController.slideFromBottom(
-                                R.id.restoreLocalFragment,
-                                RestoreLocalFragment.Input(
-                                    popUpToInclusiveId,
-                                    inclusive,
-                                    jsonString,
-                                    fileName,
-                                    StatPage.ImportWalletFromFiles
+                            navController.navigateWithTermsAccepted {
+                                val fileName = context.getFileName(uriNonNull)
+                                navController.slideFromBottom(
+                                    R.id.restoreLocalFragment,
+                                    RestoreLocalFragment.Input(
+                                        popUpToInclusiveId,
+                                        inclusive,
+                                        jsonString,
+                                        fileName,
+                                        StatPage.ImportWalletFromFiles,
+                                    ),
                                 )
-                            )
 
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromFiles))
+                                stat(
+                                    page = StatPage.ImportWallet,
+                                    event = StatEvent.Open(StatPage.ImportWalletFromFiles),
+                                )
+                            }
                         }
-                    }
-                } catch (e: Throwable) {
-                    Log.e("TAG", "ImportWalletScreen: ", e)
-                    //show json parsing error
-                    coroutineScope.launch {
-                        delay(300)
-                        bottomSheetState.show()
+                    } catch (e: Throwable) {
+                        Log.e("TAG", "ImportWalletScreen: ", e)
+                        // show json parsing error
+                        coroutineScope.launch {
+                            delay(300)
+                            bottomSheetState.show()
+                        }
                     }
                 }
             }
         }
-    }
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -130,23 +131,24 @@ private fun ImportWalletScreen(
                 },
                 onClose = {
                     coroutineScope.launch { bottomSheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.ManageAccounts_ImportWallet),
-                    navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
+                    navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) },
                 )
-            }
+            },
         ) {
             Column(
-                modifier = Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .padding(it)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(12.dp)
                 ImportOption(
@@ -157,12 +159,15 @@ private fun ImportWalletScreen(
                         navController.navigateWithTermsAccepted {
                             navController.slideFromBottom(
                                 R.id.restoreAccountFragment,
-                                ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
+                                ManageAccountsModule.Input(popUpToInclusiveId, inclusive),
                             )
 
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
+                            stat(
+                                page = StatPage.ImportWallet,
+                                event = StatEvent.Open(StatPage.ImportWalletFromKey),
+                            )
                         }
-                    }
+                    },
                 )
                 VSpacer(12.dp)
                 ImportOption(
@@ -171,7 +176,7 @@ private fun ImportWalletScreen(
                     icon = R.drawable.ic_download_24,
                     onClick = {
                         restoreLauncher.launch(arrayOf("application/json"))
-                    }
+                    },
                 )
                 VSpacer(12.dp)
                 ImportOption(
@@ -181,11 +186,14 @@ private fun ImportWalletScreen(
                     onClick = {
                         navController.slideFromBottom(
                             R.id.importCexAccountFragment,
-                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
+                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive),
                         )
 
-                        stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromExchangeWallet))
-                    }
+                        stat(
+                            page = StatPage.ImportWallet,
+                            event = StatEvent.Open(StatPage.ImportWalletFromExchangeWallet),
+                        )
+                    },
                 )
                 VSpacer(12.dp)
             }
@@ -198,7 +206,7 @@ private fun ImportOption(
     title: String,
     description: String,
     icon: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     CellUniversalLawrenceSection {
         RowUniversal(
@@ -209,7 +217,7 @@ private fun ImportOption(
             Icon(
                 painterResource(icon),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
             HSpacer(16.dp)
             Column {
@@ -220,14 +228,16 @@ private fun ImportOption(
     }
 }
 
-fun Context.getFileName(uri: Uri): String? = when (uri.scheme) {
-    ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
-    else -> uri.path?.let(::File)?.name
-}
-
-private fun Context.getContentFileName(uri: Uri): String? = runCatching {
-    contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-        cursor.moveToFirst()
-        return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+fun Context.getFileName(uri: Uri): String? =
+    when (uri.scheme) {
+        ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
+        else -> uri.path?.let(::File)?.name
     }
-}.getOrNull()
+
+private fun Context.getContentFileName(uri: Uri): String? =
+    runCatching {
+        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            cursor.moveToFirst()
+            return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+        }
+    }.getOrNull()

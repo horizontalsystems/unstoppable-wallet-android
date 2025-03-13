@@ -54,7 +54,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
-
     private val vmFactory by lazy { ManageWalletsModule.Factory() }
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
@@ -64,10 +63,9 @@ class ManageWalletsFragment : BaseComposeFragment() {
         ManageWalletsScreen(
             navController,
             viewModel,
-            restoreSettingsViewModel
+            restoreSettingsViewModel,
         )
     }
-
 }
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -75,7 +73,7 @@ class ManageWalletsFragment : BaseComposeFragment() {
 private fun ManageWalletsScreen(
     navController: NavController,
     viewModel: ManageWalletsViewModel,
-    restoreSettingsViewModel: RestoreSettingsViewModel
+    restoreSettingsViewModel: RestoreSettingsViewModel,
 ) {
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
 
@@ -94,36 +92,41 @@ private fun ManageWalletsScreen(
     }
 
     Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler),
     ) {
         SearchBar(
             title = stringResource(R.string.ManageCoins_title),
             searchHintText = stringResource(R.string.ManageCoins_Search),
-            menuItems = if (viewModel.addTokenEnabled) {
-                listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
-                        icon = R.drawable.ic_add_yellow,
-                        onClick = {
-                            navController.slideFromRight(R.id.addTokenFragment)
+            menuItems =
+                if (viewModel.addTokenEnabled) {
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
+                            icon = R.drawable.ic_add_yellow,
+                            onClick = {
+                                navController.slideFromRight(R.id.addTokenFragment)
 
-                            stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.AddToken))
-                        }
-                    ))
-            } else {
-                listOf()
-            },
+                                stat(
+                                    page = StatPage.CoinManager,
+                                    event = StatEvent.Open(StatPage.AddToken),
+                                )
+                            },
+                        ),
+                    )
+                } else {
+                    listOf()
+                },
             onClose = { navController.popBackStack() },
             onSearchTextChanged = { text ->
                 viewModel.updateFilter(text)
-            }
+            },
         )
 
         coinItems?.let {
             if (it.isEmpty()) {
                 ListEmptyView(
                     text = stringResource(R.string.ManageCoins_NoResults),
-                    icon = R.drawable.ic_not_found
+                    icon = R.drawable.ic_not_found,
                 )
             } else {
                 LazyColumn {
@@ -141,18 +144,30 @@ private fun ManageWalletsScreen(
                                 if (viewItem.enabled) {
                                     viewModel.disable(viewItem.item)
 
-                                    stat(page = StatPage.CoinManager, event = StatEvent.DisableToken(viewItem.item))
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.DisableToken(viewItem.item),
+                                    )
                                 } else {
                                     viewModel.enable(viewItem.item)
 
-                                    stat(page = StatPage.CoinManager, event = StatEvent.EnableToken(viewItem.item))
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.EnableToken(viewItem.item),
+                                    )
                                 }
                             },
                             onInfoClick = {
-                                navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
+                                navController.slideFromBottom(
+                                    R.id.configuredTokenInfo,
+                                    viewItem.item,
+                                )
 
-                                stat(page = StatPage.CoinManager, event = StatEvent.OpenTokenInfo(viewItem.item))
-                            }
+                                stat(
+                                    page = StatPage.CoinManager,
+                                    event = StatEvent.OpenTokenInfo(viewItem.item),
+                                )
+                            },
                         )
                     }
                     item {
@@ -168,26 +183,28 @@ private fun ManageWalletsScreen(
 private fun CoinCell(
     viewItem: CoinViewItem<Token>,
     onItemClick: () -> Unit,
-    onInfoClick: () -> Unit
+    onInfoClick: () -> Unit,
 ) {
     Column {
         RowUniversal(
             onClick = onItemClick,
             modifier = Modifier.padding(horizontal = 16.dp),
-            verticalPadding = 0.dp
+            verticalPadding = 0.dp,
         ) {
             Image(
                 painter = viewItem.imageSource.painter(),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
-                    .size(32.dp)
-                    .clip(CircleShape)
+                modifier =
+                    Modifier
+                        .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
+                        .size(32.dp)
+                        .clip(CircleShape),
             )
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 12.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(vertical = 12.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     body_leah(
@@ -196,17 +213,19 @@ private fun CoinCell(
                     )
                     viewItem.label?.let { labelText ->
                         Box(
-                            modifier = Modifier
-                                .padding(start = 6.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.jeremy)
+                            modifier =
+                                Modifier
+                                    .padding(start = 6.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(ComposeAppTheme.colors.jeremy),
                         ) {
                             Text(
-                                modifier = Modifier.padding(
-                                    start = 4.dp,
-                                    end = 4.dp,
-                                    bottom = 1.dp
-                                ),
+                                modifier =
+                                    Modifier.padding(
+                                        start = 4.dp,
+                                        end = 4.dp,
+                                        bottom = 1.dp,
+                                    ),
                                 text = labelText,
                                 color = ComposeAppTheme.colors.bran,
                                 style = ComposeAppTheme.typography.microSB,
@@ -218,7 +237,7 @@ private fun CoinCell(
                 subhead2_grey(
                     text = viewItem.subtitle,
                     maxLines = 1,
-                    modifier = Modifier.padding(top = 1.dp)
+                    modifier = Modifier.padding(top = 1.dp),
                 )
             }
             Spacer(Modifier.width(12.dp))
@@ -227,7 +246,7 @@ private fun CoinCell(
                     Icon(
                         painter = painterResource(R.drawable.ic_info_20),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
+                        tint = ComposeAppTheme.colors.grey,
                     )
                 }
             }
@@ -244,9 +263,9 @@ private fun CoinCell(
     }
 }
 
-//@Preview
-//@Composable
-//fun PreviewCoinCell() {
+// @Preview
+// @Composable
+// fun PreviewCoinCell() {
 //    val viewItem = CoinViewItem(
 //        item = "ethereum",
 //        imageSource = ImageSource.Local(R.drawable.logo_ethereum_24),
@@ -265,4 +284,4 @@ private fun CoinCell(
 //            {}
 //        )
 //    }
-//}
+// }

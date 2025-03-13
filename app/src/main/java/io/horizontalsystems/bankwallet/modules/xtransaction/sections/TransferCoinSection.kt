@@ -40,7 +40,7 @@ fun TransferCoinSection(
             transactionInfoHelper = transactionInfoHelper,
             navController = navController,
             statPage = statPage,
-            borderTop = false
+            borderTop = false,
         )
 
         val contact = transactionInfoHelper.getContact(address, blockchainType)
@@ -52,18 +52,18 @@ fun TransferCoinSection(
             blockchainType = blockchainType,
             statPage = statPage,
             statSection = addressStatSection,
-            navController = navController
+            navController = navController,
         )
         contact?.let {
             TitleAndValueCell(
                 title = stringResource(R.string.TransactionInfo_ContactName),
-                value = it.name
+                value = it.name,
             )
         }
         comment?.let {
             TitleAndValueCell(
                 title = stringResource(R.string.TransactionInfo_Memo),
-                value = it
+                value = it,
             )
         }
     }

@@ -21,17 +21,18 @@ import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 
 class LitecoinAdapter(
-        override val kit: LitecoinKit,
-        syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager,
-        wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), LitecoinKit.Listener, ISendBitcoinAdapter {
-
+    override val kit: LitecoinKit,
+    syncMode: BitcoinCore.SyncMode,
+    backgroundManager: BackgroundManager,
+    wallet: Wallet,
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet),
+    LitecoinKit.Listener,
+    ISendBitcoinAdapter {
     constructor(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
-        derivation: TokenType.Derivation
+        derivation: TokenType.Derivation,
     ) : this(createKit(wallet, syncMode, derivation), syncMode, backgroundManager, wallet)
 
     init {
@@ -42,7 +43,8 @@ class LitecoinAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal =
+        BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // LitecoinKit Listener
@@ -51,9 +53,7 @@ class LitecoinAdapter(
     override val explorerTitle: String
         get() = "blockchair.com"
 
-
-    override fun getTransactionUrl(transactionHash: String): String =
-        "https://blockchair.com/litecoin/transaction/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String = "https://blockchair.com/litecoin/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -67,7 +67,10 @@ class LitecoinAdapter(
         setState(state)
     }
 
-    override fun onTransactionsUpdate(inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
+    override fun onTransactionsUpdate(
+        inserted: List<TransactionInfo>,
+        updated: List<TransactionInfo>,
+    ) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -91,8 +94,13 @@ class LitecoinAdapter(
     override val blockchainType = BlockchainType.Litecoin
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/litecoin/address/${it.address}") }
-
+        kit.usedAddresses(change).map {
+            UsedAddress(
+                it.index,
+                it.address,
+                "https://blockchair.com/litecoin/address/${it.address}",
+            )
+        }
 
     companion object {
         private const val confirmationsThreshold = 1
@@ -100,7 +108,7 @@ class LitecoinAdapter(
         private fun createKit(
             wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
-            derivation: TokenType.Derivation
+            derivation: TokenType.Derivation,
         ): LitecoinKit {
             val account = wallet.account
 
@@ -116,6 +124,7 @@ class LitecoinAdapter(
                         confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 is AccountType.Mnemonic -> {
                     return LitecoinKit(
                         context = App.instance,
@@ -125,19 +134,21 @@ class LitecoinAdapter(
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold,
-                        purpose = derivation.purpose
+                        purpose = derivation.purpose,
                     )
                 }
+
                 is AccountType.BitcoinAddress -> {
                     return LitecoinKit(
                         context = App.instance,
-                        watchAddress =  accountType.address,
+                        watchAddress = accountType.address,
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 else -> throw UnsupportedAccountException()
             }
         }

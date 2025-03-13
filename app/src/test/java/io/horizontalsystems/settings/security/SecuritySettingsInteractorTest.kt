@@ -1,20 +1,20 @@
-//package io.horizontalsystems.bankwallet.modules.settings.security
+// package io.horizontalsystems.bankwallet.modules.settings.security
 //
-//import com.nhaarman.mockito_kotlin.doReturn
-//import com.nhaarman.mockito_kotlin.mock
-//import com.nhaarman.mockito_kotlin.verify
-//import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-//import io.horizontalsystems.bankwallet.core.*
-//import io.horizontalsystems.bankwallet.entities.BiometryType
-//import io.horizontalsystems.bankwallet.modules.RxBaseTest
-//import io.reactivex.Flowable
-//import org.junit.After
-//import org.junit.Assert.*
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mockito.mock
+// import com.nhaarman.mockito_kotlin.doReturn
+// import com.nhaarman.mockito_kotlin.mock
+// import com.nhaarman.mockito_kotlin.verify
+// import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+// import io.horizontalsystems.bankwallet.core.*
+// import io.horizontalsystems.bankwallet.entities.BiometryType
+// import io.horizontalsystems.bankwallet.modules.RxBaseTest
+// import io.reactivex.Flowable
+// import org.junit.After
+// import org.junit.Assert.*
+// import org.junit.Before
+// import org.junit.Test
+// import org.mockito.Mockito.mock
 //
-//class SecuritySettingsInteractorTest {
+// class SecuritySettingsInteractorTest {
 //
 //    private val delegate = mock(SecuritySettingsModule.ISecuritySettingsInteractorDelegate::class.java)
 //
@@ -85,4 +85,4 @@
 //        verify(localStorage).isBiometricOn = false
 //    }
 //
-//}
+// }

@@ -42,7 +42,10 @@ fun ImportCexAccountEnterCexDataScreen(
     onClose: () -> Unit,
     onAccountCreate: () -> Unit,
 ) {
-    val viewModel = viewModel<ImportCexAccountEnterCexDataViewModel>(factory = ImportCexAccountEnterCexDataViewModel.Factory(cexId))
+    val viewModel =
+        viewModel<ImportCexAccountEnterCexDataViewModel>(
+            factory = ImportCexAccountEnterCexDataViewModel.Factory(cexId),
+        )
 
     when (val cex = viewModel.cex) {
         is CexBinance -> {
@@ -58,7 +61,7 @@ private fun ImportBinanceCexAccountScreen(
     cex: CexBinance,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
-    onAccountCreate: () -> Unit
+    onAccountCreate: () -> Unit,
 ) {
     val viewModel = viewModel<EnterCexDataBinanceViewModel>()
     val view = LocalView.current
@@ -83,12 +86,13 @@ private fun ImportBinanceCexAccountScreen(
         }
     }
 
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-            viewModel.onScannedData(data)
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                viewModel.onScannedData(data)
+            }
         }
-    }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -98,34 +102,36 @@ private fun ImportBinanceCexAccountScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onNavigateBack)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_ScanQr),
-                        icon = R.drawable.ic_qr_scan_24px,
-                        onClick = {
-                            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
-                        }
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_ScanQr),
+                            icon = R.drawable.ic_qr_scan_24px,
+                            onClick = {
+                                qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
+                            },
+                        ),
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = onClose,
+                        ),
                     ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClose
-                    )
-                )
             )
-        }
+        },
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoText(text = stringResource(R.string.ImportCexAccountBinance_Description))
                 FormsInput(
                     initial = apiKey,
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    hint = stringResource(R.string.ImportCexAccountBinance_ApiKey)
+                    hint = stringResource(R.string.ImportCexAccountBinance_ApiKey),
                 ) {
                     viewModel.onEnterApiKey(it)
                 }
@@ -133,7 +139,7 @@ private fun ImportBinanceCexAccountScreen(
                 FormsInput(
                     initial = secretKey,
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    hint = stringResource(R.string.ImportCexAccountBinance_SecretKey)
+                    hint = stringResource(R.string.ImportCexAccountBinance_SecretKey),
                 ) {
                     viewModel.onEnterSecretKey(it)
                 }
@@ -156,7 +162,7 @@ private fun ImportBinanceCexAccountScreen(
                         title = stringResource(R.string.Button_GetApiKeys),
                         onClick = {
                             uriHandler.openUri("https://www.binance.com/en/my/settings/api-management")
-                        }
+                        },
                     )
                 }
             }

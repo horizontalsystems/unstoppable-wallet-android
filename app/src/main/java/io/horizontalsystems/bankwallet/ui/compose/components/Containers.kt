@@ -16,13 +16,13 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun BoxTyler44(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box44(
         borderTop = borderTop,
         borderBottom = borderBottom,
         color = ComposeAppTheme.colors.tyler,
-        content = content
+        content = content,
     )
 }
 
@@ -31,23 +31,25 @@ fun Box44(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
     color: Color? = null,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val colorModifier = when {
-        color != null -> Modifier.background(color)
-        else -> Modifier
-    }
+    val colorModifier =
+        when {
+            color != null -> Modifier.background(color)
+            else -> Modifier
+        }
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp)
-            .then(colorModifier)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(44.dp)
+                .then(colorModifier),
     ) {
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
 
@@ -55,7 +57,7 @@ fun Box44(
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
 

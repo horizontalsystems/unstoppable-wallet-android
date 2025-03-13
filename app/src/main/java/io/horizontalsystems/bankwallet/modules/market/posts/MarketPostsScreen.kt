@@ -41,16 +41,18 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
             viewModel.refresh()
 
             stat(page = StatPage.Markets, section = StatSection.News, event = StatEvent.Refresh)
-        }
+        },
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
+
                 ViewState.Success -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(items) { postItem ->
@@ -63,7 +65,11 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                             ) {
                                 LinkHelper.openLinkInAppBrowser(context, postItem.url)
 
-                                stat(page = StatPage.Markets, section = StatSection.News, event = StatEvent.Open(StatPage.ExternalNews))
+                                stat(
+                                    page = StatPage.Markets,
+                                    section = StatSection.News,
+                                    event = StatEvent.Open(StatPage.ExternalNews),
+                                )
                             }
                         }
                         item {
@@ -71,6 +77,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                         }
                     }
                 }
+
                 null -> {}
             }
         }
@@ -80,19 +87,20 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
 @Preview
 @Composable
 fun PreviewMarketPostView() {
-    val postItem = MarketPostsModule.PostViewItem(
-        "Tidal",
-        "3iQ’s The Ether Fund begins \$CAD trading on TSX after Bitcoin The Ether Fund begins after Bitcoin",
-        "Traders in East Asia are ready to take on more built by Wipro to streamline its liquefied.",
-        "1h ago",
-        "https://www.binance.org/news"
-    )
+    val postItem =
+        MarketPostsModule.PostViewItem(
+            "Tidal",
+            "3iQ’s The Ether Fund begins \$CAD trading on TSX after Bitcoin The Ether Fund begins after Bitcoin",
+            "Traders in East Asia are ready to take on more built by Wipro to streamline its liquefied.",
+            "1h ago",
+            "https://www.binance.org/news",
+        )
     ComposeAppTheme {
         CellNews(
             source = postItem.source,
             title = postItem.title,
             body = postItem.body,
-            date = postItem.timeAgo
+            date = postItem.timeAgo,
         ) {}
     }
 }

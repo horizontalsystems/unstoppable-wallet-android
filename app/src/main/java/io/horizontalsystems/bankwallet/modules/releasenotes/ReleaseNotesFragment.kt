@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.parcelize.Parcelize
 
 class ReleaseNotesFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         ReleaseNotesScreen(
@@ -47,7 +46,9 @@ class ReleaseNotesFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val showAsClosablePopup: Boolean) : Parcelable
+    data class Input(
+        val showAsClosablePopup: Boolean,
+    ) : Parcelable
 }
 
 @Composable
@@ -56,7 +57,7 @@ fun ReleaseNotesScreen(
     onCloseClick: () -> Unit,
     viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory()),
 ) {
-    BackHandler() {
+    BackHandler {
         viewModel.whatsNewShown()
         onCloseClick.invoke()
     }
@@ -66,37 +67,39 @@ fun ReleaseNotesScreen(
         topBar = {
             if (closeablePopup) {
                 AppBar(
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                viewModel.whatsNewShown()
-                                onCloseClick.invoke()
-                            }
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Close),
+                                icon = R.drawable.ic_close,
+                                onClick = {
+                                    viewModel.whatsNewShown()
+                                    onCloseClick.invoke()
+                                },
+                            ),
+                        ),
                 )
             } else {
                 AppBar(
                     navigationIcon = {
                         HsBackButton(onClick = onCloseClick)
-                    }
+                    },
                 )
             }
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .navigationBarsPadding()
+            modifier =
+                Modifier
+                    .padding(it)
+                    .navigationBarsPadding(),
         ) {
             MarkdownContent(
                 modifier = Modifier.weight(1f),
                 viewState = viewModel.viewState,
                 markdownBlocks = viewModel.markdownBlocks,
                 onRetryClick = { viewModel.retry() },
-                onUrlClick = {}
+                onUrlClick = {},
             )
 
             Divider(
@@ -104,29 +107,30 @@ fun ReleaseNotesScreen(
                 color = ComposeAppTheme.colors.steel10,
             )
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(ComposeAppTheme.colors.tyler)
-                    .height(62.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(ComposeAppTheme.colors.tyler)
+                        .height(62.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Spacer(Modifier.padding(start = 16.dp))
                 IconButton(
                     R.drawable.ic_twitter_filled_24,
                     viewModel.twitterUrl,
-                    stringResource(R.string.CoinPage_Twitter)
+                    stringResource(R.string.CoinPage_Twitter),
                 )
                 IconButton(
                     R.drawable.ic_telegram_filled_24,
                     viewModel.telegramUrl,
-                    stringResource(R.string.CoinPage_Telegram)
+                    stringResource(R.string.CoinPage_Telegram),
                 )
 
                 Spacer(Modifier.weight(1f))
 
                 caption_jacob(
                     modifier = Modifier.padding(end = 24.dp),
-                    text = stringResource(R.string.ReleaseNotes_JoinUnstoppables)
+                    text = stringResource(R.string.ReleaseNotes_JoinUnstoppables),
                 )
             }
         }
@@ -134,13 +138,17 @@ fun ReleaseNotesScreen(
 }
 
 @Composable
-private fun IconButton(icon: Int, url: String, description: String) {
+private fun IconButton(
+    icon: Int,
+    url: String,
+    description: String,
+) {
     val context = LocalContext.current
     HsIconButton(onClick = { LinkHelper.openLinkInAppBrowser(context, url) }) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = description,
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.jacob,
         )
     }
 }

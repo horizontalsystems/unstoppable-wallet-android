@@ -60,16 +60,20 @@ import java.util.Optional
 class MarketSearchFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel = viewModel<MarketSearchViewModel>(
-            factory = MarketSearchModule.Factory()
-        )
+        val viewModel =
+            viewModel<MarketSearchViewModel>(
+                factory = MarketSearchModule.Factory(),
+            )
         MarketSearchScreen(viewModel, navController)
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavController) {
+fun MarketSearchScreen(
+    viewModel: MarketSearchViewModel,
+    navController: NavController,
+) {
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -79,7 +83,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
     val uiState = viewModel.uiState
 
     Column(
-        modifier = Modifier.navigationBarsPadding()
+        modifier = Modifier.navigationBarsPadding(),
     ) {
         SearchBar(
             title = stringResource(R.string.Market_Search),
@@ -88,23 +92,24 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
             searchModeInitial = true,
             focusRequester = focusRequester,
             onClose = { navController.popBackStack() },
-            onSearchTextChanged = { query -> viewModel.searchByQuery(query) }
+            onSearchTextChanged = { query -> viewModel.searchByQuery(query) },
         )
 
-        val itemSections = when (uiState.page) {
-            is MarketSearchViewModel.Page.Discovery -> {
-                mapOf(
-                    MarketSearchSection.Recent to uiState.page.recent,
-                    MarketSearchSection.Popular to uiState.page.popular,
-                )
-            }
+        val itemSections =
+            when (uiState.page) {
+                is MarketSearchViewModel.Page.Discovery -> {
+                    mapOf(
+                        MarketSearchSection.Recent to uiState.page.recent,
+                        MarketSearchSection.Popular to uiState.page.popular,
+                    )
+                }
 
-            is MarketSearchViewModel.Page.SearchResults -> {
-                mapOf(
-                    MarketSearchSection.SearchResults to uiState.page.items
-                )
+                is MarketSearchViewModel.Page.SearchResults -> {
+                    mapOf(
+                        MarketSearchSection.SearchResults to uiState.page.items,
+                    )
+                }
             }
-        }
 
         MarketSearchResults(
             uiState.listId,
@@ -113,25 +118,27 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                 viewModel.onCoinOpened(coin)
                 navController.slideFromRight(
                     R.id.coinFragment,
-                    CoinFragment.Input(coin.uid)
+                    CoinFragment.Input(coin.uid),
                 )
 
                 stat(
                     page = StatPage.MarketSearch,
                     section = section.statSection,
-                    event = StatEvent.OpenCoin(coin.uid)
+                    event = StatEvent.OpenCoin(coin.uid),
                 )
-            }
+            },
         ) { favorited, coinUid ->
             viewModel.onFavoriteClick(favorited, coinUid)
         }
     }
 }
 
-enum class MarketSearchSection(val title: Optional<Int>) {
+enum class MarketSearchSection(
+    val title: Optional<Int>,
+) {
     Recent(Optional.of(R.string.Market_Search_Sections_RecentTitle)),
     Popular(Optional.of(R.string.Market_Search_Sections_PopularTitle)),
-    SearchResults(Optional.empty())
+    SearchResults(Optional.empty()),
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -145,23 +152,24 @@ fun MarketSearchResults(
     if (itemSections.all { (_, items) -> items.isEmpty() }) {
         ListEmptyView(
             text = stringResource(R.string.EmptyResults),
-            icon = R.drawable.ic_not_found
+            icon = R.drawable.ic_not_found,
         )
     } else {
         LazyColumn(
-            state = rememberSaveable(
-                *inputs,
-                saver = LazyListState.Saver
-            ) {
-                LazyListState()
-            }
+            state =
+                rememberSaveable(
+                    *inputs,
+                    saver = LazyListState.Saver,
+                ) {
+                    LazyListState()
+                },
         ) {
             itemSections.forEach { (section, coinItems) ->
                 section.title.ifPresent {
                     stickyHeader {
                         HeaderStick(
                             borderTop = true,
-                            text = stringResource(id = section.title.get())
+                            text = stringResource(id = section.title.get()),
                         )
                     }
                 }
@@ -169,9 +177,10 @@ fun MarketSearchResults(
                     val coin = item.fullCoin.coin
 
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(IntrinsicSize.Max)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Max),
                     ) {
                         Box(modifier = Modifier.background(ComposeAppTheme.colors.tyler)) {
                             MarketCoin(
@@ -215,27 +224,27 @@ private fun MarketCoin(
     onFavoriteClick: (Boolean, String) -> Unit,
     onClick: () -> Unit,
 ) {
-
     SectionItemBorderedRowUniversalClear(
         borderTop = true,
-        onClick = onClick
+        onClick = onClick,
     ) {
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
-                .clip(CircleShape)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp)
+                    .clip(CircleShape),
         )
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             body_leah(
                 text = coinCode,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(modifier = Modifier.height(3.dp))
             subhead2_grey(
@@ -250,12 +259,12 @@ private fun MarketCoin(
                 modifier = Modifier.size(20.dp),
                 onClick = {
                     onFavoriteClick(true, coinUid)
-                }
+                },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_heart_filled_20),
                     contentDescription = "heart icon button",
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.jacob,
                 )
             }
         } else {
@@ -263,12 +272,12 @@ private fun MarketCoin(
                 modifier = Modifier.size(20.dp),
                 onClick = {
                     onFavoriteClick(false, coinUid)
-                }
+                },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_heart_20),
                     contentDescription = "heart icon button",
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }
@@ -289,7 +298,7 @@ fun MarketCoinPreview() {
             R.drawable.coin_placeholder,
             false,
             { _, _ -> },
-            {}
+            {},
         )
     }
 }

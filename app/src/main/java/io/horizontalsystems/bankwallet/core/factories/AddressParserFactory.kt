@@ -36,7 +36,8 @@ val BlockchainType.removeScheme: Boolean
             BlockchainType.Zcash,
             BlockchainType.Ethereum,
             BlockchainType.Ton,
-            BlockchainType.Tron -> true
+            BlockchainType.Tron,
+            -> true
 
             else -> false
         }

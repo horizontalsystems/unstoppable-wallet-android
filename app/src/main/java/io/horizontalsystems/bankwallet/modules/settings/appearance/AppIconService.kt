@@ -9,12 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class AppIconService(private val localStorage: ILocalStorage) {
+class AppIconService(
+    private val localStorage: ILocalStorage,
+) {
     private val appIcons by lazy { AppIcon.entries }
 
-    private val _optionsFlow = MutableStateFlow(
-        Select(localStorage.appIcon ?: AppIcon.Main, appIcons)
-    )
+    private val _optionsFlow =
+        MutableStateFlow(
+            Select(localStorage.appIcon ?: AppIcon.Main, appIcons),
+        )
     val optionsFlow = _optionsFlow.asStateFlow()
 
     fun setAppIcon(appIcon: AppIcon) {
@@ -31,7 +34,7 @@ class AppIconService(private val localStorage: ILocalStorage) {
             App.instance.packageManager.setComponentEnabledSetting(
                 ComponentName(App.instance, item.launcherName),
                 if (appIcon == item) enabled else disabled,
-                PackageManager.DONT_KILL_APP
+                PackageManager.DONT_KILL_APP,
             )
         }
     }

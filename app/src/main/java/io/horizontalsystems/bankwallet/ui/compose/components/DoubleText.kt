@@ -24,36 +24,38 @@ fun DoubleText(
     onClickSubtitle: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClickTitle
-                ),
+            modifier =
+                Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClickTitle,
+                    ),
             text = title,
             style = ComposeAppTheme.typography.title2R,
             color = if (dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
-            maxLines = 1
+            maxLines = 1,
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClickSubtitle
-                ),
+            modifier =
+                Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClickSubtitle,
+                    ),
             text = body,
             style = ComposeAppTheme.typography.body,
             color = if (dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-            maxLines = 1
+            maxLines = 1,
         )
     }
-
 }

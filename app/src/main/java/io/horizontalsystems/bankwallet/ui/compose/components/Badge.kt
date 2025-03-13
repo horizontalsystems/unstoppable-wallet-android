@@ -20,7 +20,10 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
-fun Badge(modifier: Modifier = Modifier, text: String) {
+fun Badge(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
     BadgeText(
         modifier = modifier,
         text = text,
@@ -33,11 +36,11 @@ fun Badge(modifier: Modifier = Modifier, text: String) {
 fun BadgeWithDiff(
     modifier: Modifier = Modifier,
     text: String,
-    diff: BigDecimal? = null
+    diff: BigDecimal? = null,
 ) {
     BadgeBase(
         modifier = modifier,
-        background = ComposeAppTheme.colors.jeremy
+        background = ComposeAppTheme.colors.jeremy,
     ) {
         Text(
             text = text,
@@ -85,23 +88,23 @@ fun BadgeBase(
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(background)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(background)
+                .padding(horizontal = 6.dp, vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        content = content
+        content = content,
     )
 }
 
-private fun sign(value: BigDecimal): String {
-    return when (value.signum()) {
+private fun sign(value: BigDecimal): String =
+    when (value.signum()) {
         1 -> "+"
         -1 -> "-"
         else -> ""
     }
-}
 
 @Preview
 @Composable
@@ -109,7 +112,7 @@ fun BadgePreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Badge(text = "#455")
         }
@@ -122,12 +125,12 @@ fun BadgeCirclePreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             BadgeText(
                 background = ComposeAppTheme.colors.issykBlue,
                 textColor = ComposeAppTheme.colors.tyler,
-                text = "1"
+                text = "1",
             )
         }
     }
@@ -139,12 +142,12 @@ fun BadgeCircleSignal_Preview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             BadgeText(
                 background = ComposeAppTheme.colors.red20,
                 textColor = ComposeAppTheme.colors.lucian,
-                text = "Sell"
+                text = "Sell",
             )
         }
     }
@@ -156,7 +159,7 @@ fun BadgeWithDiffPreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             BadgeWithDiff(text = "35", diff = BigDecimal("5"))
         }

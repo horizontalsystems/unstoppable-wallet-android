@@ -8,18 +8,24 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddTokenModule {
     class Factory : ViewModelProvider.Factory {
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = AddTokenService(App.coinManager, App.walletManager, App.accountManager, App.marketKit)
+            val service =
+                AddTokenService(
+                    App.coinManager,
+                    App.walletManager,
+                    App.accountManager,
+                    App.marketKit,
+                )
             return AddTokenViewModel(service) as T
         }
     }
 
     interface IAddTokenBlockchainService {
         fun isValid(reference: String): Boolean
+
         fun tokenQuery(reference: String): TokenQuery
+
         suspend fun token(reference: String): Token
     }
-
 }

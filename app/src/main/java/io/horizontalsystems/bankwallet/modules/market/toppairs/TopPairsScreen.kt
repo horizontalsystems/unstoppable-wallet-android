@@ -57,9 +57,10 @@ fun TopPairsScreen() {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    val state = rememberSaveable(uiState.sortDescending, saver = LazyListState.Saver) {
-        LazyListState(0, 0)
-    }
+    val state =
+        rememberSaveable(uiState.sortDescending, saver = LazyListState.Saver) {
+            LazyListState(0, 0)
+        }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -68,7 +69,7 @@ fun TopPairsScreen() {
             HSSwipeRefresh(
                 topPadding = 44,
                 refreshing = uiState.isRefreshing,
-                onRefresh = viewModel::refresh
+                onRefresh = viewModel::refresh,
             ) {
                 Crossfade(uiState.viewState, label = "") { viewState ->
                     when (viewState) {
@@ -79,14 +80,14 @@ fun TopPairsScreen() {
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
+                                viewModel::onErrorClick,
                             )
                         }
 
                         ViewState.Success -> {
                             LazyColumn(
                                 state = state,
-                                modifier = Modifier.fillMaxSize()
+                                modifier = Modifier.fillMaxSize(),
                             ) {
                                 stickyHeader {
                                     HeaderSorting(borderBottom = true) {
@@ -97,9 +98,10 @@ fun TopPairsScreen() {
                                                 viewModel.toggleSorting()
                                             },
                                             title = stringResource(R.string.Market_Volume),
-                                            iconRight = painterResource(
-                                                if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                                            ),
+                                            iconRight =
+                                                painterResource(
+                                                    if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                                                ),
                                         )
                                         HSpacer(width = 16.dp)
                                     }
@@ -112,7 +114,7 @@ fun TopPairsScreen() {
                                             stat(
                                                 page = StatPage.Markets,
                                                 section = StatSection.Pairs,
-                                                event = StatEvent.Open(StatPage.ExternalMarketPair)
+                                                event = StatEvent.Open(StatPage.ExternalMarketPair),
                                             )
                                         }
                                     }
@@ -139,49 +141,51 @@ fun TopPairItem(
     SectionItemBorderedRowUniversalClear(
         borderTop = borderTop,
         borderBottom = borderBottom,
-        onClick = { onItemClick(item) }
+        onClick = { onItemClick(item) },
     ) {
         Box(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .width(54.dp)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .width(54.dp),
         ) {
-
-            val targetCoinModifier = Modifier
-                .size(32.dp)
-                .background(ComposeAppTheme.colors.tyler)
-                .clip(CircleShape)
-                .align(Alignment.TopEnd)
+            val targetCoinModifier =
+                Modifier
+                    .size(32.dp)
+                    .background(ComposeAppTheme.colors.tyler)
+                    .clip(CircleShape)
+                    .align(Alignment.TopEnd)
 
             if (item.targetCoin != null) {
                 CoinImage(
                     coin = item.targetCoin,
-                    modifier = targetCoinModifier
+                    modifier = targetCoinModifier,
                 )
             } else {
                 HsImage(
                     url = item.target.fiatIconUrl,
                     placeholder = R.drawable.ic_platform_placeholder_32,
-                    modifier = targetCoinModifier
+                    modifier = targetCoinModifier,
                 )
             }
 
-            val baseCoinModifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(ComposeAppTheme.colors.tyler)
-                .align(Alignment.TopStart)
+            val baseCoinModifier =
+                Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.tyler)
+                    .align(Alignment.TopStart)
 
             if (item.baseCoin != null) {
                 CoinImage(
                     coin = item.baseCoin,
-                    modifier = baseCoinModifier
+                    modifier = baseCoinModifier,
                 )
             } else {
                 HsImage(
                     url = item.base.fiatIconUrl,
                     placeholder = R.drawable.ic_platform_placeholder_32,
-                    modifier = baseCoinModifier
+                    modifier = baseCoinModifier,
                 )
             }
         }
@@ -192,7 +196,7 @@ fun TopPairItem(
             MarketCoinSecondRow(
                 subtitle = item.name,
                 marketDataValue = item.price?.let { MarketDataValue.Volume(it) },
-                label = item.rank
+                label = item.rank,
             )
         }
     }

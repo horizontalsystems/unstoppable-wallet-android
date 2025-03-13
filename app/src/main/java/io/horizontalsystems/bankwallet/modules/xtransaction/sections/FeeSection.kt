@@ -16,19 +16,20 @@ fun FeeSection(
     navController: NavController,
 ) {
     SectionUniversalLawrence {
-        val rateCurrencyValue = transactionInfoHelper.getXRate(fee.coinUid)?.let {
-            CurrencyValue(
-                currency = transactionInfoHelper.getCurrency(),
-                value = it
-            )
-        }
+        val rateCurrencyValue =
+            transactionInfoHelper.getXRate(fee.coinUid)?.let {
+                CurrencyValue(
+                    currency = transactionInfoHelper.getCurrency(),
+                    value = it,
+                )
+            }
         HSFeeRaw(
             coinCode = fee.coinCode,
             coinDecimal = fee.decimals,
             fee = fee.value,
             amountInputType = AmountInputType.COIN,
             rate = rateCurrencyValue,
-            navController = navController
+            navController = navController,
         )
     }
 }

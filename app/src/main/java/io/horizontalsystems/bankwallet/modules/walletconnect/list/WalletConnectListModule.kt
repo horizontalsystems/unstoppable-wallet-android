@@ -5,16 +5,13 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
 object WalletConnectListModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            return WalletConnectListViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            WalletConnectListViewModel(
                 App.wcSessionManager,
                 App.evmBlockchainManager,
             ) as T
-        }
     }
 
     data class SessionViewItem(
@@ -26,11 +23,9 @@ object WalletConnectListModule {
         val pendingRequestsCount: Int = 0,
     )
 
-    fun getVersionFromUri(scannedText: String): Int {
-        return when {
+    fun getVersionFromUri(scannedText: String): Int =
+        when {
             scannedText.contains("@2") -> 2
             else -> 0
         }
-    }
-
 }

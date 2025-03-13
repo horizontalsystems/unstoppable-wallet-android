@@ -14,7 +14,7 @@ import java.math.BigDecimal
 class SendBitcoinAmountService(
     private val adapter: ISendBitcoinAdapter,
     private val coinCode: String,
-    private val amountValidator: AmountValidator
+    private val amountValidator: AmountValidator,
 ) {
     private var amount: BigDecimal? = null
     private var customUnspentOutputs: List<UnspentOutputInfo>? = null
@@ -27,36 +27,47 @@ class SendBitcoinAmountService(
     private var feeRate: Int? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            amount = amount,
-            amountCaution = amountCaution,
-            availableBalance = availableBalance,
-            canBeSend = false,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                amount = amount,
+                amountCaution = amountCaution,
+                availableBalance = availableBalance,
+                canBeSend = false,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     private fun emitState() {
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution
 
-        val canBeSend = tmpAmount != null
-            && tmpAmount > BigDecimal.ZERO
-            && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
+        val canBeSend =
+            tmpAmount != null &&
+                tmpAmount > BigDecimal.ZERO &&
+                (tmpAmountCaution == null || tmpAmountCaution.isWarning())
 
         _stateFlow.update {
             State(
                 amount = amount,
                 amountCaution = amountCaution,
                 availableBalance = availableBalance,
-                canBeSend = canBeSend
+                canBeSend = canBeSend,
             )
         }
     }
 
     private fun refreshAvailableBalance() {
-        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, memo, customUnspentOutputs, pluginData) }
+        availableBalance =
+            feeRate?.let {
+                adapter.availableBalance(
+                    it,
+                    validAddress?.hex,
+                    memo,
+                    customUnspentOutputs,
+                    pluginData,
+                )
+            }
     }
 
     private fun refreshMinimumSendAmount() {
@@ -64,12 +75,13 @@ class SendBitcoinAmountService(
     }
 
     private fun validateAmount() {
-        amountCaution = amountValidator.validate(
-            amount,
-            coinCode,
-            availableBalance ?: BigDecimal.ZERO,
-            minimumSendAmount,
-        )
+        amountCaution =
+            amountValidator.validate(
+                amount,
+                coinCode,
+                availableBalance ?: BigDecimal.ZERO,
+                minimumSendAmount,
+            )
     }
 
     fun setAmount(amount: BigDecimal?) {
@@ -128,6 +140,6 @@ class SendBitcoinAmountService(
         val amount: BigDecimal?,
         val amountCaution: HSCaution?,
         val availableBalance: BigDecimal?,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

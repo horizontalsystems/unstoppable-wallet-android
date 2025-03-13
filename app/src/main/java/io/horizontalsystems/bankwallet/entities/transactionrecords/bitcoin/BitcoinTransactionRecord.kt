@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import java.util.*
+import java.util.Date
 
 abstract class BitcoinTransactionRecord(
     uid: String,
@@ -20,22 +20,23 @@ abstract class BitcoinTransactionRecord(
     val conflictingHash: String?,
     val showRawTransaction: Boolean,
     val memo: String?,
-    source: TransactionSource
+    source: TransactionSource,
 ) : TransactionRecord(
-    uid = uid,
-    transactionHash = transactionHash,
-    transactionIndex = transactionIndex,
-    blockHeight = blockHeight,
-    confirmationsThreshold = confirmationsThreshold,
-    timestamp = timestamp,
-    failed = failed,
-    source = source
-) {
-
-    override fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean {
-        return super.changedBy(oldBlockInfo, newBlockInfo)
-                || becomesUnlocked(oldBlockInfo?.timestamp, newBlockInfo?.timestamp)
-    }
+        uid = uid,
+        transactionHash = transactionHash,
+        transactionIndex = transactionIndex,
+        blockHeight = blockHeight,
+        confirmationsThreshold = confirmationsThreshold,
+        timestamp = timestamp,
+        failed = failed,
+        source = source,
+    ) {
+    override fun changedBy(
+        oldBlockInfo: LastBlockInfo?,
+        newBlockInfo: LastBlockInfo?,
+    ): Boolean =
+        super.changedBy(oldBlockInfo, newBlockInfo) ||
+            becomesUnlocked(oldBlockInfo?.timestamp, newBlockInfo?.timestamp)
 
     fun lockState(lastBlockTimestamp: Long?): TransactionLockState? {
         val lockInfo = lockInfo ?: return null
@@ -49,13 +50,20 @@ abstract class BitcoinTransactionRecord(
         return TransactionLockState(locked, lockInfo.lockedUntil)
     }
 
-    private fun becomesUnlocked(oldTimestamp: Long?, newTimestamp: Long?): Boolean {
+    private fun becomesUnlocked(
+        oldTimestamp: Long?,
+        newTimestamp: Long?,
+    ): Boolean {
         val lockTime = lockInfo?.lockedUntil?.time?.div(1000) ?: return false
         newTimestamp ?: return false
 
-        return lockTime > (oldTimestamp ?: 0L) && // was locked
-                lockTime <= newTimestamp       // now unlocked
+        return lockTime > (oldTimestamp ?: 0L) &&
+            // was locked
+            lockTime <= newTimestamp // now unlocked
     }
 }
 
-data class TransactionLockState(val locked: Boolean, val date: Date)
+data class TransactionLockState(
+    val locked: Boolean,
+    val date: Date,
+)

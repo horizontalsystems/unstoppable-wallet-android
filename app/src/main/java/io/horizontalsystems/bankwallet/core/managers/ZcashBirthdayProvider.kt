@@ -9,9 +9,10 @@ class ZcashBirthdayProvider(
     private val context: Context,
 ) {
     fun getLatestCheckpointBlockHeight(): Long {
-        val walletBirthday = runBlocking {
-            BlockHeight.ofLatestCheckpoint(context, ZcashNetwork.Mainnet)
-        }
+        val walletBirthday =
+            runBlocking {
+                BlockHeight.ofLatestCheckpoint(context, ZcashNetwork.Mainnet)
+            }
         return walletBirthday.value
     }
 }

@@ -5,14 +5,11 @@ import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SpamAddressStorage(
-    private val spamAddressDao: SpamAddressDao
+    private val spamAddressDao: SpamAddressDao,
 ) {
+    fun isSpam(hash: ByteArray): Boolean = spamAddressDao.getByTransaction(hash) != null
 
-    fun isSpam(hash: ByteArray): Boolean =
-        spamAddressDao.getByTransaction(hash) != null
-
-    fun findByAddress(address: String): SpamAddress? =
-        spamAddressDao.getByAddress(address)
+    fun findByAddress(address: String): SpamAddress? = spamAddressDao.getByAddress(address)
 
     fun save(spamAddresses: List<SpamAddress>) {
         spamAddressDao.insertAll(spamAddresses)
@@ -22,6 +19,8 @@ class SpamAddressStorage(
         spamAddressDao.insert(spamScanState)
     }
 
-    fun getSpamScanState(blockchainType: BlockchainType, accountUid: String): SpamScanState? =
-        spamAddressDao.getSpamScanState(blockchainType, accountUid)
+    fun getSpamScanState(
+        blockchainType: BlockchainType,
+        accountUid: String,
+    ): SpamScanState? = spamAddressDao.getSpamScanState(blockchainType, accountUid)
 }

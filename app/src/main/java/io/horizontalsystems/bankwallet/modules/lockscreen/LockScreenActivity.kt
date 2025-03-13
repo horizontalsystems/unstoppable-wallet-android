@@ -20,16 +20,19 @@ class LockScreenActivity : BaseActivity() {
                 PinUnlock(
                     onSuccess = {
                         finish()
-                    }
+                    },
                 )
             }
         }
 
-        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finishAffinity()
-            }
-        })
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    finishAffinity()
+                }
+            },
+        )
     }
 
     companion object {

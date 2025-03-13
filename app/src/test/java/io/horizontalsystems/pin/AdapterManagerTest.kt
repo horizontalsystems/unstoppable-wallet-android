@@ -1,19 +1,19 @@
-//package io.horizontalsystems.bankwallet.core.managers
+// package io.horizontalsystems.bankwallet.core.managers
 //
-//import com.nhaarman.mockito_kotlin.verify
-//import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-//import com.nhaarman.mockito_kotlin.whenever
-//import io.horizontalsystems.bankwallet.core.IAdapter
-//import io.horizontalsystems.bankwallet.core.Wallet
-//import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-//import io.horizontalsystems.bankwallet.entities.AuthData
-//import io.horizontalsystems.bankwallet.entities.Coin
-//import io.horizontalsystems.bankwallet.entities.CoinType
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mockito.mock
+// import com.nhaarman.mockito_kotlin.verify
+// import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+// import com.nhaarman.mockito_kotlin.whenever
+// import io.horizontalsystems.bankwallet.core.IAdapter
+// import io.horizontalsystems.bankwallet.core.Wallet
+// import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+// import io.horizontalsystems.bankwallet.entities.AuthData
+// import io.horizontalsystems.bankwallet.entities.Coin
+// import io.horizontalsystems.bankwallet.entities.CoinType
+// import org.junit.Before
+// import org.junit.Test
+// import org.mockito.Mockito.mock
 //
-//class AdapterManagerTest {
+// class AdapterManagerTest {
 //    private val coinManager = mock(WalletManager::class.java)
 //    private val authManager = mock(AuthManager::class.java)
 //    private val adapterFactory = mock(AdapterFactory::class.java)
@@ -59,4 +59,4 @@
 //        verify(adapterFactory).adapterForCoin(walletEth)
 //        verify(adapterFactory).unlinkAdapter(adapter)
 //    }
-//}
+// }

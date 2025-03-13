@@ -23,38 +23,40 @@ fun HSAddressCell(
     title: String,
     value: String,
     riskyAddress: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    val borderColor = if (riskyAddress) {
-        ComposeAppTheme.colors.red50
-    } else {
-        ComposeAppTheme.colors.transparent
-    }
+    val borderColor =
+        if (riskyAddress) {
+            ComposeAppTheme.colors.red50
+        } else {
+            ComposeAppTheme.colors.transparent
+        }
 
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence),
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence),
         content = {
             CellUniversal(
                 borderTop = false,
-                onClick = onClick
+                onClick = onClick,
             ) {
                 subhead2_grey(text = title)
 
                 HSpacer(16.dp)
                 subhead1_leah(
                     modifier = Modifier.weight(1f),
-                    text = value
+                    text = value,
                 )
                 if (riskyAddress) {
                     HSpacer(16.dp)
                     Icon(
                         painter = painterResource(id = R.drawable.ic_attention_20),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.lucian
+                        tint = ComposeAppTheme.colors.lucian,
                     )
                 }
 
@@ -62,9 +64,9 @@ fun HSAddressCell(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
-        }
+        },
     )
 }

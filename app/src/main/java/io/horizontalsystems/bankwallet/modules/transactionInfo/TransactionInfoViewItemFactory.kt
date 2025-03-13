@@ -53,7 +53,11 @@ class TransactionInfoViewItemFactory(
 
         when (transaction) {
             is ContractCreationTransactionRecord -> {
-                itemSections.add(TransactionViewItemFactoryHelper.getContractCreationItems(transaction))
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getContractCreationItems(
+                        transaction,
+                    ),
+                )
             }
 
             is TonTransactionRecord -> {
@@ -64,13 +68,14 @@ class TransactionInfoViewItemFactory(
                             rates,
                             blockchainType,
                             transactionItem.hideAmount,
-                            true
-                        )
+                            true,
+                        ),
                     )
                 }
 
 //            feeViewItem = record.fee.map { .fee(title: "tx_info.fee".localized, value: feeString(transactionValue: $0, rate: _rate($0))) }
             }
+
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     TransactionViewItemFactoryHelper.getReceiveSectionItems(
@@ -79,7 +84,7 @@ class TransactionInfoViewItemFactory(
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
             is TronIncomingTransactionRecord ->
@@ -90,7 +95,7 @@ class TransactionInfoViewItemFactory(
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
             is EvmOutgoingTransactionRecord -> {
@@ -104,7 +109,7 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf,
                         nftMetadata = nftMetadata,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
             }
 
@@ -119,7 +124,7 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf,
                         nftMetadata = nftMetadata,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
             }
 
@@ -131,8 +136,8 @@ class TransactionInfoViewItemFactory(
                         rates = rates,
                         amount = transaction.amountIn,
                         hideAmount = transactionItem.hideAmount,
-                        hasRecipient = transaction.recipient != null
-                    )
+                        hasRecipient = transaction.recipient != null,
+                    ),
                 )
 
                 itemSections.add(
@@ -140,8 +145,8 @@ class TransactionInfoViewItemFactory(
                         rates,
                         transaction.exchangeAddress,
                         transaction.valueOut,
-                        transaction.valueIn
-                    )
+                        transaction.valueIn,
+                    ),
                 )
             }
 
@@ -153,8 +158,8 @@ class TransactionInfoViewItemFactory(
                         amount = null,
                         rates = rates,
                         hideAmount = transactionItem.hideAmount,
-                        hasRecipient = false
-                    )
+                        hasRecipient = false,
+                    ),
                 )
 
                 itemSections.add(
@@ -163,7 +168,7 @@ class TransactionInfoViewItemFactory(
                         transaction.exchangeAddress,
                         transaction.valueOut,
                         transaction.valueIn,
-                    )
+                    ),
                 )
             }
 
@@ -175,7 +180,7 @@ class TransactionInfoViewItemFactory(
                         spenderAddress = transaction.spender,
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
             is TronApproveTransactionRecord ->
@@ -186,7 +191,7 @@ class TransactionInfoViewItemFactory(
                         spenderAddress = transaction.spender,
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
             is ContractCallTransactionRecord -> {
@@ -194,8 +199,8 @@ class TransactionInfoViewItemFactory(
                     TransactionViewItemFactoryHelper.getContractMethodSectionItems(
                         transaction.method,
                         transaction.contractAddress,
-                        transaction.blockchainType
-                    )
+                        transaction.blockchainType,
+                    ),
                 )
 
                 for (event in transaction.outgoingEvents) {
@@ -207,7 +212,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
 
@@ -220,7 +225,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
             }
@@ -230,8 +235,8 @@ class TransactionInfoViewItemFactory(
                     TransactionViewItemFactoryHelper.getContractMethodSectionItems(
                         transaction.method,
                         transaction.contractAddress,
-                        transaction.blockchainType
-                    )
+                        transaction.blockchainType,
+                    ),
                 )
 
                 for (event in transaction.outgoingEvents) {
@@ -243,7 +248,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
 
@@ -256,7 +261,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
             }
@@ -271,7 +276,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
 
@@ -284,7 +289,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
             }
@@ -299,7 +304,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
 
@@ -312,7 +317,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
             }
@@ -324,9 +329,9 @@ class TransactionInfoViewItemFactory(
                             transaction.transaction.contract?.label
                                 ?: Translator.getString(R.string.Transactions_ContractCall),
                             "",
-                            TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
-                        )
-                    )
+                            TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes,
+                        ),
+                    ),
                 )
             }
 
@@ -338,14 +343,14 @@ class TransactionInfoViewItemFactory(
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
                 miscItemsSection.addAll(
                     TransactionViewItemFactoryHelper.getBitcoinSectionItems(
                         transaction,
-                        transactionItem.lastBlockInfo
-                    )
+                        transactionItem.lastBlockInfo,
+                    ),
                 )
                 addMemoItem(transaction.memo, miscItemsSection)
             }
@@ -360,14 +365,14 @@ class TransactionInfoViewItemFactory(
                         hideAmount = transactionItem.hideAmount,
                         sentToSelf = transaction.sentToSelf,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
                 miscItemsSection.addAll(
                     TransactionViewItemFactoryHelper.getBitcoinSectionItems(
                         transaction,
-                        transactionItem.lastBlockInfo
-                    )
+                        transactionItem.lastBlockInfo,
+                    ),
                 )
                 addMemoItem(transaction.memo, miscItemsSection)
             }
@@ -381,7 +386,7 @@ class TransactionInfoViewItemFactory(
                         hideAmount = transactionItem.hideAmount,
                         nftMetadata = nftMetadata,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
 
             is SolanaOutgoingTransactionRecord -> {
@@ -395,7 +400,7 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf,
                         nftMetadata = nftMetadata,
                         blockchainType = blockchainType,
-                    )
+                    ),
                 )
             }
 
@@ -409,7 +414,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
 
@@ -422,7 +427,7 @@ class TransactionInfoViewItemFactory(
                             hideAmount = transactionItem.hideAmount,
                             nftMetadata = nftMetadata,
                             blockchainType = blockchainType,
-                        )
+                        ),
                     )
                 }
             }
@@ -437,15 +442,26 @@ class TransactionInfoViewItemFactory(
             itemSections.add(miscItemsSection)
         }
 
-        itemSections.add(TransactionViewItemFactoryHelper.getStatusSectionItems(transaction, status, rates, blockchainType))
-        if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
+        itemSections.add(
+            TransactionViewItemFactoryHelper.getStatusSectionItems(
+                transaction,
+                status,
+                rates,
+                blockchainType,
+            ),
+        )
+        if (transaction is EvmTransactionRecord &&
+            !transaction.foreignTransaction &&
+            status == TransactionStatus.Pending &&
+            resendEnabled
+        ) {
             itemSections.add(
                 listOf(
                     SpeedUpCancel(
                         transactionHash = transaction.transactionHash,
-                        blockchainType = transaction.blockchainType
-                    )
-                )
+                        blockchainType = transaction.blockchainType,
+                    ),
+                ),
             )
             itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
         } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
@@ -453,9 +469,9 @@ class TransactionInfoViewItemFactory(
                 listOf(
                     SpeedUpCancel(
                         transactionHash = transaction.transactionHash,
-                        blockchainType = transaction.blockchainType
-                    )
-                )
+                        blockchainType = transaction.blockchainType,
+                    ),
+                ),
             )
             itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
         }
@@ -470,7 +486,7 @@ class TransactionInfoViewItemFactory(
     ) {
         if (!memo.isNullOrBlank()) {
             miscItemsSection.add(
-                TransactionViewItemFactoryHelper.getMemoItem(memo)
+                TransactionViewItemFactoryHelper.getMemoItem(memo),
             )
         }
     }

@@ -6,9 +6,8 @@ import io.horizontalsystems.bankwallet.core.Warning
 import kotlinx.coroutines.launch
 
 class SendEvmNonceViewModel(
-    private val service: SendEvmNonceService
+    private val service: SendEvmNonceService,
 ) : ViewModelUiState<SendEvmNonceViewModel.UiState>() {
-
     private var nonce: Long? = null
     private var showInConfirmation = false
     private var showInSettings = false
@@ -30,13 +29,14 @@ class SendEvmNonceViewModel(
         }
     }
 
-    override fun createState() = UiState(
-        nonce = nonce,
-        showInConfirmation = showInConfirmation,
-        showInSettings = showInSettings,
-        warnings = warnings,
-        errors = errors
-    )
+    override fun createState() =
+        UiState(
+            nonce = nonce,
+            showInConfirmation = showInConfirmation,
+            showInSettings = showInSettings,
+            warnings = warnings,
+            errors = errors,
+        )
 
     fun onEnterNonce(nonce: Long) {
         service.setNonce(nonce)
@@ -55,6 +55,6 @@ class SendEvmNonceViewModel(
         val showInConfirmation: Boolean,
         val showInSettings: Boolean,
         val warnings: List<Warning>,
-        val errors: List<Throwable>
+        val errors: List<Throwable>,
     )
 }

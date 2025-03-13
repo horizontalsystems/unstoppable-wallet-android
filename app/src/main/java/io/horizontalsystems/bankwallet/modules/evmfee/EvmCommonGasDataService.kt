@@ -10,39 +10,47 @@ import java.math.BigInteger
 
 open class EvmCommonGasDataService(
     private val evmKit: EthereumKit,
-    protected val predefinedGasLimit: Long? = null
+    protected val predefinedGasLimit: Long? = null,
 ) {
-
-    open fun estimatedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData, stubAmount: BigInteger? = null): Single<GasData> {
+    open fun estimatedGasDataAsync(
+        gasPrice: GasPrice,
+        transactionData: TransactionData,
+        stubAmount: BigInteger? = null,
+    ): Single<GasData> {
         if (predefinedGasLimit != null) {
             return Single.just(GasData(gasLimit = predefinedGasLimit, gasPrice = gasPrice))
         }
 
         val surchargeRequired = transactionData.input.isNotEmpty()
 
-        val stubTransactionData = if (stubAmount != null)  {
-            TransactionData(transactionData.to, BigInteger.ONE, transactionData.input)
-        } else {
-            transactionData
-        }
+        val stubTransactionData =
+            if (stubAmount != null) {
+                TransactionData(transactionData.to, BigInteger.ONE, transactionData.input)
+            } else {
+                transactionData
+            }
 
-        return evmKit.estimateGas(stubTransactionData, gasPrice)
+        return evmKit
+            .estimateGas(stubTransactionData, gasPrice)
             .onErrorResumeNext {
                 evmKit.estimateGas(stubTransactionData)
-            }
-            .map { estimatedGasLimit ->
+            }.map { estimatedGasLimit ->
                 val gasLimit =
                     if (surchargeRequired) EvmFeeModule.surcharged(estimatedGasLimit) else estimatedGasLimit
                 GasData(
                     gasLimit = gasLimit,
                     estimatedGasLimit = estimatedGasLimit,
-                    gasPrice = gasPrice
+                    gasPrice = gasPrice,
                 )
             }
     }
 
     companion object {
-        fun instance(evmKit: EthereumKit, blockchainType: BlockchainType, gasLimit: Long? = null): EvmCommonGasDataService {
+        fun instance(
+            evmKit: EthereumKit,
+            blockchainType: BlockchainType,
+            gasLimit: Long? = null,
+        ): EvmCommonGasDataService {
             val l1FeeContractAddress = blockchainType.l1GasFeeContractAddress
 
             return if (l1FeeContractAddress == null) {
@@ -53,5 +61,4 @@ open class EvmCommonGasDataService(
             }
         }
     }
-
 }

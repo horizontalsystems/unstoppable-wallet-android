@@ -42,11 +42,11 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
@@ -56,11 +56,13 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
                 }
             }
         }
-    }
 }
 
 @Composable
-private fun UnlinkAccountScreen(navController: NavController, account: Account) {
+private fun UnlinkAccountScreen(
+    navController: NavController,
+    account: Account,
+) {
     val viewModel =
         viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 
@@ -73,14 +75,13 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
         title = stringResource(R.string.ManageKeys_Delete_Title),
         onCloseClick = {
             navController.popBackStack()
-        }
+        },
     ) {
-
         Spacer(Modifier.height(12.dp))
         CellUniversalLawrenceSection(confirmations, showFrame = true) { item ->
             RowUniversal(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = { viewModel.toggleConfirm(item) }
+                onClick = { viewModel.toggleConfirm(item) },
             ) {
                 HsCheckbox(
                     checked = item.confirmed,
@@ -98,7 +99,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
         if (showDeleteWarning) {
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(id = R.string.ManageAccount_DeleteWarning)
+                text = stringResource(id = R.string.ManageAccount_DeleteWarning),
             )
         }
 
@@ -107,9 +108,10 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
 
         Spacer(Modifier.height(32.dp))
         ButtonPrimaryRed(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
             title = stringResource(viewModel.deleteButtonText),
             onClick = {
                 viewModel.onUnlink()
@@ -118,7 +120,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
 
                 stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
             },
-            enabled = unlinkEnabled
+            enabled = unlinkEnabled,
         )
         Spacer(Modifier.height(32.dp))
     }

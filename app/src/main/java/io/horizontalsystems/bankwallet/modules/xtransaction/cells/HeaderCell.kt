@@ -18,7 +18,7 @@ fun HeaderCell(
     title: String,
     value: String,
     borderTop: Boolean = true,
-    painter: Painter?
+    painter: Painter?,
 ) {
     CellUniversal(borderTop = borderTop) {
         painter?.let {
@@ -33,13 +33,14 @@ fun HeaderCell(
         body_leah(text = title)
 
         subhead1_grey(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
             text = value,
             textAlign = TextAlign.End,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

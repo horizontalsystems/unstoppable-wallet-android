@@ -6,13 +6,16 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
-enum class BalanceViewType(@StringRes val titleResId: Int, @StringRes val subtitleResId: Int) :
-    WithTranslatableTitle {
+enum class BalanceViewType(
+    @StringRes val titleResId: Int,
+    @StringRes val subtitleResId: Int,
+) : WithTranslatableTitle {
     @SerializedName("coin")
     CoinThenFiat(R.string.BalanceViewType_CoinValue, R.string.BalanceViewType_FiatValue),
 
     @SerializedName("currency")
-    FiatThenCoin(R.string.BalanceViewType_FiatValue, R.string.BalanceViewType_CoinValue);
+    FiatThenCoin(R.string.BalanceViewType_FiatValue, R.string.BalanceViewType_CoinValue),
+    ;
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)

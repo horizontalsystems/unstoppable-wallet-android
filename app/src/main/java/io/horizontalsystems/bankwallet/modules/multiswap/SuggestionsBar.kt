@@ -28,34 +28,36 @@ fun SuggestionsBar(
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceAround,
             ) {
                 percents.forEach { percent ->
                     ButtonSecondary(
                         enabled = selectEnabled,
-                        onClick = { onSelect.invoke(percent) }
+                        onClick = { onSelect.invoke(percent) },
                     ) {
                         Text(
                             text = "$percent%",
                             modifier = modifier,
                             style = ComposeAppTheme.typography.captionSB,
-                            color = if (selectEnabled) {
-                                ComposeAppTheme.colors.leah
-                            } else {
-                                ComposeAppTheme.colors.grey50
-                            },
+                            color =
+                                if (selectEnabled) {
+                                    ComposeAppTheme.colors.leah
+                                } else {
+                                    ComposeAppTheme.colors.grey50
+                                },
                         )
                     }
                 }
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_delete_20,
                     enabled = deleteEnabled,
-                    tint = if (deleteEnabled) {
-                        ComposeAppTheme.colors.leah
-                    } else {
-                        ComposeAppTheme.colors.grey50
-                    },
-                    onClick = onDelete
+                    tint =
+                        if (deleteEnabled) {
+                            ComposeAppTheme.colors.leah
+                        } else {
+                            ComposeAppTheme.colors.grey50
+                        },
+                    onClick = onDelete,
                 )
             }
         }

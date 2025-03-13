@@ -7,17 +7,17 @@ import io.horizontalsystems.bankwallet.core.App
 import kotlinx.parcelize.Parcelize
 
 object KeyStoreModule {
-    class Factory(private val mode: ModeType) : ViewModelProvider.Factory {
+    class Factory(
+        private val mode: ModeType,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return KeyStoreViewModel(App.keyStoreManager, mode) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = KeyStoreViewModel(App.keyStoreManager, mode) as T
     }
 
     @Parcelize
     enum class ModeType : Parcelable {
         NoSystemLock,
         InvalidKey,
-        UserAuthentication
+        UserAuthentication,
     }
 }

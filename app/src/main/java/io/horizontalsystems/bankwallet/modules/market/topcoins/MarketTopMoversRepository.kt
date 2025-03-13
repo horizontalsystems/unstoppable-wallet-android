@@ -6,10 +6,7 @@ import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.Single
 
 class MarketTopMoversRepository(
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) {
-
-    fun getTopMovers(baseCurrency: Currency): Single<TopMovers> =
-        marketKit.topMoversSingle(baseCurrency.code)
-
+    fun getTopMovers(baseCurrency: Currency): Single<TopMovers> = marketKit.topMoversSingle(baseCurrency.code)
 }

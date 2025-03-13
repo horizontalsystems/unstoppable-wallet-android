@@ -24,38 +24,42 @@ import io.horizontalsystems.marketkit.models.LinkType
 @Composable
 fun LinksPreview() {
     ComposeAppTheme {
-        val links = listOf(
-            CoinLink(
-                "http://q.com",
-                LinkType.Guide,
-                "@twitter",
-                R.drawable.ic_academy_20
-            ),
-            CoinLink(
-                "http://q.com",
-                LinkType.Guide,
-                "@twitter",
-                R.drawable.ic_globe_20
-            ),
-            CoinLink(
-                "http://q.com",
-                LinkType.Twitter,
-                "@twitter",
-                R.drawable.ic_twitter_20
-            ),
-            CoinLink(
-                "http://q.com",
-                LinkType.Telegram,
-                "Telegram",
-                R.drawable.ic_telegram_20
-            ),
-        )
+        val links =
+            listOf(
+                CoinLink(
+                    "http://q.com",
+                    LinkType.Guide,
+                    "@twitter",
+                    R.drawable.ic_academy_20,
+                ),
+                CoinLink(
+                    "http://q.com",
+                    LinkType.Guide,
+                    "@twitter",
+                    R.drawable.ic_globe_20,
+                ),
+                CoinLink(
+                    "http://q.com",
+                    LinkType.Twitter,
+                    "@twitter",
+                    R.drawable.ic_twitter_20,
+                ),
+                CoinLink(
+                    "http://q.com",
+                    LinkType.Telegram,
+                    "Telegram",
+                    R.drawable.ic_telegram_20,
+                ),
+            )
         Links(links = links, onCoinLinkClick = {})
     }
 }
 
 @Composable
-fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
+fun Links(
+    links: List<CoinLink>,
+    onCoinLinkClick: (CoinLink) -> Unit,
+) {
     Column {
         CellSingleLineClear(borderTop = true) {
             body_leah(text = stringResource(id = R.string.CoinPage_Links))
@@ -63,10 +67,11 @@ fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
 
         CellUniversalLawrenceSection(links) { link ->
             RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onClick = { onCoinLinkClick(link) }
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                onClick = { onCoinLinkClick(link) },
             ) {
                 Image(
                     modifier = Modifier.size(24.dp),
@@ -75,13 +80,14 @@ fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
                 )
                 body_leah(
                     text = link.title,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
                 )
                 Image(
                     painter = painterResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = ""
+                    contentDescription = "",
                 )
             }
         }

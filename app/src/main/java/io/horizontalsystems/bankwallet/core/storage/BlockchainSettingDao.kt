@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 
 @Dao
 interface BlockchainSettingDao {
-
     @Query("SELECT * FROM BlockchainSettingRecord")
     fun getAll(): List<BlockchainSettingRecord>
 
@@ -16,6 +15,8 @@ interface BlockchainSettingDao {
     fun insert(item: BlockchainSettingRecord)
 
     @Query("SELECT * FROM BlockchainSettingRecord WHERE blockchainUid = :blockchainUid AND `key` == :key")
-    fun getBlockchainSetting(blockchainUid: String, key: String): BlockchainSettingRecord?
-
+    fun getBlockchainSetting(
+        blockchainUid: String,
+        key: String,
+    ): BlockchainSettingRecord?
 }

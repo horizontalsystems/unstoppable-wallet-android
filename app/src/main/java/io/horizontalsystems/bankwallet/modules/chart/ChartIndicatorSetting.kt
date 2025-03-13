@@ -1,6 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Entity
@@ -11,53 +17,62 @@ data class ChartIndicatorSetting(
     val index: Int = 1,
     val extraData: Map<String, String?>,
     val defaultData: Map<String, String?>,
-    val enabled: Boolean
+    val enabled: Boolean,
 ) {
     enum class IndicatorType {
-        MA, RSI, MACD
+        MA,
+        RSI,
+        MACD,
     }
 
     val name: String
-        get() = when (type) {
-            IndicatorType.MA -> "MA $index"
-            IndicatorType.RSI -> "RSI"
-            IndicatorType.MACD -> "MACD"
-        }
+        get() =
+            when (type) {
+                IndicatorType.MA -> "MA $index"
+                IndicatorType.RSI -> "RSI"
+                IndicatorType.MACD -> "MACD"
+            }
 
     val pointsCount: Int
-        get() = when (type) {
-            IndicatorType.MA -> {
-                getTypedDataMA().period
+        get() =
+            when (type) {
+                IndicatorType.MA -> {
+                    getTypedDataMA().period
+                }
+
+                IndicatorType.RSI -> {
+                    getTypedDataRsi().period
+                }
+
+                IndicatorType.MACD -> {
+                    getTypedDataMacd().slow + getTypedDataMacd().signal
+                }
             }
-            IndicatorType.RSI -> {
-                getTypedDataRsi().period
-            }
-            IndicatorType.MACD -> {
-                getTypedDataMacd().slow + getTypedDataMacd().signal
-            }
-        }
 
     fun getTypedDataMA(): ChartIndicatorDataMa {
         check(type == IndicatorType.MA)
 
-        val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 20
+        val period =
+            extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 20
         val maType = extraData["maType"] ?: defaultData["maType"] ?: "SMA"
-        val color = extraData["color"]?.toLongOrNull() ?: defaultData["color"]?.toLongOrNull() ?: 0xFFFFA800
+        val color =
+            extraData["color"]?.toLongOrNull() ?: defaultData["color"]?.toLongOrNull() ?: 0xFFFFA800
 
         return ChartIndicatorDataMa(
             period = period,
             maType = maType,
-            color = color
+            color = color,
         )
     }
 
     fun getTypedDataRsi(): ChartIndicatorDataRsi {
         check(type == IndicatorType.RSI)
 
-        val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 12
+        val period =
+            extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 12
 
         return ChartIndicatorDataRsi(
-            period = period
+            period = period,
         )
     }
 
@@ -76,9 +91,21 @@ data class ChartIndicatorSetting(
     }
 }
 
-data class ChartIndicatorDataMa(val period: Int, val maType: String, val color: Long)
-data class ChartIndicatorDataRsi(val period: Int)
-data class ChartIndicatorDataMacd(val fast: Int, val slow: Int, val signal: Int)
+data class ChartIndicatorDataMa(
+    val period: Int,
+    val maType: String,
+    val color: Long,
+)
+
+data class ChartIndicatorDataRsi(
+    val period: Int,
+)
+
+data class ChartIndicatorDataMacd(
+    val fast: Int,
+    val slow: Int,
+    val signal: Int,
+)
 
 @Dao
 interface ChartIndicatorSettingsDao {
@@ -110,18 +137,19 @@ interface ChartIndicatorSettingsDao {
     fun update(chartIndicatorSetting: ChartIndicatorSetting)
 
     companion object {
-        fun defaultData(): List<ChartIndicatorSetting> {
-            return listOf(
+        fun defaultData(): List<ChartIndicatorSetting> =
+            listOf(
                 ChartIndicatorSetting(
                     id = "ma1",
                     type = ChartIndicatorSetting.IndicatorType.MA,
                     index = 1,
                     extraData = mapOf(),
-                    defaultData = mapOf(
-                        "period" to "9",
-                        "maType" to "EMA",
-                        "color" to 0xFFFFA800.toString(),
-                    ),
+                    defaultData =
+                        mapOf(
+                            "period" to "9",
+                            "maType" to "EMA",
+                            "color" to 0xFFFFA800.toString(),
+                        ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
@@ -129,11 +157,12 @@ interface ChartIndicatorSettingsDao {
                     type = ChartIndicatorSetting.IndicatorType.MA,
                     index = 2,
                     extraData = mapOf(),
-                    defaultData = mapOf(
-                        "period" to "25",
-                        "maType" to "EMA",
-                        "color" to 0xFF4A98E9.toString(),
-                    ),
+                    defaultData =
+                        mapOf(
+                            "period" to "25",
+                            "maType" to "EMA",
+                            "color" to 0xFF4A98E9.toString(),
+                        ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
@@ -141,35 +170,36 @@ interface ChartIndicatorSettingsDao {
                     type = ChartIndicatorSetting.IndicatorType.MA,
                     index = 3,
                     extraData = mapOf(),
-                    defaultData = mapOf(
-                        "period" to "50",
-                        "maType" to "EMA",
-                        "color" to 0xFFBF5AF2.toString(),
-                    ),
+                    defaultData =
+                        mapOf(
+                            "period" to "50",
+                            "maType" to "EMA",
+                            "color" to 0xFFBF5AF2.toString(),
+                        ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
                     id = "rsi",
                     type = ChartIndicatorSetting.IndicatorType.RSI,
                     extraData = mapOf(),
-                    defaultData = mapOf(
-                        "period" to "12",
-                    ),
+                    defaultData =
+                        mapOf(
+                            "period" to "12",
+                        ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
                     id = "macd",
                     type = ChartIndicatorSetting.IndicatorType.MACD,
                     extraData = mapOf(),
-                    defaultData = mapOf(
-                        "fast" to "12",
-                        "slow" to "26",
-                        "signal" to "9",
-                    ),
-                    enabled = false
+                    defaultData =
+                        mapOf(
+                            "fast" to "12",
+                            "slow" to "26",
+                            "signal" to "9",
+                        ),
+                    enabled = false,
                 ),
             )
-
-        }
     }
 }

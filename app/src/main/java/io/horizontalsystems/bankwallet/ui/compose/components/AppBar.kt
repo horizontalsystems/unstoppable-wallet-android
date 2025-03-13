@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 sealed class IMenuItem
 
 data class MenuItemTimeoutIndicator(
-    val progress: Float
+    val progress: Float,
 ) : IMenuItem()
 
 data class MenuItem(
@@ -48,7 +48,7 @@ fun AppBarMenuButton(
     description: String,
     enabled: Boolean = true,
     tint: Color = Color.Unspecified,
-    showAlertDot: Boolean = false
+    showAlertDot: Boolean = false,
 ) {
     HsIconButton(
         onClick = onClick,
@@ -56,19 +56,21 @@ fun AppBarMenuButton(
     ) {
         Box(modifier = Modifier.size(30.dp)) {
             Icon(
-                modifier = Modifier
-                    .size(24.dp)
-                    .align(Alignment.Center),
+                modifier =
+                    Modifier
+                        .size(24.dp)
+                        .align(Alignment.Center),
                 painter = painterResource(id = icon),
                 contentDescription = description,
-                tint = tint
+                tint = tint,
             )
             if (showAlertDot) {
                 Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .size(8.dp)
-                        .background(ComposeAppTheme.colors.lucian, shape = CircleShape)
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .size(8.dp)
+                            .background(ComposeAppTheme.colors.lucian, shape = CircleShape),
                 )
             }
         }
@@ -81,14 +83,14 @@ fun AppBar(
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
     showSpinner: Boolean = false,
-    backgroundColor: Color = ComposeAppTheme.colors.tyler
+    backgroundColor: Color = ComposeAppTheme.colors.tyler,
 ) {
     val titleComposable: @Composable () -> Unit = {
         title?.let {
             title3_leah(
                 text = title,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -98,7 +100,7 @@ fun AppBar(
         navigationIcon = navigationIcon,
         menuItems = menuItems,
         showSpinner = showSpinner,
-        backgroundColor = backgroundColor
+        backgroundColor = backgroundColor,
     )
 }
 
@@ -110,27 +112,30 @@ fun AppBar(
     menuItems: List<IMenuItem> = listOf(),
     showSpinner: Boolean = false,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    backgroundColor: Color = ComposeAppTheme.colors.tyler
+    backgroundColor: Color = ComposeAppTheme.colors.tyler,
 ) {
     TopAppBar(
-        modifier = Modifier
-            .windowInsetsPadding(windowInsets)
-            .height(64.dp),
+        modifier =
+            Modifier
+                .windowInsetsPadding(windowInsets)
+                .height(64.dp),
         title = title,
         backgroundColor = backgroundColor,
-        navigationIcon = navigationIcon?.let {
-            {
-                navigationIcon()
-            }
-        },
+        navigationIcon =
+            navigationIcon?.let {
+                {
+                    navigationIcon()
+                }
+            },
         actions = {
             if (showSpinner) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(start = 24.dp, end = 16.dp)
-                        .size(24.dp),
+                    modifier =
+                        Modifier
+                            .padding(start = 24.dp, end = 16.dp)
+                            .size(24.dp),
                     color = ComposeAppTheme.colors.jacob,
-                    strokeWidth = 2.dp
+                    strokeWidth = 2.dp,
                 )
             }
             menuItems.forEach { menuItem ->
@@ -138,27 +143,29 @@ fun AppBar(
                     is MenuItem -> {
                         MenuItemSimple(menuItem)
                     }
+
                     is MenuItemTimeoutIndicator -> {
                         HsIconButton(
-                            onClick = {  }
+                            onClick = { },
                         ) {
                             Box(
                                 modifier = Modifier.size(30.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator(
                                     progress = 1f,
                                     modifier = Modifier.size(16.dp),
                                     color = ComposeAppTheme.colors.steel20,
-                                    strokeWidth = 1.5.dp
+                                    strokeWidth = 1.5.dp,
                                 )
                                 CircularProgressIndicator(
                                     progress = menuItem.progress,
-                                    modifier = Modifier
-                                        .size(16.dp)
-                                        .scale(scaleX = -1f, scaleY = 1f),
+                                    modifier =
+                                        Modifier
+                                            .size(16.dp)
+                                            .scale(scaleX = -1f, scaleY = 1f),
                                     color = ComposeAppTheme.colors.jacob,
-                                    strokeWidth = 1.5.dp
+                                    strokeWidth = 1.5.dp,
                                 )
                             }
                         }
@@ -166,20 +173,22 @@ fun AppBar(
                 }
             }
         },
-        elevation = 0.dp
+        elevation = 0.dp,
     )
 }
 
 @Composable
 private fun MenuItemSimple(menuItem: MenuItem) {
-    val color = if (menuItem.enabled) {
-        if (menuItem.tint == Color.Unspecified)
-            ComposeAppTheme.colors.jacob
-        else
-            menuItem.tint
-    } else {
-        ComposeAppTheme.colors.grey50
-    }
+    val color =
+        if (menuItem.enabled) {
+            if (menuItem.tint == Color.Unspecified) {
+                ComposeAppTheme.colors.jacob
+            } else {
+                menuItem.tint
+            }
+        } else {
+            ComposeAppTheme.colors.grey50
+        }
 
     val icon = menuItem.icon
     if (icon != null) {
@@ -194,11 +203,11 @@ private fun MenuItemSimple(menuItem: MenuItem) {
     } else {
         ButtonPrimaryWrapper(
             enabled = menuItem.enabled,
-            onClick = menuItem.onClick
-        ){
+            onClick = menuItem.onClick,
+        ) {
             Text(
                 text = menuItem.title.getString().uppercase(),
-                color = color
+                color = color,
             )
         }
     }

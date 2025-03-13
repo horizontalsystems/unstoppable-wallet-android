@@ -56,7 +56,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class ManageAccountFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -65,11 +64,16 @@ class ManageAccountFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val accountId: String) : Parcelable
+    data class Input(
+        val accountId: String,
+    ) : Parcelable
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, accountId: String) {
+fun ManageAccountScreen(
+    navController: NavController,
+    accountId: String,
+) {
     val viewModel =
         viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
@@ -84,13 +88,14 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.ManageAccount_Save),
-                    onClick = { viewModel.onSave() },
-                    enabled = viewModel.viewState.canSave
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.ManageAccount_Save),
+                        onClick = { viewModel.onSave() },
+                        enabled = viewModel.viewState.canSave,
+                    ),
+                ),
         )
 
         Column {
@@ -103,8 +108,11 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 onValueChange = {
                     viewModel.onChange(it)
 
-                    stat(page = StatPage.ManageWallet, event = StatEvent.Edit(StatEntity.WalletName))
-                }
+                    stat(
+                        page = StatPage.ManageWallet,
+                        event = StatEvent.Edit(StatEntity.WalletName),
+                    )
+                },
             )
 
             when (viewModel.viewState.headerNote) {
@@ -115,9 +123,9 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                         onClick = {
                             FaqManager.showFaqPage(
                                 navController,
-                                FaqManager.faqPathMigrationRequired
+                                FaqManager.faqPathMigrationRequired,
                             )
-                        }
+                        },
                     )
                 }
 
@@ -128,10 +136,10 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                         onClick = {
                             FaqManager.showFaqPage(
                                 navController,
-                                FaqManager.faqPathMigrationRecommended
+                                FaqManager.faqPathMigrationRecommended,
                             )
                         },
-                        onClose = null
+                        onClose = null,
                     )
                 }
 
@@ -144,7 +152,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 BackupActions(
                     viewModel.viewState.backupActions,
                     viewModel.account,
-                    navController
+                    navController,
                 )
             }
 
@@ -153,16 +161,20 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 listOf {
                     RedActionItem(
                         title = stringResource(id = R.string.ManageAccount_Unlink),
-                        icon = painterResource(id = R.drawable.ic_delete_20)
+                        icon = painterResource(id = R.drawable.ic_delete_20),
                     ) {
                         navController.slideFromBottom(
                             R.id.unlinkConfirmationDialog,
-                            viewModel.account
+                            viewModel.account,
                         )
 
-                        stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.UnlinkWallet))
+                        stat(
+                            page = StatPage.ManageWallet,
+                            event = StatEvent.Open(StatPage.UnlinkWallet),
+                        )
                     }
-                })
+                },
+            )
             VSpacer(32.dp)
         }
     }
@@ -172,7 +184,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 private fun BackupActions(
     backupActions: List<BackupItem>,
     account: Account,
-    navController: NavController
+    navController: NavController,
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
     val infoItems = mutableListOf<@Composable () -> Unit>()
@@ -185,15 +197,18 @@ private fun BackupActions(
                         title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
                         icon = painterResource(id = R.drawable.ic_edit_24),
                         attention = action.showAttention,
-                        completed = action.completed
+                        completed = action.completed,
                     ) {
                         navController.authorizedAction {
                             navController.slideFromBottom(
                                 R.id.backupKeyFragment,
-                                account
+                                account,
                             )
 
-                            stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.ManualBackup))
+                            stat(
+                                page = StatPage.ManageWallet,
+                                event = StatEvent.Open(StatPage.ManualBackup),
+                            )
                         }
                     }
                 }
@@ -204,12 +219,15 @@ private fun BackupActions(
                     YellowActionItem(
                         title = stringResource(id = R.string.ManageAccount_LocalBackup),
                         icon = painterResource(id = R.drawable.ic_file_24),
-                        attention = action.showAttention
+                        attention = action.showAttention,
                     ) {
                         navController.authorizedAction {
                             navController.slideFromBottom(R.id.backupLocalFragment, account)
 
-                            stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.FileBackup))
+                            stat(
+                                page = StatPage.ManageWallet,
+                                event = StatEvent.Open(StatPage.FileBackup),
+                            )
                         }
                     }
                 }
@@ -229,13 +247,12 @@ private fun BackupActions(
     infoItems.forEach {
         it.invoke()
     }
-
 }
 
 @Composable
 private fun KeyActions(
     viewModel: ManageAccountViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
 
@@ -245,15 +262,18 @@ private fun KeyActions(
                 actionItems.add {
                     AccountActionItem(
                         title = stringResource(id = R.string.RecoveryPhrase_Title),
-                        icon = painterResource(id = R.drawable.icon_paper_contract_20)
+                        icon = painterResource(id = R.drawable.icon_paper_contract_20),
                     ) {
                         navController.authorizedAction {
                             navController.slideFromRight(
                                 R.id.recoveryPhraseFragment,
-                                viewModel.account
+                                viewModel.account,
                             )
 
-                            stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.RecoveryPhrase))
+                            stat(
+                                page = StatPage.ManageWallet,
+                                event = StatEvent.Open(StatPage.RecoveryPhrase),
+                            )
                         }
                     }
                 }
@@ -263,14 +283,17 @@ private fun KeyActions(
                 actionItems.add {
                     AccountActionItem(
                         title = stringResource(id = R.string.PrivateKeys_Title),
-                        icon = painterResource(id = R.drawable.ic_key_20)
+                        icon = painterResource(id = R.drawable.ic_key_20),
                     ) {
                         navController.slideFromRight(
                             R.id.privateKeysFragment,
-                            viewModel.account
+                            viewModel.account,
                         )
 
-                        stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.PrivateKeys))
+                        stat(
+                            page = StatPage.ManageWallet,
+                            event = StatEvent.Open(StatPage.PrivateKeys),
+                        )
                     }
                 }
             }
@@ -279,14 +302,17 @@ private fun KeyActions(
                 actionItems.add {
                     AccountActionItem(
                         title = stringResource(id = R.string.PublicKeys_Title),
-                        icon = painterResource(id = R.drawable.icon_binocule_20)
+                        icon = painterResource(id = R.drawable.icon_binocule_20),
                     ) {
                         navController.slideFromRight(
                             R.id.publicKeysFragment,
-                            viewModel.account
+                            viewModel.account,
                         )
 
-                        stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.PublicKeys))
+                        stat(
+                            page = StatPage.ManageWallet,
+                            event = StatEvent.Open(StatPage.PublicKeys),
+                        )
                     }
                 }
             }
@@ -307,30 +333,31 @@ private fun AccountActionItem(
     coinIconPlaceholder: Int? = null,
     attention: Boolean = false,
     badge: String? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
-
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         icon?.let {
             Icon(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .size(24.dp),
                 painter = icon,
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
 
         if (coinIconUrl != null) {
             HsImage(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(20.dp),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .size(20.dp),
                 url = coinIconUrl,
-                placeholder = coinIconPlaceholder
+                placeholder = coinIconPlaceholder,
             )
         }
 
@@ -344,7 +371,7 @@ private fun AccountActionItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 painter = painterResource(id = R.drawable.ic_attention_20),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.lucian
+                tint = ComposeAppTheme.colors.lucian,
             )
             Spacer(modifier = Modifier.width(6.dp))
         }
@@ -359,7 +386,7 @@ private fun AccountActionItem(
                 onClick = {
                     clipboardManager.setText(AnnotatedString(it))
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                }
+                },
             )
         }
 
@@ -367,7 +394,7 @@ private fun AccountActionItem(
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
             HSpacer(16.dp)
         }
@@ -380,20 +407,20 @@ private fun YellowActionItem(
     icon: Painter? = null,
     attention: Boolean = false,
     completed: Boolean = false,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
-
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         icon?.let {
             Icon(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .size(24.dp),
                 painter = icon,
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.jacob,
             )
         }
 
@@ -407,7 +434,7 @@ private fun YellowActionItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 painter = painterResource(id = R.drawable.ic_attention_20),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.lucian
+                tint = ComposeAppTheme.colors.lucian,
             )
             HSpacer(6.dp)
         } else if (completed) {
@@ -415,7 +442,7 @@ private fun YellowActionItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 painter = painterResource(id = R.drawable.ic_checkmark_20),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.remus
+                tint = ComposeAppTheme.colors.remus,
             )
             HSpacer(6.dp)
         }
@@ -426,19 +453,19 @@ private fun YellowActionItem(
 private fun RedActionItem(
     title: String,
     icon: Painter,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(24.dp),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp),
             painter = icon,
             contentDescription = null,
-            tint = ComposeAppTheme.colors.lucian
+            tint = ComposeAppTheme.colors.lucian,
         )
 
         body_lucian(

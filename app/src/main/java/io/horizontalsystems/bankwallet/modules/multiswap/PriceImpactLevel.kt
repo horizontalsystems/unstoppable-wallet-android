@@ -5,5 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class PriceImpactLevel : Parcelable {
-    Negligible, Normal, Warning, Forbidden
+    Negligible,
+    Normal,
+    Warning,
+    Forbidden,
 }

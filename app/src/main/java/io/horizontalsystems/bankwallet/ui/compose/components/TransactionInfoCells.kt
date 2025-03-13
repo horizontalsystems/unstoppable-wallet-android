@@ -64,7 +64,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 fun SectionTitleCell(
     title: String,
     value: String,
-    iconResId: Int?
+    iconResId: Int?,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -81,13 +81,14 @@ fun SectionTitleCell(
         body_leah(text = title)
 
         subhead1_grey(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
             text = value,
             textAlign = TextAlign.End,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -95,10 +96,11 @@ fun SectionTitleCell(
 @Composable
 fun WarningMessageCell(message: String) {
     TextImportantWarning(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        text = message
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        text = message,
     )
 }
 
@@ -106,7 +108,7 @@ fun WarningMessageCell(message: String) {
 fun DescriptionCell(text: String) {
     subhead2_grey(
         modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 12.dp),
-        text = text
+        text = text,
     )
 }
 
@@ -125,9 +127,10 @@ fun TransactionNftAmountCell(
         HsImage(
             url = iconUrl,
             placeholder = iconPlaceholder,
-            modifier = Modifier
-                .size(32.dp)
-                .clip(RoundedCornerShape(CornerSize(4.dp)))
+            modifier =
+                Modifier
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(CornerSize(4.dp))),
         )
         HSpacer(16.dp)
         Column {
@@ -138,7 +141,7 @@ fun TransactionNftAmountCell(
         HSpacer(8.dp)
         Column(
             modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.End,
         ) {
             SubHead1ColoredValue(value = amount)
             nftName?.let {
@@ -162,25 +165,26 @@ fun TransactionAmountCell(
     alternativeCoinIconUrl: String?,
     badge: String?,
     coinIconPlaceholder: Int?,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
-    val title = when (amountType) {
-        AmountType.YouSent -> stringResource(R.string.TransactionInfo_YouSent)
-        AmountType.YouGot -> stringResource(R.string.TransactionInfo_YouGot)
-        AmountType.Received -> stringResource(R.string.TransactionInfo_Received)
-        AmountType.Sent -> stringResource(R.string.TransactionInfo_Sent)
-        AmountType.Approved -> stringResource(R.string.TransactionInfo_Approved)
-        AmountType.Minted -> stringResource(R.string.TransactionInfo_Minted)
-    }
+    val title =
+        when (amountType) {
+            AmountType.YouSent -> stringResource(R.string.TransactionInfo_YouSent)
+            AmountType.YouGot -> stringResource(R.string.TransactionInfo_YouGot)
+            AmountType.Received -> stringResource(R.string.TransactionInfo_Received)
+            AmountType.Sent -> stringResource(R.string.TransactionInfo_Sent)
+            AmountType.Approved -> stringResource(R.string.TransactionInfo_Approved)
+            AmountType.Minted -> stringResource(R.string.TransactionInfo_Minted)
+        }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
+        onClick = onClick,
     ) {
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
         HSpacer(16.dp)
         Column {
@@ -229,7 +233,7 @@ fun PriceWithToggleCell(
             text = if (showValueOne) valueOne else valueTwo,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.End,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         HSpacer(8.dp)
         HsIconButton(
@@ -238,9 +242,10 @@ fun PriceWithToggleCell(
 
                 stat(page = StatPage.TransactionInfo, event = StatEvent.TogglePrice)
             },
-            modifier = Modifier
-                .size(28.dp)
-                .clip(CircleShape),
+            modifier =
+                Modifier
+                    .size(28.dp)
+                    .clip(CircleShape),
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_swap3_20),
@@ -273,14 +278,14 @@ fun TransactionInfoAddressCell(
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
 
         if (showAdd) {
             HSpacer(16.dp)
             ButtonSecondaryCircle(
                 icon = R.drawable.icon_20_user_plus,
-                onClick = { showSaveAddressDialog = true }
+                onClick = { showSaveAddressDialog = true },
             )
         }
 
@@ -292,35 +297,48 @@ fun TransactionInfoAddressCell(
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
                 onCopy?.invoke()
-            }
+            },
         )
     }
 
     if (showSaveAddressDialog) {
         SelectorDialogCompose(
             title = stringResource(R.string.Contacts_AddAddress),
-            items = ContactsModule.AddAddressAction.values().map {
-                SelectorItem(stringResource(it.title), false, it)
-            },
+            items =
+                ContactsModule.AddAddressAction.values().map {
+                    SelectorItem(stringResource(it.title), false, it)
+                },
             onDismissRequest = {
                 showSaveAddressDialog = false
             },
             onSelectItem = { action ->
                 blockchainType?.let {
-                    val args = when (action) {
-                        ContactsModule.AddAddressAction.AddToNewContact -> {
-                            onAddToNew?.invoke()
-                            ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
-                        }
+                    val args =
+                        when (action) {
+                            ContactsModule.AddAddressAction.AddToNewContact -> {
+                                onAddToNew?.invoke()
+                                ContactsFragment.Input(
+                                    Mode.AddAddressToNewContact(
+                                        blockchainType,
+                                        value,
+                                    ),
+                                )
+                            }
 
-                        ContactsModule.AddAddressAction.AddToExistingContact -> {
-                            onAddToExisting?.invoke()
-                            ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
+                            ContactsModule.AddAddressAction.AddToExistingContact -> {
+                                onAddToExisting?.invoke()
+                                ContactsFragment.Input(
+                                    Mode.AddAddressToExistingContact(
+                                        blockchainType,
+                                        value,
+                                    ),
+                                )
+                            }
                         }
-                    }
                     navController?.slideFromRight(R.id.contactsFragment, args)
                 }
-            })
+            },
+        )
     }
 }
 
@@ -334,7 +352,7 @@ fun TransactionInfoContactCell(name: String) {
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = name,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
     }
 }
@@ -342,7 +360,7 @@ fun TransactionInfoContactCell(name: String) {
 @Composable
 fun TransactionInfoStatusCell(
     status: TransactionStatus,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -355,24 +373,28 @@ fun TransactionInfoStatusCell(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(R.id.statusInfoDialog)
-                stat(page = StatPage.TransactionInfo, section = StatSection.Status, event = StatEvent.Open(StatPage.Info))
-            }
+                stat(
+                    page = StatPage.TransactionInfo,
+                    section = StatSection.Status,
+                    event = StatEvent.Open(StatPage.Info),
+                )
+            },
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_info_20),
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Spacer(
             Modifier
                 .weight(1f)
-                .defaultMinSize(minWidth = 8.dp)
+                .defaultMinSize(minWidth = 8.dp),
         )
         subhead1_leah(
             text = stringResource(statusTitle(status)),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
         )
 
         when (status) {
@@ -380,7 +402,7 @@ fun TransactionInfoStatusCell(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_checkmark_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.remus
+                    tint = ComposeAppTheme.colors.remus,
                 )
             }
 
@@ -388,7 +410,7 @@ fun TransactionInfoStatusCell(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_attention_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.lucian
+                    tint = ComposeAppTheme.colors.lucian,
                 )
             }
 
@@ -407,7 +429,7 @@ fun TransactionInfoStatusCell(
 fun TransactionInfoSpeedUpCell(
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -416,14 +438,14 @@ fun TransactionInfoSpeedUpCell(
                 SpeedUpCancelType.SpeedUp,
                 transactionHash,
                 blockchainType,
-                navController
+                navController,
             )
-        }
+        },
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_arrow_medium2_up_24),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.jacob,
         )
         Spacer(Modifier.width(16.dp))
         body_leah(text = stringResource(R.string.TransactionInfo_SpeedUp))
@@ -434,7 +456,7 @@ fun TransactionInfoSpeedUpCell(
 fun TransactionInfoCancelCell(
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -443,14 +465,14 @@ fun TransactionInfoCancelCell(
                 SpeedUpCancelType.Cancel,
                 transactionHash,
                 blockchainType,
-                navController
+                navController,
             )
-        }
+        },
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_outgoingraw_24),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.redL
+            tint = ComposeAppTheme.colors.redL,
         )
         Spacer(Modifier.width(16.dp))
         body_leah(text = stringResource(R.string.TransactionInfoOptions_Cancel_Button))
@@ -458,25 +480,23 @@ fun TransactionInfoCancelCell(
 }
 
 @Composable
-fun TransactionInfoRbfCell(
-    rbfEnabled: Boolean
-) {
+fun TransactionInfoRbfCell(rbfEnabled: Boolean) {
     RowUniversal {
         subhead2_grey(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(R.string.Send_Rbf),
         )
         Spacer(modifier = Modifier.weight(1f))
-        val enabledText = if (rbfEnabled) {
-            stringResource(R.string.Send_RbfEnabled)
-        } else {
-            stringResource(R.string.Send_RbfDisabled)
-        }
+        val enabledText =
+            if (rbfEnabled) {
+                stringResource(R.string.Send_RbfEnabled)
+            } else {
+                stringResource(R.string.Send_RbfDisabled)
+            }
         subhead1_leah(text = enabledText)
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
-
 
 @Composable
 fun TransactionInfoTransactionHashCell(transactionHash: String) {
@@ -488,7 +508,7 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
     ) {
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_Id),
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp),
         )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
@@ -498,21 +518,29 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
                 TextHelper.copyText(transactionHash)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.TransactionId))
-            }
+                stat(
+                    page = StatPage.TransactionInfo,
+                    event = StatEvent.Copy(StatEntity.TransactionId),
+                )
+            },
         )
         Spacer(modifier = Modifier.width(8.dp))
         ButtonSecondaryCircle(
             icon = R.drawable.ic_share_20,
             onClick = {
-                context.startActivity(Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, transactionHash)
-                    type = "text/plain"
-                })
+                context.startActivity(
+                    Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, transactionHash)
+                        type = "text/plain"
+                    },
+                )
 
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Share(StatEntity.TransactionId))
-            }
+                stat(
+                    page = StatPage.TransactionInfo,
+                    event = StatEvent.Share(StatEntity.TransactionId),
+                )
+            },
         )
     }
 }
@@ -520,7 +548,7 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
 @Composable
 fun TransactionInfoExplorerCell(
     title: String,
-    url: String
+    url: String,
 ) {
     val context = LocalContext.current
     RowUniversal(
@@ -528,8 +556,11 @@ fun TransactionInfoExplorerCell(
         onClick = {
             LinkHelper.openLinkInAppBrowser(context, url)
 
-            stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.ExternalBlockExplorer))
-        }
+            stat(
+                page = StatPage.TransactionInfo,
+                event = StatEvent.Open(StatPage.ExternalBlockExplorer),
+            )
+        },
     ) {
         Image(
             modifier = Modifier.size(20.dp),
@@ -539,7 +570,7 @@ fun TransactionInfoExplorerCell(
         body_leah(
             text = title,
             maxLines = 1,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(Modifier.weight(1f))
         Image(
@@ -558,7 +589,7 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
     ) {
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_RawTransaction),
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp),
         )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryCircle(
@@ -568,9 +599,12 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
                     TextHelper.copyText(it)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
-                    stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.RawTransaction))
+                    stat(
+                        page = StatPage.TransactionInfo,
+                        event = StatEvent.Copy(StatEntity.RawTransaction),
+                    )
                 }
-            }
+            },
         )
     }
 }
@@ -578,7 +612,7 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
 @Composable
 fun TransactionInfoBtcLockCell(
     lockState: TransactionInfoViewItem.LockState,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -599,11 +633,15 @@ fun TransactionInfoBtcLockCell(
 
                     navController.slideFromBottom(
                         R.id.transactionLockTimeInfoFragment,
-                        TransactionLockTimeInfoFragment.Input(lockTime)
+                        TransactionLockTimeInfoFragment.Input(lockTime),
                     )
 
-                    stat(page = StatPage.TransactionInfo, section = StatSection.TimeLock, event = StatEvent.Open(StatPage.Info))
-                }
+                    stat(
+                        page = StatPage.TransactionInfo,
+                        section = StatSection.TimeLock,
+                        event = StatEvent.Open(StatPage.Info),
+                    )
+                },
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_info_20),
@@ -619,7 +657,7 @@ fun TransactionInfoBtcLockCell(
 fun TransactionInfoDoubleSpendCell(
     transactionHash: String,
     conflictingHash: String,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -632,7 +670,7 @@ fun TransactionInfoDoubleSpendCell(
         )
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_DoubleSpendNote),
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp),
         )
         Spacer(modifier = Modifier.weight(1f))
         HsIconButton(
@@ -642,12 +680,12 @@ fun TransactionInfoDoubleSpendCell(
                     R.id.transactionDoubleSpendInfoFragment,
                     TransactionDoubleSpendInfoFragment.Input(
                         transactionHash,
-                        conflictingHash
-                    )
+                        conflictingHash,
+                    ),
                 )
 
                 stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.DoubleSpend))
-            }
+            },
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_info_20),
@@ -655,16 +693,16 @@ fun TransactionInfoDoubleSpendCell(
                 contentDescription = null,
             )
         }
-
     }
 }
 
 @Composable
 fun TransactionInfoSentToSelfCell() {
     RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
     ) {
         Icon(
             modifier = Modifier.padding(end = 16.dp),
@@ -677,7 +715,10 @@ fun TransactionInfoSentToSelfCell() {
 }
 
 @Composable
-fun TransactionInfoCell(title: String, value: String) {
+fun TransactionInfoCell(
+    title: String,
+    value: String,
+) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
@@ -686,7 +727,7 @@ fun TransactionInfoCell(title: String, value: String) {
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
     }
 }
@@ -695,17 +736,18 @@ private fun openTransactionOptionsModule(
     type: SpeedUpCancelType,
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavController
+    navController: NavController,
 ) {
     when (blockchainType) {
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
         BlockchainType.ECash,
         BlockchainType.Litecoin,
-        BlockchainType.Dash -> {
+        BlockchainType.Dash,
+        -> {
             navController.slideFromRight(
                 R.id.resendBitcoinFragment,
-                ResendBitcoinFragment.Input(type)
+                ResendBitcoinFragment.Input(type),
             )
         }
 
@@ -716,10 +758,11 @@ private fun openTransactionOptionsModule(
         BlockchainType.Optimism,
         BlockchainType.Base,
         BlockchainType.ZkSync,
-        BlockchainType.ArbitrumOne -> {
+        BlockchainType.ArbitrumOne,
+        -> {
             navController.slideFromRight(
                 R.id.transactionSpeedUpCancelFragment,
-                TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash)
+                TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash),
             )
         }
 
@@ -729,18 +772,23 @@ private fun openTransactionOptionsModule(
         BlockchainType.Fantom,
         BlockchainType.Tron,
         BlockchainType.Ton,
-        is BlockchainType.Unsupported -> Unit
+        is BlockchainType.Unsupported,
+        -> Unit
     }
 
-    stat(page = StatPage.TransactionInfo, event = StatEvent.OpenResend(blockchainType.uid, type.statResendType))
+    stat(
+        page = StatPage.TransactionInfo,
+        event = StatEvent.OpenResend(blockchainType.uid, type.statResendType),
+    )
 }
 
-private fun statusTitle(status: TransactionStatus) = when (status) {
-    TransactionStatus.Completed -> R.string.Transactions_Completed
-    TransactionStatus.Failed -> R.string.Transactions_Failed
-    TransactionStatus.Pending -> R.string.Transactions_Pending
-    is TransactionStatus.Processing -> R.string.Transactions_Processing
-}
+private fun statusTitle(status: TransactionStatus) =
+    when (status) {
+        TransactionStatus.Completed -> R.string.Transactions_Completed
+        TransactionStatus.Failed -> R.string.Transactions_Failed
+        TransactionStatus.Pending -> R.string.Transactions_Pending
+        is TransactionStatus.Processing -> R.string.Transactions_Processing
+    }
 
 @Composable
 private fun SubHead2ColoredValue(value: ColoredValue) {
@@ -762,7 +810,6 @@ private fun SubHead2ColoredValue(value: ColoredValue) {
         }
     }
 }
-
 
 @Composable
 private fun SubHead1ColoredValue(value: ColoredValue) {

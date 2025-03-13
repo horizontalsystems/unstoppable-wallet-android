@@ -8,7 +8,6 @@ import java.util.Locale
 // https://github.com/zeugma-solutions/locale-helper-android
 
 object LocaleHelper {
-
     val fallbackLocale: Locale = Locale.ENGLISH
 
     private const val SELECTED_LANGUAGE = "Locale.Helper.Selected.Language"
@@ -25,7 +24,7 @@ object LocaleHelper {
             "sd",
             "ug",
             "ur",
-            "yi"
+            "yi",
         )
     }
 
@@ -44,15 +43,17 @@ object LocaleHelper {
     }
 
     private fun getSystemLocale(context: Context): Locale {
-        val systemLocale = context.resources.configuration.locales.get(0)
+        val systemLocale =
+            context.resources.configuration.locales
+                .get(0)
         var tag = systemLocale.toLanguageTag()
 
-        //App language tags are in the format "en", except "pt-BR"
+        // App language tags are in the format "en", except "pt-BR"
         if (tag.contains("-") && tag != LocaleType.pt_br.tag) {
             tag = tag.split("-")[0]
         }
 
-        //use system locale if it is supported by app, else use fallback locale
+        // use system locale if it is supported by app, else use fallback locale
         if (LocaleType.values().map { it.tag }.contains(tag)) {
             val localeFromSupportedTag = Locale.forLanguageTag(tag)
             setLocale(context, localeFromSupportedTag)
@@ -61,15 +62,16 @@ object LocaleHelper {
         return fallbackLocale
     }
 
-    fun setLocale(context: Context, locale: Locale) {
+    fun setLocale(
+        context: Context,
+        locale: Locale,
+    ) {
         persist(context, locale)
 
         updateContextLocale(context, locale)
     }
 
-    fun isRTL(locale: Locale): Boolean {
-        return RTL.contains(locale.language)
-    }
+    fun isRTL(locale: Locale): Boolean = RTL.contains(locale.language)
 
     private fun getStoredLocale(context: Context): Locale? {
         val preferences = getPreferences(context)
@@ -77,7 +79,10 @@ object LocaleHelper {
         return languageTag?.let { Locale.forLanguageTag(it) }
     }
 
-    private fun updateContextLocale(context: Context, locale: Locale): Context {
+    private fun updateContextLocale(
+        context: Context,
+        locale: Locale,
+    ): Context {
         Locale.setDefault(locale)
 
         val configuration = Configuration()
@@ -88,21 +93,24 @@ object LocaleHelper {
         return context.createConfigurationContext(configuration)
     }
 
-    private fun getPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(LocaleHelper::class.java.name, Context.MODE_PRIVATE)
-    }
+    private fun getPreferences(context: Context): SharedPreferences =
+        context.getSharedPreferences(LocaleHelper::class.java.name, Context.MODE_PRIVATE)
 
-    private fun persist(context: Context, locale: Locale?) {
+    private fun persist(
+        context: Context,
+        locale: Locale?,
+    ) {
         if (locale == null) return
         getPreferences(context)
             .edit()
             .putString(SELECTED_LANGUAGE, locale.toLanguageTag())
             .apply()
     }
-
 }
 
-enum class LocaleType(val tag: String) {
+enum class LocaleType(
+    val tag: String,
+) {
     de("de"),
     en("en"),
     es("es"),
@@ -112,5 +120,5 @@ enum class LocaleType(val tag: String) {
     ko("ko"),
     ru("ru"),
     tr("tr"),
-    zh("zh");
+    zh("zh"),
 }

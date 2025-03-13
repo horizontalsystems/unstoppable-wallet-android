@@ -15,18 +15,22 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun SliderIndicator(total: Int, current: Int) {
+fun SliderIndicator(
+    total: Int,
+    current: Int,
+) {
     Row(
         modifier = Modifier.height(30.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         repeat(total) { index ->
             Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(2.dp))
-                    .background(if (index == current) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20)
-                    .size(width = 20.dp, height = 4.dp),
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(if (index == current) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20)
+                        .size(width = 20.dp, height = 4.dp),
             )
         }
     }

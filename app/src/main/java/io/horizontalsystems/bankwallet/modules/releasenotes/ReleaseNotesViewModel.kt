@@ -26,9 +26,8 @@ class ReleaseNotesViewModel(
     private val contentUrl: String,
     private val connectivityManager: ConnectivityManager,
     private val releaseNotesManager: ReleaseNotesManager,
-    appConfigProvider: AppConfigProvider
+    appConfigProvider: AppConfigProvider,
 ) : ViewModel() {
-
     val twitterUrl = appConfigProvider.appTwitterLink
     val telegramUrl = appConfigProvider.appTelegramLink
 
@@ -46,8 +45,7 @@ class ReleaseNotesViewModel(
                 if (connectivityManager.isConnected && viewState is ViewState.Error) {
                     retry()
                 }
-            }
-            .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     fun retry() {

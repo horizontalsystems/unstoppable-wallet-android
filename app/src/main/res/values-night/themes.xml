@@ -3,7 +3,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Final, top-level theme-->
-    <style name="Theme.AppTheme.DayNight" parent="Theme.AppTheme.DarkModeAppTheme"/>
+    <style name="Theme.AppTheme.DayNight" parent="Theme.AppTheme.DarkModeAppTheme" />
 
     <style name="Theme.AppTheme.DarkModeAppTheme" parent="Theme.AppTheme">
         <item name="colorAccent">@color/yellow_d</item>

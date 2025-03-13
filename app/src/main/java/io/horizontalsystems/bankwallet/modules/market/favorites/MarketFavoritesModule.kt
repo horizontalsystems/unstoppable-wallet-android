@@ -13,20 +13,20 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
 object MarketFavoritesModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = MarketFavoritesRepository(App.marketKit, App.marketFavoritesManager)
             val menuService = MarketFavoritesMenuService(App.localStorage, App.marketWidgetManager)
-            val service = MarketFavoritesService(
-                repository,
-                menuService,
-                App.currencyManager,
-                App.backgroundManager,
-                App.priceManager,
-                SignalsControlManager(App.localStorage)
-            )
+            val service =
+                MarketFavoritesService(
+                    repository,
+                    menuService,
+                    App.currencyManager,
+                    App.backgroundManager,
+                    App.priceManager,
+                    SignalsControlManager(App.localStorage),
+                )
             return MarketFavoritesViewModel(service) as T
         }
     }
@@ -39,15 +39,17 @@ object MarketFavoritesModule {
         val period: TimeDuration,
         val showSignal: Boolean,
     )
-
 }
 
-enum class WatchlistSorting(@StringRes val titleResId: Int): WithTranslatableTitle {
+enum class WatchlistSorting(
+    @StringRes val titleResId: Int,
+) : WithTranslatableTitle {
     Manual(R.string.Market_Sorting_Manual),
     HighestCap(R.string.Market_Sorting_HighestCap),
     LowestCap(R.string.Market_Sorting_LowestCap),
     Gainers(R.string.Market_Sorting_Gainers),
-    Losers(R.string.Market_Sorting_Losers);
+    Losers(R.string.Market_Sorting_Losers),
+    ;
 
     override val title = TranslatableString.ResString(titleResId)
 }

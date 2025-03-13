@@ -19,14 +19,19 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 class DashAdapter(
-        override val kit: DashKit,
+    override val kit: DashKit,
+    syncMode: BitcoinCore.SyncMode,
+    backgroundManager: BackgroundManager,
+    wallet: Wallet,
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet),
+    DashKit.Listener,
+    ISendBitcoinAdapter {
+    constructor(
+        wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
-        wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), DashKit.Listener, ISendBitcoinAdapter {
-
-    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, backgroundManager: BackgroundManager) :
-            this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
+    ) :
+        this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
 
     init {
         kit.listener = this
@@ -36,7 +41,8 @@ class DashAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal =
+        BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // DashKit Listener
@@ -45,8 +51,7 @@ class DashAdapter(
     override val explorerTitle: String
         get() = "blockchair.com"
 
-    override fun getTransactionUrl(transactionHash: String): String =
-        "https://blockchair.com/dash/transaction/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String = "https://blockchair.com/dash/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -60,7 +65,10 @@ class DashAdapter(
         setState(state)
     }
 
-    override fun onTransactionsUpdate(inserted: List<DashTransactionInfo>, updated: List<DashTransactionInfo>) {
+    override fun onTransactionsUpdate(
+        inserted: List<DashTransactionInfo>,
+        updated: List<DashTransactionInfo>,
+    ) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -84,12 +92,21 @@ class DashAdapter(
     override val blockchainType = BlockchainType.Dash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/dash/address/${it.address}") }
+        kit.usedAddresses(change).map {
+            UsedAddress(
+                it.index,
+                it.address,
+                "https://blockchair.com/dash/address/${it.address}",
+            )
+        }
 
     companion object {
         private const val confirmationsThreshold = 1
 
-        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): DashKit {
+        private fun createKit(
+            wallet: Wallet,
+            syncMode: BitcoinCore.SyncMode,
+        ): DashKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
@@ -100,9 +117,10 @@ class DashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 is AccountType.Mnemonic -> {
                     return DashKit(
                         context = App.instance,
@@ -111,9 +129,10 @@ class DashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 is AccountType.BitcoinAddress -> {
                     return DashKit(
                         context = App.instance,
@@ -121,9 +140,10 @@ class DashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
+
                 else -> throw UnsupportedAccountException()
             }
         }

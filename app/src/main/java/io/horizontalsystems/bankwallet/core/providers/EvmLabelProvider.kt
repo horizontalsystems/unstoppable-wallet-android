@@ -21,18 +21,18 @@ class EvmLabelProvider {
         @SerializedName("address_labels")
         val addressLabels: Long,
         @SerializedName("evm_method_labels")
-        val evmMethodLabels: Long
+        val evmMethodLabels: Long,
     )
 
     data class EvmMethodLabel(
         @SerializedName("method_id")
         val methodId: String,
-        val label: String
+        val label: String,
     )
 
     data class EvmAddressLabel(
         val address: String,
-        val label: String
+        val label: String,
     )
 
     private interface HsLabelApi {
@@ -45,5 +45,4 @@ class EvmLabelProvider {
         @GET("addresses/labels")
         suspend fun evmAddressLabels(): List<EvmAddressLabel>
     }
-
 }

@@ -125,11 +125,12 @@ fun RestorePhraseNonStandard(
             }
         }
 
-    val borderColor = if (uiState.error != null) {
-        ComposeAppTheme.colors.red50
-    } else {
-        ComposeAppTheme.colors.steel20
-    }
+    val borderColor =
+        if (uiState.error != null) {
+            ComposeAppTheme.colors.red50
+        } else {
+            ComposeAppTheme.colors.steel20
+        }
 
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -138,12 +139,13 @@ fun RestorePhraseNonStandard(
             navigationIcon = {
                 HsBackButton(onClick = onBackClick)
             },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Next),
-                    onClick = viewModel::onProceed
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Next),
+                        onClick = viewModel::onProceed,
+                    ),
+                ),
         )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -158,34 +160,35 @@ fun RestorePhraseNonStandard(
                     initial = viewModel.accountName,
                     pasteEnabled = false,
                     hint = viewModel.defaultName,
-                    onValueChange = viewModel::onEnterName
+                    onValueChange = viewModel::onEnterName,
                 )
                 Spacer(Modifier.height(32.dp))
 
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                            .background(ComposeAppTheme.colors.lawrence),
                 ) {
-
-                    val style = SpanStyle(
-                        color = ComposeAppTheme.colors.lucian,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.sp
-                    )
+                    val style =
+                        SpanStyle(
+                            color = ComposeAppTheme.colors.lucian,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            letterSpacing = 0.sp,
+                        )
 
                     BasicTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onFocusChanged {
-                                isMnemonicPhraseInputFocused = it.isFocused
-                            }
-                            .defaultMinSize(minHeight = 68.dp)
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .onFocusChanged {
+                                    isMnemonicPhraseInputFocused = it.isFocused
+                                }.defaultMinSize(minHeight = 68.dp)
+                                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         enabled = true,
                         value = textState,
                         onValueChange = {
@@ -194,25 +197,28 @@ fun RestorePhraseNonStandard(
                             viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
 
                             showCustomKeyboardDialog =
-                                !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(
-                                    context
+                                !viewModel.isThirdPartyKeyboardAllowed &&
+                                Utils.isUsingCustomKeyboard(
+                                    context,
                                 )
                         },
-                        textStyle = ColoredTextStyle(
-                            color = ComposeAppTheme.colors.leah,
-                            textStyle = ComposeAppTheme.typography.body
-                        ),
+                        textStyle =
+                            ColoredTextStyle(
+                                color = ComposeAppTheme.colors.leah,
+                                textStyle = ComposeAppTheme.typography.body,
+                            ),
                         maxLines = 6,
                         cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                         visualTransformation = {
                             try {
-                                val annotatedString = buildAnnotatedString {
-                                    append(it.text)
+                                val annotatedString =
+                                    buildAnnotatedString {
+                                        append(it.text)
 
-                                    uiState.invalidWordRanges.forEach { range ->
-                                        addStyle(style = style, range.first, range.last + 1)
+                                        uiState.invalidWordRanges.forEach { range ->
+                                            addStyle(style = style, range.first, range.last + 1)
+                                        }
                                     }
-                                }
                                 TransformedText(annotatedString, OffsetMapping.Identity)
                             } catch (error: Throwable) {
                                 error.printStackTrace()
@@ -232,13 +238,13 @@ fun RestorePhraseNonStandard(
                     )
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(44.dp),
                         horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-
                         if (textState.text.isNotEmpty()) {
                             ButtonSecondaryCircle(
                                 modifier = Modifier.padding(end = 16.dp),
@@ -247,8 +253,11 @@ fun RestorePhraseNonStandard(
                                     textState = textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
 
-                                    stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Clear(StatEntity.RecoveryPhrase))
-                                }
+                                    stat(
+                                        page = StatPage.ImportWalletNonStandard,
+                                        event = StatEvent.Clear(StatEntity.RecoveryPhrase),
+                                    )
+                                },
                             )
                         } else {
                             ButtonSecondaryCircle(
@@ -256,11 +265,14 @@ fun RestorePhraseNonStandard(
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
                                     qrScannerLauncher.launch(
-                                        QRScannerActivity.getScanQrIntent(context)
+                                        QRScannerActivity.getScanQrIntent(context),
                                     )
 
-                                    stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.ScanQr(StatEntity.RecoveryPhrase))
-                                }
+                                    stat(
+                                        page = StatPage.ImportWalletNonStandard,
+                                        event = StatEvent.ScanQr(StatEntity.RecoveryPhrase),
+                                    )
+                                },
                             )
 
                             val clipboardManager = LocalClipboardManager.current
@@ -269,16 +281,20 @@ fun RestorePhraseNonStandard(
                                 title = stringResource(id = R.string.Send_Button_Paste),
                                 onClick = {
                                     clipboardManager.getText()?.text?.let { textInClipboard ->
-                                        textState = textState.copy(
-                                            text = textInClipboard,
-                                            selection = TextRange(textInClipboard.length)
-                                        )
+                                        textState =
+                                            textState.copy(
+                                                text = textInClipboard,
+                                                selection = TextRange(textInClipboard.length),
+                                            )
                                         viewModel.onEnterMnemonicPhrase(
                                             textInClipboard,
-                                            textInClipboard.length
+                                            textInClipboard.length,
                                         )
 
-                                        stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Paste(StatEntity.RecoveryPhrase))
+                                        stat(
+                                            page = StatPage.ImportWalletNonStandard,
+                                            event = StatEvent.Paste(StatEntity.RecoveryPhrase),
+                                        )
                                     }
                                 },
                             )
@@ -293,7 +309,7 @@ fun RestorePhraseNonStandard(
                 uiState.error?.let { errorText ->
                     caption_lucian(
                         modifier = Modifier.padding(horizontal = 32.dp),
-                        text = errorText
+                        text = errorText,
                     )
                 }
 
@@ -307,7 +323,7 @@ fun RestorePhraseNonStandard(
             if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
                 SuggestionsBar(
                     modifier = Modifier.align(Alignment.BottomCenter),
-                    wordSuggestions = uiState.wordSuggestions
+                    wordSuggestions = uiState.wordSuggestions,
                 ) { wordItem, suggestion ->
                     HudHelper.vibrate(context)
 
@@ -318,10 +334,11 @@ fun RestorePhraseNonStandard(
                         text = "$text "
                     }
 
-                    textState = TextFieldValue(
-                        text = text,
-                        selection = TextRange(cursorIndex)
-                    )
+                    textState =
+                        TextFieldValue(
+                            text = text,
+                            selection = TextRange(cursorIndex),
+                        )
 
                     viewModel.onEnterMnemonicPhrase(text, cursorIndex)
                 }
@@ -330,11 +347,20 @@ fun RestorePhraseNonStandard(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletNonStandard)
+        mainViewModel.setAccountData(
+            accountType,
+            viewModel.accountName,
+            true,
+            false,
+            StatPage.ImportWalletNonStandard,
+        )
         openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
 
-        stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Open(StatPage.RestoreSelect))
+        stat(
+            page = StatPage.ImportWalletNonStandard,
+            event = StatEvent.Open(StatPage.RestoreSelect),
+        )
     }
 
     if (showCustomKeyboardDialog) {
@@ -351,10 +377,9 @@ fun RestorePhraseNonStandard(
             },
             onCancel = {
                 showCustomKeyboardDialog = false
-            }
+            },
         )
     }
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -371,13 +396,14 @@ private fun BottomSection(
     if (showLanguageSelectorDialog) {
         SelectorDialogCompose(
             title = stringResource(R.string.CreateWallet_Wordlist),
-            items = viewModel.mnemonicLanguages.map {
-                SelectorItem(
-                    stringResource(it.displayNameStringRes),
-                    it == uiState.language,
-                    it
-                )
-            },
+            items =
+                viewModel.mnemonicLanguages.map {
+                    SelectorItem(
+                        stringResource(it.displayNameStringRes),
+                        it == uiState.language,
+                        it,
+                    )
+                },
             onDismissRequest = {
                 coroutineScope.launch {
                     showLanguageSelectorDialog = false
@@ -387,24 +413,26 @@ private fun BottomSection(
             },
             onSelectItem = {
                 viewModel.setMnemonicLanguage(it)
-            }
+            },
         )
     }
 
     CellSingleLineLawrenceSection(
-        listOf({
-            MnemonicLanguageCell(
-                language = uiState.language,
-                showLanguageSelectorDialog = {
-                    showLanguageSelectorDialog = true
-                }
-            )
-        },
+        listOf(
+            {
+                MnemonicLanguageCell(
+                    language = uiState.language,
+                    showLanguageSelectorDialog = {
+                        showLanguageSelectorDialog = true
+                    },
+                )
+            },
             {
                 Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
@@ -417,17 +445,18 @@ private fun BottomSection(
                         text = stringResource(R.string.Passphrase),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp),
                     )
                     HsSwitch(
                         checked = uiState.passphraseEnabled,
-                        onCheckedChange = viewModel::onTogglePassphrase
+                        onCheckedChange = viewModel::onTogglePassphrase,
                     )
                 }
-            }
-        )
+            },
+        ),
     )
 
     if (uiState.passphraseEnabled) {
@@ -441,13 +470,12 @@ private fun BottomSection(
             hide = hidePassphrase,
             onToggleHide = {
                 hidePassphrase = !hidePassphrase
-            }
+            },
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Restore_PassphraseDescription)
+            text = stringResource(R.string.Restore_PassphraseDescription),
         )
     }
-
 }

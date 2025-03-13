@@ -32,10 +32,11 @@ class ConfirmationDialog(
     private val actionButtonTitle: String?,
     private val transparentButtonTitle: String?,
 ) : BaseComposableBottomSheetFragment() {
-
     interface Listener {
         fun onActionButtonClick() {}
+
         fun onTransparentButtonClick() {}
+
         fun onCancelButtonClick() {}
     }
 
@@ -52,11 +53,11 @@ class ConfirmationDialog(
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 ComposeAppTheme {
@@ -64,7 +65,6 @@ class ConfirmationDialog(
                 }
             }
         }
-    }
 
     @Composable
     private fun BottomScreen() {
@@ -72,39 +72,40 @@ class ConfirmationDialog(
             iconPainter = painterResource(icon ?: R.drawable.ic_attention_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = title,
-            onCloseClick = { close() }
+            onCloseClick = { close() },
         ) {
-
             warningText?.let {
                 TextImportantWarning(
                     title = warningTitle,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = it
+                    text = it,
                 )
                 Spacer(Modifier.height(8.dp))
             }
             actionButtonTitle?.let {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, top = 12.dp, end = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, top = 12.dp, end = 24.dp),
                     title = actionButtonTitle,
                     onClick = {
                         listener.onActionButtonClick()
                         dismiss()
-                    }
+                    },
                 )
             }
             transparentButtonTitle?.let {
                 ButtonPrimaryTransparent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, top = 12.dp, end = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, top = 12.dp, end = 24.dp),
                     title = transparentButtonTitle,
                     onClick = {
                         listener.onTransparentButtonClick()
                         dismiss()
-                    }
+                    },
                 )
             }
             Spacer(Modifier.height(32.dp))
@@ -112,7 +113,6 @@ class ConfirmationDialog(
     }
 
     companion object {
-
         fun show(
             icon: Int? = null,
             title: String,
@@ -123,16 +123,16 @@ class ConfirmationDialog(
             fragmentManager: FragmentManager,
             listener: Listener,
         ) {
-
-            val fragment = ConfirmationDialog(
-                listener,
-                title,
-                icon,
-                warningTitle,
-                warningText,
-                actionButtonTitle,
-                transparentButtonTitle,
-            )
+            val fragment =
+                ConfirmationDialog(
+                    listener,
+                    title,
+                    icon,
+                    warningTitle,
+                    warningText,
+                    actionButtonTitle,
+                    transparentButtonTitle,
+                )
             val transaction = fragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")

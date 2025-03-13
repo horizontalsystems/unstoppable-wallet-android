@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ImportCexAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<ManageAccountsModule.Input>()
@@ -23,15 +22,13 @@ class ImportCexAccountFragment : BaseComposeFragment(screenshotEnabled = false) 
 
         ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
-
 }
-
 
 @Composable
 fun ImportCexAccountNavHost(
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
-    inclusive: Boolean
+    inclusive: Boolean,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -42,7 +39,7 @@ fun ImportCexAccountNavHost(
             ImportCexAccountSelectCexScreen(
                 onSelectCex = { navController.navigate("enter-cex-data/$it") },
                 onNavigateBack = { fragmentNavController.popBackStack() },
-                onClose = { fragmentNavController.popBackStack() }
+                onClose = { fragmentNavController.popBackStack() },
             )
         }
         composablePage("enter-cex-data/{cexId}") { backStackEntry ->
@@ -56,10 +53,10 @@ fun ImportCexAccountNavHost(
                         contenView = view,
                         resId = R.string.Hud_Text_Connected,
                         icon = R.drawable.icon_link_24,
-                        iconTint = R.color.white
+                        iconTint = R.color.white,
                     )
                     fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
-                }
+                },
             )
         }
     }

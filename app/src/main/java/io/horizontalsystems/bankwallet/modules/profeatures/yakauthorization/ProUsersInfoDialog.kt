@@ -34,11 +34,11 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 ComposeAppTheme {
@@ -49,43 +49,44 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
                             stringResource(R.string.ProUsersInfo_Features_DesLiquidity),
                             stringResource(R.string.ProUsersInfo_Features_ActiveAddresses),
                             stringResource(R.string.ProUsersInfo_Features_TxCount),
-                            stringResource(R.string.ProUsersInfo_Features_TxVolume)
-                        )
+                            stringResource(R.string.ProUsersInfo_Features_TxVolume),
+                        ),
                     )
                 }
             }
         }
-    }
-
 }
 
 @Composable
-private fun ProUsersInfoScreen(navController: NavController, features: List<String>) {
+private fun ProUsersInfoScreen(
+    navController: NavController,
+    features: List<String>,
+) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_24_lock),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
             navController.popBackStack()
-        }
+        },
     ) {
-
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            text = stringResource(R.string.ProUsersInfo_Description)
+            text = stringResource(R.string.ProUsersInfo_Description),
         )
 
         CellUniversalLawrenceSection(features, showFrame = true) { feature ->
             RowUniversal {
                 subhead2_leah(
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 8.dp)
-                        .weight(1f),
+                    modifier =
+                        Modifier
+                            .padding(start = 16.dp, end = 8.dp)
+                            .weight(1f),
                     text = feature,
                 )
-                //IconButton has own padding, that's pushes 16.dp from end
+                // IconButton has own padding, that's pushes 16.dp from end
                 HsIconButton(
-                    onClick = {}
+                    onClick = {},
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.checkbox_active_24),
@@ -98,14 +99,15 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
 
         Spacer(Modifier.height(44.dp))
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
             title = stringResource(R.string.Hud_Text_LearnMore),
             onClick = {
                 navController.popBackStack()
             },
-            enabled = false
+            enabled = false,
         )
 
         Spacer(Modifier.height(32.dp))

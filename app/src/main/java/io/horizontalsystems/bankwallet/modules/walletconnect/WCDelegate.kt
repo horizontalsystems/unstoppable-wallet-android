@@ -44,7 +44,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
 
     override fun onAuthRequest(
         authRequest: Wallet.Model.AuthRequest,
-        verifyContext: Wallet.Model.VerifyContext
+        verifyContext: Wallet.Model.VerifyContext,
     ) {
         authRequestEvent = Pair(authRequest, verifyContext)
 
@@ -61,7 +61,6 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
             _walletEvents.emit(state)
         }
     }
-
 
     override fun onError(error: Wallet.Model.Error) {
         scope.launch {
@@ -81,7 +80,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
 
     override fun onSessionProposal(
         sessionProposal: Wallet.Model.SessionProposal,
-        verifyContext: Wallet.Model.VerifyContext
+        verifyContext: Wallet.Model.VerifyContext,
     ) {
         sessionProposalEvent = Pair(sessionProposal, verifyContext)
 
@@ -92,12 +91,15 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
 
     override fun onSessionRequest(
         sessionRequest: Wallet.Model.SessionRequest,
-        verifyContext: Wallet.Model.VerifyContext
+        verifyContext: Wallet.Model.VerifyContext,
     ) {
         sessionRequestEvent = null
 
         val sessionRequestForAccount =
-            App.wcSessionManager.getCurrentSessionRequests().reversed().firstOrNull()
+            App.wcSessionManager
+                .getCurrentSessionRequests()
+                .reversed()
+                .firstOrNull()
                 ?: return
 
         if (App.wcWalletRequestHandler.handle(sessionRequestForAccount)) return
@@ -157,15 +159,14 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
 //            }
 //    }
 
-    fun getPairings(): List<Core.Model.Pairing> {
-        return CoreClient.Pairing.getPairings()
-    }
+    fun getPairings(): List<Core.Model.Pairing> = CoreClient.Pairing.getPairings()
 
-    fun getActiveSessions(): List<Wallet.Model.Session> {
-        return Web3Wallet.getListOfActiveSessions()
-    }
+    fun getActiveSessions(): List<Wallet.Model.Session> = Web3Wallet.getListOfActiveSessions()
 
-    fun deletePairing(topic: String, onError: (Throwable) -> Unit = {}) {
+    fun deletePairing(
+        topic: String,
+        onError: (Throwable) -> Unit = {},
+    ) {
         val params = Core.Params.Disconnect(topic)
         CoreClient.Pairing.disconnect(params, onError = {
             onError.invoke(it.throwable)
@@ -191,9 +192,10 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     fun deleteSession(
         topic: String,
         onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {}
+        onError: (Throwable) -> Unit = {},
     ) {
-        Web3Wallet.disconnectSession(Wallet.Params.SessionDisconnect(topic),
+        Web3Wallet.disconnectSession(
+            Wallet.Params.SessionDisconnect(topic),
             onSuccess = {
                 scope.launch {
                     _walletEvents.emit(Wallet.Model.SessionDelete.Success(it.sessionTopic, ""))
@@ -202,7 +204,8 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
             },
             onError = {
                 onError.invoke(it.throwable)
-            })
+            },
+        )
     }
 
     fun respondPendingRequest(
@@ -212,12 +215,14 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
     ) {
-        val response = Wallet.Params.SessionRequestResponse(
-            sessionTopic = topic,
-            jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, data)
-        )
+        val response =
+            Wallet.Params.SessionRequestResponse(
+                sessionTopic = topic,
+                jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, data),
+            )
 
-        Web3Wallet.respondSessionRequest(response,
+        Web3Wallet.respondSessionRequest(
+            response,
             onSuccess = {
                 onSuccessResult.invoke()
                 scope.launch {
@@ -229,7 +234,8 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
                 sessionRequestEvent = null
                 onErrorResult.invoke(error.throwable)
                 onError(error)
-            })
+            },
+        )
     }
 
     fun rejectRequest(
@@ -238,16 +244,19 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
     ) {
-        val result = Wallet.Params.SessionRequestResponse(
-            sessionTopic = topic,
-            jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
-                id = requestId,
-                code = 500,
-                message = "Rejected by user"
+        val result =
+            Wallet.Params.SessionRequestResponse(
+                sessionTopic = topic,
+                jsonRpcResponse =
+                    Wallet.Model.JsonRpcResponse.JsonRpcError(
+                        id = requestId,
+                        code = 500,
+                        message = "Rejected by user",
+                    ),
             )
-        )
 
-        Web3Wallet.respondSessionRequest(result,
+        Web3Wallet.respondSessionRequest(
+            result,
             onSuccess = {
                 onSuccessResult.invoke()
                 scope.launch {
@@ -259,7 +268,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
                 sessionRequestEvent = null
                 onErrorResult.invoke(error.throwable)
                 onError(error)
-            })
+            },
+        )
     }
-
 }

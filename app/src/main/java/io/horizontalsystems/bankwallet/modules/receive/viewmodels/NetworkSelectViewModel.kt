@@ -14,16 +14,15 @@ import io.horizontalsystems.marketkit.models.Token
 class NetworkSelectViewModel(
     val activeAccount: Account,
     val fullCoin: FullCoin,
-    private val walletManager: IWalletManager
+    private val walletManager: IWalletManager,
 ) : ViewModel() {
     val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
-    suspend fun getOrCreateWallet(token: Token): Wallet {
-        return walletManager
+    suspend fun getOrCreateWallet(token: Token): Wallet =
+        walletManager
             .activeWallets
             .find { it.token == token }
             ?: createWallet(token)
-    }
 
     private suspend fun createWallet(token: Token): Wallet {
         val wallet = Wallet(token, activeAccount)
@@ -39,11 +38,10 @@ class NetworkSelectViewModel(
 
     class Factory(
         private val activeAccount: Account,
-        private val fullCoin: FullCoin
+        private val fullCoin: FullCoin,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NetworkSelectViewModel(activeAccount, fullCoin, App.walletManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            NetworkSelectViewModel(activeAccount, fullCoin, App.walletManager) as T
     }
 }

@@ -10,9 +10,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import java.math.BigDecimal
 
-data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
+data class DataFieldSlippage(
+    val slippage: BigDecimal,
+) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(
+        navController: NavController,
+        borderTop: Boolean,
+    ) {
         QuoteInfoRow(
             borderTop = borderTop,
             title = {
@@ -20,7 +25,7 @@ data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
             },
             value = {
                 subhead2_leah(text = App.numberFormatter.format(slippage, 0, 2, suffix = "%"))
-            }
+            },
         )
     }
 }

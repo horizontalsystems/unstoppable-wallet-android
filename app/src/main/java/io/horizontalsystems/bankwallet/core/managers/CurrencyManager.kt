@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class CurrencyManager(private val localStorage: ILocalStorage, private val appConfigProvider: AppConfigProvider) {
-
+class CurrencyManager(
+    private val localStorage: ILocalStorage,
+    private val appConfigProvider: AppConfigProvider,
+) {
     private val scope = CoroutineScope(Dispatchers.Default)
 
     private val _baseCurrencyUpdatedFlow: MutableSharedFlow<Unit> = MutableSharedFlow()
@@ -32,11 +34,10 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
     private val defaultCurrency: Currency
         get() = appConfigProvider.currencies.first { it.code == "USD" }
 
-    private fun getInitialCurrency(): Currency {
-        return localStorage.baseCurrencyCode?.let { code ->
+    private fun getInitialCurrency(): Currency =
+        localStorage.baseCurrencyCode?.let { code ->
             appConfigProvider.currencies.find { it.code == code }
         } ?: defaultCurrency
-    }
 
     val currencies: List<Currency> = appConfigProvider.currencies
 

@@ -9,21 +9,23 @@ data class EvmSyncSource(
     val id: String,
     val name: String,
     val rpcSource: RpcSource,
-    val transactionSource: TransactionSource
+    val transactionSource: TransactionSource,
 ) {
     val isHttp: Boolean = rpcSource is RpcSource.Http
 
     val uri: URI
-        get() = when (val source = rpcSource) {
-            is RpcSource.Http -> source.uris[0]
-            is RpcSource.WebSocket -> source.uri
-        }
+        get() =
+            when (val source = rpcSource) {
+                is RpcSource.Http -> source.uris[0]
+                is RpcSource.WebSocket -> source.uri
+            }
 
     val auth: String?
-        get() = when (val source = rpcSource) {
-            is RpcSource.Http -> source.auth
-            is RpcSource.WebSocket -> source.auth
-        }
+        get() =
+            when (val source = rpcSource) {
+                is RpcSource.Http -> source.auth
+                is RpcSource.WebSocket -> source.auth
+            }
 }
 
 @Entity(primaryKeys = ["blockchainTypeUid", "url"])

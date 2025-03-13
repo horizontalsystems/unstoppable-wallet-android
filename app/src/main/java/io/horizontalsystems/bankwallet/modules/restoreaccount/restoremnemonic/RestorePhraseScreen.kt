@@ -119,7 +119,8 @@ fun RestorePhrase(
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
-    val statPage = if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
+    val statPage =
+        if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
@@ -128,41 +129,53 @@ fun RestorePhrase(
     var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
     val keyboardState by observeKeyboardState()
 
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-            viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+                textState =
+                    textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+                viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+            }
         }
-    }
 
-    val borderColor = if (uiState.error != null) {
-        ComposeAppTheme.colors.red50
-    } else {
-        ComposeAppTheme.colors.steel20
-    }
+    val borderColor =
+        if (uiState.error != null) {
+            ComposeAppTheme.colors.red50
+        } else {
+            ComposeAppTheme.colors.steel20
+        }
 
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(R.string.ManageAccounts_ImportWallet),
+            title =
+                if (advanced) {
+                    stringResource(R.string.Restore_Advanced_Title)
+                } else {
+                    stringResource(
+                        R.string.ManageAccounts_ImportWallet,
+                    )
+                },
             navigationIcon = {
                 HsBackButton(onClick = onBackClick)
             },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Next),
-                    onClick = viewModel::onProceed
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Next),
+                        onClick = viewModel::onProceed,
+                    ),
+                ),
         )
         Column {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Spacer(Modifier.height(12.dp))
 
@@ -172,7 +185,7 @@ fun RestorePhrase(
                     initial = viewModel.accountName,
                     pasteEnabled = false,
                     hint = viewModel.defaultName,
-                    onValueChange = viewModel::onEnterName
+                    onValueChange = viewModel::onEnterName,
                 )
                 Spacer(Modifier.height(32.dp))
 
@@ -182,29 +195,30 @@ fun RestorePhrase(
                 }
 
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                            .background(ComposeAppTheme.colors.lawrence),
                 ) {
-
-                    val style = SpanStyle(
-                        color = ComposeAppTheme.colors.lucian,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.sp
-                    )
+                    val style =
+                        SpanStyle(
+                            color = ComposeAppTheme.colors.lucian,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            letterSpacing = 0.sp,
+                        )
 
                     BasicTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onFocusChanged {
-                                isMnemonicPhraseInputFocused = it.isFocused
-                            }
-                            .defaultMinSize(minHeight = 68.dp)
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .onFocusChanged {
+                                    isMnemonicPhraseInputFocused = it.isFocused
+                                }.defaultMinSize(minHeight = 68.dp)
+                                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         enabled = true,
                         value = textState,
                         onValueChange = {
@@ -213,25 +227,28 @@ fun RestorePhrase(
                             viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
 
                             showCustomKeyboardDialog =
-                                !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(
-                                    context
+                                !viewModel.isThirdPartyKeyboardAllowed &&
+                                Utils.isUsingCustomKeyboard(
+                                    context,
                                 )
                         },
-                        textStyle = ColoredTextStyle(
-                            color = ComposeAppTheme.colors.leah,
-                            textStyle = ComposeAppTheme.typography.body
-                        ),
+                        textStyle =
+                            ColoredTextStyle(
+                                color = ComposeAppTheme.colors.leah,
+                                textStyle = ComposeAppTheme.typography.body,
+                            ),
                         maxLines = 6,
                         cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                         visualTransformation = {
                             try {
-                                val annotatedString = buildAnnotatedString {
-                                    append(it.text)
+                                val annotatedString =
+                                    buildAnnotatedString {
+                                        append(it.text)
 
-                                    uiState.invalidWordRanges.forEach { range ->
-                                        addStyle(style = style, range.first, range.last + 1)
+                                        uiState.invalidWordRanges.forEach { range ->
+                                            addStyle(style = style, range.first, range.last + 1)
+                                        }
                                     }
-                                }
                                 TransformedText(annotatedString, OffsetMapping.Identity)
                             } catch (error: Throwable) {
                                 error.printStackTrace()
@@ -251,13 +268,13 @@ fun RestorePhrase(
                     )
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(44.dp),
                         horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-
                         if (textState.text.isNotEmpty()) {
                             ButtonSecondaryCircle(
                                 modifier = Modifier.padding(end = 16.dp),
@@ -266,8 +283,11 @@ fun RestorePhrase(
                                     textState = textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
 
-                                    stat(page = statPage, event = StatEvent.Clear(StatEntity.RecoveryPhrase))
-                                }
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.Clear(StatEntity.RecoveryPhrase),
+                                    )
+                                },
                             )
                         } else {
                             ButtonSecondaryCircle(
@@ -275,11 +295,14 @@ fun RestorePhrase(
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
                                     qrScannerLauncher.launch(
-                                        QRScannerActivity.getScanQrIntent(context)
+                                        QRScannerActivity.getScanQrIntent(context),
                                     )
 
-                                    stat(page = statPage, event = StatEvent.ScanQr(StatEntity.RecoveryPhrase))
-                                }
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.ScanQr(StatEntity.RecoveryPhrase),
+                                    )
+                                },
                             )
 
                             val clipboardManager = LocalClipboardManager.current
@@ -288,17 +311,21 @@ fun RestorePhrase(
                                 title = stringResource(id = R.string.Send_Button_Paste),
                                 onClick = {
                                     clipboardManager.getText()?.text?.let { textInClipboard ->
-                                        textState = textState.copy(
-                                            text = textInClipboard,
-                                            selection = TextRange(textInClipboard.length)
-                                        )
+                                        textState =
+                                            textState.copy(
+                                                text = textInClipboard,
+                                                selection = TextRange(textInClipboard.length),
+                                            )
                                         viewModel.onEnterMnemonicPhrase(
                                             textInClipboard,
-                                            textInClipboard.length
+                                            textInClipboard.length,
                                         )
                                     }
 
-                                    stat(page = statPage, event = StatEvent.Paste(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.Paste(StatEntity.RecoveryPhrase),
+                                    )
                                 },
                             )
                         }
@@ -312,7 +339,7 @@ fun RestorePhrase(
                 uiState.error?.let { errorText ->
                     caption_lucian(
                         modifier = Modifier.padding(horizontal = 32.dp),
-                        text = errorText
+                        text = errorText,
                     )
                 }
 
@@ -323,17 +350,17 @@ fun RestorePhrase(
                         viewModel,
                         uiState,
                         openNonStandardRestore,
-                        coroutineScope
+                        coroutineScope,
                     )
                 } else {
                     CellSingleLineLawrenceSection {
                         Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    openRestoreAdvanced?.invoke()
-                                }
-                                .padding(horizontal = 16.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .clickable {
+                                        openRestoreAdvanced?.invoke()
+                                    }.padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             body_leah(text = stringResource(R.string.Button_Advanced))
@@ -362,10 +389,11 @@ fun RestorePhrase(
                             text = "$text "
                         }
 
-                        textState = TextFieldValue(
-                            text = text,
-                            selection = TextRange(cursorIndex)
-                        )
+                        textState =
+                            TextFieldValue(
+                                text = text,
+                                selection = TextRange(cursorIndex),
+                            )
 
                         viewModel.onEnterMnemonicPhrase(text, cursorIndex)
                     }
@@ -396,10 +424,9 @@ fun RestorePhrase(
             },
             onCancel = {
                 showCustomKeyboardDialog = false
-            }
+            },
         )
     }
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -417,13 +444,14 @@ private fun BottomSection(
     if (showLanguageSelectorDialog) {
         SelectorDialogCompose(
             title = stringResource(R.string.CreateWallet_Wordlist),
-            items = viewModel.mnemonicLanguages.map {
-                SelectorItem(
-                    stringResource(it.displayNameStringRes),
-                    it == uiState.language,
-                    it
-                )
-            },
+            items =
+                viewModel.mnemonicLanguages.map {
+                    SelectorItem(
+                        stringResource(it.displayNameStringRes),
+                        it == uiState.language,
+                        it,
+                    )
+                },
             onDismissRequest = {
                 coroutineScope.launch {
                     showLanguageSelectorDialog = false
@@ -433,7 +461,7 @@ private fun BottomSection(
             },
             onSelectItem = {
                 viewModel.setMnemonicLanguage(it)
-            }
+            },
         )
     }
 
@@ -444,17 +472,16 @@ private fun BottomSection(
                     language = uiState.language,
                     showLanguageSelectorDialog = {
                         showLanguageSelectorDialog = true
-                    }
+                    },
                 )
             },
             {
                 PassphraseCell(
                     enabled = uiState.passphraseEnabled,
-                    onCheckedChange = viewModel::onTogglePassphrase
+                    onCheckedChange = viewModel::onTogglePassphrase,
                 )
-            }
-
-        )
+            },
+        ),
     )
 
     if (uiState.passphraseEnabled) {
@@ -468,12 +495,12 @@ private fun BottomSection(
             hide = hidePassphrase,
             onToggleHide = {
                 hidePassphrase = !hidePassphrase
-            }
+            },
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Restore_PassphraseDescription)
+            text = stringResource(R.string.Restore_PassphraseDescription),
         )
     }
 
@@ -481,12 +508,12 @@ private fun BottomSection(
 
     CellSingleLineLawrenceSection {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    openNonStandardRestore.invoke()
-                }
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        openNonStandardRestore.invoke()
+                    }.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             body_leah(text = stringResource(R.string.Restore_NonStandardRestore))
@@ -505,7 +532,7 @@ private fun BottomSection(
 fun SuggestionsBar(
     modifier: Modifier = Modifier,
     wordSuggestions: RestoreMnemonicModule.WordSuggestions?,
-    onClick: (RestoreMnemonicModule.WordItem, String) -> Unit
+    onClick: (RestoreMnemonicModule.WordItem, String) -> Unit,
 ) {
     Box(modifier = modifier) {
         BoxTyler44(borderTop = true) {
@@ -513,14 +540,14 @@ fun SuggestionsBar(
                 LazyRow(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(start = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     items(wordSuggestions.options) { suggestion ->
                         val wordItem = wordSuggestions.wordItem
                         ButtonSecondary(
                             onClick = {
                                 onClick.invoke(wordItem, suggestion)
-                            }
+                            },
                         ) {
                             captionSB_leah(text = suggestion)
                         }
@@ -532,7 +559,7 @@ fun SuggestionsBar(
                     modifier = Modifier.align(Alignment.Center),
                     painter = painterResource(R.drawable.ic_more_24),
                     tint = ComposeAppTheme.colors.grey,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }

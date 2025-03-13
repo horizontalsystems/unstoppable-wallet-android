@@ -15,12 +15,13 @@ class AddressUri(
     var unhandledParameters: MutableMap<String, String> = mutableMapOf()
 
     inline fun <reified T> value(field: Field): T? {
-        val value: Any? = when (T::class) {
-            String::class -> parameters[field]
-            BigDecimal::class -> parameters[field]?.toBigDecimalOrNull()
-            Int::class -> parameters[field]?.toInt()
-            else -> null
-        }
+        val value: Any? =
+            when (T::class) {
+                String::class -> parameters[field]
+                BigDecimal::class -> parameters[field]?.toBigDecimalOrNull()
+                Int::class -> parameters[field]?.toInt()
+                else -> null
+            }
 
         @Suppress("UNCHECKED_CAST")
         return value as? T
@@ -29,23 +30,24 @@ class AddressUri(
     val amount: BigDecimal?
         get() = value<BigDecimal>(Field.Amount) ?: value(Field.Value)
 
-
-    enum class Field(val value: String) {
+    enum class Field(
+        val value: String,
+    ) {
         Amount("amount"),
         Value("value"),
         Label("label"),
         Message("message"),
         BlockchainUid("blockchain_uid"),
-        TokenUid("token_uid");
+        TokenUid("token_uid"),
+        ;
 
         companion object {
-            fun amountField(blockchainType: BlockchainType): Field {
-                return if (EvmBlockchainManager.blockchainTypes.contains(blockchainType)) {
+            fun amountField(blockchainType: BlockchainType): Field =
+                if (EvmBlockchainManager.blockchainTypes.contains(blockchainType)) {
                     Value
                 } else {
                     Amount
                 }
-            }
         }
     }
 
@@ -56,7 +58,8 @@ class AddressUri(
                 return listOf(BlockchainType.fromUid(concreteUid))
             }
 
-            val type: BlockchainType? = BlockchainType.supported.firstOrNull { it.uriScheme == scheme }
+            val type: BlockchainType? =
+                BlockchainType.supported.firstOrNull { it.uriScheme == scheme }
             type?.let {
                 return if (EvmBlockchainManager.blockchainTypes.contains(type)) {
                     EvmBlockchainManager.blockchainTypes
@@ -68,4 +71,3 @@ class AddressUri(
             return null
         }
 }
-

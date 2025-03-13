@@ -13,11 +13,11 @@ import org.mockito.Mockito
 import java.util.Date
 
 class LockoutManagerTest {
-
     private val localStorage = Mockito.mock(ILockoutStorage::class.java)
     private val uptimeProvider = Mockito.mock(UptimeProvider::class.java)
     private val lockoutUntilDateFactory = Mockito.mock(ILockoutUntilDateFactory::class.java)
-    private val lockoutManager = LockoutManager(localStorage, uptimeProvider, lockoutUntilDateFactory)
+    private val lockoutManager =
+        LockoutManager(localStorage, uptimeProvider, lockoutUntilDateFactory)
 
     @Test
     fun didFailUnlock_first() {
@@ -72,7 +72,13 @@ class LockoutManagerTest {
         whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
         whenever(localStorage.lockoutUptime).thenReturn(timestamp)
         whenever(uptimeProvider.uptime).thenReturn(timestamp)
-        whenever(lockoutUntilDateFactory.lockoutUntilDate(failedAttempts, timestamp, timestamp)).thenReturn(unlockDate)
+        whenever(
+            lockoutUntilDateFactory.lockoutUntilDate(
+                failedAttempts,
+                timestamp,
+                timestamp,
+            ),
+        ).thenReturn(unlockDate)
 
         val state = LockoutState.Locked(unlockDate)
 
@@ -107,10 +113,14 @@ class LockoutManagerTest {
         whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
         whenever(localStorage.lockoutUptime).thenReturn(timestamp)
         whenever(uptimeProvider.uptime).thenReturn(timestamp)
-        whenever(lockoutUntilDateFactory.lockoutUntilDate(failedAttempts, timestamp, timestamp)).thenReturn(unlockDate)
+        whenever(
+            lockoutUntilDateFactory.lockoutUntilDate(
+                failedAttempts,
+                timestamp,
+                timestamp,
+            ),
+        ).thenReturn(unlockDate)
 
         Assert.assertEquals(lockoutManager.currentState, state)
     }
-
-
 }

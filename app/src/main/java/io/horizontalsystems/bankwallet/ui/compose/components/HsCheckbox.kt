@@ -21,23 +21,23 @@ fun HsCheckbox(
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clickable(
-                enabled = enabled,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = { onCheckedChange?.invoke(!checked) }
-            )
-            .size(24.dp)
+        modifier =
+            Modifier
+                .clickable(
+                    enabled = enabled,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { onCheckedChange?.invoke(!checked) },
+                ).size(24.dp),
     ) {
         Image(
             painter = painterResource(id = R.drawable.checkbox_inactive_24),
-            contentDescription = null
+            contentDescription = null,
         )
         if (checked) {
             Image(
                 painter = painterResource(id = R.drawable.checkbox_active_24),
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }

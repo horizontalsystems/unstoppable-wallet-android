@@ -46,35 +46,34 @@ class BottomSheetSelectorMultipleDialog(
     private val warningTitle: String?,
     private val warning: String?,
     private val notifyUnchanged: Boolean,
-    private val allowEmpty: Boolean
+    private val allowEmpty: Boolean,
 ) : BaseComposableBottomSheetFragment() {
-
-    val selected = mutableStateListOf<Int>().apply {
-        addAll(selectedIndexes)
-    }
+    val selected =
+        mutableStateListOf<Int>().apply {
+            addAll(selectedIndexes)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 ComposeAppTheme {
                     BottomSheetHeader(
                         iconPainter = icon.painter(),
                         title = title,
-                        onCloseClick = { close() }
+                        onCloseClick = { close() },
                     ) {
                         BottomSheetContent()
                     }
                 }
             }
         }
-    }
 
     @Composable
     private fun BottomSheetContent() {
@@ -83,24 +82,26 @@ class BottomSheetSelectorMultipleDialog(
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 title = warningTitle,
-                text = it
+                text = it,
             )
         }
         Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp)),
         ) {
             items.forEachIndexed { index, item ->
-                val onClick = if (item.copyableString != null) {
-                    {
-                        HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                        TextHelper.copyText(item.copyableString)
+                val onClick =
+                    if (item.copyableString != null) {
+                        {
+                            HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                            TextHelper.copyText(item.copyableString)
+                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
 
                 SectionUniversalItem(
                     borderTop = index != 0,
@@ -108,14 +109,15 @@ class BottomSheetSelectorMultipleDialog(
                     RowUniversal(
                         onClick = onClick,
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalPadding = 0.dp
+                        verticalPadding = 0.dp,
                     ) {
                         item.icon?.let { url ->
                             HsImage(
                                 url = url,
-                                modifier = Modifier
-                                    .padding(end = 16.dp)
-                                    .size(32.dp)
+                                modifier =
+                                    Modifier
+                                        .padding(end = 16.dp)
+                                        .size(32.dp),
                             )
                         }
                         Column(modifier = Modifier.padding(vertical = 12.dp)) {
@@ -147,13 +149,14 @@ class BottomSheetSelectorMultipleDialog(
                 }
                 dismiss()
             },
-            enabled = allowEmpty || selected.isNotEmpty()
+            enabled = allowEmpty || selected.isNotEmpty(),
         )
     }
 
-    private fun equals(list1: List<Int>, list2: List<Int>): Boolean {
-        return (list1 - list2).isEmpty() && (list2 - list1).isEmpty()
-    }
+    private fun equals(
+        list1: List<Int>,
+        list2: List<Int>,
+    ): Boolean = (list1 - list2).isEmpty() && (list2 - list1).isEmpty()
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
@@ -177,7 +180,7 @@ class BottomSheetSelectorMultipleDialog(
             warningTitle: String? = null,
             warning: String? = null,
             notifyUnchanged: Boolean = false,
-            allowEmpty: Boolean
+            allowEmpty: Boolean,
         ) {
             BottomSheetSelectorMultipleDialog(
                 title,
@@ -189,9 +192,8 @@ class BottomSheetSelectorMultipleDialog(
                 warningTitle,
                 warning,
                 notifyUnchanged,
-                allowEmpty
-            )
-                .show(fragmentManager, "selector_dialog")
+                allowEmpty,
+            ).show(fragmentManager, "selector_dialog")
         }
     }
 
@@ -202,7 +204,7 @@ class BottomSheetSelectorMultipleDialog(
         val viewItems: List<BottomSheetSelectorViewItem>,
         val descriptionTitle: String? = null,
         val description: String? = null,
-        val allowEmpty: Boolean = false
+        val allowEmpty: Boolean = false,
     ) {
         val uuid = UUID.randomUUID().toString()
     }
@@ -212,5 +214,5 @@ data class BottomSheetSelectorViewItem(
     val title: String,
     val subtitle: String,
     val copyableString: String? = null,
-    val icon: String? = null
+    val icon: String? = null,
 )

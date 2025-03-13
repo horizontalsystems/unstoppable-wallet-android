@@ -45,7 +45,6 @@ import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 
 class SelectBlockchainsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -54,7 +53,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
                 input.accountName,
                 navController,
                 input.popOffOnSuccess,
-                input.popOffInclusive
+                input.popOffInclusive,
             )
         }
     }
@@ -66,7 +65,6 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
         val accountType: AccountType,
         val accountName: String?,
     ) : Parcelable
-
 }
 
 @Composable
@@ -75,9 +73,16 @@ private fun SelectBlockchainsScreen(
     accountName: String?,
     navController: NavController,
     popUpToInclusiveId: Int,
-    inclusive: Boolean
+    inclusive: Boolean,
 ) {
-    val viewModel = viewModel<SelectBlockchainsViewModel>(factory = SelectBlockchainsModule.Factory(accountType, accountName))
+    val viewModel =
+        viewModel<SelectBlockchainsViewModel>(
+            factory =
+                SelectBlockchainsModule.Factory(
+                    accountType,
+                    accountName,
+                ),
+        )
 
     val view = LocalView.current
     val uiState = viewModel.uiState
@@ -92,7 +97,7 @@ private fun SelectBlockchainsScreen(
                 contenView = view,
                 resId = R.string.Hud_Text_AddressAdded,
                 icon = R.drawable.icon_binocule_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             navController.popBackStack(popUpToInclusiveId, inclusive)
@@ -100,26 +105,28 @@ private fun SelectBlockchainsScreen(
     }
 
     Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler),
     ) {
         AppBar(
             title = stringResource(title),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Done),
-                    onClick = viewModel::onClickWatch,
-                    enabled = submitEnabled
-                )
-            ),
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Done),
+                        onClick = viewModel::onClickWatch,
+                        enabled = submitEnabled,
+                    ),
+                ),
         )
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -131,20 +138,22 @@ private fun SelectBlockchainsScreen(
             items(blockchainViewItems) { viewItem ->
                 CellMultilineClear(
                     borderBottom = true,
-                    onClick = { viewModel.onToggle(viewItem.item) }
+                    onClick = { viewModel.onToggle(viewItem.item) },
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp),
                     ) {
                         Image(
                             painter = viewItem.imageSource.painter(),
                             contentDescription = null,
-                            modifier = Modifier
-                                .padding(end = 16.dp)
-                                .size(32.dp)
+                            modifier =
+                                Modifier
+                                    .padding(end = 16.dp)
+                                    .size(32.dp),
                         )
                         Column(modifier = Modifier.weight(1f)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -154,17 +163,19 @@ private fun SelectBlockchainsScreen(
                                 )
                                 viewItem.label?.let { labelText ->
                                     Box(
-                                        modifier = Modifier
-                                            .padding(start = 6.dp)
-                                            .clip(RoundedCornerShape(4.dp))
-                                            .background(ComposeAppTheme.colors.jeremy)
+                                        modifier =
+                                            Modifier
+                                                .padding(start = 6.dp)
+                                                .clip(RoundedCornerShape(4.dp))
+                                                .background(ComposeAppTheme.colors.jeremy),
                                     ) {
                                         Text(
-                                            modifier = Modifier.padding(
-                                                start = 4.dp,
-                                                end = 4.dp,
-                                                bottom = 1.dp
-                                            ),
+                                            modifier =
+                                                Modifier.padding(
+                                                    start = 4.dp,
+                                                    end = 4.dp,
+                                                    bottom = 1.dp,
+                                                ),
                                             text = labelText,
                                             color = ComposeAppTheme.colors.bran,
                                             style = ComposeAppTheme.typography.microSB,
@@ -176,7 +187,7 @@ private fun SelectBlockchainsScreen(
                             subhead2_grey(
                                 text = viewItem.subtitle,
                                 maxLines = 1,
-                                modifier = Modifier.padding(top = 1.dp)
+                                modifier = Modifier.padding(top = 1.dp),
                             )
                         }
                         Spacer(Modifier.width(12.dp))

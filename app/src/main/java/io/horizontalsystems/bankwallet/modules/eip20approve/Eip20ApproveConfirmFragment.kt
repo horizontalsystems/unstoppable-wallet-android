@@ -46,17 +46,21 @@ class Eip20ApproveConfirmFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Result(val approved: Boolean) : Parcelable
+    data class Result(
+        val approved: Boolean,
+    ) : Parcelable
 }
 
 @Composable
 fun Eip20ApproveConfirmScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
-    val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.eip20ApproveFragment)
+        }
+    val viewModel =
+        viewModel<Eip20ApproveViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+        )
 
     val uiState = viewModel.uiState
 
@@ -79,25 +83,30 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                 onClick = {
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Swap_Approving, SnackbarDuration.INDEFINITE)
+                        HudHelper.showInProcessMessage(
+                            view,
+                            R.string.Swap_Approving,
+                            SnackbarDuration.INDEFINITE,
+                        )
 
-                        val result = try {
-                            viewModel.approve()
+                        val result =
+                            try {
+                                viewModel.approve()
 
-                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                            delay(1200)
-                            Eip20ApproveConfirmFragment.Result(true)
-                        } catch (t: Throwable) {
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            Eip20ApproveConfirmFragment.Result(false)
-                        }
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                                Eip20ApproveConfirmFragment.Result(true)
+                            } catch (t: Throwable) {
+                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                Eip20ApproveConfirmFragment.Result(false)
+                            }
 
                         buttonEnabled = true
                         navController.setNavigationResultX(result)
                         navController.popBackStack()
                     }
                 },
-                enabled = uiState.approveEnabled && buttonEnabled
+                enabled = uiState.approveEnabled && buttonEnabled,
             )
             VSpacer(16.dp)
             ButtonPrimaryDefault(
@@ -105,9 +114,9 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                 title = stringResource(R.string.Button_Cancel),
                 onClick = {
                     navController.popBackStack(R.id.eip20ApproveFragment, true)
-                }
+                },
             )
-        }
+        },
     ) {
         SectionUniversalLawrence {
             when (uiState.allowanceMode) {
@@ -119,15 +128,16 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                         currency = uiState.currency,
                         borderTop = false,
                         title = stringResource(R.string.Approve_YouApprove),
-                        amountColor = ComposeAppTheme.colors.leah
+                        amountColor = ComposeAppTheme.colors.leah,
                     )
                 }
+
                 Unlimited -> {
                     TokenRowUnlimited(
                         token = uiState.token,
                         borderTop = false,
                         title = stringResource(R.string.Approve_YouApprove),
-                        amountColor = ComposeAppTheme.colors.leah
+                        amountColor = ComposeAppTheme.colors.leah,
                     )
                 }
             }
@@ -138,7 +148,7 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                     value = uiState.spenderAddress,
                     showAdd = uiState.contact == null,
                     blockchainType = uiState.token.blockchainType,
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -154,7 +164,7 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
             DataFieldFee(
                 navController,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
             )
         }
 

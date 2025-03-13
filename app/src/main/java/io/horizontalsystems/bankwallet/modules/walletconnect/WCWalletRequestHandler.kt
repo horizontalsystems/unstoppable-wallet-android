@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.ethereumkit.core.hexStringToIntOrNull
 
 class WCWalletRequestHandler(
-    private val evmBlockchainManager: EvmBlockchainManager
+    private val evmBlockchainManager: EvmBlockchainManager,
 ) {
     private val gson by lazy { Gson() }
 
@@ -21,37 +21,47 @@ class WCWalletRequestHandler(
 
             return when (request.method) {
                 "wallet_addEthereumChain",
-                "wallet_switchEthereumChain" -> {
-                    val blockchain = chain.chainId.hexStringToIntOrNull()?.let { evmBlockchainManager.getBlockchain(it) }
+                "wallet_switchEthereumChain",
+                -> {
+                    val blockchain =
+                        chain.chainId
+                            .hexStringToIntOrNull()
+                            ?.let { evmBlockchainManager.getBlockchain(it) }
                     if (blockchain != null) {
-                        val response = Wallet.Params.SessionRequestResponse(
-                            sessionTopic = sessionRequest.topic,
-                            jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(
-                                id = request.id,
-                                result = "null"
+                        val response =
+                            Wallet.Params.SessionRequestResponse(
+                                sessionTopic = sessionRequest.topic,
+                                jsonRpcResponse =
+                                    Wallet.Model.JsonRpcResponse.JsonRpcResult(
+                                        id = request.id,
+                                        result = "null",
+                                    ),
                             )
-                        )
                         Web3Wallet.respondSessionRequest(
                             params = response,
                             onSuccess = {},
                             onError = { error ->
                                 Log.e("WCWalletHandler", "${request.method} response error: $error")
-                            })
-
-                    } else {
-                        val result = Wallet.Params.SessionRequestResponse(
-                            sessionTopic = sessionRequest.topic,
-                            jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
-                                id = request.id,
-                                code = 4902,
-                                message = "Unrecognized chain ID"
-                            )
+                            },
                         )
-                        Web3Wallet.respondSessionRequest(result,
+                    } else {
+                        val result =
+                            Wallet.Params.SessionRequestResponse(
+                                sessionTopic = sessionRequest.topic,
+                                jsonRpcResponse =
+                                    Wallet.Model.JsonRpcResponse.JsonRpcError(
+                                        id = request.id,
+                                        code = 4902,
+                                        message = "Unrecognized chain ID",
+                                    ),
+                            )
+                        Web3Wallet.respondSessionRequest(
+                            result,
                             onSuccess = {},
                             onError = { error ->
                                 Log.e("WCWalletHandler", "${request.method} response error: $error")
-                            })
+                            },
+                        )
                     }
 
                     true
@@ -78,5 +88,4 @@ class WCWalletRequestHandler(
         val symbol: String,
         val decimals: Int,
     )
-
 }

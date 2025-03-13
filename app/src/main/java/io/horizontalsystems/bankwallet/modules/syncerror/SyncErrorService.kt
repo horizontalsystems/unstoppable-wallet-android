@@ -10,9 +10,8 @@ class SyncErrorService(
     private val adapterManager: IAdapterManager,
     val reportEmail: String,
     private val btcBlockchainManager: BtcBlockchainManager,
-    private val evmBlockchainManager: EvmBlockchainManager
+    private val evmBlockchainManager: EvmBlockchainManager,
 ) {
-
     val blockchainWrapper by lazy {
         btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
             SyncErrorModule.BlockchainWrapper(it, SyncErrorModule.BlockchainWrapper.Type.Bitcoin)

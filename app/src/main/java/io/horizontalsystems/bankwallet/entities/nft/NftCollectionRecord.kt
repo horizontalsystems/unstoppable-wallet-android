@@ -8,14 +8,15 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Entity(
     primaryKeys = ["blockchainType", "accountId", "uid"],
-    foreignKeys = [ForeignKey(
-        entity = AccountRecord::class,
-        parentColumns = ["id"],
-        childColumns = ["accountId"],
-        onDelete = ForeignKey.CASCADE,
-        deferred = true
-    )
-    ]
+    foreignKeys = [
+        ForeignKey(
+            entity = AccountRecord::class,
+            parentColumns = ["id"],
+            childColumns = ["accountId"],
+            onDelete = ForeignKey.CASCADE,
+            deferred = true,
+        ),
+    ],
 )
 data class NftCollectionRecord(
     val blockchainType: BlockchainType,
@@ -23,10 +24,8 @@ data class NftCollectionRecord(
     val uid: String,
     val name: String,
     val imageUrl: String?,
-
     @Embedded(prefix = "averagePrice7d_")
     val averagePrice7d: NftPriceRecord?,
-
     @Embedded(prefix = "averagePrice30d_")
-    val averagePrice30d: NftPriceRecord?
+    val averagePrice30d: NftPriceRecord?,
 )

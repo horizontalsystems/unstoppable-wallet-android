@@ -9,11 +9,12 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Dao
 interface RecentAddressDao {
-
     @Query("SELECT * FROM RecentAddress WHERE accountId = :accountId AND blockchainType = :blockchainType")
-    fun get(accountId: String, blockchainType: BlockchainType): RecentAddress?
+    fun get(
+        accountId: String,
+        blockchainType: BlockchainType,
+    ): RecentAddress?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recentAddress: RecentAddress)
-
 }

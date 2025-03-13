@@ -14,13 +14,11 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
 import java.net.URI
-import java.net.URISyntaxException
 
 class AddRpcViewModel(
     private val blockchain: Blockchain,
-    private val evmSyncSourceManager: EvmSyncSourceManager
+    private val evmSyncSourceManager: EvmSyncSourceManager,
 ) : ViewModel() {
-
     private var url = ""
     private var auth: String? = null
     private var urlCaution: Caution? = null
@@ -52,15 +50,23 @@ class AddRpcViewModel(
                 throw MalformedURLException()
             }
         } catch (e: Throwable) {
-            urlCaution = Caution(Translator.getString(R.string.AddEvmSyncSource_Error_InvalidUrl), Caution.Type.Error)
+            urlCaution =
+                Caution(
+                    Translator.getString(R.string.AddEvmSyncSource_Error_InvalidUrl),
+                    Caution.Type.Error,
+                )
             syncState()
             return
         }
 
         val existingSources = evmSyncSourceManager.allSyncSources(blockchain.type)
 
-        if (existingSources.any { it.uri == sourceUri}) {
-            urlCaution = Caution(Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists), Caution.Type.Warning)
+        if (existingSources.any { it.uri == sourceUri }) {
+            urlCaution =
+                Caution(
+                    Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists),
+                    Caution.Type.Warning,
+                )
             syncState()
             return
         }
@@ -69,7 +75,10 @@ class AddRpcViewModel(
 
         viewState = AddRpcViewState(null, true)
 
-        stat(page = StatPage.BlockchainSettingsEvmAdd, event = StatEvent.AddEvmSource(blockchain.uid))
+        stat(
+            page = StatPage.BlockchainSettingsEvmAdd,
+            event = StatEvent.AddEvmSource(blockchain.uid),
+        )
     }
 
     private fun syncState() {
@@ -79,5 +88,5 @@ class AddRpcViewModel(
 
 data class AddRpcViewState(
     val urlCaution: Caution? = null,
-    val closeScreen: Boolean = false
+    val closeScreen: Boolean = false,
 )

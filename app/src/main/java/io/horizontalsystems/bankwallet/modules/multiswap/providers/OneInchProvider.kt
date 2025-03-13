@@ -40,26 +40,27 @@ object OneInchProvider : EvmSwapProvider() {
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 
-    override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne
-        -> true
+    override fun supports(blockchainType: BlockchainType) =
+        when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.Base,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.ArbitrumOne,
+            -> true
 
-        else -> false
-    }
+            else -> false
+        }
 
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>
+        settings: Map<String, Any?>,
     ): ISwapQuote {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
@@ -67,31 +68,38 @@ object OneInchProvider : EvmSwapProvider() {
         val settingRecipient = SwapSettingRecipient(settings, blockchainType)
         val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
-        val quote = oneInchKit.getQuoteAsync(
-            chain = evmBlockchainHelper.chain,
-            fromToken = getTokenAddress(tokenIn),
-            toToken = getTokenAddress(tokenOut),
-            amount = amountIn.scaleUp(tokenIn.decimals),
-            fee = PARTNER_FEE
-        ).onErrorResumeNext {
-            Single.error(it.convertedError)
-        }.await()
+        val quote =
+            oneInchKit
+                .getQuoteAsync(
+                    chain = evmBlockchainHelper.chain,
+                    fromToken = getTokenAddress(tokenIn),
+                    toToken = getTokenAddress(tokenOut),
+                    amount = amountIn.scaleUp(tokenIn.decimals),
+                    fee = PARTNER_FEE,
+                ).onErrorResumeNext {
+                    Single.error(it.convertedError)
+                }.await()
 
         val routerAddress = OneInchKit.routerAddress(evmBlockchainHelper.chain)
         val allowance = getAllowance(tokenIn, routerAddress)
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
+        val fields =
+            buildList {
+                settingRecipient.value?.let {
+                    add(DataFieldRecipient(it))
+                }
+                settingSlippage.value?.let {
+                    add(DataFieldSlippage(it))
+                }
+                if (allowance != null && allowance < amountIn) {
+                    add(DataFieldAllowance(allowance, tokenIn))
+                }
             }
-            settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
 
-        val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        val amountOut =
+            quote.toTokenAmount
+                .toBigDecimal()
+                .movePointLeft(quote.toToken.decimals)
+                .stripTrailingZeros()
         return SwapQuoteOneInch(
             amountOut,
             null,
@@ -100,15 +108,16 @@ object OneInchProvider : EvmSwapProvider() {
             tokenIn,
             tokenOut,
             amountIn,
-            actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionApprove(allowance, amountIn, routerAddress, tokenIn),
         )
     }
 
-    private fun getTokenAddress(token: Token) = when (val tokenType = token.type) {
-        TokenType.Native -> evmCoinAddress
-        is TokenType.Eip20 -> Address(tokenType.address)
-        else -> throw IllegalStateException("Unsupported tokenType: $tokenType")
-    }
+    private fun getTokenAddress(token: Token) =
+        when (val tokenType = token.type) {
+            TokenType.Native -> evmCoinAddress
+            is TokenType.Eip20 -> Address(tokenType.address)
+            else -> throw IllegalStateException("Unsupported tokenType: $tokenType")
+        }
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -129,32 +138,39 @@ object OneInchProvider : EvmSwapProvider() {
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
 
-        val swap = oneInchKit.getSwapAsync(
-            chain = evmBlockchainHelper.chain,
-            receiveAddress = sendTransactionSettings.receiveAddress,
-            fromToken = getTokenAddress(tokenIn),
-            toToken = getTokenAddress(tokenOut),
-            amount = amountIn.scaleUp(tokenIn.decimals),
-            slippagePercentage = slippage.toFloat(),
-            recipient = settingRecipient.value?.hex?.let { Address(it) },
-            gasPrice = gasPrice,
-            referrer = PARTNER_ADDRESS,
-            fee = PARTNER_FEE
-        ).await()
+        val swap =
+            oneInchKit
+                .getSwapAsync(
+                    chain = evmBlockchainHelper.chain,
+                    receiveAddress = sendTransactionSettings.receiveAddress,
+                    fromToken = getTokenAddress(tokenIn),
+                    toToken = getTokenAddress(tokenOut),
+                    amount = amountIn.scaleUp(tokenIn.decimals),
+                    slippagePercentage = slippage.toFloat(),
+                    recipient = settingRecipient.value?.hex?.let { Address(it) },
+                    gasPrice = gasPrice,
+                    referrer = PARTNER_ADDRESS,
+                    fee = PARTNER_FEE,
+                ).await()
 
         val swapTx = swap.transaction
 
-        val amountOut = swap.toTokenAmount.toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros()
+        val amountOut =
+            swap.toTokenAmount
+                .toBigDecimal()
+                .movePointLeft(swap.toToken.decimals)
+                .stripTrailingZeros()
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+        val fields =
+            buildList {
+                settingRecipient.value?.let {
+                    add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+                }
+                settingSlippage.value?.let {
+                    add(DataFieldSlippage(it))
+                }
             }
-            settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
-        }
 
         return SwapFinalQuoteEvm(
             tokenIn,
@@ -162,9 +178,12 @@ object OneInchProvider : EvmSwapProvider() {
             amountIn,
             amountOut,
             amountOutMin,
-            SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit),
+            SendTransactionData.Evm(
+                TransactionData(swapTx.to, swapTx.value, swapTx.data),
+                swapTx.gasLimit,
+            ),
             null,
-            fields
+            fields,
         )
     }
 }

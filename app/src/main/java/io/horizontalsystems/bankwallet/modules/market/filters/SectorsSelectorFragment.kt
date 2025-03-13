@@ -39,7 +39,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.findNavController
 
 class SectorsSelectorFragment : BaseComposeFragment() {
-
     private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
         MarketFiltersModule.Factory()
     }
@@ -61,15 +60,15 @@ class SectorsSelectorFragment : BaseComposeFragment() {
                 override fun handleOnBackPressed() {
                     findNavController().popBackStack()
                 }
-            })
+            },
+        )
     }
-
 }
 
 @Composable
 fun SectorsSelectorScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState
     var selectedItems by remember { mutableStateOf(uiState.sectors) }
@@ -84,46 +83,52 @@ fun SectorsSelectorScreen(
                         modifier = Modifier.padding(start = 24.dp),
                         painter = painterResource(id = R.drawable.prem_portfolio_24),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.jacob,
                     )
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
-                    )
-                ),
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = navController::popBackStack,
+                        ),
+                    ),
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(12.dp)
                 CellUniversalLawrenceSection(
                     items = sectorItems,
-                    showFrame = true
+                    showFrame = true,
                 ) { itemWrapper ->
                     RowUniversal(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
                         verticalPadding = 0.dp,
                         onClick = {
                             selectedItems =
                                 if (selectedItems.contains(itemWrapper) && itemWrapper.item == null) {
-                                    listOf(itemWrapper)  //no action when `Any` is already selected and pressed
+                                    listOf(itemWrapper) // no action when `Any` is already selected and pressed
                                 } else if (!selectedItems.contains(itemWrapper) && itemWrapper.item == null) {
-                                    listOf(itemWrapper) //on option  `Any` select, reset other selected items
-                                } else if (!selectedItems.contains(itemWrapper) && selectedItems.size == 1 && selectedItems[0].item == null) {
-                                    listOf(itemWrapper) //on option select, reset `Any` option
+                                    listOf(itemWrapper) // on option  `Any` select, reset other selected items
+                                } else if (!selectedItems.contains(itemWrapper) &&
+                                    selectedItems.size == 1 &&
+                                    selectedItems[0].item == null
+                                ) {
+                                    listOf(itemWrapper) // on option select, reset `Any` option
                                 } else if (selectedItems.contains(itemWrapper) && selectedItems.size == 1) {
                                     listOf(sectorItems[0]) // return `Any` option when last selected item is unselected
                                 } else if (selectedItems.contains(itemWrapper)) {
@@ -133,17 +138,17 @@ fun SectorsSelectorScreen(
                                 }
 
                             viewModel.setSectors(selectedItems)
-                        }
+                        },
                     ) {
                         if (itemWrapper.title != null) {
                             body_leah(
                                 text = itemWrapper.title,
-                                modifier = Modifier.padding(vertical = 12.dp)
+                                modifier = Modifier.padding(vertical = 12.dp),
                             )
                         } else {
                             body_grey(
                                 text = stringResource(R.string.Any),
-                                modifier = Modifier.padding(vertical = 12.dp)
+                                modifier = Modifier.padding(vertical = 12.dp),
                             )
                         }
 
@@ -153,7 +158,7 @@ fun SectorsSelectorScreen(
                                 modifier = Modifier.padding(start = 5.dp),
                                 painter = painterResource(id = R.drawable.ic_checkmark_20),
                                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     }
@@ -162,14 +167,16 @@ fun SectorsSelectorScreen(
             }
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    title = if (selectedItems.size == 1 && selectedItems[0].item == null) {
-                        stringResource(R.string.Button_Done)
-                    } else {
-                        stringResource(R.string.Market_Filters_Select, selectedItems.size)
-                    },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                    title =
+                        if (selectedItems.size == 1 && selectedItems[0].item == null) {
+                            stringResource(R.string.Button_Done)
+                        } else {
+                            stringResource(R.string.Market_Filters_Select, selectedItems.size)
+                        },
                     onClick = {
                         navController.popBackStack()
                     },

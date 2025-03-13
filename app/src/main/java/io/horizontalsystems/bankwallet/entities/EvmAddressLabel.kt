@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class EvmAddressLabel(
     @PrimaryKey
     val address: String,
-    val label: String
+    val label: String,
 )

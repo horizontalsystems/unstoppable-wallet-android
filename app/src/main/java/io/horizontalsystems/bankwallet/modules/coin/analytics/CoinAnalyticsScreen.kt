@@ -55,7 +55,7 @@ import io.horizontalsystems.marketkit.models.FullCoin
 fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
     navController: NavController,
-    fragmentManager: FragmentManager
+    fragmentManager: FragmentManager,
 ) {
     val viewModel =
         viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
@@ -76,7 +76,7 @@ fun CoinAnalyticsScreen(
                         AnalyticsViewItem.NoData -> {
                             ListEmptyView(
                                 text = stringResource(R.string.CoinAnalytics_ProjectNoAnalyticData),
-                                icon = R.drawable.ic_not_available
+                                icon = R.drawable.ic_not_available,
                             )
                         }
 
@@ -89,7 +89,6 @@ fun CoinAnalyticsScreen(
                         }
 
                         null -> {
-
                         }
                     }
                 }
@@ -134,24 +133,26 @@ private fun AnalyticsBlock(
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
-        sectionTitle = block.sectionTitle?.let {
-            {
-                body_leah(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(it)
-                )
-            }
-        },
+        sectionTitle =
+            block.sectionTitle?.let {
+                {
+                    body_leah(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(it),
+                    )
+                }
+            },
         titleRow = {
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
                     isPreview = false,
-                    onInfoClick = block.info?.let { info ->
-                        {
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
-                        }
-                    }
+                    onInfoClick =
+                        block.info?.let { info ->
+                            {
+                                navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+                            }
+                        },
                 )
             }
         },
@@ -164,24 +165,25 @@ private fun AnalyticsBlock(
             block.footerItems.forEachIndexed { index, item ->
                 FooterCell(item, index, navController)
             }
-        }
+        },
     ) {
         Column(
-            modifier = Modifier.clickable(
-                enabled = block.analyticChart?.chartType != null,
-                onClick = {
-                    val coinUid = block.analyticChart?.coinUid
-                    val chartType = block.analyticChart?.chartType
-                    if (coinUid != null && chartType != null) {
-                        ProChartFragment.show(
-                            fragmentManager,
-                            coinUid,
-                            Translator.getString(chartType.titleRes),
-                            chartType,
-                        )
-                    }
-                }
-            )
+            modifier =
+                Modifier.clickable(
+                    enabled = block.analyticChart?.chartType != null,
+                    onClick = {
+                        val coinUid = block.analyticChart?.coinUid
+                        val chartType = block.analyticChart?.chartType
+                        if (coinUid != null && chartType != null) {
+                            ProChartFragment.show(
+                                fragmentManager,
+                                coinUid,
+                                Translator.getString(chartType.titleRes),
+                                chartType,
+                            )
+                        }
+                    },
+                ),
         ) {
             block.value?.let {
                 AnalyticsContentNumber(number = it, period = block.valuePeriod)
@@ -210,15 +212,16 @@ private fun FooterCell(
                 cellAction = item.action,
                 onActionClick = { action ->
                     handleActionClick(action, navController)
-                }
+                },
             )
         }
 
         is CoinAnalyticsModule.FooterType.DetectorFooterItem -> {
             Column(
-                modifier = Modifier.clickable {
-                    item.action?.let { handleActionClick(it, navController) }
-                }
+                modifier =
+                    Modifier.clickable {
+                        item.action?.let { handleActionClick(it, navController) }
+                    },
             ) {
                 AnalyticsFooterCell(
                     title = item.title,
@@ -226,17 +229,17 @@ private fun FooterCell(
                     showTopDivider = index != 0,
                     showRightArrow = item.action != null,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
 
                 if (item.issues.isNotEmpty()) {
                     item.issues.forEach { snippet ->
                         Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         ) {
                             subhead2_grey(
                                 text = stringResource(snippet.title),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
                             )
                             when (snippet.type) {
                                 CoinAnalyticsModule.IssueType.High -> {
@@ -263,28 +266,30 @@ private fun FooterCell(
 @Composable
 private fun AnalyticsPreviewBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: NavController
+    navController: NavController,
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
-        sectionTitle = block.sectionTitle?.let {
-            {
-                body_leah(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(it)
-                )
-            }
-        },
+        sectionTitle =
+            block.sectionTitle?.let {
+                {
+                    body_leah(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(it),
+                    )
+                }
+            },
         titleRow = {
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
                     isPreview = true,
-                    onInfoClick = block.info?.let { info ->
-                        {
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
-                        }
-                    }
+                    onInfoClick =
+                        block.info?.let { info ->
+                            {
+                                navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+                            }
+                        },
                 )
             }
         },
@@ -299,7 +304,7 @@ private fun AnalyticsPreviewBlock(
         },
         onClick = {
             navController.slideFromBottom(R.id.buySubscriptionFragment)
-        }
+        },
     ) {
         if (block.value != null) {
             AnalyticsContentNumber(
@@ -310,11 +315,12 @@ private fun AnalyticsPreviewBlock(
             VSpacer(12.dp)
             when (chart.analyticChart) {
                 is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
-                    val lockedSlices = listOf(
-                        StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
-                        StackBarSlice(value = 37.75f, color = Color(0x80808085)),
-                        StackBarSlice(value = 11.9f, color = Color(0x40808085)),
-                    )
+                    val lockedSlices =
+                        listOf(
+                            StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
+                            StackBarSlice(value = 37.75f, color = Color(0x80808085)),
+                            StackBarSlice(value = 11.9f, color = Color(0x40808085)),
+                        )
                     StackedBarChart(lockedSlices, modifier = Modifier.padding(horizontal = 16.dp))
                 }
 
@@ -333,7 +339,7 @@ private fun AnalyticsPreviewBlock(
                 is CoinAnalyticsModule.AnalyticChart.TechAdvice -> {
                     TechnicalAdviceBlock(
                         detailText = "",
-                        advice = null
+                        advice = null,
                     )
                 }
             }
@@ -346,7 +352,7 @@ private fun AnalyticsPreviewBlock(
 private fun PreviewFooterCell(
     title: CoinAnalyticsModule.BoxItem,
     showRightArrow: Boolean,
-    index: Int
+    index: Int,
 ) {
     AnalyticsFooterCell(
         title = title,
@@ -354,19 +360,19 @@ private fun PreviewFooterCell(
         showTopDivider = index != 0,
         showRightArrow = showRightArrow,
         cellAction = null,
-        onActionClick = { }
+        onActionClick = { },
     )
 }
 
 private fun handleActionClick(
     action: CoinAnalyticsModule.ActionType,
-    navController: NavController
+    navController: NavController,
 ) {
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
             navController.slideFromBottom(
                 R.id.coinMajorHoldersFragment,
-                CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain)
+                CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain),
             )
         }
 

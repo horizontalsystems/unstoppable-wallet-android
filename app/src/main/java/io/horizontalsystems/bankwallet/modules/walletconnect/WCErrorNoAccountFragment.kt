@@ -29,21 +29,20 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 ComposeAppTheme {
-                    WalletConnectErrorNoAccount() {
+                    WalletConnectErrorNoAccount {
                         findNavController().popBackStack()
                     }
                 }
             }
         }
-    }
 }
 
 @Composable
@@ -52,18 +51,19 @@ fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            text = stringResource(id = R.string.WalletConnect_Error_NoWallet)
+            text = stringResource(id = R.string.WalletConnect_Error_NoWallet),
         )
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(vertical = 20.dp, horizontal = 24.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(vertical = 20.dp, horizontal = 24.dp)
+                    .fillMaxWidth(),
             title = stringResource(R.string.Button_Close),
-            onClick = onCloseClick
+            onClick = onCloseClick,
         )
         Spacer(Modifier.height(12.dp))
     }

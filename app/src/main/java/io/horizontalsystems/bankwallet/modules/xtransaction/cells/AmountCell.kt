@@ -42,18 +42,18 @@ fun AmountCell(
     coinAmountColor: Color,
     fiatAmount: String?,
     onClick: () -> Unit,
-    borderTop: Boolean = true
+    borderTop: Boolean = true,
 ) {
     CellUniversal(
         borderTop = borderTop,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Image(
             painter = coinIcon,
             contentDescription = null,
             modifier = Modifier.size(32.dp),
             colorFilter = null,
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
 
         HSpacer(16.dp)
@@ -87,40 +87,47 @@ fun AmountCellTV(
     transactionInfoHelper: TransactionInfoHelper,
     navController: NavController,
     statPage: StatPage,
-    borderTop: Boolean = true
+    borderTop: Boolean = true,
 ) {
     AmountCell(
         title = title,
-        coinIcon = coinIconPainter(
-            url = transactionValue.coinIconUrl,
-            alternativeUrl = transactionValue.alternativeCoinIconUrl,
-            placeholder = transactionValue.coinIconPlaceholder
-        ),
-        coinProtocolType = transactionValue.badge
-            ?: stringResource(id = R.string.CoinPlatforms_Native),
-        coinAmount = coinAmountString(
-            value = transactionValue.decimalValue?.abs(),
-            coinCode = transactionValue.coinCode,
-            sign = coinAmountSign.sign()
-        ),
+        coinIcon =
+            coinIconPainter(
+                url = transactionValue.coinIconUrl,
+                alternativeUrl = transactionValue.alternativeCoinIconUrl,
+                placeholder = transactionValue.coinIconPlaceholder,
+            ),
+        coinProtocolType =
+            transactionValue.badge
+                ?: stringResource(id = R.string.CoinPlatforms_Native),
+        coinAmount =
+            coinAmountString(
+                value = transactionValue.decimalValue?.abs(),
+                coinCode = transactionValue.coinCode,
+                sign = coinAmountSign.sign(),
+            ),
         coinAmountColor = coinAmountColor.color(),
-        fiatAmount = fiatAmountString(
-            value = transactionInfoHelper.getXRate(transactionValue.coinUid)
-                ?.let {
-                    transactionValue.decimalValue?.abs()
-                        ?.multiply(it)
-                },
-            fiatSymbol = transactionInfoHelper.getCurrencySymbol()
-        ),
+        fiatAmount =
+            fiatAmountString(
+                value =
+                    transactionInfoHelper
+                        .getXRate(transactionValue.coinUid)
+                        ?.let {
+                            transactionValue.decimalValue
+                                ?.abs()
+                                ?.multiply(it)
+                        },
+                fiatSymbol = transactionInfoHelper.getCurrencySymbol(),
+            ),
         onClick = {
             navController.slideFromRight(
                 R.id.coinFragment,
-                CoinFragment.Input(transactionValue.coinUid)
+                CoinFragment.Input(transactionValue.coinUid),
             )
 
             stat(
                 page = statPage,
-                event = StatEvent.OpenCoin(transactionValue.coinUid)
+                event = StatEvent.OpenCoin(transactionValue.coinUid),
             )
         },
         borderTop = borderTop,
@@ -128,22 +135,30 @@ fun AmountCellTV(
 }
 
 enum class AmountSign {
-    Plus, Minus, None;
+    Plus,
+    Minus,
+    None,
+    ;
 
-    fun sign() = when (this) {
-        Plus -> "+"
-        Minus -> "-"
-        None -> ""
-    }
+    fun sign() =
+        when (this) {
+            Plus -> "+"
+            Minus -> "-"
+            None -> ""
+        }
 }
 
 enum class AmountColor {
-    Positive, Negative, Neutral;
+    Positive,
+    Negative,
+    Neutral,
+    ;
 
     @Composable
-    fun color() = when (this) {
-        Positive -> ComposeAppTheme.colors.remus
-        Negative -> ComposeAppTheme.colors.lucian
-        Neutral -> ComposeAppTheme.colors.leah
-    }
+    fun color() =
+        when (this) {
+            Positive -> ComposeAppTheme.colors.remus
+            Negative -> ComposeAppTheme.colors.lucian
+            Neutral -> ComposeAppTheme.colors.leah
+        }
 }

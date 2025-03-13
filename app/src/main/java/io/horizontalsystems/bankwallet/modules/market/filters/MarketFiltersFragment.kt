@@ -66,7 +66,6 @@ import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
 
 class MarketFiltersFragment : BaseComposeFragment() {
-
     private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
         MarketFiltersModule.Factory()
     }
@@ -78,7 +77,6 @@ class MarketFiltersFragment : BaseComposeFragment() {
             navController,
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,22 +101,24 @@ private fun AdvancedSearchScreen(
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Reset),
-                        onClick = { viewModel.reset() }
-                    )
-                ),
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Reset),
+                            onClick = { viewModel.reset() },
+                        ),
+                    ),
             )
-        }
+        },
     ) { paddingValues ->
         Column(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 AdvancedSearchContent(
                     navController = navController,
@@ -132,19 +132,20 @@ private fun AdvancedSearchScreen(
                             modalBottomSheetState.show()
                             isBottomSheetVisible = true
                         }
-                    }
+                    },
                 )
             }
 
             ButtonsGroupWithShade {
                 ButtonPrimaryYellowWithSpinner(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                     title = uiState.buttonTitle,
                     onClick = {
                         navController.slideFromRight(
-                            R.id.marketAdvancedSearchResultsFragment
+                            R.id.marketAdvancedSearchResultsFragment,
                         )
                     },
                     showSpinner = uiState.showSpinner,
@@ -160,7 +161,7 @@ private fun AdvancedSearchScreen(
                 isBottomSheetVisible = false
             },
             sheetState = modalBottomSheetState,
-            containerColor = ComposeAppTheme.colors.transparent
+            containerColor = ComposeAppTheme.colors.transparent,
         ) {
             BottomSheetContent(
                 bottomSheetType = bottomSheetType,
@@ -170,7 +171,7 @@ private fun AdvancedSearchScreen(
                         modalBottomSheetState.hide()
                         isBottomSheetVisible = false
                     }
-                }
+                },
             )
         }
     }
@@ -195,7 +196,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updatePriceCloseTo(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
 
@@ -206,7 +207,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updateCoinList(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
 
@@ -219,7 +220,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updateMarketCap(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
 
@@ -232,7 +233,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updateVolume(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
 
@@ -245,7 +246,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updatePriceChange(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
 
@@ -258,7 +259,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updatePeriod(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
 
@@ -271,7 +272,7 @@ private fun BottomSheetContent(
                 onSelect = {
                     viewModel.updateTradingSignal(it)
                 },
-                onClose = onClose
+                onClose = onClose,
             )
         }
     }
@@ -293,17 +294,17 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_ChooseSet,
             value = stringResource(uiState.coinListSet.titleResId),
             borderTop = false,
-            onDropdownClick = { showBottomSheet(CoinSet) }
+            onDropdownClick = { showBottomSheet(CoinSet) },
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Volume,
             value = uiState.volume.title,
-            onDropdownClick = { showBottomSheet(TradingVolume) }
+            onDropdownClick = { showBottomSheet(TradingVolume) },
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Blockchains,
             value = uiState.selectedBlockchainsValue,
-            onDropdownClick = onFilterByBlockchainsClick
+            onDropdownClick = onFilterByBlockchainsClick,
         )
     }
 
@@ -319,7 +320,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     navController.slideFromBottom(R.id.sectorsSelectorFragment)
                 }
-            }
+            },
         )
     }
 
@@ -334,7 +335,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceChange)
                 }
-            }
+            },
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PricePeriod,
@@ -343,8 +344,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(PricePeriod)
                 }
-            }
-
+            },
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_TradingSignals,
@@ -353,7 +353,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(TradingSignals)
                 }
-            }
+            },
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PriceCloseTo,
@@ -362,7 +362,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceCloseTo)
                 }
-            }
+            },
         )
     }
 
@@ -376,7 +376,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBtcOn(it)
                 }
-            }
+            },
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedEth,
@@ -385,7 +385,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedEthOn(it)
                 }
-            }
+            },
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedBnb,
@@ -394,7 +394,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBnbOn(it)
                 }
-            }
+            },
         )
     }
 
@@ -409,7 +409,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateSolidCexOn(it)
                 }
-            }
+            },
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_SolidDex,
@@ -419,7 +419,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateSolidDexOn(it)
                 }
-            }
+            },
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_GoodDistribution,
@@ -429,7 +429,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateGoodDistributionOn(it)
                 }
-            }
+            },
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_ListedOnTopExchanges,
@@ -438,7 +438,7 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateListedOnTopExchangesOn(it)
                 }
-            }
+            },
         )
     }
 
@@ -455,7 +455,7 @@ private fun AdvancedSearchDropdown(
 ) {
     CellUniversal(
         borderTop = borderTop,
-        onClick = onDropdownClick
+        onClick = onDropdownClick,
     ) {
         body_leah(
             text = stringResource(title),
@@ -479,7 +479,7 @@ private fun AdvancedSearchSwitch(
 ) {
     CellUniversal(
         borderTop = borderTop,
-        onClick = { onChecked(!enabled) }
+        onClick = { onChecked(!enabled) },
     ) {
         Column {
             body_leah(
@@ -505,7 +505,11 @@ private fun AdvancedSearchSwitch(
 }
 
 @Composable
-private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Unit) {
+private fun FilterMenu(
+    title: String?,
+    valueColor: TextColor,
+    onClick: () -> Unit,
+) {
     val valueText = title ?: stringResource(R.string.Any)
     val textColor = if (title != null) valueColor else TextColor.Grey
     Row(
@@ -516,38 +520,42 @@ private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Uni
                 indication = null,
                 onClick = onClick,
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         when (textColor) {
-            TextColor.Grey -> body_grey(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
+            TextColor.Grey ->
+                body_grey(
+                    text = valueText,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
 
-            TextColor.Remus -> body_remus(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
+            TextColor.Remus ->
+                body_remus(
+                    text = valueText,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
 
-            TextColor.Lucian -> body_lucian(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
+            TextColor.Lucian ->
+                body_lucian(
+                    text = valueText,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
 
-            TextColor.Leah -> body_leah(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
+            TextColor.Leah ->
+                body_leah(
+                    text = valueText,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
         }
         Icon(
             modifier = Modifier.padding(start = 4.dp),
             painter = painterResource(id = R.drawable.ic_down_arrow_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }

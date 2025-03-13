@@ -17,9 +17,8 @@ import kotlinx.coroutines.rx2.asFlow
 class TokenBalanceService(
     private val wallet: Wallet,
     private val xRateRepository: BalanceXRateRepository,
-    private val balanceAdapterRepository: BalanceAdapterRepository
+    private val balanceAdapterRepository: BalanceAdapterRepository,
 ) : Clearable {
-
     private val _balanceItemFlow = MutableStateFlow<BalanceModule.BalanceItem?>(null)
     val balanceItemFlow = _balanceItemFlow.asStateFlow()
 
@@ -39,14 +38,15 @@ class TokenBalanceService(
 
         val latestRates = xRateRepository.getLatestRates()
 
-        balanceItem = BalanceModule.BalanceItem(
-            wallet = wallet,
-            balanceData = balanceAdapterRepository.balanceData(wallet),
-            state = balanceAdapterRepository.state(wallet),
-            sendAllowed = balanceAdapterRepository.sendAllowed(wallet),
-            coinPrice = latestRates[wallet.coin.uid],
-            warning = balanceAdapterRepository.warning(wallet)
-        )
+        balanceItem =
+            BalanceModule.BalanceItem(
+                wallet = wallet,
+                balanceData = balanceAdapterRepository.balanceData(wallet),
+                state = balanceAdapterRepository.state(wallet),
+                sendAllowed = balanceAdapterRepository.sendAllowed(wallet),
+                coinPrice = latestRates[wallet.coin.uid],
+                warning = balanceAdapterRepository.warning(wallet),
+            )
 
         coroutineScope.launch {
             xRateRepository.itemObservable.asFlow().collect {
@@ -66,17 +66,19 @@ class TokenBalanceService(
     }
 
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
-        balanceItem = balanceItem?.copy(
-            coinPrice = latestRates[wallet.coin.uid]
-        )
+        balanceItem =
+            balanceItem?.copy(
+                coinPrice = latestRates[wallet.coin.uid],
+            )
     }
 
     private fun handleAdapterUpdate() {
-        balanceItem = balanceItem?.copy(
-            balanceData = balanceAdapterRepository.balanceData(wallet),
-            state = balanceAdapterRepository.state(wallet),
-            sendAllowed = balanceAdapterRepository.sendAllowed(wallet)
-        )
+        balanceItem =
+            balanceItem?.copy(
+                balanceData = balanceAdapterRepository.balanceData(wallet),
+                state = balanceAdapterRepository.state(wallet),
+                sendAllowed = balanceAdapterRepository.sendAllowed(wallet),
+            )
     }
 
     override fun clear() {

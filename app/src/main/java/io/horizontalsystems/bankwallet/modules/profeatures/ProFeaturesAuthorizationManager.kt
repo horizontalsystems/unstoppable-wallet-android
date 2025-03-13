@@ -33,12 +33,11 @@ import java.util.Optional
 class ProFeaturesAuthorizationManager(
     private val storage: ProFeaturesStorage,
     private val accountManager: IAccountManager,
-    private val appConfigProvider: AppConfigProvider
+    private val appConfigProvider: AppConfigProvider,
 ) {
-
     data class AccountData(
         val id: String,
-        val address: Address
+        val address: Address,
     )
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -82,50 +81,84 @@ class ProFeaturesAuthorizationManager(
         }
     }
 
-    fun getSessionKey(nftType: ProNft): ProFeaturesSessionKey? =
-        storage.get(nftType)
+    fun getSessionKey(nftType: ProNft): ProFeaturesSessionKey? = storage.get(nftType)
 
-    fun saveSessionKey(nft: ProNft, accountData: AccountData, key: String) {
-        val sessionKey = ProFeaturesSessionKey(nft.keyName, accountData.id, accountData.address.eip55, SecretString(key))
+    fun saveSessionKey(
+        nft: ProNft,
+        accountData: AccountData,
+        key: String,
+    ) {
+        val sessionKey =
+            ProFeaturesSessionKey(
+                nft.keyName,
+                accountData.id,
+                accountData.address.eip55,
+                SecretString(key),
+            )
 
         storage.add(sessionKey)
         _sessionKeyFlow.update { sessionKey }
     }
 
-    suspend fun getNFTHolderAccountData(nftType: ProNft): AccountData? = withContext(Dispatchers.IO) {
-        val accounts = getAllAccountData
-        val provider = Eip1155Provider.instance(RpcSource.Http(listOf(URI(appConfigProvider.blocksDecodedEthereumRpc)), null))
+    suspend fun getNFTHolderAccountData(nftType: ProNft): AccountData? =
+        withContext(Dispatchers.IO) {
+            val accounts = getAllAccountData
+            val provider =
+                Eip1155Provider.instance(
+                    RpcSource.Http(
+                        listOf(URI(appConfigProvider.blocksDecodedEthereumRpc)),
+                        null,
+                    ),
+                )
 
-        return@withContext first1155TokenHolder(provider, nftType.tokenId, accounts).await().orNull
-    }
-
-    fun signMessage(accountData: AccountData, message: String): ByteArray {
-        val account = accountManager.account(accountData.id) ?: throw Exception("Account not found")
-        val privateKey = when (account.type) {
-            is AccountType.EvmPrivateKey -> {
-                account.type.key
-            }
-
-            is AccountType.Mnemonic -> {
-                Signer.privateKey(account.type.seed, Chain.Ethereum)
-            }
-
-            else -> throw Exception("AccountType not supported")
+            return@withContext first1155TokenHolder(
+                provider,
+                nftType.tokenId,
+                accounts,
+            ).await().orNull
         }
+
+    fun signMessage(
+        accountData: AccountData,
+        message: String,
+    ): ByteArray {
+        val account = accountManager.account(accountData.id) ?: throw Exception("Account not found")
+        val privateKey =
+            when (account.type) {
+                is AccountType.EvmPrivateKey -> {
+                    account.type.key
+                }
+
+                is AccountType.Mnemonic -> {
+                    Signer.privateKey(account.type.seed, Chain.Ethereum)
+                }
+
+                else -> throw Exception("AccountType not supported")
+            }
 
         val ethSigner = EthSigner(privateKey, CryptoUtils, EIP712Encoder())
 
         return ethSigner.signByteArray(message.toByteArray(Charsets.UTF_8))
     }
 
-    private fun first1155TokenHolder(provider: Eip1155Provider, tokenId: BigInteger, accounts: List<AccountData>): Single<Optional<AccountData>> {
+    private fun first1155TokenHolder(
+        provider: Eip1155Provider,
+        tokenId: BigInteger,
+        accounts: List<AccountData>,
+    ): Single<Optional<AccountData>> {
         val firstAccount = accounts.firstOrNull() ?: return Single.just(Optional.ofNullable(null))
 
-        return provider.getTokenBalance(contractAddress, tokenId, firstAccount.address).flatMap { balance ->
-            if (balance > BigInteger.ZERO) return@flatMap Single.just(Optional.of(firstAccount))
+        return provider
+            .getTokenBalance(contractAddress, tokenId, firstAccount.address)
+            .flatMap { balance ->
+                if (balance > BigInteger.ZERO) return@flatMap Single.just(Optional.of(firstAccount))
 
-            return@flatMap first1155TokenHolder(provider, tokenId, accounts.subList(1, accounts.size))
-        }
+                return@flatMap first1155TokenHolder(
+                    provider,
+                    tokenId,
+                    accounts.subList(1, accounts.size),
+                )
+            }
     }
 
     private fun handleDeletedAccounts() {
@@ -133,5 +166,4 @@ class ProFeaturesAuthorizationManager(
 
         storage.deleteAllExcept(accountIds)
     }
-
 }

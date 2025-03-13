@@ -10,7 +10,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
 import java.math.BigDecimal
 import java.util.UUID
 
-class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount: BigDecimal?) : ViewModel(), TextPreprocessor {
+class AddressParserViewModel(
+    private val parser: IAddressParser,
+    prefilledAmount: BigDecimal?,
+) : ViewModel(),
+    TextPreprocessor {
     private var lastEnteredText: String? = null
 
     var amountUnique by mutableStateOf<AmountUnique?>(prefilledAmount?.let { AmountUnique(it) })
@@ -32,7 +36,9 @@ class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount
 
         return processed
     }
-
 }
 
-data class AmountUnique(val amount: BigDecimal, val id: Long = UUID.randomUUID().leastSignificantBits)
+data class AmountUnique(
+    val amount: BigDecimal,
+    val id: Long = UUID.randomUUID().leastSignificantBits,
+)

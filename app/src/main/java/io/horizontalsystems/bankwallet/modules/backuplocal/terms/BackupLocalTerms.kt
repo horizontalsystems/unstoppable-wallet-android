@@ -43,13 +43,13 @@ fun LocalBackupTermsScreen(
                     HsBackButton(onClick = onBackClick)
                 },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Column(modifier = Modifier.weight(1f)) {
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(R.string.LocalBackup_TermsWarningText)
+                    text = stringResource(R.string.LocalBackup_TermsWarningText),
                 )
                 VSpacer(24.dp)
                 CellUniversalLawrenceSection(
@@ -59,16 +59,17 @@ fun LocalBackupTermsScreen(
                             checked = termChecked,
                             onCheckedChange = { checked ->
                                 termChecked = checked
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             }
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Continue),
                     enabled = termChecked,
                     onClick = onTermsAccepted,
@@ -82,13 +83,13 @@ fun LocalBackupTermsScreen(
 private fun LocalBackupTerm(
     text: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit = {}
+    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = {
             onCheckedChange.invoke(checked.not())
-        }
+        },
     ) {
         HsCheckbox(
             checked = checked,

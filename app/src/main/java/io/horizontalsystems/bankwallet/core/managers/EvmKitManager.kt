@@ -38,7 +38,7 @@ import java.net.URI
 class EvmKitManager(
     val chain: Chain,
     private val backgroundManager: BackgroundManager,
-    private val syncSourceManager: EvmSyncSourceManager
+    private val syncSourceManager: EvmSyncSourceManager,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -81,7 +81,10 @@ class EvmKitManager(
         get() = evmKitWrapper?.evmKit?.statusInfo()
 
     @Synchronized
-    fun getEvmKitWrapper(account: Account, blockchainType: BlockchainType): EvmKitWrapper {
+    fun getEvmKitWrapper(
+        account: Account,
+        blockchainType: BlockchainType,
+    ): EvmKitWrapper {
         if (evmKitWrapper != null && currentAccount != account) {
             stopEvmKit()
         }
@@ -101,7 +104,7 @@ class EvmKitManager(
     private fun createKitInstance(
         accountType: AccountType,
         account: Account,
-        blockchainType: BlockchainType
+        blockchainType: BlockchainType,
     ): EvmKitWrapper {
         val syncSource = syncSourceManager.getSyncSource(blockchainType)
 
@@ -114,24 +117,28 @@ class EvmKitManager(
                 address = Signer.address(seed, chain)
                 signer = Signer.getInstance(seed, chain)
             }
+
             is AccountType.EvmPrivateKey -> {
                 address = Signer.address(accountType.key)
                 signer = Signer.getInstance(accountType.key, chain)
             }
+
             is AccountType.EvmAddress -> {
                 address = Address(accountType.address)
             }
+
             else -> throw UnsupportedAccountException()
         }
 
-        val evmKit = EthereumKit.getInstance(
-            App.instance,
-            address,
-            chain,
-            syncSource.rpcSource,
-            syncSource.transactionSource,
-            account.id
-        )
+        val evmKit =
+            EthereumKit.getInstance(
+                App.instance,
+                address,
+                chain,
+                syncSource.rpcSource,
+                syncSource.transactionSource,
+                account.id,
+            )
 
         Erc20Kit.addTransactionSyncer(evmKit)
         Erc20Kit.addDecorators(evmKit)
@@ -140,7 +147,7 @@ class EvmKitManager(
         try {
             UniswapV3Kit.addDecorators(evmKit)
         } catch (e: UnsupportedChainError.NoWethAddress) {
-            //do nothing
+            // do nothing
         }
         OneInchKit.addDecorators(evmKit)
 
@@ -181,18 +188,19 @@ class EvmKitManager(
         }
     }
 
-    private fun subscribeToEvents(){
-        job = coroutineScope.launch {
-            backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    evmKitWrapper?.evmKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            kit.refresh()
-                        }, 1000)
+    private fun subscribeToEvents() {
+        job =
+            coroutineScope.launch {
+                backgroundManager.stateFlow.collect { state ->
+                    if (state == BackgroundManagerState.EnterForeground) {
+                        evmKitWrapper?.evmKit?.let { kit ->
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                kit.refresh()
+                            }, 1000)
+                        }
                     }
                 }
             }
-        }
     }
 
     private fun stopEvmKit() {
@@ -204,26 +212,27 @@ class EvmKitManager(
 }
 
 val RpcSource.uris: List<URI>
-    get() = when (this) {
-        is RpcSource.WebSocket -> listOf(uri)
-        is RpcSource.Http -> uris
-    }
+    get() =
+        when (this) {
+            is RpcSource.WebSocket -> listOf(uri)
+            is RpcSource.Http -> uris
+        }
 
 class EvmKitWrapper(
     val evmKit: EthereumKit,
     val nftKit: NftKit?,
     val blockchainType: BlockchainType,
-    val signer: Signer?
+    val signer: Signer?,
 ) {
-
     fun sendSingle(
         transactionData: TransactionData,
         gasPrice: GasPrice,
         gasLimit: Long,
-        nonce: Long?
-    ): Single<FullTransaction> {
-        return if (signer != null) {
-            evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
+        nonce: Long?,
+    ): Single<FullTransaction> =
+        if (signer != null) {
+            evmKit
+                .rawTransaction(transactionData, gasPrice, gasLimit, nonce)
                 .flatMap { rawTransaction ->
                     val signature = signer.signature(rawTransaction)
                     evmKit.send(rawTransaction, signature)
@@ -231,6 +240,4 @@ class EvmKitWrapper(
         } else {
             Single.error(Exception())
         }
-    }
-
 }

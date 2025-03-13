@@ -8,8 +8,9 @@ import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.CexType
 import io.reactivex.Flowable
 
-class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
-
+class AccountsStorage(
+    appDatabase: AppDatabase,
+) : IAccountsStorage {
     private val dao: AccountsDao by lazy {
         appDatabase.accountsDao()
     }
@@ -27,11 +28,12 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val CEX = "cex"
     }
 
-    override fun getActiveAccountId(level: Int): String? {
-        return dao.getActiveAccount(level)?.accountId
-    }
+    override fun getActiveAccountId(level: Int): String? = dao.getActiveAccount(level)?.accountId
 
-    override fun setActiveAccountId(level: Int, id: String?) {
+    override fun setActiveAccountId(
+        level: Int,
+        id: String?,
+    ) {
         if (id == null) {
             dao.deleteActiveAccount(level)
         } else {
@@ -42,12 +44,19 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     override val isAccountsEmpty: Boolean
         get() = dao.getTotalCount() == 0
 
-    override fun allAccounts(accountsMinLevel: Int): List<Account> {
-        return dao.getAll(accountsMinLevel)
-                .mapNotNull { record: AccountRecord ->
-                    try {
-                        val accountType = when (record.type) {
-                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
+    override fun allAccounts(accountsMinLevel: Int): List<Account> =
+        dao
+            .getAll(accountsMinLevel)
+            .mapNotNull { record: AccountRecord ->
+                try {
+                    val accountType =
+                        when (record.type) {
+                            MNEMONIC ->
+                                AccountType.Mnemonic(
+                                    record.words!!.list,
+                                    record.passphrase?.value ?: "",
+                                )
+
                             PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
                             ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
@@ -60,30 +69,26 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                                     AccountType.Cex(it)
                                 }
                             }
+
                             else -> null
                         }
-                        Account(
-                            record.id,
-                            record.name,
-                            accountType!!,
-                            AccountOrigin.valueOf(record.origin),
-                            record.level,
-                            record.isBackedUp,
-                            record.isFileBackedUp
-                        )
-                    } catch (ex: Exception) {
-                        null
-                    }
+                    Account(
+                        record.id,
+                        record.name,
+                        accountType!!,
+                        AccountOrigin.valueOf(record.origin),
+                        record.level,
+                        record.isBackedUp,
+                        record.isFileBackedUp,
+                    )
+                } catch (ex: Exception) {
+                    null
                 }
-    }
+            }
 
-    override fun getDeletedAccountIds(): List<String> {
-        return dao.getDeletedIds()
-    }
+    override fun getDeletedAccountIds(): List<String> = dao.getDeletedIds()
 
-    override fun clearDeleted() {
-        return dao.clearDeleted()
-    }
+    override fun clearDeleted() = dao.clearDeleted()
 
     override fun save(account: Account) {
         dao.insert(getAccountRecord(account))
@@ -93,7 +98,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         dao.update(getAccountRecord(account))
     }
 
-    override fun updateLevels(accountIds: List<String>, level: Int) {
+    override fun updateLevels(
+        accountIds: List<String>,
+        level: Int,
+    ) {
         dao.updateLevels(accountIds, level)
     }
 
@@ -105,9 +113,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         dao.delete(id)
     }
 
-    override fun getNonBackedUpCount(): Flowable<Int> {
-        return dao.getNonBackedUpCount()
-    }
+    override fun getNonBackedUpCount(): Flowable<Int> = dao.getNonBackedUpCount()
 
     override fun clear() {
         dao.deleteAll()
@@ -125,34 +131,42 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 passphrase = SecretString(account.type.passphrase)
                 accountType = MNEMONIC
             }
+
             is AccountType.EvmPrivateKey -> {
                 key = SecretString(account.type.key.toString())
                 accountType = PRIVATE_KEY
             }
+
             is AccountType.EvmAddress -> {
                 key = SecretString(account.type.address)
                 accountType = ADDRESS
             }
+
             is AccountType.SolanaAddress -> {
                 key = SecretString(account.type.address)
                 accountType = SOLANA_ADDRESS
             }
+
             is AccountType.TronAddress -> {
                 key = SecretString(account.type.address)
                 accountType = TRON_ADDRESS
             }
+
             is AccountType.TonAddress -> {
                 key = SecretString(account.type.address)
                 accountType = TON_ADDRESS
             }
+
             is AccountType.BitcoinAddress -> {
                 key = SecretString(account.type.serialized)
                 accountType = BITCOIN_ADDRESS
             }
+
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)
                 accountType = HD_EXTENDED_LEY
             }
+
             is AccountType.Cex -> {
                 key = SecretString(account.type.cexType.serialized())
                 accountType = CEX
@@ -169,8 +183,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             words = words,
             passphrase = passphrase,
             key = key,
-            level = account.level
+            level = account.level,
         )
     }
-
 }

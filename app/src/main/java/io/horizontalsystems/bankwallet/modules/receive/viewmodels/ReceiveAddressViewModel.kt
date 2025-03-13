@@ -23,9 +23,8 @@ import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
-    private val adapterManager: IAdapterManager
+    private val adapterManager: IAdapterManager,
 ) : ViewModelUiState<ReceiveModule.UiState>() {
-
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
     private var usedAddresses: List<UsedAddress> = listOf()
@@ -40,7 +39,8 @@ class ReceiveAddressViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            adapterManager.adaptersReadyObservable.asFlow()
+            adapterManager.adaptersReadyObservable
+                .asFlow()
                 .collect {
                     setData()
                 }
@@ -51,24 +51,26 @@ class ReceiveAddressViewModel(
         setNetworkName()
     }
 
-    override fun createState() = ReceiveModule.UiState(
-        viewState = viewState,
-        address = address,
-        usedAddresses = usedAddresses,
-        usedChangeAddresses = usedChangeAddresses,
-        uri = uri,
-        networkName = networkName,
-        watchAccount = watchAccount,
-        additionalItems = getAdditionalData(),
-        amount = amount,
-        alertText = alertText,
-    )
+    override fun createState() =
+        ReceiveModule.UiState(
+            viewState = viewState,
+            address = address,
+            usedAddresses = usedAddresses,
+            usedChangeAddresses = usedChangeAddresses,
+            uri = uri,
+            networkName = networkName,
+            watchAccount = watchAccount,
+            additionalItems = getAdditionalData(),
+            amount = amount,
+            alertText = alertText,
+        )
 
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
                 networkName = Translator.getString(R.string.Balance_Format) + ": "
-                networkName += "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
+                networkName +=
+                    "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
             }
 
             is TokenType.AddressTyped -> {
@@ -87,12 +89,14 @@ class ReceiveAddressViewModel(
         emitState()
     }
 
-    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
-        return if (watchAccount) ReceiveModule.AlertText.Normal(
-            Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
-        )
-        else null
-    }
+    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? =
+        if (watchAccount) {
+            ReceiveModule.AlertText.Normal(
+                Translator.getString(R.string.Balance_Receive_WatchAddressAlert),
+            )
+        } else {
+            null
+        }
 
     private suspend fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
@@ -104,12 +108,13 @@ class ReceiveAddressViewModel(
             mainNet = adapter.isMainNet
             viewState = ViewState.Success
 
-            accountActive = try {
-                adapter.isAddressActive(adapter.receiveAddress)
-            } catch (e: Exception) {
-                viewState = ViewState.Error(e)
-                false
-            }
+            accountActive =
+                try {
+                    adapter.isAddressActive(adapter.receiveAddress)
+                } catch (e: Exception) {
+                    viewState = ViewState.Error(e)
+                    false
+                }
         } else {
             viewState = ViewState.Error(NullPointerException())
         }
@@ -122,7 +127,8 @@ class ReceiveAddressViewModel(
             val parser = AddressUriParser(wallet.token.blockchainType, wallet.token.type)
             val addressUri = AddressUri(wallet.token.blockchainType.uriScheme ?: "")
             addressUri.address = newUri
-            addressUri.parameters[AddressUri.Field.amountField(wallet.token.blockchainType)] = it.toString()
+            addressUri.parameters[AddressUri.Field.amountField(wallet.token.blockchainType)] =
+                it.toString()
             addressUri.parameters[AddressUri.Field.BlockchainUid] = wallet.token.blockchainType.uid
             if (wallet.token.type !is TokenType.Derived && wallet.token.type !is TokenType.AddressTyped) {
                 addressUri.parameters[AddressUri.Field.TokenUid] = wallet.token.type.id
@@ -143,8 +149,8 @@ class ReceiveAddressViewModel(
         amount?.let {
             items.add(
                 AdditionalData.Amount(
-                    value = it.toString()
-                )
+                    value = it.toString(),
+                ),
             )
         }
 
@@ -169,5 +175,4 @@ class ReceiveAddressViewModel(
         uri = getUri()
         emitState()
     }
-
 }

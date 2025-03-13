@@ -6,16 +6,15 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 
 object RestoreMenuModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreMenuViewModel() as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = RestoreMenuViewModel() as T
     }
 
-    enum class RestoreOption(@StringRes val titleRes: Int) {
+    enum class RestoreOption(
+        @StringRes val titleRes: Int,
+    ) {
         RecoveryPhrase(R.string.Restore_RecoveryPhrase),
-        PrivateKey(R.string.Restore_PrivateKey)
+        PrivateKey(R.string.Restore_PrivateKey),
     }
 }

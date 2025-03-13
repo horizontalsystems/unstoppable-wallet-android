@@ -8,7 +8,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 data class SwapSettingRecipient(
     val settings: Map<String, Any?>,
-    val blockchainType: BlockchainType
+    val blockchainType: BlockchainType,
 ) : ISwapSetting {
     override val id = "recipient"
 
@@ -18,14 +18,14 @@ data class SwapSettingRecipient(
     override fun GetContent(
         navController: NavController,
         onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
+        onValueChange: (Any?) -> Unit,
     ) {
         RecipientAddress(
             blockchainType = blockchainType,
             navController = navController,
             initial = value,
             onError = onError,
-            onValueChange = onValueChange
+            onValueChange = onValueChange,
         )
     }
 
@@ -33,7 +33,8 @@ data class SwapSettingRecipient(
         val hex = value?.hex ?: return null
 
         return try {
-            io.horizontalsystems.ethereumkit.models.Address(hex)
+            io.horizontalsystems.ethereumkit.models
+                .Address(hex)
         } catch (err: Exception) {
             null
         }

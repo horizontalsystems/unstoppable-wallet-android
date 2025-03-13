@@ -9,13 +9,19 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddressInputModule {
-
-    class FactoryToken(private val tokenQuery: TokenQuery, private val coinCode: String, private val initial: Address?) : ViewModelProvider.Factory {
+    class FactoryToken(
+        private val tokenQuery: TokenQuery,
+        private val coinCode: String,
+        private val initial: Address?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val ensHandler = AddressHandlerEns(tokenQuery.blockchainType, EnsResolverHolder.resolver)
-            val udnHandler = AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
-            val addressParserChain = AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
+            val ensHandler =
+                AddressHandlerEns(tokenQuery.blockchainType, EnsResolverHolder.resolver)
+            val udnHandler =
+                AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
+            val addressParserChain =
+                AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
 
             when (tokenQuery.blockchainType) {
                 BlockchainType.Bitcoin,
@@ -23,9 +29,11 @@ object AddressInputModule {
                 BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-                BlockchainType.Zcash -> {
+                BlockchainType.Zcash,
+                -> {
                     addressParserChain.addHandler(AddressHandlerPure(tokenQuery.blockchainType))
                 }
+
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
@@ -35,32 +43,37 @@ object AddressInputModule {
                 BlockchainType.ZkSync,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
-                BlockchainType.ArbitrumOne -> {
+                BlockchainType.ArbitrumOne,
+                -> {
                     addressParserChain.addHandler(AddressHandlerEvm(tokenQuery.blockchainType))
                 }
+
                 BlockchainType.Solana -> {
                     addressParserChain.addHandler(AddressHandlerSolana())
                 }
+
                 BlockchainType.Tron -> {
                     addressParserChain.addHandler(AddressHandlerTron())
                 }
+
                 BlockchainType.Ton -> {
                     addressParserChain.addHandler(AddressHandlerTon())
                 }
+
                 is BlockchainType.Unsupported -> Unit
             }
 
             val addressUriParser = AddressUriParser(tokenQuery.blockchainType, tokenQuery.tokenType)
-            val addressViewModel = AddressViewModel(
-                tokenQuery.blockchainType,
-                App.contactsRepository,
-                addressUriParser,
-                addressParserChain,
-                initial
-            )
+            val addressViewModel =
+                AddressViewModel(
+                    tokenQuery.blockchainType,
+                    App.contactsRepository,
+                    addressUriParser,
+                    addressParserChain,
+                    initial,
+                )
 
             return addressViewModel as T
         }
     }
-
 }

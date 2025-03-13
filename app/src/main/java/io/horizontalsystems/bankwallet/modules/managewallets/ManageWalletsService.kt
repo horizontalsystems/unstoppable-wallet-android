@@ -30,9 +30,8 @@ class ManageWalletsService(
     private val walletManager: IWalletManager,
     private val restoreSettingsService: RestoreSettingsService,
     private val fullCoinsProvider: FullCoinsProvider?,
-    private val account: Account?
+    private val account: Account?,
 ) : Clearable {
-
     private val _itemsFlow = MutableStateFlow<List<Item>>(listOf())
     val itemsFlow
         get() = _itemsFlow.asStateFlow()
@@ -65,53 +64,53 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun isEnabled(token: Token): Boolean {
-        return walletManager.activeWallets.any { it.token == token }
-    }
+    private fun isEnabled(token: Token): Boolean = walletManager.activeWallets.any { it.token == token }
 
     private fun sync(walletList: List<Wallet>) {
         fullCoinsProvider?.setActiveWallets(walletList)
     }
 
-    private fun fetchFullCoins(): List<FullCoin> {
-        return fullCoinsProvider?.getItems() ?: listOf()
-    }
+    private fun fetchFullCoins(): List<FullCoin> = fullCoinsProvider?.getItems() ?: listOf()
 
     private fun syncFullCoins() {
         fullCoins = fetchFullCoins()
     }
 
     private fun sortItems() {
-        var comparator = compareByDescending<Item> {
-            it.enabled
-        }
+        var comparator =
+            compareByDescending<Item> {
+                it.enabled
+            }
 
         if (filter.isBlank()) {
-            comparator = comparator.thenBy {
-                it.token.blockchain.type.order
-            }
+            comparator =
+                comparator.thenBy {
+                    it.token.blockchain.type.order
+                }
         }
 
-        items = fullCoins
-            .map { getItemsForFullCoin(it) }
-            .flatten()
-            .sortedWith(comparator)
+        items =
+            fullCoins
+                .map { getItemsForFullCoin(it) }
+                .flatten()
+                .sortedWith(comparator)
     }
 
     private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {
         val accountType = account?.type ?: return listOf()
         val eligibleTokens = fullCoin.eligibleTokens(accountType)
 
-        val tokens = if (filter.isNotBlank()) {
-            eligibleTokens
-        } else if (
-            accountType !is AccountType.HdExtendedKey &&
-            (eligibleTokens.all { it.type is TokenType.Derived } || eligibleTokens.all { it.type is TokenType.AddressTyped })
-        ) {
-            eligibleTokens.filter { isEnabled(it) || it.type.isDefault }
-        } else {
-            eligibleTokens.filter { isEnabled(it) || it.type.isNative }
-        }
+        val tokens =
+            if (filter.isNotBlank()) {
+                eligibleTokens
+            } else if (
+                accountType !is AccountType.HdExtendedKey &&
+                (eligibleTokens.all { it.type is TokenType.Derived } || eligibleTokens.all { it.type is TokenType.AddressTyped })
+            ) {
+                eligibleTokens.filter { isEnabled(it) || it.type.isDefault }
+            } else {
+                eligibleTokens.filter { isEnabled(it) || it.type.isNative }
+            }
 
         return tokens.map { getItemForToken(it) }
     }
@@ -122,17 +121,22 @@ class ManageWalletsService(
         return Item(
             token = token,
             enabled = enabled,
-            hasInfo = hasInfo(token, enabled)
+            hasInfo = hasInfo(token, enabled),
         )
     }
 
-    private fun hasInfo(token: Token, enabled: Boolean) = when (token.type) {
+    private fun hasInfo(
+        token: Token,
+        enabled: Boolean,
+    ) = when (token.type) {
         is TokenType.Native -> token.blockchainType is BlockchainType.Zcash && enabled
         is TokenType.Derived,
         is TokenType.AddressTyped,
         is TokenType.Eip20,
         is TokenType.Spl,
-        is TokenType.Jetton -> true
+        is TokenType.Jetton,
+        -> true
+
         else -> false
     }
 
@@ -154,20 +158,27 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun updateSortedItems(token: Token, enable: Boolean) {
-        items = items.map { item ->
-            if (item.token == token) {
-                item.copy(
-                    enabled = enable,
-                    hasInfo = hasInfo(token, enable)
-                )
-            } else {
-                item
+    private fun updateSortedItems(
+        token: Token,
+        enable: Boolean,
+    ) {
+        items =
+            items.map { item ->
+                if (item.token == token) {
+                    item.copy(
+                        enabled = enable,
+                        hasInfo = hasInfo(token, enable),
+                    )
+                } else {
+                    item
+                }
             }
-        }
     }
 
-    private fun enable(token: Token, restoreSettings: RestoreSettings) {
+    private fun enable(
+        token: Token,
+        restoreSettings: RestoreSettings,
+    ) {
         val account = this.account ?: return
 
         if (restoreSettings.isNotEmpty()) {
@@ -214,6 +225,6 @@ class ManageWalletsService(
     data class Item(
         val token: Token,
         val enabled: Boolean,
-        val hasInfo: Boolean
+        val hasInfo: Boolean,
     )
 }

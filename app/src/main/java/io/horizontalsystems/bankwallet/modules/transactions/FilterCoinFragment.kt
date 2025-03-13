@@ -42,15 +42,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 
 class FilterCoinFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
+        val viewModel: TransactionsViewModel? =
+            try {
+                navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
+            } catch (e: IllegalStateException) {
+                Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
+                null
+            }
 
         if (viewModel == null) {
             navController.popBackStack(R.id.filterCoinFragment, true)
@@ -59,12 +59,13 @@ class FilterCoinFragment : BaseComposeFragment() {
 
         FilterCoinScreen(navController, viewModel)
     }
-
 }
 
-
 @Composable
-fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewModel) {
+fun FilterCoinScreen(
+    navController: NavController,
+    viewModel: TransactionsViewModel,
+) {
     val filterCoins by viewModel.filterTokensLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -73,35 +74,37 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                 title = stringResource(R.string.Transactions_Filter_ChooseCoin),
                 navigationIcon = {
                     HsBackButton(onClick = navController::popBackStack)
-                }
+                },
             )
             filterCoins?.let { filterCoins ->
                 LazyColumn(
-                    contentPadding = PaddingValues(bottom = 32.dp)
+                    contentPadding = PaddingValues(bottom = 32.dp),
                 ) {
                     items(filterCoins) {
                         CellMultilineClear(borderTop = true) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clickable {
-                                        viewModel.setFilterToken(it.item)
-                                        navController.popBackStack()
-                                    }
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .clickable {
+                                            viewModel.setFilterToken(it.item)
+                                            navController.popBackStack()
+                                        }.padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 val token = it.item?.token
                                 if (token != null) {
                                     Image(
-                                        painter = rememberAsyncImagePainter(
-                                            model = token.coin.imageUrl,
-                                            error = painterResource(token.iconPlaceholder)
-                                        ),
-                                        modifier = Modifier
-                                            .padding(end = 16.dp)
-                                            .size(24.dp),
-                                        contentDescription = null
+                                        painter =
+                                            rememberAsyncImagePainter(
+                                                model = token.coin.imageUrl,
+                                                error = painterResource(token.iconPlaceholder),
+                                            ),
+                                        modifier =
+                                            Modifier
+                                                .padding(end = 16.dp)
+                                                .size(24.dp),
+                                        contentDescription = null,
                                     )
                                     Column {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -117,10 +120,11 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                 } else {
                                     Image(
                                         painter = painterResource(R.drawable.icon_24_circle_coin),
-                                        modifier = Modifier
-                                            .padding(end = 16.dp)
-                                            .size(24.dp),
-                                        contentDescription = null
+                                        modifier =
+                                            Modifier
+                                                .padding(end = 16.dp)
+                                                .size(24.dp),
+                                        contentDescription = null,
                                     )
                                     B2(text = stringResource(R.string.Transactions_Filter_AllCoins))
                                 }
@@ -129,7 +133,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                     Icon(
                                         painter = painterResource(R.drawable.icon_20_check_1),
                                         contentDescription = null,
-                                        tint = ComposeAppTheme.colors.jacob
+                                        tint = ComposeAppTheme.colors.jacob,
                                     )
                                 }
                             }

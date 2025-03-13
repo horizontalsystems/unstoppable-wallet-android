@@ -31,10 +31,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 @Composable
-fun MacdSettingsScreen(navController: NavController, indicatorSetting: ChartIndicatorSetting) {
-    val viewModel = viewModel<MacdSettingViewModel>(
-        factory = MacdSettingViewModel.Factory(indicatorSetting)
-    )
+fun MacdSettingsScreen(
+    navController: NavController,
+    indicatorSetting: ChartIndicatorSetting,
+) {
+    val viewModel =
+        viewModel<MacdSettingViewModel>(
+            factory = MacdSettingViewModel.Factory(indicatorSetting),
+        )
     val uiState = viewModel.uiState
 
     if (uiState.finish) {
@@ -51,90 +55,96 @@ fun MacdSettingsScreen(navController: NavController, indicatorSetting: ChartIndi
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Reset),
-                        enabled = uiState.resetEnabled,
-                        onClick = {
-                            viewModel.reset()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Reset),
+                            enabled = uiState.resetEnabled,
+                            onClick = {
+                                viewModel.reset()
+                            },
+                        ),
+                    ),
             )
-        }
+        },
     ) {
         Column(Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoText(
-                    text = stringResource(R.string.CoinPage_MacdSettingsDescription)
+                    text = stringResource(R.string.CoinPage_MacdSettingsDescription),
                 )
                 VSpacer(12.dp)
                 HeaderText(
-                    text = stringResource(R.string.CoinPage_FastLength).uppercase()
+                    text = stringResource(R.string.CoinPage_FastLength).uppercase(),
                 )
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     hint = viewModel.defaultFast ?: "",
                     initial = uiState.fast,
-                    state = uiState.fastError?.let {
-                        DataState.Error(it)
-                    },
+                    state =
+                        uiState.fastError?.let {
+                            DataState.Error(it)
+                        },
                     pasteEnabled = false,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     onValueChange = {
                         viewModel.onEnterFast(it)
-                    }
+                    },
                 )
                 VSpacer(24.dp)
                 HeaderText(
-                    text = stringResource(R.string.CoinPage_SlowLength).uppercase()
+                    text = stringResource(R.string.CoinPage_SlowLength).uppercase(),
                 )
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     hint = viewModel.defaultSlow ?: "",
                     initial = uiState.slow,
-                    state = uiState.slowError?.let {
-                        DataState.Error(it)
-                    },
+                    state =
+                        uiState.slowError?.let {
+                            DataState.Error(it)
+                        },
                     pasteEnabled = false,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     onValueChange = {
                         viewModel.onEnterSlow(it)
-                    }
+                    },
                 )
                 VSpacer(24.dp)
                 HeaderText(
-                    text = stringResource(R.string.CoinPage_SignalSmoothing).uppercase()
+                    text = stringResource(R.string.CoinPage_SignalSmoothing).uppercase(),
                 )
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     hint = viewModel.defaultSignal ?: "",
                     initial = uiState.signal,
-                    state = uiState.signalError?.let {
-                        DataState.Error(it)
-                    },
+                    state =
+                        uiState.signalError?.let {
+                            DataState.Error(it)
+                        },
                     pasteEnabled = false,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     onValueChange = {
                         viewModel.onEnterSignal(it)
-                    }
+                    },
                 )
                 VSpacer(32.dp)
             }
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.SwapSettings_Apply),
                     onClick = {
                         viewModel.save()
                     },
-                    enabled = uiState.applyEnabled
+                    enabled = uiState.applyEnabled,
                 )
             }
         }

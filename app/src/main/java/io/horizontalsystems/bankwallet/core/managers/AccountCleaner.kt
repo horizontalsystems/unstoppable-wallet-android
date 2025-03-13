@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 
 class AccountCleaner : IAccountCleaner {
-
     override fun clearAccounts(accountIds: List<String>) {
         accountIds.forEach { clearAccount(it) }
     }
@@ -28,5 +27,4 @@ class AccountCleaner : IAccountCleaner {
         SolanaAdapter.clear(accountId)
         TronAdapter.clear(accountId)
     }
-
 }

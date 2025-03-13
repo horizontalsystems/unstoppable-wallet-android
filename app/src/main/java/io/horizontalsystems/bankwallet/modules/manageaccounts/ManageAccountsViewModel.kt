@@ -14,15 +14,15 @@ import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountsViewModel(
     private val accountManager: IAccountManager,
-    private val mode: ManageAccountsModule.Mode
+    private val mode: ManageAccountsModule.Mode,
 ) : ViewModel() {
-
     var viewItems by mutableStateOf<Pair<List<AccountViewItem>, List<AccountViewItem>>?>(null)
     var finish by mutableStateOf(false)
 
     init {
         viewModelScope.launch {
-            accountManager.accountsFlowable.asFlow()
+            accountManager.accountsFlowable
+                .asFlow()
                 .collect {
                     updateViewItems(accountManager.activeAccount, it)
                 }
@@ -40,24 +40,30 @@ class ManageAccountsViewModel(
         updateViewItems(accountManager.activeAccount, accountManager.accounts)
     }
 
-    private fun updateViewItems(activeAccount: Account?, accounts: List<Account>) {
-        viewItems = accounts
-            .sortedBy { it.name.lowercase() }
-            .map { getViewItem(it, activeAccount) }
-            .partition { !it.isWatchAccount }
+    private fun updateViewItems(
+        activeAccount: Account?,
+        accounts: List<Account>,
+    ) {
+        viewItems =
+            accounts
+                .sortedBy { it.name.lowercase() }
+                .map { getViewItem(it, activeAccount) }
+                .partition { !it.isWatchAccount }
     }
 
-    private fun getViewItem(account: Account, activeAccount: Account?) =
-        AccountViewItem(
-            accountId = account.id,
-            title = account.name,
-            subtitle = account.type.detailedDescription,
-            selected = account == activeAccount,
-            backupRequired = !account.isBackedUp && !account.isFileBackedUp,
-            showAlertIcon = !account.isBackedUp || account.nonStandard || account.nonRecommended,
-            isWatchAccount = account.isWatchAccount,
-            migrationRequired = account.nonStandard,
-        )
+    private fun getViewItem(
+        account: Account,
+        activeAccount: Account?,
+    ) = AccountViewItem(
+        accountId = account.id,
+        title = account.name,
+        subtitle = account.type.detailedDescription,
+        selected = account == activeAccount,
+        backupRequired = !account.isBackedUp && !account.isFileBackedUp,
+        showAlertIcon = !account.isBackedUp || account.nonStandard || account.nonRecommended,
+        isWatchAccount = account.isWatchAccount,
+        migrationRequired = account.nonStandard,
+    )
 
     fun onSelect(accountViewItem: AccountViewItem) {
         accountManager.setActiveAccountId(accountViewItem.accountId)

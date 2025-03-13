@@ -9,8 +9,14 @@ sealed class Mode : Parcelable {
     object Full : Mode()
 
     @Parcelize
-    class AddAddressToExistingContact(val blockchainType: BlockchainType, val address: String) : Mode()
+    class AddAddressToExistingContact(
+        val blockchainType: BlockchainType,
+        val address: String,
+    ) : Mode()
 
     @Parcelize
-    class AddAddressToNewContact(val blockchainType: BlockchainType, val address: String) : Mode()
+    class AddAddressToNewContact(
+        val blockchainType: BlockchainType,
+        val address: String,
+    ) : Mode()
 }

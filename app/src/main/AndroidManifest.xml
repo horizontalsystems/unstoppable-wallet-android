@@ -48,8 +48,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"></activity>
         <activity
             android:name=".modules.qrscanner.QRScannerActivity"
             android:screenOrientation="portrait" />
@@ -66,9 +65,9 @@
         <activity-alias
             android:name="${applicationId}.MainLauncherAlias"
             android:enabled="true"
+            android:exported="true"
             android:icon="@mipmap/launcher_main"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -76,27 +75,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -105,9 +112,9 @@
         <activity-alias
             android:name="${applicationId}.DarkLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_dark"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,27 +122,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -144,9 +159,9 @@
         <activity-alias
             android:name="${applicationId}.MonoLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_mono"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -154,27 +169,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -183,9 +206,9 @@
         <activity-alias
             android:name="${applicationId}.LeoLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_leo"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -193,27 +216,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -222,9 +253,9 @@
         <activity-alias
             android:name="${applicationId}.MustangLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_mustang"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -232,27 +263,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -261,9 +300,9 @@
         <activity-alias
             android:name="${applicationId}.YakLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_yak"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -271,27 +310,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -300,9 +347,9 @@
         <activity-alias
             android:name="${applicationId}.PunkLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_punk"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -310,27 +357,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -339,9 +394,9 @@
         <activity-alias
             android:name="${applicationId}.ApeLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_ape"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -349,27 +404,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -378,9 +441,9 @@
         <activity-alias
             android:name="${applicationId}.Ball8LauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_8ball"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -388,27 +451,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -417,9 +488,9 @@
         <activity-alias
             android:name="${applicationId}.IvfunLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_ivfun"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -427,27 +498,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -456,9 +535,9 @@
         <activity-alias
             android:name="${applicationId}.PepeLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_pepe"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -466,27 +545,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -495,9 +582,9 @@
         <activity-alias
             android:name="${applicationId}.DogeLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_doge"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -505,27 +592,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -534,9 +629,9 @@
         <activity-alias
             android:name="${applicationId}.GigachadLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_gigachad"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -544,27 +639,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -573,9 +676,9 @@
         <activity-alias
             android:name="${applicationId}.PlflagLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_plflag"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -583,27 +686,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />
@@ -612,9 +723,9 @@
         <activity-alias
             android:name="${applicationId}.YeschadLauncherAlias"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/launcher_yeschad"
             android:label="@string/App_Name"
-            android:exported="true"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -622,27 +733,35 @@
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tc" />
                 <data android:scheme="unstoppable.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="wc" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/DeeplinkScheme" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="unstoppable.money" />
                 <data android:pathPrefix="/referral" />

@@ -18,7 +18,7 @@ interface EnterAddressValidator {
 }
 
 class BitcoinAddressValidator(
-    private val adapter: ISendBitcoinAdapter
+    private val adapter: ISendBitcoinAdapter,
 ) : EnterAddressValidator {
     override suspend fun validate(address: Address) {
         adapter.validate(address.hex, null)
@@ -28,13 +28,15 @@ class BitcoinAddressValidator(
 class EvmAddressValidator : EnterAddressValidator {
     override suspend fun validate(address: Address) {
         AddressValidator.validate(address.hex)
-        io.horizontalsystems.ethereumkit.models.Address(address.hex)
+        io.horizontalsystems.ethereumkit.models
+            .Address(address.hex)
     }
 }
 
 class SolanaAddressValidator : EnterAddressValidator {
     override suspend fun validate(address: Address) {
-        io.horizontalsystems.solanakit.models.Address(address.hex)
+        io.horizontalsystems.solanakit.models
+            .Address(address.hex)
     }
 }
 
@@ -46,32 +48,36 @@ class TonAddressValidator : EnterAddressValidator {
 
 class TronAddressValidator(
     private val adapter: ISendTronAdapter,
-    private val token: Token
+    private val token: Token,
 ) : EnterAddressValidator {
     override suspend fun validate(address: Address) {
-        val validAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(address.hex)
+        val validAddress =
+            io.horizontalsystems.tronkit.models.Address
+                .fromBase58(address.hex)
         if (token.type == TokenType.Native && adapter.isOwnAddress(validAddress)) {
             throw AddressValidationError.SendToSelfForbidden(
-                Translator.getString(R.string.Send_Error_SendToSelf, "TRX")
+                Translator.getString(R.string.Send_Error_SendToSelf, "TRX"),
             )
         }
     }
 }
 
 class ZcashAddressValidator(
-    private val adapter: ISendZcashAdapter
+    private val adapter: ISendZcashAdapter,
 ) : EnterAddressValidator {
     override suspend fun validate(address: Address) {
         try {
             adapter.validate(address.hex)
         } catch (e: ZcashError.SendToSelfNotAllowed) {
             throw AddressValidationError.SendToSelfForbidden(
-                Translator.getString(R.string.Send_Error_SendToSelf, "ZEC")
+                Translator.getString(R.string.Send_Error_SendToSelf, "ZEC"),
             )
         }
     }
 }
 
 sealed class AddressValidationError : Throwable() {
-    class SendToSelfForbidden(override val message: String) : AddressValidationError()
+    class SendToSelfForbidden(
+        override val message: String,
+    ) : AddressValidationError()
 }

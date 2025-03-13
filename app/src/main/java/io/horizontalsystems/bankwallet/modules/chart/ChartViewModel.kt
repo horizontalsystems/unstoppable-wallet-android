@@ -25,7 +25,6 @@ open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
 ) : ViewModelUiState<ChartUiState>() {
-
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
     private var chartHeaderView: ChartModule.ChartHeaderView? = null
     private var chartInfoData: ChartInfoData? = null
@@ -38,10 +37,11 @@ open class ChartViewModel(
 
         viewModelScope.launch {
             service.chartTypeObservable.asFlow().collect { chartType ->
-                val tabItems = service.chartIntervals.map {
-                    val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
-                    TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
-                }
+                val tabItems =
+                    service.chartIntervals.map {
+                        val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
+                        TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
+                    }
                 this@ChartViewModel.tabItems = tabItems
 
                 emitState()
@@ -67,15 +67,16 @@ open class ChartViewModel(
         }
     }
 
-    override fun createState() = ChartUiState(
-        tabItems = tabItems,
-        chartHeaderView = chartHeaderView,
-        chartInfoData = chartInfoData,
-        loading = loading,
-        viewState = viewState,
-        hasVolumes = service.hasVolumes,
-        chartViewType = service.chartViewType,
-    )
+    override fun createState() =
+        ChartUiState(
+            tabItems = tabItems,
+            chartHeaderView = chartHeaderView,
+            chartInfoData = chartInfoData,
+            loading = loading,
+            viewState = viewState,
+            hasVolumes = service.hasVolumes,
+            chartViewType = service.chartViewType,
+        )
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         loading = true
@@ -109,62 +110,77 @@ open class ChartViewModel(
             return
         }
 
-        val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false, chartPointsWrapper.indicators)
-
-        val headerView = if (!chartPointsWrapper.isMovementChart) {
-            val value = valueFormatter.formatValue(service.currency, chartData.sum())
-            ChartModule.ChartHeaderView(
-                value = value,
-                valueHint = null,
-                date = null,
-                diff = null,
-                extraData = null
+        val chartData =
+            ChartData(
+                chartPointsWrapper.items,
+                chartPointsWrapper.isMovementChart,
+                false,
+                chartPointsWrapper.indicators,
             )
-        } else {
-            val chartItems = chartPointsWrapper.items
 
-            val latestItem = chartItems.last()
-            val lastItemValue = latestItem.value
-            val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
+        val headerView =
+            if (!chartPointsWrapper.isMovementChart) {
+                val value = valueFormatter.formatValue(service.currency, chartData.sum())
+                ChartModule.ChartHeaderView(
+                    value = value,
+                    valueHint = null,
+                    date = null,
+                    diff = null,
+                    extraData = null,
+                )
+            } else {
+                val chartItems = chartPointsWrapper.items
 
-            val dominanceData = latestItem.dominance?.let { dominance ->
-                val earliestItem = chartItems.first()
-                val diff = earliestItem.dominance?.let { earliestDominance ->
-                    Value.Percent((dominance - earliestDominance).toBigDecimal())
-                }
+                val latestItem = chartItems.last()
+                val lastItemValue = latestItem.value
+                val currentValue =
+                    valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
-                ChartModule.ChartHeaderExtraData.Dominance(
-                    App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
-                    diff
+                val dominanceData =
+                    latestItem.dominance?.let { dominance ->
+                        val earliestItem = chartItems.first()
+                        val diff =
+                            earliestItem.dominance?.let { earliestDominance ->
+                                Value.Percent((dominance - earliestDominance).toBigDecimal())
+                            }
+
+                        ChartModule.ChartHeaderExtraData.Dominance(
+                            App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
+                            diff,
+                        )
+                    }
+                ChartModule.ChartHeaderView(
+                    value = currentValue,
+                    valueHint = null,
+                    date = null,
+                    diff = Value.Percent(chartData.diff()),
+                    extraData = dominanceData,
                 )
             }
-            ChartModule.ChartHeaderView(
-                value = currentValue,
-                valueHint = null,
-                date = null,
-                diff = Value.Percent(chartData.diff()),
-                extraData = dominanceData
-            )
-        }
 
         val (minValue, maxValue) = getMinMax(chartData.minValue, chartData.maxValue)
 
-        val chartInfoData = ChartInfoData(
-            chartData,
-            maxValue,
-            minValue
-        )
+        val chartInfoData =
+            ChartInfoData(
+                chartData,
+                maxValue,
+                minValue,
+            )
 
         this.chartHeaderView = headerView
         this.chartInfoData = chartInfoData
     }
 
     private val noChangesLimitPercent = 0.2f
-    private fun getMinMax(minValue: Float, maxValue: Float): Pair<String?, String?> {
+
+    private fun getMinMax(
+        minValue: Float,
+        maxValue: Float,
+    ): Pair<String?, String?> {
         var max = maxValue
         var min = minValue
 
-        if (max == min){
+        if (max == min) {
             min *= (1 - noChangesLimitPercent)
             max *= (1 + noChangesLimitPercent)
         }
@@ -173,19 +189,20 @@ open class ChartViewModel(
         val minValueStr = getFormattedValue(min, service.currency)
 
         return Pair(minValueStr, maxValueStr)
-
     }
 
-    private fun getFormattedValue(value: Float, currency: Currency): String {
-        return valueFormatter.formatValue(currency,  value.toBigDecimal())
-    }
+    private fun getFormattedValue(
+        value: Float,
+        currency: Currency,
+    ): String = valueFormatter.formatValue(currency, value.toBigDecimal())
 
     override fun onCleared() {
         service.stop()
     }
 
     fun getSelectedPoint(selectedItem: SelectedItem): ChartModule.ChartHeaderView {
-        val value = valueFormatter.formatValue(service.currency, selectedItem.mainValue.toBigDecimal())
+        val value =
+            valueFormatter.formatValue(service.currency, selectedItem.mainValue.toBigDecimal())
         val dayAndTime = DateHelper.getFullDate(Date(selectedItem.timestamp * 1000))
 
         return ChartModule.ChartHeaderView(
@@ -193,7 +210,7 @@ open class ChartViewModel(
             valueHint = null,
             date = dayAndTime,
             diff = null,
-            extraData = getItemExtraData(selectedItem)
+            extraData = getItemExtraData(selectedItem),
         )
     }
 
@@ -208,29 +225,38 @@ open class ChartViewModel(
             movingAverages.isNotEmpty() || rsi != null || macd != null -> {
                 ChartModule.ChartHeaderExtraData.Indicators(movingAverages, rsi, macd)
             }
+
             dominance != null -> {
                 ChartModule.ChartHeaderExtraData.Dominance(
                     App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
-                    null
+                    null,
                 )
             }
-            volume != null -> ChartModule.ChartHeaderExtraData.Volume(
-                App.numberFormatter.formatFiatShort(volume.toBigDecimal(), service.currency.symbol, 2)
-            )
+
+            volume != null ->
+                ChartModule.ChartHeaderExtraData.Volume(
+                    App.numberFormatter.formatFiatShort(
+                        volume.toBigDecimal(),
+                        service.currency.symbol,
+                        2,
+                    ),
+                )
+
             else -> null
         }
     }
 }
 
 val HsTimePeriod.stringResId: Int
-    get() = when (this) {
-        HsTimePeriod.Day1 -> R.string.CoinPage_TimeDuration_Day
-        HsTimePeriod.Week1 -> R.string.CoinPage_TimeDuration_Week
-        HsTimePeriod.Week2 -> R.string.CoinPage_TimeDuration_TwoWeeks
-        HsTimePeriod.Month1 -> R.string.CoinPage_TimeDuration_Month
-        HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
-        HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
-        HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
-        HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
-        HsTimePeriod.Year5 -> R.string.CoinPage_TimeDuration_Year5
-    }
+    get() =
+        when (this) {
+            HsTimePeriod.Day1 -> R.string.CoinPage_TimeDuration_Day
+            HsTimePeriod.Week1 -> R.string.CoinPage_TimeDuration_Week
+            HsTimePeriod.Week2 -> R.string.CoinPage_TimeDuration_TwoWeeks
+            HsTimePeriod.Month1 -> R.string.CoinPage_TimeDuration_Month
+            HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
+            HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
+            HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
+            HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
+            HsTimePeriod.Year5 -> R.string.CoinPage_TimeDuration_Year5
+        }

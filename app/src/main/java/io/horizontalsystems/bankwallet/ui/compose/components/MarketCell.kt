@@ -39,22 +39,23 @@ fun MarketCoinClear(
     value: String? = null,
     marketDataValue: MarketDataValue? = null,
     label: String? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     SectionItemBorderedRowUniversalClear(
         onClick = onClick,
-        borderBottom = true
+        borderBottom = true,
     ) {
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp),
         )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             MarketCoinFirstRow(title, value)
             Spacer(modifier = Modifier.height(3.dp))
@@ -76,33 +77,34 @@ fun MarketCoin(
     label: String? = null,
     advice: Advice? = null,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 24.dp)
-            .combinedClickable(
-                enabled = onClick != null || onLongClick != null,
-                onClick = onClick ?: { },
-                onLongClick = onLongClick
-            )
-            .background(ComposeAppTheme.colors.tyler)
-            .padding(horizontal = 16.dp)
-            .padding(vertical = 12.dp),
-        verticalAlignment =  Alignment.CenterVertically,
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 24.dp)
+                .combinedClickable(
+                    enabled = onClick != null || onLongClick != null,
+                    onClick = onClick ?: { },
+                    onLongClick = onLongClick,
+                ).background(ComposeAppTheme.colors.tyler)
+                .padding(horizontal = 16.dp)
+                .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
-                .clip(CircleShape)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp)
+                    .clip(CircleShape),
         )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             MarketCoinFirstRow(title, value, advice)
             Spacer(modifier = Modifier.height(3.dp))
@@ -116,35 +118,38 @@ fun MarketCoinFirstRow(
     title: String,
     value: String?,
     advice: Advice? = null,
-    badge: String? = null
+    badge: String? = null,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             body_leah(
                 text = title,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             if (badge != null) {
                 Box(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(ComposeAppTheme.colors.jeremy)
+                    modifier =
+                        Modifier
+                            .padding(start = 8.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(ComposeAppTheme.colors.jeremy),
                 ) {
                     Text(
-                        modifier = Modifier.padding(
-                            start = 4.dp,
-                            end = 4.dp,
-                            bottom = 1.dp
-                        ),
+                        modifier =
+                            Modifier.padding(
+                                start = 4.dp,
+                                end = 4.dp,
+                                bottom = 1.dp,
+                            ),
                         text = badge,
                         color = ComposeAppTheme.colors.bran,
                         style = ComposeAppTheme.typography.microSB,
@@ -166,37 +171,40 @@ fun MarketCoinFirstRow(
 
 @Composable
 fun SignalBadge(advice: Advice) {
-    val textColor = when (advice) {
-        Advice.Buy -> ComposeAppTheme.colors.remus
-        Advice.Sell -> ComposeAppTheme.colors.lucian
-        Advice.StrongBuy -> ComposeAppTheme.colors.tyler
-        Advice.StrongSell -> ComposeAppTheme.colors.tyler
-        Advice.Neutral -> ComposeAppTheme.colors.bran
-        else -> ComposeAppTheme.colors.jacob
-    }
+    val textColor =
+        when (advice) {
+            Advice.Buy -> ComposeAppTheme.colors.remus
+            Advice.Sell -> ComposeAppTheme.colors.lucian
+            Advice.StrongBuy -> ComposeAppTheme.colors.tyler
+            Advice.StrongSell -> ComposeAppTheme.colors.tyler
+            Advice.Neutral -> ComposeAppTheme.colors.bran
+            else -> ComposeAppTheme.colors.jacob
+        }
 
-    val backgroundColor = when (advice) {
-        Advice.Buy -> ComposeAppTheme.colors.green20
-        Advice.Sell -> ComposeAppTheme.colors.red20
-        Advice.StrongBuy -> ComposeAppTheme.colors.remus
-        Advice.StrongSell -> ComposeAppTheme.colors.lucian
-        Advice.Neutral -> ComposeAppTheme.colors.jeremy
-        else -> ComposeAppTheme.colors.yellow20
-    }
+    val backgroundColor =
+        when (advice) {
+            Advice.Buy -> ComposeAppTheme.colors.green20
+            Advice.Sell -> ComposeAppTheme.colors.red20
+            Advice.StrongBuy -> ComposeAppTheme.colors.remus
+            Advice.StrongSell -> ComposeAppTheme.colors.lucian
+            Advice.Neutral -> ComposeAppTheme.colors.jeremy
+            else -> ComposeAppTheme.colors.yellow20
+        }
 
-    val text = when (advice) {
-        Advice.Buy -> stringResource(R.string.Coin_Analytics_Indicators_Buy)
-        Advice.Sell -> stringResource(R.string.Coin_Analytics_Indicators_Sell)
-        Advice.StrongBuy -> stringResource(R.string.Coin_Analytics_Indicators_StrongBuy)
-        Advice.StrongSell -> stringResource(R.string.Coin_Analytics_Indicators_StrongSell)
-        Advice.Neutral -> stringResource(R.string.Coin_Analytics_Indicators_Neutral)
-        else -> stringResource(R.string.Coin_Analytics_Indicators_Risky)
-    }
+    val text =
+        when (advice) {
+            Advice.Buy -> stringResource(R.string.Coin_Analytics_Indicators_Buy)
+            Advice.Sell -> stringResource(R.string.Coin_Analytics_Indicators_Sell)
+            Advice.StrongBuy -> stringResource(R.string.Coin_Analytics_Indicators_StrongBuy)
+            Advice.StrongSell -> stringResource(R.string.Coin_Analytics_Indicators_StrongSell)
+            Advice.Neutral -> stringResource(R.string.Coin_Analytics_Indicators_Neutral)
+            else -> stringResource(R.string.Coin_Analytics_Indicators_Risky)
+        }
 
     BadgeText(
         text = text,
         textColor = textColor,
-        background = backgroundColor
+        background = backgroundColor,
     )
 }
 
@@ -204,22 +212,22 @@ fun SignalBadge(advice: Advice) {
 fun MarketCoinSecondRow(
     subtitle: String,
     marketDataValue: MarketDataValue?,
-    label: String?
+    label: String?,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         label?.let {
             Badge(
                 modifier = Modifier.padding(end = 8.dp),
-                text = it
+                text = it,
             )
         }
         subhead2_grey(
             text = subtitle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Spacer(Modifier.width(8.dp))
         MarketDataValueComponent(marketDataValue)
@@ -237,6 +245,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
                 )
             }
         }
+
         is MarketDataValue.Volume -> {
             Row {
                 subhead2_grey(
@@ -245,6 +254,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
                 )
             }
         }
+
         is MarketDataValue.Diff -> {
             Text(
                 text = diffText(marketDataValue.value),
@@ -253,6 +263,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
                 maxLines = 1,
             )
         }
+
         is MarketDataValue.DiffNew -> {
             Text(
                 text = formatValueAsDiff(marketDataValue.value),
@@ -261,6 +272,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
                 maxLines = 1,
             )
         }
+
         null -> {
             subhead2_grey(text = "---")
         }
@@ -269,7 +281,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
 
 @Preview
 @Composable
-fun PreviewMarketCoin(){
+fun PreviewMarketCoin() {
     ComposeAppTheme {
         MarketCoin(
             title = "ETH",

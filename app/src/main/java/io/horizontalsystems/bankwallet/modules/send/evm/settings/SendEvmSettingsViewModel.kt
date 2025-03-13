@@ -13,9 +13,8 @@ import kotlinx.coroutines.launch
 
 class SendEvmSettingsViewModel(
     private val service: SendEvmSettingsService,
-    private val cautionViewItemFactory: CautionViewItemFactory
+    private val cautionViewItemFactory: CautionViewItemFactory,
 ) : ViewModel() {
-
     var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
         private set
 
@@ -35,8 +34,10 @@ class SendEvmSettingsViewModel(
             is DataState.Error -> {
                 isRecommendedSettingsSelected = false
             }
+
             DataState.Loading -> {
             }
+
             is DataState.Success -> {
                 isRecommendedSettingsSelected = state.data.default
             }

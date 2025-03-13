@@ -40,8 +40,8 @@ class SendTonViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val address: Address,
-    private val recentAddressManager: RecentAddressManager
-): ViewModelUiState<SendTonUiState>() {
+    private val recentAddressManager: RecentAddressManager,
+) : ViewModelUiState<SendTonUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -92,16 +92,17 @@ class SendTonViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendTonUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        fee = feeState.fee,
-        feeInProgress = feeState.inProgress,
-        address = address
-    )
+    override fun createState() =
+        SendTonUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput,
+            fee = feeState.fee,
+            feeInProgress = feeState.inProgress,
+            address = address,
+        )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -109,10 +110,12 @@ class SendTonViewModel(
 
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.address!!
-        val contact = contactsRepo.getContactsFiltered(
-            blockchainType,
-            addressQuery = address.hex
-        ).firstOrNull()
+        val contact =
+            contactsRepo
+                .getContactsFiltered(
+                    blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = feeState.fee!!,
@@ -139,28 +142,30 @@ class SendTonViewModel(
         }
     }
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
-        try {
-            sendResult = SendResult.Sending
-            logger.info("sending tx")
+    private suspend fun send() =
+        withContext(Dispatchers.IO) {
+            try {
+                sendResult = SendResult.Sending
+                logger.info("sending tx")
 
-            adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
+                adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
 
-            sendResult = SendResult.Sent()
-            logger.info("success")
+                sendResult = SendResult.Sent()
+                logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
-        } catch (e: Throwable) {
-            sendResult = SendResult.Failed(createCaution(e))
-            logger.warning("failed", e)
+                recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
+            } catch (e: Throwable) {
+                sendResult = SendResult.Failed(createCaution(e))
+                logger.warning("failed", e)
+            }
         }
-    }
 
-    private fun createCaution(error: Throwable) = when (error) {
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
-    }
+    private fun createCaution(error: Throwable) =
+        when (error) {
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        }
 
     private fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
         this.amountState = amountState
@@ -183,7 +188,6 @@ class SendTonViewModel(
 
         emitState()
     }
-
 }
 
 data class SendTonUiState(

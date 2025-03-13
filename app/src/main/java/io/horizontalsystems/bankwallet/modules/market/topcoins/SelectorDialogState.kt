@@ -5,5 +5,8 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 
 sealed class SelectorDialogState {
     object Closed : SelectorDialogState()
-    class Opened(val select: Select<SortingField>) : SelectorDialogState()
+
+    class Opened(
+        val select: Select<SortingField>,
+    ) : SelectorDialogState()
 }

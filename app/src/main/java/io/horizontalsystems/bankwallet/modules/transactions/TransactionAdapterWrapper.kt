@@ -19,7 +19,7 @@ class TransactionAdapterWrapper(
     private val transactionsAdapter: ITransactionsAdapter,
     private val transactionWallet: TransactionWallet,
     private var transactionType: FilterTransactionType,
-    private var contact: Contact?
+    private var contact: Contact?,
 ) : Clearable {
     private val updatedSubject = PublishSubject.create<Unit>()
     val updatedObservable: Observable<Unit> get() = updatedSubject
@@ -30,10 +30,11 @@ class TransactionAdapterWrapper(
     private var updatesJob: Job? = null
 
     val address: String?
-        get() = contact
-            ?.addresses
-            ?.find { it.blockchain == transactionWallet.source.blockchain }
-            ?.address
+        get() =
+            contact
+                ?.addresses
+                ?.find { it.blockchain == transactionWallet.source.blockchain }
+                ?.address
 
     init {
         subscribeForUpdates()
@@ -64,39 +65,40 @@ class TransactionAdapterWrapper(
 
         if (contact != null && address == null) return
 
-        updatesJob = coroutineScope.launch {
-            transactionsAdapter
-                .getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
-                .asFlow()
-                .collect {
-                    transactionRecords.clear()
-                    allLoaded = false
-                    updatedSubject.onNext(Unit)
-                }
-        }
+        updatesJob =
+            coroutineScope.launch {
+                transactionsAdapter
+                    .getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
+                    .asFlow()
+                    .collect {
+                        transactionRecords.clear()
+                        allLoaded = false
+                        updatedSubject.onNext(Unit)
+                    }
+            }
     }
 
-    fun get(limit: Int): Single<List<TransactionRecord>> = when {
-        transactionRecords.size >= limit || allLoaded -> Single.just(transactionRecords.take(limit))
-        contact != null && address == null -> Single.just(listOf())
-        else -> {
-            val numberOfRecordsToRequest = limit - transactionRecords.size
-            transactionsAdapter
-                .getTransactionsAsync(
-                    transactionRecords.lastOrNull(),
-                    transactionWallet.token,
-                    numberOfRecordsToRequest,
-                    transactionType,
-                    address
-                )
-                .map {
-                    allLoaded = it.size < numberOfRecordsToRequest
-                    transactionRecords.addAll(it)
+    fun get(limit: Int): Single<List<TransactionRecord>> =
+        when {
+            transactionRecords.size >= limit || allLoaded -> Single.just(transactionRecords.take(limit))
+            contact != null && address == null -> Single.just(listOf())
+            else -> {
+                val numberOfRecordsToRequest = limit - transactionRecords.size
+                transactionsAdapter
+                    .getTransactionsAsync(
+                        transactionRecords.lastOrNull(),
+                        transactionWallet.token,
+                        numberOfRecordsToRequest,
+                        transactionType,
+                        address,
+                    ).map {
+                        allLoaded = it.size < numberOfRecordsToRequest
+                        transactionRecords.addAll(it)
 
-                    transactionRecords
-                }
+                        transactionRecords
+                    }
+            }
         }
-    }
 
     override fun clear() {
         coroutineScope.cancel()

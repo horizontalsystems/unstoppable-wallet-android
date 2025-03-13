@@ -13,14 +13,15 @@ class SendTonAddressService {
     private var addressError: Throwable? = null
     private var tonAddress: FriendlyAddress? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            address = address,
-            tonAddress = tonAddress,
-            addressError = addressError,
-            canBeSend = tonAddress != null,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                address = address,
+                tonAddress = tonAddress,
+                addressError = addressError,
+                canBeSend = tonAddress != null,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     fun setAddress(address: Address?) {
@@ -39,7 +40,8 @@ class SendTonAddressService {
         try {
             tonAddress = FriendlyAddress.parse(address.hex)
         } catch (e: Exception) {
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError =
+                Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 
@@ -49,7 +51,7 @@ class SendTonAddressService {
                 address = address,
                 tonAddress = tonAddress,
                 addressError = addressError,
-                canBeSend = tonAddress != null
+                canBeSend = tonAddress != null,
             )
         }
     }
@@ -58,6 +60,6 @@ class SendTonAddressService {
         val address: Address?,
         val tonAddress: FriendlyAddress?,
         val addressError: Throwable?,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

@@ -70,9 +70,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 @Composable
 fun TransactionsScreen(
     navController: NavController,
-    viewModel: TransactionsViewModel
+    viewModel: TransactionsViewModel,
 ) {
-    val accountsViewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
+    val accountsViewModel =
+        viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
     val showFilterAlertDot by viewModel.filterResetEnabled.observeAsState(false)
@@ -86,18 +87,22 @@ fun TransactionsScreen(
             AppBar(
                 title = stringResource(R.string.Transactions_Title),
                 showSpinner = syncing,
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Transactions_Filter),
-                        icon = R.drawable.ic_manage_2_24,
-                        showAlertDot = showFilterAlertDot,
-                        onClick = {
-                            navController.slideFromRight(R.id.transactionFilterFragment)
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Transactions_Filter),
+                            icon = R.drawable.ic_manage_2_24,
+                            showAlertDot = showFilterAlertDot,
+                            onClick = {
+                                navController.slideFromRight(R.id.transactionFilterFragment)
 
-                            stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionFilter))
-                        },
-                    )
-                )
+                                stat(
+                                    page = StatPage.Transactions,
+                                    event = StatEvent.Open(StatPage.TransactionFilter),
+                                )
+                            },
+                        ),
+                    ),
             )
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
@@ -106,7 +111,7 @@ fun TransactionsScreen(
                         viewModel.setFilterTransactionType(it)
 
                         stat(page = StatPage.Transactions, event = StatEvent.SwitchTab(it.statTab))
-                    }
+                    },
                 )
             }
 
@@ -117,39 +122,41 @@ fun TransactionsScreen(
                             if (syncing) {
                                 ListEmptyView(
                                     text = stringResource(R.string.Transactions_WaitForSync),
-                                    icon = R.drawable.ic_clock
+                                    icon = R.drawable.ic_clock,
                                 )
                             } else {
                                 ListEmptyView(
                                     text = stringResource(R.string.Transactions_EmptyList),
-                                    icon = R.drawable.ic_outgoingraw
+                                    icon = R.drawable.ic_outgoingraw,
                                 )
                             }
                         } else {
-                            val listState = rememberSaveable(
-                                uiState.transactionListId,
-                                (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
-                                saver = LazyListState.Saver
-                            ) {
-                                LazyListState(0, 0)
-                            }
-
-                            val onClick: (TransactionViewItem) -> Unit = remember {
-                                {
-                                    onTransactionClick(
-                                        it,
-                                        viewModel,
-                                        navController
-                                    )
+                            val listState =
+                                rememberSaveable(
+                                    uiState.transactionListId,
+                                    (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
+                                    saver = LazyListState.Saver,
+                                ) {
+                                    LazyListState(0, 0)
                                 }
-                            }
+
+                            val onClick: (TransactionViewItem) -> Unit =
+                                remember {
+                                    {
+                                        onTransactionClick(
+                                            it,
+                                            viewModel,
+                                            navController,
+                                        )
+                                    }
+                                }
 
                             LazyColumn(state = listState) {
                                 transactionList(
                                     transactionsMap = transactionItems,
                                     willShow = { viewModel.willShow(it) },
                                     onClick = onClick,
-                                    onBottomReached = { viewModel.onBottomReached() }
+                                    onBottomReached = { viewModel.onBottomReached() },
                                 )
                             }
                         }
@@ -163,7 +170,7 @@ fun TransactionsScreen(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     viewModel: TransactionsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
 
@@ -179,7 +186,7 @@ fun LazyListScope.transactionList(
     transactionsMap: Map<String, List<TransactionViewItem>>,
     willShow: (TransactionViewItem) -> Unit,
     onClick: (TransactionViewItem) -> Unit,
-    onBottomReached: () -> Unit
+    onBottomReached: () -> Unit,
 ) {
     val bottomReachedUid = getBottomReachedUid(transactionsMap)
 
@@ -195,14 +202,15 @@ fun LazyListScope.transactionList(
             items = transactions,
             key = { _, item ->
                 item.uid
-            }
+            },
         ) { index, item ->
-            val position: SectionItemPosition = when {
-                singleElement -> SectionItemPosition.Single
-                index == 0 -> SectionItemPosition.First
-                index == itemsCount - 1 -> SectionItemPosition.Last
-                else -> SectionItemPosition.Middle
-            }
+            val position: SectionItemPosition =
+                when {
+                    singleElement -> SectionItemPosition.Single
+                    index == 0 -> SectionItemPosition.First
+                    index == itemsCount - 1 -> SectionItemPosition.Last
+                    else -> SectionItemPosition.Middle
+                }
 
             Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                 TransactionCell(item, position) { onClick.invoke(item) }
@@ -227,50 +235,61 @@ fun LazyListScope.transactionList(
 
 private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionViewItem>>): String? {
     val txList = transactionsMap.values.flatten()
-    //get index not exact bottom but near to the bottom, to make scroll smoother
+    // get index not exact bottom but near to the bottom, to make scroll smoother
     val index = if (txList.size > 4) txList.size - 4 else 0
 
     return txList.getOrNull(index)?.uid
 }
 
 @Composable
-fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, onClick: () -> Unit) {
+fun TransactionCell(
+    item: TransactionViewItem,
+    position: SectionItemPosition,
+    onClick: () -> Unit,
+) {
     val divider = position == SectionItemPosition.Middle || position == SectionItemPosition.Last
     SectionUniversalItem(
         borderTop = divider,
     ) {
-        val clipModifier = when (position) {
-            SectionItemPosition.First -> {
-                Modifier.clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-            }
-            SectionItemPosition.Last -> {
-                Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
-            }
-            SectionItemPosition.Single -> {
-                Modifier.clip(RoundedCornerShape(12.dp))
-            }
-            else -> Modifier
-        }
+        val clipModifier =
+            when (position) {
+                SectionItemPosition.First -> {
+                    Modifier.clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                }
 
-        val borderModifier = if (position != SectionItemPosition.Single) {
-            Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)
-        } else {
-            Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-        }
+                SectionItemPosition.Last -> {
+                    Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                }
+
+                SectionItemPosition.Single -> {
+                    Modifier.clip(RoundedCornerShape(12.dp))
+                }
+
+                else -> Modifier
+            }
+
+        val borderModifier =
+            if (position != SectionItemPosition.Single) {
+                Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)
+            } else {
+                Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+            }
 
         RowUniversal(
-            modifier = Modifier
-                .fillMaxSize()
-                .then(clipModifier)
-                .then(borderModifier)
-                .clickable(onClick = onClick),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .then(clipModifier)
+                    .then(borderModifier)
+                    .clickable(onClick = onClick),
         ) {
             Box(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .size(42.dp)
-                    .alpha(if (item.spam) 0.5f else 1f),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp)
+                        .size(42.dp)
+                        .alpha(if (item.spam) 0.5f else 1f),
+                contentAlignment = Alignment.Center,
             ) {
                 item.progress?.let { progress ->
                     HSCircularProgressIndicator(progress)
@@ -281,68 +300,81 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                         Icon(
                             painter = painterResource(R.drawable.ic_attention_24),
                             tint = ComposeAppTheme.colors.lucian,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
+
                     is TransactionViewItem.Icon.Platform -> {
                         Icon(
                             modifier = Modifier.size(32.dp),
                             painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
                             tint = ComposeAppTheme.colors.leah,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
+
                     is TransactionViewItem.Icon.Regular -> {
-                        val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val shape =
+                            if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         HsImage(
-                            modifier = Modifier.size(32.dp)
-                                .clip(shape),
+                            modifier =
+                                Modifier
+                                    .size(32.dp)
+                                    .clip(shape),
                             url = icon.url,
                             alternativeUrl = icon.alternativeUrl,
-                            placeholder = icon.placeholder
+                            placeholder = icon.placeholder,
                         )
                     }
+
                     is TransactionViewItem.Icon.Double -> {
-                        val backShape = if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        val frontShape = if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val backShape =
+                            if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val frontShape =
+                            if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         HsImage(
-                            modifier = Modifier
-                                .align(Alignment.TopStart)
-                                .padding(top = 4.dp, start = 6.dp)
-                                .size(24.dp)
-                                .clip(backShape),
+                            modifier =
+                                Modifier
+                                    .align(Alignment.TopStart)
+                                    .padding(top = 4.dp, start = 6.dp)
+                                    .size(24.dp)
+                                    .clip(backShape),
                             url = icon.back.url,
                             alternativeUrl = icon.back.alternativeUrl,
                             placeholder = icon.back.placeholder,
                         )
 
                         Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 4.5.dp, end = 6.5.dp)
-                                .size(24.dp)
-                                .clip(frontShape)
-                                .background(ComposeAppTheme.colors.tyler)
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 4.5.dp, end = 6.5.dp)
+                                    .size(24.dp)
+                                    .clip(frontShape)
+                                    .background(ComposeAppTheme.colors.tyler),
                         )
 
                         HsImage(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 4.dp, end = 6.dp)
-                                .size(24.dp)
-                                .clip(frontShape),
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 4.dp, end = 6.dp)
+                                    .size(24.dp)
+                                    .clip(frontShape),
                             url = icon.front.url,
                             alternativeUrl = icon.front.alternativeUrl,
                             placeholder = icon.front.placeholder,
                         )
                     }
+
                     is TransactionViewItem.Icon.ImageResource -> {}
                 }
             }
             Column(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .alpha(if (item.spam) 0.5f else 1f)
+                modifier =
+                    Modifier
+                        .padding(end = 16.dp)
+                        .alpha(if (item.spam) 0.5f else 1f),
             ) {
                 Row {
                     body_leah(
@@ -365,21 +397,21 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                         Image(
                             modifier = Modifier.padding(start = 6.dp),
                             painter = painterResource(R.drawable.ic_double_spend_20),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                     item.locked?.let { locked ->
                         Image(
                             modifier = Modifier.padding(start = 6.dp),
                             painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                     if (item.sentToSelf) {
                         Image(
                             modifier = Modifier.padding(start = 6.dp),
                             painter = painterResource(R.drawable.ic_arrow_return_20),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }
@@ -387,9 +419,10 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                 Row {
                     subhead2_grey(
                         text = item.subtitle,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp),
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp),
                         maxLines = 2,
                     )
                     item.secondaryValue?.let { coloredValue ->
@@ -409,15 +442,19 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
 @Composable
 private fun FilterTypeTabs(
     filterTypes: List<Filter<FilterTransactionType>>,
-    onTransactionTypeClick: (FilterTransactionType) -> Unit
+    onTransactionTypeClick: (FilterTransactionType) -> Unit,
 ) {
-    val tabItems = filterTypes.map {
-        TabItem(stringResource(it.item.title), it.selected, it.item)
-    }
+    val tabItems =
+        filterTypes.map {
+            TabItem(stringResource(it.item.title), it.selected, it.item)
+        }
 
     ScrollableTabs(tabItems) { transactionType ->
         onTransactionTypeClick.invoke(transactionType)
     }
 }
 
-data class Filter<T>(val item: T, val selected: Boolean)
+data class Filter<T>(
+    val item: T,
+    val selected: Boolean,
+)

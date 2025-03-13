@@ -20,7 +20,7 @@ import kotlinx.coroutines.rx2.asFlow
 
 class CoinTreasuriesViewModel(
     private val service: CoinTreasuriesService,
-    private val numberFormatter: IAppNumberFormatter
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModel() {
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
@@ -29,11 +29,11 @@ class CoinTreasuriesViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateObservable.asFlow()
+            service.stateObservable
+                .asFlow()
                 .catch {
                     viewStateLiveData.postValue(ViewState.Error(it))
-                }
-                .collect { state ->
+                }.collect { state ->
                     handleServiceState(state)
                 }
         }
@@ -66,7 +66,7 @@ class CoinTreasuriesViewModel(
 
     fun onClickTreasuryTypeSelector() {
         treasuryTypeSelectorDialogStateLiveData.postValue(
-            SelectorDialogState.Opened(Select(service.treasuryType, service.treasuryTypes))
+            SelectorDialogState.Opened(Select(service.treasuryType, service.treasuryTypes)),
         )
     }
 
@@ -93,13 +93,14 @@ class CoinTreasuriesViewModel(
     }
 
     private fun syncCoinTreasuriesData(coinTreasuries: List<CoinTreasury>) {
-        val coinTreasuriesData = CoinTreasuriesData(
-            Select(service.treasuryType, service.treasuryTypes),
-            service.sortDescending,
-            coinTreasuries.map {
-                coinTreasuryItem(it)
-            }
-        )
+        val coinTreasuriesData =
+            CoinTreasuriesData(
+                Select(service.treasuryType, service.treasuryTypes),
+                service.sortDescending,
+                coinTreasuries.map {
+                    coinTreasuryItem(it)
+                },
+            )
         coinTreasuriesLiveData.postValue(coinTreasuriesData)
     }
 
@@ -109,10 +110,11 @@ class CoinTreasuriesViewModel(
             fundLogoUrl = coinTreasury.logoUrl,
             country = coinTreasury.countryCode,
             amount = numberFormatter.formatCoinShort(coinTreasury.amount, service.coin.code, 8),
-            amountInCurrency = numberFormatter.formatFiatShort(
-                coinTreasury.amountInCurrency,
-                service.currency.symbol,
-                2
-            )
+            amountInCurrency =
+                numberFormatter.formatFiatShort(
+                    coinTreasury.amountInCurrency,
+                    service.currency.symbol,
+                    2,
+                ),
         )
 }

@@ -35,12 +35,13 @@ fun PinConfirm(
                     HsBackButton(onClick = onCancel)
                 },
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(it)
+                    .fillMaxSize(),
         ) {
             PinTopBlock(
                 modifier = Modifier.weight(1f),
@@ -48,7 +49,7 @@ fun PinConfirm(
                 enteredCount = viewModel.uiState.enteredCount,
                 showShakeAnimation = viewModel.uiState.showShakeAnimation,
                 inputState = viewModel.uiState.inputState,
-                onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() }
+                onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
             )
 
             PinNumpad(
@@ -56,7 +57,7 @@ fun PinConfirm(
                 onNumberClick = { number -> viewModel.onKeyClick(number) },
                 onDeleteClick = { viewModel.onDelete() },
                 inputState = viewModel.uiState.inputState,
-                updatePinRandomized = { random -> viewModel.updatePinRandomized(random) }
+                updatePinRandomized = { random -> viewModel.updatePinRandomized(random) },
             )
         }
     }

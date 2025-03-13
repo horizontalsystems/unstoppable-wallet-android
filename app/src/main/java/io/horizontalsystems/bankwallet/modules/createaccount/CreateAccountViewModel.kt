@@ -30,7 +30,6 @@ class CreateAccountViewModel(
     private val passphraseValidator: PassphraseValidator,
     private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : ViewModel() {
-
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
@@ -62,13 +61,14 @@ class CreateAccountViewModel(
         }
 
         val accountType = mnemonicAccountType(selectedKind.wordsCount)
-        val account = accountFactory.account(
-            accountName,
-            accountType,
-            AccountOrigin.Created,
-            false,
-            false,
-        )
+        val account =
+            accountFactory.account(
+                accountName,
+                accountType,
+                AccountOrigin.Created,
+                false,
+                false,
+            )
 
         accountManager.save(account)
         activateDefaultWallets(account)
@@ -85,11 +85,12 @@ class CreateAccountViewModel(
             passphraseState = null
             passphrase = v
         } else {
-            passphraseState = DataState.Error(
-                Exception(
-                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+            passphraseState =
+                DataState.Error(
+                    Exception(
+                        Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols),
+                    ),
                 )
-            )
         }
     }
 
@@ -120,36 +121,51 @@ class CreateAccountViewModel(
         }
 
         if (passphrase.isBlank()) {
-            passphraseState = DataState.Error(
-                Exception(
-                    Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
+            passphraseState =
+                DataState.Error(
+                    Exception(
+                        Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase),
+                    ),
                 )
-            )
             return true
         }
         if (passphrase != passphraseConfirmation) {
-            passphraseConfirmState = DataState.Error(
-                Exception(
-                    Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
+            passphraseConfirmState =
+                DataState.Error(
+                    Exception(
+                        Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation),
+                    ),
                 )
-            )
             return true
         }
         return false
     }
 
     private fun activateDefaultWallets(account: Account) {
-        val tokenQueries = listOfNotNull(
-            TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
-            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
-            TokenQuery(BlockchainType.Tron, TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t")),//USDT(TRC20)
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0x55d398326f99059ff775485246999027b3197955")), //USDT(bep20)
-            TokenQuery(BlockchainType.Polygon, TokenType.Native),
-            TokenQuery(BlockchainType.Tron, TokenType.Native),
-            TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),//USDT(erc20)
-            TokenQuery(BlockchainType.Base, TokenType.Eip20("0x833589fcd6edb6e08f4c7c32d4f71b54bda02913")),//USDC(Base)
-        )
+        val tokenQueries =
+            listOfNotNull(
+                TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
+                TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+                TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
+                TokenQuery(
+                    BlockchainType.Tron,
+                    TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
+                ), // USDT(TRC20)
+                TokenQuery(
+                    BlockchainType.BinanceSmartChain,
+                    TokenType.Eip20("0x55d398326f99059ff775485246999027b3197955"),
+                ), // USDT(bep20)
+                TokenQuery(BlockchainType.Polygon, TokenType.Native),
+                TokenQuery(BlockchainType.Tron, TokenType.Native),
+                TokenQuery(
+                    BlockchainType.Ethereum,
+                    TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7"),
+                ), // USDT(erc20)
+                TokenQuery(
+                    BlockchainType.Base,
+                    TokenType.Eip20("0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"),
+                ), // USDC(Base)
+            )
         walletActivator.activateWallets(account, tokenQueries)
     }
 
@@ -160,5 +176,4 @@ class CreateAccountViewModel(
         val words = wordsManager.generateWords(wordCount).map { it.normalizeNFKD() }
         return AccountType.Mnemonic(words, passphrase.normalizeNFKD())
     }
-
 }

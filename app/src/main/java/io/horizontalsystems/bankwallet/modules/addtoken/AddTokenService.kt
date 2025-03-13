@@ -20,44 +20,52 @@ class AddTokenService(
     private val accountManager: IAccountManager,
     marketKit: MarketKitWrapper,
 ) {
+    private val blockchainTypes =
+        listOf(
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Tron,
+            BlockchainType.Ton,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.ArbitrumOne,
+            BlockchainType.Optimism,
+            BlockchainType.Base,
+            BlockchainType.ZkSync,
+            BlockchainType.Solana,
+        )
 
-    private val blockchainTypes = listOf(
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Tron,
-        BlockchainType.Ton,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.Solana
-    )
-
-    val blockchains = marketKit
-        .blockchains(blockchainTypes.map { it.uid })
-        .sortedBy { it.type.order }
+    val blockchains =
+        marketKit
+            .blockchains(blockchainTypes.map { it.uid })
+            .sortedBy { it.type.order }
 
     val accountType = accountManager.activeAccount?.type
 
-    suspend fun tokenInfo(blockchain: Blockchain, reference: String): TokenInfo? {
+    suspend fun tokenInfo(
+        blockchain: Blockchain,
+        reference: String,
+    ): TokenInfo? {
         if (reference.isEmpty()) return null
 
-        val blockchainService = when (blockchain.type) {
-            BlockchainType.Tron -> {
-                AddTronTokenBlockchainService.getInstance(blockchain)
+        val blockchainService =
+            when (blockchain.type) {
+                BlockchainType.Tron -> {
+                    AddTronTokenBlockchainService.getInstance(blockchain)
+                }
+
+                BlockchainType.Ton -> {
+                    AddTonTokenBlockchainService(blockchain)
+                }
+
+                BlockchainType.Solana -> {
+                    AddSolanaTokenBlockchainService.getInstance(blockchain)
+                }
+
+                else -> AddEvmTokenBlockchainService.getInstance(blockchain)
             }
-            BlockchainType.Ton -> {
-                AddTonTokenBlockchainService(blockchain)
-            }
-            BlockchainType.Solana -> {
-                AddSolanaTokenBlockchainService.getInstance(blockchain)
-            }
-            else -> AddEvmTokenBlockchainService.getInstance(blockchain)
-        }
 
         if (!blockchainService.isValid(reference)) throw TokenError.InvalidReference
 
@@ -84,6 +92,7 @@ class AddTokenService(
 
     sealed class TokenError : Exception() {
         object InvalidReference : TokenError()
+
         object NotFound : TokenError()
     }
 

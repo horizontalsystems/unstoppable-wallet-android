@@ -27,9 +27,8 @@ class SwapViewModel(
     private val fiatServiceOut: FiatService,
     private val timerService: TimerService,
     private val networkAvailabilityService: NetworkAvailabilityService,
-    tokenIn: Token?
+    tokenIn: Token?,
 ) : ViewModelUiState<SwapUiState>() {
-
     private val quoteLifetime = 20
 
     private var networkState = networkAvailabilityService.stateFlow.value
@@ -98,31 +97,35 @@ class SwapViewModel(
         }
     }
 
-    override fun createState() = SwapUiState(
-        amountIn = quoteState.amountIn,
-        tokenIn = quoteState.tokenIn,
-        tokenOut = quoteState.tokenOut,
-        quoting = quoteState.quoting,
-        quotes = quoteState.quotes,
-        preferredProvider = quoteState.preferredProvider,
-        quote = quoteState.quote,
-        error = networkState.error ?: quoteState.error ?: balanceState.error ?: priceImpactState.error,
-        availableBalance = balanceState.balance,
-        priceImpact = priceImpactState.priceImpact,
-        priceImpactLevel = priceImpactState.priceImpactLevel,
-        priceImpactCaution = priceImpactState.priceImpactCaution,
-        fiatPriceImpact = priceImpactState.fiatPriceImpact,
-        fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
-        fiatAmountIn = fiatAmountIn,
-        fiatAmountOut = fiatAmountOut,
-        currency = currency,
-        fiatAmountInputEnabled = fiatAmountInputEnabled,
-        timeRemaining = timerState.remaining,
-        timeout = timerState.timeout,
-        timeRemainingProgress = timerState.remaining?.let { remaining ->
-            remaining / quoteLifetime.toFloat()
-        }
-    )
+    override fun createState() =
+        SwapUiState(
+            amountIn = quoteState.amountIn,
+            tokenIn = quoteState.tokenIn,
+            tokenOut = quoteState.tokenOut,
+            quoting = quoteState.quoting,
+            quotes = quoteState.quotes,
+            preferredProvider = quoteState.preferredProvider,
+            quote = quoteState.quote,
+            error =
+                networkState.error ?: quoteState.error ?: balanceState.error
+                    ?: priceImpactState.error,
+            availableBalance = balanceState.balance,
+            priceImpact = priceImpactState.priceImpact,
+            priceImpactLevel = priceImpactState.priceImpactLevel,
+            priceImpactCaution = priceImpactState.priceImpactCaution,
+            fiatPriceImpact = priceImpactState.fiatPriceImpact,
+            fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
+            fiatAmountIn = fiatAmountIn,
+            fiatAmountOut = fiatAmountOut,
+            currency = currency,
+            fiatAmountInputEnabled = fiatAmountInputEnabled,
+            timeRemaining = timerState.remaining,
+            timeout = timerState.timeout,
+            timeRemainingProgress =
+                timerState.remaining?.let { remaining ->
+                    remaining / quoteLifetime.toFloat()
+                },
+        )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
         this.networkState = networkState
@@ -146,7 +149,10 @@ class SwapViewModel(
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
 
-        priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
+        priceImpactService.setPriceImpact(
+            quoteState.quote?.priceImpact,
+            quoteState.quote?.provider?.title,
+        )
 
         fiatServiceIn.setToken(quoteState.tokenIn)
         fiatServiceIn.setAmount(quoteState.amountIn)
@@ -175,27 +181,32 @@ class SwapViewModel(
     }
 
     fun onEnterAmount(v: BigDecimal?) = quoteService.setAmount(v)
+
     fun onEnterAmountPercentage(percentage: Int) {
         val tokenIn = quoteState.tokenIn ?: return
         val availableBalance = balanceState.balance ?: return
 
-        val amount = availableBalance
-            .times(BigDecimal(percentage / 100.0))
-            .setScale(tokenIn.decimals, RoundingMode.DOWN)
-            .stripTrailingZeros()
+        val amount =
+            availableBalance
+                .times(BigDecimal(percentage / 100.0))
+                .setScale(tokenIn.decimals, RoundingMode.DOWN)
+                .stripTrailingZeros()
 
         quoteService.setAmount(amount)
     }
-    fun onSelectTokenIn(token: Token)  {
+
+    fun onSelectTokenIn(token: Token) {
         quoteService.setTokenIn(token)
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenIn(token))
     }
+
     fun onSelectTokenOut(token: Token) {
         quoteService.setTokenOut(token)
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenOut(token))
     }
+
     fun onSwitchPairs() {
         quoteService.switchPairs()
 
@@ -203,15 +214,22 @@ class SwapViewModel(
     }
 
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
+
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
+
     fun reQuote() = quoteService.reQuote()
+
     fun onActionStarted() = quoteService.onActionStarted()
+
     fun onActionCompleted() = quoteService.onActionCompleted()
 
     fun getCurrentQuote() = quoteState.quote
+
     fun getSettings() = quoteService.getSwapSettings()
 
-    class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
+    class Factory(
+        private val tokenIn: Token?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService()
@@ -227,7 +245,7 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
-                tokenIn
+                tokenIn,
             ) as T
         }
     }
@@ -254,29 +272,40 @@ data class SwapUiState(
     val fiatPriceImpactLevel: PriceImpactLevel?,
     val timeRemaining: Long?,
     val timeout: Boolean,
-    val timeRemainingProgress: Float?
+    val timeRemainingProgress: Float?,
 ) {
-    val currentStep: SwapStep = when {
-        quoting -> SwapStep.Quoting
-        error != null -> SwapStep.Error(error)
-        tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
-        tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
-        amountIn == null -> SwapStep.InputRequired(InputType.Amount)
-        quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
-        else -> SwapStep.Proceed
-    }
+    val currentStep: SwapStep =
+        when {
+            quoting -> SwapStep.Quoting
+            error != null -> SwapStep.Error(error)
+            tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
+            tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
+            amountIn == null -> SwapStep.InputRequired(InputType.Amount)
+            quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
+            else -> SwapStep.Proceed
+        }
 }
 
 sealed class SwapStep {
-    data class InputRequired(val inputType: InputType) : SwapStep()
+    data class InputRequired(
+        val inputType: InputType,
+    ) : SwapStep()
+
     object Quoting : SwapStep()
-    data class Error(val error: Throwable) : SwapStep()
+
+    data class Error(
+        val error: Throwable,
+    ) : SwapStep()
+
     object Proceed : SwapStep()
-    data class ActionRequired(val action: ISwapProviderAction) : SwapStep()
+
+    data class ActionRequired(
+        val action: ISwapProviderAction,
+    ) : SwapStep()
 }
 
 enum class InputType {
     TokenIn,
     TokenOut,
-    Amount
+    Amount,
 }

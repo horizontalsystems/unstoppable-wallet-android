@@ -45,14 +45,14 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class MarketWidgetConfigurationActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appWidgetId = intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        val appWidgetId =
+            intent?.extras?.getInt(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID,
+            ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         val context = applicationContext
         val manufacturer = "xiaomi"
@@ -68,38 +68,43 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                     AppBar(
                         title = stringResource(R.string.WidgetList_Config_Title),
                         navigationIcon = null,
-                        menuItems = listOf(MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { finish() }
-                        ))
+                        menuItems =
+                            listOf(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Button_Close),
+                                    icon = R.drawable.ic_close,
+                                    onClick = { finish() },
+                                ),
+                            ),
                     )
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState()),
                     ) {
                         Spacer(modifier = Modifier.height(12.dp))
                         CellSingleLineLawrenceSection(MarketWidgetManager.getMarketWidgetTypes()) { type ->
                             Row(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clickable(onClick = {
-                                        selectedType = type
-                                        finishActivity(type, appWidgetId, currentGlanceId, context)
-                                    })
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .clickable(onClick = {
+                                            selectedType = type
+                                            finishActivity(type, appWidgetId, currentGlanceId, context)
+                                        })
+                                        .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 body_leah(
                                     text = stringResource(type.title),
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
                                 )
                                 if (selectedType == type) {
                                     Image(
                                         painter = painterResource(id = R.drawable.ic_checkmark_20),
                                         contentDescription = null,
-                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                                     )
                                 }
                             }
@@ -108,7 +113,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                             Spacer(modifier = Modifier.height(24.dp))
                             TextImportantWarning(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                text = stringResource(R.string.Widget_EnableAutostartWarning)
+                                text = stringResource(R.string.Widget_EnableAutostartWarning),
                             )
                         }
                         Spacer(modifier = Modifier.height(24.dp))
@@ -118,7 +123,12 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishActivity(selectedType: MarketWidgetType, appWidgetId: Int, glanceId: GlanceId?, context: Context) {
+    private fun finishActivity(
+        selectedType: MarketWidgetType,
+        appWidgetId: Int,
+        glanceId: GlanceId?,
+        context: Context,
+    ) {
         val scope = MainScope()
         scope.launch {
             glanceId?.let {
@@ -135,5 +145,4 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }

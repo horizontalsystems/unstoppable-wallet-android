@@ -24,20 +24,15 @@ class CoinAnalyticsService(
     private val currencyManager: CurrencyManager,
     private val accountManager: IAccountManager,
 ) {
-
     private val _stateFlow = MutableStateFlow<DataState<AnalyticData>>(DataState.Loading)
     val stateFlow: Flow<DataState<AnalyticData>> = _stateFlow
 
     val currency: Currency
         get() = currencyManager.baseCurrency
 
-    fun blockchain(uid: String): Blockchain? {
-        return marketKit.blockchain(uid)
-    }
+    fun blockchain(uid: String): Blockchain? = marketKit.blockchain(uid)
 
-    fun blockchains(uids: List<String>): List<Blockchain> {
-        return marketKit.blockchains(uids)
-    }
+    fun blockchains(uids: List<String>): List<Blockchain> = marketKit.blockchains(uids)
 
     suspend fun start() {
         fetch()
@@ -54,7 +49,9 @@ class CoinAnalyticsService(
         _stateFlow.emit(DataState.Loading)
 
         try {
-            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code).await()
+            marketKit
+                .analyticsSingle(fullCoin.coin.uid, currency.code)
+                .await()
                 .let {
                     _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
                 }
@@ -66,7 +63,8 @@ class CoinAnalyticsService(
     private suspend fun handleError(error: Throwable) {
         when (error) {
             is NoAuthTokenException,
-            is InvalidAuthTokenException -> {
+            is InvalidAuthTokenException,
+            -> {
                 preview()
             }
 
@@ -77,12 +75,15 @@ class CoinAnalyticsService(
     }
 
     private suspend fun preview() {
-        val addresses = accountManager.accounts.mapNotNull {
-            it.type.evmAddress(App.evmBlockchainManager.getChain(BlockchainType.Ethereum))?.hex
-        }
+        val addresses =
+            accountManager.accounts.mapNotNull {
+                it.type.evmAddress(App.evmBlockchainManager.getChain(BlockchainType.Ethereum))?.hex
+            }
 
         try {
-            marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses).await()
+            marketKit
+                .analyticsPreviewSingle(fullCoin.coin.uid, addresses)
+                .await()
                 .let {
                     _stateFlow.emit(DataState.Success(AnalyticData(analyticsPreview = it)))
                 }
@@ -93,7 +94,6 @@ class CoinAnalyticsService(
 
     data class AnalyticData(
         val analytics: Analytics? = null,
-        val analyticsPreview: AnalyticsPreview? = null
+        val analyticsPreview: AnalyticsPreview? = null,
     )
-
 }

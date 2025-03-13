@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapPro
 
 data class SwapProviderQuote(
     val provider: IMultiSwapProvider,
-    val swapQuote: ISwapQuote
+    val swapQuote: ISwapQuote,
 ) {
     val tokenIn by swapQuote::tokenIn
     val tokenOut by swapQuote::tokenOut

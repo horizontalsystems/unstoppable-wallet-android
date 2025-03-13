@@ -43,7 +43,6 @@ import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.putParcelableExtra
 
 class KeyStoreActivity : BaseActivity() {
-
     private val mode by lazy {
         intent.parcelable<KeyStoreModule.ModeType>(MODE)!!
     }
@@ -57,15 +56,17 @@ class KeyStoreActivity : BaseActivity() {
             KeyStoreScreen(
                 viewModel = viewModel,
                 showBiometricPrompt = { showBiometricPrompt() },
-                closeApp = { finish() }
+                closeApp = { finish() },
             )
         }
     }
 
     private fun showBiometricPrompt() {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.OSPin_Confirm_Title))
-            .setDescription(getString(R.string.OSPin_Prompt_Desciption))
+        val promptInfo =
+            BiometricPrompt.PromptInfo
+                .Builder()
+                .setTitle(getString(R.string.OSPin_Confirm_Title))
+                .setDescription(getString(R.string.OSPin_Prompt_Desciption))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             promptInfo.setAllowedAuthenticators(DEVICE_CREDENTIAL)
@@ -77,23 +78,30 @@ class KeyStoreActivity : BaseActivity() {
         val executor = ContextCompat.getMainExecutor(this)
 
         val biometricPrompt =
-            BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    viewModel.onAuthenticationSuccess()
-                }
-
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-
-                    if (errorCode == BiometricPrompt.ERROR_USER_CANCELED
-                        || errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON
-                        || errorCode == BiometricPrompt.ERROR_CANCELED
-                    ) {
-                        viewModel.onAuthenticationCanceled()
+            BiometricPrompt(
+                this,
+                executor,
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        viewModel.onAuthenticationSuccess()
                     }
-                }
-            })
+
+                    override fun onAuthenticationError(
+                        errorCode: Int,
+                        errString: CharSequence,
+                    ) {
+                        super.onAuthenticationError(errorCode, errString)
+
+                        if (errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+                            errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
+                            errorCode == BiometricPrompt.ERROR_CANCELED
+                        ) {
+                            viewModel.onAuthenticationCanceled()
+                        }
+                    }
+                },
+            )
 
         biometricPrompt.authenticate(promptInfo.build())
     }
@@ -113,13 +121,17 @@ class KeyStoreActivity : BaseActivity() {
             start(context, KeyStoreModule.ModeType.UserAuthentication)
         }
 
-        private fun start(context: Context, mode: KeyStoreModule.ModeType) {
-            val intent = Intent(context, KeyStoreActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+        private fun start(
+            context: Context,
+            mode: KeyStoreModule.ModeType,
+        ) {
+            val intent =
+                Intent(context, KeyStoreActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                         Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-                putParcelableExtra(MODE, mode)
-            }
+                    putParcelableExtra(MODE, mode)
+                }
 
             context.startActivity(intent)
         }
@@ -149,10 +161,11 @@ private fun KeyStoreScreen(
     ComposeAppTheme {
         if (viewModel.showSystemLockWarning) {
             Column(
-                modifier = Modifier
-                    .background(color = ComposeAppTheme.colors.tyler)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center
+                modifier =
+                    Modifier
+                        .background(color = ComposeAppTheme.colors.tyler)
+                        .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
             ) {
                 NoSystemLockWarning()
             }
@@ -166,18 +179,18 @@ private fun KeyStoreScreen(
 
 @Composable
 private fun NoSystemLockWarning() {
-    Column() {
+    Column {
         Spacer(Modifier.height(12.dp))
         Image(
             painter = painterResource(id = R.drawable.ic_attention_24),
             contentDescription = null,
-            modifier = Modifier.size(48.dp).align(Alignment.CenterHorizontally)
+            modifier = Modifier.size(48.dp).align(Alignment.CenterHorizontally),
         )
         Spacer(Modifier.height(32.dp))
         subhead2_grey(
             modifier = Modifier.padding(horizontal = 48.dp),
             text = stringResource(R.string.OSPin_Confirm_Desciption),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(12.dp))
     }
@@ -190,20 +203,20 @@ private fun KeysInvalidatedDialog(onClick: () -> Unit) {
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+                .background(ComposeAppTheme.colors.lawrence),
         ) {
             BottomSheetsElementsHeader(
                 icon = painterResource(R.drawable.icon_key_24),
                 title = stringResource(R.string.Alert_KeysInvalidatedTitle),
                 subtitle = stringResource(R.string.Error),
-                onClickClose = onClick
+                onClickClose = onClick,
             )
             BottomSheetsElementsText(
-                text = stringResource(R.string.Alert_KeysInvalidatedDescription)
+                text = stringResource(R.string.Alert_KeysInvalidatedDescription),
             )
             BottomSheetsElementsButtons(
                 buttonPrimaryText = stringResource(R.string.Button_Ok),
-                onClickPrimary = onClick
+                onClickPrimary = onClick,
             )
         }
     }

@@ -23,23 +23,22 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 
 @Composable
-fun RestoreByMenu(
-    viewModel: RestoreMenuViewModel
-) {
+fun RestoreByMenu(viewModel: RestoreMenuViewModel) {
     ByMenu(
         menuTitle = stringResource(R.string.Restore_By),
         menuValue = stringResource(viewModel.restoreOption.titleRes),
         selectorDialogTitle = stringResource(R.string.Restore_RestoreBy),
-        selectorItems = viewModel.restoreOptions.map {
-            SelectorItem(
-                stringResource(it.titleRes),
-                it == viewModel.restoreOption,
-                it
-            )
-        },
+        selectorItems =
+            viewModel.restoreOptions.map {
+                SelectorItem(
+                    stringResource(it.titleRes),
+                    it == viewModel.restoreOption,
+                    it,
+                )
+            },
         onSelectItem = {
             viewModel.onRestoreOptionSelected(it)
-        }
+        },
     )
 }
 
@@ -49,7 +48,7 @@ fun <T> ByMenu(
     menuValue: String,
     selectorDialogTitle: String,
     selectorItems: List<SelectorItem<T>>,
-    onSelectItem: (T) -> Unit
+    onSelectItem: (T) -> Unit,
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }
 
@@ -60,7 +59,7 @@ fun <T> ByMenu(
             onDismissRequest = {
                 showSelectorDialog = false
             },
-            onSelectItem = onSelectItem
+            onSelectItem = onSelectItem,
         )
     }
 
@@ -68,7 +67,7 @@ fun <T> ByMenu(
         listOf {
             RowUniversal(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = { showSelectorDialog = true }
+                onClick = { showSelectorDialog = true },
             ) {
                 B2(text = menuTitle)
                 Spacer(Modifier.weight(1f))
@@ -78,9 +77,10 @@ fun <T> ByMenu(
                         modifier = Modifier.padding(start = 4.dp),
                         painter = painterResource(id = R.drawable.ic_down_arrow_20),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
+                        tint = ComposeAppTheme.colors.grey,
                     )
                 }
             }
-        })
+        },
+    )
 }

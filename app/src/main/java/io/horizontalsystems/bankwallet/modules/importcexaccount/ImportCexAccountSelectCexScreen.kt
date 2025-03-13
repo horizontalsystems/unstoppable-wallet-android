@@ -45,15 +45,16 @@ fun ImportCexAccountSelectCexScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onNavigateBack)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClose
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = onClose,
+                        ),
+                    ),
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             InfoText(text = stringResource(R.string.ImportCexAccount_SelectCexDescription))
@@ -62,14 +63,15 @@ fun ImportCexAccountSelectCexScreen(
                 RowUniversal(
                     onClick = {
                         onSelectCex.invoke(it.id)
-                    }
+                    },
                 ) {
                     Image(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .size(32.dp),
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 16.dp)
+                                .size(32.dp),
                         painter = painterResource(it.icon),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         body_leah(

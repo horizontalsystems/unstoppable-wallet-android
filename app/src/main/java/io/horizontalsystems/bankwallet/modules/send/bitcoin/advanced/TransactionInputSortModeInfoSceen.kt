@@ -19,26 +19,26 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
-fun BtcTransactionInputSortInfoScreen(
-    onCloseClick: () -> Unit
-) {
+fun BtcTransactionInputSortInfoScreen(onCloseClick: () -> Unit) {
     ComposeAppTheme {
         Surface(color = ComposeAppTheme.colors.tyler) {
             Column {
                 AppBar(
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = onCloseClick
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Close),
+                                icon = R.drawable.ic_close,
+                                onClick = onCloseClick,
+                            ),
+                        ),
                 )
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()),
                 ) {
                     InfoHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs)
                     InfoBody(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)

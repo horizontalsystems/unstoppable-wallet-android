@@ -16,13 +16,15 @@ class Eip20RevokeTransactionSettingsFragment : BaseComposeFragment() {
 
 @Composable
 fun Eip20RevokeTransactionSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
-    }
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
+        }
 
-    val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+    val viewModel =
+        viewModel<Eip20RevokeConfirmViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+        )
 
     val sendTransactionService = viewModel.sendTransactionService
 

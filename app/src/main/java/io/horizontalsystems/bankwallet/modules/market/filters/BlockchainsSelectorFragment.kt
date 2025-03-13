@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.core.findNavController
 
 class BlockchainsSelectorFragment : BaseComposeFragment() {
-
     private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
         MarketFiltersModule.Factory()
     }
@@ -56,15 +55,15 @@ class BlockchainsSelectorFragment : BaseComposeFragment() {
                 override fun handleOnBackPressed() {
                     findNavController().popBackStack()
                 }
-            })
+            },
+        )
     }
-
 }
 
 @Composable
 private fun FilterByBlockchainsScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState
 
@@ -77,39 +76,41 @@ private fun FilterByBlockchainsScreen(
                         modifier = Modifier.padding(start = 24.dp),
                         painter = painterResource(id = R.drawable.ic_blocks_24),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.jacob,
                     )
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
-                    )
-                ),
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = navController::popBackStack,
+                        ),
+                    ),
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 VSpacer(height = 12.dp)
 
                 SectionUniversalLawrence {
                     AnyCell(
                         checked = uiState.selectedBlockchains.isEmpty(),
-                        onClick = { viewModel.anyBlockchains() }
+                        onClick = { viewModel.anyBlockchains() },
                     )
                     uiState.blockchainOptions.forEach { item ->
                         CellBlockchainChecked(
                             blockchain = item.blockchain,
-                            checked = item.checked
+                            checked = item.checked,
                         ) {
                             if (item.checked) {
                                 viewModel.onBlockchainUncheck(item.blockchain)
@@ -124,17 +125,19 @@ private fun FilterByBlockchainsScreen(
             }
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    title = if (uiState.selectedBlockchains.isEmpty()) {
-                        stringResource(R.string.Button_Done)
-                    } else {
-                        stringResource(
-                            R.string.Market_Filters_Select,
-                            uiState.selectedBlockchains.size
-                        )
-                    },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                    title =
+                        if (uiState.selectedBlockchains.isEmpty()) {
+                            stringResource(R.string.Button_Done)
+                        } else {
+                            stringResource(
+                                R.string.Market_Filters_Select,
+                                uiState.selectedBlockchains.size,
+                            )
+                        },
                     onClick = {
                         navController.popBackStack()
                     },
@@ -147,16 +150,17 @@ private fun FilterByBlockchainsScreen(
 @Composable
 private fun AnyCell(
     checked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     CellUniversal(
         borderTop = false,
-        onClick = onClick
+        onClick = onClick,
     ) {
         body_grey(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .weight(1f),
             text = stringResource(R.string.Any),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -165,7 +169,7 @@ private fun AnyCell(
             painter = painterResource(R.drawable.ic_checkmark_20),
             tint = ComposeAppTheme.colors.jacob,
             contentDescription = null,
-            modifier = Modifier.alpha(if (checked) 1f else 0f)
+            modifier = Modifier.alpha(if (checked) 1f else 0f),
         )
     }
 }

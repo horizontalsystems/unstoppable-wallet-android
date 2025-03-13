@@ -46,7 +46,8 @@ class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
 
 @Composable
 fun SetDuressPinSelectAccountsScreen(navController: NavController) {
-    val viewModel = viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
+    val viewModel =
+        viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
     val regularAccounts = viewModel.regularAccounts
     val watchAccounts = viewModel.watchAccounts
     val selected = remember { mutableStateListOf<String>() }
@@ -64,32 +65,37 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRight(R.id.setDuressPinFragment, SetDuressPinFragment.Input(selected))
+                        navController.slideFromRight(
+                            R.id.setDuressPinFragment,
+                            SetDuressPinFragment.Input(selected),
+                        )
                     },
                 )
             }
-        }
+        },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(innerPaddings)
+                    .verticalScroll(rememberScrollState()),
         ) {
             InfoText(
                 text = stringResource(R.string.DuressPinSelectAccounts_Description),
-                paddingBottom = 32.dp
+                paddingBottom = 32.dp,
             )
 
             if (regularAccounts.isNotEmpty()) {
                 ItemsSection(
                     title = stringResource(R.string.DuressPinSelectAccounts_SectionWallets_Title),
                     items = regularAccounts,
-                    selected = selected
+                    selected = selected,
                 ) { account, checked ->
                     if (checked) {
                         selected.add(account.id)
@@ -104,7 +110,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                 ItemsSection(
                     title = stringResource(R.string.DuressPinSelectAccounts_SectionWatchWallets_Title),
                     items = watchAccounts,
-                    selected = selected
+                    selected = selected,
                 ) { account, checked ->
                     if (checked) {
                         selected.add(account.id)
@@ -116,7 +122,6 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
             }
         }
     }
-
 }
 
 @Composable
@@ -130,11 +135,12 @@ private fun ItemsSection(
     CellUniversalLawrenceSection(items) { account ->
         val checked = selected.contains(account.id)
         RowUniversal(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clickable {
-                    onToggle.invoke(account, !checked)
-                }
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .clickable {
+                        onToggle.invoke(account, !checked)
+                    },
         ) {
             Column {
                 body_leah(text = account.name)
@@ -145,7 +151,7 @@ private fun ItemsSection(
                     subhead2_grey(
                         text = account.type.detailedDescription,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 1,
                     )
                 }
             }

@@ -4,13 +4,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 
 class NotIntegerException : Exception() {
-    override fun getLocalizedMessage(): String {
-        return Translator.getString(R.string.Error_NotInteger)
-    }
+    override fun getLocalizedMessage(): String = Translator.getString(R.string.Error_NotInteger)
 }
 
-class OutOfRangeException(val lower: Int, val upper: Int) : Exception() {
-    override fun getLocalizedMessage(): String {
-        return Translator.getString(R.string.Error_OutOfRange, lower, upper)
-    }
+class OutOfRangeException(
+    val lower: Int,
+    val upper: Int,
+) : Exception() {
+    override fun getLocalizedMessage(): String = Translator.getString(R.string.Error_OutOfRange, lower, upper)
 }

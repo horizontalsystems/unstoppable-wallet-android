@@ -23,41 +23,40 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
-
 @Composable
-fun RootedDeviceScreen(
-    onIgnoreWarningClicked: () -> Unit
-) {
+fun RootedDeviceScreen(onIgnoreWarningClicked: () -> Unit) {
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            contentAlignment = Alignment.Center,
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_attention_24),
                     contentDescription = null,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(48.dp),
                 )
                 Spacer(Modifier.height(20.dp))
                 subhead2_grey(
                     modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
                     textAlign = TextAlign.Center,
-                    text = stringResource(R.string.Alert_DeviceIsRootedWarning)
+                    text = stringResource(R.string.Alert_DeviceIsRootedWarning),
                 )
             }
         }
 
         ButtonsGroupWithShade {
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
                 title = stringResource(R.string.RootedDevice_Button_Understand),
                 onClick = onIgnoreWarningClicked,
             )

@@ -15,9 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class BtcBlockchainSettingsViewModel(
-    private val service: BtcBlockchainSettingsService
+    private val service: BtcBlockchainSettingsService,
 ) : ViewModel() {
-
     var closeScreen by mutableStateOf(false)
         private set
 
@@ -51,23 +50,24 @@ class BtcBlockchainSettingsViewModel(
     }
 
     private fun syncRestoreModeState() {
-        val viewItems = service.restoreModes.map { mode ->
-            ViewItem(
-                id = mode.raw,
-                title = Translator.getString(mode.title),
-                subtitle = Translator.getString(mode.description),
-                selected = mode == service.restoreMode,
-                icon = mode.icon
-            )
-        }
+        val viewItems =
+            service.restoreModes.map { mode ->
+                ViewItem(
+                    id = mode.raw,
+                    title = Translator.getString(mode.title),
+                    subtitle = Translator.getString(mode.description),
+                    selected = mode == service.restoreMode,
+                    icon = mode.icon,
+                )
+            }
         restoreSources = viewItems
     }
 
     private val BtcRestoreMode.icon: BlockchainSettingsIcon
-        get() = when (this) {
-            BtcRestoreMode.Blockchair -> BlockchainSettingsIcon.ApiIcon(R.drawable.ic_blockchair)
-            BtcRestoreMode.Hybrid -> BlockchainSettingsIcon.ApiIcon(R.drawable.ic_api_hybrid)
-            BtcRestoreMode.Blockchain -> BlockchainSettingsIcon.BlockchainIcon(service.blockchain.type.imageUrl)
-        }
-
+        get() =
+            when (this) {
+                BtcRestoreMode.Blockchair -> BlockchainSettingsIcon.ApiIcon(R.drawable.ic_blockchair)
+                BtcRestoreMode.Hybrid -> BlockchainSettingsIcon.ApiIcon(R.drawable.ic_api_hybrid)
+                BtcRestoreMode.Blockchain -> BlockchainSettingsIcon.BlockchainIcon(service.blockchain.type.imageUrl)
+            }
 }

@@ -10,15 +10,17 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
 
-class SystemInfoManager(appConfigProvider: AppConfigProvider) : ISystemInfoManager {
-
+class SystemInfoManager(
+    appConfigProvider: AppConfigProvider,
+) : ISystemInfoManager {
     override val appVersion: String = appConfigProvider.appVersion
 
     private val biometricManager by lazy { BiometricManager.from(App.instance) }
 
     override val isSystemLockOff: Boolean
         get() {
-            val keyguardManager = App.instance.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
+            val keyguardManager =
+                App.instance.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
             return !keyguardManager.isDeviceSecure
         }
 
@@ -30,5 +32,4 @@ class SystemInfoManager(appConfigProvider: AppConfigProvider) : ISystemInfoManag
 
     override val osVersion: String
         get() = "Android ${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})"
-
 }

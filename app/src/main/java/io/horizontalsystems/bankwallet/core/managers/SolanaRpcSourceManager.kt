@@ -8,10 +8,9 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class SolanaRpcSourceManager(
-        private val blockchainSettingsStorage: BlockchainSettingsStorage,
-        private val marketKitWrapper: MarketKitWrapper
+    private val blockchainSettingsStorage: BlockchainSettingsStorage,
+    private val marketKitWrapper: MarketKitWrapper,
 ) {
-
     private val blockchainType = BlockchainType.Solana
     private val rpcSourceSubjectUpdate = PublishSubject.create<Unit>()
 
@@ -35,5 +34,4 @@ class SolanaRpcSourceManager(
         blockchainSettingsStorage.save(rpcSource.name, blockchainType)
         rpcSourceSubjectUpdate.onNext(Unit)
     }
-
 }

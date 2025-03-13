@@ -11,12 +11,12 @@ import kotlin.math.abs
 
 class ChartIndicatorManager(
     private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     val isEnabled: Boolean
         get() = localStorage.chartIndicatorsEnabled
-    private val _isEnabledFlow : MutableSharedFlow<Boolean> = MutableSharedFlow()
+    private val _isEnabledFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val isEnabledFlow: SharedFlow<Boolean>
         get() = _isEnabledFlow
 
@@ -32,18 +32,23 @@ class ChartIndicatorManager(
         chartIndicatorSettingsDao.insertAll(ChartIndicatorSettingsDao.defaultData())
     }
 
-    fun calculateIndicators(points: LinkedHashMap<Long, Float>, startTimestamp: Long): Map<String, ChartIndicator> {
-        return getEnabledIndicators()
+    fun calculateIndicators(
+        points: LinkedHashMap<Long, Float>,
+        startTimestamp: Long,
+    ): Map<String, ChartIndicator> =
+        getEnabledIndicators()
             .mapNotNull { chartIndicatorSetting: ChartIndicatorSetting ->
                 when (chartIndicatorSetting.type) {
                     ChartIndicatorSetting.IndicatorType.MA -> {
                         val typedDataMA = chartIndicatorSetting.getTypedDataMA()
                         calculateMovingAverage(points, typedDataMA, startTimestamp)
                     }
+
                     ChartIndicatorSetting.IndicatorType.RSI -> {
                         val typedDataRsi = chartIndicatorSetting.getTypedDataRsi()
                         calculateRsi(points, typedDataRsi, startTimestamp)
                     }
+
                     ChartIndicatorSetting.IndicatorType.MACD -> {
                         val typedDataMacd = chartIndicatorSetting.getTypedDataMacd()
                         calculateMacd(points, typedDataMacd, startTimestamp)
@@ -51,27 +56,29 @@ class ChartIndicatorManager(
                 }?.let {
                     chartIndicatorSetting.id to it
                 }
-            }
-            .toMap()
-    }
+            }.toMap()
 
     private fun calculateMovingAverage(
         points: LinkedHashMap<Long, Float>,
         typedDataMA: ChartIndicatorDataMa,
-        startTimestamp: Long
+        startTimestamp: Long,
     ): ChartIndicator.MovingAverage? {
         val period = typedDataMA.period
         val maType = typedDataMA.maType
         if (points.size < period) return null
 
-        val line = when (maType) {
-            "SMA" -> calculateSMA(points, period)
-            "EMA" -> calculateEMA(points, period)
-            "WMA" -> calculateWMA(points, period)
-            else -> return null
-        }
+        val line =
+            when (maType) {
+                "SMA" -> calculateSMA(points, period)
+                "EMA" -> calculateEMA(points, period)
+                "WMA" -> calculateWMA(points, period)
+                else -> return null
+            }
 
-        return ChartIndicator.MovingAverage(line.filterByTimestamp(startTimestamp), typedDataMA.color)
+        return ChartIndicator.MovingAverage(
+            line.filterByTimestamp(startTimestamp),
+            typedDataMA.color,
+        )
     }
 
     fun enable() {
@@ -96,48 +103,45 @@ class ChartIndicatorManager(
         chartIndicatorSettingsDao.disableIndicator(indicatorId)
     }
 
-    fun getPointsCount(): Int {
-        return getEnabledIndicators().maxOfOrNull { it.pointsCount } ?: 0
-    }
+    fun getPointsCount(): Int = getEnabledIndicators().maxOfOrNull { it.pointsCount } ?: 0
 
-    private fun getEnabledIndicators(): List<ChartIndicatorSetting> {
-        return chartIndicatorSettingsDao.getEnabled()
-    }
+    private fun getEnabledIndicators(): List<ChartIndicatorSetting> = chartIndicatorSettingsDao.getEnabled()
 
-    fun getChartIndicatorSetting(id: String): ChartIndicatorSetting? {
-        return chartIndicatorSettingsDao.get(id)
-    }
+    fun getChartIndicatorSetting(id: String): ChartIndicatorSetting? = chartIndicatorSettingsDao.get(id)
 
     fun update(chartIndicatorSetting: ChartIndicatorSetting) {
         chartIndicatorSettingsDao.update(chartIndicatorSetting)
     }
 
-    companion object{
+    companion object {
         val maPeriods = listOf(9, 25, 50)
         val rsiPeriod = 12
         val macdPeriods = listOf(12, 26, 9)
 
         fun calculateWMA(
             points: LinkedHashMap<Long, Float>,
-            period: Int
+            period: Int,
         ): LinkedHashMap<Long, Float> {
             val pointsList = points.toList()
             return LinkedHashMap(
-                pointsList.windowed(period, 1) { window ->
-                    val n = period
-                    val sumOfWeights = (n + 1) * n / 2
-                    val wma = window.mapIndexed { i, (_, value) ->
-                        value * (i + 1)
-                    }.sum() / sumOfWeights
+                pointsList
+                    .windowed(period, 1) { window ->
+                        val n = period
+                        val sumOfWeights = (n + 1) * n / 2
+                        val wma =
+                            window
+                                .mapIndexed { i, (_, value) ->
+                                    value * (i + 1)
+                                }.sum() / sumOfWeights
 
-                    window.last().first to wma
-                }.toMap()
+                        window.last().first to wma
+                    }.toMap(),
             )
         }
 
         fun calculateEMA(
             points: LinkedHashMap<Long, Float>,
-            period: Int
+            period: Int,
         ): LinkedHashMap<Long, Float> {
             val pointsList = points.toList()
             val subListForFirstSma = pointsList.subList(0, period)
@@ -158,22 +162,23 @@ class ChartIndicatorManager(
             return res
         }
 
-         fun calculateSMA(
+        fun calculateSMA(
             points: LinkedHashMap<Long, Float>,
-            period: Int
+            period: Int,
         ): LinkedHashMap<Long, Float> {
             val pointsList = points.toList()
             return LinkedHashMap(
-                pointsList.windowed(period, 1) {
-                    it.last().first to it.map { it.second }.average().toFloat()
-                }.toMap()
+                pointsList
+                    .windowed(period, 1) {
+                        it.last().first to it.map { it.second }.average().toFloat()
+                    }.toMap(),
             )
         }
 
         fun calculateRsi(
             points: LinkedHashMap<Long, Float>,
             typedDataRsi: ChartIndicatorDataRsi,
-            startTimestamp: Long
+            startTimestamp: Long,
         ): ChartIndicator.Rsi {
             val period = typedDataRsi.period
 
@@ -191,7 +196,7 @@ class ChartIndicatorManager(
                 downMove[key] = if (change < 0) abs(change) else 0f
             }
 
-            val rsi =  mutableMapOf<Long, Float>()
+            val rsi = mutableMapOf<Long, Float>()
 
             var maUp = 0f
             var maDown = 0f
@@ -230,40 +235,47 @@ class ChartIndicatorManager(
             return ChartIndicator.Rsi(LinkedHashMap(rsi).filterByTimestamp(startTimestamp))
         }
 
-         fun calculateMacd(
+        fun calculateMacd(
             points: LinkedHashMap<Long, Float>,
             typedDataMacd: ChartIndicatorDataMacd,
-            startTimestamp: Long
+            startTimestamp: Long,
         ): ChartIndicator.Macd {
             val emaFast = calculateEMA(points, typedDataMacd.fast)
             val emaSlow = calculateEMA(points, typedDataMacd.slow)
 
-            val macdLine = LinkedHashMap(
-                emaSlow.mapNotNull { (key, value) ->
-                    emaFast[key]?.minus(value)?.let {
-                        key to it
-                    }
-                }.toMap()
-            )
+            val macdLine =
+                LinkedHashMap(
+                    emaSlow
+                        .mapNotNull { (key, value) ->
+                            emaFast[key]?.minus(value)?.let {
+                                key to it
+                            }
+                        }.toMap(),
+                )
             val signalLine = calculateEMA(macdLine, typedDataMacd.signal)
 
-            val histogram = LinkedHashMap(
-                signalLine.mapNotNull { (key, value) ->
-                    macdLine[key]?.minus(value)?.let {
-                        key to it
-                    }
-                }.toMap()
-            )
+            val histogram =
+                LinkedHashMap(
+                    signalLine
+                        .mapNotNull { (key, value) ->
+                            macdLine[key]?.minus(value)?.let {
+                                key to it
+                            }
+                        }.toMap(),
+                )
 
             return ChartIndicator.Macd(
                 macdLine.filterByTimestamp(startTimestamp),
                 signalLine.filterByTimestamp(startTimestamp),
-                histogram.filterByTimestamp(startTimestamp)
+                histogram.filterByTimestamp(startTimestamp),
             )
         }
     }
 }
 
-private fun LinkedHashMap<Long, Float>.filterByTimestamp(startTimestamp: Long): LinkedHashMap<Long, Float> {
-    return LinkedHashMap(filter { it.key >= startTimestamp })
-}
+private fun LinkedHashMap<Long, Float>.filterByTimestamp(startTimestamp: Long): LinkedHashMap<Long, Float> =
+    LinkedHashMap(
+        filter {
+            it.key >= startTimestamp
+        },
+    )

@@ -4,7 +4,7 @@ import io.horizontalsystems.marketkit.models.NftPrice
 
 data class NftAddressMetadata(
     val collections: List<NftCollectionShortMetadata>,
-    val assets: List<NftAssetShortMetadata>
+    val assets: List<NftAssetShortMetadata>,
 )
 
 data class NftCollectionShortMetadata(
@@ -12,7 +12,7 @@ data class NftCollectionShortMetadata(
     val name: String,
     val thumbnailImageUrl: String?,
     val averagePrice7d: NftPrice?,
-    val averagePrice30: NftPrice?
+    val averagePrice30: NftPrice?,
 )
 
 data class NftAssetShortMetadata(
@@ -21,7 +21,7 @@ data class NftAssetShortMetadata(
     val name: String?,
     val previewImageUrl: String?,
     val onSale: Boolean,
-    val lastSalePrice: NftPrice?
+    val lastSalePrice: NftPrice?,
 ) {
     val displayName = name ?: "#${nftUid.tokenId}"
 }

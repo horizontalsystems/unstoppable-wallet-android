@@ -38,7 +38,6 @@ class TransactionsViewModel(
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
 ) : ViewModelUiState<TransactionsUiState>() {
-
     var tmpTransactionRecordToShow: TransactionRecord? = null
 
     val filterResetEnabled = MutableLiveData<Boolean>()
@@ -68,14 +67,16 @@ class TransactionsViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             transactionFilterService.stateFlow.collect { state ->
-                val transactionWallets = state.filterTokens.map { filterToken ->
-                    filterToken?.let {
+                val transactionWallets =
+                    state.filterTokens.map { filterToken ->
+                        filterToken?.let {
+                            TransactionWallet(it.token, it.source, it.token.badge)
+                        }
+                    }
+                val selectedTransactionWallet =
+                    state.selectedToken?.let {
                         TransactionWallet(it.token, it.source, it.token.badge)
                     }
-                }
-                val selectedTransactionWallet = state.selectedToken?.let {
-                    TransactionWallet(it.token, it.source, it.token.badge)
-                }
                 service.set(
                     transactionWallets.filterNotNull(),
                     selectedTransactionWallet,
@@ -96,14 +97,15 @@ class TransactionsViewModel(
                 val filterBlockchains = blockchains.map { Filter(it, it == selectedBlockchain) }
                 filterBlockchainsLiveData.postValue(filterBlockchains)
 
-                val filterCoins = state.filterTokens.map {
-                    Filter(it, it == state.selectedToken)
-                }
+                val filterCoins =
+                    state.filterTokens.map {
+                        Filter(it, it == state.selectedToken)
+                    }
                 filterTokensLiveData.postValue(filterCoins)
 
                 filterContactLiveData.postValue(state.contact)
 
-                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx){
+                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx) {
                     service.reload()
                 }
                 filterHideSuspiciousTx.postValue(state.hideSuspiciousTx)
@@ -137,31 +139,33 @@ class TransactionsViewModel(
 
     private fun handleUpdatedItems(items: List<TransactionItem>) {
         refreshViewItemsJob?.cancel()
-        refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            val viewItems = items
-                .map {
-                    ensureActive()
-                    transactionViewItem2Factory.convertToViewItemCached(it)
-                }
-                .groupBy {
-                    ensureActive()
-                    it.formattedDate
-                }
+        refreshViewItemsJob =
+            viewModelScope.launch(Dispatchers.Default) {
+                val viewItems =
+                    items
+                        .map {
+                            ensureActive()
+                            transactionViewItem2Factory.convertToViewItemCached(it)
+                        }.groupBy {
+                            ensureActive()
+                            it.formattedDate
+                        }
 
-            transactions = viewItems
-            viewState = ViewState.Success
+                transactions = viewItems
+                viewState = ViewState.Success
 
-            ensureActive()
-            emitState()
-        }
+                ensureActive()
+                emitState()
+            }
     }
 
-    override fun createState() = TransactionsUiState(
-        transactions = transactions,
-        viewState = viewState,
-        transactionListId = transactionListId,
-        syncing = syncing
-    )
+    override fun createState() =
+        TransactionsUiState(
+            transactions = transactions,
+            viewState = viewState,
+            transactionListId = transactionListId,
+            syncing = syncing,
+        )
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
         transactionFilterService.setWallets(wallets)
@@ -204,14 +208,13 @@ class TransactionsViewModel(
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
         transactionFilterService.updateFilterHideSuspiciousTx(checked)
     }
-
 }
 
 data class TransactionItem(
     val record: TransactionRecord,
     val currencyValue: CurrencyValue?,
     val lastBlockInfo: LastBlockInfo?,
-    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
 ) {
     val createdAt = System.currentTimeMillis()
 }
@@ -230,30 +233,46 @@ data class TransactionViewItem(
     val doubleSpend: Boolean = false,
     val spam: Boolean = false,
     val locked: Boolean? = null,
-    val icon: Icon
+    val icon: Icon,
 ) {
-
     sealed class Icon {
-        class ImageResource(val resourceId: Int) : Icon()
-        class Regular(val url: String?, val alternativeUrl: String?, val placeholder: Int?, val rectangle: Boolean = false) : Icon()
-        class Double(val back: Regular, val front: Regular) : Icon()
+        class ImageResource(
+            val resourceId: Int,
+        ) : Icon()
+
+        class Regular(
+            val url: String?,
+            val alternativeUrl: String?,
+            val placeholder: Int?,
+            val rectangle: Boolean = false,
+        ) : Icon()
+
+        class Double(
+            val back: Regular,
+            val front: Regular,
+        ) : Icon()
+
         object Failed : Icon()
-        class Platform(blockchainType: BlockchainType) : Icon() {
-            val iconRes = when (blockchainType) {
-                BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
-                BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
-                BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
-                BlockchainType.Avalanche -> R.drawable.logo_chain_avalanche_trx_24
-                BlockchainType.Optimism -> R.drawable.logo_chain_optimism_trx_24
-                BlockchainType.Base -> R.drawable.logo_chain_base_trx_24
-                BlockchainType.ZkSync -> R.drawable.logo_chain_zksync_trx_32
-                BlockchainType.ArbitrumOne -> R.drawable.logo_chain_arbitrum_one_trx_24
-                BlockchainType.Gnosis -> R.drawable.logo_chain_gnosis_trx_32
-                BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32
-                BlockchainType.Tron -> R.drawable.logo_chain_tron_trx_32
-                BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
-                else -> null
-            }
+
+        class Platform(
+            blockchainType: BlockchainType,
+        ) : Icon() {
+            val iconRes =
+                when (blockchainType) {
+                    BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
+                    BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
+                    BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
+                    BlockchainType.Avalanche -> R.drawable.logo_chain_avalanche_trx_24
+                    BlockchainType.Optimism -> R.drawable.logo_chain_optimism_trx_24
+                    BlockchainType.Base -> R.drawable.logo_chain_base_trx_24
+                    BlockchainType.ZkSync -> R.drawable.logo_chain_zksync_trx_32
+                    BlockchainType.ArbitrumOne -> R.drawable.logo_chain_arbitrum_one_trx_24
+                    BlockchainType.Gnosis -> R.drawable.logo_chain_gnosis_trx_32
+                    BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32
+                    BlockchainType.Tron -> R.drawable.logo_chain_tron_trx_32
+                    BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
+                    else -> null
+                }
         }
     }
 
@@ -279,14 +298,20 @@ data class TransactionViewItem(
 }
 
 enum class FilterTransactionType {
-    All, Incoming, Outgoing, Swap, Approve;
+    All,
+    Incoming,
+    Outgoing,
+    Swap,
+    Approve,
+    ;
 
     val title: Int
-        get() = when (this) {
-            All -> R.string.Transactions_All
-            Incoming -> R.string.Transactions_Incoming
-            Outgoing -> R.string.Transactions_Outgoing
-            Swap -> R.string.Transactions_Swaps
-            Approve -> R.string.Transactions_Approvals
-        }
+        get() =
+            when (this) {
+                All -> R.string.Transactions_All
+                Incoming -> R.string.Transactions_Incoming
+                Outgoing -> R.string.Transactions_Outgoing
+                Swap -> R.string.Transactions_Swaps
+                Approve -> R.string.Transactions_Approvals
+            }
 }

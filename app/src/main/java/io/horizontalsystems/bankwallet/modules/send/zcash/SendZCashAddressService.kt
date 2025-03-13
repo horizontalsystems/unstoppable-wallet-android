@@ -9,19 +9,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
+class SendZCashAddressService(
+    private val adapter: ISendZcashAdapter,
+) {
     private var address: Address? = null
     private var addressType: ZcashAdapter.ZCashAddressType? = null
     private var addressError: Throwable? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            address = address,
-            addressType = addressType,
-            addressError = addressError,
-            canBeSend = address != null && addressError == null
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                address = address,
+                addressType = addressType,
+                addressError = addressError,
+                canBeSend = address != null && addressError == null,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     suspend fun setAddress(address: Address?) {
@@ -45,11 +48,12 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
     }
 
     private fun getError(error: Throwable): Throwable {
-        val message = when (error) {
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
-            is ZcashAdapter.ZcashError.InvalidAddress -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
-            else -> error.message ?: error.javaClass.simpleName
-        }
+        val message =
+            when (error) {
+                is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
+                is ZcashAdapter.ZcashError.InvalidAddress -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+                else -> error.message ?: error.javaClass.simpleName
+            }
 
         return Throwable(message)
     }
@@ -60,7 +64,7 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
                 address = address,
                 addressType = addressType,
                 addressError = addressError,
-                canBeSend = address != null && addressError == null
+                canBeSend = address != null && addressError == null,
             )
         }
     }
@@ -69,6 +73,6 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
         val address: Address?,
         val addressType: ZcashAdapter.ZCashAddressType?,
         val addressError: Throwable?,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

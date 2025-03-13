@@ -21,9 +21,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
-data class DataFieldAllowance(val allowance: BigDecimal, val token: Token) : DataField {
+data class DataFieldAllowance(
+    val allowance: BigDecimal,
+    val token: Token,
+) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(
+        navController: NavController,
+        borderTop: Boolean,
+    ) {
         val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
         val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
 
@@ -33,26 +39,26 @@ data class DataFieldAllowance(val allowance: BigDecimal, val token: Token) : Dat
                 subhead2_grey(text = stringResource(R.string.Swap_Allowance))
 
                 Image(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .clickable(
-                            onClick = {
-                                navController.slideFromBottom(
-                                    R.id.feeSettingsInfoDialog,
-                                    FeeSettingsInfoDialog.Input(infoTitle, infoText)
-                                )
-                            },
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        )
-                    ,
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 8.dp)
+                            .clickable(
+                                onClick = {
+                                    navController.slideFromBottom(
+                                        R.id.feeSettingsInfoDialog,
+                                        FeeSettingsInfoDialog.Input(infoTitle, infoText),
+                                    )
+                                },
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ),
                     painter = painterResource(id = R.drawable.ic_info_20),
-                    contentDescription = ""
+                    contentDescription = "",
                 )
             },
             value = {
                 subhead2_lucian(text = CoinValue(token, allowance).getFormattedFull())
-            }
+            },
         )
     }
 }

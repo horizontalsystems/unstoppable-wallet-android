@@ -24,31 +24,32 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 
 class ProChartFragment : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val input = requireArguments().getInputX<Input>()!!
-                val chartViewModel = viewModel<ChartViewModel>(
-                    factory = ProChartModule.Factory(
-                        input.coinUid,
-                        enumValues<ProChartModule.ChartType>()[input.chartType]
+                val chartViewModel =
+                    viewModel<ChartViewModel>(
+                        factory =
+                            ProChartModule.Factory(
+                                input.coinUid,
+                                enumValues<ProChartModule.ChartType>()[input.chartType],
+                            ),
                     )
-                )
 
                 ComposeAppTheme {
                     BottomSheetHeader(
                         iconPainter = painterResource(R.drawable.ic_chart_24),
                         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                         title = input.title,
-                        onCloseClick = { close() }
+                        onCloseClick = { close() },
                     ) {
                         Chart(chartViewModel = chartViewModel)
                         VSpacer(32.dp)
@@ -56,7 +57,6 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
                 }
             }
         }
-    }
 
     @Parcelize
     data class Input(
@@ -73,11 +73,11 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
             chartType: ProChartModule.ChartType,
         ) {
             val fragment = ProChartFragment()
-            fragment.arguments = bundleOf(
-                "input" to Input(coinUid, title, chartType.ordinal)
-            )
+            fragment.arguments =
+                bundleOf(
+                    "input" to Input(coinUid, title, chartType.ordinal),
+                )
             fragment.show(fragmentManager, "pro_chart_dialog")
         }
     }
 }
-

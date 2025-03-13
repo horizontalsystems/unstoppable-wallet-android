@@ -24,19 +24,23 @@ class PriceImpactService {
     private var priceImpactCaution: HSCaution? = null
     private var error: Throwable? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            priceImpact = priceImpact,
-            priceImpactLevel = priceImpactLevel,
-            priceImpactCaution = priceImpactCaution,
-            fiatPriceImpact = fiatPriceImpact,
-            fiatPriceImpactLevel = fiatPriceImpactLevel,
-            error = error
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                priceImpact = priceImpact,
+                priceImpactLevel = priceImpactLevel,
+                priceImpactCaution = priceImpactCaution,
+                fiatPriceImpact = fiatPriceImpact,
+                fiatPriceImpactLevel = fiatPriceImpactLevel,
+                error = error,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun setPriceImpact(priceImpact: BigDecimal?, providerTitle: String?) {
+    fun setPriceImpact(
+        priceImpact: BigDecimal?,
+        providerTitle: String?,
+    ) {
         if (priceImpact == null || priceImpact < normalPriceImpact) {
             this.priceImpact = null
             priceImpactLevel = null
@@ -44,38 +48,47 @@ class PriceImpactService {
         } else {
             this.priceImpact = priceImpact
 
-            priceImpactLevel = when {
-                priceImpact < warningPriceImpact -> PriceImpactLevel.Normal
-                priceImpact < forbiddenPriceImpact -> PriceImpactLevel.Warning
-                else -> PriceImpactLevel.Forbidden
-            }
+            priceImpactLevel =
+                when {
+                    priceImpact < warningPriceImpact -> PriceImpactLevel.Normal
+                    priceImpact < forbiddenPriceImpact -> PriceImpactLevel.Warning
+                    else -> PriceImpactLevel.Forbidden
+                }
 
-            priceImpactCaution = when (priceImpactLevel) {
-                PriceImpactLevel.Forbidden -> {
-                    HSCaution(
-                        s = TranslatableString.ResString(R.string.Swap_PriceImpact),
-                        type = HSCaution.Type.Error,
-                        description = TranslatableString.ResString(R.string.Swap_PriceImpactTooHigh, providerTitle ?: "")
-                    )
+            priceImpactCaution =
+                when (priceImpactLevel) {
+                    PriceImpactLevel.Forbidden -> {
+                        HSCaution(
+                            s = TranslatableString.ResString(R.string.Swap_PriceImpact),
+                            type = HSCaution.Type.Error,
+                            description =
+                                TranslatableString.ResString(
+                                    R.string.Swap_PriceImpactTooHigh,
+                                    providerTitle ?: "",
+                                ),
+                        )
+                    }
+
+                    PriceImpactLevel.Warning -> {
+                        HSCaution(
+                            s = TranslatableString.ResString(R.string.Swap_PriceImpact),
+                            type = HSCaution.Type.Warning,
+                            description = TranslatableString.ResString(R.string.Swap_PriceImpactWarning),
+                        )
+                    }
+
+                    else -> {
+                        null
+                    }
                 }
-                PriceImpactLevel.Warning -> {
-                    HSCaution(
-                        s = TranslatableString.ResString(R.string.Swap_PriceImpact),
-                        type = HSCaution.Type.Warning,
-                        description = TranslatableString.ResString(R.string.Swap_PriceImpactWarning)
-                    )
-                }
-                else -> {
-                    null
-                }
-            }
         }
 
-        error = if (priceImpactLevel == PriceImpactLevel.Forbidden) {
-            PriceImpactTooHigh(providerTitle)
-        } else {
-            null
-        }
+        error =
+            if (priceImpactLevel == PriceImpactLevel.Forbidden) {
+                PriceImpactTooHigh(providerTitle)
+            } else {
+                null
+            }
 
         emitState()
     }
@@ -88,7 +101,7 @@ class PriceImpactService {
                 priceImpactCaution,
                 fiatPriceImpact,
                 fiatPriceImpactLevel,
-                error
+                error,
             )
         }
     }
@@ -105,15 +118,19 @@ class PriceImpactService {
             fiatPriceImpactLevel = null
         } else {
             this.fiatPriceImpact = fiatPriceImpact
-            fiatPriceImpactLevel = when {
-                fiatPriceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
-                fiatPriceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.Warning
-                else -> PriceImpactLevel.Forbidden
-            }
+            fiatPriceImpactLevel =
+                when {
+                    fiatPriceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
+                    fiatPriceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.Warning
+                    else -> PriceImpactLevel.Forbidden
+                }
         }
     }
 
-    private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {
+    private fun calculateDiff(
+        amountOut: BigDecimal?,
+        amountIn: BigDecimal?,
+    ): BigDecimal? {
         if (amountOut == null || amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0) return null
 
         return (amountOut - amountIn)
@@ -145,8 +162,10 @@ class PriceImpactService {
         val priceImpactCaution: HSCaution?,
         val fiatPriceImpact: BigDecimal?,
         val fiatPriceImpactLevel: PriceImpactLevel?,
-        val error: Throwable?
+        val error: Throwable?,
     )
 }
 
-data class PriceImpactTooHigh(val providerTitle: String?) : Exception()
+data class PriceImpactTooHigh(
+    val providerTitle: String?,
+) : Exception()

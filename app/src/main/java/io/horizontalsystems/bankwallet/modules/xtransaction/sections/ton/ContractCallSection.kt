@@ -31,9 +31,10 @@ fun ContractCallSection(
         HeaderCell(
             title = stringResource(R.string.Transactions_ContractCall),
             value = operation,
-            painter = TransactionViewItem.Icon.Platform(blockchainType).iconRes?.let {
-                painterResource(it)
-            }
+            painter =
+                TransactionViewItem.Icon.Platform(blockchainType).iconRes?.let {
+                    painterResource(it)
+                },
         )
         val contact = transactionInfoHelper.getContact(address, blockchainType)
         AddressCell(
@@ -43,7 +44,7 @@ fun ContractCallSection(
             blockchainType = blockchainType,
             statPage = StatPage.TonConnect,
             statSection = StatSection.AddressTo,
-            navController = navController
+            navController = navController,
         )
 
         AmountCellTV(
@@ -53,7 +54,7 @@ fun ContractCallSection(
             coinAmountSign = AmountSign.Minus,
             transactionInfoHelper = transactionInfoHelper,
             navController = navController,
-            statPage = StatPage.TonConnect
+            statPage = StatPage.TonConnect,
         )
     }
 }

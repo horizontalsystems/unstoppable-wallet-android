@@ -25,9 +25,8 @@ class CoinMajorHoldersViewModel(
     private val coinUid: String,
     private val blockchain: Blockchain,
     private val marketKit: MarketKitWrapper,
-    private val factory: CoinViewFactory
+    private val factory: CoinViewFactory,
 ) : ViewModelUiState<UiState>() {
-
     private var viewState: ViewState = ViewState.Loading
     private var top10Share: String = ""
     private var totalHoldersCount: String = ""
@@ -40,15 +39,16 @@ class CoinMajorHoldersViewModel(
         fetch()
     }
 
-    override fun createState() = UiState(
-        viewState = viewState,
-        top10Share = top10Share,
-        totalHoldersCount  = totalHoldersCount,
-        seeAllUrl = seeAllUrl,
-        chartData = chartData,
-        topHolders = topHolders,
-        error = error
-    )
+    override fun createState() =
+        UiState(
+            viewState = viewState,
+            top10Share = top10Share,
+            totalHoldersCount = totalHoldersCount,
+            seeAllUrl = seeAllUrl,
+            chartData = chartData,
+            topHolders = topHolders,
+            error = error,
+        )
 
     fun onErrorClick() {
         viewState = ViewState.Loading
@@ -83,11 +83,18 @@ class CoinMajorHoldersViewModel(
         }
     }
 
-    private suspend fun getTokenHolders(coinUid: String, blockchainUid: String): TokenHolders = withContext(Dispatchers.IO) {
-        marketKit.tokenHoldersSingle(coinUid, blockchainUid).await()
-    }
+    private suspend fun getTokenHolders(
+        coinUid: String,
+        blockchainUid: String,
+    ): TokenHolders =
+        withContext(Dispatchers.IO) {
+            marketKit.tokenHoldersSingle(coinUid, blockchainUid).await()
+        }
 
-    private fun getChartData(top10ShareFloat: Float, blockchain: Blockchain): List<StackBarSlice> {
+    private fun getChartData(
+        top10ShareFloat: Float,
+        blockchain: Blockchain,
+    ): List<StackBarSlice> {
         val remaining = 100f - top10ShareFloat
         val color = blockchain.type.brandColor ?: Color(0xFFFFA800)
         return listOf(
@@ -96,10 +103,9 @@ class CoinMajorHoldersViewModel(
         )
     }
 
-    private fun errorText(error: Throwable): TranslatableString {
-        return when (error) {
+    private fun errorText(error: Throwable): TranslatableString =
+        when (error) {
             is UnknownHostException -> TranslatableString.ResString(R.string.Hud_Text_NoInternet)
             else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
         }
-    }
 }

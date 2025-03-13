@@ -32,17 +32,20 @@ fun WCSignEthereumTransactionRequestScreen(
     transaction: WalletConnectTransaction,
     peerName: String,
 ) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.wcRequestFragment)
-    }
-    val viewModel = viewModel<WCSignEthereumTransactionRequestViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-        factory = WCSignEthereumTransactionRequestViewModel.Factory(
-            blockchainType = blockchainType,
-            transaction = transaction,
-            peerName = peerName
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.wcRequestFragment)
+        }
+    val viewModel =
+        viewModel<WCSignEthereumTransactionRequestViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+            factory =
+                WCSignEthereumTransactionRequestViewModel.Factory(
+                    blockchainType = blockchainType,
+                    transaction = transaction,
+                    peerName = peerName,
+                ),
         )
-    )
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
@@ -53,7 +56,6 @@ fun WCSignEthereumTransactionRequestScreen(
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
-
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
@@ -74,7 +76,7 @@ fun WCSignEthereumTransactionRequestScreen(
 
                         navController.popBackStack()
                     }
-                }
+                },
             )
             VSpacer(16.dp)
             ButtonPrimaryDefault(
@@ -83,9 +85,9 @@ fun WCSignEthereumTransactionRequestScreen(
                 onClick = {
                     viewModel.reject()
                     navController.popBackStack()
-                }
+                },
             )
-        }
+        },
     ) {
         SendEvmTransactionView(
             navController,
@@ -93,7 +95,7 @@ fun WCSignEthereumTransactionRequestScreen(
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
-            StatPage.WalletConnect
+            StatPage.WalletConnect,
         )
     }
 }

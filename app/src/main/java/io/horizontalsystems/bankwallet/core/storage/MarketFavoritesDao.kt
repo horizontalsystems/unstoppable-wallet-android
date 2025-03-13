@@ -1,10 +1,14 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
 
 @Dao
 interface MarketFavoritesDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(favoriteCoin: FavoriteCoin)
 
@@ -19,8 +23,9 @@ interface MarketFavoritesDao {
 
     @Query("SELECT COUNT(*) FROM FavoriteCoin WHERE coinUid = :coinUid")
     fun getCount(coinUid: String): Int
-
 }
 
 @Entity
-data class FavoriteCoin(@PrimaryKey val coinUid: String)
+data class FavoriteCoin(
+    @PrimaryKey val coinUid: String,
+)

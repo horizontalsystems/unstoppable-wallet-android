@@ -12,7 +12,6 @@ class PersonalSupportViewModel(
     private val marketKitWrapper: MarketKitWrapper,
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<PersonalSupportModule.UiState>() {
-
     private var contactName: String = ""
     private var showSuccess = false
     private var showError = false
@@ -20,14 +19,15 @@ class PersonalSupportViewModel(
     private var buttonEnabled = false
     private var showRequestForm = !localStorage.personalSupportEnabled
 
-    override fun createState() = PersonalSupportModule.UiState(
-        contactName = contactName,
-        showSuccess = showSuccess,
-        showError = showError,
-        showSpinner = showSpinner,
-        buttonEnabled = buttonEnabled,
-        showRequestForm = showRequestForm
-    )
+    override fun createState() =
+        PersonalSupportModule.UiState(
+            contactName = contactName,
+            showSuccess = showSuccess,
+            showError = showError,
+            showSpinner = showSpinner,
+            buttonEnabled = buttonEnabled,
+            showRequestForm = showRequestForm,
+        )
 
     fun onUsernameChange(username: String) {
         contactName = username
@@ -74,5 +74,4 @@ class PersonalSupportViewModel(
         showRequestForm = true
         emitState()
     }
-
 }

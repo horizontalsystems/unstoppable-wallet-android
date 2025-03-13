@@ -24,14 +24,15 @@ class TonConnectNewViewModel(
     private var error: Throwable? = null
     private var toast: String? = null
 
-    override fun createState() = TonConnectNewUiState(
-        manifest = manifest,
-        accounts = accounts,
-        account = account,
-        finish = finish,
-        error = error,
-        toast = toast,
-    )
+    override fun createState() =
+        TonConnectNewUiState(
+            manifest = manifest,
+            accounts = accounts,
+            account = account,
+            finish = finish,
+            error = error,
+            toast = toast,
+        )
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
@@ -44,9 +45,10 @@ class TonConnectNewViewModel(
             }
         }
 
-        accounts = App.accountManager.accounts.filter {
-            it.type is AccountType.Mnemonic
-        }
+        accounts =
+            App.accountManager.accounts.filter {
+                it.type is AccountType.Mnemonic
+            }
 
         if (accounts.isEmpty()) {
             error = NoTonAccountError()
@@ -69,7 +71,7 @@ class TonConnectNewViewModel(
                     requestEntity,
                     manifest,
                     account.id,
-                    account.type.toTonWalletFullAccess()
+                    account.type.toTonWalletFullAccess(),
                 )
                 finish = true
             } catch (e: Throwable) {
@@ -85,20 +87,22 @@ class TonConnectNewViewModel(
             try {
                 val manifest = manifest ?: throw NoManifestError()
                 val account = account ?: throw IllegalArgumentException("Empty account")
-                val dapp = tonConnectKit.newApp(
-                    manifest,
-                    account.id,
-                    false,
-                    requestEntity.id,
-                    account.id,
-                    false
-                )
+                val dapp =
+                    tonConnectKit.newApp(
+                        manifest,
+                        account.id,
+                        false,
+                        requestEntity.id,
+                        account.id,
+                        false,
+                    )
 
-                val error = DAppConnectEventError(
-                    id = System.currentTimeMillis().toString(),
-                    errorCode = 300,
-                    errorMessage = "User declined the transaction"
-                )
+                val error =
+                    DAppConnectEventError(
+                        id = System.currentTimeMillis().toString(),
+                        errorCode = 300,
+                        errorMessage = "User declined the transaction",
+                    )
 
                 tonConnectKit.send(dapp, error.toJSON())
                 finish = true
@@ -116,7 +120,9 @@ class TonConnectNewViewModel(
 }
 
 sealed class TonConnectError : Error()
+
 class NoManifestError : TonConnectError()
+
 class NoTonAccountError : TonConnectError()
 
 data class TonConnectNewUiState(
@@ -125,7 +131,7 @@ data class TonConnectNewUiState(
     val account: Account?,
     val finish: Boolean,
     val error: Throwable?,
-    val toast: String?
+    val toast: String?,
 ) {
     val connectEnabled get() = error == null && account != null
 }

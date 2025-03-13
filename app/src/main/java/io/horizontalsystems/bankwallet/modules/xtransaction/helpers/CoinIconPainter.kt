@@ -10,13 +10,14 @@ fun coinIconPainter(
     url: String?,
     alternativeUrl: String?,
     placeholder: Int?,
-    fallback: Int = placeholder ?: R.drawable.coin_placeholder
+    fallback: Int = placeholder ?: R.drawable.coin_placeholder,
 ) = rememberAsyncImagePainter(
     model = url,
-    error = alternativeUrl?.let {
-        rememberAsyncImagePainter(
-            model = it,
-            error = painterResource(fallback)
-        )
-    } ?: painterResource(fallback)
+    error =
+        alternativeUrl?.let {
+            rememberAsyncImagePainter(
+                model = it,
+                error = painterResource(fallback),
+            )
+        } ?: painterResource(fallback),
 )

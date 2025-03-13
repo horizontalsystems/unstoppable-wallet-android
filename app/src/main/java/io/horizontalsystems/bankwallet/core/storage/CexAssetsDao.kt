@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.providers.CexAssetRaw
 
 @Dao
 interface CexAssetsDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(cexAssetRaws: List<CexAssetRaw>)
 
@@ -16,9 +15,11 @@ interface CexAssetsDao {
     fun delete(accountId: String)
 
     @Query("SELECT * FROM CexAssetRaw WHERE accountId = :accountId AND id = :id")
-    fun get(accountId: String, id: String): CexAssetRaw?
+    fun get(
+        accountId: String,
+        id: String,
+    ): CexAssetRaw?
 
     @Query("SELECT * FROM CexAssetRaw WHERE accountId = :accountId")
     fun getAllForAccount(accountId: String): List<CexAssetRaw>
-
 }

@@ -5,8 +5,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 
-class RestoreViewModel: ViewModel() {
-
+class RestoreViewModel : ViewModel() {
     var accountType: AccountType? = null
         private set
 
@@ -27,7 +26,13 @@ class RestoreViewModel: ViewModel() {
 
     var cancelZCashConfig: Boolean = false
 
-    fun setAccountData(accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean, statPage: StatPage) {
+    fun setAccountData(
+        accountType: AccountType,
+        accountName: String,
+        manualBackup: Boolean,
+        fileBackup: Boolean,
+        statPage: StatPage,
+    ) {
         this.accountType = accountType
         this.accountName = accountName
         this.manualBackup = manualBackup
@@ -38,5 +43,4 @@ class RestoreViewModel: ViewModel() {
     fun setZCashConfig(config: ZCashConfig?) {
         zCashConfig = config
     }
-
 }

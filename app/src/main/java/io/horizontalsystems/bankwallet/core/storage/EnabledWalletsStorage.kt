@@ -3,14 +3,13 @@ package io.horizontalsystems.bankwallet.core.storage
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 
-class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWalletStorage {
-
+class EnabledWalletsStorage(
+    private val appDatabase: AppDatabase,
+) : IEnabledWalletStorage {
     override val enabledWallets: List<EnabledWallet>
         get() = appDatabase.walletsDao().enabledCoins()
 
-    override fun enabledWallets(accountId: String): List<EnabledWallet> {
-        return appDatabase.walletsDao().enabledCoins(accountId)
-    }
+    override fun enabledWallets(accountId: String): List<EnabledWallet> = appDatabase.walletsDao().enabledCoins(accountId)
 
     override fun save(enabledWallets: List<EnabledWallet>) {
         appDatabase.walletsDao().insertWallets(enabledWallets)

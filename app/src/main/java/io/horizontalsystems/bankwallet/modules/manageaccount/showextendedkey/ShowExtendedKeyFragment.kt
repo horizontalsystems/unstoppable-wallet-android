@@ -64,7 +64,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
@@ -77,21 +76,28 @@ class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
             ShowExtendedKeyScreen(
                 navController,
                 hdExtendedKey,
-                displayKeyType
+                displayKeyType,
             )
         }
     }
 
     @Parcelize
-    data class Input(val extendedRootKeySerialized: String, val displayKeyType: DisplayKeyType) : Parcelable {
+    data class Input(
+        val extendedRootKeySerialized: String,
+        val displayKeyType: DisplayKeyType,
+    ) : Parcelable {
         val extendedRootKey: HDExtendedKey?
-            get() = try {
-                HDExtendedKey(extendedRootKeySerialized)
-            } catch (error: Throwable) {
-                null
-            }
+            get() =
+                try {
+                    HDExtendedKey(extendedRootKeySerialized)
+                } catch (error: Throwable) {
+                    null
+                }
 
-        constructor(extendedRootKey: HDExtendedKey, displayKeyType: DisplayKeyType) : this(extendedRootKey.serialize(), displayKeyType)
+        constructor(extendedRootKey: HDExtendedKey, displayKeyType: DisplayKeyType) : this(
+            extendedRootKey.serialize(),
+            displayKeyType,
+        )
     }
 }
 
@@ -99,15 +105,23 @@ class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 private fun ShowExtendedKeyScreen(
     navController: NavController,
     extendedKey: HDExtendedKey,
-    displayKeyType: DisplayKeyType
+    displayKeyType: DisplayKeyType,
 ) {
-    val viewModel = viewModel<ShowExtendedKeyViewModel>(factory = ShowExtendedKeyModule.Factory(extendedKey, displayKeyType))
+    val viewModel =
+        viewModel<ShowExtendedKeyViewModel>(
+            factory =
+                ShowExtendedKeyModule.Factory(
+                    extendedKey,
+                    displayKeyType,
+                ),
+        )
 
     val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val sheetState =
+        rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+        )
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -127,9 +141,9 @@ private fun ShowExtendedKeyScreen(
                     coroutineScope.launch {
                         sheetState.hide()
                     }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -139,34 +153,36 @@ private fun ShowExtendedKeyScreen(
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                                viewModel.logEvent(StatEvent.Open(StatPage.Info))
-                            }
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Info_Title),
+                                icon = R.drawable.ic_info_24,
+                                onClick = {
+                                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                                    viewModel.logEvent(StatEvent.Open(StatPage.Info))
+                                },
+                            ),
+                        ),
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
                 modifier = Modifier.padding(paddingValues),
             ) {
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.Top
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.Top,
                 ) {
                     VSpacer(12.dp)
 
                     if (viewModel.displayKeyType.isPrivate) {
                         TextImportantWarning(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                            text = stringResource(R.string.PrivateKeys_NeverShareWarning),
                         )
                         VSpacer(24.dp)
                     }
@@ -175,38 +191,42 @@ private fun ShowExtendedKeyScreen(
                     var showPurposeSelectorDialog by remember { mutableStateOf(false) }
                     var showAccountSelectorDialog by remember { mutableStateOf(false) }
 
-                    val menuItems = buildList<@Composable () -> Unit> {
-                        add {
-                            MenuItem(
-                                title = stringResource(R.string.ExtendedKey_Purpose),
-                                value = viewModel.purpose.name,
-                                onClick = if (viewModel.displayKeyType == DisplayKeyType.Bip32RootKey || viewModel.displayKeyType.isDerivable) {
-                                    { showPurposeSelectorDialog = true }
-                                } else {
-                                    null
+                    val menuItems =
+                        buildList<@Composable () -> Unit> {
+                            add {
+                                MenuItem(
+                                    title = stringResource(R.string.ExtendedKey_Purpose),
+                                    value = viewModel.purpose.name,
+                                    onClick =
+                                        if (viewModel.displayKeyType == DisplayKeyType.Bip32RootKey ||
+                                            viewModel.displayKeyType.isDerivable
+                                        ) {
+                                            { showPurposeSelectorDialog = true }
+                                        } else {
+                                            null
+                                        },
+                                )
+                            }
+                            if (viewModel.displayKeyType.isDerivable) {
+                                add {
+                                    MenuItem(
+                                        title = stringResource(R.string.ExtendedKey_Blockchain),
+                                        value = viewModel.blockchain.name,
+                                        onClick = { showBlockchainSelectorDialog = true },
+                                    )
                                 }
-                            )
-                        }
-                        if (viewModel.displayKeyType.isDerivable) {
-                            add {
-                                MenuItem(
-                                    title = stringResource(R.string.ExtendedKey_Blockchain),
-                                    value = viewModel.blockchain.name,
-                                    onClick = { showBlockchainSelectorDialog = true }
-                                )
-                            }
-                            add {
-                                MenuItem(
-                                    title = stringResource(R.string.ExtendedKey_Account),
-                                    value = viewModel.account.toString(),
-                                    infoButtonClick = {
-                                        navController.slideFromBottom(R.id.кeyAccountInfoFragment)
-                                    },
-                                    onClick = { showAccountSelectorDialog = true }
-                                )
+                                add {
+                                    MenuItem(
+                                        title = stringResource(R.string.ExtendedKey_Account),
+                                        value = viewModel.account.toString(),
+                                        infoButtonClick = {
+                                            navController.slideFromBottom(R.id.кeyAccountInfoFragment)
+                                        },
+                                        onClick = { showAccountSelectorDialog = true },
+                                    )
+                                }
                             }
                         }
-                    }
 
                     if (menuItems.isNotEmpty()) {
                         CellUniversalLawrenceSection(menuItems)
@@ -216,7 +236,7 @@ private fun ShowExtendedKeyScreen(
                     if (viewModel.displayKeyType.isPrivate) {
                         HidableContent(
                             viewModel.extendedKey,
-                            stringResource(R.string.ExtendedKey_TapToShowPrivateKey)
+                            stringResource(R.string.ExtendedKey_TapToShowPrivateKey),
                         ) {
                             viewModel.logEvent(StatEvent.ToggleHidden)
                         }
@@ -227,43 +247,46 @@ private fun ShowExtendedKeyScreen(
                     if (showPurposeSelectorDialog) {
                         SelectorDialogCompose(
                             title = stringResource(R.string.ExtendedKey_Purpose),
-                            items = viewModel.purposes.map {
-                                SelectorItem(it.name, it == viewModel.purpose, it)
-                            },
+                            items =
+                                viewModel.purposes.map {
+                                    SelectorItem(it.name, it == viewModel.purpose, it)
+                                },
                             onDismissRequest = {
                                 showPurposeSelectorDialog = false
                             },
                             onSelectItem = {
                                 viewModel.set(it)
-                            }
+                            },
                         )
                     }
                     if (showBlockchainSelectorDialog) {
                         SelectorDialogCompose(
                             title = stringResource(R.string.ExtendedKey_Blockchain),
-                            items = viewModel.blockchains.map {
-                                SelectorItem(it.name, it == viewModel.blockchain, it)
-                            },
+                            items =
+                                viewModel.blockchains.map {
+                                    SelectorItem(it.name, it == viewModel.blockchain, it)
+                                },
                             onDismissRequest = {
                                 showBlockchainSelectorDialog = false
                             },
                             onSelectItem = {
                                 viewModel.set(it)
-                            }
+                            },
                         )
                     }
                     if (showAccountSelectorDialog) {
                         SelectorDialogCompose(
                             title = stringResource(R.string.ExtendedKey_Account),
-                            items = viewModel.accounts.map {
-                                SelectorItem(it.toString(), it == viewModel.account, it)
-                            },
+                            items =
+                                viewModel.accounts.map {
+                                    SelectorItem(it.toString(), it == viewModel.account, it)
+                                },
                             onDismissRequest = {
                                 showAccountSelectorDialog = false
                             },
                             onSelectItem = {
                                 viewModel.set(it)
-                            }
+                            },
                         )
                     }
                 }
@@ -290,11 +313,11 @@ private fun MenuItem(
     title: String,
     value: String,
     infoButtonClick: (() -> Unit)? = null,
-    onClick: (() -> Unit)?
+    onClick: (() -> Unit)?,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
+        onClick = onClick,
     ) {
         body_leah(
             text = title,
@@ -305,12 +328,12 @@ private fun MenuItem(
             HSpacer(width = 8.dp)
             HsIconButton(
                 modifier = Modifier.size(20.dp),
-                onClick = click
+                onClick = click,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }
@@ -320,19 +343,19 @@ private fun MenuItem(
         Row(
             Modifier
                 .fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             subhead1_grey(
                 text = value,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
             )
             if (onClick != null) {
                 Icon(
                     modifier = Modifier.padding(start = 4.dp),
                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }
@@ -341,5 +364,4 @@ private fun MenuItem(
 
 @Composable
 private fun NoExtendKeyScreen() {
-
 }

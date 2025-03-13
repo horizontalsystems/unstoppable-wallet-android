@@ -37,7 +37,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class SendEvmConfirmationFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -50,24 +49,25 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
         val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
         val additionalInfo: SendEvmData.AdditionalInfo?,
         val blockchainType: BlockchainType,
-        val sendEntryPointDestId: Int
+        val sendEntryPointDestId: Int,
     ) : Parcelable {
         val transactionData: TransactionData
-            get() = TransactionData(
-                Address(transactionDataParcelable.toAddress),
-                transactionDataParcelable.value,
-                transactionDataParcelable.input
-            )
+            get() =
+                TransactionData(
+                    Address(transactionDataParcelable.toAddress),
+                    transactionDataParcelable.value,
+                    transactionDataParcelable.input,
+                )
 
         constructor(
             sendData: SendEvmData,
             blockchainType: BlockchainType,
-            sendEntryPointDestId: Int
+            sendEntryPointDestId: Int,
         ) : this(
             SendEvmModule.TransactionDataParcelable(sendData.transactionData),
             sendData.additionalInfo,
             blockchainType,
-            sendEntryPointDestId
+            sendEntryPointDestId,
         )
     }
 }
@@ -75,21 +75,24 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
 @Composable
 private fun SendEvmConfirmationScreen(
     navController: NavController,
-    input: SendEvmConfirmationFragment.Input
+    input: SendEvmConfirmationFragment.Input,
 ) {
     val logger = remember { AppLogger("send-evm") }
 
-    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
-    }
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        viewModelStoreOwner = currentBackStackEntry,
-        factory = SendEvmConfirmationViewModel.Factory(
-            input.transactionData,
-            input.additionalInfo,
-            input.blockchainType,
+    val currentBackStackEntry =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
+        }
+    val viewModel =
+        viewModel<SendEvmConfirmationViewModel>(
+            viewModelStoreOwner = currentBackStackEntry,
+            factory =
+                SendEvmConfirmationViewModel.Factory(
+                    input.transactionData,
+                    input.additionalInfo,
+                    input.blockchainType,
+                ),
         )
-    )
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
@@ -105,16 +108,21 @@ private fun SendEvmConfirmationScreen(
             var buttonEnabled by remember { mutableStateOf(true) }
 
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
                 onClick = {
                     logger.info("click send button")
 
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+                        HudHelper.showInProcessMessage(
+                            view,
+                            R.string.Send_Sending,
+                            SnackbarDuration.INDEFINITE,
+                        )
 
                         try {
                             logger.info("sending tx")
@@ -134,9 +142,9 @@ private fun SendEvmConfirmationScreen(
                         buttonEnabled = true
                     }
                 },
-                enabled = uiState.sendEnabled && buttonEnabled
+                enabled = uiState.sendEnabled && buttonEnabled,
             )
-        }
+        },
     ) {
         SendEvmTransactionView(
             navController,
@@ -144,8 +152,7 @@ private fun SendEvmConfirmationScreen(
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
-            StatPage.SendConfirmation
+            StatPage.SendConfirmation,
         )
     }
 }
-

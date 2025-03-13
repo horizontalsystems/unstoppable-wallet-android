@@ -53,9 +53,8 @@ class CoinAnalyticsViewModel(
     private val service: CoinAnalyticsService,
     private val numberFormatter: IAppNumberFormatter,
     private val technicalAdviceViewItemFactory: TechnicalAdviceViewItemFactory,
-    private val code: String
+    private val code: String,
 ) : ViewModelUiState<CoinAnalyticsModule.UiState>() {
-
     private val currency = service.currency
     val coin: Coin
         get() = service.fullCoin.coin
@@ -99,11 +98,12 @@ class CoinAnalyticsViewModel(
         }
     }
 
-    override fun createState() = CoinAnalyticsModule.UiState(
-        viewState = viewState,
-        viewItem = analyticsViewItem,
-        isRefreshing = isRefreshing
-    )
+    override fun createState() =
+        CoinAnalyticsModule.UiState(
+            viewState = viewState,
+            viewItem = analyticsViewItem,
+            isRefreshing = isRefreshing,
+        )
 
     fun refresh() {
         viewModelScope.launch {
@@ -118,7 +118,10 @@ class CoinAnalyticsViewModel(
         }
     }
 
-    private fun viewItem(item: CoinAnalyticsService.AnalyticData, showPreviewBlocks: Boolean): AnalyticsViewItem {
+    private fun viewItem(
+        item: CoinAnalyticsService.AnalyticData,
+        showPreviewBlocks: Boolean,
+    ): AnalyticsViewItem {
         if (item.analytics != null) {
             val viewItems = getViewItems(item.analytics, showPreviewBlocks)
             if (viewItems.isNotEmpty()) {
@@ -129,7 +132,10 @@ class CoinAnalyticsViewModel(
         return AnalyticsViewItem.NoData
     }
 
-    private fun getViewItems(analytics: Analytics, showPreviewBlocks: Boolean): List<BlockViewItem> {
+    private fun getViewItems(
+        analytics: Analytics,
+        showPreviewBlocks: Boolean,
+    ): List<BlockViewItem> {
         val blocks = mutableListOf<BlockViewItem>()
 
         analytics.technicalAdvice?.let { technicalAdvice ->
@@ -139,17 +145,18 @@ class CoinAnalyticsViewModel(
                     title = R.string.TechnicalAdvice_Title,
                     info = AnalyticInfo.TechnicalIndicatorsInfo,
                     showAsPreview = showPreviewBlocks,
-                    analyticChart = ChartViewItem(
-                        AnalyticChart.TechAdvice(
-                            CoinAnalyticsModule.TechAdviceData(
-                                detailText = technicalAdviceViewItemFactory.advice(technicalAdvice),
-                                advice = advice
-                            )
+                    analyticChart =
+                        ChartViewItem(
+                            AnalyticChart.TechAdvice(
+                                CoinAnalyticsModule.TechAdviceData(
+                                    detailText = technicalAdviceViewItemFactory.advice(technicalAdvice),
+                                    advice = advice,
+                                ),
+                            ),
+                            coin.uid,
                         ),
-                        coin.uid,
-                    ),
-                    footerItems = emptyList()
-                )
+                    footerItems = emptyList(),
+                ),
             )
         }
 
@@ -164,8 +171,8 @@ class CoinAnalyticsViewModel(
                 FooterItem(
                     title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
                     value = data.rank30d?.let { Value(getRank(it)) },
-                    action = ActionType.OpenRank(RankType.CexVolumeRank)
-                )
+                    action = ActionType.OpenRank(RankType.CexVolumeRank),
+                ),
             )
             blocks.add(
                 BlockViewItem(
@@ -174,9 +181,14 @@ class CoinAnalyticsViewModel(
                     showAsPreview = false,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.CexVolume),
-                    footerItems = footerItems
-                )
+                    analyticChart =
+                        getChartViewItem(
+                            data.chartPoints(),
+                            ChartViewType.Bar,
+                            ProChartModule.ChartType.CexVolume,
+                        ),
+                    footerItems = footerItems,
+                ),
             )
         }
 
@@ -194,7 +206,7 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.CoinAnalytics_TvlRatio)),
                         value = Value(numberFormatter.format(it, 2, 2)),
-                    )
+                    ),
                 )
             }
             blocks.add(
@@ -204,9 +216,14 @@ class CoinAnalyticsViewModel(
                     showAsPreview = false,
                     value = getFormattedValue(data.points.last().tvl, currency),
                     valuePeriod = getValuePeriod(true),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.Tvl),
-                    footerItems = footerItems
-                )
+                    analyticChart =
+                        getChartViewItem(
+                            data.chartPoints(),
+                            ChartViewType.Line,
+                            ProChartModule.ChartType.Tvl,
+                        ),
+                    footerItems = footerItems,
+                ),
             )
         }
 
@@ -221,8 +238,8 @@ class CoinAnalyticsViewModel(
                 FooterItem(
                     title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
                     value = data.rank30d?.let { Value(getRank(it)) },
-                    action = ActionType.OpenRank(RankType.DexVolumeRank)
-                )
+                    action = ActionType.OpenRank(RankType.DexVolumeRank),
+                ),
             )
             blocks.add(
                 BlockViewItem(
@@ -231,9 +248,14 @@ class CoinAnalyticsViewModel(
                     showAsPreview = showPreviewBlocks,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.DexVolume),
-                    footerItems = footerItems
-                )
+                    analyticChart =
+                        getChartViewItem(
+                            data.chartPoints(),
+                            ChartViewType.Bar,
+                            ProChartModule.ChartType.DexVolume,
+                        ),
+                    footerItems = footerItems,
+                ),
             )
         }
 
@@ -248,8 +270,8 @@ class CoinAnalyticsViewModel(
                 FooterItem(
                     title = Title(ResString(R.string.Coin_Analytics_Rank)),
                     value = data.rank?.let { Value(getRank(it)) },
-                    action = ActionType.OpenRank(RankType.DexLiquidityRank)
-                )
+                    action = ActionType.OpenRank(RankType.DexLiquidityRank),
+                ),
             )
             blocks.add(
                 BlockViewItem(
@@ -258,13 +280,24 @@ class CoinAnalyticsViewModel(
                     showAsPreview = showPreviewBlocks,
                     value = getFormattedValue(data.points.last().volume, currency),
                     valuePeriod = getValuePeriod(true),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.DexLiquidity),
-                    footerItems = footerItems
-                )
+                    analyticChart =
+                        getChartViewItem(
+                            data.chartPoints(),
+                            ChartViewType.Line,
+                            ProChartModule.ChartType.DexLiquidity,
+                        ),
+                    footerItems = footerItems,
+                ),
             )
         }
         analytics.addresses?.let { data ->
-            val chartValue = formatNumberShort(data.points.last().count.toBigDecimal())
+            val chartValue =
+                formatNumberShort(
+                    data.points
+                        .last()
+                        .count
+                        .toBigDecimal(),
+                )
             val footerItems = mutableListOf<FooterItem>()
             data.rating?.let { rating ->
                 getRatingFooterItem(rating, ScoreCategory.AddressesScoreCategory)?.let {
@@ -280,9 +313,9 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
                         value = data.rank30d?.let { Value(getRank(it)) },
-                        action = ActionType.OpenRank(RankType.AddressesRank)
-                    )
-                )
+                        action = ActionType.OpenRank(RankType.AddressesRank),
+                    ),
+                ),
             )
             blocks.add(
                 BlockViewItem(
@@ -291,9 +324,14 @@ class CoinAnalyticsViewModel(
                     showAsPreview = showPreviewBlocks,
                     value = chartValue,
                     valuePeriod = getValuePeriod(true),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.AddressesCount),
-                    footerItems = footerItems
-                )
+                    analyticChart =
+                        getChartViewItem(
+                            data.chartPoints(),
+                            ChartViewType.Line,
+                            ProChartModule.ChartType.AddressesCount,
+                        ),
+                    footerItems = footerItems,
+                ),
             )
         }
         analytics.transactions?.let { data ->
@@ -307,14 +345,14 @@ class CoinAnalyticsViewModel(
                 listOf(
                     FooterItem(
                         title = Title(ResString(R.string.Coin_Analytics_30DayVolume)),
-                        value = data.volume30d?.let { Value(getVolume(it)) }
+                        value = data.volume30d?.let { Value(getVolume(it)) },
                     ),
                     FooterItem(
                         title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
                         value = data.rank30d?.let { Value(getRank(it)) },
-                        action = ActionType.OpenRank(RankType.TransactionCountRank)
+                        action = ActionType.OpenRank(RankType.TransactionCountRank),
                     ),
-                )
+                ),
             )
             blocks.add(
                 BlockViewItem(
@@ -323,9 +361,14 @@ class CoinAnalyticsViewModel(
                     showAsPreview = showPreviewBlocks,
                     value = getFormattedSum(data.points.map { it.count.toBigDecimal() }),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.TxCount),
-                    footerItems = footerItems
-                )
+                    analyticChart =
+                        getChartViewItem(
+                            data.chartPoints(),
+                            ChartViewType.Bar,
+                            ProChartModule.ChartType.TxCount,
+                        ),
+                    footerItems = footerItems,
+                ),
             )
         }
         analytics.holders?.let { data ->
@@ -341,27 +384,30 @@ class CoinAnalyticsViewModel(
             data.sortedByDescending { it.holdersCount }.forEach { item ->
                 val blockchain = blockchains.firstOrNull { it.uid == item.blockchainUid }
                 blockchain?.let {
-                    val percent = item.holdersCount.divide(total, 4, RoundingMode.HALF_EVEN)
-                        .times("100".toBigDecimal())
+                    val percent =
+                        item.holdersCount
+                            .divide(total, 4, RoundingMode.HALF_EVEN)
+                            .times("100".toBigDecimal())
                     val percentFormatted = numberFormatter.format(percent, 0, 2, suffix = "%")
                     chartSlices.add(
                         StackBarSlice(
                             value = percent.toFloat(),
-                            color = blockchain.type.brandColor ?: Color(0xFFFFA800)
-                        )
+                            color = blockchain.type.brandColor ?: Color(0xFFFFA800),
+                        ),
                     )
                     footerItems.add(
                         FooterItem(
-                            title = IconTitle(
-                                ImageSource.Remote(
-                                    blockchain.type.imageUrl,
-                                    R.drawable.coin_placeholder
+                            title =
+                                IconTitle(
+                                    ImageSource.Remote(
+                                        blockchain.type.imageUrl,
+                                        R.drawable.coin_placeholder,
+                                    ),
+                                    TranslatableString.PlainString(blockchain.name),
                                 ),
-                                TranslatableString.PlainString(blockchain.name)
-                            ),
                             value = Value(percentFormatted),
-                            action = ActionType.OpenTokenHolders(coin, blockchain)
-                        )
+                            action = ActionType.OpenTokenHolders(coin, blockchain),
+                        ),
                     )
                 }
             }
@@ -370,7 +416,7 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.CoinAnalytics_HoldersRank)),
                         value = Value(getRank(holdersRank)),
-                        action = ActionType.OpenRank(RankType.HoldersRank)
+                        action = ActionType.OpenRank(RankType.HoldersRank),
                     ),
                 )
             }
@@ -386,8 +432,8 @@ class CoinAnalyticsViewModel(
                     value = getFormattedSum(listOf(total)),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = ChartViewItem(AnalyticChart.StackedBars(chartSlices), coin.uid),
-                    footerItems = footerItems
-                )
+                    footerItems = footerItems,
+                ),
             )
         }
         analytics.fee?.let { data ->
@@ -400,14 +446,15 @@ class CoinAnalyticsViewModel(
                     valuePeriod = getValuePeriod(false),
                     analyticChart = null,
                     sectionDescription = data.description,
-                    footerItems = listOf(
-                        FooterItem(
-                            title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
-                            value = data.rank30d?.let { Value(getRank(it)) },
-                            action = ActionType.OpenRank(RankType.FeeRank)
+                    footerItems =
+                        listOf(
+                            FooterItem(
+                                title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
+                                value = data.rank30d?.let { Value(getRank(it)) },
+                                action = ActionType.OpenRank(RankType.FeeRank),
+                            ),
                         ),
-                    )
-                )
+                ),
             )
         }
         analytics.revenue?.let { data ->
@@ -420,23 +467,27 @@ class CoinAnalyticsViewModel(
                     valuePeriod = getValuePeriod(false),
                     analyticChart = null,
                     sectionDescription = data.description,
-                    footerItems = listOf(
-                        FooterItem(
-                            title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
-                            value = data.rank30d?.let { Value(getRank(it)) },
-                            action = ActionType.OpenRank(RankType.RevenueRank)
+                    footerItems =
+                        listOf(
+                            FooterItem(
+                                title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
+                                value = data.rank30d?.let { Value(getRank(it)) },
+                                action = ActionType.OpenRank(RankType.RevenueRank),
+                            ),
                         ),
-                    )
-                )
+                ),
             )
         }
         analytics.issues?.let { issues ->
-            val detectorFooterItems = mutableListOf<CoinAnalyticsModule.FooterType.DetectorFooterItem>()
+            val detectorFooterItems =
+                mutableListOf<CoinAnalyticsModule.FooterType.DetectorFooterItem>()
 
-            val sortedList = issues.mapNotNull {
-                val blockchain = service.blockchain(it.blockchain) ?: return@mapNotNull null
-                CoinAnalyticsModule.BlockchainAndIssues(blockchain, it)
-            }.sortedBy { it.blockchain.type.order }
+            val sortedList =
+                issues
+                    .mapNotNull {
+                        val blockchain = service.blockchain(it.blockchain) ?: return@mapNotNull null
+                        CoinAnalyticsModule.BlockchainAndIssues(blockchain, it)
+                    }.sortedBy { it.blockchain.type.order }
 
             sortedList.forEach { blockchainAndIssues ->
                 val blockchain = blockchainAndIssues.blockchain
@@ -446,35 +497,40 @@ class CoinAnalyticsViewModel(
                 val blockchainIssues = blockchainAndIssues.issues
                 detectorFooterItems.add(
                     CoinAnalyticsModule.FooterType.DetectorFooterItem(
-                        title = IconTitle(
-                            icon,
-                            TranslatableString.PlainString(blockchainTitle)
-                        ),
-                        value = Value(
-                            Translator.getString(
-                                R.string.CoinAnalytics_CountItems,
-                                blockchainIssues.issues.size
-                            )
-                        ),
-                        action = ActionType.OpenDetectorsDetails(
-                            title = blockchainTitle,
-                            issues = blockchainIssues.issues.map {
-                                IssueParcelable(
-                                    issue = it.issue,
-                                    title = it.title,
-                                    description = it.description,
-                                    issues = it.issues?.map { issueItem ->
-                                        IssueItemParcelable(
-                                            impact = issueItem.impact,
-                                            confidence = issueItem.confidence,
-                                            description = issueItem.description.trim()
+                        title =
+                            IconTitle(
+                                icon,
+                                TranslatableString.PlainString(blockchainTitle),
+                            ),
+                        value =
+                            Value(
+                                Translator.getString(
+                                    R.string.CoinAnalytics_CountItems,
+                                    blockchainIssues.issues.size,
+                                ),
+                            ),
+                        action =
+                            ActionType.OpenDetectorsDetails(
+                                title = blockchainTitle,
+                                issues =
+                                    blockchainIssues.issues.map {
+                                        IssueParcelable(
+                                            issue = it.issue,
+                                            title = it.title,
+                                            description = it.description,
+                                            issues =
+                                                it.issues?.map { issueItem ->
+                                                    IssueItemParcelable(
+                                                        impact = issueItem.impact,
+                                                        confidence = issueItem.confidence,
+                                                        description = issueItem.description.trim(),
+                                                    )
+                                                },
                                         )
-                                    }
-                                )
-                            }
-                        ),
-                        issues = getIssueSnippet(blockchainIssues.issues)
-                    )
+                                    },
+                            ),
+                        issues = getIssueSnippet(blockchainIssues.issues),
+                    ),
                 )
             }
             blocks.add(
@@ -484,8 +540,8 @@ class CoinAnalyticsViewModel(
                     showAsPreview = showPreviewBlocks,
                     analyticChart = null,
                     footerItems = detectorFooterItems,
-                    sectionDescription = Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)
-                )
+                    sectionDescription = Translator.getString(R.string.CoinAnalytics_PoweredByDeFi),
+                ),
             )
         }
 
@@ -496,8 +552,8 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.CoinAnalytics_Reports)),
                         value = Value(reportsCount.toString()),
-                        action = ActionType.OpenReports(coin.uid)
-                    )
+                        action = ActionType.OpenReports(coin.uid),
+                    ),
                 )
             }
             analytics.fundsInvested?.let { invested ->
@@ -505,8 +561,8 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.CoinAnalytics_Funding)),
                         value = Value(getFormattedValue(invested, currency)),
-                        action = ActionType.OpenInvestors(coin.uid)
-                    )
+                        action = ActionType.OpenInvestors(coin.uid),
+                    ),
                 )
             }
             analytics.treasuries?.let { treasuries ->
@@ -514,26 +570,27 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.CoinAnalytics_Treasuries)),
                         value = Value(getFormattedValue(treasuries, currency)),
-                        action = ActionType.OpenTreasuries(coin)
-                    )
+                        action = ActionType.OpenTreasuries(coin),
+                    ),
                 )
             }
 
             analytics.audits?.let { audits ->
-                val auditsParcelable = audits.map {
-                    CoinAuditsModule.AuditParcelable(
-                        date = it.date,
-                        name = it.name,
-                        auditUrl = it.auditUrl,
-                        techIssues = it.techIssues,
-                        partnerName = it.partnerName
-                    )
-                }
+                val auditsParcelable =
+                    audits.map {
+                        CoinAuditsModule.AuditParcelable(
+                            date = it.date,
+                            name = it.name,
+                            auditUrl = it.auditUrl,
+                            techIssues = it.techIssues,
+                            partnerName = it.partnerName,
+                        )
+                    }
                 footerItems.add(
                     FooterItem(
                         title = Title(ResString(R.string.Coin_Analytics_Audits)),
-                        action = ActionType.OpenAudits(auditsParcelable)
-                    )
+                        action = ActionType.OpenAudits(auditsParcelable),
+                    ),
                 )
             }
 
@@ -546,7 +603,7 @@ class CoinAnalyticsViewModel(
                     footerItems = footerItems,
                     sectionTitle = R.string.CoinAnalytics_OtherData,
                     showFooterDivider = false,
-                )
+                ),
             )
         }
 
@@ -564,11 +621,16 @@ class CoinAnalyticsViewModel(
             issue.issues?.forEach { issueItem ->
                 when (issueItem.impact) {
                     "Critical",
-                    "High" -> innerHigh++
+                    "High",
+                    -> innerHigh++
+
                     "Medium" -> innerMedium++
                     "Low",
-                    "Informational" -> innerLow++
-                    "Optimization" -> { /* ignore */}
+                    "Informational",
+                    -> innerLow++
+
+                    "Optimization" -> { // ignore
+                    }
                 }
             }
             if (innerHigh > 0) {
@@ -582,17 +644,17 @@ class CoinAnalyticsViewModel(
         val snippets = mutableListOf<CoinAnalyticsModule.IssueSnippet>()
         if (high > 0) {
             snippets.add(
-                issueSnippet(high, CoinAnalyticsModule.IssueType.High)
+                issueSnippet(high, CoinAnalyticsModule.IssueType.High),
             )
         }
         if (medium > 0) {
             snippets.add(
-                issueSnippet(medium, CoinAnalyticsModule.IssueType.Medium)
+                issueSnippet(medium, CoinAnalyticsModule.IssueType.Medium),
             )
         }
         if (low > 0) {
             snippets.add(
-                issueSnippet(low, CoinAnalyticsModule.IssueType.Attention)
+                issueSnippet(low, CoinAnalyticsModule.IssueType.Attention),
             )
         }
 
@@ -601,53 +663,61 @@ class CoinAnalyticsViewModel(
 
     private fun issueSnippet(
         count: Int,
-        type: CoinAnalyticsModule.IssueType
+        type: CoinAnalyticsModule.IssueType,
     ): CoinAnalyticsModule.IssueSnippet {
-        val title = when (type) {
-            CoinAnalyticsModule.IssueType.High -> R.string.CoinAnalytics_HighRiskItems
-            CoinAnalyticsModule.IssueType.Medium -> R.string.CoinAnalytics_MediumRiskItems
-            CoinAnalyticsModule.IssueType.Attention -> R.string.CoinAnalytics_AttentionRequired
-        }
+        val title =
+            when (type) {
+                CoinAnalyticsModule.IssueType.High -> R.string.CoinAnalytics_HighRiskItems
+                CoinAnalyticsModule.IssueType.Medium -> R.string.CoinAnalytics_MediumRiskItems
+                CoinAnalyticsModule.IssueType.Attention -> R.string.CoinAnalytics_AttentionRequired
+            }
         return CoinAnalyticsModule.IssueSnippet(
             title = title,
             count = count.toString(),
-            type = type
+            type = type,
         )
     }
 
-    private fun getRatingFooterItem(ratingString: String?, scoreCategory: ScoreCategory): FooterItem? {
-        return CoinAnalyticsModule.OverallScore.fromString(ratingString)?.let { rating ->
+    private fun getRatingFooterItem(
+        ratingString: String?,
+        scoreCategory: ScoreCategory,
+    ): FooterItem? =
+        CoinAnalyticsModule.OverallScore.fromString(ratingString)?.let { rating ->
             FooterItem(
-                title = TitleWithInfo(ResString(R.string.Coin_Analytics_OverallScore), ActionType.OpenOverallScoreInfo(scoreCategory)),
+                title =
+                    TitleWithInfo(
+                        ResString(R.string.Coin_Analytics_OverallScore),
+                        ActionType.OpenOverallScoreInfo(scoreCategory),
+                    ),
                 value = OverallScoreValue(rating),
             )
         }
-    }
 
-    private fun getFormattedSum(values: List<BigDecimal>, currency: Currency? = null): String {
-        return currency?.let {
+    private fun getFormattedSum(
+        values: List<BigDecimal>,
+        currency: Currency? = null,
+    ): String =
+        currency?.let {
             numberFormatter.formatFiatShort(values.sumOf { it }, currency.symbol, 2)
         } ?: numberFormatter.formatCoinShort(values.sumOf { it }, null, 0)
-    }
 
-    private fun getFormattedValue(value: BigDecimal, currency: Currency? = null): String {
-        return currency?.let {
+    private fun getFormattedValue(
+        value: BigDecimal,
+        currency: Currency? = null,
+    ): String =
+        currency?.let {
             numberFormatter.formatFiatShort(value, currency.symbol, 2)
         } ?: numberFormatter.formatCoinShort(value, null, 0)
-    }
 
     private fun getVolume(volume30d: BigDecimal): String {
         val formatted = numberFormatter.formatNumberShort(volume30d, 1)
         return "$formatted $code"
     }
 
-    private fun formatNumberShort(number: BigDecimal): String {
-        return numberFormatter.formatNumberShort(number, 1)
-    }
+    private fun formatNumberShort(number: BigDecimal): String = numberFormatter.formatNumberShort(number, 1)
 
-    private fun getValuePeriod(isMovement: Boolean): String {
-        return Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)
-    }
+    private fun getValuePeriod(isMovement: Boolean): String =
+        Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)
 
     private fun getRank(rank: Int) = "#$rank"
 
@@ -658,18 +728,20 @@ class CoinAnalyticsViewModel(
     ): ChartViewItem? {
         if (values.isEmpty()) return null
 
-        val points = values.map {
-            io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
-        }
+        val points =
+            values.map {
+                io.horizontalsystems.chartview.models
+                    .ChartPoint(it.value.toFloat(), it.timestamp)
+            }
 
         val chartData = ChartData(points, chartViewType == ChartViewType.Line, false)
 
-        val analyticChart = when (chartViewType) {
-            ChartViewType.Bar -> AnalyticChart.Bars(chartData)
-            ChartViewType.Line -> AnalyticChart.Line(chartData)
-        }
+        val analyticChart =
+            when (chartViewType) {
+                ChartViewType.Bar -> AnalyticChart.Bars(chartData)
+                ChartViewType.Line -> AnalyticChart.Line(chartData)
+            }
 
         return ChartViewItem(analyticChart, coin.uid, chartType)
     }
-
 }

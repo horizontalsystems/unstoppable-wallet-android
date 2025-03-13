@@ -5,5 +5,8 @@ import androidx.navigation.NavController
 
 interface DataField {
     @Composable
-    fun GetContent(navController: NavController, borderTop: Boolean)
+    fun GetContent(
+        navController: NavController,
+        borderTop: Boolean,
+    )
 }

@@ -31,7 +31,6 @@ class BlockchainSettingsService(
     val blockchainItemsObservable: Observable<List<BlockchainItem>>
         get() = blockchainItemsSubject
 
-
     fun start() {
         coroutineScope.launch {
             btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect {
@@ -62,15 +61,17 @@ class BlockchainSettingsService(
     }
 
     private fun syncBlockchainItems() {
-        val btcBlockchainItems = btcBlockchainManager.allBlockchains.map { blockchain ->
-            val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
-            BlockchainItem.Btc(blockchain, restoreMode)
-        }
+        val btcBlockchainItems =
+            btcBlockchainManager.allBlockchains.map { blockchain ->
+                val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
+                BlockchainItem.Btc(blockchain, restoreMode)
+            }
 
-        val evmBlockchainItems = evmBlockchainManager.allBlockchains.map { blockchain ->
-            val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
-            BlockchainItem.Evm(blockchain, syncSource)
-        }
+        val evmBlockchainItems =
+            evmBlockchainManager.allBlockchains.map { blockchain ->
+                val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
+                BlockchainItem.Evm(blockchain, syncSource)
+            }
 
         val solanaBlockchainItems = mutableListOf<BlockchainItem>()
 
@@ -78,7 +79,7 @@ class BlockchainSettingsService(
             solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
         }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + solanaBlockchainItems).sortedBy { it.order }
+        blockchainItems =
+            (btcBlockchainItems + evmBlockchainItems + solanaBlockchainItems).sortedBy { it.order }
     }
-
 }

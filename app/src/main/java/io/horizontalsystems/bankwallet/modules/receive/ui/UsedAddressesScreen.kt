@@ -45,19 +45,21 @@ import io.horizontalsystems.core.helpers.HudHelper
 data class UsedAddressesParams(
     val coinName: String,
     val usedAddresses: List<UsedAddress>,
-    val usedChangeAddresses: List<UsedAddress>
+    val usedChangeAddresses: List<UsedAddress>,
 )
 
-enum class UsedAddressTab(@StringRes val titleResId: Int) {
+enum class UsedAddressTab(
+    @StringRes val titleResId: Int,
+) {
     ReceiveAddress(R.string.Balance_Receive_ReceiveAddresses),
-    ChangeAddress(R.string.Balance_Receive_ChangeAddresses);
+    ChangeAddress(R.string.Balance_Receive_ChangeAddresses),
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UsedAddressScreen(
     params: UsedAddressesParams,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
 ) {
     val tabs = UsedAddressTab.values()
     var selectedTab by remember { mutableStateOf(UsedAddressTab.ReceiveAddress) }
@@ -70,35 +72,42 @@ fun UsedAddressScreen(
                 title = stringResource(id = R.string.Balance_Receive_UsedAddresses),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
+            modifier =
+                Modifier
+                    .padding(it)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-            InfoText(text = stringResource(id = R.string.Balance_Receive_UsedAddressesDescriptoin, params.coinName))
+            InfoText(
+                text =
+                    stringResource(
+                        id = R.string.Balance_Receive_UsedAddressesDescriptoin,
+                        params.coinName,
+                    ),
+            )
 
             VSpacer(12.dp)
 
             LaunchedEffect(key1 = selectedTab, block = {
                 pagerState.scrollToPage(selectedTab.ordinal)
             })
-            val tabItems = tabs.map {
-                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
-            }
+            val tabItems =
+                tabs.map {
+                    TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+                }
             Tabs(tabItems, onClick = { selectedTab = it })
 
             VSpacer(12.dp)
 
             HorizontalPager(
                 state = pagerState,
-                userScrollEnabled = false
+                userScrollEnabled = false,
             ) { page ->
                 when (tabs[page]) {
                     UsedAddressTab.ReceiveAddress -> AddressList(params.usedAddresses)
@@ -116,15 +125,16 @@ fun UsedAddressScreen(
 private fun AddressList(usedAddresses: List<UsedAddress>) {
     CellUniversalLawrenceSection(
         buildList {
-            for (item in usedAddresses)
+            for (item in usedAddresses) {
                 add {
                     TransactionInfoAddressCell(
                         index = item.index.plus(1).toString(),
                         address = item.address,
-                        explorerUrl = item.explorerUrl
+                        explorerUrl = item.explorerUrl,
                     )
                 }
-        }
+            }
+        },
     )
 }
 
@@ -132,7 +142,7 @@ private fun AddressList(usedAddresses: List<UsedAddress>) {
 fun TransactionInfoAddressCell(
     index: String,
     address: String,
-    explorerUrl: String
+    explorerUrl: String,
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -145,13 +155,13 @@ fun TransactionInfoAddressCell(
         subhead2_leah(
             modifier = Modifier.weight(1f),
             text = address,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
 
         HSpacer(16.dp)
         ButtonSecondaryCircle(
             icon = R.drawable.ic_language,
-            onClick = { LinkHelper.openLinkInAppBrowser(context, explorerUrl) }
+            onClick = { LinkHelper.openLinkInAppBrowser(context, explorerUrl) },
         )
 
         HSpacer(16.dp)
@@ -160,7 +170,7 @@ fun TransactionInfoAddressCell(
             onClick = {
                 TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            }
+            },
         )
     }
 }

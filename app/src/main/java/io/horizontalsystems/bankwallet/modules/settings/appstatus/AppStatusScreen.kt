@@ -41,11 +41,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
 
-
 @Composable
-fun AppStatusScreen(
-    navController: NavController
-) {
+fun AppStatusScreen(navController: NavController) {
     val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
     val uiState = viewModel.uiState
     val clipboardManager = LocalClipboardManager.current
@@ -61,18 +58,20 @@ fun AppStatusScreen(
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
-        }
+        },
     ) {
         Column(Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                 ) {
                     ButtonPrimaryYellow(
                         modifier = Modifier.weight(1f),
@@ -82,9 +81,12 @@ fun AppStatusScreen(
                                 clipboardManager.setText(AnnotatedString(it))
                                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
 
-                                stat(page = StatPage.AppStatus, event= StatEvent.Copy(StatEntity.Status))
+                                stat(
+                                    page = StatPage.AppStatus,
+                                    event = StatEvent.Copy(StatEntity.Status),
+                                )
                             }
-                        }
+                        },
                     )
                     HSpacer(8.dp)
                     ButtonPrimaryDefault(
@@ -92,14 +94,18 @@ fun AppStatusScreen(
                         title = stringResource(R.string.Button_Share),
                         onClick = {
                             uiState.appStatusAsText?.let {
-                                ShareCompat.IntentBuilder(context)
+                                ShareCompat
+                                    .IntentBuilder(context)
                                     .setType("text/plain")
                                     .setText(it)
                                     .startChooser()
 
-                                stat(page = StatPage.AppStatus, event= StatEvent.Share(StatEntity.Status))
+                                stat(
+                                    page = StatPage.AppStatus,
+                                    event = StatEvent.Share(StatEntity.Status),
+                                )
                             }
-                        }
+                        },
                     )
                 }
                 uiState.blockViewItems.forEach { blockData ->
@@ -159,25 +165,32 @@ private fun StatusBlock(
 @Preview
 @Composable
 fun StatusBlockPreview() {
-    val testBlocks = listOf(
-        BlockData(
-            title = "Status",
-            content = listOf(
-                BlockContent.Header("Header"),
-                BlockContent.TitleValue("Title", "Value"),
-                BlockContent.TitleValue("Title 2", "Value 2"),
-                BlockContent.Text("So then I thought what if I use chat GPT, save a link to my home screen on my phone, and start a new thread on it called MyFitness app. For anyone not familiar with chat GPT you can essentially give it prompts and get it to give outputs that provide information you need. Not always 100% correct but you can give it feedback to adjust as needed."),
-            )
-        ),
-        BlockData(
-            title = null,
-            content = listOf(
-                BlockContent.TitleValue("Title", "Value"),
-                BlockContent.TitleValue("Title 2", "Value 2"),
-                BlockContent.Text("So then I thought what if I use chat GPT, save a link to my home screen on my phone, and start a new thread on it called MyFitness app. For anyone not familiar with chat GPT you can essentially give it prompts and get it to give outputs that provide information you need. Not always 100% correct but you can give it feedback to adjust as needed."),
-            )
-        ),
-    )
+    val testBlocks =
+        listOf(
+            BlockData(
+                title = "Status",
+                content =
+                    listOf(
+                        BlockContent.Header("Header"),
+                        BlockContent.TitleValue("Title", "Value"),
+                        BlockContent.TitleValue("Title 2", "Value 2"),
+                        BlockContent.Text(
+                            "So then I thought what if I use chat GPT, save a link to my home screen on my phone, and start a new thread on it called MyFitness app. For anyone not familiar with chat GPT you can essentially give it prompts and get it to give outputs that provide information you need. Not always 100% correct but you can give it feedback to adjust as needed.",
+                        ),
+                    ),
+            ),
+            BlockData(
+                title = null,
+                content =
+                    listOf(
+                        BlockContent.TitleValue("Title", "Value"),
+                        BlockContent.TitleValue("Title 2", "Value 2"),
+                        BlockContent.Text(
+                            "So then I thought what if I use chat GPT, save a link to my home screen on my phone, and start a new thread on it called MyFitness app. For anyone not familiar with chat GPT you can essentially give it prompts and get it to give outputs that provide information you need. Not always 100% correct but you can give it feedback to adjust as needed.",
+                        ),
+                    ),
+            ),
+        )
     ComposeAppTheme {
         testBlocks.forEach {
             StatusBlock(

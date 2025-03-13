@@ -32,7 +32,6 @@ class TonConnectManager(
             val dAppRequest = kit.readData(scannedText)
             _dappRequestFlow.emit(dAppRequest)
         } catch (e: Throwable) {
-
         }
     }
 }

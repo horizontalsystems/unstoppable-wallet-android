@@ -17,7 +17,6 @@ class CoinViewModel(
     private val clearables: List<Clearable>,
     private val localStorage: ILocalStorage,
 ) : ViewModel() {
-
     val tabs = CoinModule.Tab.values()
     val fullCoin by service::fullCoin
 
@@ -53,5 +52,4 @@ class CoinViewModel(
     fun onSuccessMessageShown() {
         successMessage = null
     }
-
 }

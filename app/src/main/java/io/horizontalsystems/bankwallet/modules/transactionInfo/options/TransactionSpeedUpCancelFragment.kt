@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -42,39 +41,47 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
     data class Input(
         val blockchainType: BlockchainType,
         val optionType: SpeedUpCancelType,
-        val transactionHash: String
+        val transactionHash: String,
     ) : Parcelable
 
     @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(
+        val success: Boolean,
+    ) : Parcelable
 }
 
 @Composable
 private fun TransactionSpeedUpCancelScreen(
     navController: NavController,
-    input: TransactionSpeedUpCancelFragment.Input
+    input: TransactionSpeedUpCancelFragment.Input,
 ) {
     val logger = remember { AppLogger("tx-speedUp-cancel") }
     val view = LocalView.current
 
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
-    }
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
+        }
 
-    val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-        factory = TransactionSpeedUpCancelViewModel.Factory(
-            input.blockchainType,
-            input.transactionHash,
-            input.optionType,
+    val viewModel =
+        viewModel<TransactionSpeedUpCancelViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+            factory =
+                TransactionSpeedUpCancelViewModel.Factory(
+                    input.blockchainType,
+                    input.transactionHash,
+                    input.optionType,
+                ),
         )
-    )
 
     val uiState = viewModel.uiState
 
     LaunchedEffect(uiState.error) {
         if (uiState.error is TransactionAlreadyInBlock) {
-            HudHelper.showErrorMessage(view, R.string.TransactionInfoOptions_Warning_TransactionInBlock)
+            HudHelper.showErrorMessage(
+                view,
+                R.string.TransactionInfoOptions_Warning_TransactionInBlock,
+            )
             navController.popBackStack()
         }
     }
@@ -101,31 +108,35 @@ private fun TransactionSpeedUpCancelScreen(
 
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+                        HudHelper.showInProcessMessage(
+                            view,
+                            R.string.Send_Sending,
+                            SnackbarDuration.INDEFINITE,
+                        )
 
-                        val result = try {
-                            logger.info("sending tx")
-                            viewModel.send()
-                            logger.info("success")
+                        val result =
+                            try {
+                                logger.info("sending tx")
+                                viewModel.send()
+                                logger.info("success")
 
-                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                            delay(1200)
-                            TransactionSpeedUpCancelFragment.Result(true)
-                        } catch (t: Throwable) {
-                            logger.warning("failed", t)
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            TransactionSpeedUpCancelFragment.Result(false)
-                        }
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                                TransactionSpeedUpCancelFragment.Result(true)
+                            } catch (t: Throwable) {
+                                logger.warning("failed", t)
+                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                TransactionSpeedUpCancelFragment.Result(false)
+                            }
 
                         buttonEnabled = true
                         navController.setNavigationResultX(result)
                         navController.popBackStack()
                     }
-
                 },
-                enabled = uiState.sendEnabled && buttonEnabled
+                enabled = uiState.sendEnabled && buttonEnabled,
             )
-        }
+        },
     ) {
         SendEvmTransactionView(
             navController,
@@ -133,7 +144,7 @@ private fun TransactionSpeedUpCancelScreen(
             sendTransactionState.cautions,
             sendTransactionState.fields,
             sendTransactionState.networkFee,
-            StatPage.Resend
+            StatPage.Resend,
         )
     }
 }

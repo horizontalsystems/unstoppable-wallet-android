@@ -7,17 +7,19 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule.TermViewItem
 
-class TermsViewModel(private val termsManager: ITermsManager) : ViewModel() {
-
+class TermsViewModel(
+    private val termsManager: ITermsManager,
+) : ViewModel() {
     private val terms by termsManager::terms
 
-    private var checkedTerms = mutableListOf<TermsModule.TermType>().also {
-        if(termsManager.allTermsAccepted) {
-            it.addAll(terms)
+    private var checkedTerms =
+        mutableListOf<TermsModule.TermType>().also {
+            if (termsManager.allTermsAccepted) {
+                it.addAll(terms)
+            }
         }
-    }
 
-    val readOnlyState  = termsManager.allTermsAccepted
+    val readOnlyState = termsManager.allTermsAccepted
 
     var closeWithTermsAgreed by mutableStateOf(false)
         private set
@@ -31,8 +33,10 @@ class TermsViewModel(private val termsManager: ITermsManager) : ViewModel() {
     var buttonVisible by mutableStateOf(!readOnlyState)
         private set
 
-
-    fun onTapTerm(termType: TermsModule.TermType, checked: Boolean) {
+    fun onTapTerm(
+        termType: TermsModule.TermType,
+        checked: Boolean,
+    ) {
         if (checked) {
             checkedTerms.add(termType)
         } else {
@@ -52,9 +56,7 @@ class TermsViewModel(private val termsManager: ITermsManager) : ViewModel() {
         closeWithTermsAgreed = false
     }
 
-    private fun getViewItems() =
-        terms.map { termType -> TermViewItem(termType, checkedTerms.any { it == termType }) }
+    private fun getViewItems() = terms.map { termType -> TermViewItem(termType, checkedTerms.any { it == termType }) }
 
     private fun buttonEnabled() = termsViewItems.all { it.checked }
-
 }

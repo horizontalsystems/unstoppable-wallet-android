@@ -14,7 +14,7 @@ import kotlinx.coroutines.rx2.await
 
 class TvlService(
     private val currencyManager: CurrencyManager,
-    private val globalMarketRepository: GlobalMarketRepository
+    private val globalMarketRepository: GlobalMarketRepository,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var tvlDataJob: Job? = null
@@ -43,27 +43,29 @@ class TvlService(
             updateTvlData(false)
         }
 
-
     private fun forceRefresh() {
         updateTvlData(true)
     }
 
     private fun updateTvlData(forceRefresh: Boolean) {
         tvlDataJob?.cancel()
-        tvlDataJob = coroutineScope.launch {
-            try {
-                val items = globalMarketRepository.getMarketTvlItems(
-                    currency,
-                    chain,
-                    chartInterval,
-                    sortDescending,
-                    forceRefresh
-                ).await()
-                marketTvlItemsObservable.onNext(DataState.Success(items))
-            } catch (e: Throwable) {
-                marketTvlItemsObservable.onNext(DataState.Error(e))
+        tvlDataJob =
+            coroutineScope.launch {
+                try {
+                    val items =
+                        globalMarketRepository
+                            .getMarketTvlItems(
+                                currency,
+                                chain,
+                                chartInterval,
+                                sortDescending,
+                                forceRefresh,
+                            ).await()
+                    marketTvlItemsObservable.onNext(DataState.Success(items))
+                } catch (e: Throwable) {
+                    marketTvlItemsObservable.onNext(DataState.Error(e))
+                }
             }
-        }
     }
 
     fun start() {
@@ -75,7 +77,6 @@ class TvlService(
 
         forceRefresh()
     }
-
 
     fun refresh() {
         forceRefresh()

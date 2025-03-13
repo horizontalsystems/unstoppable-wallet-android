@@ -19,9 +19,10 @@ class SubscriptionViewModel : ViewModelUiState<ManageSubscriptionUiState>() {
         }
     }
 
-    override fun createState() = ManageSubscriptionUiState(
-        userHasActiveSubscription = userHasActiveSubscription
-    )
+    override fun createState() =
+        ManageSubscriptionUiState(
+            userHasActiveSubscription = userHasActiveSubscription,
+        )
 
     private fun refreshData(userSubscription: UserSubscription?) {
         userHasActiveSubscription = userSubscription != null

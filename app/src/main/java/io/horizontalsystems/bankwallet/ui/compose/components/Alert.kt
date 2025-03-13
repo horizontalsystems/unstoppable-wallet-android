@@ -3,7 +3,11 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -23,18 +27,19 @@ fun <T : WithTranslatableTitle> AlertGroup(
     @StringRes title: Int,
     select: Select<T>,
     onSelect: (T) -> Unit,
-    onDismiss: (() -> Unit)
+    onDismiss: (() -> Unit),
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Column(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .clip(RoundedCornerShape(16.dp))
+            modifier =
+                Modifier
+                    .padding(horizontal = 20.dp)
+                    .clip(RoundedCornerShape(16.dp)),
         ) {
             AlertHeader(title)
             select.options.forEach { option ->
                 AlertItem(
-                    onClick = { onSelect.invoke(option) }
+                    onClick = { onSelect.invoke(option) },
                 ) {
                     Text(
                         option.title.getString(),
@@ -48,13 +53,16 @@ fun <T : WithTranslatableTitle> AlertGroup(
 }
 
 @Composable
-fun AlertHeader(@StringRes title: Int) {
+fun AlertHeader(
+    @StringRes title: Int,
+) {
     Box(
-        modifier = Modifier
-            .height(40.dp)
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .height(40.dp)
+                .fillMaxWidth()
+                .background(ComposeAppTheme.colors.lawrence),
+        contentAlignment = Alignment.Center,
     ) {
         subhead1_grey(stringResource(title))
     }
@@ -63,20 +71,21 @@ fun AlertHeader(@StringRes title: Int) {
 @Composable
 fun AlertItem(
     onClick: (() -> Unit),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable { onClick.invoke() },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable { onClick.invoke() },
+        contentAlignment = Alignment.Center,
     ) {
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
 
         content.invoke()

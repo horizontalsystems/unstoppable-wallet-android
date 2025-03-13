@@ -33,7 +33,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -42,12 +41,16 @@ class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
     }
 
     @Parcelize
-    data class Input(val evmAddress: String) : Parcelable
-
+    data class Input(
+        val evmAddress: String,
+    ) : Parcelable
 }
 
 @Composable
-private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
+private fun EvmAddressScreen(
+    evmAddress: String,
+    navController: NavController,
+) {
     val view = LocalView.current
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
@@ -55,23 +58,25 @@ private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
             navigationIcon = {
                 HsBackButton(onClick = navController::popBackStack)
             },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Info_Title),
-                    icon = R.drawable.ic_info_24,
-                    onClick = {
-                        FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
+                        onClick = {
+                            FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
 
-                        stat(page = StatPage.EvmAddress, event = StatEvent.Open(StatPage.Info))
-                    }
-                )
-            )
+                            stat(page = StatPage.EvmAddress, event = StatEvent.Open(StatPage.Info))
+                        },
+                    ),
+                ),
         )
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top,
         ) {
             Spacer(Modifier.height(12.dp))
             HidableContent(evmAddress)

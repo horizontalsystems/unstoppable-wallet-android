@@ -10,18 +10,24 @@ class WalletActivator(
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
 ) {
-
-    fun activateWallets(account: Account, tokenQueries: List<TokenQuery>) {
-        val wallets = tokenQueries.mapNotNull { tokenQuery ->
-            marketKit.token(tokenQuery)?.let { token ->
-                Wallet(token, account)
+    fun activateWallets(
+        account: Account,
+        tokenQueries: List<TokenQuery>,
+    ) {
+        val wallets =
+            tokenQueries.mapNotNull { tokenQuery ->
+                marketKit.token(tokenQuery)?.let { token ->
+                    Wallet(token, account)
+                }
             }
-        }
 
         walletManager.save(wallets)
     }
 
-    fun activateTokens(account: Account, tokens: List<Token>) {
+    fun activateTokens(
+        account: Account,
+        tokens: List<Token>,
+    ) {
         val wallets = mutableListOf<Wallet>()
 
         for (token in tokens) {
@@ -30,5 +36,4 @@ class WalletActivator(
 
         walletManager.save(wallets)
     }
-
 }

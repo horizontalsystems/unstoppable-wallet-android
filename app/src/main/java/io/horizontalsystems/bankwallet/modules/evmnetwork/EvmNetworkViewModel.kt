@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.onEach
 
 class EvmNetworkViewModel(
     val blockchain: Blockchain,
-    private val evmSyncSourceManager: EvmSyncSourceManager
+    private val evmSyncSourceManager: EvmSyncSourceManager,
 ) : ViewModel() {
-
     private var currentSyncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
 
     var viewState by mutableStateOf(ViewState(emptyList(), emptyList()))
@@ -33,10 +32,11 @@ class EvmNetworkViewModel(
     }
 
     private fun syncState() {
-        viewState = ViewState(
-            defaultItems = viewItems(evmSyncSourceManager.defaultSyncSources(blockchain.type)),
-            customItems = viewItems(evmSyncSourceManager.customSyncSources(blockchain.type))
-        )
+        viewState =
+            ViewState(
+                defaultItems = viewItems(evmSyncSourceManager.defaultSyncSources(blockchain.type)),
+                customItems = viewItems(evmSyncSourceManager.customSyncSources(blockchain.type)),
+            )
     }
 
     private fun viewItems(evmSyncSources: List<EvmSyncSource>): List<ViewItem> {
@@ -48,8 +48,11 @@ class EvmNetworkViewModel(
                 syncSource = evmSyncSource,
                 id = evmSyncSource.id,
                 name = evmSyncSource.name,
-                url = evmSyncSource.rpcSource.uris.first().toString(),
-                selected = evmSyncSource.id == currentSyncSourceId
+                url =
+                    evmSyncSource.rpcSource.uris
+                        .first()
+                        .toString(),
+                selected = evmSyncSource.id == currentSyncSourceId,
             )
         }
     }

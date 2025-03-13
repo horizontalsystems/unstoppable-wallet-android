@@ -41,23 +41,26 @@ class Eip20ApproveViewModel(
     private var allowanceMode = OnlyRequired
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var fiatAmount: BigDecimal? = null
-    private val contact = contactsRepository.getContactsFiltered(
-        blockchainType = token.blockchainType,
-        addressQuery = spenderAddress
-    ).firstOrNull()
+    private val contact =
+        contactsRepository
+            .getContactsFiltered(
+                blockchainType = token.blockchainType,
+                addressQuery = spenderAddress,
+            ).firstOrNull()
 
-    override fun createState() = Eip20ApproveUiState(
-        token = token,
-        requiredAllowance = requiredAllowance,
-        allowanceMode = allowanceMode,
-        networkFee = sendTransactionState.networkFee,
-        cautions = sendTransactionState.cautions,
-        currency = currency,
-        fiatAmount = fiatAmount,
-        spenderAddress = spenderAddress,
-        contact = contact,
-        approveEnabled = sendTransactionState.sendable
-    )
+    override fun createState() =
+        Eip20ApproveUiState(
+            token = token,
+            requiredAllowance = requiredAllowance,
+            allowanceMode = allowanceMode,
+            networkFee = sendTransactionState.networkFee,
+            cautions = sendTransactionState.cautions,
+            currency = currency,
+            fiatAmount = fiatAmount,
+            spenderAddress = spenderAddress,
+            contact = contact,
+            approveEnabled = sendTransactionState.sendable,
+        )
 
     init {
 
@@ -96,21 +99,29 @@ class Eip20ApproveViewModel(
 
         checkNotNull(eip20Adapter)
 
-        val transactionData = when (allowanceMode) {
-            OnlyRequired -> eip20Adapter.buildApproveTransactionData(
-                Address(spenderAddress),
-                requiredAllowance
-            )
+        val transactionData =
+            when (allowanceMode) {
+                OnlyRequired ->
+                    eip20Adapter.buildApproveTransactionData(
+                        Address(spenderAddress),
+                        requiredAllowance,
+                    )
 
-            Unlimited -> eip20Adapter.buildApproveUnlimitedTransactionData(Address(spenderAddress))
+                Unlimited -> eip20Adapter.buildApproveUnlimitedTransactionData(Address(spenderAddress))
+            }
+
+        sendTransactionService.setSendTransactionData(
+            SendTransactionData.Evm(
+                transactionData,
+                null,
+            ),
+        )
+    }
+
+    suspend fun approve() =
+        withContext(Dispatchers.Default) {
+            sendTransactionService.sendTransaction()
         }
-
-        sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
-    }
-
-    suspend fun approve() = withContext(Dispatchers.Default) {
-        sendTransactionService.sendTransaction()
-    }
 
     class Factory(
         private val token: Token,
@@ -130,7 +141,7 @@ class Eip20ApproveViewModel(
                 sendTransactionService,
                 App.currencyManager,
                 FiatService(App.marketKit),
-                App.contactsRepository
+                App.contactsRepository,
             ) as T
         }
     }
@@ -150,6 +161,6 @@ data class Eip20ApproveUiState(
 )
 
 enum class AllowanceMode {
-    OnlyRequired, Unlimited
+    OnlyRequired,
+    Unlimited,
 }
-

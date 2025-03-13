@@ -38,13 +38,23 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 @Composable
 fun ContractsPreview() {
     ComposeAppTheme(darkTheme = true) {
-        val contracts = listOf(
-            ContractInfo("0xda123as34290098asd0098asdasd9098asd90123asd", BlockchainType.Ethereum.imageUrl,"https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"),
-            ContractInfo("BNB", BlockchainType.BinanceSmartChain.imageUrl,"https://explorer.binance.org/asset/BNB"),
-        )
+        val contracts =
+            listOf(
+                ContractInfo(
+                    "0xda123as34290098asd0098asdasd9098asd90123asd",
+                    BlockchainType.Ethereum.imageUrl,
+                    "https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd",
+                ),
+                ContractInfo(
+                    "BNB",
+                    BlockchainType.BinanceSmartChain.imageUrl,
+                    "https://explorer.binance.org/asset/BNB",
+                ),
+            )
         Contracts(contracts = contracts, {}, {})
     }
 }
+
 @Composable
 fun Contracts(
     contracts: List<ContractInfo>,
@@ -58,43 +68,52 @@ fun Contracts(
 
         CellUniversalLawrenceSection(contracts) { contractInfo ->
             RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
                 Image(
                     modifier = Modifier.size(32.dp),
-                    painter = rememberAsyncImagePainter(
-                        model = contractInfo.imgUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_32)
-                    ),
-                    contentDescription = "platform"
+                    painter =
+                        rememberAsyncImagePainter(
+                            model = contractInfo.imgUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_32),
+                        ),
+                    contentDescription = "platform",
                 )
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp)
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
                 ) {
                     contractInfo.name?.let {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             body_leah(
                                 modifier = Modifier.weight(1f, fill = false),
                                 text = it,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
                             contractInfo.schema?.let { labelText ->
                                 Box(
-                                    modifier = Modifier
-                                        .padding(start = 8.dp)
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .background(ComposeAppTheme.colors.jeremy)
+                                    modifier =
+                                        Modifier
+                                            .padding(start = 8.dp)
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .background(ComposeAppTheme.colors.jeremy),
                                 ) {
                                     Text(
-                                        modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
+                                        modifier =
+                                            Modifier.padding(
+                                                start = 4.dp,
+                                                end = 4.dp,
+                                                bottom = 1.dp,
+                                            ),
                                         text = labelText,
                                         color = ComposeAppTheme.colors.bran,
                                         style = ComposeAppTheme.typography.microSB,
@@ -108,7 +127,7 @@ fun Contracts(
                     subhead2_grey(
                         text = contractInfo.shortened,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 ButtonSecondaryCircle(
@@ -116,7 +135,7 @@ fun Contracts(
                     contentDescription = stringResource(R.string.Button_Copy),
                     onClick = {
                         onClickCopy.invoke(contractInfo)
-                    }
+                    },
                 )
                 contractInfo.explorerUrl?.let { explorerUrl ->
                     ButtonSecondaryCircle(
@@ -125,7 +144,7 @@ fun Contracts(
                         contentDescription = stringResource(R.string.Button_Browser),
                         onClick = {
                             onClickExplorer.invoke(explorerUrl)
-                        }
+                        },
                     )
                 }
             }

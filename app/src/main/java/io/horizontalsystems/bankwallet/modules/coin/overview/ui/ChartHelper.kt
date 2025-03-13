@@ -13,8 +13,11 @@ import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
-class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, private val colors: Colors) {
-
+class ChartHelper(
+    private var target: ChartData,
+    var hasVolumes: Boolean,
+    private val colors: Colors,
+) {
     private var minValue: Float = 0.0f
     private var maxValue: Float = 0.0f
     private var minKey: Long = 0
@@ -32,20 +35,22 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     var mainCurveColor = colors.greenD
     var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
     var mainCurvePressedColor = colors.leah
-    var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
+    var mainCurveGradientPressedColors =
+        Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
     var mainBarsColor = colors.jacob
     var mainBarsPressedColor = colors.grey50
 
     init {
         setExtremum()
 
-        mainCurve = CurveAnimator2(
-            target.valuesByTimestamp(),
-            minKey,
-            maxKey,
-            minValue,
-            maxValue
-        )
+        mainCurve =
+            CurveAnimator2(
+                target.valuesByTimestamp(),
+                minKey,
+                maxKey,
+                minValue,
+                maxValue,
+            )
 
         initDominanceCurve()
 
@@ -58,13 +63,14 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             val volumeByTimestamp = target.volumeByTimestamp()
             val volumeMin = volumeByTimestamp.minOf { it.value }
             val volumeMax = volumeByTimestamp.maxOf { it.value }
-            volumeBars = CurveAnimatorBars(
-                volumeByTimestamp,
-                minKey,
-                maxKey,
-                volumeMin,
-                volumeMax
-            )
+            volumeBars =
+                CurveAnimatorBars(
+                    volumeByTimestamp,
+                    minKey,
+                    maxKey,
+                    volumeMin,
+                    volumeMax,
+                )
         }
 
         defineColors()
@@ -73,13 +79,14 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     private fun initDominanceCurve() {
         val dominanceValues = target.dominanceByTimestamp()
         if (dominanceValues.isNotEmpty()) {
-            dominanceCurve = CurveAnimator2(
-                dominanceValues,
-                minKey,
-                maxKey,
-                dominanceValues.minOf { it.value },
-                dominanceValues.maxOf { it.value }
-            )
+            dominanceCurve =
+                CurveAnimator2(
+                    dominanceValues,
+                    minKey,
+                    maxKey,
+                    dominanceValues.minOf { it.value },
+                    dominanceValues.maxOf { it.value },
+                )
         }
     }
 
@@ -89,7 +96,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         when {
             chartData.disabled -> {
                 mainCurveColor = colors.grey
-                mainCurveGradientColors = Pair(colors.grey50.copy(alpha = 0f), colors.grey50.copy(alpha = 0.5f))
+                mainCurveGradientColors =
+                    Pair(colors.grey50.copy(alpha = 0f), colors.grey50.copy(alpha = 0.5f))
             }
 
             !chartData.isMovementChart -> {
@@ -115,104 +123,94 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             val macdLine = macd.macdLine
             val signalLine = macd.signalLine
 
-            val extremum = listOf(
-                macdLine.minOfOrNull { it.value },
-                macdLine.maxOfOrNull { it.value },
-                signalLine.minOfOrNull { it.value },
-                signalLine.maxOfOrNull { it.value },
-            )
+            val extremum =
+                listOf(
+                    macdLine.minOfOrNull { it.value },
+                    macdLine.maxOfOrNull { it.value },
+                    signalLine.minOfOrNull { it.value },
+                    signalLine.maxOfOrNull { it.value },
+                )
             val absMax = extremum.mapNotNull { it?.absoluteValue }.maxOrNull() ?: 0f
             val absMin = absMax * -1
 
-            macdLineCurve = CurveAnimator2(
-                macdLine,
-                minKey,
-                maxKey,
-                absMin,
-                absMax
-            )
-            macdSignalCurve = CurveAnimator2(
-                signalLine,
-                minKey,
-                maxKey,
-                absMin,
-                absMax
-            )
+            macdLineCurve =
+                CurveAnimator2(
+                    macdLine,
+                    minKey,
+                    maxKey,
+                    absMin,
+                    absMax,
+                )
+            macdSignalCurve =
+                CurveAnimator2(
+                    signalLine,
+                    minKey,
+                    maxKey,
+                    absMin,
+                    absMax,
+                )
             val histogram = macd.histogram
             val histogramAbsMax = histogram.values.maxOfOrNull { it.absoluteValue } ?: 0f
             val histogramAbsMin = histogramAbsMax * -1
-            macdHistogramBars = CurveAnimatorBars(
-                histogram,
-                minKey,
-                maxKey,
-                histogramAbsMin,
-                histogramAbsMax
-            )
+            macdHistogramBars =
+                CurveAnimatorBars(
+                    histogram,
+                    minKey,
+                    maxKey,
+                    histogramAbsMin,
+                    histogramAbsMax,
+                )
         }
     }
 
     private fun initRsiCurve() {
-        rsiCurve = target.rsi?.let { chartIndicatorRsi ->
-            val values = chartIndicatorRsi.points
-            CurveAnimator2(
-                values,
-                minKey,
-                maxKey,
-                values.minOf { it.value },
-                values.maxOf { it.value }
-            )
-        }
+        rsiCurve =
+            target.rsi?.let { chartIndicatorRsi ->
+                val values = chartIndicatorRsi.points
+                CurveAnimator2(
+                    values,
+                    minKey,
+                    maxKey,
+                    values.minOf { it.value },
+                    values.maxOf { it.value },
+                )
+            }
     }
 
     private fun initMovingAverages() {
         movingAverageCurves.clear()
         movingAverageCurves.putAll(
             target.movingAverages
-                .map { (id, movingAverage: ChartIndicator) ->
-                    id to CurveAnimator2(
-                        movingAverage.line,
-                        minKey,
-                        maxKey,
-                        minValue,
-                        maxValue
-                    ).apply {
-                        color = movingAverage.color
-                    }
-                }
+                .map { (id, movingAverage: ChartIndicator.MovingAverage) ->
+                    id to
+                        CurveAnimator2(
+                            movingAverage.line,
+                            minKey,
+                            maxKey,
+                            minValue,
+                            maxValue,
+                        ).apply {
+                            color = movingAverage.color
+                        }
+                },
         )
     }
 
-    fun getMainCurveState(): CurveAnimator2.UiState {
-        return mainCurve.state
-    }
+    fun getMainCurveState(): CurveAnimator2.UiState = mainCurve.state
 
-    fun getDominanceCurveState(): CurveAnimator2.UiState? {
-        return dominanceCurve?.state
-    }
+    fun getDominanceCurveState(): CurveAnimator2.UiState? = dominanceCurve?.state
 
-    fun getVolumeBarsState(): CurveAnimatorBars.UiState? {
-        return volumeBars?.state
-    }
+    fun getVolumeBarsState(): CurveAnimatorBars.UiState? = volumeBars?.state
 
-    fun getMovingAverageCurveStates(): List<CurveAnimator2.UiState> {
-        return movingAverageCurves.map { it.value.state }
-    }
+    fun getMovingAverageCurveStates(): List<CurveAnimator2.UiState> = movingAverageCurves.map { it.value.state }
 
-    fun getRsiCurveState(): CurveAnimator2.UiState? {
-        return rsiCurve?.state
-    }
+    fun getRsiCurveState(): CurveAnimator2.UiState? = rsiCurve?.state
 
-    fun getMacdLineCurveState(): CurveAnimator2.UiState? {
-        return macdLineCurve?.state
-    }
+    fun getMacdLineCurveState(): CurveAnimator2.UiState? = macdLineCurve?.state
 
-    fun getMacdSignalCurveState(): CurveAnimator2.UiState? {
-        return macdSignalCurve?.state
-    }
+    fun getMacdSignalCurveState(): CurveAnimator2.UiState? = macdSignalCurve?.state
 
-    fun getMacdHistogramBarsState(): CurveAnimatorBars.UiState? {
-        return macdHistogramBars?.state
-    }
+    fun getMacdHistogramBarsState(): CurveAnimatorBars.UiState? = macdHistogramBars?.state
 
     private fun setExtremum() {
         minValue = target.minValue
@@ -231,7 +229,10 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         }
     }
 
-    fun setTarget(chartData: ChartData, hasVolumes: Boolean) {
+    fun setTarget(
+        chartData: ChartData,
+        hasVolumes: Boolean,
+    ) {
         target = chartData
         this.hasVolumes = hasVolumes
         setExtremum()
@@ -241,13 +242,13 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             minKey,
             maxKey,
             minValue,
-            maxValue
+            maxValue,
         )
 
         if (target.movingAverages.keys != movingAverageCurves.keys) {
             initMovingAverages()
         } else {
-            target.movingAverages.forEach { (id, u: ChartIndicator) ->
+            target.movingAverages.forEach { (id, u: ChartIndicator.MovingAverage) ->
                 movingAverageCurves[id]?.setTo(
                     u.line,
                     minKey,
@@ -269,7 +270,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 minKey,
                 maxKey,
                 dominanceValues.minOf { it.value },
-                dominanceValues.maxOf { it.value }
+                dominanceValues.maxOf { it.value },
             )
         }
 
@@ -285,7 +286,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     minKey,
                     maxKey,
                     values.minOf { it.value },
-                    values.maxOf { it.value }
+                    values.maxOf { it.value },
                 )
             }
         }
@@ -301,12 +302,13 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 val macdLine = macd.macdLine
                 val signalLine = macd.signalLine
 
-                val extremum = listOf(
-                    macdLine.minOfOrNull { it.value },
-                    macdLine.maxOfOrNull { it.value },
-                    signalLine.minOfOrNull { it.value },
-                    signalLine.maxOfOrNull { it.value },
-                )
+                val extremum =
+                    listOf(
+                        macdLine.minOfOrNull { it.value },
+                        macdLine.maxOfOrNull { it.value },
+                        signalLine.minOfOrNull { it.value },
+                        signalLine.maxOfOrNull { it.value },
+                    )
                 val absMax = extremum.mapNotNull { it?.absoluteValue }.maxOrNull() ?: 0f
                 val absMin = absMax * -1
 
@@ -315,14 +317,14 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     minKey,
                     maxKey,
                     absMin,
-                    absMax
+                    absMax,
                 )
                 macdSignalCurve?.setTo(
                     signalLine,
                     minKey,
                     maxKey,
                     absMin,
-                    absMax
+                    absMax,
                 )
                 val histogram = macd.histogram
                 val histogramAbsMax = histogram.values.maxOfOrNull { it.absoluteValue } ?: 0f
@@ -332,7 +334,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     minKey,
                     maxKey,
                     histogramAbsMin,
-                    histogramAbsMax
+                    histogramAbsMax,
                 )
             }
         }
@@ -347,7 +349,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     minKey,
                     maxKey,
                     volumeMin,
-                    volumeMax
+                    volumeMax,
                 )
             }
         }
@@ -380,9 +382,10 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         val interval = maxKey - minKey
         val timestamp = minKey + interval * percentagePositionX
 
-        val nearestChartPoint = target.items.minByOrNull {
-            abs(it.timestamp - timestamp)
-        } ?: return
+        val nearestChartPoint =
+            target.items.minByOrNull {
+                abs(it.timestamp - timestamp)
+            } ?: return
 
         val selectedTimestamp = nearestChartPoint.timestamp
 
@@ -392,34 +395,36 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 selectedMovingAverages.add(SelectedItem.MA(movingAverage.color, it))
             }
         }
-        val selectedRsi = target.rsi?.let {
-            it.points[selectedTimestamp]
-        }
-        val selectedMacd = target.macd?.let {
-            val macd = it.macdLine[selectedTimestamp]
-            val signal = it.signalLine[selectedTimestamp]
-            val histogram = it.histogram[selectedTimestamp]
-            if (macd != null) {
-                SelectedItem.Macd(macd, signal, histogram)
-            } else {
-                null
+        val selectedRsi =
+            target.rsi?.let {
+                it.points[selectedTimestamp]
             }
-        }
+        val selectedMacd =
+            target.macd?.let {
+                val macd = it.macdLine[selectedTimestamp]
+                val signal = it.signalLine[selectedTimestamp]
+                val histogram = it.histogram[selectedTimestamp]
+                if (macd != null) {
+                    SelectedItem.Macd(macd, signal, histogram)
+                } else {
+                    null
+                }
+            }
 
         val nearestPercentagePositionX = (nearestChartPoint.timestamp - minKey) / interval.toFloat()
 
-        selectedItem = SelectedItem(
-            percentagePositionX = nearestPercentagePositionX,
-            timestamp = selectedTimestamp,
-            mainValue = nearestChartPoint.value,
-            dominance = nearestChartPoint.dominance,
-            volume = nearestChartPoint.volume,
-            movingAverages = selectedMovingAverages,
-            rsi = selectedRsi,
-            macd = selectedMacd,
-        )
+        selectedItem =
+            SelectedItem(
+                percentagePositionX = nearestPercentagePositionX,
+                timestamp = selectedTimestamp,
+                mainValue = nearestChartPoint.value,
+                dominance = nearestChartPoint.dominance,
+                volume = nearestChartPoint.volume,
+                movingAverages = selectedMovingAverages,
+                rsi = selectedRsi,
+                macd = selectedMacd,
+            )
     }
-
 }
 
 data class SelectedItem(
@@ -430,8 +435,16 @@ data class SelectedItem(
     val volume: Float?,
     val movingAverages: List<MA>,
     val rsi: Float?,
-    val macd: Macd?
+    val macd: Macd?,
 ) {
-    data class MA(val color: Long, val value: Float)
-    data class Macd(val macdValue: Float, val signalValue: Float?, val histogramValue: Float?)
+    data class MA(
+        val color: Long,
+        val value: Float,
+    )
+
+    data class Macd(
+        val macdValue: Float,
+        val signalValue: Float?,
+        val histogramValue: Float?,
+    )
 }

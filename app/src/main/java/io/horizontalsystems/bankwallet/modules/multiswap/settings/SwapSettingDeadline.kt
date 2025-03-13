@@ -23,11 +23,12 @@ data class SwapSettingDeadline(
     override fun GetContent(
         navController: NavController,
         onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
+        onValueChange: (Any?) -> Unit,
     ) {
-        val viewModel = viewModel<SwapDeadlineViewModel>(initializer = {
-            SwapDeadlineViewModel(SwapDeadlineService(value, defaultTtl))
-        })
+        val viewModel =
+            viewModel<SwapDeadlineViewModel>(initializer = {
+                SwapDeadlineViewModel(SwapDeadlineService(value, defaultTtl))
+            })
 
         val error = viewModel.errorState?.error
 
@@ -39,7 +40,7 @@ data class SwapSettingDeadline(
             viewModel.inputFieldPlaceholder,
             viewModel.initialValue,
             viewModel.inputButtons,
-            error
+            error,
         ) {
             viewModel.onChangeText(it)
             onValueChange.invoke(it.toLongOrNull()?.times(60))
@@ -51,17 +52,17 @@ class SwapDeadlineService(
     override val initialDeadline: Long?,
     override val defaultDeadline: Long,
 ) : ISwapDeadlineService {
-
     override var deadlineError: Throwable? = null
     override val deadlineErrorObservable = PublishSubject.create<Optional<Throwable>>()
     override val recommendedDeadlineBounds = Range(600L, 1800L)
 
     override fun setDeadline(value: Long) {
-        deadlineError = if (value == 0L) {
-            SwapSettingsModule.SwapSettingsError.ZeroDeadline
-        } else {
-            null
-        }
+        deadlineError =
+            if (value == 0L) {
+                SwapSettingsModule.SwapSettingsError.ZeroDeadline
+            } else {
+                null
+            }
         deadlineErrorObservable.onNext(Optional.ofNullable(deadlineError))
     }
 }

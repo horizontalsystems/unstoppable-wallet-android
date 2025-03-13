@@ -15,9 +15,8 @@ import java.math.BigInteger
 class EvmNftAdapter(
     private val blockchainType: BlockchainType,
     private val nftKit: NftKit,
-    address: Address
+    address: Address,
 ) : INftAdapter {
-
     override val userAddress = address.hex
 
     override val nftRecordsFlow: Flow<List<NftRecord>>
@@ -45,7 +44,7 @@ class EvmNftAdapter(
     override fun transferEip721TransactionData(
         contractAddress: String,
         to: Address,
-        tokenId: String
+        tokenId: String,
     ): TransactionData? {
         val address = Address(contractAddress)
         val tokenIdBigInt = tokenId.toBigIntegerOrNull() ?: return null
@@ -63,14 +62,13 @@ class EvmNftAdapter(
         return nftKit.transferEip1155TransactionData(address, to, tokenIdBigInt, value)
     }
 
-    private fun record(nftBalance: NftBalance): EvmNftRecord {
-        return EvmNftRecord(
+    private fun record(nftBalance: NftBalance): EvmNftRecord =
+        EvmNftRecord(
             blockchainType = blockchainType,
             nftType = nftBalance.nft.type,
             contractAddress = nftBalance.nft.contractAddress.hex,
             tokenId = nftBalance.nft.tokenId.toString(),
             tokenName = nftBalance.nft.tokenName,
-            balance = nftBalance.balance
+            balance = nftBalance.balance,
         )
-    }
 }

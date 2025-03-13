@@ -14,7 +14,7 @@ import kotlinx.coroutines.rx2.asFlow
 class BalanceXRateRepository(
     private val tag: String,
     private val currencyManager: CurrencyManager,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) {
     val baseCurrency by currencyManager::baseCurrency
     private var coinUids = listOf<String>()
@@ -24,24 +24,26 @@ class BalanceXRateRepository(
     private var baseCurrencyJob: Job? = null
 
     private val itemSubject = PublishSubject.create<Map<String, CoinPrice?>>()
-    val itemObservable: Observable<Map<String, CoinPrice?>> get() = itemSubject
-        .doOnSubscribe {
-            subscribeForBaseCurrencyUpdate()
-            subscribeForLatestRateUpdates()
-        }
-        .doFinally {
-            unsubscribeFromBaseCurrencyUpdate()
-            unsubscribeFromLatestRateUpdates()
-        }
+    val itemObservable: Observable<Map<String, CoinPrice?>>
+        get() =
+            itemSubject
+                .doOnSubscribe {
+                    subscribeForBaseCurrencyUpdate()
+                    subscribeForLatestRateUpdates()
+                }.doFinally {
+                    unsubscribeFromBaseCurrencyUpdate()
+                    unsubscribeFromLatestRateUpdates()
+                }
 
     private fun subscribeForBaseCurrencyUpdate() {
-        baseCurrencyJob = coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-                unsubscribeFromLatestRateUpdates()
-                itemSubject.onNext(getLatestRates())
-                subscribeForLatestRateUpdates()
+        baseCurrencyJob =
+            coroutineScope.launch {
+                currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                    unsubscribeFromLatestRateUpdates()
+                    itemSubject.onNext(getLatestRates())
+                    subscribeForLatestRateUpdates()
+                }
             }
-        }
     }
 
     private fun unsubscribeFromBaseCurrencyUpdate() {
@@ -54,20 +56,19 @@ class BalanceXRateRepository(
         subscribeForLatestRateUpdates()
     }
 
-    fun getLatestRates(): Map<String, CoinPrice?> {
-        return coinUids.associateWith { null } + marketKit.coinPriceMap(coinUids, baseCurrency.code)
-    }
+    fun getLatestRates(): Map<String, CoinPrice?> = coinUids.associateWith { null } + marketKit.coinPriceMap(coinUids, baseCurrency.code)
 
     fun refresh() {
         marketKit.refreshCoinPrices(baseCurrency.code)
     }
 
     private fun subscribeForLatestRateUpdates() {
-        latestRateJob = coroutineScope.launch {
-            marketKit.coinPriceMapObservable(tag, coinUids, baseCurrency.code).asFlow().collect {
-                itemSubject.onNext(it)
+        latestRateJob =
+            coroutineScope.launch {
+                marketKit.coinPriceMapObservable(tag, coinUids, baseCurrency.code).asFlow().collect {
+                    itemSubject.onNext(it)
+                }
             }
-        }
     }
 
     private fun unsubscribeFromLatestRateUpdates() {

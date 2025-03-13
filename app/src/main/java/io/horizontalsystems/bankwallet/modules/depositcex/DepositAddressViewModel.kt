@@ -19,7 +19,7 @@ import java.math.BigDecimal
 class DepositAddressViewModel(
     private val cexAsset: CexAsset,
     private val network: CexDepositNetwork?,
-    cexProviderManager: CexProviderManager
+    cexProviderManager: CexProviderManager,
 ) : ViewModelUiState<ReceiveModule.UiState>() {
     private val cexProvider = cexProviderManager.cexProviderFlow.value
 
@@ -35,18 +35,19 @@ class DepositAddressViewModel(
         setInitialData()
     }
 
-    override fun createState() = ReceiveModule.UiState(
-        viewState = viewState,
-        address = address,
-        usedAddresses = listOf(),
-        usedChangeAddresses = listOf(),
-        uri = uri,
-        networkName = networkName,
-        watchAccount = watchAccount,
-        additionalItems = getAdditionalData(),
-        amount = amount,
-        alertText = getAlertText(memo != null)
-    )
+    override fun createState() =
+        ReceiveModule.UiState(
+            viewState = viewState,
+            address = address,
+            usedAddresses = listOf(),
+            usedChangeAddresses = listOf(),
+            uri = uri,
+            networkName = networkName,
+            watchAccount = watchAccount,
+            additionalItems = getAdditionalData(),
+            amount = amount,
+            alertText = getAlertText(memo != null),
+        )
 
     private fun setInitialData() {
         viewState = ViewState.Loading
@@ -78,28 +79,30 @@ class DepositAddressViewModel(
         memo?.let {
             items.add(
                 ReceiveModule.AdditionalData.Memo(
-                    value = it
-                )
+                    value = it,
+                ),
             )
         }
 
         amount?.let {
             items.add(
                 ReceiveModule.AdditionalData.Amount(
-                    value = it.toString()
-                )
+                    value = it.toString(),
+                ),
             )
         }
 
         return items
     }
 
-    private fun getAlertText(hasMemo: Boolean): ReceiveModule.AlertText? {
-        return if (hasMemo) ReceiveModule.AlertText.Critical(
-            Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
-        )
-        else null
-    }
+    private fun getAlertText(hasMemo: Boolean): ReceiveModule.AlertText? =
+        if (hasMemo) {
+            ReceiveModule.AlertText.Critical(
+                Translator.getString(R.string.Balance_Receive_AddressMemoAlert),
+            )
+        } else {
+            null
+        }
 
     fun onErrorClick() {
         setInitialData()
@@ -117,10 +120,12 @@ class DepositAddressViewModel(
         emitState()
     }
 
-    class Factory(private val cexAsset: CexAsset, private val network: CexDepositNetwork?) : ViewModelProvider.Factory {
+    class Factory(
+        private val cexAsset: CexAsset,
+        private val network: CexDepositNetwork?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DepositAddressViewModel(cexAsset, network, App.cexProviderManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            DepositAddressViewModel(cexAsset, network, App.cexProviderManager) as T
     }
 }

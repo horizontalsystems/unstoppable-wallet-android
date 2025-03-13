@@ -2,9 +2,13 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.Entity
 
-class SecretString(val value: String)
+class SecretString(
+    val value: String,
+)
 
-class SecretList(val list: List<String>)
+class SecretList(
+    val list: List<String>,
+)
 
 @Entity(primaryKeys = ["id"])
 data class AccountRecord(
@@ -17,9 +21,8 @@ data class AccountRecord(
     val words: SecretList?,
     val passphrase: SecretString?,
     val key: SecretString?,
-    val level: Int
+    val level: Int,
 ) {
-
     var deleted = false
 
     override fun equals(other: Any?): Boolean {
@@ -30,8 +33,5 @@ data class AccountRecord(
         return false
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-
+    override fun hashCode(): Int = id.hashCode()
 }

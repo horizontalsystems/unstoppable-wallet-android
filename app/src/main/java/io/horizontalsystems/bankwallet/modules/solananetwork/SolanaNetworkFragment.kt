@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class SolanaNetworkFragment : BaseComposeFragment() {
-
     private val viewModel by viewModels<SolanaNetworkViewModel> {
         SolanaNetworkModule.Factory()
     }
@@ -46,18 +45,16 @@ class SolanaNetworkFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SolanaNetworkScreen(
             viewModel,
-            navController
+            navController,
         )
     }
-
 }
 
 @Composable
 private fun SolanaNetworkScreen(
     viewModel: SolanaNetworkViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
-
     if (viewModel.closeScreen) {
         navController.popBackStack()
     }
@@ -68,36 +65,38 @@ private fun SolanaNetworkScreen(
                 title = viewModel.title,
                 navigationIcon = {
                     Image(
-                        painter = rememberAsyncImagePainter(
-                            model = viewModel.blockchainType.imageUrl,
-                            error = painterResource(R.drawable.ic_platform_placeholder_32)
-                        ),
+                        painter =
+                            rememberAsyncImagePainter(
+                                model = viewModel.blockchainType.imageUrl,
+                                error = painterResource(R.drawable.ic_platform_placeholder_32),
+                            ),
                         contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 14.dp)
-                            .size(24.dp)
+                        modifier =
+                            Modifier
+                                .padding(start = 14.dp)
+                                .size(24.dp),
                     )
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                        ),
+                    ),
             )
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-
                 item {
                     VSpacer(12.dp)
                     subhead2_grey(
                         modifier = Modifier.padding(horizontal = 32.dp),
-                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription),
                     )
                     VSpacer(32.dp)
                 }
@@ -110,10 +109,8 @@ private fun SolanaNetworkScreen(
                     }
                     Spacer(Modifier.height(32.dp))
                 }
-
             }
         }
-
     }
 }
 
@@ -122,14 +119,17 @@ private fun NetworkSettingCell(
     title: String,
     subtitle: String,
     checked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
-        Column(modifier = Modifier
-            .padding(start = 16.dp)
-            .weight(1f)) {
+        Column(
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f),
+        ) {
             body_leah(
                 text = title,
                 maxLines = 1,
@@ -143,10 +143,11 @@ private fun NetworkSettingCell(
             )
         }
         Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .width(52.dp)
+                    .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
         ) {
             if (checked) {
                 Icon(

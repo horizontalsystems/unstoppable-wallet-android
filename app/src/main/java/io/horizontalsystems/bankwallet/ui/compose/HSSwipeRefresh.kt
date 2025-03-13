@@ -24,20 +24,22 @@ fun HSSwipeRefresh(
     val pullRefreshState = rememberPullRefreshState(refreshing, onRefresh)
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .pullRefresh(pullRefreshState)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState),
     ) {
         content.invoke()
         PullRefreshIndicator(
             refreshing = refreshing,
             state = pullRefreshState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(topPadding.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(topPadding.dp),
             backgroundColor = ComposeAppTheme.colors.claude,
             contentColor = ComposeAppTheme.colors.leah,
-            scale = true
+            scale = true,
         )
     }
 }

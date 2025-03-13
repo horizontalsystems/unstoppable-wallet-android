@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 
 object TextHelper : IClipboardManager {
-
     override val hasPrimaryClip: Boolean
         get() = clipboard?.hasPrimaryClip() ?: false
 
@@ -15,18 +14,21 @@ object TextHelper : IClipboardManager {
         copyTextToClipboard(App.instance, text)
     }
 
-    override fun getCopiedText(): String {
-        return clipboard?.primaryClip?.itemCount?.let { count ->
+    override fun getCopiedText(): String =
+        clipboard?.primaryClip?.itemCount?.let { count ->
             if (count > 0) {
-                clipboard?.primaryClip?.getItemAt(0)?.text?.toString()
+                clipboard
+                    ?.primaryClip
+                    ?.getItemAt(0)
+                    ?.text
+                    ?.toString()
             } else {
                 null
             }
         } ?: ""
-    }
 
-    fun getCleanedUrl(link: String): String{
-        var cleanedUrl = link.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)".toRegex(),"")
+    fun getCleanedUrl(link: String): String {
+        var cleanedUrl = link.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)".toRegex(), "")
         if (cleanedUrl.endsWith("/")) {
             cleanedUrl = cleanedUrl.substring(0, cleanedUrl.length - 1)
         }
@@ -36,10 +38,12 @@ object TextHelper : IClipboardManager {
     private val clipboard: ClipboardManager?
         get() = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
 
-    private fun copyTextToClipboard(context: Context, text: String) {
+    private fun copyTextToClipboard(
+        context: Context,
+        text: String,
+    ) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
         val clip = ClipData.newPlainText("text", text)
         clipboard?.setPrimaryClip(clip)
     }
-
 }

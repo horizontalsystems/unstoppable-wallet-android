@@ -11,7 +11,7 @@ import io.reactivex.subjects.PublishSubject
 class MarketFavoritesManager(
     appDatabase: AppDatabase,
     private val localStorage: ILocalStorage,
-    private val marketWidgetManager: MarketWidgetManager
+    private val marketWidgetManager: MarketWidgetManager,
 ) {
     val dataUpdatedAsync: Observable<Unit>
         get() = dataUpdatedSubject
@@ -48,11 +48,7 @@ class MarketFavoritesManager(
         marketWidgetManager.updateWatchListWidgets()
     }
 
-    fun getAll(): List<FavoriteCoin> {
-        return dao.getAll()
-    }
+    fun getAll(): List<FavoriteCoin> = dao.getAll()
 
-    fun isCoinInFavorites(coinUid: String): Boolean {
-        return dao.getCount(coinUid) > 0
-    }
+    fun isCoinInFavorites(coinUid: String): Boolean = dao.getCount(coinUid) > 0
 }

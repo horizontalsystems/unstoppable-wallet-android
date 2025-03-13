@@ -13,9 +13,8 @@ open class EvmTransactionRecord(
     baseToken: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
-    spam: Boolean = false
-) :
-    TransactionRecord(
+    spam: Boolean = false,
+) : TransactionRecord(
         uid = transaction.hashString,
         transactionHash = transaction.hashString,
         transactionIndex = transaction.transactionIndex ?: 0,
@@ -24,34 +23,42 @@ open class EvmTransactionRecord(
         timestamp = transaction.timestamp,
         failed = transaction.isFailed,
         spam = spam,
-        source = source
+        source = source,
     ) {
-
     val fee: TransactionValue?
 
     init {
         val feeAmount: Long? = transaction.gasUsed ?: transaction.gasLimit
         val gasPrice = transaction.gasPrice
 
-        fee = if (feeAmount != null && gasPrice != null) {
-            val feeDecimal = feeAmount.toBigDecimal()
-                .multiply(gasPrice.toBigDecimal())
-                .movePointLeft(baseToken.decimals).stripTrailingZeros()
+        fee =
+            if (feeAmount != null && gasPrice != null) {
+                val feeDecimal =
+                    feeAmount
+                        .toBigDecimal()
+                        .multiply(gasPrice.toBigDecimal())
+                        .movePointLeft(baseToken.decimals)
+                        .stripTrailingZeros()
 
-            TransactionValue.CoinValue(baseToken, feeDecimal)
-        } else {
-            null
-        }
+                TransactionValue.CoinValue(baseToken, feeDecimal)
+            } else {
+                null
+            }
     }
 
     companion object {
-        private fun sameType(value: TransactionValue, value2: TransactionValue): Boolean =
+        private fun sameType(
+            value: TransactionValue,
+            value2: TransactionValue,
+        ): Boolean =
             when {
                 value is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue ->
                     value.token == value2.token
 
                 value is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue ->
-                    value.tokenName == value2.tokenName && value.tokenCode == value2.tokenCode && value.tokenDecimals == value2.tokenDecimals
+                    value.tokenName == value2.tokenName &&
+                        value.tokenCode == value2.tokenCode &&
+                        value.tokenDecimals == value2.tokenDecimals
 
                 value is TransactionValue.NftValue && value2 is TransactionValue.NftValue ->
                     value.nftUid == value2.nftUid
@@ -60,7 +67,10 @@ open class EvmTransactionRecord(
                     false
             }
 
-        fun combined(incomingEvents: List<TransferEvent>, outgoingEvents: List<TransferEvent>): Pair<List<TransactionValue>, List<TransactionValue>> {
+        fun combined(
+            incomingEvents: List<TransferEvent>,
+            outgoingEvents: List<TransferEvent>,
+        ): Pair<List<TransactionValue>, List<TransactionValue>> {
             val values = (incomingEvents + outgoingEvents).map { it.value }
             val resultIncoming: MutableList<TransactionValue> = mutableListOf()
             val resultOutgoing: MutableList<TransactionValue> = mutableListOf()
@@ -71,21 +81,31 @@ open class EvmTransactionRecord(
                 }
 
                 val sameTypeValues = values.filter { sameType(value, it) }
-                val totalValue = sameTypeValues.map { it.decimalValue ?: BigDecimal.ZERO }.reduce { sum, t -> sum + t }
-                val resultValue = when (value) {
-                    is TransactionValue.CoinValue -> TransactionValue.CoinValue(value.token, totalValue)
-                    is TransactionValue.TokenValue -> TransactionValue.TokenValue(
-                        tokenName = value.tokenName,
-                        tokenCode = value.tokenCode,
-                        tokenDecimals = value.tokenDecimals,
-                        value = totalValue,
-                        coinIconPlaceholder = value.coinIconPlaceholder
-                    )
+                val totalValue =
+                    sameTypeValues
+                        .map { it.decimalValue ?: BigDecimal.ZERO }
+                        .reduce { sum, t -> sum + t }
+                val resultValue =
+                    when (value) {
+                        is TransactionValue.CoinValue ->
+                            TransactionValue.CoinValue(
+                                value.token,
+                                totalValue,
+                            )
 
-                    is TransactionValue.RawValue -> value
-                    is TransactionValue.NftValue -> value.copy(value = totalValue)
-                    is TransactionValue.JettonValue -> value
-                }
+                        is TransactionValue.TokenValue ->
+                            TransactionValue.TokenValue(
+                                tokenName = value.tokenName,
+                                tokenCode = value.tokenCode,
+                                tokenDecimals = value.tokenDecimals,
+                                value = totalValue,
+                                coinIconPlaceholder = value.coinIconPlaceholder,
+                            )
+
+                        is TransactionValue.RawValue -> value
+                        is TransactionValue.NftValue -> value.copy(value = totalValue)
+                        is TransactionValue.JettonValue -> value
+                    }
 
                 if (totalValue > BigDecimal.ZERO) {
                     resultIncoming.add(resultValue)
@@ -97,5 +117,4 @@ open class EvmTransactionRecord(
             return Pair(resultIncoming, resultOutgoing)
         }
     }
-
 }

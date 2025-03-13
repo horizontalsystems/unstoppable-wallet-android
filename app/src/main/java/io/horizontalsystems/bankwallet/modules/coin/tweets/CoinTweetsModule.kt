@@ -8,11 +8,17 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.FullCoin
 
 object CoinTweetsModule {
-    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
-
+    class Factory(
+        private val fullCoin: FullCoin,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinTweetsService(fullCoin.coin.uid, TweetsProvider(App.appConfigProvider.twitterBearerToken), App.marketKit)
+            val service =
+                CoinTweetsService(
+                    fullCoin.coin.uid,
+                    TweetsProvider(App.appConfigProvider.twitterBearerToken),
+                    App.marketKit,
+                )
 
             return CoinTweetsViewModel(service, Extractor()) as T
         }
@@ -31,4 +37,7 @@ data class TweetViewItem(
     val url: String,
 )
 
-data class ReferencedTweetViewItem(val title: TranslatableString, val text: String)
+data class ReferencedTweetViewItem(
+    val title: TranslatableString,
+    val text: String,
+)

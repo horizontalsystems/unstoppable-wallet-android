@@ -8,24 +8,26 @@ import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 enum class ThemeType(
     val value: String,
     override val title: TranslatableString,
-    val iconRes: Int
+    val iconRes: Int,
 ) : WithTranslatableTitle {
     @SerializedName("dark")
     Dark(
         "Dark",
         TranslatableString.ResString(R.string.SettingsTheme_Dark),
-        R.drawable.ic_theme_dark
+        R.drawable.ic_theme_dark,
     ),
+
     @SerializedName("light")
     Light(
         "Light",
         TranslatableString.ResString(R.string.SettingsTheme_Light),
-        R.drawable.ic_theme_light
+        R.drawable.ic_theme_light,
     ),
+
     @SerializedName("system")
     System(
         "System",
         TranslatableString.ResString(R.string.SettingsTheme_System),
-        R.drawable.ic_theme_system
-    );
+        R.drawable.ic_theme_system,
+    ),
 }

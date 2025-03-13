@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class SyncerState(
     @PrimaryKey
     val key: String,
-    val value: String
+    val value: String,
 )

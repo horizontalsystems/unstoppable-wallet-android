@@ -32,9 +32,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 @Composable
 fun SelectBackupItemsScreen(
     onNextClick: (accountIds: List<String>) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
-    val viewModel = viewModel<SelectBackupItemsViewModel>(factory = SelectBackupItemsViewModel.Factory())
+    val viewModel =
+        viewModel<SelectBackupItemsViewModel>(factory = SelectBackupItemsViewModel.Factory())
     val uiState = viewModel.uiState
 
     Scaffold(
@@ -50,30 +51,32 @@ fun SelectBackupItemsScreen(
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         onNextClick(viewModel.selectedWallets)
-                    }
+                    },
                 )
             }
-        }
+        },
     ) {
         LazyColumn(modifier = Modifier.padding(it)) {
-
             when (uiState.viewState) {
                 ViewState.Success -> {
                     if (uiState.wallets.isNotEmpty()) {
                         item {
                             HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                            CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
+                            CellUniversalLawrenceSection(
+                                items = uiState.wallets,
+                                showFrame = true,
+                            ) { wallet ->
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    onClick = { viewModel.toggle(wallet) }
+                                    onClick = { viewModel.toggle(wallet) },
                                 ) {
-
                                     Column(modifier = Modifier.weight(1f)) {
                                         body_leah(text = wallet.name)
                                         if (wallet.backupRequired) {
@@ -82,7 +85,7 @@ fun SelectBackupItemsScreen(
                                             subhead2_grey(
                                                 text = wallet.type,
                                                 overflow = TextOverflow.Ellipsis,
-                                                maxLines = 1
+                                                maxLines = 1,
                                             )
                                         }
                                     }
@@ -105,9 +108,9 @@ fun SelectBackupItemsScreen(
                 }
 
                 is ViewState.Error,
-                ViewState.Loading -> Unit
+                ViewState.Loading,
+                -> Unit
             }
-
         }
     }
 }
@@ -117,7 +120,7 @@ fun OtherBackupItems(otherBackupItems: List<SelectBackupItemsViewModel.OtherBack
     HeaderText(text = stringResource(id = R.string.BackupManager_Other))
     CellUniversalLawrenceSection(items = otherBackupItems, showFrame = true) { item ->
         RowUniversal(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row {
@@ -126,7 +129,7 @@ fun OtherBackupItems(otherBackupItems: List<SelectBackupItemsViewModel.OtherBack
                         subhead1_grey(
                             text = item.value,
                             overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
+                            maxLines = 1,
                         )
                     }
                 }
@@ -134,7 +137,7 @@ fun OtherBackupItems(otherBackupItems: List<SelectBackupItemsViewModel.OtherBack
                     subhead2_grey(
                         text = item.subtitle,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 1,
                     )
                 }
             }

@@ -19,10 +19,11 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
         }
     }
 
-    override fun createState() = BuySubscriptionUiState(
-        subscription = subscription,
-        hasFreeTrial = hasFreeTrial,
-    )
+    override fun createState() =
+        BuySubscriptionUiState(
+            subscription = subscription,
+            hasFreeTrial = hasFreeTrial,
+        )
 
     private fun refreshHasFreeTrial() {
         val subscription = subscription ?: return
@@ -39,5 +40,5 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
 
 data class BuySubscriptionUiState(
     val subscription: Subscription?,
-    val hasFreeTrial: Boolean
+    val hasFreeTrial: Boolean,
 )

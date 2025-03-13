@@ -47,11 +47,13 @@ class CoinTweetsService(
                 if (tmpUser != null) {
                     twitterUser = tmpUser
                 } else {
-                    val marketInfoOverview = marketKit.marketInfoOverviewSingle(
-                        coinUid,
-                        "USD",
-                        "en"
-                    ).await()
+                    val marketInfoOverview =
+                        marketKit
+                            .marketInfoOverviewSingle(
+                                coinUid,
+                                "USD",
+                                "en",
+                            ).await()
                     val username = marketInfoOverview.links[LinkType.Twitter]
                     if (username.isNullOrBlank()) {
                         throw TweetsProvider.UserNotFound()
@@ -69,5 +71,3 @@ class CoinTweetsService(
         }
     }
 }
-
-

@@ -38,21 +38,22 @@ fun <ItemClass> SingleSelectBottomSheetContent(
         iconPainter = painterResource(headerIcon),
         title = stringResource(title),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
     ) {
         Spacer(Modifier.height(12.dp))
         CellUniversalLawrenceSection(
             items = items,
-            showFrame = true
+            showFrame = true,
         ) { itemWrapper ->
             RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 onClick = {
                     onSelect(itemWrapper)
                     onClose()
-                }
+                },
             ) {
                 if (itemWrapper.title != null && itemWrapper.item is PriceChange) {
                     when (itemWrapper.item.color) {
@@ -74,7 +75,7 @@ fun <ItemClass> SingleSelectBottomSheetContent(
                         modifier = Modifier.padding(start = 5.dp),
                         painter = painterResource(id = R.drawable.ic_checkmark_20),
                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
@@ -94,30 +95,31 @@ fun PriceCloseToBottomSheetContent(
         iconPainter = painterResource(R.drawable.ic_usd_24),
         title = stringResource(R.string.Market_Filter_PriceCloseTo),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
     ) {
         VSpacer(12.dp)
         CellUniversalLawrenceSection(showFrame = true) {
             Column {
                 RowUniversal(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                     onClick = {
                         onSelect(null)
                         onClose()
-                    }
+                    },
                 ) {
                     body_grey(
                         text = stringResource(R.string.Any),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                     if (selectedItem == null) {
                         Image(
                             modifier = Modifier.padding(start = 5.dp),
                             painter = painterResource(id = R.drawable.ic_checkmark_20),
                             colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }
@@ -127,24 +129,25 @@ fun PriceCloseToBottomSheetContent(
                         color = ComposeAppTheme.colors.steel10,
                     )
                     RowUniversal(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
                         onClick = {
                             onSelect(item)
                             onClose()
-                        }
+                        },
                     ) {
                         body_leah(
                             text = stringResource(item.titleResId) + " " + stringResource(item.descriptionResId),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         if (item == selectedItem) {
                             Image(
                                 modifier = Modifier.padding(start = 5.dp),
                                 painter = painterResource(id = R.drawable.ic_checkmark_20),
                                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     }
@@ -167,21 +170,22 @@ fun CoinSetBottomSheetContent(
         iconPainter = painterResource(R.drawable.ic_circle_coin_24),
         title = stringResource(R.string.Market_Filter_ChooseSet),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
     ) {
         VSpacer(12.dp)
         CellUniversalLawrenceSection(
             items = items,
-            showFrame = true
+            showFrame = true,
         ) { item ->
             RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 onClick = {
                     onSelect(item)
                     onClose()
-                }
+                },
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     body_leah(text = stringResource(item.titleResId))
@@ -193,7 +197,7 @@ fun CoinSetBottomSheetContent(
                         modifier = Modifier.padding(start = 5.dp),
                         painter = painterResource(id = R.drawable.ic_checkmark_20),
                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }

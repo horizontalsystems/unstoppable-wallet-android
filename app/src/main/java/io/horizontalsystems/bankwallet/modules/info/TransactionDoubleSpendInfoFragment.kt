@@ -39,14 +39,13 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
             InfoScreen(
                 txHash = input.transactionHash,
                 conflictingTxHash = input.conflictingTransactionHash,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
             )
         }
     }
@@ -62,25 +61,26 @@ class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 private fun InfoScreen(
     txHash: String,
     conflictingTxHash: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onBackClick
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = onBackClick,
+                        ),
+                    ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoHeader(R.string.Info_DoubleSpend_Title)
                 TextImportantWarning(
@@ -95,34 +95,42 @@ private fun InfoScreen(
 }
 
 @Composable
-fun ConflictingTransactions(transactionHash: String, conflictingHash: String) {
+fun ConflictingTransactions(
+    transactionHash: String,
+    conflictingHash: String,
+) {
     Spacer(Modifier.height(12.dp))
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp)),
     ) {
         TransactionHashCell(R.string.Info_DoubleSpend_ThisTx, transactionHash)
         Divider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
+            color = ComposeAppTheme.colors.steel10,
         )
         TransactionHashCell(R.string.Info_DoubleSpend_ConflictingTx, conflictingHash)
     }
 }
 
 @Composable
-private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
+private fun TransactionHashCell(
+    titleRes: Int,
+    transactionHash: String,
+) {
     val view = LocalView.current
     val clipboardManager = LocalClipboardManager.current
-    CellSingleLineLawrence() {
+    CellSingleLineLawrence {
         Row(verticalAlignment = Alignment.CenterVertically) {
             subhead2_grey(
                 text = stringResource(titleRes),
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
             )
             ButtonSecondaryDefault(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -130,7 +138,7 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
                 onClick = {
                     clipboardManager.setText(AnnotatedString(transactionHash))
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                }
+                },
             )
         }
     }
@@ -142,7 +150,7 @@ private fun Preview_InfoScreen() {
     ComposeAppTheme {
         InfoScreen(
             "jh2rnj23rnk2b3k42b2k4jb",
-            "nb3k4brk34bk34bk34bk3g"
+            "nb3k4brk34bk34bk34bk3g",
         ) { }
     }
 }

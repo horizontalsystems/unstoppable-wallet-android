@@ -26,13 +26,14 @@ class BitcoinCashAdapter(
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), BitcoinCashKit.Listener, ISendBitcoinAdapter {
-
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet),
+    BitcoinCashKit.Listener,
+    ISendBitcoinAdapter {
     constructor(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
-        addressType: TokenType.AddressType
+        addressType: TokenType.AddressType,
     ) : this(createKit(wallet, syncMode, addressType), syncMode, backgroundManager, wallet)
 
     init {
@@ -43,7 +44,8 @@ class BitcoinCashAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal =
+        BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // BitcoinCashKit Listener
@@ -52,8 +54,7 @@ class BitcoinCashAdapter(
     override val explorerTitle: String
         get() = "blockchair.com"
 
-    override fun getTransactionUrl(transactionHash: String): String =
-        "https://blockchair.com/bitcoin-cash/transaction/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String = "https://blockchair.com/bitcoin-cash/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -67,7 +68,10 @@ class BitcoinCashAdapter(
         setState(state)
     }
 
-    override fun onTransactionsUpdate(inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
+    override fun onTransactionsUpdate(
+        inserted: List<TransactionInfo>,
+        updated: List<TransactionInfo>,
+    ) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -91,7 +95,13 @@ class BitcoinCashAdapter(
     override val blockchainType = BlockchainType.BitcoinCash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/bitcoin-cash/address/${it.address}") }
+        kit.usedAddresses(change).map {
+            UsedAddress(
+                it.index,
+                it.address,
+                "https://blockchair.com/bitcoin-cash/address/${it.address}",
+            )
+        }
 
     companion object {
         private const val confirmationsThreshold = 1
@@ -99,7 +109,7 @@ class BitcoinCashAdapter(
         private fun createKit(
             wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
-            addressType: TokenType.AddressType
+            addressType: TokenType.AddressType,
         ): BitcoinCashKit {
             val account = wallet.account
             val networkType = getNetworkType(addressType.kitCoinType)
@@ -111,7 +121,7 @@ class BitcoinCashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = networkType,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
 
@@ -123,7 +133,7 @@ class BitcoinCashAdapter(
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = networkType,
-                        confirmationsThreshold = confirmationsThreshold
+                        confirmationsThreshold = confirmationsThreshold,
                     )
                 }
 
@@ -140,7 +150,6 @@ class BitcoinCashAdapter(
 
                 else -> throw UnsupportedAccountException()
             }
-
         }
 
         fun clear(walletId: String) {

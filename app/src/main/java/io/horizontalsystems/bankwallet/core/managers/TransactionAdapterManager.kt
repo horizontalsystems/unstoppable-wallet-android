@@ -18,14 +18,14 @@ import java.util.concurrent.ConcurrentHashMap
 
 class TransactionAdapterManager(
     private val adapterManager: IAdapterManager,
-    private val adapterFactory: AdapterFactory
+    private val adapterFactory: AdapterFactory,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val _adaptersReadyFlow =
         MutableSharedFlow<Map<TransactionSource, ITransactionsAdapter>>(
             replay = 1,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
         )
     val adaptersReadyFlow get() = _adaptersReadyFlow.asSharedFlow()
 
@@ -49,30 +49,39 @@ class TransactionAdapterManager(
 
             var txAdapter = currentAdapters.remove(source)
             if (txAdapter == null) {
-                txAdapter = when (val blockchainType = source.blockchain.type) {
-                    BlockchainType.Ethereum,
-                    BlockchainType.BinanceSmartChain,
-                    BlockchainType.Polygon,
-                    BlockchainType.Avalanche,
-                    BlockchainType.Optimism,
-                    BlockchainType.Base,
-                    BlockchainType.ZkSync,
-                    BlockchainType.Gnosis,
-                    BlockchainType.Fantom,
-                    BlockchainType.ArbitrumOne -> {
-                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
+                txAdapter =
+                    when (val blockchainType = source.blockchain.type) {
+                        BlockchainType.Ethereum,
+                        BlockchainType.BinanceSmartChain,
+                        BlockchainType.Polygon,
+                        BlockchainType.Avalanche,
+                        BlockchainType.Optimism,
+                        BlockchainType.Base,
+                        BlockchainType.ZkSync,
+                        BlockchainType.Gnosis,
+                        BlockchainType.Fantom,
+                        BlockchainType.ArbitrumOne,
+                        -> {
+                            adapterFactory.evmTransactionsAdapter(
+                                wallet.transactionSource,
+                                blockchainType,
+                            )
+                        }
+
+                        BlockchainType.Solana -> {
+                            adapterFactory.solanaTransactionsAdapter(wallet.transactionSource)
+                        }
+
+                        BlockchainType.Tron -> {
+                            adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
+                        }
+
+                        BlockchainType.Ton -> {
+                            adapterFactory.tonTransactionsAdapter(wallet.transactionSource)
+                        }
+
+                        else -> adapter as? ITransactionsAdapter
                     }
-                    BlockchainType.Solana -> {
-                        adapterFactory.solanaTransactionsAdapter(wallet.transactionSource)
-                    }
-                    BlockchainType.Tron -> {
-                        adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
-                    }
-                    BlockchainType.Ton -> {
-                        adapterFactory.tonTransactionsAdapter(wallet.transactionSource)
-                    }
-                    else -> adapter as? ITransactionsAdapter
-                }
             }
 
             txAdapter?.let {

@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.parcelize.Parcelize
 
 class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
@@ -24,13 +23,17 @@ class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
                 navController.setNavigationResultX(Result(true))
                 navController.popBackStack()
             },
-            onBackPress = { navController.popBackStack() }
+            onBackPress = { navController.popBackStack() },
         )
     }
 
     @Parcelize
-    data class Input(val descriptionResId: Int) : Parcelable
+    data class Input(
+        val descriptionResId: Int,
+    ) : Parcelable
 
     @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(
+        val success: Boolean,
+    ) : Parcelable
 }

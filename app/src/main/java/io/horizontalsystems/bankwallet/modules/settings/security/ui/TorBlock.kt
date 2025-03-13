@@ -46,8 +46,8 @@ fun TorBlock(
                 checked = viewModel.torCheckEnabled,
                 onCheckedChange = { checked ->
                     viewModel.setTorEnabledWithChecks(checked)
-                }
+                },
             )
-        }
+        },
     )
 }

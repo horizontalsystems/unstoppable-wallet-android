@@ -25,17 +25,23 @@ class EvmTransactionsAdapter(
     coinManager: ICoinManager,
     source: TransactionSource,
     private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource,
-    evmLabelManager: EvmLabelManager
+    evmLabelManager: EvmLabelManager,
 ) : ITransactionsAdapter {
-
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, App.spamManager, baseToken, evmLabelManager)
+    private val transactionConverter =
+        EvmTransactionConverter(
+            coinManager,
+            evmKitWrapper,
+            source,
+            App.spamManager,
+            baseToken,
+            evmLabelManager,
+        )
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
 
-    override fun getTransactionUrl(transactionHash: String): String =
-        evmTransactionSource.transactionUrl(transactionHash)
+    override fun getTransactionUrl(transactionHash: String): String = evmTransactionSource.transactionUrl(transactionHash)
 
     override val lastBlockInfo: LastBlockInfo?
         get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
@@ -50,9 +56,10 @@ class EvmTransactionsAdapter(
         get() = evmKit.transactionsSyncStateFlowable.map {}
 
     override val additionalTokenQueries: List<TokenQuery>
-        get() = evmKit.getTagTokenContractAddresses().map { address ->
-            TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
-        }
+        get() =
+            evmKit.getTagTokenContractAddresses().map { address ->
+                TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
+            }
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
@@ -60,25 +67,24 @@ class EvmTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsAsync(
-            getFilters(token, transactionType, address?.lowercase()),
-            from?.transactionHash?.hexStringToByteArray(),
-            limit
-        ).map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
-    }
+    ): Single<List<TransactionRecord>> =
+        evmKit
+            .getFullTransactionsAsync(
+                getFilters(token, transactionType, address?.lowercase()),
+                from?.transactionHash?.hexStringToByteArray(),
+                limit,
+            ).map {
+                it.map { tx -> transactionConverter.transactionRecord(tx) }
+            }
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
+    ): Flowable<List<TransactionRecord>> =
+        evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
-    }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
         when (syncState) {
@@ -87,11 +93,12 @@ class EvmTransactionsAdapter(
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing()
         }
 
-    private fun coinTagName(token: Token) = when (val type = token.type) {
-        TokenType.Native -> TransactionTag.EVM_COIN
-        is TokenType.Eip20 -> type.address
-        else -> ""
-    }
+    private fun coinTagName(token: Token) =
+        when (val type = token.type) {
+            TokenType.Native -> TransactionTag.EVM_COIN
+            is TokenType.Eip20 -> type.address
+            else -> ""
+        }
 
     private fun getFilters(
         token: Token?,
@@ -102,19 +109,24 @@ class EvmTransactionsAdapter(
             add(listOf(coinTagName(it)))
         }
 
-        val filterType = when (transactionType) {
-            FilterTransactionType.All -> null
-            FilterTransactionType.Incoming -> when {
-                token != null -> TransactionTag.tokenIncoming(coinTagName(token))
-                else -> TransactionTag.INCOMING
+        val filterType =
+            when (transactionType) {
+                FilterTransactionType.All -> null
+                FilterTransactionType.Incoming ->
+                    when {
+                        token != null -> TransactionTag.tokenIncoming(coinTagName(token))
+                        else -> TransactionTag.INCOMING
+                    }
+
+                FilterTransactionType.Outgoing ->
+                    when {
+                        token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
+                        else -> TransactionTag.OUTGOING
+                    }
+
+                FilterTransactionType.Swap -> TransactionTag.SWAP
+                FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
             }
-            FilterTransactionType.Outgoing -> when {
-                token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
-                else -> TransactionTag.OUTGOING
-            }
-            FilterTransactionType.Swap -> TransactionTag.SWAP
-            FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
-        }
 
         filterType?.let {
             add(listOf(it))

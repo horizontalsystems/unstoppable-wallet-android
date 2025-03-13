@@ -7,8 +7,9 @@ import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class AppConfigProvider(localStorage: ILocalStorage) {
-
+class AppConfigProvider(
+    localStorage: ILocalStorage,
+) {
     val appId by lazy { localStorage.appId }
     val appVersion by lazy { BuildConfig.VERSION_NAME }
     val appBuild by lazy { BuildConfig.VERSION_CODE }
@@ -108,27 +109,28 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val fiatDecimal: Int = 2
     val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
-    val currencies: List<Currency> = listOf(
-        Currency("AUD", "A$", 2, R.drawable.icon_32_flag_australia),
-        Currency("ARS", "$", 2, R.drawable.icon_32_flag_argentine),
-        Currency("BRL", "R$", 2, R.drawable.icon_32_flag_brazil),
-        Currency("CAD", "C$", 2, R.drawable.icon_32_flag_canada),
-        Currency("CHF", "₣", 2, R.drawable.icon_32_flag_switzerland),
-        Currency("CNY", "¥", 2, R.drawable.icon_32_flag_china),
-        Currency("EUR", "€", 2, R.drawable.icon_32_flag_europe),
-        Currency("GBP", "£", 2, R.drawable.icon_32_flag_england),
-        Currency("HKD", "HK$", 2, R.drawable.icon_32_flag_hongkong),
-        Currency("HUF", "Ft", 2, R.drawable.icon_32_flag_hungary),
-        Currency("ILS", "₪", 2, R.drawable.icon_32_flag_israel),
-        Currency("INR", "₹", 2, R.drawable.icon_32_flag_india),
-        Currency("JPY", "¥", 2, R.drawable.icon_32_flag_japan),
-        Currency("NOK", "kr", 2, R.drawable.icon_32_flag_norway),
-        Currency("PHP", "₱", 2, R.drawable.icon_32_flag_philippine),
-        Currency("RUB", "₽", 2, R.drawable.icon_32_flag_russia),
-        Currency("SGD", "S$", 2, R.drawable.icon_32_flag_singapore),
-        Currency("USD", "$", 2, R.drawable.icon_32_flag_usa),
-        Currency("ZAR", "R", 2, R.drawable.icon_32_flag_south_africa),
-    )
+    val currencies: List<Currency> =
+        listOf(
+            Currency("AUD", "A$", 2, R.drawable.icon_32_flag_australia),
+            Currency("ARS", "$", 2, R.drawable.icon_32_flag_argentine),
+            Currency("BRL", "R$", 2, R.drawable.icon_32_flag_brazil),
+            Currency("CAD", "C$", 2, R.drawable.icon_32_flag_canada),
+            Currency("CHF", "₣", 2, R.drawable.icon_32_flag_switzerland),
+            Currency("CNY", "¥", 2, R.drawable.icon_32_flag_china),
+            Currency("EUR", "€", 2, R.drawable.icon_32_flag_europe),
+            Currency("GBP", "£", 2, R.drawable.icon_32_flag_england),
+            Currency("HKD", "HK$", 2, R.drawable.icon_32_flag_hongkong),
+            Currency("HUF", "Ft", 2, R.drawable.icon_32_flag_hungary),
+            Currency("ILS", "₪", 2, R.drawable.icon_32_flag_israel),
+            Currency("INR", "₹", 2, R.drawable.icon_32_flag_india),
+            Currency("JPY", "¥", 2, R.drawable.icon_32_flag_japan),
+            Currency("NOK", "kr", 2, R.drawable.icon_32_flag_norway),
+            Currency("PHP", "₱", 2, R.drawable.icon_32_flag_philippine),
+            Currency("RUB", "₽", 2, R.drawable.icon_32_flag_russia),
+            Currency("SGD", "S$", 2, R.drawable.icon_32_flag_singapore),
+            Currency("USD", "$", 2, R.drawable.icon_32_flag_usa),
+            Currency("ZAR", "R", 2, R.drawable.icon_32_flag_south_africa),
+        )
 
     val donateAddresses: Map<BlockchainType, String> by lazy {
         mapOf(
@@ -154,14 +156,15 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         ).toList().sortedBy { (key, _) -> key.order }.toMap()
     }
 
-    val spamCoinValueLimits: Map<String, Double> = mapOf(
-        "tether" to 0.01,
-        "usd-coin" to 0.01,
-        "dai" to 0.01,
-        "binance-usd" to 0.01,
-        "binance-peg-busd" to 0.01,
-        "stasis-eurs" to 0.01,
-    )
+    val spamCoinValueLimits: Map<String, Double> =
+        mapOf(
+            "tether" to 0.01,
+            "usd-coin" to 0.01,
+            "dai" to 0.01,
+            "binance-usd" to 0.01,
+            "binance-peg-busd" to 0.01,
+            "stasis-eurs" to 0.01,
+        )
 
     val chainalysisBaseUrl by lazy {
         Translator.getString(R.string.chainalysisBaseUrl)
@@ -178,5 +181,4 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val hashDitApiKey by lazy {
         Translator.getString(R.string.hashDitApiKey)
     }
-
 }

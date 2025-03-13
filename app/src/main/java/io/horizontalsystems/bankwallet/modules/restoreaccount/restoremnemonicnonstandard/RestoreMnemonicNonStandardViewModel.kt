@@ -19,7 +19,6 @@ class RestoreMnemonicNonStandardViewModel(
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
 ) : ViewModelUiState<UiState>() {
-
     val mnemonicLanguages = Language.values().toList()
 
     private var passphraseEnabled: Boolean = false
@@ -46,35 +45,44 @@ class RestoreMnemonicNonStandardViewModel(
     val isThirdPartyKeyboardAllowed: Boolean
         get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
 
-    override fun createState() = UiState(
-        passphraseEnabled = passphraseEnabled,
-        passphraseError = passphraseError,
-        invalidWordRanges = invalidWordRanges,
-        error = error,
-        accountType = accountType,
-        wordSuggestions = wordSuggestions,
-        language = language,
-    )
+    override fun createState() =
+        UiState(
+            passphraseEnabled = passphraseEnabled,
+            passphraseError = passphraseError,
+            invalidWordRanges = invalidWordRanges,
+            error = error,
+            accountType = accountType,
+            wordSuggestions = wordSuggestions,
+            language = language,
+        )
 
     private fun processText() {
         wordItems = wordItems(text)
         invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word, false) }
 
-        val wordItemWithCursor = wordItems.find {
-            it.range.contains(cursorPosition - 1)
-        }
-
-        val invalidWordItemsExcludingCursoredPartiallyValid = when {
-            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word, true) -> {
-                invalidWordItems.filter { it != wordItemWithCursor }
+        val wordItemWithCursor =
+            wordItems.find {
+                it.range.contains(cursorPosition - 1)
             }
-            else -> invalidWordItems
-        }
+
+        val invalidWordItemsExcludingCursoredPartiallyValid =
+            when {
+                wordItemWithCursor != null &&
+                    mnemonicWordList.validWord(
+                        wordItemWithCursor.word,
+                        true,
+                    ) -> {
+                    invalidWordItems.filter { it != wordItemWithCursor }
+                }
+
+                else -> invalidWordItems
+            }
 
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
-        wordSuggestions = wordItemWithCursor?.let {
-            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word))
-        }
+        wordSuggestions =
+            wordItemWithCursor?.let {
+                RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word))
+            }
     }
 
     fun onTogglePassphrase(enabled: Boolean) {
@@ -96,7 +104,10 @@ class RestoreMnemonicNonStandardViewModel(
         emitState()
     }
 
-    fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
+    fun onEnterMnemonicPhrase(
+        text: String,
+        cursorPosition: Int,
+    ) {
         error = null
         this.text = text
         this.cursorPosition = cursorPosition
@@ -118,12 +129,16 @@ class RestoreMnemonicNonStandardViewModel(
             invalidWordItems.isNotEmpty() -> {
                 invalidWordRanges = invalidWordItems.map { it.range }
             }
+
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
-                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
+                error =
+                    Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
             }
+
             passphraseEnabled && passphrase.isBlank() -> {
                 passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
             }
+
             else -> {
                 try {
                     val words = wordItems.map { it.word }
@@ -150,9 +165,9 @@ class RestoreMnemonicNonStandardViewModel(
         thirdKeyboardStorage.isThirdPartyKeyboardAllowed = true
     }
 
-    private fun wordItems(text: String): List<RestoreMnemonicModule.WordItem> {
-        return regex.findAll(text.lowercase())
+    private fun wordItems(text: String): List<RestoreMnemonicModule.WordItem> =
+        regex
+            .findAll(text.lowercase())
             .map { RestoreMnemonicModule.WordItem(it.value, it.range) }
             .toList()
-    }
 }

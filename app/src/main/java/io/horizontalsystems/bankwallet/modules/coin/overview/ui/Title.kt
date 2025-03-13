@@ -11,28 +11,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TabBalance
 import java.math.BigDecimal
 
 @Composable
-fun Title(rate: String?, rateDiff: BigDecimal?) {
+fun Title(
+    rate: String?,
+    rateDiff: BigDecimal?,
+) {
     TabBalance(borderTop = true) {
         Text(
             modifier = Modifier.padding(end = 8.dp),
             text = rate ?: "",
             style = ComposeAppTheme.typography.headline1,
-            color = ComposeAppTheme.colors.leah
+            color = ComposeAppTheme.colors.leah,
         )
 
         rateDiff?.let { value ->
             val sign = if (value >= BigDecimal.ZERO) "+" else "-"
             val text = App.numberFormatter.format(value.abs(), 0, 2, sign, "%")
 
-            val color = when {
-                value >= BigDecimal.ZERO -> ComposeAppTheme.colors.remus
-                else -> ComposeAppTheme.colors.lucian
-            }
+            val color =
+                when {
+                    value >= BigDecimal.ZERO -> ComposeAppTheme.colors.remus
+                    else -> ComposeAppTheme.colors.lucian
+                }
 
             Text(
                 text = text,
                 style = ComposeAppTheme.typography.subhead1,
-                color = color
+                color = color,
             )
         }
     }

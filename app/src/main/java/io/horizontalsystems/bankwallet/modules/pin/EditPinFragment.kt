@@ -8,14 +8,13 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 
 class EditPinFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         PinSet(
             title = stringResource(R.string.EditPin_Title),
             description = stringResource(R.string.EditPin_NewPinInfo),
             dismissWithSuccess = { navController.popBackStack() },
-            onBackPress = { navController.popBackStack() }
+            onBackPress = { navController.popBackStack() },
         )
     }
 }

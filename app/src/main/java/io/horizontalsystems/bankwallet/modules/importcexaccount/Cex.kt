@@ -10,13 +10,15 @@ sealed class Cex {
     abstract val url: String
 
     companion object {
-        fun all() = listOf(
-            CexBinance(),
-        )
+        fun all() =
+            listOf(
+                CexBinance(),
+            )
 
-        fun getById(cexId: String) = all().find {
-            it.id == cexId
-        }
+        fun getById(cexId: String) =
+            all().find {
+                it.id == cexId
+            }
     }
 }
 

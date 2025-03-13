@@ -11,15 +11,14 @@ class ExternalContractCallTransactionRecord(
     source: TransactionSource,
     val incomingEvents: List<TransferEvent>,
     val outgoingEvents: List<TransferEvent>,
-    isSpam: Boolean
+    isSpam: Boolean,
 ) : EvmTransactionRecord(
-    transaction = transaction,
-    baseToken = baseToken,
-    source = source,
-    foreignTransaction = true,
-    spam = isSpam
-) {
-
+        transaction = transaction,
+        baseToken = baseToken,
+        source = source,
+        foreignTransaction = true,
+        spam = isSpam,
+    ) {
     override val mainValue: TransactionValue?
         get() {
             val (incomingValues, outgoingValues) = combined(incomingEvents, outgoingEvents)

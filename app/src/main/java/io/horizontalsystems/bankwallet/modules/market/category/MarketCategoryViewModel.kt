@@ -22,7 +22,6 @@ import kotlinx.coroutines.rx2.asFlow
 class MarketCategoryViewModel(
     private val service: MarketCategoryService,
 ) : ViewModel() {
-
     private val marketFields = MarketField.values().toList()
     private var marketItems: List<MarketItemWrapper> = listOf()
     private var marketField = MarketField.PriceDiff
@@ -63,8 +62,8 @@ class MarketCategoryViewModel(
         menuLiveData.postValue(
             MarketCategoryModule.Menu(
                 Select(service.sortingField, service.sortingFields),
-                Select(marketField, marketFields)
-            )
+                Select(marketField, marketFields),
+            ),
         )
     }
 
@@ -72,7 +71,7 @@ class MarketCategoryViewModel(
         viewItemsLiveData.postValue(
             marketItems.map {
                 MarketViewItem.create(it.marketItem, it.favorited)
-            }
+            },
         )
     }
 
@@ -89,7 +88,10 @@ class MarketCategoryViewModel(
         service.setSortingField(sortingField)
         selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
 
-        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchSortType(sortingField.statSortType))
+        stat(
+            page = StatPage.CoinCategory,
+            event = StatEvent.SwitchSortType(sortingField.statSortType),
+        )
     }
 
     fun onSelectMarketField(marketField: MarketField) {
@@ -107,11 +109,11 @@ class MarketCategoryViewModel(
 
     fun showSelectorMenu() {
         selectorDialogStateLiveData.postValue(
-            SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
+            SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields)),
         )
     }
 
-    fun refresh(){
+    fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
     }
 

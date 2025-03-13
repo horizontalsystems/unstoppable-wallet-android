@@ -19,25 +19,30 @@ object SendTonModule {
         private val address: Address,
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
+        val adapter =
+            (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter)
+                ?: throw IllegalStateException("ISendTonAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 SendTonViewModel::class.java -> {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendTonAmountService(
-                        amountValidator = amountValidator,
-                        coinCode = wallet.coin.code,
-                        availableBalance = adapter.availableBalance,
-                        leaveSomeBalanceForFee = wallet.token.type.isNative
-                    )
+                    val amountService =
+                        SendTonAmountService(
+                            amountValidator = amountValidator,
+                            coinCode = wallet.coin.code,
+                            availableBalance = adapter.availableBalance,
+                            leaveSomeBalanceForFee = wallet.token.type.isNative,
+                        )
                     val addressService = SendTonAddressService()
                     val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-                    val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
+                    val feeToken =
+                        App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native))
+                            ?: throw IllegalArgumentException()
 
                     SendTonViewModel(
                         wallet,
@@ -52,15 +57,11 @@ object SendTonModule {
                         App.contactsRepository,
                         !hideAddress,
                         address,
-                        App.recentAddressManager
+                        App.recentAddressManager,
                     ) as T
                 }
 
                 else -> throw IllegalArgumentException()
             }
-        }
     }
-
 }
-
-

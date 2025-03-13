@@ -41,7 +41,7 @@ fun AddressCell(
     statPage: StatPage,
     statSection: StatSection,
     navController: NavController? = null,
-    borderTop: Boolean = true
+    borderTop: Boolean = true,
 ) {
     val view = LocalView.current
     var showSaveAddressDialog by remember { mutableStateOf(false) }
@@ -52,14 +52,14 @@ fun AddressCell(
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
 
         if (showAddContactButton) {
             HSpacer(16.dp)
             ButtonSecondaryCircle(
                 icon = R.drawable.icon_20_user_plus,
-                onClick = { showSaveAddressDialog = true }
+                onClick = { showSaveAddressDialog = true },
             )
         }
 
@@ -73,54 +73,57 @@ fun AddressCell(
                 stat(
                     page = statPage,
                     section = statSection,
-                    event = StatEvent.Copy(StatEntity.Address)
+                    event = StatEvent.Copy(StatEntity.Address),
                 )
-            }
+            },
         )
     }
 
     if (showSaveAddressDialog) {
         SelectorDialogCompose(
             title = stringResource(R.string.Contacts_AddAddress),
-            items = ContactsModule.AddAddressAction.entries.map {
-                SelectorItem(stringResource(it.title), false, it)
-            },
+            items =
+                ContactsModule.AddAddressAction.entries.map {
+                    SelectorItem(stringResource(it.title), false, it)
+                },
             onDismissRequest = {
                 showSaveAddressDialog = false
             },
             onSelectItem = { action ->
                 blockchainType?.let {
-                    val args = when (action) {
-                        ContactsModule.AddAddressAction.AddToNewContact -> {
-                            stat(
-                                page = statPage,
-                                section = statSection,
-                                event = StatEvent.Open(StatPage.ContactNew)
-                            )
-                            ContactsFragment.Input(
-                                Mode.AddAddressToNewContact(
-                                    blockchainType,
-                                    value
+                    val args =
+                        when (action) {
+                            ContactsModule.AddAddressAction.AddToNewContact -> {
+                                stat(
+                                    page = statPage,
+                                    section = statSection,
+                                    event = StatEvent.Open(StatPage.ContactNew),
                                 )
-                            )
-                        }
+                                ContactsFragment.Input(
+                                    Mode.AddAddressToNewContact(
+                                        blockchainType,
+                                        value,
+                                    ),
+                                )
+                            }
 
-                        ContactsModule.AddAddressAction.AddToExistingContact -> {
-                            stat(
-                                page = statPage,
-                                section = statSection,
-                                event = StatEvent.Open(StatPage.ContactAddToExisting)
-                            )
-                            ContactsFragment.Input(
-                                Mode.AddAddressToExistingContact(
-                                    blockchainType,
-                                    value
+                            ContactsModule.AddAddressAction.AddToExistingContact -> {
+                                stat(
+                                    page = statPage,
+                                    section = statSection,
+                                    event = StatEvent.Open(StatPage.ContactAddToExisting),
                                 )
-                            )
+                                ContactsFragment.Input(
+                                    Mode.AddAddressToExistingContact(
+                                        blockchainType,
+                                        value,
+                                    ),
+                                )
+                            }
                         }
-                    }
                     navController?.slideFromRight(R.id.contactsFragment, args)
                 }
-            })
+            },
+        )
     }
 }

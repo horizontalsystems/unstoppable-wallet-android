@@ -13,7 +13,6 @@ import kotlinx.coroutines.rx2.asFlow
 class MarketFiltersResultViewModel(
     private val service: MarketFiltersResultService,
 ) : ViewModelUiState<MarketFiltersUiState>() {
-
     private var marketItems: List<MarketItemWrapper> = listOf()
     private var viewState: ViewState = ViewState.Loading
     private var viewItemsState: List<MarketViewItem> = listOf()
@@ -37,13 +36,14 @@ class MarketFiltersResultViewModel(
         service.start()
     }
 
-    override fun createState() = MarketFiltersUiState(
-        viewItems = viewItemsState,
-        viewState = viewState,
-        sortingField = service.sortingField,
-        selectSortingField = Select(service.sortingField, service.sortingFields),
-        showSignal = service.showSignals
-    )
+    override fun createState() =
+        MarketFiltersUiState(
+            viewItems = viewItemsState,
+            viewState = viewState,
+            sortingField = service.sortingField,
+            selectSortingField = Select(service.sortingField, service.sortingFields),
+            showSignal = service.showSignals,
+        )
 
     override fun onCleared() {
         service.stop()
@@ -67,13 +67,15 @@ class MarketFiltersResultViewModel(
     }
 
     private fun syncMarketViewItems() {
-        viewItemsState = marketItems.map { itemWrapper ->
-            MarketViewItem.create(
-                marketItem = itemWrapper.marketItem,
-                favorited = itemWrapper.favorited,
-                advice = itemWrapper.signal
-            )
-        }.toList()
+        viewItemsState =
+            marketItems
+                .map { itemWrapper ->
+                    MarketViewItem.create(
+                        marketItem = itemWrapper.marketItem,
+                        favorited = itemWrapper.favorited,
+                        advice = itemWrapper.signal,
+                    )
+                }.toList()
     }
 
     fun showSignals() {
@@ -85,7 +87,6 @@ class MarketFiltersResultViewModel(
         service.hideSignals()
         emitState()
     }
-
 }
 
 data class MarketFiltersUiState(
@@ -93,5 +94,5 @@ data class MarketFiltersUiState(
     val viewState: ViewState,
     val sortingField: SortingField,
     val selectSortingField: Select<SortingField>,
-    val showSignal: Boolean
+    val showSignal: Boolean,
 )

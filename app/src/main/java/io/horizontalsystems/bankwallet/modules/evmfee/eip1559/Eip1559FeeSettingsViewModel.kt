@@ -25,9 +25,8 @@ import kotlinx.coroutines.launch
 class Eip1559FeeSettingsViewModel(
     private val gasPriceService: Eip1559GasPriceService,
     feeService: IEvmFeeService,
-    private val coinService: EvmCoinService
+    private val coinService: EvmCoinService,
 ) : ViewModel() {
-
     private val scale = coinService.token.blockchainType.feePriceScale
 
     var feeSummaryViewItem by mutableStateOf<FeeSummaryViewItem?>(null)
@@ -56,23 +55,38 @@ class Eip1559FeeSettingsViewModel(
         }
     }
 
-    fun onSelectGasPrice(maxFee: Long, priorityFee: Long) {
+    fun onSelectGasPrice(
+        maxFee: Long,
+        priorityFee: Long,
+    ) {
         gasPriceService.setGasPrice(maxFee, priorityFee)
     }
 
-    fun onIncrementMaxFee(maxFee: Long, priorityFee: Long) {
+    fun onIncrementMaxFee(
+        maxFee: Long,
+        priorityFee: Long,
+    ) {
         gasPriceService.setGasPrice(maxFee + scale.scaleValue, priorityFee)
     }
 
-    fun onDecrementMaxFee(maxFee: Long, priorityFee: Long) {
+    fun onDecrementMaxFee(
+        maxFee: Long,
+        priorityFee: Long,
+    ) {
         gasPriceService.setGasPrice((maxFee - scale.scaleValue).coerceAtLeast(0), priorityFee)
     }
 
-    fun onIncrementPriorityFee(maxFee: Long, priorityFee: Long) {
+    fun onIncrementPriorityFee(
+        maxFee: Long,
+        priorityFee: Long,
+    ) {
         gasPriceService.setGasPrice(maxFee, priorityFee + scale.scaleValue)
     }
 
-    fun onDecrementPriorityFee(maxFee: Long, priorityFee: Long) {
+    fun onDecrementPriorityFee(
+        maxFee: Long,
+        priorityFee: Long,
+    ) {
         gasPriceService.setGasPrice(maxFee, (priorityFee - scale.scaleValue).coerceAtLeast(0))
     }
 
@@ -81,33 +95,39 @@ class Eip1559FeeSettingsViewModel(
 
         state.dataOrNull?.let { gasPriceInfo ->
             if (gasPriceInfo.gasPrice is GasPrice.Eip1559) {
-                maxFeeViewItem = FeeViewItem(
-                    weiValue = gasPriceInfo.gasPrice.maxFeePerGas,
-                    scale = scale,
-                    warnings = gasPriceInfo.warnings,
-                    errors = gasPriceInfo.errors
-                )
-                priorityFeeViewItem = FeeViewItem(
-                    weiValue = gasPriceInfo.gasPrice.maxPriorityFeePerGas,
-                    scale = scale,
-                    warnings = gasPriceInfo.warnings,
-                    errors = gasPriceInfo.errors
-                )
+                maxFeeViewItem =
+                    FeeViewItem(
+                        weiValue = gasPriceInfo.gasPrice.maxFeePerGas,
+                        scale = scale,
+                        warnings = gasPriceInfo.warnings,
+                        errors = gasPriceInfo.errors,
+                    )
+                priorityFeeViewItem =
+                    FeeViewItem(
+                        weiValue = gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                        scale = scale,
+                        warnings = gasPriceInfo.warnings,
+                        errors = gasPriceInfo.errors,
+                    )
             }
         }
     }
 
-    private fun scaledString(wei: Long, scale: FeePriceScale): String {
+    private fun scaledString(
+        wei: Long,
+        scale: FeePriceScale,
+    ): String {
         val gwei = wei.toDouble() / scale.scaleValue
         return "${gwei.toBigDecimal().toPlainString()} ${scale.unit}"
     }
 
     private fun sync(baseFee: Long?) {
-        currentBaseFee = if (baseFee != null) {
-            scaledString(baseFee, coinService.token.blockchainType.feePriceScale)
-        } else {
-            Translator.getString(R.string.NotAvailable)
-        }
+        currentBaseFee =
+            if (baseFee != null) {
+                scaledString(baseFee, coinService.token.blockchainType.feePriceScale)
+            } else {
+                Translator.getString(R.string.NotAvailable)
+            }
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
@@ -120,15 +140,34 @@ class Eip1559FeeSettingsViewModel(
             DataState.Loading -> {
                 feeSummaryViewItem = FeeSummaryViewItem(null, notAvailable, ViewState.Loading)
             }
+
             is DataState.Error -> {
-                feeSummaryViewItem = FeeSummaryViewItem(null, notAvailable, ViewState.Error(transactionStatus.error))
+                feeSummaryViewItem =
+                    FeeSummaryViewItem(null, notAvailable, ViewState.Error(transactionStatus.error))
             }
+
             is DataState.Success -> {
                 val transaction = transactionStatus.data
-                val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
-                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.estimatedFee, transactionStatus.data.gasData.isSurcharged)
-                val feeItem = FeeItem(feeAmountData.primary.getFormattedPlain(), feeAmountData.secondary?.getFormattedPlain())
-                val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
+                val viewState =
+                    transaction.errors.firstOrNull()?.let { ViewState.Error(it) }
+                        ?: ViewState.Success
+                val feeAmountData =
+                    coinService.amountData(
+                        transactionStatus.data.gasData.estimatedFee,
+                        transactionStatus.data.gasData.isSurcharged,
+                    )
+                val feeItem =
+                    FeeItem(
+                        feeAmountData.primary.getFormattedPlain(),
+                        feeAmountData.secondary?.getFormattedPlain(),
+                    )
+                val gasLimit =
+                    App.numberFormatter.format(
+                        transactionStatus.data.gasData.gasLimit
+                            .toBigDecimal(),
+                        0,
+                        0,
+                    )
 
                 feeSummaryViewItem = FeeSummaryViewItem(feeItem, gasLimit, viewState)
             }

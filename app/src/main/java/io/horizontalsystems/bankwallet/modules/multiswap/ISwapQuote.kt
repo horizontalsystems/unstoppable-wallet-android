@@ -26,7 +26,7 @@ class SwapQuoteUniswap(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
 ) : ISwapQuote {
     override val amountOut: BigDecimal = tradeData.amountOut!!
     override val priceImpact: BigDecimal? = tradeData.priceImpact
@@ -39,7 +39,7 @@ class SwapQuoteUniswapV3(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
 ) : ISwapQuote {
     override val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
     override val priceImpact = tradeDataV3.priceImpact
@@ -53,5 +53,5 @@ class SwapQuoteOneInch(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
 ) : ISwapQuote

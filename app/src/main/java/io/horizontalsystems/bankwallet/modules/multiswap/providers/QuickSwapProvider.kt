@@ -10,7 +10,5 @@ object QuickSwapProvider : BaseUniswapProvider() {
     override val icon = R.drawable.quickswap
     override val priority = 0
 
-    override fun supports(blockchainType: BlockchainType): Boolean {
-        return blockchainType == BlockchainType.Polygon
-    }
+    override fun supports(blockchainType: BlockchainType): Boolean = blockchainType == BlockchainType.Polygon
 }

@@ -47,7 +47,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 
 class CexAssetFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<CexAsset>(navController) { asset ->
@@ -60,7 +59,7 @@ class CexAssetFragment : BaseComposeFragment() {
 @Composable
 fun CexAssetScreen(
     viewModel: CexAssetViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState
 
@@ -71,29 +70,28 @@ fun CexAssetScreen(
                 title = uiState.title,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
 
         Column(Modifier.padding(paddingValues)) {
-
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                state = rememberSaveable(
-                    uiState.balanceViewItem?.assetId,
-                    saver = LazyListState.Saver
-                ) {
-                    LazyListState()
-                }
+                state =
+                    rememberSaveable(
+                        uiState.balanceViewItem?.assetId,
+                        saver = LazyListState.Saver,
+                    ) {
+                        LazyListState()
+                    },
             ) {
-
                 item {
                     uiState.balanceViewItem?.let {
                         TokenBalanceHeader(
                             balanceViewItem = it,
                             navController = navController,
-                            viewModel = viewModel
+                            viewModel = viewModel,
                         )
                     }
                 }
@@ -112,22 +110,23 @@ private fun TokenBalanceHeader(
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         VSpacer(height = (24.dp))
         WalletIconCex(balanceViewItem)
         VSpacer(height = 12.dp)
         Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = {
-                        viewModel.toggleBalanceVisibility()
-                        HudHelper.vibrate(context)
-                    }
-                ),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            viewModel.toggleBalanceVisibility()
+                            HudHelper.vibrate(context)
+                        },
+                    ),
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
             color = if (balanceViewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.title2R,
@@ -152,16 +151,17 @@ private fun LockedBalanceCell(balanceViewItem: BalanceCexViewItem) {
     if (balanceViewItem.coinValueLocked.value != null) {
         VSpacer(height = 8.dp)
         RowUniversal(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+                    .padding(horizontal = 16.dp),
         ) {
             subhead2_grey(
                 text = stringResource(R.string.Balance_LockedAmount_Title),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.weight(1f))
             Text(
@@ -176,11 +176,13 @@ private fun LockedBalanceCell(balanceViewItem: BalanceCexViewItem) {
     }
 }
 
-
 @Composable
-private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavController) {
+private fun ButtonsRow(
+    viewItem: BalanceCexViewItem,
+    navController: NavController,
+) {
     Row(
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 16.dp)
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 16.dp),
     ) {
         ButtonPrimaryYellow(
             modifier = Modifier.weight(1f),
@@ -206,7 +208,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
                 viewItem.coin?.let { coin ->
                     navController.slideFromRight(
                         R.id.coinFragment,
-                        CoinFragment.Input(coin.uid)
+                        CoinFragment.Input(coin.uid),
                     )
                 }
             },

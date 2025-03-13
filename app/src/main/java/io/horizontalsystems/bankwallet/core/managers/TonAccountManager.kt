@@ -59,12 +59,14 @@ class TonAccountManager(
         val tonKitWrapper = tonKitManager.tonKitWrapper ?: return
         val account = accountManager.activeAccount ?: return
 
-        transactionSubscriptionJob = coroutineScope.launch {
-            tonKitWrapper.tonKit.eventFlow(TagQuery(null, null, null, null))
-                .collect { (events, initial) ->
-                    handle(events, account, tonKitWrapper, initial)
-                }
-        }
+        transactionSubscriptionJob =
+            coroutineScope.launch {
+                tonKitWrapper.tonKit
+                    .eventFlow(TagQuery(null, null, null, null))
+                    .collect { (events, initial) ->
+                        handle(events, account, tonKitWrapper, initial)
+                    }
+            }
     }
 
     private fun handle(
@@ -106,7 +108,10 @@ class TonAccountManager(
         handle(jettons, account)
     }
 
-    private fun handle(jettons: Set<Jetton>, account: Account) {
+    private fun handle(
+        jettons: Set<Jetton>,
+        account: Account,
+    ) {
         if (jettons.isEmpty()) return
 
         val existingWallets = walletManager.activeWallets
@@ -115,16 +120,17 @@ class TonAccountManager(
 
         if (newJettons.isEmpty()) return
 
-        val enabledWallets = newJettons.map { jetton ->
-            EnabledWallet(
-                tokenQueryId = TokenQuery(BlockchainType.Ton, jetton.tokenType).id,
-                accountId = account.id,
-                coinName = jetton.name,
-                coinCode = jetton.symbol,
-                coinDecimals = jetton.decimals,
-                coinImage = jetton.image
-            )
-        }
+        val enabledWallets =
+            newJettons.map { jetton ->
+                EnabledWallet(
+                    tokenQueryId = TokenQuery(BlockchainType.Ton, jetton.tokenType).id,
+                    accountId = account.id,
+                    coinName = jetton.name,
+                    coinCode = jetton.symbol,
+                    coinDecimals = jetton.decimals,
+                    coinImage = jetton.image,
+                )
+            }
 
         walletManager.saveEnabledWallets(enabledWallets)
     }

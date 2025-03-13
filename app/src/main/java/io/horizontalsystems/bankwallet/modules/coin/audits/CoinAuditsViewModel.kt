@@ -18,9 +18,8 @@ import java.text.SimpleDateFormat
 
 @SuppressLint("SimpleDateFormat")
 class CoinAuditsViewModel(
-    audits: List<CoinAuditsModule.AuditParcelable>
+    audits: List<CoinAuditsModule.AuditParcelable>,
 ) : ViewModel() {
-
     var uiState by mutableStateOf(CoinAuditsModule.UiState(emptyList()))
 
     init {
@@ -41,25 +40,27 @@ class CoinAuditsViewModel(
                 AuditorViewItem(
                     name = auditor ?: "",
                     logoUrl = auditor?.let { logoUrl(it) } ?: "",
-                    auditViewItems = reports.map { report ->
-                        AuditViewItem(
-                            date = report.date?.let { formatter.parse(it) }?.let { date ->
-                                DateHelper.formatDate(date, "MMM dd, yyyy")
-                            },
-                            name = report.name ?: "",
-                            issues = TranslatableString.ResString(
-                                R.string.CoinPage_Audits_Issues,
-                                report.techIssues
-                            ),
-                            reportUrl = report.auditUrl
-                        )
-                    }
-                ))
+                    auditViewItems =
+                        reports.map { report ->
+                            AuditViewItem(
+                                date =
+                                    report.date?.let { formatter.parse(it) }?.let { date ->
+                                        DateHelper.formatDate(date, "MMM dd, yyyy")
+                                    },
+                                name = report.name ?: "",
+                                issues =
+                                    TranslatableString.ResString(
+                                        R.string.CoinPage_Audits_Issues,
+                                        report.techIssues,
+                                    ),
+                                reportUrl = report.auditUrl,
+                            )
+                        },
+                ),
+            )
         }
         return auditorViewItems
     }
 
-    private fun logoUrl(name: String): String =
-        "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
-
+    private fun logoUrl(name: String): String = "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
 }

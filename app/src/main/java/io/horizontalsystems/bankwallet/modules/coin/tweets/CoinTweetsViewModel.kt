@@ -39,29 +39,36 @@ class CoinTweetsViewModel(
         service.start()
     }
 
-    private fun getTweetViewItem(tweet: Tweet) = TweetViewItem(
-        title = tweet.user.name,
-        subtitle = "@${tweet.user.username}",
-        titleImageUrl = tweet.user.profileImageUrl,
-        text = tweet.text,
-        attachments = tweet.attachments,
-        date = DateHelper.getDayAndTime(tweet.date),
-        referencedTweet = tweet.referencedTweet?.let { referencedTweet ->
-            val typeStringRes = when (referencedTweet.referenceType) {
-                Tweet.ReferenceType.Quoted -> R.string.CoinPage_Twitter_Quoted
-                Tweet.ReferenceType.Retweeted -> R.string.CoinPage_Twitter_Retweeted
-                Tweet.ReferenceType.Replied -> R.string.CoinPage_Twitter_Replied
-            }
-            val title = TranslatableString.ResString(typeStringRes, "@${referencedTweet.tweet.user.username}")
+    private fun getTweetViewItem(tweet: Tweet) =
+        TweetViewItem(
+            title = tweet.user.name,
+            subtitle = "@${tweet.user.username}",
+            titleImageUrl = tweet.user.profileImageUrl,
+            text = tweet.text,
+            attachments = tweet.attachments,
+            date = DateHelper.getDayAndTime(tweet.date),
+            referencedTweet =
+                tweet.referencedTweet?.let { referencedTweet ->
+                    val typeStringRes =
+                        when (referencedTweet.referenceType) {
+                            Tweet.ReferenceType.Quoted -> R.string.CoinPage_Twitter_Quoted
+                            Tweet.ReferenceType.Retweeted -> R.string.CoinPage_Twitter_Retweeted
+                            Tweet.ReferenceType.Replied -> R.string.CoinPage_Twitter_Replied
+                        }
+                    val title =
+                        TranslatableString.ResString(
+                            typeStringRes,
+                            "@${referencedTweet.tweet.user.username}",
+                        )
 
-            ReferencedTweetViewItem(
-                title = title,
-                text = referencedTweet.tweet.text
-            )
-        },
-        entities = extractor.extractEntitiesWithIndices(tweet.text),
-        url = "https://twitter.com/${tweet.user.username}/status/${tweet.id}"
-    )
+                    ReferencedTweetViewItem(
+                        title = title,
+                        text = referencedTweet.tweet.text,
+                    )
+                },
+            entities = extractor.extractEntitiesWithIndices(tweet.text),
+            url = "https://twitter.com/${tweet.user.username}/status/${tweet.id}",
+        )
 
     fun refresh() {
         isRefreshingLiveData.postValue(true)
@@ -72,4 +79,3 @@ class CoinTweetsViewModel(
         service.stop()
     }
 }
-

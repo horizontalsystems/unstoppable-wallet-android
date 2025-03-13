@@ -10,5 +10,5 @@ data class NftAssetBriefMetadataRecord(
     val providerCollectionUid: String,
     val name: String?,
     val imageUrl: String?,
-    val previewImageUrl: String?
+    val previewImageUrl: String?,
 )

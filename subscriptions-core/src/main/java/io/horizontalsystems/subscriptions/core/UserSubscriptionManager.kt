@@ -6,22 +6,24 @@ import android.content.Context
 object UserSubscriptionManager {
     var authToken: String? = ""
 
-    private val predefinedSubscriptions = listOf(
-        Subscription(
-            id = "premium",
-            name = "Premium",
-            description = "",
-            actions = listOf(
-                TokenInsights,
-                AdvancedSearch,
-                TradeSignals,
-                DuressMode,
-                AddressPhishing,
-                AddressBlacklist,
-                VIPSupport,
-            )
-        ),
-    )
+    private val predefinedSubscriptions =
+        listOf(
+            Subscription(
+                id = "premium",
+                name = "Premium",
+                description = "",
+                actions =
+                    listOf(
+                        TokenInsights,
+                        AdvancedSearch,
+                        TradeSignals,
+                        DuressMode,
+                        AddressPhishing,
+                        AddressBlacklist,
+                        VIPSupport,
+                    ),
+            ),
+        )
     private lateinit var service: SubscriptionService
 
     val activeSubscriptionStateFlow
@@ -32,36 +34,27 @@ object UserSubscriptionManager {
         UserSubscriptionManager.service = service
     }
 
-    fun isActionAllowed(paidAction: IPaidAction): Boolean {
-        return service.isActionAllowed(paidAction)
-    }
+    fun isActionAllowed(paidAction: IPaidAction): Boolean = service.isActionAllowed(paidAction)
 
-    suspend fun getSubscriptions(): List<Subscription> {
-        return service.getSubscriptions()
-    }
+    suspend fun getSubscriptions(): List<Subscription> = service.getSubscriptions()
 
     suspend fun launchPurchaseFlow(
         subscriptionId: String,
         offerToken: String,
-        activity: Activity
-    ): HSPurchase? {
-        return service.launchPurchaseFlow(subscriptionId, offerToken, activity)
-    }
+        activity: Activity,
+    ): HSPurchase? = service.launchPurchaseFlow(subscriptionId, offerToken, activity)
 
     fun launchManageSubscriptionScreen(context: Context) {
         service.launchManageSubscriptionScreen(context)
     }
 
-    fun getBasePlans(subscriptionId: String): List<BasePlan> {
-        return service.getBasePlans(subscriptionId)
-    }
+    fun getBasePlans(subscriptionId: String): List<BasePlan> = service.getBasePlans(subscriptionId)
 
     suspend fun onResume() {
         service.onResume()
     }
 
     fun pause() {
-
     }
 
     suspend fun restore() {

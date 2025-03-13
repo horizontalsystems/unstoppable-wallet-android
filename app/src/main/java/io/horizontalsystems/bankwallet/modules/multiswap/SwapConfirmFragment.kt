@@ -63,7 +63,9 @@ class SwapConfirmFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(
+        val success: Boolean,
+    ) : Parcelable
 }
 
 @Composable
@@ -72,18 +74,20 @@ fun SwapConfirmScreen(navController: NavController) {
     val view = LocalView.current
 
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
-    val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry!!,
-    )
+    val swapViewModel =
+        viewModel<SwapViewModel>(
+            viewModelStoreOwner = previousBackStackEntry!!,
+        )
 
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
     val settings = remember { swapViewModel.getSettings() }
 
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
-    val viewModel = viewModel<SwapConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
-        initializer = SwapConfirmViewModel.init(currentQuote, settings)
-    )
+    val viewModel =
+        viewModel<SwapConfirmViewModel>(
+            viewModelStoreOwner = currentBackStackEntry!!,
+            initializer = SwapConfirmViewModel.init(currentQuote, settings),
+        )
 
     val uiState = viewModel.uiState
 
@@ -132,18 +136,23 @@ fun SwapConfirmScreen(navController: NavController) {
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
-                            HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
+                            HudHelper.showInProcessMessage(
+                                view,
+                                R.string.Swap_Swapping,
+                                SnackbarDuration.INDEFINITE,
+                            )
 
-                            val result = try {
-                                viewModel.swap()
+                            val result =
+                                try {
+                                    viewModel.swap()
 
-                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                                delay(1200)
-                                SwapConfirmFragment.Result(true)
-                            } catch (t: Throwable) {
-                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                                SwapConfirmFragment.Result(false)
-                            }
+                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                    delay(1200)
+                                    SwapConfirmFragment.Result(true)
+                                } catch (t: Throwable) {
+                                    HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                    SwapConfirmFragment.Result(false)
+                                }
 
                             buttonEnabled = true
                             navController.setNavigationResultX(result)
@@ -154,7 +163,7 @@ fun SwapConfirmScreen(navController: NavController) {
                 VSpacer(height = 12.dp)
                 subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
             }
-        }
+        },
     ) {
         SectionUniversalLawrence {
             TokenRow(
@@ -178,18 +187,25 @@ fun SwapConfirmScreen(navController: NavController) {
         uiState.amountOut?.let { amountOut ->
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
+                PriceField(
+                    uiState.tokenIn,
+                    uiState.tokenOut,
+                    uiState.amountIn,
+                    amountOut,
+                    StatPage.SwapConfirmation,
+                )
                 PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                 uiState.amountOutMin?.let { amountOutMin ->
-                    val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
-                        CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
-                    } ?: "---"
+                    val subvalue =
+                        uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
+                            CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
+                        } ?: "---"
 
                     SwapInfoRow(
                         borderTop = true,
                         title = stringResource(id = R.string.Swap_MinimumReceived),
                         value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
-                        subvalue = subvalue
+                        subvalue = subvalue,
                     )
                 }
                 uiState.quoteFields.forEach {
@@ -213,7 +229,7 @@ fun SwapConfirmScreen(navController: NavController) {
             DataFieldFee(
                 navController,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
             )
         }
 
@@ -224,7 +240,12 @@ fun SwapConfirmScreen(navController: NavController) {
 }
 
 @Composable
-private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subvalue: String? = null) {
+private fun SwapInfoRow(
+    borderTop: Boolean,
+    title: String,
+    value: String,
+    subvalue: String? = null,
+) {
     CellUniversal(borderTop = borderTop) {
         subhead2_grey(text = title)
         HFillSpacer(minWidth = 16.dp)
@@ -257,7 +278,7 @@ fun TokenRow(
     token.coin.alternativeImageUrl,
     token.iconPlaceholder,
     token.badge,
-    amount?.let { CoinValue(token, it).getFormattedFull() }
+    amount?.let { CoinValue(token, it).getFormattedFull() },
 )
 
 @Composable
@@ -278,7 +299,7 @@ fun TokenRowPure(
             modifier = Modifier.size(32.dp),
             url = imageUrl,
             alternativeUrl = alternativeImageUrl,
-            placeholder = imagePlaceholder
+            placeholder = imagePlaceholder,
         )
         HSpacer(width = 16.dp)
         Column {
@@ -311,7 +332,7 @@ fun TokenRowUnlimited(
     CellUniversal(borderTop = borderTop) {
         CoinImage(
             token = token,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
         HSpacer(width = 16.dp)
         Column {

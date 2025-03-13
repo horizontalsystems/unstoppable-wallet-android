@@ -10,9 +10,14 @@ import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
-data class DataFieldRecipient(val address: Address) : DataField {
+data class DataFieldRecipient(
+    val address: Address,
+) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(
+        navController: NavController,
+        borderTop: Boolean,
+    ) {
         QuoteInfoRow(
             borderTop = borderTop,
             title = {
@@ -21,9 +26,9 @@ data class DataFieldRecipient(val address: Address) : DataField {
             value = {
                 subhead2_leah(
                     text = address.hex,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
                 )
-            }
+            },
         )
     }
 }

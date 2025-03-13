@@ -6,5 +6,5 @@ import androidx.room.Entity
 data class BlockchainSettingRecord(
     val blockchainUid: String,
     val key: String,
-    val value: String
+    val value: String,
 )

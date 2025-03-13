@@ -23,11 +23,17 @@ class AddressExtractor(
             }
 
             AddressUriResult.InvalidBlockchainType -> {
-                throw AddressValidationException.Invalid(Throwable("Invalid Blockchain Type"), blockchainType.title)
+                throw AddressValidationException.Invalid(
+                    Throwable("Invalid Blockchain Type"),
+                    blockchainType.title,
+                )
             }
 
             AddressUriResult.InvalidTokenType -> {
-                throw AddressValidationException.Invalid(Throwable("Invalid Token Type"), blockchainType.title)
+                throw AddressValidationException.Invalid(
+                    Throwable("Invalid Token Type"),
+                    blockchainType.title,
+                )
             }
 
             AddressUriResult.NoUri, AddressUriResult.WrongUri -> {
@@ -35,6 +41,4 @@ class AddressExtractor(
             }
         }
     }
-
-
 }

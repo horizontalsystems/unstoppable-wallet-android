@@ -16,8 +16,9 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 object TopPlatformsModule {
-
-    class Factory(private val timeDuration: TimeDuration?) : ViewModelProvider.Factory {
+    class Factory(
+        private val timeDuration: TimeDuration?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = TopPlatformsRepository(App.marketKit)
@@ -27,7 +28,7 @@ object TopPlatformsModule {
 
     data class Menu(
         val sortingFieldSelect: Select<SortingField>,
-        val marketFieldSelect: Select<MarketField>
+        val marketFieldSelect: Select<MarketField>,
     )
 
     data class UiState(
@@ -35,9 +36,8 @@ object TopPlatformsModule {
         val timePeriod: TimeDuration,
         val viewItems: List<TopPlatformViewItem>,
         val viewState: ViewState,
-        val isRefreshing: Boolean
+        val isRefreshing: Boolean,
     )
-
 }
 
 @Parcelize
@@ -52,7 +52,7 @@ data class TopPlatformItem(
     val protocols: Int,
     val marketCap: BigDecimal,
     val rankDiff: Int?,
-    val changeDiff: BigDecimal?
+    val changeDiff: BigDecimal?,
 )
 
 @Immutable
@@ -64,12 +64,9 @@ data class TopPlatformViewItem(
     val rank: String?,
     val rankDiff: Int?,
 ) {
-
-
     val iconUrl: String
         get() = platform.iconUrl
 
     val iconPlaceHolder: Int
         get() = R.drawable.ic_platform_placeholder_24
-
 }

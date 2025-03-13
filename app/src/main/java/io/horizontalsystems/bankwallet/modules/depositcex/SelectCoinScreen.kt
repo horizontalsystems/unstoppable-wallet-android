@@ -37,9 +37,10 @@ fun SelectCoinScreen(
     onClose: () -> Unit,
     itemIsSuspended: (DepositCexModule.CexCoinViewItem) -> Boolean,
     onSelectAsset: (CexAsset) -> Unit,
-    withBalance: Boolean
+    withBalance: Boolean,
 ) {
-    val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory(withBalance))
+    val viewModel =
+        viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory(withBalance))
 
     val uiState = viewModel.uiState
 
@@ -52,9 +53,9 @@ fun SelectCoinScreen(
                 onClose = onClose,
                 onSearchTextChanged = {
                     viewModel.onEnterQuery(it)
-                }
+                },
             )
-        }
+        },
     ) {
         Crossfade(targetState = uiState.loading, label = "") { loading ->
             Column(modifier = Modifier.padding(it)) {
@@ -65,7 +66,7 @@ fun SelectCoinScreen(
                         if (viewItems.isEmpty()) {
                             ListEmptyView(
                                 text = stringResource(R.string.EmptyResults),
-                                icon = R.drawable.ic_not_found
+                                icon = R.drawable.ic_not_found,
                             )
                         } else {
                             LazyColumn {
@@ -104,20 +105,22 @@ private fun CoinCell(
         RowUniversal(
             onClick = if (suspended) null else onItemClick,
             modifier = Modifier.padding(horizontal = 16.dp),
-            verticalPadding = 0.dp
+            verticalPadding = 0.dp,
         ) {
             HsImage(
                 url = viewItem.coinIconUrl,
                 alternativeUrl = viewItem.alternativeCoinUrl,
                 placeholder = viewItem.coinIconPlaceholder,
-                modifier = Modifier
-                    .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
-                    .size(32.dp)
+                modifier =
+                    Modifier
+                        .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
+                        .size(32.dp),
             )
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 12.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(vertical = 12.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     body_leah(
@@ -128,7 +131,7 @@ private fun CoinCell(
                 subhead2_grey(
                     text = viewItem.subtitle,
                     maxLines = 1,
-                    modifier = Modifier.padding(top = 1.dp)
+                    modifier = Modifier.padding(top = 1.dp),
                 )
             }
             if (suspended) {

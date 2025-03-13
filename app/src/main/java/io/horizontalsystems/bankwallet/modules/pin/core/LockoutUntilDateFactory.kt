@@ -1,13 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.pin.core
 
 import io.horizontalsystems.core.ICurrentDateProvider
-import java.util.*
+import java.util.Date
 
-class LockoutUntilDateFactory(private val currentDateProvider: ICurrentDateProvider) :
-    ILockoutUntilDateFactory {
-
-    override fun lockoutUntilDate(failedAttempts: Int, lockoutUptime: Long, uptime: Long): Date? {
-
+class LockoutUntilDateFactory(
+    private val currentDateProvider: ICurrentDateProvider,
+) : ILockoutUntilDateFactory {
+    override fun lockoutUntilDate(
+        failedAttempts: Int,
+        lockoutUptime: Long,
+        uptime: Long,
+    ): Date? {
         var timeFrame: Long = 0
 
         val timeDiff = if (uptime >= lockoutUptime) uptime - lockoutUptime else uptime
@@ -26,8 +29,8 @@ class LockoutUntilDateFactory(private val currentDateProvider: ICurrentDateProvi
                 date.time = timestamp
                 date
             }
+
             else -> null
         }
     }
-
 }

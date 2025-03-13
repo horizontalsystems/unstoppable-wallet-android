@@ -47,31 +47,34 @@ class TopPairsViewModel(
         }
     }
 
-    override fun createState() = TopPairsUiState(
-        isRefreshing = isRefreshing,
-        items = items,
-        viewState = viewState,
-        sortDescending = sortDescending,
-    )
+    override fun createState() =
+        TopPairsUiState(
+            isRefreshing = isRefreshing,
+            items = items,
+            viewState = viewState,
+            sortDescending = sortDescending,
+        )
 
     private fun sortItems(items: List<TopPairViewItem>) =
         if (sortDescending) items.sortedByDescending { it.volume } else items.sortedBy { it.volume }
 
-    private suspend fun fetchItems() = withContext(Dispatchers.Default) {
-        try {
-            val topPairs =
-                marketKit.topPairsSingle(currencyManager.baseCurrency.code, 1, 100).await()
-            val pairs = topPairs.map {
-                TopPairViewItem.createFromTopPair(it, currencyManager.baseCurrency.symbol)
+    private suspend fun fetchItems() =
+        withContext(Dispatchers.Default) {
+            try {
+                val topPairs =
+                    marketKit.topPairsSingle(currencyManager.baseCurrency.code, 1, 100).await()
+                val pairs =
+                    topPairs.map {
+                        TopPairViewItem.createFromTopPair(it, currencyManager.baseCurrency.symbol)
+                    }
+                items = sortItems(pairs)
+                viewState = ViewState.Success
+            } catch (e: CancellationException) {
+                // no-op
+            } catch (e: Throwable) {
+                viewState = ViewState.Error(e)
             }
-            items = sortItems(pairs)
-            viewState = ViewState.Success
-        } catch (e: CancellationException) {
-            // no-op
-        } catch (e: Throwable) {
-            viewState = ViewState.Error(e)
         }
-    }
 
     fun refresh() {
         viewModelScope.launch {
@@ -87,9 +90,8 @@ class TopPairsViewModel(
         stat(
             page = StatPage.Markets,
             section = StatSection.Pairs,
-            event = StatEvent.Refresh
+            event = StatEvent.Refresh,
         )
-
     }
 
     fun onErrorClick() {
@@ -107,17 +109,14 @@ class TopPairsViewModel(
         stat(
             page = StatPage.Markets,
             section = StatSection.Pairs,
-            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume)
+            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume),
         )
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TopPairsViewModel(App.marketKit, App.currencyManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = TopPairsViewModel(App.marketKit, App.currencyManager) as T
     }
-
 }
 
 data class TopPairsUiState(
@@ -141,19 +140,23 @@ data class TopPairViewItem(
     val tradeUrl: String?,
     val volume: BigDecimal,
     val volumeInFiat: String,
-    val price: String?
+    val price: String?,
 ) {
     companion object {
-        fun createFromTopPair(topPair: TopPair, currencySymbol: String): TopPairViewItem {
+        fun createFromTopPair(
+            topPair: TopPair,
+            currencySymbol: String,
+        ): TopPairViewItem {
             val volumeStr = App.numberFormatter.formatFiatShort(topPair.volume, currencySymbol, 2)
 
-            val priceStr = topPair.price?.let {
-                App.numberFormatter.formatCoinShort(
-                    it,
-                    topPair.target,
-                    8
-                )
-            }
+            val priceStr =
+                topPair.price?.let {
+                    App.numberFormatter.formatCoinShort(
+                        it,
+                        topPair.target,
+                        8,
+                    )
+                }
 
             return TopPairViewItem(
                 title = "${topPair.base}/${topPair.target}",

@@ -18,7 +18,7 @@ import kotlinx.coroutines.rx2.asFlow
 
 class CoinInvestmentsViewModel(
     private val service: CoinInvestmentsService,
-    private val numberFormatter: IAppNumberFormatter
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModel() {
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
@@ -26,11 +26,11 @@ class CoinInvestmentsViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateObservable.asFlow()
+            service.stateObservable
+                .asFlow()
                 .catch {
                     viewStateLiveData.postValue(ViewState.Error(it))
-                }
-                .collect { state ->
+                }.collect { state ->
                     handleServiceState(state)
                 }
         }
@@ -75,17 +75,19 @@ class CoinInvestmentsViewModel(
     }
 
     private fun viewItem(investment: CoinInvestment): ViewItem {
-        val amount = investment.amount?.let {
-            numberFormatter.formatFiatShort(it, service.usdCurrency.symbol, 2)
-        } ?: "---"
+        val amount =
+            investment.amount?.let {
+                numberFormatter.formatFiatShort(it, service.usdCurrency.symbol, 2)
+            } ?: "---"
         val dateString = DateHelper.formatDate(investment.date, "MMM dd, yyyy")
 
         return ViewItem(
             amount = amount,
             info = "${investment.round} - $dateString",
-            fundViewItems = investment.funds.map {
-                FundViewItem(it.name, it.logoUrl, it.isLead, it.website)
-            }
+            fundViewItems =
+                investment.funds.map {
+                    FundViewItem(it.name, it.logoUrl, it.isLead, it.website)
+                },
         )
     }
 }

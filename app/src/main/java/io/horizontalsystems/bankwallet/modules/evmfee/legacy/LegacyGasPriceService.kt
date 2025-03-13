@@ -64,44 +64,47 @@ class LegacyGasPriceService(
         emitState()
 
         setGasPriceJob?.cancel()
-        setGasPriceJob = coroutineScope.launch {
-            try {
-                val recommended = getRecommendedGasPriceSingle()
+        setGasPriceJob =
+            coroutineScope.launch {
+                try {
+                    val recommended = getRecommendedGasPriceSingle()
 
-                val gasPriceInfo = if (value == null) {
-                    GasPriceInfo(
-                        gasPrice = GasPrice.Legacy(recommended),
-                        gasPriceDefault = GasPrice.Legacy(recommended),
-                        default = true,
-                        warnings = listOf<FeeSettingsWarning>(),
-                        errors = listOf()
-                    )
-                } else {
-                    val warnings = buildList {
-                        if (value < riskOfStuckBound.calculate(recommended)) {
-                            add(FeeSettingsWarning.RiskOfGettingStuckLegacy)
+                    val gasPriceInfo =
+                        if (value == null) {
+                            GasPriceInfo(
+                                gasPrice = GasPrice.Legacy(recommended),
+                                gasPriceDefault = GasPrice.Legacy(recommended),
+                                default = true,
+                                warnings = listOf<FeeSettingsWarning>(),
+                                errors = listOf(),
+                            )
+                        } else {
+                            val warnings =
+                                buildList {
+                                    if (value < riskOfStuckBound.calculate(recommended)) {
+                                        add(FeeSettingsWarning.RiskOfGettingStuckLegacy)
+                                    }
+
+                                    if (value >= overpricingBound.calculate(recommended)) {
+                                        add(FeeSettingsWarning.Overpricing)
+                                    }
+                                }
+
+                            GasPriceInfo(
+                                gasPrice = GasPrice.Legacy(value),
+                                gasPriceDefault = GasPrice.Legacy(recommended),
+                                default = false,
+                                warnings = warnings,
+                                errors = listOf(),
+                            )
                         }
 
-                        if (value >= overpricingBound.calculate(recommended)) {
-                            add(FeeSettingsWarning.Overpricing)
-                        }
-                    }
-
-                    GasPriceInfo(
-                        gasPrice = GasPrice.Legacy(value),
-                        gasPriceDefault = GasPrice.Legacy(recommended),
-                        default = false,
-                        warnings = warnings,
-                        errors = listOf()
-                    )
+                    state = DataState.Success(gasPriceInfo)
+                    emitState()
+                } catch (e: Throwable) {
+                    state = DataState.Error(e)
+                    emitState()
                 }
-
-                state = DataState.Success(gasPriceInfo)
-                emitState()
-            } catch (e: Throwable) {
-                state = DataState.Error(e)
-                emitState()
             }
-        }
     }
 }

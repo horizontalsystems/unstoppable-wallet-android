@@ -24,10 +24,13 @@ abstract class AbstractChartService {
 
     protected abstract val currencyManager: CurrencyManager
     protected abstract val initialChartInterval: HsTimePeriod
-    protected open fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
-        return Single.error(Exception("Not Implemented"))
-    }
-    protected abstract fun getItems(chartInterval: HsTimePeriod, currency: Currency): Single<ChartPointsWrapper>
+
+    protected open fun getAllItems(currency: Currency): Single<ChartPointsWrapper> = Single.error(Exception("Not Implemented"))
+
+    protected abstract fun getItems(
+        chartInterval: HsTimePeriod,
+        currency: Currency,
+    ): Single<ChartPointsWrapper>
 
     protected var chartInterval: HsTimePeriod? = null
         set(value) {
@@ -77,22 +80,23 @@ abstract class AbstractChartService {
     @Synchronized
     private fun fetchItems() {
         fetchItemsJob?.cancel()
-        fetchItemsJob = coroutineScope.launch {
-            val tmpChartInterval = chartInterval
-            val itemsSingle = when {
-                tmpChartInterval == null -> getAllItems(currency)
-                else -> getItems(tmpChartInterval, currency)
-            }
+        fetchItemsJob =
+            coroutineScope.launch {
+                val tmpChartInterval = chartInterval
+                val itemsSingle =
+                    when {
+                        tmpChartInterval == null -> getAllItems(currency)
+                        else -> getItems(tmpChartInterval, currency)
+                    }
 
-            try {
-                val chartPointsWrapper = itemsSingle.await()
-                chartPointsWrapperObservable.onNext(Result.success(chartPointsWrapper))
-            } catch (e: CancellationException) {
-                // Do nothing
-            } catch (e: Throwable) {
-                chartPointsWrapperObservable.onNext(Result.failure(e))
+                try {
+                    val chartPointsWrapper = itemsSingle.await()
+                    chartPointsWrapperObservable.onNext(Result.success(chartPointsWrapper))
+                } catch (e: CancellationException) {
+                    // Do nothing
+                } catch (e: Throwable) {
+                    chartPointsWrapperObservable.onNext(Result.failure(e))
+                }
             }
-        }
     }
 }
-

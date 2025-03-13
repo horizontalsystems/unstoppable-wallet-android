@@ -29,22 +29,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class AutoLockIntervalsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         AutoLockIntervalsScreen(
             close = { navController.popBackStack() },
         )
     }
-
 }
 
 @Composable
 private fun AutoLockIntervalsScreen(
     close: () -> Unit,
-    viewModel: AutoLockIntervalsViewModel = viewModel(
-        factory = AutoLockModule.Factory()
-    )
+    viewModel: AutoLockIntervalsViewModel =
+        viewModel(
+            factory = AutoLockModule.Factory(),
+        ),
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -55,15 +54,16 @@ private fun AutoLockIntervalsScreen(
                     HsBackButton(onClick = close)
                 },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(
+                            rememberScrollState(),
+                        ),
             ) {
                 VSpacer(12.dp)
                 CellUniversalLawrenceSection(viewModel.intervals) { item ->
@@ -81,21 +81,22 @@ private fun AutoLockIntervalsScreen(
 private fun IntervalCell(
     item: AutoLockInterval,
     checked: Boolean,
-    onClick: (AutoLockInterval) -> Unit
+    onClick: (AutoLockInterval) -> Unit,
 ) {
     RowUniversal(
-        onClick = { onClick.invoke(item) }
+        onClick = { onClick.invoke(item) },
     ) {
         HSpacer(16.dp)
         body_leah(
             modifier = Modifier.weight(1f),
-            text = stringResource(item.title)
+            text = stringResource(item.title),
         )
         Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .width(52.dp)
+                    .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
         ) {
             if (checked) {
                 Icon(

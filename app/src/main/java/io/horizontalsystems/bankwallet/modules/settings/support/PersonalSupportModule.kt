@@ -7,9 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 object PersonalSupportModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PersonalSupportViewModel(App.marketKit, App.localStorage) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = PersonalSupportViewModel(App.marketKit, App.localStorage) as T
     }
 
     data class UiState(

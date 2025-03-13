@@ -41,15 +41,14 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="12dp"
         android:textColor="@color/bran"
+        app:layout_constraintBaseline_toBaselineOf="@id/paragraph"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/paragraph"
         tools:text="•" />
 
     <TextView
         android:id="@+id/paragraph"
         style="@style/Body"
-        android:textColorLink="@color/stateful_button_yellow_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -58,6 +57,7 @@
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:textColor="@color/bran"
+        android:textColorLink="@color/stateful_button_yellow_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

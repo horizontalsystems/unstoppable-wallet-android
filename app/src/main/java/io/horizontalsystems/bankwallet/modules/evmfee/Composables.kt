@@ -66,7 +66,7 @@ import java.math.BigDecimal
 @Composable
 fun Eip1559FeeSettings(
     viewModel: Eip1559FeeSettingsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val currentBaseFee = viewModel.currentBaseFee
@@ -83,7 +83,7 @@ fun Eip1559FeeSettings(
                         info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                         value = summaryViewItem?.fee,
                         viewState = summaryViewItem?.viewState,
-                        navController = navController
+                        navController = navController,
                     )
                 },
                 {
@@ -91,7 +91,7 @@ fun Eip1559FeeSettings(
                         title = stringResource(R.string.FeeSettings_GasLimit),
                         info = stringResource(R.string.FeeSettings_GasLimit_Info),
                         value = summaryViewItem?.gasLimit,
-                        navController = navController
+                        navController = navController,
                     )
                 },
                 {
@@ -99,10 +99,10 @@ fun Eip1559FeeSettings(
                         title = stringResource(R.string.FeeSettings_BaseFee),
                         info = stringResource(R.string.FeeSettings_BaseFee_Info),
                         value = currentBaseFee,
-                        navController = navController
+                        navController = navController,
                     )
-                }
-            )
+                },
+            ),
         )
 
         maxFeeViewItem?.let { maxFee ->
@@ -125,7 +125,7 @@ fun Eip1559FeeSettings(
                     },
                     onClickDecrement = {
                         viewModel.onDecrementMaxFee(maxFee.weiValue, priorityFee.weiValue)
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -145,7 +145,7 @@ fun Eip1559FeeSettings(
                     },
                     onClickDecrement = {
                         viewModel.onDecrementPriorityFee(maxFee.weiValue, priorityFee.weiValue)
-                    }
+                    },
                 )
             }
         }
@@ -163,13 +163,14 @@ fun EvmSettingsInput(
     navController: NavController,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
-    onClickDecrement: () -> Unit
+    onClickDecrement: () -> Unit,
 ) {
-    val borderColor = when {
-        errors.isNotEmpty() -> ComposeAppTheme.colors.red50
-        warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
-    }
+    val borderColor =
+        when {
+            errors.isNotEmpty() -> ComposeAppTheme.colors.red50
+            warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
+            else -> ComposeAppTheme.colors.steel20
+        }
 
     EvmSettingsInput(
         title = title,
@@ -180,7 +181,7 @@ fun EvmSettingsInput(
         navController = navController,
         onValueChange = onValueChange,
         onClickIncrement = onClickIncrement,
-        onClickDecrement = onClickDecrement
+        onClickDecrement = onClickDecrement,
     )
 }
 
@@ -194,13 +195,14 @@ fun EvmSettingsInput(
     navController: NavController,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
-    onClickDecrement: () -> Unit
+    onClickDecrement: () -> Unit,
 ) {
-    val borderColor = when (caution?.type) {
-        HSCaution.Type.Error -> ComposeAppTheme.colors.red50
-        HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
-    }
+    val borderColor =
+        when (caution?.type) {
+            HSCaution.Type.Error -> ComposeAppTheme.colors.red50
+            HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
+            else -> ComposeAppTheme.colors.steel20
+        }
 
     EvmSettingsInput(
         title = title,
@@ -211,7 +213,7 @@ fun EvmSettingsInput(
         navController = navController,
         onValueChange = onValueChange,
         onClickIncrement = onClickIncrement,
-        onClickDecrement = onClickDecrement
+        onClickDecrement = onClickDecrement,
     )
 }
 
@@ -228,10 +230,20 @@ private fun EvmSettingsInput(
     onClickDecrement: () -> Unit,
 ) {
     HeaderText(text = title) {
-        navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(title, info))
+        navController.slideFromBottom(
+            R.id.feeSettingsInfoDialog,
+            FeeSettingsInfoDialog.Input(title, info),
+        )
     }
 
-    NumberInputWithButtons(value, decimals, borderColor, onValueChange, onClickIncrement, onClickDecrement)
+    NumberInputWithButtons(
+        value,
+        decimals,
+        borderColor,
+        onValueChange,
+        onClickIncrement,
+        onClickDecrement,
+    )
 }
 
 @Composable
@@ -241,7 +253,7 @@ private fun NumberInputWithButtons(
     borderColor: Color,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
-    onClickDecrement: () -> Unit
+    onClickDecrement: () -> Unit,
 ) {
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         val text = value.toString()
@@ -254,24 +266,25 @@ private fun NumberInputWithButtons(
     }
 
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 44.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 44.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         BasicTextField(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .weight(1f)
-                .shake(
-                    enabled = playShakeAnimation,
-                    onAnimationFinish = { playShakeAnimation = false }
-                ),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .weight(1f)
+                    .shake(
+                        enabled = playShakeAnimation,
+                        onAnimationFinish = { playShakeAnimation = false },
+                    ),
             value = textState,
             onValueChange = { textFieldValue ->
                 val newValue = textFieldValue.text.toBigDecimalOrNull() ?: BigDecimal.ZERO
@@ -285,10 +298,11 @@ private fun NumberInputWithButtons(
                     playShakeAnimation = true
                 }
             },
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.leah,
-                textStyle = ComposeAppTheme.typography.body
-            ),
+            textStyle =
+                ColoredTextStyle(
+                    color = ComposeAppTheme.colors.leah,
+                    textStyle = ComposeAppTheme.typography.body,
+                ),
             singleLine = true,
             cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -297,38 +311,39 @@ private fun NumberInputWithButtons(
         ButtonSecondaryCircle(
             modifier = Modifier.padding(end = 16.dp),
             icon = R.drawable.ic_minus_20,
-            onClick = onClickDecrement
+            onClick = onClickDecrement,
         )
 
         ButtonSecondaryCircle(
             modifier = Modifier.padding(end = 16.dp),
             icon = R.drawable.ic_plus_20,
-            onClick = onClickIncrement
+            onClick = onClickIncrement,
         )
     }
 }
 
 @Composable
-fun ButtonsGroupWithShade(
-    ButtonsContent: @Composable (() -> Unit)
-) {
+fun ButtonsGroupWithShade(ButtonsContent: @Composable (() -> Unit)) {
     Column(
-        modifier = Modifier
-            .offset(y = -(24.dp))
-            .navigationBarsPadding()
+        modifier =
+            Modifier
+                .offset(y = -(24.dp))
+                .navigationBarsPadding(),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(24.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        listOf(ComposeAppTheme.colors.transparent, ComposeAppTheme.colors.tyler)
-                    )
-                )
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .background(
+                        brush =
+                            Brush.verticalGradient(
+                                listOf(ComposeAppTheme.colors.transparent, ComposeAppTheme.colors.tyler),
+                            ),
+                    ),
         )
         Box(
-            modifier = Modifier.background(ComposeAppTheme.colors.tyler)
+            modifier = Modifier.background(ComposeAppTheme.colors.tyler),
         ) {
             ButtonsContent()
         }
@@ -338,7 +353,7 @@ fun ButtonsGroupWithShade(
 @Composable
 fun LegacyFeeSettings(
     viewModel: LegacyFeeSettingsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val viewItem = viewModel.feeViewItem
@@ -353,7 +368,7 @@ fun LegacyFeeSettings(
                         info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                         value = summaryViewItem?.fee,
                         viewState = summaryViewItem?.viewState,
-                        navController = navController
+                        navController = navController,
                     )
                 },
                 {
@@ -361,10 +376,10 @@ fun LegacyFeeSettings(
                         title = stringResource(R.string.FeeSettings_GasLimit),
                         info = stringResource(R.string.FeeSettings_GasLimit_Info),
                         value = summaryViewItem?.gasLimit,
-                        navController = navController
+                        navController = navController,
                     )
-                }
-            )
+                },
+            ),
         )
 
         viewItem?.let { fee ->
@@ -385,7 +400,7 @@ fun LegacyFeeSettings(
                 },
                 onClickDecrement = {
                     viewModel.onDecrementGasPrice(fee.weiValue)
-                }
+                },
             )
         }
     }
@@ -398,8 +413,9 @@ fun Cautions(cautions: List<CautionViewItem>) {
     val modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         cautions.forEach { caution ->
 
@@ -409,15 +425,16 @@ fun Cautions(cautions: List<CautionViewItem>) {
                         modifier = modifier,
                         text = caution.text,
                         title = caution.title,
-                        icon = R.drawable.ic_attention_20
+                        icon = R.drawable.ic_attention_20,
                     )
                 }
+
                 CautionViewItem.Type.Warning -> {
                     TextImportantWarning(
                         modifier = modifier,
                         text = caution.text,
                         title = caution.title,
-                        icon = R.drawable.ic_attention_20
+                        icon = R.drawable.ic_attention_20,
                     )
                 }
             }
@@ -430,28 +447,35 @@ fun FeeInfoCell(
     title: String,
     info: String,
     value: String?,
-    navController: NavController
+    navController: NavController,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            modifier = Modifier.clickable(
-                onClick = { navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(title, info)) },
-                interactionSource = MutableInteractionSource(),
-                indication = null
-            ),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier.clickable(
+                    onClick = {
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.Input(title, info),
+                        )
+                    },
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             subhead2_grey(text = title)
 
             Image(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = ""
+                contentDescription = "",
             )
         }
 
@@ -460,8 +484,7 @@ fun FeeInfoCell(
             text = value ?: "",
             textAlign = TextAlign.End,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
-

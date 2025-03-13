@@ -14,7 +14,6 @@ class WalletStorage(
     private val marketKit: MarketKitWrapper,
     private val storage: IEnabledWalletStorage,
 ) : IWalletStorage {
-
     override fun wallets(account: Account): List<Wallet> {
         val enabledWallets = storage.enabledWallets(account.id)
 
@@ -33,19 +32,23 @@ class WalletStorage(
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
                 val coinUid = tokenQuery.customCoinUid
-                val blockchain = blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid } ?: return@mapNotNull null
+                val blockchain =
+                    blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid }
+                        ?: return@mapNotNull null
 
-                val token = Token(
-                    coin = Coin(
-                        uid = coinUid,
-                        name = enabledWallet.coinName,
-                        code = enabledWallet.coinCode,
-                        image = enabledWallet.coinImage
-                    ),
-                    blockchain = blockchain,
-                    type = tokenQuery.tokenType,
-                    decimals = enabledWallet.coinDecimals
-                )
+                val token =
+                    Token(
+                        coin =
+                            Coin(
+                                uid = coinUid,
+                                name = enabledWallet.coinName,
+                                code = enabledWallet.coinCode,
+                                image = enabledWallet.coinImage,
+                            ),
+                        blockchain = blockchain,
+                        type = tokenQuery.tokenType,
+                        decimals = enabledWallet.coinDecimals,
+                    )
 
                 Wallet(token, account)
             } else {
@@ -60,7 +63,7 @@ class WalletStorage(
         wallets.forEachIndexed { index, wallet ->
 
             enabledWallets.add(
-                enabledWallet(wallet, index)
+                enabledWallet(wallet, index),
             )
         }
 
@@ -79,15 +82,17 @@ class WalletStorage(
         storage.deleteAll()
     }
 
-    private fun enabledWallet(wallet: Wallet, index: Int? = null): EnabledWallet {
-        return EnabledWallet(
+    private fun enabledWallet(
+        wallet: Wallet,
+        index: Int? = null,
+    ): EnabledWallet =
+        EnabledWallet(
             wallet.token.tokenQuery.id,
             wallet.account.id,
             index,
             wallet.coin.name,
             wallet.coin.code,
             wallet.decimal,
-            wallet.coin.image
+            wallet.coin.image,
         )
-    }
 }

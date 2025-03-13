@@ -46,16 +46,17 @@ fun UtxoExpertModeScreen(
     token: Token,
     customUnspentOutputs: List<UnspentOutputInfo>?,
     updateUnspentOutputs: (List<UnspentOutputInfo>) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
-
-    val viewModel: UtxoExpertModeViewModel = viewModel(
-        factory = UtxoExpertModeModule.Factory(
-            adapter,
-            token,
-            customUnspentOutputs
+    val viewModel: UtxoExpertModeViewModel =
+        viewModel(
+            factory =
+                UtxoExpertModeModule.Factory(
+                    adapter,
+                    token,
+                    customUnspentOutputs,
+                ),
         )
-    )
     val uiState = viewModel.uiState
 
     ComposeAppTheme {
@@ -68,47 +69,50 @@ fun UtxoExpertModeScreen(
                         HsBackButton(onClick = onBackClick)
                     },
                 )
-            }
+            },
         ) {
             Column(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
+                modifier =
+                    Modifier
+                        .padding(it)
+                        .fillMaxSize(),
             ) {
                 CellUniversalLawrenceSection {
                     UtxoInfoCell(
                         title = stringResource(R.string.Send_Utxo_AvailableBalance),
                         value = uiState.availableBalanceInfo.value,
-                        subValue = uiState.availableBalanceInfo.subValue
+                        subValue = uiState.availableBalanceInfo.subValue,
                     )
                 }
                 Box(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     UtxoList(
                         utxos = uiState.utxoItems,
                         onItemClicked = {
                             viewModel.onUnspentOutputClicked(it)
                             updateUnspentOutputs(viewModel.customOutputs)
-                        }
+                        },
                     )
                 }
                 Box(
-                    modifier = Modifier
-                        .height(62.dp)
-                        .fillMaxWidth()
-                ){
+                    modifier =
+                        Modifier
+                            .height(62.dp)
+                            .fillMaxWidth(),
+                ) {
                     Divider(
                         modifier = Modifier.fillMaxWidth(),
                         thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10
+                        color = ComposeAppTheme.colors.steel10,
                     )
                     Row(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxSize(),
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         ButtonSecondaryTransparent(
                             title = stringResource(id = R.string.Send_Utxo_UnselectAll),
@@ -116,14 +120,14 @@ fun UtxoExpertModeScreen(
                             onClick = {
                                 viewModel.unselectAll()
                                 updateUnspentOutputs(viewModel.customOutputs)
-                            }
+                            },
                         )
                         ButtonSecondaryTransparent(
                             title = stringResource(id = R.string.Send_Utxo_SelectAll),
                             onClick = {
                                 viewModel.selectAll()
                                 updateUnspentOutputs(viewModel.customOutputs)
-                            }
+                            },
                         )
                     }
                 }
@@ -138,9 +142,10 @@ private fun UtxoList(
     onItemClicked: (String) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
     ) {
         item {
             VSpacer(16.dp)
@@ -156,7 +161,7 @@ private fun UtxoList(
                 onItemClicked = onItemClicked,
                 showTopBorder = index != 0,
                 topRoundedCorners = index == 0,
-                bottomRoundedCorners = index == utxos.size - 1
+                bottomRoundedCorners = index == utxos.size - 1,
             )
         }
         item {
@@ -169,22 +174,23 @@ private fun UtxoList(
 private fun UtxoInfoCell(
     title: String,
     value: String?,
-    subValue: String?
+    subValue: String?,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .height(64.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .height(64.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             subhead2_leah(text = title)
         }
         Column(
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.End,
         ) {
             if (value == null) {
                 subhead2_lucian(text = "N/A")
@@ -207,38 +213,40 @@ private fun UtxoCell(
     subValue: String?,
     onItemClicked: (String) -> Unit,
     topRoundedCorners: Boolean,
-    bottomRoundedCorners: Boolean
+    bottomRoundedCorners: Boolean,
 ) {
-    val shape = when {
-        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(12.dp)
-        topRoundedCorners -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
-        else -> RoundedCornerShape(0.dp)
-    }
+    val shape =
+        when {
+            topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(12.dp)
+            topRoundedCorners -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+            bottomRoundedCorners -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+            else -> RoundedCornerShape(0.dp)
+        }
     Box(
-        modifier = Modifier
-            .clip(shape)
-            .background(ComposeAppTheme.colors.lawrence)
+        modifier =
+            Modifier
+                .clip(shape)
+                .background(ComposeAppTheme.colors.lawrence),
     ) {
         SectionItemBorderedRowUniversalClear(
             onClick = {
                 onItemClicked.invoke(id)
             },
-            borderTop = showTopBorder
+            borderTop = showTopBorder,
         ) {
             HsCheckbox(
                 checked = selected,
-                onCheckedChange = { onItemClicked.invoke(id) }
+                onCheckedChange = { onItemClicked.invoke(id) },
             )
             HSpacer(16.dp)
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 subhead2_leah(text = title)
                 subhead2_grey(text = subtitle)
             }
             Column(
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.End,
             ) {
                 subhead2_leah(text = value)
                 subValue?.let {

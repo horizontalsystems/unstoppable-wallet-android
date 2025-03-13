@@ -15,9 +15,8 @@ import kotlinx.coroutines.flow.onEach
 
 class TorConnectionViewModel(
     private val torManager: ITorManager,
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
-
     var torViewState by mutableStateOf(getState())
 
     private var stateText = R.string.TorPage_Connecting
@@ -33,7 +32,7 @@ class TorConnectionViewModel(
     }
 
     fun restartTor() {
-        if (!connectivityManager.isConnected){
+        if (!connectivityManager.isConnected) {
             showNoNetworkConnectionError = true
             emitState()
             return
@@ -41,7 +40,7 @@ class TorConnectionViewModel(
         torManager.start()
     }
 
-    fun networkErrorShown(){
+    fun networkErrorShown() {
         showNoNetworkConnectionError = false
         emitState()
     }
@@ -54,25 +53,25 @@ class TorConnectionViewModel(
             showNoNetworkConnectionError = true
         }
 
-        stateText = when(torStatus) {
-            TorStatus.Connected -> R.string.Tor_TorIsActive
-            TorStatus.Failed -> R.string.TorPage_Failed
-            else -> R.string.TorPage_Connecting
-        }
+        stateText =
+            when (torStatus) {
+                TorStatus.Connected -> R.string.Tor_TorIsActive
+                TorStatus.Failed -> R.string.TorPage_Failed
+                else -> R.string.TorPage_Connecting
+            }
 
         emitState()
     }
 
-    private fun getState(): TorViewState {
-        return TorViewState(
+    private fun getState(): TorViewState =
+        TorViewState(
             stateText = stateText,
             showRetryButton = showRetryButton,
             torIsActive = torIsActive,
-            showNetworkConnectionError = showNoNetworkConnectionError
+            showNetworkConnectionError = showNoNetworkConnectionError,
         )
-    }
 
-    private fun emitState(){
+    private fun emitState() {
         torViewState = getState()
     }
 }

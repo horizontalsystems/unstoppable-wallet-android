@@ -6,10 +6,8 @@ import java.io.File
 import java.io.InputStreamReader
 
 object RootUtil {
-
     val isRooted: Boolean
         get() = buildTags() || checkPaths() || checkSu()
-
 
     private fun buildTags(): Boolean {
         val buildTags = Build.TAGS
@@ -18,18 +16,19 @@ object RootUtil {
 
     private fun checkPaths(): Boolean {
         arrayOf(
-                "/data/local/su",
-                "/data/local/xbin/su",
-                "/data/local/bin/su",
-                "/sbin/su",
-                "/system/app/Superuser.apk",
-                "/system/bin/failsafe/su",
-                "/system/bin/su",
-                "/system/sd/xbin/su",
-                "/system/xbin/su"
+            "/data/local/su",
+            "/data/local/xbin/su",
+            "/data/local/bin/su",
+            "/sbin/su",
+            "/system/app/Superuser.apk",
+            "/system/bin/failsafe/su",
+            "/system/bin/su",
+            "/system/sd/xbin/su",
+            "/system/xbin/su",
         ).forEach {
-            if (File(it).exists())
+            if (File(it).exists()) {
                 return true
+            }
         }
 
         return false

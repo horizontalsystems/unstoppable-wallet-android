@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import kotlin.math.max
 
 class RotatingCircleProgressView : View {
-
     private val mCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val pathPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mThickness: Float = LayoutHelper.dp(2f, context).toFloat()
@@ -49,9 +48,17 @@ class RotatingCircleProgressView : View {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr,
+    )
 
-    fun setProgressColored(value: Int, color: Int, showPath: Boolean = false) {
+    fun setProgressColored(
+        value: Int,
+        color: Int,
+        showPath: Boolean = false,
+    ) {
         this.showPath = showPath
 
         mCirclePaint.color = color
@@ -72,11 +79,20 @@ class RotatingCircleProgressView : View {
         if (showPath) {
             canvas.drawArc(mCircleRect, radOffset, 360f, false, pathPaint)
         }
-        canvas.drawArc(mCircleRect, radOffset, max(4f, 360 * animatedProgressValue), false, mCirclePaint)
+        canvas.drawArc(
+            mCircleRect,
+            radOffset,
+            max(4f, 360 * animatedProgressValue),
+            false,
+            mCirclePaint,
+        )
         updateAnimation()
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+    ) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         mSize = measuredWidth
         circlePadding = (mSize * 0.10).toInt()
@@ -85,11 +101,20 @@ class RotatingCircleProgressView : View {
     }
 
     private fun updateRectAngleBounds() {
-        mCircleRect.set(circlePadding + mThickness, circlePadding + mThickness,
-                mSize.toFloat() - circlePadding.toFloat() - mThickness, mSize.toFloat() - circlePadding.toFloat() - mThickness)
+        mCircleRect.set(
+            circlePadding + mThickness,
+            circlePadding + mThickness,
+            mSize.toFloat() - circlePadding.toFloat() - mThickness,
+            mSize.toFloat() - circlePadding.toFloat() - mThickness,
+        )
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    override fun onSizeChanged(
+        w: Int,
+        h: Int,
+        oldw: Int,
+        oldh: Int,
+    ) {
         super.onSizeChanged(w, h, oldw, oldh)
         mSize = if (w < h) w else h
         updateRectAngleBounds()
@@ -110,11 +135,14 @@ class RotatingCircleProgressView : View {
                     animationProgressStart = currentProgress
                     currentProgressTime = 0
                 } else {
-                    animatedProgressValue = animationProgressStart + progressDiff * decelerateInterpolator.getInterpolation(currentProgressTime / 300.0f)
+                    animatedProgressValue =
+                        animationProgressStart + progressDiff *
+                        decelerateInterpolator.getInterpolation(
+                            currentProgressTime / 300.0f,
+                        )
                 }
             }
             invalidate()
         }
     }
-
 }

@@ -34,16 +34,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),
             onClickItem = { viewItem ->
-                val donateAddress: String? = App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
+                val donateAddress: String? =
+                    App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
                 donateAddress?.let {
-                    val sendTitle = Translator.getString(R.string.Settings_DonateToken, viewItem.wallet.token.fullCoin.coin.code)
+                    val sendTitle =
+                        Translator.getString(
+                            R.string.Settings_DonateToken,
+                            viewItem.wallet.token.fullCoin.coin.code,
+                        )
                     navController.slideFromRight(
                         R.id.sendXFragment,
                         SendFragment.Input(
@@ -51,16 +55,15 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                             title = sendTitle,
                             sendEntryPointDestId = R.id.sendTokenSelectFragment,
                             address = Address(donateAddress),
-                            hideAddress = true
-                        )
+                            hideAddress = true,
+                        ),
                     )
 
                     stat(page = StatPage.Donate, event = StatEvent.OpenSend(viewItem.wallet.token))
                 }
-
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
-            emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
+            emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend),
         ) { DonateHeader(navController) }
     }
 }
@@ -68,15 +71,16 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
 @Composable
 private fun DonateHeader(navController: NavController) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         VSpacer(24.dp)
         headline2_leah(
             text = stringResource(R.string.Settings_Donate_Info),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         VSpacer(24.dp)
         Icon(
@@ -94,20 +98,18 @@ private fun DonateHeader(navController: NavController) {
 }
 
 @Composable
-private fun GetAddressCell(
-    onClick: () -> Unit
-) {
+private fun GetAddressCell(onClick: () -> Unit) {
     VSpacer(24.dp)
     ButtonPrimaryDefault(
         title = stringResource(R.string.Settings_Donate_GetAddress),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
-        onClick = onClick
+        onClick = onClick,
     )
     VSpacer(24.dp)
     subhead2_grey(
         text = stringResource(R.string.Settings_Donate_OrSelectCoinToDonate),
         modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
     VSpacer(24.dp)
 }

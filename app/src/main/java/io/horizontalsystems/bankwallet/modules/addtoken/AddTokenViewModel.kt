@@ -15,9 +15,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddTokenViewModel(private val addTokenService: AddTokenService) :
-    ViewModelUiState<AddTokenUiState>() {
-
+class AddTokenViewModel(
+    private val addTokenService: AddTokenService,
+) : ViewModelUiState<AddTokenUiState>() {
     private var loading = false
     private var finished = false
     private var addButtonEnabled = false
@@ -25,13 +25,14 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
     private var caution: Caution? = null
     private var enteredText = ""
 
-    override fun createState() = AddTokenUiState(
-        tokenInfo = tokenInfo,
-        addButtonEnabled = addButtonEnabled,
-        loading = loading,
-        finished = finished,
-        caution = caution
-    )
+    override fun createState() =
+        AddTokenUiState(
+            tokenInfo = tokenInfo,
+            addButtonEnabled = addButtonEnabled,
+            loading = loading,
+            finished = finished,
+            caution = caution,
+        )
 
     val blockchains by addTokenService::blockchains
 
@@ -52,7 +53,10 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
         updateTokenInfo(selectedBlockchain, text)
     }
 
-    private fun updateTokenInfo(blockchain: Blockchain, text: String) {
+    private fun updateTokenInfo(
+        blockchain: Blockchain,
+        text: String,
+    ) {
         fetchCustomCoinsJob?.cancel()
         tokenInfo = null
         addButtonEnabled = false
@@ -61,28 +65,31 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
 
         emitState()
 
-        fetchCustomCoinsJob = viewModelScope.launch {
-            try {
-                tokenInfo = withContext(Dispatchers.IO) {
-                    addTokenService.tokenInfo(blockchain, text.trim())
-                }
-                tokenInfo?.let {
-                    if (it.inCoinList) {
-                        caution = Caution(
-                            Translator.getString(R.string.AddToken_CoinAlreadyInListWarning),
-                            Caution.Type.Warning
-                        )
-                    } else {
-                        addButtonEnabled = true
+        fetchCustomCoinsJob =
+            viewModelScope.launch {
+                try {
+                    tokenInfo =
+                        withContext(Dispatchers.IO) {
+                            addTokenService.tokenInfo(blockchain, text.trim())
+                        }
+                    tokenInfo?.let {
+                        if (it.inCoinList) {
+                            caution =
+                                Caution(
+                                    Translator.getString(R.string.AddToken_CoinAlreadyInListWarning),
+                                    Caution.Type.Warning,
+                                )
+                        } else {
+                            addButtonEnabled = true
+                        }
                     }
+                } catch (e: Exception) {
+                    caution = Caution(getErrorText(e), Caution.Type.Error)
                 }
-            } catch (e: Exception) {
-                caution = Caution(getErrorText(e), Caution.Type.Error)
-            }
 
-            loading = false
-            emitState()
-        }
+                loading = false
+                emitState()
+            }
     }
 
     fun onAddClick() {
@@ -96,20 +103,21 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
         }
     }
 
-    private fun getErrorText(error: Throwable): String = when (error) {
-        is AddTokenService.TokenError.NotFound -> {
-            Translator.getString(
-                R.string.AddEvmToken_ContractAddressNotFoundInBlockchain,
-                selectedBlockchain.name
-            )
-        }
+    private fun getErrorText(error: Throwable): String =
+        when (error) {
+            is AddTokenService.TokenError.NotFound -> {
+                Translator.getString(
+                    R.string.AddEvmToken_ContractAddressNotFoundInBlockchain,
+                    selectedBlockchain.name,
+                )
+            }
 
-        is AddTokenService.TokenError.InvalidReference -> {
-            Translator.getString(R.string.AddToken_InvalidContractAddress)
-        }
+            is AddTokenService.TokenError.InvalidReference -> {
+                Translator.getString(R.string.AddToken_InvalidContractAddress)
+            }
 
-        else -> Translator.getString(R.string.Error)
-    }
+            else -> Translator.getString(R.string.Error)
+        }
 }
 
 data class AddTokenUiState(

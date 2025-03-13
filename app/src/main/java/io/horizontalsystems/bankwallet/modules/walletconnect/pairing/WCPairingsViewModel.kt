@@ -7,14 +7,14 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 
 class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
-
     private val pairings: List<PairingViewItem>
         get() = WCDelegate.getPairings().map { getPairingViewItem(it) }
 
-    override fun createState() = WCPairingsUiState(
-        pairings = pairings,
-        closeScreen = pairings.isEmpty(),
-    )
+    override fun createState() =
+        WCPairingsUiState(
+            pairings = pairings,
+            closeScreen = pairings.isEmpty(),
+        )
 
     private fun getPairingViewItem(pairing: Core.Model.Pairing): PairingViewItem {
         val metaData = pairing.peerAppMetaData
@@ -23,7 +23,7 @@ class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
             icon = metaData?.icons?.lastOrNull(),
             name = metaData?.name,
             url = metaData?.url,
-            topic = pairing.topic
+            topic = pairing.topic,
         )
     }
 
@@ -39,9 +39,7 @@ class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCPairingsViewModel() as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = WCPairingsViewModel() as T
     }
 }
 
@@ -49,10 +47,10 @@ data class PairingViewItem(
     val icon: String?,
     val name: String?,
     val url: String?,
-    val topic: String
+    val topic: String,
 )
 
 data class WCPairingsUiState(
     val pairings: List<PairingViewItem>,
-    val closeScreen: Boolean
+    val closeScreen: Boolean,
 )

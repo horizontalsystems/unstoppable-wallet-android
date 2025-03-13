@@ -16,10 +16,11 @@ class TokenBalanceService(
     private var balance: BigDecimal? = null
     private var error: Throwable? = null
 
-    override fun createState() = State(
-        balance = balance,
-        error = error
-    )
+    override fun createState() =
+        State(
+            balance = balance,
+            error = error,
+        )
 
     fun setToken(token: Token?) {
         this.token = token
@@ -43,19 +44,20 @@ class TokenBalanceService(
 
         val amount = amount ?: return
 
-        error = when (adapter?.balanceState) {
-            null -> TokenNotEnabled()
-            is AdapterState.SearchingTxs -> WalletSyncing()
-            is AdapterState.Syncing -> WalletSyncing()
-            is AdapterState.NotSynced -> WalletNotSynced()
-            AdapterState.Synced -> {
-                if (amount > balance) {
-                    SwapError.InsufficientBalanceFrom
-                } else {
-                    null
+        error =
+            when (adapter?.balanceState) {
+                null -> TokenNotEnabled()
+                is AdapterState.SearchingTxs -> WalletSyncing()
+                is AdapterState.Syncing -> WalletSyncing()
+                is AdapterState.NotSynced -> WalletNotSynced()
+                AdapterState.Synced -> {
+                    if (amount > balance) {
+                        SwapError.InsufficientBalanceFrom
+                    } else {
+                        null
+                    }
                 }
             }
-        }
     }
 
     private fun refreshAvailableBalance() {
@@ -63,9 +65,14 @@ class TokenBalanceService(
         balance = adapter?.balanceData?.available
     }
 
-    data class State(val balance: BigDecimal?, val error: Throwable?)
+    data class State(
+        val balance: BigDecimal?,
+        val error: Throwable?,
+    )
 }
 
 class TokenNotEnabled : Exception()
+
 class WalletSyncing : Exception()
+
 class WalletNotSynced : Exception()

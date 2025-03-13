@@ -13,9 +13,8 @@ import kotlinx.coroutines.launch
 
 class SelectBackupItemsViewModel(
     private val backupProvider: BackupProvider,
-    private val backupViewItemFactory: BackupViewItemFactory
+    private val backupViewItemFactory: BackupViewItemFactory,
 ) : ViewModelUiState<UIState>() {
-
     private var viewState: ViewState = ViewState.Loading
     private var wallets: List<WalletBackupViewItem> = emptyList()
     private var otherBackupItems: List<OtherBackupViewItem> = emptyList()
@@ -36,20 +35,22 @@ class SelectBackupItemsViewModel(
         }
     }
 
-    override fun createState() = UIState(
-        viewState = viewState,
-        wallets = wallets,
-        otherBackupItems = otherBackupItems
-    )
+    override fun createState() =
+        UIState(
+            viewState = viewState,
+            wallets = wallets,
+            otherBackupItems = otherBackupItems,
+        )
 
     fun toggle(wallet: WalletBackupViewItem) {
-        wallets = wallets.map {
-            if (wallet.account.id == it.account.id) {
-                it.copy(selected = !wallet.selected)
-            } else {
-                it
+        wallets =
+            wallets.map {
+                if (wallet.account.id == it.account.id) {
+                    it.copy(selected = !wallet.selected)
+                } else {
+                    it
+                }
             }
-        }
 
         emitState()
     }
@@ -57,7 +58,7 @@ class SelectBackupItemsViewModel(
     data class UIState(
         val viewState: ViewState,
         val wallets: List<WalletBackupViewItem>,
-        val otherBackupItems: List<OtherBackupViewItem>
+        val otherBackupItems: List<OtherBackupViewItem>,
     )
 
     data class WalletBackupViewItem(
@@ -65,20 +66,18 @@ class SelectBackupItemsViewModel(
         val name: String,
         val type: String,
         val backupRequired: Boolean,
-        val selected: Boolean
+        val selected: Boolean,
     )
 
     data class OtherBackupViewItem(
         val title: String,
         val value: String? = null,
-        val subtitle: String? = null
+        val subtitle: String? = null,
     )
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SelectBackupItemsViewModel(App.backupProvider, BackupViewItemFactory()) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            SelectBackupItemsViewModel(App.backupProvider, BackupViewItemFactory()) as T
     }
-
 }

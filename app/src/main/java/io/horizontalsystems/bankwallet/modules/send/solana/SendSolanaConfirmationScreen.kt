@@ -15,7 +15,7 @@ fun SendSolanaConfirmationScreen(
     navController: NavController,
     sendViewModel: SendSolanaViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }
@@ -49,6 +49,6 @@ fun SendSolanaConfirmationScreen(
         memo = confirmationData.memo,
         rbfEnabled = confirmationData.rbfEnabled,
         onClickSend = sendViewModel::onClickSend,
-        sendEntryPointDestId = sendEntryPointDestId
+        sendEntryPointDestId = sendEntryPointDestId,
     )
 }

@@ -33,12 +33,13 @@ class MarketFiltersResultService(
     var marketItems: List<MarketItem> = listOf()
     var signals: Map<String, Analytics.TechnicalAdvice.Advice> = mapOf()
 
-    val sortingFields = listOf(
-        SortingField.HighestCap,
-        SortingField.LowestCap,
-        SortingField.TopGainers,
-        SortingField.TopLosers,
-    )
+    val sortingFields =
+        listOf(
+            SortingField.HighestCap,
+            SortingField.LowestCap,
+            SortingField.TopGainers,
+            SortingField.TopLosers,
+        )
 
     var sortingField = SortingField.HighestCap
 
@@ -89,35 +90,37 @@ class MarketFiltersResultService(
     private fun fetch() {
         fetchJob?.cancel()
 
-        fetchJob = coroutineScope.launch {
-            try {
-                marketItems = fetcher.fetchAsync().await()
-                if (showSignals) {
-                    signals = marketKitWrapper
-                        .getCoinSignalsSingle(marketItems.map { it.fullCoin.coin.uid })
-                        .await()
+        fetchJob =
+            coroutineScope.launch {
+                try {
+                    marketItems = fetcher.fetchAsync().await()
+                    if (showSignals) {
+                        signals =
+                            marketKitWrapper
+                                .getCoinSignalsSingle(marketItems.map { it.fullCoin.coin.uid })
+                                .await()
+                    }
+                    syncItems()
+                } catch (e: Throwable) {
+                    stateObservable.onNext(DataState.Error(e))
                 }
-                syncItems()
-            } catch (e: Throwable) {
-                stateObservable.onNext(DataState.Error(e))
             }
-        }
     }
 
     private fun syncItems() {
         val favorites = favoritesManager.getAll().map { it.coinUid }
 
-        val items = marketItems
-            .sort(sortingField)
-            .map {
-                MarketItemWrapper(
-                    marketItem = it,
-                    favorited = favorites.contains(it.fullCoin.coin.uid),
-                    signal = if (showSignals) signals[it.fullCoin.coin.uid] else null
-                )
-            }
+        val items =
+            marketItems
+                .sort(sortingField)
+                .map {
+                    MarketItemWrapper(
+                        marketItem = it,
+                        favorited = favorites.contains(it.fullCoin.coin.uid),
+                        signal = if (showSignals) signals[it.fullCoin.coin.uid] else null,
+                    )
+                }
 
         stateObservable.onNext(DataState.Success(items))
     }
-
 }

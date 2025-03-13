@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
 
 class ChartIndicatorsViewModel(
-    private val chartIndicatorManager: ChartIndicatorManager
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModelUiState<ChartIndicatorsUiState>() {
     private var maIndicators: List<ChartIndicatorSetting> = listOf()
     private var oscillatorIndicators: List<ChartIndicatorSetting> = listOf()
@@ -19,17 +19,19 @@ class ChartIndicatorsViewModel(
         viewModelScope.launch {
             chartIndicatorManager.allIndicatorsFlow.collect {
                 maIndicators = it.filter { it.type == ChartIndicatorSetting.IndicatorType.MA }
-                oscillatorIndicators = it.filter { it.type == ChartIndicatorSetting.IndicatorType.RSI || it.type == ChartIndicatorSetting.IndicatorType.MACD }
+                oscillatorIndicators =
+                    it.filter { it.type == ChartIndicatorSetting.IndicatorType.RSI || it.type == ChartIndicatorSetting.IndicatorType.MACD }
 
                 emitState()
             }
         }
     }
 
-    override fun createState() = ChartIndicatorsUiState(
-        maIndicators = maIndicators,
-        oscillatorIndicators = oscillatorIndicators
-    )
+    override fun createState() =
+        ChartIndicatorsUiState(
+            maIndicators = maIndicators,
+            oscillatorIndicators = oscillatorIndicators,
+        )
 
     fun enable(indicator: ChartIndicatorSetting) {
         chartIndicatorManager.enableIndicator(indicator.id)
@@ -47,15 +49,11 @@ class ChartIndicatorsViewModel(
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChartIndicatorsViewModel(App.chartIndicatorManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ChartIndicatorsViewModel(App.chartIndicatorManager) as T
     }
-
 }
-
 
 data class ChartIndicatorsUiState(
     val maIndicators: List<ChartIndicatorSetting>,
-    val oscillatorIndicators: List<ChartIndicatorSetting>
+    val oscillatorIndicators: List<ChartIndicatorSetting>,
 )

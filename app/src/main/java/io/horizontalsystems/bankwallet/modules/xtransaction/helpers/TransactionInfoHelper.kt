@@ -11,21 +11,17 @@ class TransactionInfoHelper {
     private val currencyManager = App.currencyManager
     private val contactsRepository = App.contactsRepository
 
-    fun getXRate(coinUid: String): BigDecimal? {
-        return marketKit.coinPrice(coinUid, currencyManager.baseCurrency.code)?.value
-    }
+    fun getXRate(coinUid: String): BigDecimal? = marketKit.coinPrice(coinUid, currencyManager.baseCurrency.code)?.value
 
-    fun getCurrency(): Currency {
-        return currencyManager.baseCurrency
-    }
+    fun getCurrency(): Currency = currencyManager.baseCurrency
 
-    fun getCurrencySymbol(): String {
-        return currencyManager.baseCurrency.symbol
-    }
+    fun getCurrencySymbol(): String = currencyManager.baseCurrency.symbol
 
-    fun getContact(address: String?, blockchainType: BlockchainType): Contact? {
-        return contactsRepository
+    fun getContact(
+        address: String?,
+        blockchainType: BlockchainType,
+    ): Contact? =
+        contactsRepository
             .getContactsFiltered(blockchainType, addressQuery = address)
             .firstOrNull()
-    }
 }

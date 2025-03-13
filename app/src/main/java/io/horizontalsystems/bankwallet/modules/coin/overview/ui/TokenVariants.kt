@@ -43,51 +43,55 @@ fun TokenVariants(
 
         CellUniversalLawrenceSection(
             items = tokenVariants.items,
-            limit = 3
+            limit = 3,
         ) { tokenVariant ->
             RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
                 Image(
                     modifier = Modifier.size(32.dp),
-                    painter = rememberAsyncImagePainter(
-                        model = tokenVariant.imgUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_32)
-                    ),
-                    contentDescription = "platform"
+                    painter =
+                        rememberAsyncImagePainter(
+                            model = tokenVariant.imgUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_32),
+                        ),
+                    contentDescription = "platform",
                 )
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp)
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
                 ) {
                     tokenVariant.name?.let {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             body_leah(
                                 modifier = Modifier.weight(1f, fill = false),
                                 text = it,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                         Spacer(Modifier.height(1.dp))
                     }
                     subhead2_grey(
-                        modifier = Modifier
-                            .clickable(
-                                enabled = tokenVariant.copyValue != null,
-                                onClick = {
-                                    onClickCopy.invoke(tokenVariant.copyValue ?: "")
-                                }
-                            ),
+                        modifier =
+                            Modifier
+                                .clickable(
+                                    enabled = tokenVariant.copyValue != null,
+                                    onClick = {
+                                        onClickCopy.invoke(tokenVariant.copyValue ?: "")
+                                    },
+                                ),
                         text = tokenVariant.value,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 if (tokenVariant.canAddToWallet) {
@@ -98,7 +102,7 @@ fun TokenVariants(
                             tint = ComposeAppTheme.colors.jacob,
                             onClick = {
                                 onClickRemoveWallet.invoke(tokenVariant.token)
-                            }
+                            },
                         )
                     } else {
                         ButtonSecondaryCircle(
@@ -106,10 +110,9 @@ fun TokenVariants(
                             contentDescription = stringResource(R.string.CoinPage_AddToWallet),
                             onClick = {
                                 onClickAddToWallet.invoke(tokenVariant.token)
-                            }
+                            },
                         )
                     }
-
                 }
                 tokenVariant.explorerUrl?.let { explorerUrl ->
                     ButtonSecondaryCircle(
@@ -118,7 +121,7 @@ fun TokenVariants(
                         contentDescription = stringResource(R.string.Button_Browser),
                         onClick = {
                             onClickExplorer.invoke(explorerUrl)
-                        }
+                        },
                     )
                 }
             }

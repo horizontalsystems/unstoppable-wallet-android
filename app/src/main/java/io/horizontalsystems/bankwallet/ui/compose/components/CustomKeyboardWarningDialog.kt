@@ -18,33 +18,32 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun CustomKeyboardWarningDialog(
     onSelect: () -> Unit,
     onSkip: () -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = onCancel
+        onDismissRequest = onCancel,
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+                .background(ComposeAppTheme.colors.lawrence),
         ) {
             BottomSheetsElementsHeader(
                 icon = painterResource(R.drawable.icon_24_warning_2),
                 title = stringResource(R.string.Alert_TitleWarning),
                 subtitle = stringResource(R.string.Keyboard),
-                onClickClose = onCancel
+                onClickClose = onCancel,
             )
             BottomSheetsElementsText(
-                text = stringResource(R.string.Alert_CustomKeyboardIsUsed)
+                text = stringResource(R.string.Alert_CustomKeyboardIsUsed),
             )
             BottomSheetsElementsButtons(
                 buttonPrimaryText = stringResource(id = R.string.Alert_Select),
                 onClickPrimary = onSelect,
                 buttonDefaultText = stringResource(id = R.string.Alert_Skip),
-                onClickDefault = onSkip
+                onClickDefault = onSkip,
             )
         }
     }
-
 }

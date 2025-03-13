@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 @Composable
 fun HSMemoInput(
     maxLength: Int,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     FormsInput(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -24,6 +24,6 @@ fun HSMemoInput(
         pasteEnabled = false,
         singleLine = true,
         maxLength = maxLength,
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
     )
 }

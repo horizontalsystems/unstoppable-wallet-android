@@ -35,15 +35,14 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
@@ -52,14 +51,20 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
                 }
             }
         }
-    }
 
     @Parcelize
-    data class Input(val account: Account, val text: String) : Parcelable
+    data class Input(
+        val account: Account,
+        val text: String,
+    ) : Parcelable
 }
 
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
+fun BackupRequiredScreen(
+    navController: NavController,
+    account: Account,
+    text: String,
+) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
@@ -67,53 +72,62 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
             title = stringResource(R.string.ManageAccount_BackupRequired_Title),
             onCloseClick = {
                 navController.popBackStack()
-            }
+            },
         ) {
             VSpacer(12.dp)
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = text
+                text = text,
             )
             VSpacer(32.dp)
             ButtonPrimaryYellowWithIcon(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup),
                 icon = R.drawable.ic_edit_24,
                 iconTint = ComposeAppTheme.colors.dark,
                 onClick = {
                     navController.slideFromBottom(
                         R.id.backupKeyFragment,
-                        account
+                        account,
                     )
 
-                    stat(page = StatPage.BackupRequired, event = StatEvent.Open(StatPage.ManualBackup))
-                }
+                    stat(
+                        page = StatPage.BackupRequired,
+                        event = StatEvent.Open(StatPage.ManualBackup),
+                    )
+                },
             )
             VSpacer(12.dp)
             ButtonPrimaryDefaultWithIcon(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup),
                 icon = R.drawable.ic_file_24,
                 iconTint = ComposeAppTheme.colors.claude,
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
 
-                    stat(page = StatPage.BackupRequired, event = StatEvent.Open(StatPage.FileBackup))
-                }
+                    stat(
+                        page = StatPage.BackupRequired,
+                        event = StatEvent.Open(StatPage.FileBackup),
+                    )
+                },
             )
             VSpacer(12.dp)
             ButtonPrimaryTransparent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BackupRecoveryPhrase_Later),
                 onClick = {
                     navController.popBackStack()
-                }
+                },
             )
             VSpacer(32.dp)
         }

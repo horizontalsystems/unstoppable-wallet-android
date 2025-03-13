@@ -13,15 +13,18 @@ data class WalletConnectTransaction(
     val maxPriorityFeePerGas: Long?,
     val maxFeePerGas: Long?,
     val value: BigInteger,
-    val data: ByteArray
+    val data: ByteArray,
 ) {
-    fun getGasPriceObj() = when {
-        maxFeePerGas != null && maxPriorityFeePerGas != null -> {
-            GasPrice.Eip1559(maxFeePerGas, maxPriorityFeePerGas)
+    fun getGasPriceObj() =
+        when {
+            maxFeePerGas != null && maxPriorityFeePerGas != null -> {
+                GasPrice.Eip1559(maxFeePerGas, maxPriorityFeePerGas)
+            }
+
+            this.gasPrice != null -> {
+                GasPrice.Legacy(this.gasPrice)
+            }
+
+            else -> null
         }
-        this.gasPrice != null -> {
-            GasPrice.Legacy(this.gasPrice)
-        }
-        else -> null
-    }
 }

@@ -4,5 +4,5 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 
 data class TransferEvent(
     val address: String?,
-    val value: TransactionValue
+    val value: TransactionValue,
 )

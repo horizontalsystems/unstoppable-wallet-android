@@ -34,22 +34,29 @@ fun FeeCell(
     info: String,
     value: FeeItem?,
     viewState: ViewState?,
-    navController: NavController?
+    navController: NavController?,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            modifier = Modifier.clickable(
-                enabled = navController != null,
-                onClick = { navController?.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(title, info)) },
-                interactionSource = MutableInteractionSource(),
-                indication = null
-            ),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier.clickable(
+                    enabled = navController != null,
+                    onClick = {
+                        navController?.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.Input(title, info),
+                        )
+                    },
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             subhead2_grey(text = title)
 
@@ -57,7 +64,7 @@ fun FeeCell(
                 Image(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     painter = painterResource(id = R.drawable.ic_info_20),
-                    contentDescription = ""
+                    contentDescription = "",
                 )
             }
         }
@@ -69,30 +76,31 @@ fun FeeCell(
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 1.5.dp
+                    strokeWidth = 1.5.dp,
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
-                val color = if (viewState is ViewState.Error) {
-                    ComposeAppTheme.colors.lucian
-                } else if (value == null) {
-                    ComposeAppTheme.colors.grey50
-                } else {
-                    ComposeAppTheme.colors.leah
-                }
+                val color =
+                    if (viewState is ViewState.Error) {
+                        ComposeAppTheme.colors.lucian
+                    } else if (value == null) {
+                        ComposeAppTheme.colors.grey50
+                    } else {
+                        ComposeAppTheme.colors.leah
+                    }
                 Text(
                     modifier = Modifier.alpha(if (viewState == ViewState.Loading) 0f else 1f),
                     text = value?.primary ?: stringResource(id = R.string.NotAvailable),
                     maxLines = 1,
                     style = ComposeAppTheme.typography.subhead1,
-                    color = color
+                    color = color,
                 )
                 Text(
                     modifier = Modifier.alpha(if (viewState == ViewState.Loading) 0f else 1f),
                     text = value?.secondary ?: stringResource(id = R.string.NotAvailable),
                     maxLines = 1,
                     style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.grey
+                    color = ComposeAppTheme.colors.grey,
                 )
             }
         }

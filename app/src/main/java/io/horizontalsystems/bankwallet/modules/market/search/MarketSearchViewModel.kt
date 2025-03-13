@@ -22,10 +22,11 @@ class MarketSearchViewModel(
     private var searchState = marketSearchService.stateFlow.value
     private var discoveryState = marketDiscoveryService.stateFlow.value
     private var listId: String = ""
-    private var page: Page = Page.Discovery(
-        recent = coinItems(discoveryState.recent),
-        popular = coinItems(discoveryState.popular),
-    )
+    private var page: Page =
+        Page.Discovery(
+            recent = coinItems(discoveryState.recent),
+            popular = coinItems(discoveryState.popular),
+        )
 
     var uiState by mutableStateOf(UiState(page, listId))
         private set
@@ -70,7 +71,7 @@ class MarketSearchViewModel(
         fullCoins.map {
             MarketSearchModule.CoinItem(
                 it,
-                marketFavoritesManager.isCoinInFavorites(it.coin.uid)
+                marketFavoritesManager.isCoinInFavorites(it.coin.uid),
             )
         }
 
@@ -79,10 +80,11 @@ class MarketSearchViewModel(
             page = Page.SearchResults(coinItems(searchState.results))
             listId = searchState.query
         } else {
-            page = Page.Discovery(
-                coinItems(discoveryState.recent),
-                coinItems(discoveryState.popular),
-            )
+            page =
+                Page.Discovery(
+                    coinItems(discoveryState.recent),
+                    coinItems(discoveryState.popular),
+                )
             listId = ""
         }
 
@@ -91,7 +93,10 @@ class MarketSearchViewModel(
         }
     }
 
-    fun onFavoriteClick(favourited: Boolean, coinUid: String) {
+    fun onFavoriteClick(
+        favourited: Boolean,
+        coinUid: String,
+    ) {
         if (favourited) {
             marketFavoritesManager.remove(coinUid)
 
@@ -109,11 +114,17 @@ class MarketSearchViewModel(
 
     data class UiState(
         val page: Page,
-        val listId: String
+        val listId: String,
     )
 
     sealed class Page {
-        data class Discovery(val recent: List<MarketSearchModule.CoinItem>, val popular: List<MarketSearchModule.CoinItem>) : Page()
-        data class SearchResults(val items: List<MarketSearchModule.CoinItem>) : Page()
+        data class Discovery(
+            val recent: List<MarketSearchModule.CoinItem>,
+            val popular: List<MarketSearchModule.CoinItem>,
+        ) : Page()
+
+        data class SearchResults(
+            val items: List<MarketSearchModule.CoinItem>,
+        ) : Page()
     }
 }

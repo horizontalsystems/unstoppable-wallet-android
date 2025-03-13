@@ -20,26 +20,31 @@ class TonTransactionConverter(
     private val address: Address,
     private val coinManager: ICoinManager,
     private val source: TransactionSource,
-    private val baseToken: Token
+    private val baseToken: Token,
 ) {
-
     fun createTransactionRecord(event: Event): TonTransactionRecord {
-        val actions = event.actions.map { action ->
-            val status = when (action.status) {
-                Action.Status.OK -> TransactionStatus.Completed
-                Action.Status.FAILED -> TransactionStatus.Failed
-            }
+        val actions =
+            event.actions.map { action ->
+                val status =
+                    when (action.status) {
+                        Action.Status.OK -> TransactionStatus.Completed
+                        Action.Status.FAILED -> TransactionStatus.Failed
+                    }
 
-            TonTransactionRecord.Action(
-                type = getActionType(action),
-                status = status
-            )
-        }
+                TonTransactionRecord.Action(
+                    type = getActionType(action),
+                    status = status,
+                )
+            }
 
         return TonTransactionRecord(source, event, baseToken, actions)
     }
 
-    private fun convertAmount(amount: BigInteger, decimal: Int, negative: Boolean): BigDecimal {
+    private fun convertAmount(
+        amount: BigInteger,
+        decimal: Int,
+        negative: Boolean,
+    ): BigDecimal {
         var significandAmount = amount.toBigDecimal().movePointLeft(decimal).stripTrailingZeros()
 
         if (significandAmount.compareTo(BigDecimal.ZERO) == 0) {
@@ -53,13 +58,24 @@ class TonTransactionConverter(
         return significandAmount
     }
 
-    private fun tonValue(value: BigInteger, negative: Boolean): TransactionValue {
+    private fun tonValue(
+        value: BigInteger,
+        negative: Boolean,
+    ): TransactionValue {
         val amount = convertAmount(value, baseToken.decimals, negative)
         return TransactionValue.CoinValue(baseToken, amount)
     }
 
-    private fun jettonValue(jetton: Jetton, value: BigInteger, negative: Boolean): TransactionValue {
-        val query = TokenQuery(BlockchainType.Ton, TokenType.Jetton(jetton.address.toUserFriendly(bounceable = true)))
+    private fun jettonValue(
+        jetton: Jetton,
+        value: BigInteger,
+        negative: Boolean,
+    ): TransactionValue {
+        val query =
+            TokenQuery(
+                BlockchainType.Ton,
+                TokenType.Jetton(jetton.address.toUserFriendly(bounceable = true)),
+            )
 
         val token = coinManager.getToken(query)
 
@@ -71,14 +87,12 @@ class TonTransactionConverter(
                 jetton.symbol,
                 jetton.decimals,
                 convertAmount(value, jetton.decimals, negative),
-                jetton.image
+                jetton.image,
             )
         }
     }
 
-    private fun format(address: AccountAddress): String {
-        return address.address.toUserFriendly(bounceable = !address.isWallet)
-    }
+    private fun format(address: AccountAddress): String = address.address.toUserFriendly(bounceable = !address.isWallet)
 
     private fun getActionType(action: Action): TonTransactionRecord.Action.Type {
         action.tonTransfer?.let { tonTransfer ->
@@ -88,7 +102,7 @@ class TonTransactionConverter(
                         value = tonValue(tonTransfer.amount, true),
                         to = format(tonTransfer.recipient),
                         sentToSelf = tonTransfer.recipient.address == address,
-                        comment = tonTransfer.comment
+                        comment = tonTransfer.comment,
                     )
                 }
 
@@ -96,7 +110,7 @@ class TonTransactionConverter(
                     TonTransactionRecord.Action.Type.Receive(
                         value = tonValue(tonTransfer.amount, false),
                         from = format(tonTransfer.sender),
-                        comment = tonTransfer.comment
+                        comment = tonTransfer.comment,
                     )
                 }
 
@@ -114,7 +128,7 @@ class TonTransactionConverter(
                         value = jettonValue(jettonTransfer.jetton, jettonTransfer.amount, true),
                         to = format(recipient),
                         sentToSelf = jettonTransfer.recipient?.address == address,
-                        comment = jettonTransfer.comment
+                        comment = jettonTransfer.comment,
                     )
                 }
 
@@ -122,7 +136,7 @@ class TonTransactionConverter(
                     TonTransactionRecord.Action.Type.Receive(
                         value = jettonValue(jettonTransfer.jetton, jettonTransfer.amount, false),
                         from = format(sender),
-                        comment = jettonTransfer.comment
+                        comment = jettonTransfer.comment,
                     )
                 }
 
@@ -132,19 +146,19 @@ class TonTransactionConverter(
 
         action.jettonBurn?.let { jettonBurn ->
             return TonTransactionRecord.Action.Type.Burn(
-                value = jettonValue(jettonBurn.jetton, jettonBurn.amount, true)
+                value = jettonValue(jettonBurn.jetton, jettonBurn.amount, true),
             )
         }
 
         action.jettonMint?.let { jettonMint ->
             return TonTransactionRecord.Action.Type.Mint(
-                value = jettonValue(jettonMint.jetton, jettonMint.amount, false)
+                value = jettonValue(jettonMint.jetton, jettonMint.amount, false),
             )
         }
 
         action.contractDeploy?.let { contractDeploy ->
             return TonTransactionRecord.Action.Type.ContractDeploy(
-                interfaces = contractDeploy.interfaces
+                interfaces = contractDeploy.interfaces,
             )
         }
 
@@ -152,12 +166,14 @@ class TonTransactionConverter(
             return TonTransactionRecord.Action.Type.Swap(
                 routerName = jettonSwap.router.name,
                 routerAddress = format(jettonSwap.router),
-                valueIn = jettonSwap.jettonMasterIn?.let {
-                    jettonValue(it, jettonSwap.amountIn, true)
-                } ?: tonValue(jettonSwap.tonIn ?: BigInteger.ZERO, true),
-                valueOut = jettonSwap.jettonMasterOut?.let {
-                    jettonValue(it, jettonSwap.amountOut, false)
-                } ?: tonValue(jettonSwap.tonOut ?: BigInteger.ZERO, false),
+                valueIn =
+                    jettonSwap.jettonMasterIn?.let {
+                        jettonValue(it, jettonSwap.amountIn, true)
+                    } ?: tonValue(jettonSwap.tonIn ?: BigInteger.ZERO, true),
+                valueOut =
+                    jettonSwap.jettonMasterOut?.let {
+                        jettonValue(it, jettonSwap.amountOut, false)
+                    } ?: tonValue(jettonSwap.tonOut ?: BigInteger.ZERO, false),
             )
         }
 
@@ -165,7 +181,7 @@ class TonTransactionConverter(
             return TonTransactionRecord.Action.Type.ContractCall(
                 address = format(smartContractExec.contract),
                 value = tonValue(smartContractExec.tonAttached, true),
-                operation = smartContractExec.operation
+                operation = smartContractExec.operation,
             )
         }
 

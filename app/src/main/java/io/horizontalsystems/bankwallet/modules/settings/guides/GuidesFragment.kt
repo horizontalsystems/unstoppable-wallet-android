@@ -41,12 +41,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import java.net.UnknownHostException
 
 class GuidesFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         GuidesScreen(navController)
     }
-
 }
 
 @Composable
@@ -61,15 +59,16 @@ fun GuidesScreen(navController: NavController) {
     val expandedSections = uiState.expandedSections
 
     Column(
-        modifier = Modifier
-            .background(color = ComposeAppTheme.colors.tyler)
-            .navigationBarsPadding()
+        modifier =
+            Modifier
+                .background(color = ComposeAppTheme.colors.tyler)
+                .navigationBarsPadding(),
     ) {
         AppBar(
             title = stringResource(R.string.Guides_Title),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
-            }
+            },
         )
 
         Crossfade(viewState) { viewState ->
@@ -79,11 +78,12 @@ fun GuidesScreen(navController: NavController) {
                 }
 
                 is ViewState.Error -> {
-                    val s = when (val error = viewState.t) {
-                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
-                        is LocalizedException -> stringResource(error.errorTextRes)
-                        else -> stringResource(R.string.Hud_UnknownError, error)
-                    }
+                    val s =
+                        when (val error = viewState.t) {
+                            is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                            is LocalizedException -> stringResource(error.errorTextRes)
+                            else -> stringResource(R.string.Hud_UnknownError, error)
+                        }
 
                     ScreenMessageWithAction(s, R.drawable.ic_error_48)
                 }
@@ -91,19 +91,21 @@ fun GuidesScreen(navController: NavController) {
                 ViewState.Success -> {
                     if (selectedCategory != null) {
                         Column {
-                            val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
+                            val tabItems =
+                                categories.map { TabItem(it.category, it == selectedCategory, it) }
                             ScrollableTabs(tabItems) { tab ->
                                 viewModel.onSelectCategory(tab)
                             }
-                            val listState = rememberSaveable(
-                                selectedCategory,
-                                saver = LazyListState.Saver
-                            ) {
-                                LazyListState()
-                            }
+                            val listState =
+                                rememberSaveable(
+                                    selectedCategory,
+                                    saver = LazyListState.Saver,
+                                ) {
+                                    LazyListState()
+                                }
                             LazyColumn(
                                 state = listState,
-                                contentPadding = PaddingValues(bottom = 32.dp)
+                                contentPadding = PaddingValues(bottom = 32.dp),
                             ) {
                                 val sections = selectedCategory.sections
                                 val sectionsSize = sections.size
@@ -118,19 +120,20 @@ fun GuidesScreen(navController: NavController) {
                                             color = ComposeAppTheme.colors.lawrence,
                                             onClick = {
                                                 viewModel.toggleSection(sectionTitle, expanded)
-                                            }
+                                            },
                                         ) {
                                             headline2_leah(sectionTitle)
                                             HFillSpacer(8.dp)
-                                            val iconId = if (expanded) {
-                                                R.drawable.ic_arrow_big_up_20
-                                            } else {
-                                                R.drawable.ic_arrow_big_down_20
-                                            }
+                                            val iconId =
+                                                if (expanded) {
+                                                    R.drawable.ic_arrow_big_up_20
+                                                } else {
+                                                    R.drawable.ic_arrow_big_down_20
+                                                }
                                             Icon(
                                                 painter = painterResource(iconId),
                                                 contentDescription = null,
-                                                tint = ComposeAppTheme.colors.grey
+                                                tint = ComposeAppTheme.colors.grey,
                                             )
                                         }
                                     }
@@ -141,11 +144,14 @@ fun GuidesScreen(navController: NavController) {
                                                 onClick = {
                                                     navController.slideFromRight(
                                                         R.id.markdownFragment,
-                                                        MarkdownFragment.Input(guide.markdown, true)
+                                                        MarkdownFragment.Input(guide.markdown, true),
                                                     )
 
-                                                    stat(page = StatPage.Academy, event = StatEvent.OpenArticle(guide.markdown))
-                                                }
+                                                    stat(
+                                                        page = StatPage.Academy,
+                                                        event = StatEvent.OpenArticle(guide.markdown),
+                                                    )
+                                                },
                                             ) {
                                                 body_leah(guide.title)
                                             }
@@ -154,7 +160,7 @@ fun GuidesScreen(navController: NavController) {
                                             item {
                                                 Divider(
                                                     thickness = 1.dp,
-                                                    color = ComposeAppTheme.colors.steel10
+                                                    color = ComposeAppTheme.colors.steel10,
                                                 )
                                             }
                                         }

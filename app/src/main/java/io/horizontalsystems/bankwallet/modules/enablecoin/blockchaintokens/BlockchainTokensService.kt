@@ -9,11 +9,19 @@ class BlockchainTokensService {
     val rejectApproveTokensObservable = PublishSubject.create<Blockchain>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveTokens(blockchain: Blockchain, tokens: List<Token>, enabledTokens: List<Token>, allowEmpty: Boolean = false) {
+    fun approveTokens(
+        blockchain: Blockchain,
+        tokens: List<Token>,
+        enabledTokens: List<Token>,
+        allowEmpty: Boolean = false,
+    ) {
         requestObservable.onNext(Request(blockchain, tokens, enabledTokens, allowEmpty))
     }
 
-    fun select(tokens: List<Token>, blockchain: Blockchain) {
+    fun select(
+        tokens: List<Token>,
+        blockchain: Blockchain,
+    ) {
         approveTokensObservable.onNext(BlockchainWithTokens(blockchain, tokens))
     }
 
@@ -21,6 +29,15 @@ class BlockchainTokensService {
         rejectApproveTokensObservable.onNext(blockchain)
     }
 
-    data class BlockchainWithTokens(val blockchain: Blockchain, val tokens: List<Token>)
-    data class Request(val blockchain: Blockchain, val tokens: List<Token>, val enabledTokens: List<Token>, val allowEmpty: Boolean)
+    data class BlockchainWithTokens(
+        val blockchain: Blockchain,
+        val tokens: List<Token>,
+    )
+
+    data class Request(
+        val blockchain: Blockchain,
+        val tokens: List<Token>,
+        val enabledTokens: List<Token>,
+        val allowEmpty: Boolean,
+    )
 }

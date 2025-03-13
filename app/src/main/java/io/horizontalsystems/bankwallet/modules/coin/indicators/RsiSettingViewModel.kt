@@ -1,20 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
-import kotlinx.coroutines.launch
 
 class RsiSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
-    private val chartIndicatorManager: ChartIndicatorManager
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModelUiState<IndicatorSettingUiState>() {
     val name = indicatorSetting.name
     val defaultPeriod = indicatorSetting.defaultData["period"]
@@ -22,21 +17,18 @@ class RsiSettingViewModel(
     private var periodError: Throwable? = null
     private var finish = false
 
-    override fun createState() = IndicatorSettingUiState(
-        period = period,
-        periodError = periodError,
-        applyEnabled = applyEnabled(),
-        finish = finish,
-        resetEnabled = resetEnabled()
-    )
+    override fun createState() =
+        IndicatorSettingUiState(
+            period = period,
+            periodError = periodError,
+            applyEnabled = applyEnabled(),
+            finish = finish,
+            resetEnabled = resetEnabled(),
+        )
 
-    private fun applyEnabled(): Boolean {
-        return period != indicatorSetting.extraData["period"]
-    }
+    private fun applyEnabled(): Boolean = period != indicatorSetting.extraData["period"]
 
-    private fun resetEnabled(): Boolean {
-        return period != null
-    }
+    private fun resetEnabled(): Boolean = period != null
 
     fun onEnterPeriod(v: String) {
         period = v
@@ -55,11 +47,12 @@ class RsiSettingViewModel(
     }
 
     fun save() {
-        val extraData = indicatorSetting.extraData.plus(
-            mapOf(
-                "period" to period,
+        val extraData =
+            indicatorSetting.extraData.plus(
+                mapOf(
+                    "period" to period,
+                ),
             )
-        )
         val updated = indicatorSetting.copy(extraData = extraData)
         chartIndicatorManager.update(updated)
 
@@ -73,11 +66,11 @@ class RsiSettingViewModel(
         emitState()
     }
 
-    class Factory(private val indicatorSetting: ChartIndicatorSetting) : ViewModelProvider.Factory {
+    class Factory(
+        private val indicatorSetting: ChartIndicatorSetting,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RsiSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = RsiSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
     }
 }
 

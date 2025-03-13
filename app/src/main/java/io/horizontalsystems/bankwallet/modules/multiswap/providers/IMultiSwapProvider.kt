@@ -14,17 +14,20 @@ interface IMultiSwapProvider {
     val icon: Int
     val priority: Int
 
-    fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return tokenFrom.blockchainType == tokenTo.blockchainType &&
+    fun supports(
+        tokenFrom: Token,
+        tokenTo: Token,
+    ): Boolean =
+        tokenFrom.blockchainType == tokenTo.blockchainType &&
             supports(tokenFrom.blockchainType)
-    }
 
     fun supports(blockchainType: BlockchainType): Boolean
+
     suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>
+        settings: Map<String, Any?>,
     ): ISwapQuote
 
     suspend fun fetchFinalQuote(
@@ -32,6 +35,6 @@ interface IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
-        sendTransactionSettings: SendTransactionSettings?
-    ) : ISwapFinalQuote
+        sendTransactionSettings: SendTransactionSettings?,
+    ): ISwapFinalQuote
 }

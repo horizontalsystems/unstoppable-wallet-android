@@ -20,30 +20,48 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 object SendSolanaModule {
-
     class Factory(
         private val wallet: Wallet,
         private val address: Address,
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
+        val adapter =
+            (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter)
+                ?: throw IllegalStateException("SendSolanaAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 SendSolanaViewModel::class.java -> {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendAmountService(
-                        amountValidator,
-                        wallet.token.coin.code,
-                        adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-                        wallet.token.type.isNative,
-                    )
-                    val solToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
-                    val balance = App.solanaKitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
-                    val solBalance = SolanaAdapter.balanceInBigDecimal(balance, solToken.decimals) - SolanaKit.accountRentAmount
+                    val amountService =
+                        SendAmountService(
+                            amountValidator,
+                            wallet.token.coin.code,
+                            adapter.availableBalance.setScale(
+                                coinMaxAllowedDecimals,
+                                RoundingMode.DOWN,
+                            ),
+                            wallet.token.type.isNative,
+                        )
+                    val solToken =
+                        App.coinManager.getToken(
+                            TokenQuery(
+                                BlockchainType.Solana,
+                                TokenType.Native,
+                            ),
+                        ) ?: throw IllegalArgumentException()
+                    val balance =
+                        App.solanaKitManager.solanaKitWrapper
+                            ?.solanaKit
+                            ?.balance ?: 0L
+                    val solBalance =
+                        SolanaAdapter.balanceInBigDecimal(
+                            balance,
+                            solToken.decimals,
+                        ) - SolanaKit.accountRentAmount
                     val addressService = SendSolanaAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
@@ -61,13 +79,12 @@ object SendSolanaModule {
                         !hideAddress,
                         App.connectivityManager,
                         address,
-                        App.recentAddressManager
+                        App.recentAddressManager,
                     ) as T
                 }
 
                 else -> throw IllegalArgumentException()
             }
-        }
     }
 
     data class SendUiState(
@@ -78,5 +95,4 @@ object SendSolanaModule {
         val showAddressInput: Boolean,
         val address: Address,
     )
-
 }

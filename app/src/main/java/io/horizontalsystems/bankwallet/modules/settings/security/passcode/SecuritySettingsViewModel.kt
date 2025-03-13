@@ -13,7 +13,7 @@ class SecuritySettingsViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
     private val balanceHiddenManager: BalanceHiddenManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
 ) : ViewModelUiState<SecuritySettingsUiState>() {
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
 
@@ -31,13 +31,14 @@ class SecuritySettingsViewModel(
         }
     }
 
-    override fun createState() = SecuritySettingsUiState(
-        pinEnabled = pinEnabled,
-        biometricsEnabled = pinComponent.isBiometricAuthEnabled,
-        duressPinEnabled = duressPinEnabled,
-        balanceAutoHideEnabled = balanceAutoHideEnabled,
-        autoLockIntervalName = localStorage.autoLockInterval.title,
-    )
+    override fun createState() =
+        SecuritySettingsUiState(
+            pinEnabled = pinEnabled,
+            biometricsEnabled = pinComponent.isBiometricAuthEnabled,
+            duressPinEnabled = duressPinEnabled,
+            balanceAutoHideEnabled = balanceAutoHideEnabled,
+            autoLockIntervalName = localStorage.autoLockInterval.title,
+        )
 
     fun enableBiometrics() {
         pinComponent.isBiometricAuthEnabled = true
@@ -76,5 +77,5 @@ data class SecuritySettingsUiState(
     val biometricsEnabled: Boolean,
     val duressPinEnabled: Boolean,
     val balanceAutoHideEnabled: Boolean,
-    val autoLockIntervalName: Int
+    val autoLockIntervalName: Int,
 )

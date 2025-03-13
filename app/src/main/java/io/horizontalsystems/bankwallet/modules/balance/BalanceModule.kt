@@ -18,20 +18,19 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 object BalanceModule {
     class AccountsFactory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BalanceAccountsViewModel(App.accountManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = BalanceAccountsViewModel(App.accountManager) as T
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val totalService = TotalService(
-                App.currencyManager,
-                App.marketKit,
-                App.baseTokenManager,
-                App.balanceHiddenManager
-            )
+            val totalService =
+                TotalService(
+                    App.currencyManager,
+                    App.marketKit,
+                    App.baseTokenManager,
+                    App.balanceHiddenManager,
+                )
             return BalanceViewModel(
                 BalanceService.getInstance("wallet"),
                 BalanceViewItemFactory(),
@@ -41,21 +40,21 @@ object BalanceModule {
                 App.wcManager,
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 App.priceManager,
-                App.instance.isSwapEnabled
+                App.instance.isSwapEnabled,
             ) as T
         }
     }
 
     class FactoryCex : ViewModelProvider.Factory {
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val totalService = TotalService(
-                App.currencyManager,
-                App.marketKit,
-                App.baseTokenManager,
-                App.balanceHiddenManager
-            )
+            val totalService =
+                TotalService(
+                    App.currencyManager,
+                    App.marketKit,
+                    App.baseTokenManager,
+                    App.balanceHiddenManager,
+                )
 
             return BalanceCexViewModel(
                 TotalBalance(totalService, App.balanceHiddenManager),
@@ -76,7 +75,7 @@ object BalanceModule {
         val state: AdapterState,
         val sendAllowed: Boolean,
         val coinPrice: CoinPrice?,
-        val warning: BalanceWarning? = null
+        val warning: BalanceWarning? = null,
     ) {
         val fiatValue get() = coinPrice?.value?.let { balanceData.available.times(it) }
         val balanceFiatTotal get() = coinPrice?.value?.let { balanceData.total.times(it) }
@@ -87,10 +86,12 @@ object BalanceModule {
     }
 
     val BalanceWarning.warningText: WarningText
-        get() = when (this) {
-            BalanceWarning.TronInactiveAccountWarning -> WarningText(
-                title = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Title),
-                text = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Info),
-            )
-        }
+        get() =
+            when (this) {
+                BalanceWarning.TronInactiveAccountWarning ->
+                    WarningText(
+                        title = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Title),
+                        text = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Info),
+                    )
+            }
 }

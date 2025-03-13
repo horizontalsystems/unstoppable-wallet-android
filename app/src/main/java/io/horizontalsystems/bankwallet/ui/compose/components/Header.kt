@@ -33,22 +33,24 @@ fun HeaderStick(
     text: String,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.tyler)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(ComposeAppTheme.colors.tyler),
     ) {
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
 
         Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             subhead1_grey(
                 modifier = Modifier.align(Alignment.CenterVertically),
@@ -65,27 +67,29 @@ fun HeaderText(
     onInfoClick: (() -> Unit)? = null,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(32.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         subhead2_grey(
             modifier = Modifier.padding(horizontal = 32.dp),
             text = text,
-            maxLines = 1
+            maxLines = 1,
         )
         onInfoClick?.let { onClick ->
             Spacer(Modifier.weight(1f))
             Icon(
-                modifier = Modifier
-                    .padding(end = 24.dp)
-                    .size(20.dp)
-                    .clickable(
-                        onClick = onClick,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                    ),
+                modifier =
+                    Modifier
+                        .padding(end = 24.dp)
+                        .size(20.dp)
+                        .clickable(
+                            onClick = onClick,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ),
                 painter = painterResource(R.drawable.ic_info_20),
                 tint = ComposeAppTheme.colors.grey,
                 contentDescription = stringResource(R.string.Info_Title),
@@ -101,16 +105,17 @@ fun HeaderSorting(
     content: @Composable RowScope.() -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp)
-            .background(ComposeAppTheme.colors.tyler)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(44.dp)
+                .background(ComposeAppTheme.colors.tyler),
     ) {
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
 
@@ -118,16 +123,17 @@ fun HeaderSorting(
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .horizontalScroll(rememberScrollState()),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .horizontalScroll(rememberScrollState()),
             verticalAlignment = Alignment.CenterVertically,
-            content = content
+            content = content,
         )
     }
 }
@@ -135,23 +141,25 @@ fun HeaderSorting(
 @Composable
 fun PremiumHeader() {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 32.dp)
-            .height(32.dp)
-            .padding(top = 1.dp),
+        modifier =
+            Modifier
+                .padding(horizontal = 32.dp)
+                .height(32.dp)
+                .padding(top = 1.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            modifier = Modifier
-                .padding(end = 10.dp)
-                .size(16.dp),
+            modifier =
+                Modifier
+                    .padding(end = 10.dp)
+                    .size(16.dp),
             painter = painterResource(R.drawable.star_filled_yellow_16),
             tint = ComposeAppTheme.colors.jacob,
             contentDescription = null,
         )
         subhead1_jacob(
             text = stringResource(R.string.Premium_Title),
-            maxLines = 1
+            maxLines = 1,
         )
     }
 }
@@ -162,7 +170,7 @@ fun Preview_HeaderText() {
     ComposeAppTheme {
         HeaderText(
             text = "Sample Header",
-            { }
+            { },
         )
     }
 }

@@ -8,8 +8,9 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 
-class BackupKeyViewModel(val account: Account) : ViewModel() {
-
+class BackupKeyViewModel(
+    val account: Account,
+) : ViewModel() {
     var passphrase by mutableStateOf("")
         private set
 
@@ -18,9 +19,10 @@ class BackupKeyViewModel(val account: Account) : ViewModel() {
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            wordsNumbered = account.type.words.mapIndexed { index, word ->
-                RecoveryPhraseModule.WordNumbered(word, index + 1)
-            }
+            wordsNumbered =
+                account.type.words.mapIndexed { index, word ->
+                    RecoveryPhraseModule.WordNumbered(word, index + 1)
+                }
             passphrase = account.type.passphrase
         }
     }

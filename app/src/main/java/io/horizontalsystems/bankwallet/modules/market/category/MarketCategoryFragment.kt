@@ -50,7 +50,6 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.launch
 
 class MarketCategoryFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<CoinCategory>(navController) { input ->
@@ -62,12 +61,15 @@ class MarketCategoryFragment : BaseComposeFragment() {
                 viewModel = viewModel,
                 chartViewModel = chartViewModel,
                 onCloseButtonClick = { navController.popBackStack() },
-                onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
+                onCoinClick = { coinUid -> onCoinClick(coinUid, navController) },
             )
         }
     }
 
-    private fun onCoinClick(coinUid: String, navController: NavController) {
+    private fun onCoinClick(
+        coinUid: String,
+        navController: NavController,
+    ) {
         val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
@@ -102,32 +104,34 @@ fun CategoryScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onCloseButtonClick)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
-                            isInfoBottomSheetVisible = true
-                        },
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                coroutineScope.launch {
+                                    infoModalBottomSheetState.show()
+                                }
+                                isInfoBottomSheetVisible = true
+                            },
+                        ),
+                    ),
             )
         },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .navigationBarsPadding()
+            modifier =
+                Modifier
+                    .padding(innerPaddings)
+                    .navigationBarsPadding(),
         ) {
             HSSwipeRefresh(
                 refreshing = isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                     chartViewModel.refresh()
-                }
+                },
             ) {
                 Crossfade(viewItemState) { state ->
                     when (state) {
@@ -141,7 +145,7 @@ fun CategoryScreen(
                                 onClick = {
                                     viewModel.onErrorClick()
                                     chartViewModel.refresh()
-                                }
+                                },
                             )
                         }
 
@@ -163,29 +167,30 @@ fun CategoryScreen(
                                             stickyHeader {
                                                 HeaderSorting(
                                                     borderTop = true,
-                                                    borderBottom = true
+                                                    borderBottom = true,
                                                 ) {
                                                     Box(modifier = Modifier.weight(1f)) {
                                                         SortMenu(
                                                             it.sortingFieldSelect.selected.titleResId,
-                                                            viewModel::showSelectorMenu
+                                                            viewModel::showSelectorMenu,
                                                         )
                                                     }
                                                     Box(
-                                                        modifier = Modifier.padding(
-                                                            start = 8.dp,
-                                                            end = 16.dp
-                                                        )
+                                                        modifier =
+                                                            Modifier.padding(
+                                                                start = 8.dp,
+                                                                end = 16.dp,
+                                                            ),
                                                     ) {
                                                         ButtonSecondaryToggle(
                                                             select = it.marketFieldSelect,
-                                                            onSelect = viewModel::onSelectMarketField
+                                                            onSelect = viewModel::onSelectMarketField,
                                                         )
                                                     }
                                                 }
                                             }
                                         }
-                                    }
+                                    },
                                 )
                                 if (scrollToTopAfterUpdate) {
                                     scrollToTopAfterUpdate = false
@@ -196,7 +201,7 @@ fun CategoryScreen(
                 }
             }
         }
-        //Dialog
+        // Dialog
         when (val option = selectorDialogState) {
             is SelectorDialogState.Opened -> {
                 AlertGroup(
@@ -206,12 +211,13 @@ fun CategoryScreen(
                         scrollToTopAfterUpdate = true
                         viewModel.onSelectSortingField(selected)
                     },
-                    { viewModel.onSelectorDialogDismiss() }
+                    { viewModel.onSelectorDialogDismiss() },
                 )
             }
 
             SelectorDialogState.Closed,
-            null -> {
+            null,
+            -> {
             }
         }
     }
@@ -226,8 +232,7 @@ fun CategoryScreen(
                     infoModalBottomSheetState.hide()
                 }
                 isInfoBottomSheetVisible = false
-            }
+            },
         )
     }
 }
-

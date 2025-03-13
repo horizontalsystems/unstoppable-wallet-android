@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import com.google.gson.*
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategoryMultiLang
@@ -9,46 +13,54 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.reflect.Type
 import java.net.URL
-import java.util.*
 
 object GuidesManager {
-
     private val guidesUrl = App.appConfigProvider.guidesUrl
 
-    private val gson = GsonBuilder()
+    private val gson =
+        GsonBuilder()
             .setDateFormat("yyyy-MM-dd")
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(Guide::class.java, GuideDeserializer(guidesUrl))
             .create()
 
-    fun getGuideCategories(): Single<Array<GuideCategoryMultiLang>> {
-        return Single.fromCallable {
-            val request = Request.Builder()
+    fun getGuideCategories(): Single<Array<GuideCategoryMultiLang>> =
+        Single.fromCallable {
+            val request =
+                Request
+                    .Builder()
                     .url(guidesUrl)
                     .build()
 
             val response = OkHttpClient().newCall(request).execute()
-            val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategoryMultiLang>::class.java)
+            val categories =
+                gson.fromJson(
+                    response.body?.charStream(),
+                    Array<GuideCategoryMultiLang>::class.java,
+                )
             response.close()
 
             categories
         }
-    }
 
-    class GuideDeserializer(guidesUrl: String) : JsonDeserializer<Guide> {
+    class GuideDeserializer(
+        guidesUrl: String,
+    ) : JsonDeserializer<Guide> {
         private val guidesUrlObj = URL(guidesUrl)
 
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Guide {
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type,
+            context: JsonDeserializationContext,
+        ): Guide {
             val jsonObject = json.asJsonObject
 
             return Guide(
                 jsonObject.get("title").asString,
-                absolutify(jsonObject.get("markdown").asString)
+                absolutify(jsonObject.get("markdown").asString),
             )
         }
 
-        private fun absolutify(relativeUrl: String?): String {
-            return URL(guidesUrlObj, relativeUrl).toString()
-        }
+        private fun absolutify(relativeUrl: String?): String = URL(guidesUrlObj, relativeUrl).toString()
     }
 }

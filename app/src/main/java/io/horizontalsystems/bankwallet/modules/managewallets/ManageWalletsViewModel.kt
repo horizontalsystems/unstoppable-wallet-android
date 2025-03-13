@@ -15,9 +15,8 @@ import kotlinx.coroutines.launch
 
 class ManageWalletsViewModel(
     private val service: ManageWalletsService,
-    private val clearables: List<Clearable>
+    private val clearables: List<Clearable>,
 ) : ViewModel() {
-
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
 
     init {
@@ -33,17 +32,21 @@ class ManageWalletsViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(
-        item: ManageWalletsService.Item,
-    ) = CoinViewItem(
-        item = item.token,
-        imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder, item.token.coin.alternativeImageUrl),
-        title = item.token.coin.code,
-        subtitle = item.token.coin.name,
-        enabled = item.enabled,
-        hasInfo = item.hasInfo,
-        label = item.token.badge
-    )
+    private fun viewItem(item: ManageWalletsService.Item) =
+        CoinViewItem(
+            item = item.token,
+            imageSource =
+                ImageSource.Remote(
+                    item.token.coin.imageUrl,
+                    item.token.iconPlaceholder,
+                    item.token.coin.alternativeImageUrl,
+                ),
+            title = item.token.coin.code,
+            subtitle = item.token.coin.name,
+            enabled = item.enabled,
+            hasInfo = item.hasInfo,
+            label = item.token.badge,
+        )
 
     fun enable(token: Token) {
         service.enable(token)
@@ -67,6 +70,6 @@ class ManageWalletsViewModel(
     data class BirthdayHeightViewItem(
         val blockchainIcon: ImageSource,
         val blockchainName: String,
-        val birthdayHeight: String
+        val birthdayHeight: String,
     )
 }

@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class SecuritySettingsFragment : BaseComposeFragment() {
-
     private val securitySettingsViewModel by viewModels<SecuritySettingsViewModel> {
         SecurityPasscodeSettingsModule.Factory()
     }
@@ -49,7 +48,6 @@ class SecuritySettingsFragment : BaseComposeFragment() {
             navController = navController,
         )
     }
-
 }
 
 @Composable
@@ -71,16 +69,16 @@ private fun SecurityCenterScreen(
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
-        }
+        },
     ) {
         Column(
             Modifier
                 .padding(it)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,
-                navController
+                navController,
             )
 
             VSpacer(height = 32.dp)
@@ -92,7 +90,7 @@ private fun SecurityCenterScreen(
                             painter = painterResource(id = R.drawable.ic_off_24),
                             tint = ComposeAppTheme.colors.grey,
                             modifier = Modifier.size(24.dp),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     },
                     center = {
@@ -107,23 +105,23 @@ private fun SecurityCenterScreen(
                             checked = uiState.balanceAutoHideEnabled,
                             onCheckedChange = {
                                 securitySettingsViewModel.onSetBalanceAutoHidden(it)
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             }
             InfoText(
                 text = stringResource(R.string.Appearance_BalanceAutoHide_Description),
-                paddingBottom = 32.dp
+                paddingBottom = 32.dp,
             )
 
             DuressPasscodeBlock(
                 securitySettingsViewModel,
-                navController
+                navController,
             )
             InfoText(
                 text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
-                paddingBottom = 32.dp
+                paddingBottom = 32.dp,
             )
 
             VSpacer(height = 32.dp)
@@ -135,12 +133,14 @@ private fun SecurityCenterScreen(
 fun SecurityCenterCell(
     start: @Composable RowScope.() -> Unit,
     center: @Composable RowScope.() -> Unit,
-    end: @Composable() (RowScope.() -> Unit)? = null,
+    end:
+        @Composable()
+        (RowScope.() -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
+        onClick = onClick,
     ) {
         start.invoke(this)
         Spacer(Modifier.width(16.dp))
@@ -149,7 +149,7 @@ fun SecurityCenterCell(
             Spacer(
                 Modifier
                     .defaultMinSize(minWidth = 8.dp)
-                    .weight(1f)
+                    .weight(1f),
             )
             end.invoke(this)
         }

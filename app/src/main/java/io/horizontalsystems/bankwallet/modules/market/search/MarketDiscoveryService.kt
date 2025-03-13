@@ -16,21 +16,23 @@ class MarketDiscoveryService(
     private var recentCoins: List<FullCoin> = listOf()
     private var popularCoins: List<FullCoin> = listOf()
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            recent = recentCoins,
-            popular = popularCoins,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                recent = recentCoins,
+                popular = popularCoins,
+            ),
         )
-    )
     val stateFlow: StateFlow<State>
         get() = _stateFlow.asStateFlow()
 
     fun start() {
-        recentCoins = marketKit
-            .fullCoins(localStorage.marketSearchRecentCoinUids)
-            .sortedBy {
-                localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
-            }
+        recentCoins =
+            marketKit
+                .fullCoins(localStorage.marketSearchRecentCoinUids)
+                .sortedBy {
+                    localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
+                }
         popularCoins = marketKit.fullCoins("")
 
         emitState()
@@ -40,7 +42,7 @@ class MarketDiscoveryService(
         _stateFlow.update {
             State(
                 recent = recentCoins,
-                popular = popularCoins
+                popular = popularCoins,
             )
         }
     }

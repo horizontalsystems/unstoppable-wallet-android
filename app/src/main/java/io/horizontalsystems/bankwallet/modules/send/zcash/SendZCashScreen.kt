@@ -40,7 +40,7 @@ fun SendZCashScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
-    riskyAddress: Boolean
+    riskyAddress: Boolean,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -53,9 +53,10 @@ fun SendZCashScreen(
     val amountInputType = amountInputModeViewModel.inputType
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
-    )
+    val paymentAddressViewModel =
+        viewModel<AddressParserViewModel>(
+            factory = AddressParserModule.Factory(wallet.token, amount),
+        )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
@@ -67,13 +68,13 @@ fun SendZCashScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
         ) {
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),
                     value = uiState.address.hex,
-                    riskyAddress = riskyAddress
+                    riskyAddress = riskyAddress,
                 ) {
                     navController.popBackStack()
                 }
@@ -96,7 +97,7 @@ fun SendZCashScreen(
                 },
                 inputType = amountInputType,
                 rate = viewModel.coinRate,
-                amountUnique = amountUnique
+                amountUnique = amountUnique,
             )
 
             VSpacer(8.dp)
@@ -106,13 +107,13 @@ fun SendZCashScreen(
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = availableBalance,
                 amountInputType = amountInputType,
-                rate = viewModel.coinRate
+                rate = viewModel.coinRate,
             )
 
             if (memoIsAllowed) {
                 VSpacer(16.dp)
                 HSMemoInput(
-                    maxLength = viewModel.memoMaxLength
+                    maxLength = viewModel.memoMaxLength,
                 ) {
                     viewModel.onEnterMemo(it)
                 }
@@ -125,13 +126,14 @@ fun SendZCashScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.coinRate,
-                navController = navController
+                navController = navController,
             )
 
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                 title = stringResource(R.string.Button_Next),
                 onClick = {
                     if (riskyAddress) {
@@ -139,8 +141,8 @@ fun SendZCashScreen(
                         navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
                             R.id.addressRiskyBottomSheetAlert,
                             AddressRiskyBottomSheetAlert.Input(
-                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                            )
+                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText),
+                            ),
                         ) {
                             openConfirm(navController, sendEntryPointDestId)
                         }
@@ -148,7 +150,7 @@ fun SendZCashScreen(
                         openConfirm(navController, sendEntryPointDestId)
                     }
                 },
-                enabled = proceedEnabled
+                enabled = proceedEnabled,
             )
         }
     }
@@ -156,13 +158,13 @@ fun SendZCashScreen(
 
 private fun openConfirm(
     navController: NavController,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
     navController.slideFromRight(
         R.id.sendConfirmation,
         SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.ZCash,
-            sendEntryPointDestId
-        )
+            sendEntryPointDestId,
+        ),
     )
 }

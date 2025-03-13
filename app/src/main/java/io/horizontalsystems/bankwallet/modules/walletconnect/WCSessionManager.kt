@@ -18,7 +18,6 @@ class WCSessionManager(
     private val accountManager: IAccountManager,
     private val storage: WCSessionStorage,
 ) {
-
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _sessionsFlow = MutableStateFlow<List<Wallet.Model.Session>>(emptyList())
@@ -79,9 +78,10 @@ class WCSessionManager(
         val allDbTopics = allDbSessions.map { it.topic }
 
         val newSessions = currentSessions.filter { !allDbTopics.contains(it.topic) }
-        val deletedTopics = allDbTopics.filter { topic ->
-            !currentSessions.any { it.topic == topic }
-        }
+        val deletedTopics =
+            allDbTopics.filter { topic ->
+                !currentSessions.any { it.topic == topic }
+            }
 
         storage.save(newSessions.map { WalletConnectV2Session(accountId, it.topic) })
         storage.deleteSessionsByTopics(deletedTopics)
@@ -94,9 +94,10 @@ class WCSessionManager(
         val sessions = Web3Wallet.getListOfActiveSessions()
         val dbSessions = storage.getSessionsByAccountId(accountId)
 
-        val accountSessions = sessions.filter { session ->
-            dbSessions.any { it.topic == session.topic }
-        }
+        val accountSessions =
+            sessions.filter { session ->
+                dbSessions.any { it.topic == session.topic }
+            }
 
         return accountSessions
     }
@@ -124,12 +125,17 @@ class WCSessionManager(
 
     open class RequestDataError : Throwable() {
         object UnsupportedChainId : RequestDataError()
-        object NoSuitableAccount : RequestDataError()
-        object NoSuitableEvmKit : RequestDataError()
-        object NoSigner : RequestDataError()
-        object RequestNotFoundError : RequestDataError()
-        object InvalidGasPrice: RequestDataError()
-        object InvalidNonce: RequestDataError()
-    }
 
+        object NoSuitableAccount : RequestDataError()
+
+        object NoSuitableEvmKit : RequestDataError()
+
+        object NoSigner : RequestDataError()
+
+        object RequestNotFoundError : RequestDataError()
+
+        object InvalidGasPrice : RequestDataError()
+
+        object InvalidNonce : RequestDataError()
+    }
 }

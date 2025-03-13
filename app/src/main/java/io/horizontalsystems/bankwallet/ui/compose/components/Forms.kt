@@ -80,56 +80,61 @@ fun FormsInput(
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
 
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
-            } else {
-                ComposeAppTheme.colors.red50
+    val borderColor =
+        when (state) {
+            is DataState.Error -> {
+                if (state.error is FormsInputStateWarning) {
+                    ComposeAppTheme.colors.yellow50
+                } else {
+                    ComposeAppTheme.colors.red50
+                }
             }
-        }
-        else -> ComposeAppTheme.colors.steel20
-    }
 
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
+            else -> ComposeAppTheme.colors.steel20
+        }
+
+    val cautionColor =
+        if (state?.errorOrNull is FormsInputStateWarning) {
+            ComposeAppTheme.colors.jacob
+        } else {
+            ComposeAppTheme.colors.lucian
+        }
 
     Column(modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 44.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                .background(ComposeAppTheme.colors.lawrence),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 44.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: "", TextRange(initial?.length ?: 0)))
             }
 
-            prefix?.let{
+            prefix?.let {
                 body_grey(
                     modifier = Modifier.padding(start = 12.dp),
-                    text = prefix
+                    text = prefix,
                 )
             }
 
             BasicTextField(
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .onFocusChanged {
-                        onChangeFocus?.invoke(it.isFocused)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .focusRequester(focusRequester)
+                        .onFocusChanged {
+                            onChangeFocus?.invoke(it.isFocused)
+                        }.padding(horizontal = 16.dp, vertical = 12.dp)
+                        .weight(1f),
                 enabled = enabled,
                 value = textState,
                 onValueChange = { textFieldValue ->
-                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+                    val textFieldValueProcessed =
+                        textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
 
                     val text = textFieldValueProcessed.text
                     if (maxLength == null || text.length <= maxLength) {
@@ -138,13 +143,15 @@ fun FormsInput(
                     } else {
                         // Need to set textState to new instance of TextFieldValue with the same values
                         // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                        textState =
+                            TextFieldValue(text = textState.text, selection = textState.selection)
                     }
                 },
-                textStyle = ColoredTextStyle(
-                    color = textColor,
-                    textStyle = textStyle
-                ),
+                textStyle =
+                    ColoredTextStyle(
+                        color = textColor,
+                        textStyle = textStyle,
+                    ),
                 singleLine = singleLine,
                 cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                 decorationBox = { innerTextField ->
@@ -154,7 +161,7 @@ fun FormsInput(
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             color = hintColor,
-                            style = hintStyle
+                            style = hintStyle,
                         )
                     }
                     innerTextField()
@@ -167,22 +174,25 @@ fun FormsInput(
                 is DataState.Loading -> {
                     HSCircularProgressIndicator()
                 }
+
                 is DataState.Error -> {
                     Icon(
                         modifier = Modifier.padding(end = 8.dp),
                         painter = painterResource(id = R.drawable.ic_attention_20),
                         contentDescription = null,
-                        tint = cautionColor
+                        tint = cautionColor,
                     )
                 }
+
                 is DataState.Success -> {
                     Icon(
                         modifier = Modifier.padding(end = 8.dp),
                         painter = painterResource(id = R.drawable.ic_check_20),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.remus
+                        tint = ComposeAppTheme.colors.remus,
                     )
                 }
+
                 else -> {
                     Spacer(modifier = Modifier.width(28.dp))
                 }
@@ -197,40 +207,51 @@ fun FormsInput(
                         textState = textState.copy(text = text, selection = TextRange(0))
                         onValueChange.invoke(text)
                         focusRequester.requestFocus()
-                    }
+                    },
                 )
             } else {
                 if (qrScannerEnabled) {
-                    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                    val qrScannerLauncher =
+                        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                            if (result.resultCode == Activity.RESULT_OK) {
+                                val scannedText =
+                                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                            val textProcessed = textPreprocessor.process(scannedText)
-                            textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                            onValueChange.invoke(textProcessed)
+                                val textProcessed = textPreprocessor.process(scannedText)
+                                textState =
+                                    textState.copy(
+                                        text = textProcessed,
+                                        selection = TextRange(textProcessed.length),
+                                    )
+                                onValueChange.invoke(textProcessed)
+                            }
                         }
-                    }
 
                     ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
+                        modifier = Modifier.padding(end = if (pasteEnabled) 8.dp else 16.dp),
                         icon = R.drawable.ic_qr_scan_20,
                         onClick = {
                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
-                        }
+                        },
                     )
                 }
 
                 if (pasteEnabled) {
                     val clipboardManager = LocalClipboardManager.current
                     ButtonSecondaryDefault(
-                        modifier = Modifier
-                            .padding(end = 16.dp)
-                            .height(28.dp),
+                        modifier =
+                            Modifier
+                                .padding(end = 16.dp)
+                                .height(28.dp),
                         title = stringResource(id = R.string.Send_Button_Paste),
                         onClick = {
                             clipboardManager.getText()?.text?.let { textInClipboard ->
                                 val textProcessed = textPreprocessor.process(textInClipboard)
-                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                textState =
+                                    textState.copy(
+                                        text = textProcessed,
+                                        selection = TextRange(textProcessed.length),
+                                    )
                                 onValueChange.invoke(textProcessed)
                             }
                         },
@@ -244,7 +265,7 @@ fun FormsInput(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
                 text = it,
                 color = cautionColor,
-                style = ComposeAppTheme.typography.caption
+                style = ComposeAppTheme.typography.caption,
             )
         }
     }
@@ -265,43 +286,48 @@ fun FormsInputPassword(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     enabled: Boolean = true,
     onValueChange: (String) -> Unit,
-    onToggleHide: () -> Unit
+    onToggleHide: () -> Unit,
 ) {
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
-            } else {
-                ComposeAppTheme.colors.red50
+    val borderColor =
+        when (state) {
+            is DataState.Error -> {
+                if (state.error is FormsInputStateWarning) {
+                    ComposeAppTheme.colors.yellow50
+                } else {
+                    ComposeAppTheme.colors.red50
+                }
             }
-        }
-        else -> ComposeAppTheme.colors.steel20
-    }
 
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
+            else -> ComposeAppTheme.colors.steel20
+        }
+
+    val cautionColor =
+        if (state?.errorOrNull is FormsInputStateWarning) {
+            ComposeAppTheme.colors.jacob
+        } else {
+            ComposeAppTheme.colors.lucian
+        }
 
     Column(modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 44.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                .background(ComposeAppTheme.colors.lawrence),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 44.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(""))
             }
 
             BasicTextField(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .weight(1f),
                 value = textState,
                 onValueChange = { textFieldValue ->
 
@@ -312,13 +338,15 @@ fun FormsInputPassword(
                     } else {
                         // Need to set textState to new instance of TextFieldValue with the same values
                         // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                        textState =
+                            TextFieldValue(text = textState.text, selection = textState.selection)
                     }
                 },
-                textStyle = ColoredTextStyle(
-                    color = textColor,
-                    textStyle = textStyle
-                ),
+                textStyle =
+                    ColoredTextStyle(
+                        color = textColor,
+                        textStyle = textStyle,
+                    ),
                 singleLine = singleLine,
                 cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                 decorationBox = { innerTextField ->
@@ -328,7 +356,7 @@ fun FormsInputPassword(
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             color = hintColor,
-                            style = hintStyle
+                            style = hintStyle,
                         )
                     }
                     innerTextField()
@@ -344,21 +372,27 @@ fun FormsInputPassword(
                         modifier = Modifier.padding(end = 8.dp),
                         painter = painterResource(id = R.drawable.ic_attention_20),
                         contentDescription = null,
-                        tint = cautionColor
+                        tint = cautionColor,
                     )
                 }
+
                 else -> {
                     Spacer(modifier = Modifier.width(28.dp))
                 }
             }
 
             Icon(
-                modifier = Modifier
-                    .size(20.dp)
-                    .clickable(onClick = onToggleHide, interactionSource = MutableInteractionSource(), indication = null),
+                modifier =
+                    Modifier
+                        .size(20.dp)
+                        .clickable(
+                            onClick = onToggleHide,
+                            interactionSource = MutableInteractionSource(),
+                            indication = null,
+                        ),
                 painter = painterResource(id = if (hide) R.drawable.ic_eye_off_20 else R.drawable.ic_eye_20),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
             Spacer(Modifier.width(16.dp))
         }
@@ -368,7 +402,7 @@ fun FormsInputPassword(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
                 text = it,
                 color = cautionColor,
-                style = ComposeAppTheme.typography.caption
+                style = ComposeAppTheme.typography.caption,
             )
         }
     }
@@ -395,34 +429,38 @@ fun FormsInputMultiline(
     onValueChange: (String) -> Unit,
     onClear: (() -> Unit)? = null,
     onPaste: (() -> Unit)? = null,
-    onScanQR: (() -> Unit)? = null
+    onScanQR: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
-            } else {
-                ComposeAppTheme.colors.red50
+    val borderColor =
+        when (state) {
+            is DataState.Error -> {
+                if (state.error is FormsInputStateWarning) {
+                    ComposeAppTheme.colors.yellow50
+                } else {
+                    ComposeAppTheme.colors.red50
+                }
             }
-        }
-        else -> ComposeAppTheme.colors.steel20
-    }
 
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
+            else -> ComposeAppTheme.colors.steel20
+        }
+
+    val cautionColor =
+        if (state?.errorOrNull is FormsInputStateWarning) {
+            ComposeAppTheme.colors.jacob
+        } else {
+            ComposeAppTheme.colors.lucian
+        }
 
     Column(modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                .background(ComposeAppTheme.colors.lawrence),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
@@ -431,17 +469,18 @@ fun FormsInputMultiline(
             Spacer(modifier = Modifier.height(12.dp))
 
             BasicTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 64.dp)
-                    .onFocusChanged {
-                        onChangeFocus?.invoke(it.isFocused)
-                    }
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minHeight = 64.dp)
+                        .onFocusChanged {
+                            onChangeFocus?.invoke(it.isFocused)
+                        }.padding(horizontal = 16.dp),
                 enabled = enabled,
                 value = textState,
                 onValueChange = { textFieldValue ->
-                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+                    val textFieldValueProcessed =
+                        textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
 
                     val text = textFieldValueProcessed.text
                     if (maxLength == null || text.length <= maxLength) {
@@ -450,13 +489,15 @@ fun FormsInputMultiline(
                     } else {
                         // Need to set textState to new instance of TextFieldValue with the same values
                         // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                        textState =
+                            TextFieldValue(text = textState.text, selection = textState.selection)
                     }
                 },
-                textStyle = ColoredTextStyle(
-                    color = textColor,
-                    textStyle = textStyle
-                ),
+                textStyle =
+                    ColoredTextStyle(
+                        color = textColor,
+                        textStyle = textStyle,
+                    ),
                 cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
@@ -464,7 +505,7 @@ fun FormsInputMultiline(
                             hint,
                             overflow = TextOverflow.Ellipsis,
                             color = hintColor,
-                            style = hintStyle
+                            style = hintStyle,
                         )
                     }
                     innerTextField()
@@ -474,9 +515,10 @@ fun FormsInputMultiline(
             )
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(44.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(44.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -484,24 +526,26 @@ fun FormsInputMultiline(
                     is DataState.Loading -> {
                         HSCircularProgressIndicator()
                     }
+
                     is DataState.Error -> {
                         Icon(
                             modifier = Modifier.padding(end = 8.dp),
                             painter = painterResource(id = R.drawable.ic_attention_20),
                             contentDescription = null,
-                            tint = cautionColor
+                            tint = cautionColor,
                         )
                     }
+
                     is DataState.Success -> {
                         Icon(
                             modifier = Modifier.padding(end = 8.dp),
                             painter = painterResource(id = R.drawable.ic_check_20),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.remus
+                            tint = ComposeAppTheme.colors.remus,
                         )
                     }
-                    else -> {
 
+                    else -> {
                     }
                 }
 
@@ -515,42 +559,53 @@ fun FormsInputMultiline(
                             onValueChange.invoke(text)
 
                             onClear?.invoke()
-                        }
+                        },
                     )
                 } else {
                     if (qrScannerEnabled) {
-                        val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                            if (result.resultCode == Activity.RESULT_OK) {
-                                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                        val qrScannerLauncher =
+                            rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                                if (result.resultCode == Activity.RESULT_OK) {
+                                    val scannedText =
+                                        result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                                val textProcessed = textPreprocessor.process(scannedText)
-                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                                onValueChange.invoke(textProcessed)
+                                    val textProcessed = textPreprocessor.process(scannedText)
+                                    textState =
+                                        textState.copy(
+                                            text = textProcessed,
+                                            selection = TextRange(textProcessed.length),
+                                        )
+                                    onValueChange.invoke(textProcessed)
+                                }
                             }
-                        }
 
                         ButtonSecondaryCircle(
-                            modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
+                            modifier = Modifier.padding(end = if (pasteEnabled) 8.dp else 16.dp),
                             icon = R.drawable.ic_qr_scan_20,
                             onClick = {
                                 qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
 
                                 onScanQR?.invoke()
-                            }
+                            },
                         )
                     }
 
                     if (pasteEnabled) {
                         val clipboardManager = LocalClipboardManager.current
                         ButtonSecondaryDefault(
-                            modifier = Modifier
-                                .padding(end = 16.dp)
-                                .height(28.dp),
+                            modifier =
+                                Modifier
+                                    .padding(end = 16.dp)
+                                    .height(28.dp),
                             title = stringResource(id = R.string.Send_Button_Paste),
                             onClick = {
                                 clipboardManager.getText()?.text?.let { textInClipboard ->
                                     val textProcessed = textPreprocessor.process(textInClipboard)
-                                    textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                    textState =
+                                        textState.copy(
+                                            text = textProcessed,
+                                            selection = TextRange(textProcessed.length),
+                                        )
                                     onValueChange.invoke(textProcessed)
                                 }
 
@@ -569,13 +624,15 @@ fun FormsInputMultiline(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
                 text = it,
                 color = cautionColor,
-                style = ComposeAppTheme.typography.caption
+                style = ComposeAppTheme.typography.caption,
             )
         }
     }
 }
 
-class FormsInputStateWarning(override val message: String?) : Exception()
+class FormsInputStateWarning(
+    override val message: String?,
+) : Exception()
 
 interface TextPreprocessor {
     fun process(text: String): String

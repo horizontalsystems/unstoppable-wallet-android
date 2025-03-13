@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 class KeyAccountInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         InfoScreen(navController)
@@ -34,19 +33,21 @@ private fun InfoScreen(navController: NavController) {
         Column {
             AppBar(
                 title = stringResource(R.string.ExtendedKey_Account),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = { navController.popBackStack() },
+                        ),
+                    ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoBody(R.string.ExtendedKey_AccountInfo)
                 Spacer(Modifier.height(20.dp))

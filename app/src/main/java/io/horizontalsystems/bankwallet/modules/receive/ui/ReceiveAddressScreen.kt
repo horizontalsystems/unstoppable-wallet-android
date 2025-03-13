@@ -104,7 +104,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-
 @Composable
 fun ReceiveAddressScreen(
     title: String,
@@ -131,9 +130,9 @@ fun ReceiveAddressScreen(
                 onActionButtonClick = onBackPress,
                 onCloseClick = {
                     scope.launch { sheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -143,19 +142,21 @@ fun ReceiveAddressScreen(
                     navigationIcon = {
                         HsBackButton(onClick = onBackPress)
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Done),
-                            onClick = closeModule
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Done),
+                                onClick = closeModule,
+                            ),
+                        ),
                 )
-            }
+            },
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(it),
             ) {
                 Crossfade(uiState.viewState, label = "") { viewState ->
                     Column {
@@ -170,10 +171,11 @@ fun ReceiveAddressScreen(
 
                             ViewState.Success -> {
                                 Column(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxWidth()
-                                        .verticalScroll(rememberScrollState()),
+                                    modifier =
+                                        Modifier
+                                            .weight(1f)
+                                            .fillMaxWidth()
+                                            .verticalScroll(rememberScrollState()),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
                                     VSpacer(12.dp)
@@ -182,36 +184,39 @@ fun ReceiveAddressScreen(
                                     }
                                     VSpacer(12.dp)
                                     Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 16.dp)
-                                            .clip(RoundedCornerShape(24.dp))
-                                            .background(ComposeAppTheme.colors.lawrence),
+                                        modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 16.dp)
+                                                .clip(RoundedCornerShape(24.dp))
+                                                .background(ComposeAppTheme.colors.lawrence),
                                     ) {
                                         Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clickable {
-                                                    TextHelper.copyText(uiState.uri)
-                                                    HudHelper.showSuccessMessage(
-                                                        localView,
-                                                        R.string.Hud_Text_Copied
-                                                    )
+                                            modifier =
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .clickable {
+                                                        TextHelper.copyText(uiState.uri)
+                                                        HudHelper.showSuccessMessage(
+                                                            localView,
+                                                            R.string.Hud_Text_Copied,
+                                                        )
 
-                                                    stat(
-                                                        page = StatPage.Receive,
-                                                        event = StatEvent.Copy(StatEntity.ReceiveAddress)
-                                                    )
-                                                },
+                                                        stat(
+                                                            page = StatPage.Receive,
+                                                            event = StatEvent.Copy(StatEntity.ReceiveAddress),
+                                                        )
+                                                    },
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                         ) {
                                             VSpacer(32.dp)
                                             Box(
-                                                modifier = Modifier
-                                                    .clip(RoundedCornerShape(8.dp))
-                                                    .background(ComposeAppTheme.colors.white)
-                                                    .size(224.dp),
-                                                contentAlignment = Alignment.Center
+                                                modifier =
+                                                    Modifier
+                                                        .clip(RoundedCornerShape(8.dp))
+                                                        .background(ComposeAppTheme.colors.white)
+                                                        .size(224.dp),
+                                                contentAlignment = Alignment.Center,
                                             ) {
                                                 QrCodeImage(uiState.uri)
                                             }
@@ -235,11 +240,14 @@ fun ReceiveAddressScreen(
                                                 onClearAmount = {
                                                     setAmount(null)
 
-                                                    stat(page = StatPage.Receive, event = StatEvent.RemoveAmount)
+                                                    stat(
+                                                        page = StatPage.Receive,
+                                                        event = StatEvent.RemoveAmount,
+                                                    )
                                                 },
                                                 showAccountNotActiveWarningDialog = {
                                                     scope.launch { sheetState.show() }
-                                                }
+                                                },
                                             )
                                         }
 
@@ -247,18 +255,22 @@ fun ReceiveAddressScreen(
                                             Divider(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 thickness = 1.dp,
-                                                color = ComposeAppTheme.colors.steel10
+                                                color = ComposeAppTheme.colors.steel10,
                                             )
                                             RowUniversal(
                                                 modifier = Modifier.height(48.dp),
                                                 onClick = {
-                                                    showUsedAddresses.invoke(uiState.usedAddresses, uiState.usedChangeAddresses)
-                                                }
+                                                    showUsedAddresses.invoke(
+                                                        uiState.usedAddresses,
+                                                        uiState.usedChangeAddresses,
+                                                    )
+                                                },
                                             ) {
                                                 subhead2_grey(
-                                                    modifier = Modifier
-                                                        .padding(start = 16.dp)
-                                                        .weight(1f),
+                                                    modifier =
+                                                        Modifier
+                                                            .padding(start = 16.dp)
+                                                            .weight(1f),
                                                     text = stringResource(R.string.Balance_Receive_UsedAddresses),
                                                 )
 
@@ -266,7 +278,7 @@ fun ReceiveAddressScreen(
                                                     modifier = Modifier.padding(end = 16.dp),
                                                     painter = painterResource(id = R.drawable.ic_arrow_right),
                                                     contentDescription = null,
-                                                    tint = ComposeAppTheme.colors.grey
+                                                    tint = ComposeAppTheme.colors.grey,
                                                 )
                                             }
                                         }
@@ -296,7 +308,7 @@ fun ReceiveAddressScreen(
                             openAmountDialog.value = false
 
                             stat(page = StatPage.Receive, event = StatEvent.SetAmount)
-                        }
+                        },
                     )
                 }
             }
@@ -309,7 +321,7 @@ private fun QrCodeImage(address: String) {
     val logoPainter: Painter =
         adaptiveIconPainterResource(
             id = R.mipmap.launcher_main,
-            fallbackDrawable = R.drawable.launcher_main_preview
+            fallbackDrawable = R.drawable.launcher_main_preview,
         )
     val qrcodePainter: Painter =
         rememberQrCodePainter(address) {
@@ -329,18 +341,17 @@ private fun QrCodeImage(address: String) {
         }
     Image(
         painter = qrcodePainter,
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxSize(),
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .fillMaxSize(),
         contentScale = ContentScale.FillWidth,
-        contentDescription = null
+        contentDescription = null,
     )
 }
 
 @Composable
-private fun WarningTextView(
-    alertText: ReceiveModule.AlertText
-) {
+private fun WarningTextView(alertText: ReceiveModule.AlertText) {
     when (alertText) {
         is ReceiveModule.AlertText.Critical -> {
             TextImportantError(
@@ -367,9 +378,10 @@ private fun ActionButtonsRow(
 ) {
     val localView = LocalView.current
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 48.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp),
         horizontalArrangement = if (watchAccount) Arrangement.Center else Arrangement.SpaceBetween,
     ) {
         val itemModifier = if (watchAccount) Modifier else Modifier.weight(1f)
@@ -422,7 +434,7 @@ private fun AdditionalDataSection(
         Divider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel20
+            color = ComposeAppTheme.colors.steel20,
         )
         RowUniversal(
             modifier = Modifier.height(48.dp),
@@ -430,42 +442,45 @@ private fun AdditionalDataSection(
             when (item) {
                 is ReceiveModule.AdditionalData.Amount -> {
                     subhead2_grey(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .weight(1f),
+                        modifier =
+                            Modifier
+                                .padding(start = 16.dp)
+                                .weight(1f),
                         text = stringResource(R.string.Balance_Receive_Amount),
                     )
                     subhead1_leah(
                         text = item.value,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
                     ButtonSecondaryCircle(
                         modifier = Modifier.padding(end = 16.dp),
                         icon = R.drawable.ic_delete_20,
-                        onClick = onClearAmount
+                        onClick = onClearAmount,
                     )
                 }
 
                 is ReceiveModule.AdditionalData.Memo -> {
                     subhead2_grey(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .weight(1f),
+                        modifier =
+                            Modifier
+                                .padding(start = 16.dp)
+                                .weight(1f),
                         text = stringResource(R.string.Balance_Receive_Memo),
                     )
                     subhead1_leah(
                         text = item.value,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
                     ButtonSecondaryCircle(
-                        modifier = Modifier
-                            .height(28.dp)
-                            .padding(end = 16.dp),
+                        modifier =
+                            Modifier
+                                .height(28.dp)
+                                .padding(end = 16.dp),
                         icon = R.drawable.ic_copy_20,
                         onClick = {
                             TextHelper.copyText(item.value)
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                        }
+                        },
                     )
                 }
 
@@ -477,26 +492,26 @@ private fun AdditionalDataSection(
                     HSpacer(8.dp)
                     HsIconButton(
                         modifier = Modifier.size(20.dp),
-                        onClick = showAccountNotActiveWarningDialog
+                        onClick = showAccountNotActiveWarningDialog,
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_info_20),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                     subhead1_jacob(
                         text = stringResource(R.string.Balance_Receive_NotActive),
                         textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .weight(1f)
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 16.dp)
+                                .weight(1f),
                     )
                 }
             }
         }
     }
 }
-
 
 @Composable
 private fun ReceiveActionButton(
@@ -525,40 +540,44 @@ private fun ReceiveActionButton(
 fun AmountInputDialog(
     initialAmount: BigDecimal? = null,
     onDismissRequest: () -> Unit,
-    onAmountConfirm: (BigDecimal?) -> Unit
+    onAmountConfirm: (BigDecimal?) -> Unit,
 ) {
-    val textState = remember { mutableStateOf(TextFieldValue(text = initialAmount?.toString() ?: "")) }
+    val textState =
+        remember { mutableStateOf(TextFieldValue(text = initialAmount?.toString() ?: "")) }
     val focusRequester = remember { FocusRequester() }
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
             Modifier
                 .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+                .background(ComposeAppTheme.colors.lawrence),
         ) {
             VSpacer(24.dp)
             title3_leah(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth(),
                 text = stringResource(R.string.Balance_Receive_SetAmount),
             )
             VSpacer(16.dp)
 
             BasicTextField(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .focusRequester(focusRequester),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .focusRequester(focusRequester),
                 value = textState.value,
                 onValueChange = { value ->
                     textState.value = value
                 },
                 singleLine = true,
-                textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
-                    textStyle = ComposeAppTheme.typography.body
-                ),
+                textStyle =
+                    ColoredTextStyle(
+                        color = ComposeAppTheme.colors.leah,
+                        textStyle = ComposeAppTheme.typography.body,
+                    ),
                 decorationBox = { innerTextField ->
                     if (textState.value.text.isEmpty()) {
                         body_grey50("0")
@@ -570,31 +589,33 @@ fun AmountInputDialog(
             )
             SideEffect {
                 focusRequester.requestFocus()
-                textState.value = textState.value.copy(
-                    selection = TextRange(textState.value.text.length)
-                )
+                textState.value =
+                    textState.value.copy(
+                        selection = TextRange(textState.value.text.length),
+                    )
             }
 
             Divider(
                 modifier = Modifier.padding(horizontal = 24.dp),
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.jacob
+                color = ComposeAppTheme.colors.jacob,
             )
 
             Row(
-                modifier = Modifier
-                    .padding(all = 24.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                modifier =
+                    Modifier
+                        .padding(all = 24.dp)
+                        .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
             ) {
                 HsTextButton(
-                    onClick = onDismissRequest
+                    onClick = onDismissRequest,
                 ) {
                     body_jacob(stringResource(R.string.Button_Cancel).uppercase())
                 }
                 HSpacer(8.dp)
                 HsTextButton(
-                    onClick = { onAmountConfirm.invoke(textState.value.text.toBigDecimalOrNull()) }
+                    onClick = { onAmountConfirm.invoke(textState.value.text.toBigDecimalOrNull()) },
                 ) {
                     body_jacob(stringResource(R.string.Button_Confirm).uppercase())
                 }
@@ -614,27 +635,31 @@ private fun BottomSheetWarning(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = title,
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            text = text
+            text = text,
         )
 
         VSpacer(12.dp)
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
             title = stringResource(R.string.Button_Understand),
-            onClick = onActionButtonClick
+            onClick = onActionButtonClick,
         )
         Spacer(Modifier.height(32.dp))
     }
 }
 
 @Composable
-fun adaptiveIconPainterResource(@DrawableRes id: Int, @DrawableRes fallbackDrawable: Int): Painter {
+fun adaptiveIconPainterResource(
+    @DrawableRes id: Int,
+    @DrawableRes fallbackDrawable: Int,
+): Painter {
     val res = LocalContext.current.resources
     val theme = LocalContext.current.theme
 

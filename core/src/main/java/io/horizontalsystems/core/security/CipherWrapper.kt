@@ -6,7 +6,6 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 
 class CipherWrapper {
-
     companion object {
         const val TRANSFORMATION_SYMMETRIC = "AES/CBC/PKCS7Padding"
         const val IV_SEPARATOR = "]"
@@ -14,7 +13,10 @@ class CipherWrapper {
 
     private val cipher: Cipher = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
 
-    fun encrypt(data: String, key: Key): String {
+    fun encrypt(
+        data: String,
+        key: Key,
+    ): String {
         cipher.init(Cipher.ENCRYPT_MODE, key)
 
         val iv = cipher.iv
@@ -27,9 +29,12 @@ class CipherWrapper {
         return result
     }
 
-    fun decrypt(data: String, key: Key): String {
+    fun decrypt(
+        data: String,
+        key: Key,
+    ): String {
         val split = data.split(IV_SEPARATOR.toRegex())
-        if (split.size != 2) throw IllegalArgumentException("Passed data is incorrect. There was no IV specified with it.")
+        require(split.size != 2) { throw IllegalArgumentException("Passed data is incorrect. There was no IV specified with it.") }
 
         val ivString = split[0]
         val encodedString = split[1]
@@ -40,5 +45,4 @@ class CipherWrapper {
         val decodedData = cipher.doFinal(encryptedData)
         return String(decodedData)
     }
-
 }

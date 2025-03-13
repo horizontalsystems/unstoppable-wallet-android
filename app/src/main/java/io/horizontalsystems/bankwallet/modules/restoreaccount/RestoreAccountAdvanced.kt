@@ -25,6 +25,7 @@ fun AdvancedRestoreScreen(
                 onBackClick = onBackClick,
             )
         }
+
         RestoreOption.PrivateKey -> {
             RestorePrivateKey(
                 restoreMenuViewModel = restoreMenuViewModel,

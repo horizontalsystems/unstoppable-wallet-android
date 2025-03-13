@@ -31,8 +31,8 @@ android {
 
 dependencies {
     implementation project(':subscriptions-core')
-    implementation "androidx.startup:startup-runtime:1.1.1"
-    def billing_version = "7.0.0"
+    implementation "androidx.startup:startup-runtime:1.2.0"
+    def billing_version = "7.1.1"
 
     implementation "com.android.billingclient:billing-ktx:$billing_version"
 

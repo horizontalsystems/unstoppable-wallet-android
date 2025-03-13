@@ -16,8 +16,8 @@ data class WCEthereumTransaction(
     val maxPriorityFeePerGas: String?,
     val maxFeePerGas: String?,
     val value: String?,
-    val data: String
-){
+    val data: String,
+) {
     fun getWCTransaction(): WalletConnectTransaction {
         val transaction = this
         val to = transaction.to
@@ -31,11 +31,13 @@ data class WCEthereumTransaction(
             nonce = transaction.nonce?.hexStringToByteArray()?.toLong(),
             gasPrice = transaction.gasPrice?.hexStringToByteArray()?.toLong(),
             gasLimit = (transaction.gas ?: transaction.gasLimit)?.hexStringToByteArray()?.toLong(),
-            maxPriorityFeePerGas = transaction.maxPriorityFeePerGas?.hexStringToByteArray()
-                ?.toLong(),
+            maxPriorityFeePerGas =
+                transaction.maxPriorityFeePerGas
+                    ?.hexStringToByteArray()
+                    ?.toLong(),
             maxFeePerGas = transaction.maxFeePerGas?.hexStringToByteArray()?.toLong(),
             value = transaction.value?.hexStringToByteArray()?.toBigInteger() ?: BigInteger.ZERO,
-            data = transaction.data.hexStringToByteArray()
+            data = transaction.data.hexStringToByteArray(),
         )
     }
 

@@ -10,8 +10,9 @@ class SignalsControlManager(
     val showSignalsStateChangedFlow = localStorage.marketSignalsStateChangedFlow
 
     var showSignals: Boolean
-        get() = localStorage.marketFavoritesShowSignals
-                && UserSubscriptionManager.isActionAllowed(TradeSignals)
+        get() =
+            localStorage.marketFavoritesShowSignals &&
+                UserSubscriptionManager.isActionAllowed(TradeSignals)
         set(value) {
             localStorage.marketFavoritesShowSignals = value
         }

@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import java.math.BigDecimal
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<ScoreCategory>(navController) { scoreCategory ->
@@ -43,7 +42,7 @@ class OverallScoreInfoFragment : BaseComposeFragment() {
                 scoreCategory.title,
                 scoreCategory.description,
                 categoryScores,
-                navController
+                navController,
             )
         }
     }
@@ -54,7 +53,7 @@ private fun InfoScreen(
     categoryTitle: Int,
     description: Int,
     categoryScores: Map<OverallScore, String>,
-    navController: NavController
+    navController: NavController,
 ) {
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -65,50 +64,53 @@ private fun InfoScreen(
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoHeader(R.string.Coin_Analytics_OverallScore)
                 VSpacer(12.dp)
                 headline2_jacob(
                     modifier = Modifier.padding(horizontal = 32.dp),
-                    text = stringResource(categoryTitle)
+                    text = stringResource(categoryTitle),
                 )
                 InfoTextBody(stringResource(description))
                 VSpacer(12.dp)
-                val items = buildList<@Composable () -> Unit> {
-                    categoryScores.forEach { (score, value) ->
-                        val color = when (score) {
-                            OverallScore.Excellent -> Color(0xFF05C46B)
-                            OverallScore.Good -> Color(0xFFFFA800)
-                            OverallScore.Fair -> Color(0xFFFF7A00)
-                            OverallScore.Poor -> Color(0xFFFF3D00)
-                        }
-                        add {
-                            RowUniversal(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                            ) {
-                                Image(
-                                    painter = painterResource(score.icon),
-                                    contentDescription = null
-                                )
-                                HSpacer(8.dp)
-                                Text(
-                                    text = stringResource(score.title).uppercase(),
-                                    style = ComposeAppTheme.typography.subhead1,
-                                    color = color,
-                                )
-                                Spacer(Modifier.weight(1f))
-                                Text(
-                                    text = value,
-                                    style = ComposeAppTheme.typography.subhead1,
-                                    color = color,
-                                )
+                val items =
+                    buildList<@Composable () -> Unit> {
+                        categoryScores.forEach { (score, value) ->
+                            val color =
+                                when (score) {
+                                    OverallScore.Excellent -> Color(0xFF05C46B)
+                                    OverallScore.Good -> Color(0xFFFFA800)
+                                    OverallScore.Fair -> Color(0xFFFF7A00)
+                                    OverallScore.Poor -> Color(0xFFFF3D00)
+                                }
+                            add {
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                ) {
+                                    Image(
+                                        painter = painterResource(score.icon),
+                                        contentDescription = null,
+                                    )
+                                    HSpacer(8.dp)
+                                    Text(
+                                        text = stringResource(score.title).uppercase(),
+                                        style = ComposeAppTheme.typography.subhead1,
+                                        color = color,
+                                    )
+                                    Spacer(Modifier.weight(1f))
+                                    Text(
+                                        text = value,
+                                        style = ComposeAppTheme.typography.subhead1,
+                                        color = color,
+                                    )
+                                }
                             }
                         }
                     }
-                }
                 CellUniversalLawrenceSection(items)
                 VSpacer(24.dp)
             }
@@ -123,12 +125,10 @@ private fun formatUsd(number: Int): String {
     return App.numberFormatter.formatFiatShort(BigDecimal(number), symbol, decimals)
 }
 
-private fun formatNumber(number: Int): String {
-    return App.numberFormatter.formatNumberShort(BigDecimal(number), 2)
-}
+private fun formatNumber(number: Int): String = App.numberFormatter.formatNumberShort(BigDecimal(number), 2)
 
-private fun getScores(scoreCategory: ScoreCategory?): Map<OverallScore, String> {
-    return when (scoreCategory) {
+private fun getScores(scoreCategory: ScoreCategory?): Map<OverallScore, String> =
+    when (scoreCategory) {
         ScoreCategory.CexScoreCategory -> {
             mapOf(
                 OverallScore.Excellent to "> " + formatUsd(10_000_000),
@@ -194,4 +194,3 @@ private fun getScores(scoreCategory: ScoreCategory?): Map<OverallScore, String> 
 
         null -> emptyMap()
     }
-}

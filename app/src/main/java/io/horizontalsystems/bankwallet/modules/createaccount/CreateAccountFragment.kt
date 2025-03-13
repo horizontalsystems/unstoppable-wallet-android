@@ -46,7 +46,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
 class CreateAccountFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<ManageAccountsModule.Input>()
@@ -54,14 +53,13 @@ class CreateAccountFragment : BaseComposeFragment() {
         val inclusive = input?.popOffInclusive ?: true
         CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
-
 }
 
 @Composable
 private fun CreateAccountNavHost(
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
-    inclusive: Boolean
+    inclusive: Boolean,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -78,7 +76,7 @@ private fun CreateAccountNavHost(
         composablePage("create_account_advanced") {
             CreateAccountAdvancedScreen(
                 onBackClick = { navController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) },
             )
         }
     }
@@ -88,7 +86,7 @@ private fun CreateAccountNavHost(
 private fun CreateAccountIntroScreen(
     openCreateAdvancedScreen: () -> Unit,
     onBackClick: () -> Unit,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
 ) {
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
@@ -99,14 +97,17 @@ private fun CreateAccountIntroScreen(
                 contenView = view,
                 resId = R.string.Hud_Text_Created,
                 icon = R.drawable.icon_add_to_wallet_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
 
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
 
-            stat(page = StatPage.NewWallet, event = StatEvent.CreateWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.NewWallet,
+                event = StatEvent.CreateWallet(accountType.statAccountType),
+            )
         }
     }
 
@@ -114,16 +115,17 @@ private fun CreateAccountIntroScreen(
         Column(Modifier.fillMaxSize()) {
             AppBar(
                 title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = viewModel::createAccount
-                    )
-                ),
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Create),
+                            onClick = viewModel::createAccount,
+                        ),
+                    ),
                 navigationIcon = {
                     HsBackButton(onClick = onBackClick)
                 },
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
             )
             Spacer(Modifier.height(12.dp))
 
@@ -133,21 +135,24 @@ private fun CreateAccountIntroScreen(
                 initial = viewModel.accountName,
                 pasteEnabled = false,
                 hint = viewModel.defaultAccountName,
-                onValueChange = viewModel::onChangeAccountName
+                onValueChange = viewModel::onChangeAccountName,
             )
 
             Spacer(Modifier.height(32.dp))
 
             CellSingleLineLawrenceSection {
                 Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            openCreateAdvancedScreen.invoke()
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                openCreateAdvancedScreen.invoke()
 
-                            stat(page = StatPage.NewWallet, event = StatEvent.Open(StatPage.NewWalletAdvanced))
-                        }
-                        .padding(horizontal = 16.dp),
+                                stat(
+                                    page = StatPage.NewWallet,
+                                    event = StatEvent.Open(StatPage.NewWalletAdvanced),
+                                )
+                            }.padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     body_leah(text = stringResource(R.string.Button_Advanced))

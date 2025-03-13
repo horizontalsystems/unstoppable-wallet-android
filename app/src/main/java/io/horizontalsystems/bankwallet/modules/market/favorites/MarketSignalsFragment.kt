@@ -47,7 +47,9 @@ class MarketSignalsFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Result(val enabled: Boolean) : Parcelable
+    data class Result(
+        val enabled: Boolean,
+    ) : Parcelable
 }
 
 @Composable
@@ -56,60 +58,79 @@ fun MarketSignalsScreen(navController: NavController) {
         topBar = {
             AppBar(
                 title = stringResource(R.string.Market_Signals),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
-                    )
-                ),
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = navController::popBackStack,
+                        ),
+                    ),
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler
+        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(modifier = Modifier.padding(it)) {
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
-
                 item {
                     InfoText(
                         text = stringResource(R.string.Market_Signal_Description),
                         paddingStart = 16.dp,
-                        paddingEnd = 16.dp
+                        paddingEnd = 16.dp,
                     )
                     VSpacer(height = 24.dp)
                 }
 
-                val signals = listOf(Advice.StrongBuy, Advice.Buy, Advice.Neutral, Advice.Sell, Advice.StrongSell, Advice.Overbought)
+                val signals =
+                    listOf(
+                        Advice.StrongBuy,
+                        Advice.Buy,
+                        Advice.Neutral,
+                        Advice.Sell,
+                        Advice.StrongSell,
+                        Advice.Overbought,
+                    )
                 signals.forEachIndexed { index, signal ->
-                    val position: SectionItemPosition = when (index) {
-                        0 -> SectionItemPosition.First
-                        signals.size - 1 -> SectionItemPosition.Last
-                        else -> SectionItemPosition.Middle
-                    }
+                    val position: SectionItemPosition =
+                        when (index) {
+                            0 -> SectionItemPosition.First
+                            signals.size - 1 -> SectionItemPosition.Last
+                            else -> SectionItemPosition.Middle
+                        }
 
                     item {
                         SectionUniversalItem(borderTop = index != 0) {
                             RowUniversal(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .then(Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)),
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .then(
+                                            Modifier.sectionItemBorder(
+                                                1.dp,
+                                                ComposeAppTheme.colors.steel20,
+                                                12.dp,
+                                                position,
+                                            ),
+                                        ),
                             ) {
                                 Box(
-                                    modifier = Modifier
-                                        .padding(horizontal = 16.dp)
-                                        .height(40.dp)
-                                        .width(77.dp),
-                                    contentAlignment = Alignment.Center
+                                    modifier =
+                                        Modifier
+                                            .padding(horizontal = 16.dp)
+                                            .height(40.dp)
+                                            .width(77.dp),
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     SignalBadge(signal)
                                 }
                                 subhead2_leah(
-                                    modifier = Modifier
-                                        .padding(end = 16.dp),
-                                    text = stringResource(id = signal.descriptionResId)
+                                    modifier =
+                                        Modifier
+                                            .padding(end = 16.dp),
+                                    text = stringResource(id = signal.descriptionResId),
                                 )
                             }
                         }
@@ -125,16 +146,17 @@ fun MarketSignalsScreen(navController: NavController) {
 
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Market_Signal_TurnOn),
                     onClick = {
                         navController.paidAction(TradeSignals) {
                             navController.setNavigationResultX(MarketSignalsFragment.Result(true))
                             navController.popBackStack()
                         }
-                    }
+                    },
                 )
             }
         }
@@ -142,12 +164,14 @@ fun MarketSignalsScreen(navController: NavController) {
 }
 
 val Advice.descriptionResId: Int
-    get() = when (this) {
-        Advice.StrongBuy -> R.string.Market_Signal_StrongBuy_Description
-        Advice.Buy -> R.string.Market_Signal_Buy_Description
-        Advice.Neutral -> R.string.Market_Signal_Neutral_Descripion
-        Advice.Sell -> R.string.Market_Signal_Sell_Description
-        Advice.StrongSell -> R.string.Market_Signal_StrongSell_Description
-        Advice.Oversold,
-        Advice.Overbought -> R.string.Market_Signal_Risky_Description
-    }
+    get() =
+        when (this) {
+            Advice.StrongBuy -> R.string.Market_Signal_StrongBuy_Description
+            Advice.Buy -> R.string.Market_Signal_Buy_Description
+            Advice.Neutral -> R.string.Market_Signal_Neutral_Descripion
+            Advice.Sell -> R.string.Market_Signal_Sell_Description
+            Advice.StrongSell -> R.string.Market_Signal_StrongSell_Description
+            Advice.Oversold,
+            Advice.Overbought,
+            -> R.string.Market_Signal_Risky_Description
+        }

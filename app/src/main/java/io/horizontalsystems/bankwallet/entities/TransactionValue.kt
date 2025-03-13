@@ -34,7 +34,7 @@ sealed class TransactionValue {
         val symbol: String,
         override val decimals: Int,
         val value: BigDecimal,
-        val image: String?
+        val image: String?,
     ) : TransactionValue() {
         override val fullName = name
         override val coinUid = symbol
@@ -53,10 +53,12 @@ sealed class TransactionValue {
             get() = copy(value = value.abs())
         override val formattedString: String
             get() = "n/a"
-
     }
 
-    data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue() {
+    data class CoinValue(
+        val token: Token,
+        val value: BigDecimal,
+    ) : TransactionValue() {
         override val coin: Coin = token.coin
         override val badge: String? = token.badge
         override val coinIconUrl = token.coin.imageUrl
@@ -75,10 +77,11 @@ sealed class TransactionValue {
             get() = copy(value = value.abs())
         override val formattedString: String
             get() = "n/a"
-
     }
 
-    data class RawValue(val value: BigInteger) : TransactionValue() {
+    data class RawValue(
+        val value: BigInteger,
+    ) : TransactionValue() {
         override val coinUid: String = ""
         override val coin: Coin? = null
         override val badge: String? = null
@@ -96,7 +99,6 @@ sealed class TransactionValue {
             get() = copy(value = value.abs())
         override val formattedString: String
             get() = "n/a"
-
     }
 
     data class TokenValue(
@@ -104,7 +106,7 @@ sealed class TransactionValue {
         val tokenCode: String,
         val tokenDecimals: Int,
         val value: BigDecimal,
-        override val coinIconPlaceholder: Int? = null
+        override val coinIconPlaceholder: Int? = null,
     ) : TransactionValue() {
         override val coinUid: String = ""
         override val coin: Coin? = null
@@ -125,14 +127,13 @@ sealed class TransactionValue {
             get() = copy(value = value.abs())
         override val formattedString: String
             get() = "n/a"
-
     }
 
     data class NftValue(
         override val nftUid: NftUid,
         val value: BigDecimal,
         val tokenName: String?,
-        val tokenSymbol: String?
+        val tokenSymbol: String?,
     ) : TransactionValue() {
         override val coinUid: String = ""
         override val coin: Coin? = null
@@ -153,6 +154,5 @@ sealed class TransactionValue {
             get() = copy(value = value.abs())
         override val formattedString: String
             get() = "n/a"
-
     }
 }

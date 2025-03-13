@@ -28,15 +28,14 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
@@ -46,17 +45,19 @@ class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
                 ErrorDisplayScreen(title, text, navController)
             }
         }
-    }
 
     @Parcelize
-    data class Input(val title: String, val text: String) : Parcelable
+    data class Input(
+        val title: String,
+        val text: String,
+    ) : Parcelable
 }
 
 @Composable
 private fun ErrorDisplayScreen(
     title: String,
     errorText: String,
-    navController: NavController
+    navController: NavController,
 ) {
     ComposeAppTheme {
         BottomSheetHeader(
@@ -65,22 +66,23 @@ private fun ErrorDisplayScreen(
             title = title,
             onCloseClick = {
                 navController.popBackStack()
-            }
+            },
         ) {
             VSpacer(12.dp)
             TextImportantError(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = errorText
+                text = errorText,
             )
             VSpacer(8.dp)
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Button_Ok),
                 onClick = {
                     navController.popBackStack()
-                }
+                },
             )
             VSpacer(8.dp)
         }

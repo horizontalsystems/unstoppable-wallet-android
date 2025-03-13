@@ -7,11 +7,15 @@ import io.horizontalsystems.marketkit.models.CoinTreasury.TreasuryType
 import io.reactivex.Single
 
 class CoinTreasuriesRepository(
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) {
     private var cache: List<CoinTreasury> = listOf()
 
-    private fun getCoinTreasuries(coinUid: String, currencyCode: String, forceRefresh: Boolean): List<CoinTreasury> {
+    private fun getCoinTreasuries(
+        coinUid: String,
+        currencyCode: String,
+        forceRefresh: Boolean,
+    ): List<CoinTreasury> {
         if (forceRefresh || cache.isEmpty()) {
             cache = marketKit.treasuriesSingle(coinUid, currencyCode).blockingGet()
         }
@@ -23,24 +27,26 @@ class CoinTreasuriesRepository(
         currencyCode: String,
         treasuryType: TreasuryTypeFilter,
         sortDescending: Boolean,
-        forceRefresh: Boolean
+        forceRefresh: Boolean,
     ): Single<List<CoinTreasury>> =
         Single.create { emitter ->
             try {
                 val treasuries = getCoinTreasuries(coinUid, currencyCode, forceRefresh)
-                val filteredTreasuries = treasuries.filter {
-                    when (treasuryType) {
-                        TreasuryTypeFilter.All -> true
-                        TreasuryTypeFilter.Public -> it.type == TreasuryType.Public
-                        TreasuryTypeFilter.Private -> it.type == TreasuryType.Private
-                        TreasuryTypeFilter.ETF -> it.type == TreasuryType.Etf
+                val filteredTreasuries =
+                    treasuries.filter {
+                        when (treasuryType) {
+                            TreasuryTypeFilter.All -> true
+                            TreasuryTypeFilter.Public -> it.type == TreasuryType.Public
+                            TreasuryTypeFilter.Private -> it.type == TreasuryType.Private
+                            TreasuryTypeFilter.ETF -> it.type == TreasuryType.Etf
+                        }
                     }
-                }
-                val sortedTreasuries = if (sortDescending) {
-                    filteredTreasuries.sortedByDescending { it.amount }
-                } else {
-                    filteredTreasuries.sortedBy { it.amount }
-                }
+                val sortedTreasuries =
+                    if (sortDescending) {
+                        filteredTreasuries.sortedByDescending { it.amount }
+                    } else {
+                        filteredTreasuries.sortedBy { it.amount }
+                    }
                 emitter.onSuccess(sortedTreasuries)
             } catch (exception: Exception) {
                 emitter.onError(exception)

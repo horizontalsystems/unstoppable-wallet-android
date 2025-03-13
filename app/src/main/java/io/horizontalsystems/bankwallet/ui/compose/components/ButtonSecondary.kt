@@ -55,7 +55,7 @@ fun ButtonSecondaryDefault(
                 captionSB_grey50(text = title, maxLines = 1)
             }
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -69,12 +69,13 @@ fun ButtonSecondaryYellow(
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            ButtonPrimaryDefaults.textButtonColors(
+                backgroundColor = ComposeAppTheme.colors.yellowD,
+                contentColor = ComposeAppTheme.colors.dark,
+                disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             Text(
                 title,
@@ -83,7 +84,7 @@ fun ButtonSecondaryYellow(
                 overflow = TextOverflow.Ellipsis,
             )
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -93,33 +94,34 @@ fun ButtonSecondaryWithIcon(
     title: String,
     iconRight: Painter,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        contentPadding = PaddingValues(
-            start = 16.dp,
-            end = 8.dp,
-        ),
+        contentPadding =
+            PaddingValues(
+                start = 16.dp,
+                end = 8.dp,
+            ),
         content = {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 captionSB_leah(
                     text = title,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Icon(
                     modifier = Modifier.padding(start = 2.dp),
                     painter = iconRight,
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -129,23 +131,23 @@ fun ButtonSecondaryTransparent(
     title: String,
     @DrawableRes iconRight: Int? = null,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
-
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = buttonColors(
-            backgroundColor = ComposeAppTheme.colors.transparent,
-            contentColor = ComposeAppTheme.colors.leah,
-            disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            buttonColors(
+                backgroundColor = ComposeAppTheme.colors.transparent,
+                contentColor = ComposeAppTheme.colors.leah,
+                disabledBackgroundColor = ComposeAppTheme.colors.transparent,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             if (iconRight != null) {
-                Row (
-                    verticalAlignment = Alignment.CenterVertically
-                ){
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(
                         text = title,
                         maxLines = 1,
@@ -156,7 +158,7 @@ fun ButtonSecondaryTransparent(
                         modifier = Modifier.padding(start = 4.dp),
                         painter = painterResource(id = iconRight),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
+                        tint = ComposeAppTheme.colors.grey,
                     )
                 }
             } else {
@@ -168,7 +170,7 @@ fun ButtonSecondaryTransparent(
                 )
             }
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -177,49 +179,51 @@ fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
     modifier: Modifier = Modifier,
     select: Select<T>,
     onSelect: (T) -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     ButtonSecondary(
         modifier = modifier,
         onClick = {
             val options = select.options
             val selectedItemIndex = options.indexOf(select.selected)
-            val nextSelectedItemIndex = if (selectedItemIndex == options.size - 1) 0 else selectedItemIndex + 1
+            val nextSelectedItemIndex =
+                if (selectedItemIndex == options.size - 1) 0 else selectedItemIndex + 1
 
             onSelect(options[nextSelectedItemIndex])
         },
         content = {
             Row(
                 modifier = Modifier.height(IntrinsicSize.Max),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = select.selected.title.getString(),
                     maxLines = 1,
                     style = ComposeAppTheme.typography.captionSB,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Column(
-                    modifier = Modifier
-                        .height(16.dp)
-                        .padding(start = 12.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly
+                    modifier =
+                        Modifier
+                            .height(16.dp)
+                            .padding(start = 12.dp),
+                    verticalArrangement = Arrangement.SpaceEvenly,
                 ) {
                     select.options.forEach {
                         Box(
-                            modifier = Modifier
-                                .size(3.dp)
-                                .clip(CircleShape)
-                                .background(if (select.selected == it) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey)
+                            modifier =
+                                Modifier
+                                    .size(3.dp)
+                                    .clip(CircleShape)
+                                    .background(if (select.selected == it) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
                         )
                     }
                 }
             }
         },
-        enabled = enabled
+        enabled = enabled,
     )
 }
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -231,7 +235,7 @@ fun ButtonSecondary(
     border: BorderStroke? = null,
     buttonColors: ButtonColors = buttonColors(),
     contentPadding: PaddingValues = SecondaryButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Surface(
         modifier = modifier,
@@ -243,18 +247,17 @@ fun ButtonSecondary(
         enabled = enabled,
     ) {
         ProvideTextStyle(
-            value = ComposeAppTheme.typography.captionSB
+            value = ComposeAppTheme.typography.captionSB,
         ) {
             Row(
                 Modifier
                     .defaultMinSize(
                         minWidth = SecondaryButtonDefaults.MinWidth,
-                        minHeight = SecondaryButtonDefaults.MinHeight
-                    )
-                    .padding(contentPadding),
+                        minHeight = SecondaryButtonDefaults.MinHeight,
+                    ).padding(contentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                content = content
+                content = content,
             )
         }
     }
@@ -263,11 +266,11 @@ fun ButtonSecondary(
 object SecondaryButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
 
-    val ContentPadding = PaddingValues(
-        start = ButtonHorizontalPadding,
-        end = ButtonHorizontalPadding,
-    )
-
+    val ContentPadding =
+        PaddingValues(
+            start = ButtonHorizontalPadding,
+            end = ButtonHorizontalPadding,
+        )
 
     /**
      * The default min width applied for the [Button].
@@ -287,10 +290,11 @@ object SecondaryButtonDefaults {
         contentColor: Color = ComposeAppTheme.colors.leah,
         disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
         disabledContentColor: Color = ComposeAppTheme.colors.grey50,
-    ): ButtonColors = HsButtonColors(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        disabledBackgroundColor = disabledBackgroundColor,
-        disabledContentColor = disabledContentColor,
-    )
+    ): ButtonColors =
+        HsButtonColors(
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
+            disabledBackgroundColor = disabledBackgroundColor,
+            disabledContentColor = disabledContentColor,
+        )
 }

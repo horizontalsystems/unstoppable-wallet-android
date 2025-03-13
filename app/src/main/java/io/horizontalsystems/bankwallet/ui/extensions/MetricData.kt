@@ -8,5 +8,5 @@ data class MetricData(
     val value: String?,
     val diff: BigDecimal?,
     val chartData: ChartData?,
-    val type: MetricsType
+    val type: MetricsType,
 )

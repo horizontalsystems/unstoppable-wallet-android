@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import java.util.Date
 
 data class TweetsPageResponse(
     val data: List<RawTweet>,
@@ -15,11 +15,11 @@ data class TweetsPageResponse(
         @SerializedName("users")
         val users: List<TwitterUser>,
         @SerializedName("tweets")
-        val referencedTweets: List<RawTweet>
+        val referencedTweets: List<RawTweet>,
     )
 
-    fun tweets(user: TwitterUser): List<Tweet> {
-        return data.map { rawTweet ->
+    fun tweets(user: TwitterUser): List<Tweet> =
+        data.map { rawTweet ->
             val attachments = mutableListOf<Tweet.Attachment>()
             rawTweet.attachments?.mediaKeys?.let { mediaKeys ->
                 for (mediaKey in mediaKeys) {
@@ -31,6 +31,7 @@ data class TweetsPageResponse(
                                     attachments.add(Tweet.Attachment.Photo(it))
                                 }
                             }
+
                             "video" -> {
                                 media.previewImageUrl?.let {
                                     attachments.add(Tweet.Attachment.Video(it))
@@ -44,7 +45,14 @@ data class TweetsPageResponse(
                 for (pollId in pollIds) {
                     val poll = includes.polls.find { it.id == pollId }
                     if (poll != null) {
-                        val options = poll.options.map { Tweet.Attachment.Poll.Option(it.position, it.label, it.votes) }
+                        val options =
+                            poll.options.map {
+                                Tweet.Attachment.Poll.Option(
+                                    it.position,
+                                    it.label,
+                                    it.votes,
+                                )
+                            }
                         attachments.add(Tweet.Attachment.Poll(options))
                     }
                 }
@@ -52,25 +60,46 @@ data class TweetsPageResponse(
 
             var referencedTweet: Tweet.ReferencedTweetXxx? = null
             rawTweet.referencedTweets?.firstOrNull()?.let { tweetReference ->
-                includes.referencedTweets.find { tweet -> tweet.id == tweetReference.id }?.let { rawReferencedTweet ->
-                    includes.users.find { user -> user.id == rawReferencedTweet.authorId }?.let { referencedTweetAuthor ->
-                        val tweet = Tweet(
-                            rawReferencedTweet.id,
-                            referencedTweetAuthor,
-                            rawReferencedTweet.text,
-                            rawReferencedTweet.date,
-                            listOf(),
-                            null
-                        )
+                includes.referencedTweets
+                    .find { tweet -> tweet.id == tweetReference.id }
+                    ?.let { rawReferencedTweet ->
+                        includes.users
+                            .find { user -> user.id == rawReferencedTweet.authorId }
+                            ?.let { referencedTweetAuthor ->
+                                val tweet =
+                                    Tweet(
+                                        rawReferencedTweet.id,
+                                        referencedTweetAuthor,
+                                        rawReferencedTweet.text,
+                                        rawReferencedTweet.date,
+                                        listOf(),
+                                        null,
+                                    )
 
-                        referencedTweet = when (tweetReference.type) {
-                            "quoted" -> Tweet.ReferencedTweetXxx(Tweet.ReferenceType.Quoted, tweet)
-                            "retweeted" -> Tweet.ReferencedTweetXxx(Tweet.ReferenceType.Retweeted, tweet)
-                            "replied_to" -> Tweet.ReferencedTweetXxx(Tweet.ReferenceType.Replied, tweet)
-                            else -> null
-                        }
+                                referencedTweet =
+                                    when (tweetReference.type) {
+                                        "quoted" ->
+                                            Tweet.ReferencedTweetXxx(
+                                                Tweet.ReferenceType.Quoted,
+                                                tweet,
+                                            )
+
+                                        "retweeted" ->
+                                            Tweet.ReferencedTweetXxx(
+                                                Tweet.ReferenceType.Retweeted,
+                                                tweet,
+                                            )
+
+                                        "replied_to" ->
+                                            Tweet.ReferencedTweetXxx(
+                                                Tweet.ReferenceType.Replied,
+                                                tweet,
+                                            )
+
+                                        else -> null
+                                    }
+                            }
                     }
-                }
             }
 
             Tweet(
@@ -79,10 +108,9 @@ data class TweetsPageResponse(
                 rawTweet.text,
                 rawTweet.date,
                 attachments,
-                referencedTweet
+                referencedTweet,
             )
         }
-    }
 
     data class RawTweet(
         val id: String,
@@ -93,7 +121,7 @@ data class TweetsPageResponse(
         val text: String,
         val attachments: Attachments?,
         @SerializedName("referenced_tweets")
-        val referencedTweets: List<ReferencedTweet>?
+        val referencedTweets: List<ReferencedTweet>?,
     ) {
         data class Attachments(
             @SerializedName("media_keys")
@@ -143,5 +171,4 @@ data class TweetsPageResponse(
 //        guard let value = value else { return nil }
 //        return utcDateFormatter.string(from: value)
 //    })
-
 }

@@ -35,14 +35,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class BlockchainSettingsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         BlockchainSettingsScreen(
             navController = navController,
         )
     }
-
 }
 
 @Composable
@@ -50,10 +48,9 @@ private fun BlockchainSettingsScreen(
     navController: NavController,
     viewModel: BlockchainSettingsViewModel = viewModel(factory = BlockchainSettingsModule.Factory()),
 ) {
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column(
-            modifier = Modifier.navigationBarsPadding()
+            modifier = Modifier.navigationBarsPadding(),
         ) {
             AppBar(
                 title = stringResource(R.string.BlockchainSettings_Title),
@@ -63,28 +60,28 @@ private fun BlockchainSettingsScreen(
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Spacer(Modifier.height(12.dp))
                 BlockchainSettingsBlock(
                     btcLikeChains = viewModel.btcLikeChains,
                     otherChains = viewModel.otherChains,
-                    navController = navController
+                    navController = navController,
                 )
                 Spacer(Modifier.height(44.dp))
             }
         }
     }
-
 }
 
 @Composable
 fun BlockchainSettingsBlock(
     btcLikeChains: List<BlockchainSettingsModule.BlockchainViewItem>,
     otherChains: List<BlockchainSettingsModule.BlockchainViewItem>,
-    navController: NavController
+    navController: NavController,
 ) {
     CellUniversalLawrenceSection(btcLikeChains) { item ->
         BlockchainSettingCell(item) {
@@ -101,25 +98,37 @@ fun BlockchainSettingsBlock(
 
 private fun onClick(
     item: BlockchainSettingsModule.BlockchainViewItem,
-    navController: NavController
+    navController: NavController,
 ) {
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
-            navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, item.blockchainItem.blockchain)
+            navController.slideFromBottom(
+                R.id.btcBlockchainSettingsFragment,
+                item.blockchainItem.blockchain,
+            )
 
-            stat(page = StatPage.BlockchainSettings, event = StatEvent.OpenBlockchainSettingsBtc(item.blockchainItem.blockchain.uid))
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsBtc(item.blockchainItem.blockchain.uid),
+            )
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
             navController.slideFromBottom(R.id.evmNetworkFragment, item.blockchainItem.blockchain)
 
-            stat(page = StatPage.BlockchainSettings, event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid))
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid),
+            )
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
             navController.slideFromBottom(R.id.solanaNetworkFragment)
 
-            stat(page = StatPage.BlockchainSettings, event = StatEvent.Open(StatPage.BlockchainSettingsSolana))
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.Open(StatPage.BlockchainSettingsSolana),
+            )
         }
     }
 }
@@ -127,19 +136,21 @@ private fun onClick(
 @Composable
 private fun BlockchainSettingCell(
     item: BlockchainSettingsModule.BlockchainViewItem,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Image(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(32.dp),
-            painter = rememberAsyncImagePainter(
-                model = item.imageUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_32)
-            ),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(32.dp),
+            painter =
+                rememberAsyncImagePainter(
+                    model = item.imageUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_32),
+                ),
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
@@ -150,7 +161,7 @@ private fun BlockchainSettingCell(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.grey,
         )
     }
 }

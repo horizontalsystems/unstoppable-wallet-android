@@ -47,9 +47,10 @@ fun SendEvmScreen(
     riskyAddress: Boolean,
     sendEntryPointDestId: Int,
 ) {
-    val viewModel = viewModel<SendEvmViewModel>(
-        factory = SendEvmModule.Factory(wallet, address, hideAddress)
-    )
+    val viewModel =
+        viewModel<SendEvmViewModel>(
+            factory = SendEvmModule.Factory(wallet, address, hideAddress),
+        )
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
@@ -57,9 +58,10 @@ fun SendEvmScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
-    )
+    val paymentAddressViewModel =
+        viewModel<AddressParserViewModel>(
+            factory = AddressParserModule.Factory(wallet.token, amount),
+        )
     val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -73,7 +75,7 @@ fun SendEvmScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
         ) {
             if (uiState.showAddressInput) {
                 HSAddressCell(
@@ -102,7 +104,7 @@ fun SendEvmScreen(
                 },
                 inputType = amountInputType,
                 rate = viewModel.coinRate,
-                amountUnique = amountUnique
+                amountUnique = amountUnique,
             )
 
             VSpacer(8.dp)
@@ -112,13 +114,14 @@ fun SendEvmScreen(
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = availableBalance,
                 amountInputType = amountInputType,
-                rate = viewModel.coinRate
+                rate = viewModel.coinRate,
             )
 
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                 title = stringResource(R.string.Button_Next),
                 onClick = {
                     val sendData = viewModel.getSendData() ?: return@ButtonPrimaryYellow
@@ -129,14 +132,14 @@ fun SendEvmScreen(
                         navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
                             R.id.addressRiskyBottomSheetAlert,
                             AddressRiskyBottomSheetAlert.Input(
-                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                            )
+                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText),
+                            ),
                         ) {
                             openSendConfirm(
                                 sendData,
                                 viewModel.wallet.token.blockchainType,
                                 navController,
-                                sendEntryPointDestId
+                                sendEntryPointDestId,
                             )
                         }
                     } else {
@@ -144,11 +147,11 @@ fun SendEvmScreen(
                             sendData,
                             viewModel.wallet.token.blockchainType,
                             navController,
-                            sendEntryPointDestId
+                            sendEntryPointDestId,
                         )
                     }
                 },
-                enabled = proceedEnabled
+                enabled = proceedEnabled,
             )
         }
     }
@@ -158,14 +161,14 @@ private fun openSendConfirm(
     sendEvmData: SendEvmData,
     blockchainType: BlockchainType,
     navController: NavController,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
     navController.slideFromRight(
         R.id.sendEvmConfirmationFragment,
         SendEvmConfirmationFragment.Input(
             sendData = sendEvmData,
             blockchainType = blockchainType,
-            sendEntryPointDestId = sendEntryPointDestId
-        )
+            sendEntryPointDestId = sendEntryPointDestId,
+        ),
     )
 }

@@ -39,22 +39,22 @@ class AppStatusViewModel(
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
-
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
     private var appStatusAsText: String? = null
     private val appLogs = AppLog.getLog()
 
     init {
         viewModelScope.launch {
-            blockViewItems = listOf<AppStatusModule.BlockData>()
-                .asSequence()
-                .plus(getAppInfoBlock())
-                .plus(getVersionHistoryBlock())
-                .plus(getWalletsStatusBlock())
-                .plus(getBlockchainStatusBlock())
-                .plus(getMarketLastSyncTimestampsBlock())
-                .plus(getAppLogBlocks())
-                .toList()
+            blockViewItems =
+                listOf<AppStatusModule.BlockData>()
+                    .asSequence()
+                    .plus(getAppInfoBlock())
+                    .plus(getVersionHistoryBlock())
+                    .plus(getWalletsStatusBlock())
+                    .plus(getBlockchainStatusBlock())
+                    .plus(getMarketLastSyncTimestampsBlock())
+                    .plus(getAppLogBlocks())
+                    .toList()
 
             emitState()
         }
@@ -68,10 +68,11 @@ class AppStatusViewModel(
         }
     }
 
-    override fun createState() = AppStatusModule.UiState(
-        appStatusAsText = appStatusAsText,
-        blockViewItems = blockViewItems
-    )
+    override fun createState() =
+        AppStatusModule.UiState(
+            appStatusAsText = appStatusAsText,
+            blockViewItems = blockViewItems,
+        )
 
     private fun getStatusMap(): LinkedHashMap<String, Any> {
         val status = LinkedHashMap<String, Any>()
@@ -92,16 +93,20 @@ class AppStatusViewModel(
         appLogs.forEach { (key, value) ->
             val title = if (sectionTitleNotSet) "App Log" else null
             val map = mapOf("" to value)
-            val content = formatMapToString(map)?.removePrefix(":")
-                ?.removePrefix("\n")
-                ?.trimEnd() ?: ""
-            val item = AppStatusModule.BlockData(
-                title = title,
-                content = listOf(
-                    BlockContent.Header(key.replaceFirstChar(Char::uppercase)),
-                    BlockContent.Text(content),
+            val content =
+                formatMapToString(map)
+                    ?.removePrefix(":")
+                    ?.removePrefix("\n")
+                    ?.trimEnd() ?: ""
+            val item =
+                AppStatusModule.BlockData(
+                    title = title,
+                    content =
+                        listOf(
+                            BlockContent.Header(key.replaceFirstChar(Char::uppercase)),
+                            BlockContent.Text(content),
+                        ),
                 )
-            )
             blocks.add(item)
             sectionTitleNotSet = false
         }
@@ -124,7 +129,7 @@ class AppStatusViewModel(
                 BlockContent.TitleValue(
                     DateHelper.formatDate(Date(version.timestamp), "MMM d, yyyy, HH:mm"),
                     version.version,
-                )
+                ),
             )
         }
 
@@ -156,8 +161,8 @@ class AppStatusViewModel(
                         BlockContent.TitleValue("Name", account.name),
                         BlockContent.TitleValue("Origin", origin),
                         BlockContent.TitleValue("Type", account.type.description),
-                    )
-                )
+                    ),
+                ),
             )
         }
         return walletBlocks
@@ -171,7 +176,7 @@ class AppStatusViewModel(
                 BlockchainType.BitcoinCash,
                 BlockchainType.Dash,
                 BlockchainType.Litecoin,
-                BlockchainType.ECash
+                BlockchainType.ECash,
             )
 
         walletManager.activeWallets
@@ -207,7 +212,8 @@ class AppStatusViewModel(
             blockchainStatus["Solana"] = statusInfo
         }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
+        walletManager.activeWallets
+            .firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
             ?.let { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
                     blockchainStatus["Zcash"] = adapter.statusInfo
@@ -234,21 +240,22 @@ class AppStatusViewModel(
             .forEach {
                 val wallet = it
                 val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                val block = when (val adapter = adapterManager.getAdapterForWallet(wallet)) {
-                    is BitcoinBaseAdapter -> {
-                        val restoreMode =
-                            btcBlockchainManager.restoreMode(wallet.token.blockchainType)
-                        val statusInfo = mutableMapOf<String, Any>("Sync Mode" to restoreMode.name)
-                        statusInfo.putAll(adapter.statusInfo)
-                        getBlockchainInfoBlock(
-                            title,
-                            "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}",
-                            statusInfo
-                        )
-                    }
+                val block =
+                    when (val adapter = adapterManager.getAdapterForWallet(wallet)) {
+                        is BitcoinBaseAdapter -> {
+                            val restoreMode =
+                                btcBlockchainManager.restoreMode(wallet.token.blockchainType)
+                            val statusInfo = mutableMapOf<String, Any>("Sync Mode" to restoreMode.name)
+                            statusInfo.putAll(adapter.statusInfo)
+                            getBlockchainInfoBlock(
+                                title,
+                                "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}",
+                                statusInfo,
+                            )
+                        }
 
-                    else -> null
-                }
+                        else -> null
+                    }
                 block?.let { blocks.add(it) }
             }
 
@@ -273,7 +280,8 @@ class AppStatusViewModel(
             blocks.add(block)
         }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
+        walletManager.activeWallets
+            .firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
             ?.let { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
                     val title = if (blocks.isEmpty()) "Blockchain Status" else null
@@ -282,7 +290,8 @@ class AppStatusViewModel(
                 }
             }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
+        walletManager.activeWallets
+            .firstOrNull { it.token.blockchainType == BlockchainType.Ton }
             ?.let { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? TonAdapter)?.let { adapter ->
                     val title = if (blocks.isEmpty()) "Blockchain Status" else null
@@ -297,16 +306,15 @@ class AppStatusViewModel(
     fun getBlockchainInfoBlock(
         title: String?,
         blockchain: String,
-        statusInfo: Map<String, Any>
-    ): AppStatusModule.BlockData {
-        return AppStatusModule.BlockData(
+        statusInfo: Map<String, Any>,
+    ): AppStatusModule.BlockData =
+        AppStatusModule.BlockData(
             title,
             listOf(
                 BlockContent.TitleValue("Blockchain", blockchain),
                 BlockContent.Text(formatMapToString(statusInfo)?.trimEnd() ?: ""),
-            )
+            ),
         )
-    }
 
     private fun getMarketLastSyncTimestamps(): Map<String, Any> {
         val syncInfo = marketKit.syncInfo()
@@ -323,11 +331,12 @@ class AppStatusViewModel(
 
         return AppStatusModule.BlockData(
             title = "Market Last Sync Timestamps",
-            content = listOf(
-                BlockContent.TitleValue("Coins", syncInfo.coinsTimestamp ?: ""),
-                BlockContent.TitleValue("Blockchains", syncInfo.blockchainsTimestamp ?: ""),
-                BlockContent.TitleValue("Tokens", syncInfo.tokensTimestamp ?: ""),
-            )
+            content =
+                listOf(
+                    BlockContent.TitleValue("Coins", syncInfo.coinsTimestamp ?: ""),
+                    BlockContent.TitleValue("Blockchains", syncInfo.blockchainsTimestamp ?: ""),
+                    BlockContent.TitleValue("Tokens", syncInfo.tokensTimestamp ?: ""),
+                ),
         )
     }
 
@@ -341,20 +350,20 @@ class AppStatusViewModel(
         return appInfo
     }
 
-    private fun getAppInfoBlock(): AppStatusModule.BlockData {
-        return AppStatusModule.BlockData(
+    private fun getAppInfoBlock(): AppStatusModule.BlockData =
+        AppStatusModule.BlockData(
             title = "App Info",
-            content = listOf(
-                BlockContent.TitleValue(
-                    "Current Time",
-                    DateHelper.formatDate(Date(), "MMM d, yyyy, HH:mm")
+            content =
+                listOf(
+                    BlockContent.TitleValue(
+                        "Current Time",
+                        DateHelper.formatDate(Date(), "MMM d, yyyy, HH:mm"),
+                    ),
+                    BlockContent.TitleValue("App Version", systemInfoManager.appVersion),
+                    BlockContent.TitleValue("Device Model", systemInfoManager.deviceModel),
+                    BlockContent.TitleValue("OS Version", systemInfoManager.osVersion),
                 ),
-                BlockContent.TitleValue("App Version", systemInfoManager.appVersion),
-                BlockContent.TitleValue("Device Model", systemInfoManager.deviceModel),
-                BlockContent.TitleValue("OS Version", systemInfoManager.osVersion),
-            )
         )
-    }
 
     private fun getAccountDetails(account: Account): LinkedHashMap<String, Any> {
         val accountDetails = LinkedHashMap<String, Any>()
@@ -365,9 +374,7 @@ class AppStatusViewModel(
         return accountDetails
     }
 
-    private fun getAccountOrigin(account: Account): String {
-        return if (account.isWatchAccount) "Watched" else account.origin.value
-    }
+    private fun getAccountOrigin(account: Account): String = if (account.isWatchAccount) "Watched" else account.origin.value
 
     private fun formatMapToString(status: Map<String, Any>?): String? {
         if (status == null) return null
@@ -391,8 +398,8 @@ class AppStatusViewModel(
                         convertNestedMapToStringList(
                             map = value as Map<String, Any>,
                             bullet = " - ",
-                            level = level + 1
-                        )
+                            level = level + 1,
+                        ),
                     )
                     if (level < 2) resultList.add("")
                 }
@@ -407,5 +414,4 @@ class AppStatusViewModel(
         }
         return resultList
     }
-
 }

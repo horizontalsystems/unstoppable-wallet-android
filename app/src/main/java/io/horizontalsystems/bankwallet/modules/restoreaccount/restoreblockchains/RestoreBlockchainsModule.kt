@@ -12,15 +12,13 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 
 object RestoreBlockchainsModule {
-
     class Factory(
         private val accountName: String,
         private val accountType: AccountType,
         private val manualBackup: Boolean,
         private val fileBackup: Boolean,
-        private val statPage: StatPage
+        private val statPage: StatPage,
     ) : ViewModelProvider.Factory {
-
         private val restoreSettingsService by lazy {
             RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
@@ -41,31 +39,33 @@ object RestoreBlockchainsModule {
                 App.tokenAutoEnableManager,
                 blockchainTokensService,
                 restoreSettingsService,
-                statPage
+                statPage,
             )
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 RestoreSettingsViewModel::class.java -> {
                     RestoreSettingsViewModel(
                         restoreSettingsService,
-                        listOf(restoreSettingsService)
+                        listOf(restoreSettingsService),
                     ) as T
                 }
+
                 RestoreBlockchainsViewModel::class.java -> {
                     RestoreBlockchainsViewModel(
                         restoreSelectCoinsService,
-                        listOf(restoreSelectCoinsService)
+                        listOf(restoreSelectCoinsService),
                     ) as T
                 }
+
                 BlockchainTokensViewModel::class.java -> {
                     BlockchainTokensViewModel(blockchainTokensService) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
-        }
     }
 }
 

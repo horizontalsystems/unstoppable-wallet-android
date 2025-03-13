@@ -11,7 +11,6 @@ class CoinService(
     val fullCoin: FullCoin,
     private val marketFavoritesManager: MarketFavoritesManager,
 ) : Clearable {
-
     private val _isFavorite = BehaviorSubject.create<Boolean>()
     val isFavorite: Observable<Boolean>
         get() = _isFavorite

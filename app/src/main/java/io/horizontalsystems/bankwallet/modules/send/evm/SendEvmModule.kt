@@ -16,14 +16,15 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 import java.math.RoundingMode
 
-
 data class SendEvmData(
     val transactionData: TransactionData,
-    val additionalInfo: AdditionalInfo? = null
+    val additionalInfo: AdditionalInfo? = null,
 ) {
     sealed class AdditionalInfo : Parcelable {
         @Parcelize
-        class Send(val info: SendInfo) : AdditionalInfo()
+        class Send(
+            val info: SendInfo,
+        ) : AdditionalInfo()
 
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
@@ -31,52 +32,56 @@ data class SendEvmData(
 
     @Parcelize
     data class SendInfo(
-        val nftShortMeta: NftShortMeta? = null
+        val nftShortMeta: NftShortMeta? = null,
     ) : Parcelable
 
     @Parcelize
     data class NftShortMeta(
         val nftName: String,
-        val previewImageUrl: String?
+        val previewImageUrl: String?,
     ) : Parcelable
 }
 
 object SendEvmModule {
-
     @Parcelize
     data class TransactionDataParcelable(
         val toAddress: String,
         val value: BigInteger,
-        val input: ByteArray
+        val input: ByteArray,
     ) : Parcelable {
         constructor(transactionData: TransactionData) : this(
             transactionData.to.hex,
             transactionData.value,
-            transactionData.input
+            transactionData.input,
         )
     }
-
 
     class Factory(
         private val wallet: Wallet,
         private val address: Address,
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
+        val adapter =
+            (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter)
+                ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            when (modelClass) {
                 SendEvmViewModel::class.java -> {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendAmountService(
-                        amountValidator,
-                        wallet.token.coin.code,
-                        adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-                        wallet.token.type.isNative
-                    )
+                    val amountService =
+                        SendAmountService(
+                            amountValidator,
+                            wallet.token.coin.code,
+                            adapter.balanceData.available.setScale(
+                                coinMaxAllowedDecimals,
+                                RoundingMode.DOWN,
+                            ),
+                            wallet.token.type.isNative,
+                        )
                     val addressService = SendEvmAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
@@ -90,11 +95,11 @@ object SendEvmModule {
                         coinMaxAllowedDecimals,
                         !hideAddress,
                         App.connectivityManager,
-                        address
+                        address,
                     ) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
-        }
     }
 }

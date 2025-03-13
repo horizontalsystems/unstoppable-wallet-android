@@ -33,19 +33,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class IndicatorsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         IndicatorsScreen(
             navController = navController,
         )
     }
-
 }
 
 @Composable
 fun IndicatorsScreen(navController: NavController) {
-    val chartIndicatorsViewModel = viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
+    val chartIndicatorsViewModel =
+        viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
 
     val uiState = chartIndicatorsViewModel.uiState
     val toggleIndicator = { indicator: ChartIndicatorSetting, checked: Boolean ->
@@ -63,13 +62,13 @@ fun IndicatorsScreen(navController: NavController) {
                 title = stringResource(R.string.CoinPage_Indicators),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
-        }
+        },
     ) {
         Column(Modifier.padding(it)) {
             HeaderText(
-                stringResource(R.string.CoinPage_MovingAverages).uppercase()
+                stringResource(R.string.CoinPage_MovingAverages).uppercase(),
             )
             CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicatorSetting ->
                 val indicatorDataMa = indicator.getTypedDataMA()
@@ -87,13 +86,16 @@ fun IndicatorsScreen(navController: NavController) {
                         toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(R.id.indicatorSettingsFragment, IndicatorSettingsFragment.Input(indicator.id))
-                    }
+                        navController.slideFromRight(
+                            R.id.indicatorSettingsFragment,
+                            IndicatorSettingsFragment.Input(indicator.id),
+                        )
+                    },
                 )
             }
             VSpacer(24.dp)
             HeaderText(
-                stringResource(R.string.CoinPage_OscillatorsSettings).uppercase()
+                stringResource(R.string.CoinPage_OscillatorsSettings).uppercase(),
             )
             CellUniversalLawrenceSection(uiState.oscillatorIndicators) { indicator ->
                 IndicatorCell(
@@ -103,8 +105,11 @@ fun IndicatorsScreen(navController: NavController) {
                         toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(R.id.indicatorSettingsFragment, IndicatorSettingsFragment.Input(indicator.id))
-                    }
+                        navController.slideFromRight(
+                            R.id.indicatorSettingsFragment,
+                            IndicatorSettingsFragment.Input(indicator.id),
+                        )
+                    },
                 )
             }
         }
@@ -117,34 +122,35 @@ private fun IndicatorCell(
     checked: Boolean,
     leftIcon: (@Composable () -> Unit)? = null,
     onCheckedChange: (Boolean) -> Unit,
-    onEditClick: () -> Unit
+    onEditClick: () -> Unit,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
     ) {
         leftIcon?.invoke()
         HSpacer(16.dp)
         body_leah(
             text = title,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         HsIconButton(
             modifier = Modifier.size(20.dp),
-            onClick = onEditClick
+            onClick = onEditClick,
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_edit_20),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
         HSpacer(16.dp)
         HsSwitch(
             modifier = Modifier.padding(0.dp),
             checked = checked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
         )
     }
 }

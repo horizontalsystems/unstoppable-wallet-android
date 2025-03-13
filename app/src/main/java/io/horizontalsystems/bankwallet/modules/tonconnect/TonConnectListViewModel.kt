@@ -13,7 +13,6 @@ class TonConnectListViewModel(
     deepLinkUri: String?,
     accountManager: IAccountManager,
 ) : ViewModelUiState<TonConnectListUiState>() {
-
     private val tonConnectKit = App.tonConnectManager.kit
 
     private var dapps = mapOf<String, List<DAppEntity>>()
@@ -22,11 +21,12 @@ class TonConnectListViewModel(
 
     private val accountNamesById = accountManager.accounts.associate { it.id to it.name }
 
-    override fun createState() = TonConnectListUiState(
-        dapps = dapps,
-        dAppRequestEntity = dAppRequestEntity,
-        error = error
-    )
+    override fun createState() =
+        TonConnectListUiState(
+            dapps = dapps,
+            dAppRequestEntity = dAppRequestEntity,
+            error = error,
+        )
 
     init {
         viewModelScope.launch {
@@ -67,12 +67,10 @@ class TonConnectListViewModel(
             tonConnectKit.disconnect(dapp)
         }
     }
-
 }
-
 
 data class TonConnectListUiState(
     val dapps: Map<String, List<DAppEntity>>,
     val dAppRequestEntity: DAppRequestEntity?,
-    val error: Throwable?
+    val error: Throwable?,
 )

@@ -38,19 +38,23 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
+fun TonConnectMainScreen(
+    navController: NavController,
+    deepLinkUri: String?,
+) {
     val context = LocalContext.current
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModel = viewModel<TonConnectListViewModel>(initializer = {
-        TonConnectListViewModel(deepLinkUri, App.accountManager)
-    })
+    val viewModel =
+        viewModel<TonConnectListViewModel>(initializer = {
+            TonConnectListViewModel(deepLinkUri, App.accountManager)
+        })
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 viewModel.setConnectionUri(
-                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "",
                 )
             }
         }
@@ -93,9 +97,9 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                 },
                 onClose = {
                     coroutineScope.launch { invalidUrlBottomSheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -104,9 +108,9 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                     title = stringResource(R.string.TonConnect_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
-                    }
+                    },
                 )
-            }
+            },
         ) {
             Column(modifier = Modifier.padding(it)) {
                 Column(modifier = Modifier.weight(1f)) {
@@ -114,30 +118,31 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                     if (dapps.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.WalletConnect_NoConnection),
-                            icon = R.drawable.ic_ton_connect_24
+                            icon = R.drawable.ic_ton_connect_24,
                         )
                     } else {
                         TonConnectSessionList(
                             dapps = dapps,
                             navController = navController,
-                            onDelete = viewModel::disconnect
+                            onDelete = viewModel::disconnect,
                         )
                     }
                 }
                 ButtonsGroupWithShade {
                     ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp)
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .padding(start = 16.dp, end = 16.dp)
+                                .fillMaxWidth(),
                         title = stringResource(R.string.TonConnect_NewConnect),
                         onClick = {
                             qrScannerLauncher.launch(
                                 QRScannerActivity.getScanQrIntent(
                                     context,
-                                    true
-                                )
+                                    true,
+                                ),
                             )
-                        }
+                        },
                     )
                 }
             }

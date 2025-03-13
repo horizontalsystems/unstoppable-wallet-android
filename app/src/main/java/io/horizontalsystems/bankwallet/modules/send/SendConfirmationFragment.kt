@@ -33,7 +33,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         navController,
                         sendBitcoinViewModel,
                         amountInputModeViewModel,
-                        input.sendEntryPointDestId
+                        input.sendEntryPointDestId,
                     )
                 }
 
@@ -44,7 +44,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         navController,
                         sendZCashViewModel,
                         amountInputModeViewModel,
-                        input.sendEntryPointDestId
+                        input.sendEntryPointDestId,
                     )
                 }
 
@@ -54,7 +54,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         navController,
                         sendTronViewModel,
                         amountInputModeViewModel,
-                        input.sendEntryPointDestId
+                        input.sendEntryPointDestId,
                     )
                 }
 
@@ -65,7 +65,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         navController,
                         sendSolanaViewModel,
                         amountInputModeViewModel,
-                        input.sendEntryPointDestId
+                        input.sendEntryPointDestId,
                     )
                 }
 
@@ -76,7 +76,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         navController,
                         sendTonViewModel,
                         amountInputModeViewModel,
-                        input.sendEntryPointDestId
+                        input.sendEntryPointDestId,
                     )
                 }
             }
@@ -85,9 +85,16 @@ class SendConfirmationFragment : BaseComposeFragment() {
 
     @Parcelize
     enum class Type : Parcelable {
-        Bitcoin, ZCash, Solana, Tron, Ton
+        Bitcoin,
+        ZCash,
+        Solana,
+        Tron,
+        Ton,
     }
 
     @Parcelize
-    data class Input(val type: Type, val sendEntryPointDestId: Int) : Parcelable
+    data class Input(
+        val type: Type,
+        val sendEntryPointDestId: Int,
+    ) : Parcelable
 }

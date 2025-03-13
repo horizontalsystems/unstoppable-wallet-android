@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class TronKitManager(
     private val appConfigProvider: AppConfigProvider,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -53,17 +53,18 @@ class TronKitManager(
 
         if (this.tronKitWrapper == null) {
             val accountType = account.type
-            this.tronKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account)
-                }
+            this.tronKitWrapper =
+                when (accountType) {
+                    is AccountType.Mnemonic -> {
+                        createKitInstance(accountType, account)
+                    }
 
-                is AccountType.TronAddress -> {
-                    createKitInstance(accountType, account)
-                }
+                    is AccountType.TronAddress -> {
+                        createKitInstance(accountType, account)
+                    }
 
-                else -> throw UnsupportedAccountException()
-            }
+                    else -> throw UnsupportedAccountException()
+                }
             start()
             useCount = 0
             currentAccount = account
@@ -75,35 +76,37 @@ class TronKitManager(
 
     private fun createKitInstance(
         accountType: AccountType.Mnemonic,
-        account: Account
+        account: Account,
     ): TronKitWrapper {
         val seed = accountType.seed
         val signer = Signer.getInstance(seed, network)
 
-        val kit = TronKit.getInstance(
-            application = App.instance,
-            walletId = account.id,
-            seed = seed,
-            network = network,
-            tronGridApiKeys = appConfigProvider.trongridApiKeys
-        )
+        val kit =
+            TronKit.getInstance(
+                application = App.instance,
+                walletId = account.id,
+                seed = seed,
+                network = network,
+                tronGridApiKeys = appConfigProvider.trongridApiKeys,
+            )
 
         return TronKitWrapper(kit, signer)
     }
 
     private fun createKitInstance(
         accountType: AccountType.TronAddress,
-        account: Account
+        account: Account,
     ): TronKitWrapper {
         val address = accountType.address
 
-        val kit = TronKit.getInstance(
-            application = App.instance,
-            address = Address.fromBase58(address),
-            network = network,
-            walletId = account.id,
-            tronGridApiKeys = appConfigProvider.trongridApiKeys
-        )
+        val kit =
+            TronKit.getInstance(
+                application = App.instance,
+                address = Address.fromBase58(address),
+                network = network,
+                walletId = account.id,
+                tronGridApiKeys = appConfigProvider.trongridApiKeys,
+            )
 
         return TronKitWrapper(kit, null)
     }
@@ -128,18 +131,22 @@ class TronKitManager(
 
     private fun start() {
         tronKitWrapper?.tronKit?.start()
-        job = scope.launch {
-            backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    tronKitWrapper?.tronKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            kit.refresh()
-                        }, 1000)
+        job =
+            scope.launch {
+                backgroundManager.stateFlow.collect { state ->
+                    if (state == BackgroundManagerState.EnterForeground) {
+                        tronKitWrapper?.tronKit?.let { kit ->
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                kit.refresh()
+                            }, 1000)
+                        }
                     }
                 }
             }
-        }
     }
 }
 
-class TronKitWrapper(val tronKit: TronKit, val signer: Signer?)
+class TronKitWrapper(
+    val tronKit: TronKit,
+    val signer: Signer?,
+)

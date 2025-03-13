@@ -5,17 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
 object SecurityPasscodeSettingsModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SecuritySettingsViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            SecuritySettingsViewModel(
                 App.systemInfoManager,
                 App.pinComponent,
                 App.balanceHiddenManager,
                 App.localStorage,
             ) as T
-        }
     }
-
 }

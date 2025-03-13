@@ -55,22 +55,25 @@ import java.util.Date
 import java.util.Locale
 
 class MarketWidget : GlanceAppWidget() {
-
     companion object {
         private val smallMode = DpSize(140.dp, 120.dp)
         private val mediumMode = DpSize(220.dp, 200.dp)
         private val largeMode = DpSize(260.dp, 280.dp)
     }
 
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
+    override suspend fun provideGlance(
+        context: Context,
+        id: GlanceId,
+    ) {
         provideContent {
             Content(context)
         }
     }
 
-    override val sizeMode: SizeMode = SizeMode.Responsive(
-        setOf(smallMode, mediumMode, largeMode)
-    )
+    override val sizeMode: SizeMode =
+        SizeMode.Responsive(
+            setOf(smallMode, mediumMode, largeMode),
+        )
 
     override val stateDefinition = MarketWidgetStateDefinition
 
@@ -81,35 +84,39 @@ class MarketWidget : GlanceAppWidget() {
 
         AppWidgetTheme {
             Column(
-                modifier = GlanceModifier
-                    .fillMaxSize()
-                    .background(ImageProvider(R.drawable.widget_background))
-                    .padding(16.dp),
+                modifier =
+                    GlanceModifier
+                        .fillMaxSize()
+                        .background(ImageProvider(R.drawable.widget_background))
+                        .padding(16.dp),
                 verticalAlignment = Alignment.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Column(
-                    modifier = GlanceModifier
-                        .defaultWeight()
-                        .background(ImageProvider(R.drawable.widget_list_background))
+                    modifier =
+                        GlanceModifier
+                            .defaultWeight()
+                            .background(ImageProvider(R.drawable.widget_list_background)),
                 ) {
                     Row(
-                        modifier = GlanceModifier
-                            .height(44.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            GlanceModifier
+                                .height(44.dp)
+                                .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             modifier = GlanceModifier.defaultWeight().padding(start = 16.dp),
                             text = context.getString(state.type.title),
-                            style = AppWidgetTheme.textStyles.d1()
+                            style = AppWidgetTheme.textStyles.d1(),
                         )
                         Box(
-                            modifier = GlanceModifier
-                                .fillMaxHeight()
-                                .padding(horizontal = 16.dp)
-                                .clickable(actionRunCallback<UpdateMarketAction>()),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                GlanceModifier
+                                    .fillMaxHeight()
+                                    .padding(horizontal = 16.dp)
+                                    .clickable(actionRunCallback<UpdateMarketAction>()),
+                            contentAlignment = Alignment.Center,
                         ) {
                             if (state.loading) {
                                 CircularProgressIndicator(modifier = GlanceModifier.size(20.dp))
@@ -117,7 +124,7 @@ class MarketWidget : GlanceAppWidget() {
                                 Image(
                                     modifier = GlanceModifier.size(20.dp),
                                     provider = ImageProvider(R.drawable.ic_refresh),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             }
                         }
@@ -138,12 +145,18 @@ class MarketWidget : GlanceAppWidget() {
                             items(state.items) { item ->
                                 val deeplinkUri = getDeeplinkUri(item, state.type, deeplinkScheme)
                                 Box(
-                                    modifier = GlanceModifier
-                                        .height(60.dp)
-                                        .background(ImageProvider(R.drawable.widget_list_item_background))
-                                        .clickable(
-                                            actionStartActivity(Intent(Intent.ACTION_VIEW, deeplinkUri))
-                                        )
+                                    modifier =
+                                        GlanceModifier
+                                            .height(60.dp)
+                                            .background(ImageProvider(R.drawable.widget_list_item_background))
+                                            .clickable(
+                                                actionStartActivity(
+                                                    Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        deeplinkUri,
+                                                    ),
+                                                ),
+                                            ),
                                 ) {
                                     Item(item = item, state.type)
                                 }
@@ -154,8 +167,13 @@ class MarketWidget : GlanceAppWidget() {
                 Column {
                     Spacer(modifier = GlanceModifier.height(8.dp))
                     Text(
-                        text = "Updated: " + SimpleDateFormat("HH:mm:ss, dd-MM-yyyy", Locale.US).format(Date(state.updateTimestampMillis)),
-                        style = AppWidgetTheme.textStyles.micro()
+                        text =
+                            "Updated: " +
+                                SimpleDateFormat(
+                                    "HH:mm:ss, dd-MM-yyyy",
+                                    Locale.US,
+                                ).format(Date(state.updateTimestampMillis)),
+                        style = AppWidgetTheme.textStyles.micro(),
                     )
                 }
             }
@@ -163,36 +181,49 @@ class MarketWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType, deeplinkScheme: String): Uri = when (type) {
-        MarketWidgetType.Watchlist,
-        MarketWidgetType.TopGainers -> {
-            "$deeplinkScheme://coin-page?uid=${item.uid}".toUri()
-        }
+    private fun getDeeplinkUri(
+        item: MarketWidgetItem,
+        type: MarketWidgetType,
+        deeplinkScheme: String,
+    ): Uri =
+        when (type) {
+            MarketWidgetType.Watchlist,
+            MarketWidgetType.TopGainers,
+            -> {
+                "$deeplinkScheme://coin-page?uid=${item.uid}".toUri()
+            }
 
-        MarketWidgetType.TopPlatforms -> {
-            "$deeplinkScheme://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
+            MarketWidgetType.TopPlatforms -> {
+                "$deeplinkScheme://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
+            }
         }
-    }
 
     @Composable
-    private fun Item(item: MarketWidgetItem, type: MarketWidgetType) {
+    private fun Item(
+        item: MarketWidgetItem,
+        type: MarketWidgetType,
+    ) {
         Row(
-            modifier = GlanceModifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = CenterVertically
+            modifier =
+                GlanceModifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp),
+            verticalAlignment = CenterVertically,
         ) {
-           val modifier =  when(type) {
-                MarketWidgetType.Watchlist,
-                MarketWidgetType.TopGainers -> GlanceModifier.size(32.dp).cornerRadius(16.dp)
-                MarketWidgetType.TopPlatforms -> GlanceModifier.size(32.dp)
-            }
+            val modifier =
+                when (type) {
+                    MarketWidgetType.Watchlist,
+                    MarketWidgetType.TopGainers,
+                    -> GlanceModifier.size(32.dp).cornerRadius(16.dp)
+
+                    MarketWidgetType.TopPlatforms -> GlanceModifier.size(32.dp)
+                }
 
             Image(
                 provider = imageProvider(item.imageLocalPath),
                 contentDescription = null,
-                contentScale= ContentScale.FillBounds,
-                modifier = modifier
+                contentScale = ContentScale.FillBounds,
+                modifier = modifier,
             )
             Spacer(modifier = GlanceModifier.width(16.dp))
             Column {
@@ -207,29 +238,32 @@ class MarketWidget : GlanceAppWidget() {
         }
     }
 
-    private fun imageProvider(path: String?) = if (path == null) {
-        ImageProvider(R.drawable.coin_placeholder)
-    } else {
-        ImageProvider(BitmapFactory.decodeFile(path))
-    }
+    private fun imageProvider(path: String?) =
+        if (path == null) {
+            ImageProvider(R.drawable.coin_placeholder)
+        } else {
+            ImageProvider(BitmapFactory.decodeFile(path))
+        }
 
     @Composable
-    private fun ItemFirstRow(title: String, value: String?) {
+    private fun ItemFirstRow(
+        title: String,
+        value: String?,
+    ) {
         Row(
             modifier = GlanceModifier.fillMaxWidth(),
-            verticalAlignment = CenterVertically
+            verticalAlignment = CenterVertically,
         ) {
-
             Text(
                 text = if (title.length > 20) title.take(17) + "..." else title,
                 maxLines = 1,
-                style = TextStyle(AppWidgetTheme.colors.leah, fontSize = 16.sp)
+                style = TextStyle(AppWidgetTheme.colors.leah, fontSize = 16.sp),
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             Text(
                 text = value ?: "",
                 maxLines = 1,
-                style = TextStyle(color = AppWidgetTheme.colors.leah, fontSize = 16.sp)
+                style = TextStyle(color = AppWidgetTheme.colors.leah, fontSize = 16.sp),
             )
         }
     }
@@ -242,7 +276,7 @@ class MarketWidget : GlanceAppWidget() {
     ) {
         Row(
             modifier = GlanceModifier.fillMaxWidth(),
-            verticalAlignment = CenterVertically
+            verticalAlignment = CenterVertically,
         ) {
             label?.let {
                 Badge(text = it)
@@ -251,14 +285,19 @@ class MarketWidget : GlanceAppWidget() {
             Text(
                 text = subtitle,
                 maxLines = 1,
-                style = AppWidgetTheme.textStyles.d1()
+                style = AppWidgetTheme.textStyles.d1(),
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             diff?.let {
                 Text(
                     text = App.numberFormatter.formatValueAsDiff(Value.Percent(diff)),
-                    style = TextStyle(color = diffColor(diff), fontSize = 14.sp, fontWeight = FontWeight.Normal),
-                    maxLines = 1
+                    style =
+                        TextStyle(
+                            color = diffColor(diff),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal,
+                        ),
+                    maxLines = 1,
                 )
             }
         }
@@ -275,26 +314,36 @@ class MarketWidget : GlanceAppWidget() {
     @Composable
     private fun Badge(text: String) {
         Text(
-            modifier = GlanceModifier
-                .background(ImageProvider(R.drawable.widget_list_item_badge_background))
-                .padding(horizontal = 4.dp, vertical = 2.dp),
+            modifier =
+                GlanceModifier
+                    .background(ImageProvider(R.drawable.widget_list_item_badge_background))
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
             text = text,
-            style = TextStyle(color = AppWidgetTheme.colors.bran, fontSize = 10.sp, fontWeight = FontWeight.Medium),
+            style =
+                TextStyle(
+                    color = AppWidgetTheme.colors.bran,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Medium,
+                ),
         )
     }
 
     @Composable
-    private fun FullScreenMessage(icon: Int, text: String) {
+    private fun FullScreenMessage(
+        icon: Int,
+        text: String,
+    ) {
         Column(
             modifier = GlanceModifier.fillMaxSize().padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                modifier = GlanceModifier
-                    .size(100.dp)
-                    .background(ImageProvider(R.drawable.widget_screen_message_icon_background)),
-                contentAlignment = Alignment.Center
+                modifier =
+                    GlanceModifier
+                        .size(100.dp)
+                        .background(ImageProvider(R.drawable.widget_screen_message_icon_background)),
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
                     modifier = GlanceModifier.size(48.dp),
@@ -305,19 +354,18 @@ class MarketWidget : GlanceAppWidget() {
             Spacer(modifier = GlanceModifier.height(32.dp))
             Text(
                 text = text,
-                style = AppWidgetTheme.textStyles.d1(textAlign = TextAlign.Center)
+                style = AppWidgetTheme.textStyles.d1(textAlign = TextAlign.Center),
             )
             Spacer(modifier = GlanceModifier.height(32.dp))
         }
     }
-
 }
 
 class UpdateMarketAction : ActionCallback {
     override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,
-        parameters: ActionParameters
+        parameters: ActionParameters,
     ) {
         updateAppWidgetState(context, MarketWidgetStateDefinition, glanceId) { state ->
             state.copy(loading = true)

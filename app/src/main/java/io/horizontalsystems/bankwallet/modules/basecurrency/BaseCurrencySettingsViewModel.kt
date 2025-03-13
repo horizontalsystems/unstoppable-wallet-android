@@ -10,8 +10,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 
-class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager) : ViewModel() {
-
+class BaseCurrencySettingsViewModel(
+    private val currencyManager: CurrencyManager,
+) : ViewModel() {
     private val popularCurrencyCodes = listOf("USD", "EUR", "GBP", "JPY")
     private val popularCurrencies: List<Currency>
     private val otherCurrencies: List<Currency>
@@ -72,5 +73,4 @@ class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager
     fun closeDisclaimer() {
         showDisclaimer = false
     }
-
 }

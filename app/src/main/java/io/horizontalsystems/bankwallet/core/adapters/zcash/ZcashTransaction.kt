@@ -40,32 +40,30 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
         }
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is ZcashTransaction &&
-                other.transactionHash.contentEquals(transactionHash)
-    }
+    override fun equals(other: Any?): Boolean =
+        other is ZcashTransaction &&
+            other.transactionHash.contentEquals(transactionHash)
 
-    override fun hashCode(): Int {
-        return transactionHash.hashCode()
-    }
+    override fun hashCode(): Int = transactionHash.hashCode()
 
-    override fun compareTo(other: ZcashTransaction): Int = when  {
-        transactionHash.contentEquals(other.transactionHash) -> 0
-        timestamp == other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
-        else -> timestamp.compareTo(other.timestamp)
-    }
+    override fun compareTo(other: ZcashTransaction): Int =
+        when {
+            transactionHash.contentEquals(other.transactionHash) -> 0
+            timestamp == other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
+            else -> timestamp.compareTo(other.timestamp)
+        }
 
-    //taken from here
-    //https://github.com/zcash/zcash-android-wallet/blob/371c5ef36517cab868e5345dcc8ac7517560987f/app/src/main/java/cash/z/ecc/android/ui/util/MemoUtil.kt#L24-L33
-    private fun ByteArray?.toUtf8Memo(): String {
-        return if (this == null || this.isEmpty() || this[0] >= 0xF5) ""
-        else
+    // taken from here
+    // https://github.com/zcash/zcash-android-wallet/blob/371c5ef36517cab868e5345dcc8ac7517560987f/app/src/main/java/cash/z/ecc/android/ui/util/MemoUtil.kt#L24-L33
+    private fun ByteArray?.toUtf8Memo(): String =
+        if (this == null || this.isEmpty() || this[0] >= 0xF5) {
+            ""
+        } else {
             try {
                 // trim empty and "replacement characters" for codes that can't be represented in unicode
                 String(this, charset("UTF-8")).trim('\u0000', '\uFFFD')
             } catch (t: Throwable) {
                 "Unable to parse memo."
             }
-    }
-
+        }
 }

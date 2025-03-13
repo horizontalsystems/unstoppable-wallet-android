@@ -22,8 +22,7 @@ class Colors(
     raina: Color,
     andy: Color,
 ) {
-
-    //base colors
+    // base colors
     val transparent = Color.Transparent
     val dark = Dark
     val light = Light
@@ -52,7 +51,7 @@ class Colors(
     val red50 = Red50
     val red20 = Red20
 
-    //themed colors
+    // themed colors
     var jacob by mutableStateOf(jacob)
         private set
     var remus by mutableStateOf(remus)
@@ -96,19 +95,20 @@ class Colors(
         andy = other.andy
     }
 
-    fun copy(): Colors = Colors(
-        jacob = jacob,
-        remus = remus,
-        lucian = lucian,
-        tyler = tyler,
-        bran = bran,
-        leah = leah,
-        claude = claude,
-        lawrence = lawrence,
-        jeremy = jeremy,
-        laguna = laguna,
-        purple = purple,
-        raina = raina,
-        andy = andy,
-    )
+    fun copy(): Colors =
+        Colors(
+            jacob = jacob,
+            remus = remus,
+            lucian = lucian,
+            tyler = tyler,
+            bran = bran,
+            leah = leah,
+            claude = claude,
+            lawrence = lawrence,
+            jeremy = jeremy,
+            laguna = laguna,
+            purple = purple,
+            raina = raina,
+            andy = andy,
+        )
 }

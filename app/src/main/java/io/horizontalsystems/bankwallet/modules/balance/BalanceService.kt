@@ -33,9 +33,8 @@ class BalanceService(
     private val localStorage: ILocalStorage,
     private val connectivityManager: ConnectivityManager,
     private val balanceSorter: BalanceSorter,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
 ) : Clearable {
-
     val networkAvailable by connectivityManager::isConnected
     val baseCurrency by xRateRepository::baseCurrency
 
@@ -59,12 +58,13 @@ class BalanceService(
 
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
 
-    /* getBalanceItems should return new immutable list */
-    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
-        allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
-    } else {
-        allBalanceItems.toList()
-    }
+    // getBalanceItems should return new immutable list
+    private fun getBalanceItems(): List<BalanceModule.BalanceItem> =
+        if (hideZeroBalances) {
+            allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
+        } else {
+            allBalanceItems.toList()
+        }
 
     private val _balanceItemsFlow = MutableStateFlow<List<BalanceModule.BalanceItem>?>(null)
     val balanceItemsFlow = _balanceItemsFlow.asStateFlow()
@@ -114,11 +114,12 @@ class BalanceService(
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
-            allBalanceItems[i] = balanceItem.copy(
-                balanceData = adapterRepository.balanceData(balanceItem.wallet),
-                state = adapterRepository.state(balanceItem.wallet),
-                sendAllowed = adapterRepository.sendAllowed(balanceItem.wallet),
-            )
+            allBalanceItems[i] =
+                balanceItem.copy(
+                    balanceData = adapterRepository.balanceData(balanceItem.wallet),
+                    state = adapterRepository.state(balanceItem.wallet),
+                    sendAllowed = adapterRepository.sendAllowed(balanceItem.wallet),
+                )
         }
 
         sortAndEmitItems()
@@ -130,11 +131,12 @@ class BalanceService(
         if (indexOfFirst != -1) {
             val itemToUpdate = allBalanceItems[indexOfFirst]
 
-            allBalanceItems[indexOfFirst] = itemToUpdate.copy(
-                balanceData = adapterRepository.balanceData(wallet),
-                state = adapterRepository.state(wallet),
-                sendAllowed = adapterRepository.sendAllowed(wallet),
-            )
+            allBalanceItems[indexOfFirst] =
+                itemToUpdate.copy(
+                    balanceData = adapterRepository.balanceData(wallet),
+                    state = adapterRepository.state(wallet),
+                    sendAllowed = adapterRepository.sendAllowed(wallet),
+                )
 
             sortAndEmitItems()
         }
@@ -146,7 +148,8 @@ class BalanceService(
             val balanceItem = allBalanceItems[i]
 
             if (latestRates.containsKey(balanceItem.wallet.coin.uid)) {
-                allBalanceItems[i] = balanceItem.copy(coinPrice = latestRates[balanceItem.wallet.coin.uid])
+                allBalanceItems[i] =
+                    balanceItem.copy(coinPrice = latestRates[balanceItem.wallet.coin.uid])
             }
         }
 
@@ -162,15 +165,16 @@ class BalanceService(
         xRateRepository.setCoinUids(wallets.map { it.coin.uid })
         val latestRates = xRateRepository.getLatestRates()
 
-        val balanceItems = wallets.map { wallet ->
-            BalanceModule.BalanceItem(
-                wallet = wallet,
-                balanceData = adapterRepository.balanceData(wallet),
-                state = adapterRepository.state(wallet),
-                sendAllowed = adapterRepository.sendAllowed(wallet),
-                coinPrice = latestRates[wallet.coin.uid]
-            )
-        }
+        val balanceItems =
+            wallets.map { wallet ->
+                BalanceModule.BalanceItem(
+                    wallet = wallet,
+                    balanceData = adapterRepository.balanceData(wallet),
+                    state = adapterRepository.state(wallet),
+                    sendAllowed = adapterRepository.sendAllowed(wallet),
+                    coinPrice = latestRates[wallet.coin.uid],
+                )
+            }
 
         this.allBalanceItems.clear()
         this.allBalanceItems.addAll(balanceItems)
@@ -189,6 +193,7 @@ class BalanceService(
     }
 
     val disabledWalletSubject = PublishSubject.create<Wallet>()
+
     fun disable(wallet: Wallet) {
         activeWalletRepository.disable(wallet)
 
@@ -200,17 +205,18 @@ class BalanceService(
     }
 
     companion object {
-        fun getInstance(tag: String): BalanceService {
-            return BalanceService(
+        fun getInstance(tag: String): BalanceService =
+            BalanceService(
                 BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
                 BalanceXRateRepository(tag, App.currencyManager, App.marketKit),
-                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                BalanceAdapterRepository(
+                    App.adapterManager,
+                    BalanceCache(App.appDatabase.enabledWalletsCacheDao()),
+                ),
                 App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),
-                App.accountManager
+                App.accountManager,
             )
-
-        }
     }
 }

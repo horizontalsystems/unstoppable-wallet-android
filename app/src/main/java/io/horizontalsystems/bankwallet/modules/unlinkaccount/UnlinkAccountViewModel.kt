@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 class UnlinkAccountViewModel(
     private val account: Account,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
     val accountName = account.name
 
@@ -22,7 +22,8 @@ class UnlinkAccountViewModel(
     var showDeleteWarning by mutableStateOf(false)
         private set
 
-    val deleteButtonText = when {
+    val deleteButtonText =
+        when {
             account.isWatchAccount -> R.string.ManageKeys_StopWatching
             else -> R.string.ManageKeys_Delete_FromPhone
         }
@@ -31,10 +32,11 @@ class UnlinkAccountViewModel(
         if (account.isWatchAccount) {
             showDeleteWarning = true
         } else {
-            confirmations = listOf(
-                ConfirmationItem(ConfirmationType.ConfirmationRemove),
-                ConfirmationItem(ConfirmationType.ConfirmationLos),
-            )
+            confirmations =
+                listOf(
+                    ConfirmationItem(ConfirmationType.ConfirmationRemove),
+                    ConfirmationItem(ConfirmationType.ConfirmationLos),
+                )
         }
 
         updateUnlinkEnabledState()
@@ -43,9 +45,10 @@ class UnlinkAccountViewModel(
     fun toggleConfirm(item: ConfirmationItem) {
         val index = confirmations.indexOf(item)
         if (index != -1) {
-            confirmations = confirmations.toMutableList().apply {
-                this[index] = item.copy(confirmed = !item.confirmed)
-            }
+            confirmations =
+                confirmations.toMutableList().apply {
+                    this[index] = item.copy(confirmed = !item.confirmed)
+                }
 
             updateUnlinkEnabledState()
         }
@@ -60,9 +63,14 @@ class UnlinkAccountViewModel(
     }
 }
 
-enum class ConfirmationType(val title: TranslatableString) {
+enum class ConfirmationType(
+    val title: TranslatableString,
+) {
     ConfirmationRemove(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationRemove)),
-    ConfirmationLos(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationLose))
+    ConfirmationLos(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationLose)),
 }
 
-data class ConfirmationItem(val confirmationType: ConfirmationType, val confirmed: Boolean = false)
+data class ConfirmationItem(
+    val confirmationType: ConfirmationType,
+    val confirmed: Boolean = false,
+)

@@ -12,11 +12,11 @@ import io.horizontalsystems.bankwallet.ui.compose.MyRippleConfiguration
 @Composable
 fun HsTextButton(
     onClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     CompositionLocalProvider(LocalRippleConfiguration provides MyRippleConfiguration) {
         TextButton(
-            onClick = onClick
+            onClick = onClick,
         ) {
             content()
         }

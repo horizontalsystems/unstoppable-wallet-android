@@ -37,19 +37,19 @@ data class BalanceViewItem(
     val swapEnabled: Boolean = false,
     val errorMessage: String?,
     val isWatchAccount: Boolean,
-    val warning: WarningText?
+    val warning: WarningText?,
 )
 
 data class WarningText(
     val title: TranslatableString,
-    val text: TranslatableString
+    val text: TranslatableString,
 )
 
 data class LockedValue(
     val title: TranslatableString,
     val infoTitle: TranslatableString,
     val info: TranslatableString,
-    val coinValue: DeemedValue<String>
+    val coinValue: DeemedValue<String>,
 )
 
 @Immutable
@@ -67,62 +67,88 @@ data class BalanceViewItem2(
     val badge: String?,
     val swapEnabled: Boolean = false,
     val errorMessage: String?,
-    val isWatchAccount: Boolean
+    val isWatchAccount: Boolean,
 )
 
-data class DeemedValue<T>(val value: T, val dimmed: Boolean = false, val visible: Boolean = true)
-data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
+data class DeemedValue<T>(
+    val value: T,
+    val dimmed: Boolean = false,
+    val visible: Boolean = true,
+)
+
+data class SyncingProgress(
+    val progress: Int?,
+    val dimmed: Boolean = false,
+)
 
 class BalanceViewItemFactory {
+    private fun getSyncingProgress(
+        state: AdapterState?,
+        blockchainType: BlockchainType,
+    ): SyncingProgress =
+        when (state) {
+            is AdapterState.Syncing ->
+                SyncingProgress(
+                    state.progress ?: getDefaultSyncingProgress(
+                        blockchainType,
+                    ),
+                    false,
+                )
 
-    private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
-        return when (state) {
-            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(blockchainType), false)
             is AdapterState.SearchingTxs -> SyncingProgress(10, true)
             else -> SyncingProgress(null, false)
         }
-    }
 
-    private fun getDefaultSyncingProgress(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash,
-        BlockchainType.ECash,
-        BlockchainType.Litecoin,
-        BlockchainType.Dash,
-        BlockchainType.Zcash -> 10
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.Solana,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Solana,
-        BlockchainType.Tron,
-        BlockchainType.Ton -> 50
-        is BlockchainType.Unsupported -> 0
-    }
+    private fun getDefaultSyncingProgress(blockchainType: BlockchainType) =
+        when (blockchainType) {
+            BlockchainType.Bitcoin,
+            BlockchainType.BitcoinCash,
+            BlockchainType.ECash,
+            BlockchainType.Litecoin,
+            BlockchainType.Dash,
+            BlockchainType.Zcash,
+            -> 10
+
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.Base,
+            BlockchainType.ZkSync,
+            BlockchainType.Solana,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.ArbitrumOne,
+            BlockchainType.Solana,
+            BlockchainType.Tron,
+            BlockchainType.Ton,
+            -> 50
+
+            is BlockchainType.Unsupported -> 0
+        }
 
     private fun getSyncingText(state: AdapterState?): String? {
         if (state == null) {
             return null
         }
 
-        val text = when (state) {
-            is AdapterState.Syncing -> {
-                if (state.progress != null) {
-                    Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
-                } else {
-                    Translator.getString(R.string.Balance_Syncing)
+        val text =
+            when (state) {
+                is AdapterState.Syncing -> {
+                    if (state.progress != null) {
+                        Translator.getString(
+                            R.string.Balance_Syncing_WithProgress,
+                            state.progress.toString(),
+                        )
+                    } else {
+                        Translator.getString(R.string.Balance_Syncing)
+                    }
                 }
+
+                is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
+                else -> null
             }
-            is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
-            else -> null
-        }
 
         return text
     }
@@ -132,23 +158,29 @@ class BalanceViewItemFactory {
             return null
         }
 
-        val text = when (state) {
-            is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null) {
-                    Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"))
-                } else {
-                    null
+        val text =
+            when (state) {
+                is AdapterState.Syncing -> {
+                    if (state.lastBlockDate != null) {
+                        Translator.getString(
+                            R.string.Balance_SyncedUntil,
+                            DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"),
+                        )
+                    } else {
+                        null
+                    }
                 }
-            }
-            is AdapterState.SearchingTxs -> {
-                if (state.count > 0) {
-                    Translator.getString(R.string.Balance_FoundTx, state.count.toString())
-                } else {
-                    null
+
+                is AdapterState.SearchingTxs -> {
+                    if (state.count > 0) {
+                        Translator.getString(R.string.Balance_FoundTx, state.count.toString())
+                    } else {
+                        null
+                    }
                 }
+
+                else -> null
             }
-            else -> null
-        }
 
         return text
     }
@@ -158,7 +190,7 @@ class BalanceViewItemFactory {
         balance: BigDecimal,
         hideBalance: Boolean,
         coinDecimals: Int,
-        token: Token
+        token: Token,
     ): DeemedValue<String>? {
         if (balance <= BigDecimal.ZERO) {
             return null
@@ -177,7 +209,7 @@ class BalanceViewItemFactory {
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,
-        balanceViewType: BalanceViewType
+        balanceViewType: BalanceViewType,
     ): BalanceViewItem {
         val wallet = item.wallet
         val state = item.state
@@ -185,69 +217,71 @@ class BalanceViewItemFactory {
 
         val balanceTotalVisibility = !hideBalance
 
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
-            balance = item.balanceData.total,
-            visible = balanceTotalVisibility,
-            fullFormat = true,
-            coinDecimals = wallet.decimal,
-            dimmed = state !is AdapterState.Synced,
-            coinPrice = latestRate,
-            currency = currency,
-            balanceViewType = balanceViewType
-        )
+        val (primaryValue, secondaryValue) =
+            BalanceViewHelper.getPrimaryAndSecondaryValues(
+                balance = item.balanceData.total,
+                visible = balanceTotalVisibility,
+                fullFormat = true,
+                coinDecimals = wallet.decimal,
+                dimmed = state !is AdapterState.Synced,
+                coinPrice = latestRate,
+                currency = currency,
+                balanceViewType = balanceViewType,
+            )
 
-        val lockedValues = buildList {
-            lockedCoinValue(
-                state,
-                item.balanceData.timeLocked,
-                hideBalance,
-                wallet.decimal,
-                wallet.token
-            )?.let {
-                add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_LockedAmount_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_LockTime_Title),
-                        info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
-                        coinValue = it
+        val lockedValues =
+            buildList {
+                lockedCoinValue(
+                    state,
+                    item.balanceData.timeLocked,
+                    hideBalance,
+                    wallet.decimal,
+                    wallet.token,
+                )?.let {
+                    add(
+                        LockedValue(
+                            title = TranslatableString.ResString(R.string.Balance_LockedAmount_Title),
+                            infoTitle = TranslatableString.ResString(R.string.Info_LockTime_Title),
+                            info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
+                            coinValue = it,
+                        ),
                     )
-                )
-            }
+                }
 
-            lockedCoinValue(
-                state,
-                item.balanceData.pending,
-                hideBalance,
-                wallet.decimal,
-                wallet.token
-            )?.let {
-                add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_ProcessingBalance_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
-                        info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
-                        coinValue = it
+                lockedCoinValue(
+                    state,
+                    item.balanceData.pending,
+                    hideBalance,
+                    wallet.decimal,
+                    wallet.token,
+                )?.let {
+                    add(
+                        LockedValue(
+                            title = TranslatableString.ResString(R.string.Balance_ProcessingBalance_Title),
+                            infoTitle = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
+                            info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
+                            coinValue = it,
+                        ),
                     )
-                )
-            }
+                }
 
-            lockedCoinValue(
-                state,
-                item.balanceData.notRelayed,
-                hideBalance,
-                wallet.decimal,
-                wallet.token
-            )?.let {
-                add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_NotRelayedAmount_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
-                        info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
-                        coinValue = it
+                lockedCoinValue(
+                    state,
+                    item.balanceData.notRelayed,
+                    hideBalance,
+                    wallet.decimal,
+                    wallet.token,
+                )?.let {
+                    add(
+                        LockedValue(
+                            title = TranslatableString.ResString(R.string.Balance_NotRelayedAmount_Title),
+                            infoTitle = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
+                            info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
+                            coinValue = it,
+                        ),
                     )
-                )
+                }
             }
-        }
 
         return BalanceViewItem(
             wallet = item.wallet,
@@ -266,7 +300,7 @@ class BalanceViewItemFactory {
             swapEnabled = state is AdapterState.Synced,
             errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
             isWatchAccount = watchAccount,
-            warning = item.warning?.warningText
+            warning = item.warning?.warningText,
         )
     }
 
@@ -276,7 +310,7 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         watchAccount: Boolean,
         balanceViewType: BalanceViewType,
-        networkAvailable: Boolean
+        networkAvailable: Boolean,
     ): BalanceViewItem2 {
         val wallet = item.wallet
         val state = item.state
@@ -284,22 +318,24 @@ class BalanceViewItemFactory {
 
         val balanceTotalVisibility = !hideBalance
 
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
-            balance = item.balanceData.total,
-            visible = balanceTotalVisibility,
-            fullFormat = false,
-            coinDecimals = wallet.decimal,
-            dimmed = state !is AdapterState.Synced,
-            coinPrice = latestRate,
-            currency = currency,
-            balanceViewType = balanceViewType
-        )
+        val (primaryValue, secondaryValue) =
+            BalanceViewHelper.getPrimaryAndSecondaryValues(
+                balance = item.balanceData.total,
+                visible = balanceTotalVisibility,
+                fullFormat = false,
+                coinDecimals = wallet.decimal,
+                dimmed = state !is AdapterState.Synced,
+                coinPrice = latestRate,
+                currency = currency,
+                balanceViewType = balanceViewType,
+            )
 
-        val errorMessage = if (networkAvailable) {
-            (state as? AdapterState.NotSynced)?.error?.message
-        } else {
-            Translator.getString(R.string.Hud_Text_NoInternet)
-        }
+        val errorMessage =
+            if (networkAvailable) {
+                (state as? AdapterState.NotSynced)?.error?.message
+            } else {
+                Translator.getString(R.string.Hud_Text_NoInternet)
+            }
 
         return BalanceViewItem2(
             wallet = item.wallet,
@@ -315,7 +351,7 @@ class BalanceViewItemFactory {
             badge = wallet.badge,
             swapEnabled = state is AdapterState.Synced,
             errorMessage = errorMessage,
-            isWatchAccount = watchAccount
+            isWatchAccount = watchAccount,
         )
     }
 
@@ -326,18 +362,19 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         balanceViewType: BalanceViewType,
         fullFormat: Boolean,
-        adapterState: AdapterState
+        adapterState: AdapterState,
     ): BalanceCexViewItem {
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
-            balance = cexAsset.freeBalance + cexAsset.lockedBalance,
-            visible = !hideBalance,
-            fullFormat = fullFormat,
-            coinDecimals = cexAsset.decimals,
-            dimmed = false,
-            coinPrice = latestRate,
-            currency = currency,
-            balanceViewType = balanceViewType
-        )
+        val (primaryValue, secondaryValue) =
+            BalanceViewHelper.getPrimaryAndSecondaryValues(
+                balance = cexAsset.freeBalance + cexAsset.lockedBalance,
+                visible = !hideBalance,
+                fullFormat = fullFormat,
+                coinDecimals = cexAsset.decimals,
+                dimmed = false,
+                coinPrice = latestRate,
+                currency = currency,
+                balanceViewType = balanceViewType,
+            )
         val fiatLockedVisibility = !hideBalance && cexAsset.lockedBalance > BigDecimal.ZERO
         val errorMessage = (adapterState as? AdapterState.NotSynced)?.error?.message
 
@@ -349,32 +386,35 @@ class BalanceViewItemFactory {
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
             diff = latestRate?.diff,
             secondaryValue = secondaryValue,
-            coinValueLocked = lockedCoinValue(
-                balance = cexAsset.lockedBalance,
-                hideBalance = hideBalance,
-                coinDecimals = cexAsset.decimals,
-                coinCode = cexAsset.id
-            ),
-            fiatValueLocked = BalanceViewHelper.currencyValue(
-                balance = cexAsset.lockedBalance,
-                coinPrice = latestRate,
-                visible = fiatLockedVisibility,
-                fullFormat = fullFormat,
-                currency = currency,
-                dimmed = false
-            ),
+            coinValueLocked =
+                lockedCoinValue(
+                    balance = cexAsset.lockedBalance,
+                    hideBalance = hideBalance,
+                    coinDecimals = cexAsset.decimals,
+                    coinCode = cexAsset.id,
+                ),
+            fiatValueLocked =
+                BalanceViewHelper.currencyValue(
+                    balance = cexAsset.lockedBalance,
+                    coinPrice = latestRate,
+                    visible = fiatLockedVisibility,
+                    fullFormat = fullFormat,
+                    currency = currency,
+                    dimmed = false,
+                ),
             assetId = cexAsset.id,
             cexAsset = cexAsset,
             coinPrice = latestRate,
             depositEnabled = cexAsset.depositEnabled,
             withdrawEnabled = cexAsset.withdrawEnabled,
-            syncingProgress = when (adapterState) {
-                is AdapterState.Syncing -> SyncingProgress(50)
-                else -> SyncingProgress(null)
-            },
+            syncingProgress =
+                when (adapterState) {
+                    is AdapterState.Syncing -> SyncingProgress(50)
+                    else -> SyncingProgress(null)
+                },
             failedIconVisible = adapterState is AdapterState.NotSynced,
             errorMessage = errorMessage,
-            adapterState = adapterState
+            adapterState = adapterState,
         )
     }
 
@@ -382,7 +422,7 @@ class BalanceViewItemFactory {
         balance: BigDecimal,
         hideBalance: Boolean,
         coinDecimals: Int,
-        coinCode: String
+        coinCode: String,
     ): DeemedValue<String?> {
         if (balance <= BigDecimal.ZERO) {
             return DeemedValue(null, false, false)
@@ -392,5 +432,4 @@ class BalanceViewItemFactory {
 
         return DeemedValue(value, false, visible)
     }
-
 }

@@ -46,7 +46,7 @@ class RestoreBlockchainsService(
     private val tokenAutoEnableManager: TokenAutoEnableManager,
     private val blockchainTokensService: BlockchainTokensService,
     private val restoreSettingsService: RestoreSettingsService,
-    private val statPage: StatPage
+    private val statPage: StatPage,
 ) : Clearable {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -93,16 +93,22 @@ class RestoreBlockchainsService(
 
     private fun syncInternalItems() {
         val allowedBlockchainTypes = BlockchainType.supported.filter { it.supports(accountType) }
-        val tokenQueries = allowedBlockchainTypes
-            .map { it.nativeTokenQueries }
-            .flatten()
+        val tokenQueries =
+            allowedBlockchainTypes
+                .map { it.nativeTokenQueries }
+                .flatten()
 
-        tokens = marketKit.tokens(tokenQueries)
-            .filter { it.supports(accountType) }
-            .sortedBy { it.type.order }
+        tokens =
+            marketKit
+                .tokens(tokenQueries)
+                .filter { it.supports(accountType) }
+                .sortedBy { it.type.order }
     }
 
-    private fun handleApproveTokens(blockchain: Blockchain, tokens: List<Token>) {
+    private fun handleApproveTokens(
+        blockchain: Blockchain,
+        tokens: List<Token>,
+    ) {
         val existingTokens = enabledTokens.filter { it.blockchain == blockchain }
 
         val newTokens = tokens.minus(existingTokens)
@@ -114,9 +120,10 @@ class RestoreBlockchainsService(
         syncCanRestore()
         syncState()
     }
+
     private fun handleApproveRestoreSettings(
         token: Token,
-        restoreSettings: RestoreSettings
+        restoreSettings: RestoreSettings,
     ) {
         if (restoreSettings.isNotEmpty()) {
             restoreSettingsMap[token] = restoreSettings
@@ -134,9 +141,7 @@ class RestoreBlockchainsService(
         }
     }
 
-    private fun isEnabled(blockchain: Blockchain): Boolean {
-        return enabledTokens.any { it.blockchain == blockchain }
-    }
+    private fun isEnabled(blockchain: Blockchain): Boolean = enabledTokens.any { it.blockchain == blockchain }
 
     private fun item(blockchain: Blockchain): Item {
         val enabled = isEnabled(blockchain)
@@ -144,9 +149,7 @@ class RestoreBlockchainsService(
         return Item(blockchain, enabled, hasSettings)
     }
 
-    private fun hasSettings(blockchain: Blockchain): Boolean {
-        return tokens.count { it.blockchain == blockchain } > 1
-    }
+    private fun hasSettings(blockchain: Blockchain): Boolean = tokens.count { it.blockchain == blockchain } > 1
 
     private fun syncState() {
         val blockchains = tokens.map { it.blockchain }.toSet()
@@ -168,7 +171,11 @@ class RestoreBlockchainsService(
                 handleApproveRestoreSettings(token, RestoreSettings())
             }
         } else {
-            blockchainTokensService.approveTokens(blockchain, tokens, tokens.filter { it.type.isDefault })
+            blockchainTokensService.approveTokens(
+                blockchain,
+                tokens,
+                tokens.filter { it.type.isDefault },
+            )
         }
     }
 
@@ -189,13 +196,14 @@ class RestoreBlockchainsService(
     }
 
     fun restore() {
-        val account = accountFactory.account(
-            accountName,
-            accountType,
-            AccountOrigin.Restored,
-            manualBackup,
-            fileBackup,
-        )
+        val account =
+            accountFactory.account(
+                accountName,
+                accountType,
+                AccountOrigin.Restored,
+                manualBackup,
+                fileBackup,
+            )
         accountManager.save(account)
 
         restoreSettingsMap.forEach { (token, settings) ->
@@ -221,7 +229,6 @@ class RestoreBlockchainsService(
     data class Item(
         val blockchain: Blockchain,
         val enabled: Boolean,
-        val hasSettings: Boolean
+        val hasSettings: Boolean,
     )
-
 }

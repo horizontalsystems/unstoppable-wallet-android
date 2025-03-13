@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 fun TitleAndValueCell(
     title: String,
     value: String,
-    borderTop: Boolean = true
+    borderTop: Boolean = true,
 ) {
     CellUniversal(borderTop = borderTop) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
@@ -22,7 +22,7 @@ fun TitleAndValueCell(
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
-            textAlign = TextAlign.Right
+            textAlign = TextAlign.Right,
         )
     }
 }

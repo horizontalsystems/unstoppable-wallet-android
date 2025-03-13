@@ -14,9 +14,8 @@ class ActionRevoke(
     private val token: Token,
     private val spenderAddress: String,
     override val inProgress: Boolean,
-    private val allowance: BigDecimal
+    private val allowance: BigDecimal,
 ) : ISwapProviderAction {
-
     @Composable
     override fun getTitle() = stringResource(R.string.Swap_Revoke)
 
@@ -25,12 +24,18 @@ class ActionRevoke(
 
     @Composable
     override fun getDescription() =
-        stringResource(R.string.Approve_RevokeAndApproveInfo, CoinValue(token, allowance).getFormattedFull())
+        stringResource(
+            R.string.Approve_RevokeAndApproveInfo,
+            CoinValue(token, allowance).getFormattedFull(),
+        )
 
-    override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
+    override fun execute(
+        navController: NavController,
+        onActionCompleted: () -> Unit,
+    ) {
         navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
             R.id.eip20RevokeConfirmFragment,
-            Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
+            Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance),
         ) {
             onActionCompleted.invoke()
         }

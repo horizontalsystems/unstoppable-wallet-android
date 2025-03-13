@@ -14,19 +14,22 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendTonFeeService(private val adapter: ISendTonAdapter) : AutoCloseable {
+class SendTonFeeService(
+    private val adapter: ISendTonAdapter,
+) : AutoCloseable {
     private var memo: String? = null
     private var address: FriendlyAddress? = null
     private var amount: BigDecimal? = null
 
     private var fee: BigDecimal? = null
     private var inProgress = false
-    private val _stateFlow = MutableStateFlow(
-        State(
-            fee = fee,
-            inProgress = inProgress
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                fee = fee,
+                inProgress = inProgress,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var estimateFeeJob: Job? = null
@@ -37,26 +40,27 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : AutoCloseable {
         val memo = memo
 
         estimateFeeJob?.cancel()
-        estimateFeeJob = coroutineScope.launch {
-            if (amount != null && address != null) {
-                inProgress = true
-                emitState()
+        estimateFeeJob =
+            coroutineScope.launch {
+                if (amount != null && address != null) {
+                    inProgress = true
+                    emitState()
 
-                delay(1000)
-                ensureActive()
-                try {
-                    fee = adapter.estimateFee(amount, address, memo)
-                } catch (e: Throwable) {
-                    delay(500)
-                    refreshFeeAndEmitState()
+                    delay(1000)
+                    ensureActive()
+                    try {
+                        fee = adapter.estimateFee(amount, address, memo)
+                    } catch (e: Throwable) {
+                        delay(500)
+                        refreshFeeAndEmitState()
+                    }
+                } else {
+                    fee = null
                 }
-            } else {
-                fee = null
-            }
 
-            inProgress = false
-            emitState()
-        }
+                inProgress = false
+                emitState()
+            }
     }
 
     fun setAmount(amount: BigDecimal?) {
@@ -81,15 +85,14 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : AutoCloseable {
         _stateFlow.update {
             State(
                 fee = fee,
-                inProgress = inProgress
+                inProgress = inProgress,
             )
         }
     }
 
-
     data class State(
         val fee: BigDecimal?,
-        val inProgress: Boolean
+        val inProgress: Boolean,
     )
 
     override fun close() {

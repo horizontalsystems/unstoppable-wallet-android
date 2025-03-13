@@ -21,7 +21,7 @@ import java.io.FileOutputStream
 import java.util.concurrent.Executors
 
 class ContactsRepository(
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) {
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val coroutineScope = CoroutineScope(singleDispatcher)
@@ -59,8 +59,8 @@ class ContactsRepository(
         if (addressQuery != null) {
             criteria.add {
                 it.addresses.any { contactAddress ->
-                    (blockchainType == null || blockchainType == contactAddress.blockchain.type)
-                            && contactAddress.address.equals(addressQuery, true)
+                    (blockchainType == null || blockchainType == contactAddress.blockchain.type) &&
+                        contactAddress.address.equals(addressQuery, true)
                 }
             }
         } else if (blockchainType != null) {
@@ -83,15 +83,22 @@ class ContactsRepository(
     }
 
     @Throws
-    fun validateContactName(contactUid: String, name: String) {
+    fun validateContactName(
+        contactUid: String,
+        name: String,
+    ) {
         if (contacts.any { it.uid != contactUid && it.name == name }) {
             throw ContactValidationException.DuplicateContactName
         }
     }
 
     @Throws
-    fun validateAddress(contactUid: String?, address: ContactAddress) {
-        val contactWithSameAddress = contacts.find { it.uid != contactUid && it.addresses.contains(address) }
+    fun validateAddress(
+        contactUid: String?,
+        address: ContactAddress,
+    ) {
+        val contactWithSameAddress =
+            contacts.find { it.uid != contactUid && it.addresses.contains(address) }
 
         if (contactWithSameAddress != null) {
             throw ContactValidationException.DuplicateAddress(contactWithSameAddress)
@@ -116,9 +123,7 @@ class ContactsRepository(
         }
     }
 
-    fun get(id: String): Contact? {
-        return contactsMap[id]
-    }
+    fun get(id: String): Contact? = contactsMap[id]
 
     fun delete(id: String) {
         contactsMap.remove(id)
@@ -146,11 +151,12 @@ class ContactsRepository(
 
     private fun readFromFile() {
         try {
-            val json = FileInputStream(file).use { fis ->
-                fis.bufferedReader().use { br ->
-                    br.readText()
+            val json =
+                FileInputStream(file).use { fis ->
+                    fis.bufferedReader().use { br ->
+                        br.readText()
+                    }
                 }
-            }
             parseAndRestore(json)
         } catch (e: Throwable) {
             if (file.exists()) {
@@ -167,9 +173,12 @@ class ContactsRepository(
             Contact(
                 uid = contactJson.uid,
                 name = contactJson.name,
-                addresses = contactJson.addresses.mapNotNull { addressJson ->
-                    marketKit.blockchain(addressJson.blockchain_uid)?.let { ContactAddress(it, addressJson.address) }
-                }
+                addresses =
+                    contactJson.addresses.mapNotNull { addressJson ->
+                        marketKit
+                            .blockchain(addressJson.blockchain_uid)
+                            ?.let { ContactAddress(it, addressJson.address) }
+                    },
             )
         }
     }
@@ -189,17 +198,17 @@ class ContactsRepository(
     data class ContactJson(
         val uid: String,
         val name: String,
-        val addresses: List<AddressJson>
+        val addresses: List<AddressJson>,
     ) {
         constructor(contact: Contact) : this(
             contact.uid,
             contact.name,
-            contact.addresses.map { AddressJson(it.blockchain.uid, it.address) }
+            contact.addresses.map { AddressJson(it.blockchain.uid, it.address) },
         )
 
         data class AddressJson(
             val blockchain_uid: String,
-            val address: String
+            val address: String,
         )
     }
 }

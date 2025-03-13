@@ -13,7 +13,7 @@ import kotlinx.coroutines.rx2.await
 
 class CoinReportsService(
     private val coinUid: String,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 

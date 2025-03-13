@@ -61,24 +61,33 @@ fun ManageWalletsScreen(
     mainViewModel: RestoreViewModel,
     openZCashConfigure: () -> Unit,
     onBackClick: () -> Unit,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
 ) {
-    val accountType = mainViewModel.accountType ?: run {
-        Toast.makeText(App.instance, "Error: accountType is NULL", Toast.LENGTH_SHORT).show()
-        onBackClick.invoke()
-        return
-    }
+    val accountType =
+        mainViewModel.accountType ?: run {
+            Toast.makeText(App.instance, "Error: accountType is NULL", Toast.LENGTH_SHORT).show()
+            onBackClick.invoke()
+            return
+        }
 
-    val statPage = mainViewModel.statPage ?: run {
-        Toast.makeText(App.instance, "Error: statPage is NULL", Toast.LENGTH_SHORT).show()
-        onBackClick.invoke()
-        return
-    }
+    val statPage =
+        mainViewModel.statPage ?: run {
+            Toast.makeText(App.instance, "Error: statPage is NULL", Toast.LENGTH_SHORT).show()
+            onBackClick.invoke()
+            return
+        }
 
     val manualBackup = mainViewModel.manualBackup
     val fileBackup = mainViewModel.fileBackup
 
-    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup, statPage)
+    val factory =
+        RestoreBlockchainsModule.Factory(
+            mainViewModel.accountName,
+            accountType,
+            manualBackup,
+            fileBackup,
+            statPage,
+        )
     val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
     val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
     val blockchainTokensViewModel: BlockchainTokensViewModel = viewModel(factory = factory)
@@ -112,7 +121,7 @@ fun ManageWalletsScreen(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
                 icon = R.drawable.icon_add_to_wallet_2_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             onFinish.invoke()
@@ -121,10 +130,11 @@ fun ManageWalletsScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val skipHalfExpanded by remember { mutableStateOf(true) }
-    val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        skipHalfExpanded = skipHalfExpanded
-    )
+    val modalBottomSheetState =
+        rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+            skipHalfExpanded = skipHalfExpanded,
+        )
 
     LaunchedEffect(blockchainTokensViewModel.showBottomSheetDialog) {
         if (blockchainTokensViewModel.showBottomSheetDialog) {
@@ -159,20 +169,22 @@ fun ManageWalletsScreen(
                     navigationIcon = {
                         HsBackButton(onClick = onBackClick)
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Restore),
-                            onClick = { viewModel.onRestore() },
-                            enabled = doneButtonEnabled
-                        )
-                    ),
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Restore),
+                                onClick = { viewModel.onRestore() },
+                                enabled = doneButtonEnabled,
+                            ),
+                        ),
                 )
-            }
+            },
         ) { paddingValues ->
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
@@ -185,20 +197,22 @@ fun ManageWalletsScreen(
                     items(it) { viewItem ->
                         CellMultilineClear(
                             borderBottom = true,
-                            onClick = { onItemClick(viewItem, viewModel) }
+                            onClick = { onItemClick(viewItem, viewModel) },
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 16.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 16.dp),
                             ) {
                                 Image(
                                     painter = viewItem.imageSource.painter(),
                                     contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(end = 16.dp)
-                                        .size(32.dp)
+                                    modifier =
+                                        Modifier
+                                            .padding(end = 16.dp)
+                                            .size(32.dp),
                                 )
                                 Column(modifier = Modifier.weight(1f)) {
                                     body_leah(
@@ -208,18 +222,18 @@ fun ManageWalletsScreen(
                                     subhead2_grey(
                                         text = viewItem.subtitle,
                                         maxLines = 1,
-                                        modifier = Modifier.padding(top = 1.dp)
+                                        modifier = Modifier.padding(top = 1.dp),
                                     )
                                 }
                                 HSpacer(12.dp)
                                 if (viewItem.hasSettings) {
                                     HsIconButton(
-                                        onClick = { viewModel.onClickSettings(viewItem.item) }
+                                        onClick = { viewModel.onClickSettings(viewItem.item) },
                                     ) {
                                         Icon(
                                             painter = painterResource(R.drawable.ic_edit_20),
                                             contentDescription = null,
-                                            tint = ComposeAppTheme.colors.grey
+                                            tint = ComposeAppTheme.colors.grey,
                                         )
                                     }
                                 }
@@ -238,7 +252,7 @@ fun ManageWalletsScreen(
 
 private fun onItemClick(
     viewItem: CoinViewItem<Blockchain>,
-    viewModel: RestoreBlockchainsViewModel
+    viewModel: RestoreBlockchainsViewModel,
 ) {
     if (viewItem.enabled) {
         viewModel.disable(viewItem.item)

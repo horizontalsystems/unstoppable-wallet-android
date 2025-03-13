@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class PriceManager(
-    private val storage: ILocalStorage
+    private val storage: ILocalStorage,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -25,5 +25,4 @@ class PriceManager(
             }
         }
     }
-
 }

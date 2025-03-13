@@ -34,9 +34,8 @@ import java.math.BigDecimal
 class MetricsPageViewModel(
     private val metricsType: MetricsType,
     private val currencyManager: CurrencyManager,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) : ViewModelUiState<MetricsPageModule.UiState>() {
-
     private var viewState: ViewState = ViewState.Loading
     private var isRefreshing: Boolean = false
     private val statPage: StatPage = metricsType.statPage
@@ -44,38 +43,43 @@ class MetricsPageViewModel(
     private var sortDescending: Boolean = true
     private var marketDataJob: Job? = null
 
-    private val toggleButtonTitle = when (metricsType) {
-        MetricsType.Volume24h -> Translator.getString(R.string.Market_Volume)
-        MetricsType.TotalMarketCap -> Translator.getString(R.string.Market_MarketCap)
-        else -> throw Exception("MetricsType not supported")
-    }
+    private val toggleButtonTitle =
+        when (metricsType) {
+            MetricsType.Volume24h -> Translator.getString(R.string.Market_Volume)
+            MetricsType.TotalMarketCap -> Translator.getString(R.string.Market_MarketCap)
+            else -> throw Exception("MetricsType not supported")
+        }
 
-    private val title = when(metricsType) {
-        MetricsType.Volume24h -> R.string.MarketGlobalMetrics_Volume
-        MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCap
-        else -> throw Exception("MetricsType not supported")
-    }
+    private val title =
+        when (metricsType) {
+            MetricsType.Volume24h -> R.string.MarketGlobalMetrics_Volume
+            MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCap
+            else -> throw Exception("MetricsType not supported")
+        }
 
-    private val description = when(metricsType) {
-        MetricsType.Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
-        MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCapDescription
-        else -> throw Exception("MetricsType not supported")
-    }
+    private val description =
+        when (metricsType) {
+            MetricsType.Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
+            MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCapDescription
+            else -> throw Exception("MetricsType not supported")
+        }
 
-    private val icon = when(metricsType) {
-        MetricsType.Volume24h -> "total_volume"
-        MetricsType.TotalMarketCap -> "total_mcap"
-        else -> throw Exception("MetricsType not supported")
-    }
+    private val icon =
+        when (metricsType) {
+            MetricsType.Volume24h -> "total_volume"
+            MetricsType.TotalMarketCap -> "total_mcap"
+            else -> throw Exception("MetricsType not supported")
+        }
 
-    private val header = MarketModule.Header(
-        title = Translator.getString(title),
-        description = Translator.getString(description),
-        icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/$icon@3x.png")
-    )
+    private val header =
+        MarketModule.Header(
+            title = Translator.getString(title),
+            description = Translator.getString(description),
+            icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/$icon@3x.png"),
+        )
 
-    override fun createState(): MetricsPageModule.UiState {
-        return MetricsPageModule.UiState(
+    override fun createState(): MetricsPageModule.UiState =
+        MetricsPageModule.UiState(
             header = header,
             viewItems = viewItems,
             viewState = viewState,
@@ -83,7 +87,6 @@ class MetricsPageViewModel(
             toggleButtonTitle = toggleButtonTitle,
             sortDescending = sortDescending,
         )
-    }
 
     init {
         viewModelScope.launch {
@@ -97,66 +100,73 @@ class MetricsPageViewModel(
 
     private fun syncMarketItems() {
         marketDataJob?.cancel()
-        marketDataJob = viewModelScope.launch(Dispatchers.IO) {
-            try {
-                viewItems = getMarketItemsSingle(
-                    currencyManager.baseCurrency,
-                    sortDescending,
-                    metricsType
-                ).await()
-                viewState = ViewState.Success
-            } catch (e: Throwable) {
-                viewState = ViewState.Error(e)
+        marketDataJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    viewItems =
+                        getMarketItemsSingle(
+                            currencyManager.baseCurrency,
+                            sortDescending,
+                            metricsType,
+                        ).await()
+                    viewState = ViewState.Success
+                } catch (e: Throwable) {
+                    viewState = ViewState.Error(e)
+                }
+                emitState()
             }
-            emitState()
-        }
     }
 
     private fun getMarketItemsSingle(
         currency: Currency,
         sortDescending: Boolean,
         metricsType: MetricsType,
-        period: TimePeriod = TimePeriod.TimePeriod_1D
-    ): Single<List<CoinViewItem>> {
-        return marketKit.marketInfosSingle(
-            250,
-            currency.code,
-            defi = false
-        )
-            .map { coinMarkets ->
-                val marketItems = coinMarkets.map { marketInfo ->
-                    val subtitle = when (metricsType) {
-                        MetricsType.Volume24h -> CurrencyValue(
-                            currency,
-                            marketInfo.totalVolume ?: BigDecimal.ZERO
-                        ).getFormattedShort()
+        period: TimePeriod = TimePeriod.TimePeriod_1D,
+    ): Single<List<CoinViewItem>> =
+        marketKit
+            .marketInfosSingle(
+                250,
+                currency.code,
+                defi = false,
+            ).map { coinMarkets ->
+                val marketItems =
+                    coinMarkets.map { marketInfo ->
+                        val subtitle =
+                            when (metricsType) {
+                                MetricsType.Volume24h ->
+                                    CurrencyValue(
+                                        currency,
+                                        marketInfo.totalVolume ?: BigDecimal.ZERO,
+                                    ).getFormattedShort()
 
-                        MetricsType.TotalMarketCap -> CurrencyValue(
-                            currency,
-                            marketInfo.marketCap ?: BigDecimal.ZERO
-                        ).getFormattedShort()
+                                MetricsType.TotalMarketCap ->
+                                    CurrencyValue(
+                                        currency,
+                                        marketInfo.marketCap ?: BigDecimal.ZERO,
+                                    ).getFormattedShort()
 
-                        else -> marketInfo.fullCoin.coin.name
+                                else -> marketInfo.fullCoin.coin.name
+                            }
+                        CoinViewItem(
+                            fullCoin = marketInfo.fullCoin,
+                            subtitle = subtitle,
+                            coinRate =
+                                CurrencyValue(
+                                    currency,
+                                    marketInfo.price ?: BigDecimal.ZERO,
+                                ).getFormattedFull(),
+                            marketDataValue = MarketDataValue.Diff(marketInfo.priceChangeValue(period)),
+                            rank = marketInfo.marketCapRank?.toString(),
+                            sortField =
+                                when (metricsType) {
+                                    MetricsType.Volume24h -> marketInfo.totalVolume
+                                    MetricsType.TotalMarketCap -> marketInfo.marketCap
+                                    else -> null
+                                },
+                        )
                     }
-                    CoinViewItem(
-                        fullCoin = marketInfo.fullCoin,
-                        subtitle = subtitle,
-                        coinRate = CurrencyValue(
-                            currency,
-                            marketInfo.price ?: BigDecimal.ZERO
-                        ).getFormattedFull(),
-                        marketDataValue = MarketDataValue.Diff(marketInfo.priceChangeValue(period)),
-                        rank = marketInfo.marketCapRank?.toString(),
-                        sortField = when (metricsType) {
-                            MetricsType.Volume24h -> marketInfo.totalVolume
-                            MetricsType.TotalMarketCap -> marketInfo.marketCap
-                            else -> null
-                        }
-                    )
-                }
                 sortItems(marketItems, sortDescending)
             }
-    }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
         isRefreshing = true
@@ -169,12 +179,15 @@ class MetricsPageViewModel(
         }
     }
 
-    private fun sortItems(items: List<CoinViewItem>, sortDescending: Boolean): List<CoinViewItem> {
-        return if (sortDescending)
+    private fun sortItems(
+        items: List<CoinViewItem>,
+        sortDescending: Boolean,
+    ): List<CoinViewItem> =
+        if (sortDescending) {
             items.sortedByDescendingNullLast { it.sortField }
-        else
+        } else {
             items.sortedByNullLast { it.sortField }
-    }
+        }
 
     fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
@@ -197,5 +210,4 @@ class MetricsPageViewModel(
         }
         stat(page = statPage, event = StatEvent.ToggleSortDirection)
     }
-
 }

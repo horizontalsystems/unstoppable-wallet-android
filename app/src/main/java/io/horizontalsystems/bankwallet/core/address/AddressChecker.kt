@@ -10,40 +10,48 @@ import io.horizontalsystems.subscriptions.core.AddressPhishing
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 interface AddressChecker {
-    suspend fun checkAddress(address: Address, token: Token): AddressCheckResult
+    suspend fun checkAddress(
+        address: Address,
+        token: Token,
+    ): AddressCheckResult
+
     fun supports(token: Token): Boolean
 }
 
 class PhishingAddressChecker(
-    private val spamManager: SpamManager
+    private val spamManager: SpamManager,
 ) : AddressChecker {
-
-    override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
-        return when {
+    override suspend fun checkAddress(
+        address: Address,
+        token: Token,
+    ): AddressCheckResult =
+        when {
             !EvmBlockchainManager.blockchainTypes.contains(token.blockchainType) -> AddressCheckResult.NotSupported
             !UserSubscriptionManager.isActionAllowed(AddressPhishing) -> AddressCheckResult.NotAllowed
-            else -> try {
-                val spamAddress = spamManager.find(address.hex.uppercase())
-                if (spamAddress != null)
-                    AddressCheckResult.Detected
-                else
-                    AddressCheckResult.Clear
-            } catch (e: Throwable) {
-                AddressCheckResult.NotAvailable
-            }
+            else ->
+                try {
+                    val spamAddress = spamManager.find(address.hex.uppercase())
+                    if (spamAddress != null) {
+                        AddressCheckResult.Detected
+                    } else {
+                        AddressCheckResult.Clear
+                    }
+                } catch (e: Throwable) {
+                    AddressCheckResult.NotAvailable
+                }
         }
-    }
 
-    override fun supports(token: Token): Boolean {
-        return EvmBlockchainManager.blockchainTypes.contains(token.blockchainType)
-    }
+    override fun supports(token: Token): Boolean = EvmBlockchainManager.blockchainTypes.contains(token.blockchainType)
 }
 
 class BlacklistAddressChecker(
     private val hashDitAddressValidator: HashDitAddressValidator,
-    private val eip20AddressValidator: Eip20AddressValidator
+    private val eip20AddressValidator: Eip20AddressValidator,
 ) : AddressChecker {
-    override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
+    override suspend fun checkAddress(
+        address: Address,
+        token: Token,
+    ): AddressCheckResult {
         if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist)) return AddressCheckResult.NotAllowed
 
         return try {
@@ -58,7 +66,7 @@ class BlacklistAddressChecker(
                 }
 
                 checkResults.contains(AddressCheckResult.Clear) &&
-                        checkResults.all { it == AddressCheckResult.Clear || it == AddressCheckResult.NotSupported } -> {
+                    checkResults.all { it == AddressCheckResult.Clear || it == AddressCheckResult.NotSupported } -> {
                     AddressCheckResult.Clear
                 }
 
@@ -71,17 +79,19 @@ class BlacklistAddressChecker(
         }
     }
 
-    override fun supports(token: Token): Boolean {
-        return hashDitAddressValidator.supports(token) || eip20AddressValidator.supports(token)
-    }
+    override fun supports(token: Token): Boolean = hashDitAddressValidator.supports(token) || eip20AddressValidator.supports(token)
 }
 
 class SanctionAddressChecker(
-    private val chainalysisAddressValidator: ChainalysisAddressValidator
+    private val chainalysisAddressValidator: ChainalysisAddressValidator,
 ) : AddressChecker {
-    override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
-        if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist))
+    override suspend fun checkAddress(
+        address: Address,
+        token: Token,
+    ): AddressCheckResult {
+        if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist)) {
             return AddressCheckResult.NotAllowed
+        }
 
         return try {
             chainalysisAddressValidator.check(address)
@@ -90,7 +100,5 @@ class SanctionAddressChecker(
         }
     }
 
-    override fun supports(token: Token): Boolean {
-        return true
-    }
+    override fun supports(token: Token): Boolean = true
 }

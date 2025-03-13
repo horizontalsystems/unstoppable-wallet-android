@@ -54,26 +54,28 @@ import io.horizontalsystems.chartview.ChartMinimal
 fun AnalyticsBlockHeader(
     title: String,
     isPreview: Boolean = false,
-    onInfoClick: (() -> Unit)? = null
+    onInfoClick: (() -> Unit)? = null,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         subhead1_grey(text = title)
         onInfoClick?.let {
             HsIconButton(
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .size(20.dp),
-                onClick = it
+                modifier =
+                    Modifier
+                        .padding(start = 8.dp)
+                        .size(20.dp),
+                onClick = it,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }
@@ -86,19 +88,21 @@ fun AnalyticsBlockHeader(
 
 @Composable
 private fun PremiumBadge() {
-    val yellowGradient = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFFFFD000),
-            Color(0xFFFFA800),
-        ),
-    )
+    val yellowGradient =
+        Brush.linearGradient(
+            colors =
+                listOf(
+                    Color(0xFFFFD000),
+                    Color(0xFFFFA800),
+                ),
+        )
     Box(
-        modifier = Modifier
-            .background(
-                yellowGradient,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(horizontal = 6.dp, vertical = 2.dp)
+        modifier =
+            Modifier
+                .background(
+                    yellowGradient,
+                    shape = RoundedCornerShape(8.dp),
+                ).padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
         microSB_claude(
             text = stringResource(R.string.Premium_Title),
@@ -109,11 +113,11 @@ private fun PremiumBadge() {
 @Composable
 fun AnalyticsContentNumber(
     number: String,
-    period: String? = null
+    period: String? = null,
 ) {
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         headline1_bran(text = number)
         period?.let {
@@ -134,32 +138,33 @@ fun AnalyticsFooterCell(
     showRightArrow: Boolean,
     showTopDivider: Boolean = true,
     cellAction: CoinAnalyticsModule.ActionType?,
-    onActionClick: (CoinAnalyticsModule.ActionType) -> Unit
+    onActionClick: (CoinAnalyticsModule.ActionType) -> Unit,
 ) {
     if (showTopDivider) {
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = if (cellAction != null) {
-            { onActionClick.invoke(cellAction) }
-        } else {
-            null
-        }
+        onClick =
+            if (cellAction != null) {
+                { onActionClick.invoke(cellAction) }
+            } else {
+                null
+            },
     ) {
         BoxItemCell(
             modifier = Modifier.weight(1f),
             boxItem = title,
-            onActionClick = onActionClick
+            onActionClick = onActionClick,
         )
         value?.let {
             BoxItemCell(
                 boxItem = it,
-                onActionClick = onActionClick
+                onActionClick = onActionClick,
             )
         }
 
@@ -167,7 +172,7 @@ fun AnalyticsFooterCell(
             HSpacer(8.dp)
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = "arrow icon"
+                contentDescription = "arrow icon",
             )
         }
     }
@@ -177,7 +182,7 @@ fun AnalyticsFooterCell(
 private fun BoxItemCell(
     modifier: Modifier = Modifier,
     boxItem: BoxItem,
-    onActionClick: (CoinAnalyticsModule.ActionType) -> Unit
+    onActionClick: (CoinAnalyticsModule.ActionType) -> Unit,
 ) {
     when (boxItem) {
         is BoxItem.IconTitle -> {
@@ -189,7 +194,7 @@ private fun BoxItemCell(
             HSpacer(16.dp)
             subhead2_grey(
                 text = boxItem.text.getString(),
-                modifier = modifier.padding(end = 8.dp)
+                modifier = modifier.padding(end = 8.dp),
             )
         }
 
@@ -200,7 +205,7 @@ private fun BoxItemCell(
         is BoxItem.Title -> {
             subhead2_grey(
                 text = boxItem.text.getString(),
-                modifier = modifier.padding(end = 8.dp)
+                modifier = modifier.padding(end = 8.dp),
             )
         }
 
@@ -210,12 +215,13 @@ private fun BoxItemCell(
             )
             HSpacer(8.dp)
             HsIconButton(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .size(20.dp),
+                modifier =
+                    Modifier
+                        .padding(end = 8.dp)
+                        .size(20.dp),
                 onClick = {
                     onActionClick.invoke(boxItem.action)
-                }
+                },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
@@ -238,12 +244,13 @@ private fun BoxItemCell(
 
 @Composable
 private fun RatingCell(rating: OverallScore) {
-    val color = when (rating) {
-        OverallScore.Excellent -> Color(0xFF05C46B)
-        OverallScore.Good -> Color(0xFFFFA800)
-        OverallScore.Fair -> Color(0xFFFF7A00)
-        OverallScore.Poor -> Color(0xFFFF3D00)
-    }
+    val color =
+        when (rating) {
+            OverallScore.Excellent -> Color(0xFF05C46B)
+            OverallScore.Good -> Color(0xFFFFA800)
+            OverallScore.Fair -> Color(0xFFFF7A00)
+            OverallScore.Poor -> Color(0xFFFF3D00)
+        }
     Text(
         text = stringResource(rating.title).uppercase(),
         style = ComposeAppTheme.typography.subhead1,
@@ -252,7 +259,7 @@ private fun RatingCell(rating: OverallScore) {
     HSpacer(8.dp)
     Image(
         painter = painterResource(rating.icon),
-        contentDescription = null
+        contentDescription = null,
     )
 }
 
@@ -266,16 +273,18 @@ fun AnalyticsContainer(
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    var modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp)
-        .clip(RoundedCornerShape(12.dp))
-        .background(ComposeAppTheme.colors.lawrence)
+    var modifier =
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
 
     if (onClick != null) {
-        modifier = modifier.clickable {
-            onClick.invoke()
-        }
+        modifier =
+            modifier.clickable {
+                onClick.invoke()
+            }
     }
 
     VSpacer(12.dp)
@@ -283,12 +292,12 @@ fun AnalyticsContainer(
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         RowUniversal(content = it)
     }
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         titleRow?.invoke()
         content.invoke()
@@ -296,20 +305,18 @@ fun AnalyticsContainer(
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         Column(
-            content = bottomRows
+            content = bottomRows,
         )
     }
     sectionDescription?.invoke()
 }
 
 @Composable
-fun AnalyticsChart(
-    analyticChart: CoinAnalyticsModule.AnalyticChart,
-) {
+fun AnalyticsChart(analyticChart: CoinAnalyticsModule.AnalyticChart) {
     when (analyticChart) {
         is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
             StackedBarChart(analyticChart.data, modifier = Modifier.padding(horizontal = 16.dp))
@@ -318,21 +325,23 @@ fun AnalyticsChart(
 
         is CoinAnalyticsModule.AnalyticChart.Bars -> {
             ChartBars(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .height(60.dp),
-                chartData = analyticChart.data
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .height(60.dp),
+                chartData = analyticChart.data,
             )
             VSpacer(12.dp)
         }
 
         is CoinAnalyticsModule.AnalyticChart.Line -> {
             AndroidView(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .height(60.dp),
                 factory = {
                     ChartMinimal(it)
                 },
@@ -340,7 +349,7 @@ fun AnalyticsChart(
                     view.doOnLayout {
                         view.setData(analyticChart.data)
                     }
-                }
+                },
             )
             VSpacer(12.dp)
         }
@@ -348,7 +357,7 @@ fun AnalyticsChart(
         is CoinAnalyticsModule.AnalyticChart.TechAdvice -> {
             TechnicalAdviceBlock(
                 detailText = analyticChart.data.detailText,
-                advice = analyticChart.data.advice
+                advice = analyticChart.data.advice,
             )
         }
     }
@@ -357,18 +366,19 @@ fun AnalyticsChart(
 @Preview
 @Composable
 private fun Preview_HoldersBlockLocked() {
-    val slices = listOf(
-        StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
-        StackBarSlice(value = 37.75f, color = Color(0x80808085)),
-        StackBarSlice(value = 11.9f, color = Color(0x40808085)),
-    )
+    val slices =
+        listOf(
+            StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
+            StackBarSlice(value = 37.75f, color = Color(0x80808085)),
+            StackBarSlice(value = 11.9f, color = Color(0x40808085)),
+        )
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(
                     title = "Holders",
                     isPreview = true,
-                    onInfoClick = {}
+                    onInfoClick = {},
                 )
             },
             bottomRows = {
@@ -377,23 +387,23 @@ private fun Preview_HoldersBlockLocked() {
                     value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Blockchain 2")),
                     value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Blockchain 3")),
                     value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
-            }
+            },
         ) {
             AnalyticsContentNumber(
                 number = "•••",
@@ -414,7 +424,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
                 AnalyticsBlockHeader(
                     title = "Dex Volume",
                     isPreview = true,
-                    onInfoClick = {}
+                    onInfoClick = {},
                 )
             },
             bottomRows = {
@@ -423,9 +433,9 @@ private fun Preview_AnalyticsBarChartDisabled() {
                     value = BoxItem.Value("•••"),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
-            }
+            },
         ) {
             AnalyticsContentNumber(
                 number = "•••",
@@ -447,7 +457,7 @@ private fun Preview_AnalyticsLineChartDisabled() {
                 AnalyticsBlockHeader(
                     title = "Dex Volume",
                     isPreview = true,
-                    onInfoClick = {}
+                    onInfoClick = {},
                 )
             },
             bottomRows = {
@@ -456,9 +466,9 @@ private fun Preview_AnalyticsLineChartDisabled() {
                     value = BoxItem.Value("#19"),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
-            }
+            },
         ) {
             AnalyticsContentNumber(
                 number = "•••",
@@ -474,19 +484,20 @@ private fun Preview_AnalyticsLineChartDisabled() {
 @Preview
 @Composable
 private fun Preview_HoldersBlock() {
-    val slices = listOf(
-        StackBarSlice(value = 60f, color = Color(0xFF6B7196)),
-        StackBarSlice(value = 31f, color = Color(0xFFF3BA2F)),
-        StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
-        StackBarSlice(value = 1f, color = Color(0xFFD74F49))
-    )
+    val slices =
+        listOf(
+            StackBarSlice(value = 60f, color = Color(0xFF6B7196)),
+            StackBarSlice(value = 31f, color = Color(0xFFF3BA2F)),
+            StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
+            StackBarSlice(value = 1f, color = Color(0xFFD74F49)),
+        )
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(
                     title = "Defi Cap",
                     isPreview = true,
-                    onInfoClick = {}
+                    onInfoClick = {},
                 )
             },
             bottomRows = {
@@ -495,20 +506,20 @@ private fun Preview_HoldersBlock() {
                     value = BoxItem.Value("•••"),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Chain 2")),
                     value = BoxItem.Value("•••"),
                     showRightArrow = true,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
-            }
+            },
         ) {
             AnalyticsContentNumber(
                 number = "\$2.46B",
-                period = "last 30d"
+                period = "last 30d",
             )
             VSpacer(12.dp)
             StackedBarChart(slices, modifier = Modifier.padding(horizontal = 16.dp))
@@ -526,21 +537,22 @@ private fun Preview_AnalyticsRatingScale() {
                 AnalyticsBlockHeader(
                     title = "Dex Volume",
                     isPreview = true,
-                    onInfoClick = {}
+                    onInfoClick = {},
                 )
             },
             bottomRows = {
                 AnalyticsFooterCell(
-                    title = BoxItem.TitleWithInfo(
-                        TranslatableString.PlainString("Rating Scale"),
-                        CoinAnalyticsModule.ActionType.OpenOverallScoreInfo(ScoreCategory.CexScoreCategory)
-                    ),
+                    title =
+                        BoxItem.TitleWithInfo(
+                            TranslatableString.PlainString("Rating Scale"),
+                            CoinAnalyticsModule.ActionType.OpenOverallScoreInfo(ScoreCategory.CexScoreCategory),
+                        ),
                     value = BoxItem.OverallScoreValue(OverallScore.Fair),
                     showRightArrow = false,
                     cellAction = null,
-                    onActionClick = {}
+                    onActionClick = {},
                 )
-            }
+            },
         ) {
             AnalyticsContentNumber(
                 number = "•••",

@@ -11,15 +11,17 @@ object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {
     override val icon = R.drawable.uniswap_v3
     override val priority = 0
 
-    override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Ethereum,
-        BlockchainType.ArbitrumOne,
+    override fun supports(blockchainType: BlockchainType) =
+        when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.ArbitrumOne,
 //            BlockchainType.Optimism,
-        BlockchainType.Polygon,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        -> true
-        else -> false
-    }
+            BlockchainType.Polygon,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Base,
+            BlockchainType.ZkSync,
+            -> true
+
+            else -> false
+        }
 }

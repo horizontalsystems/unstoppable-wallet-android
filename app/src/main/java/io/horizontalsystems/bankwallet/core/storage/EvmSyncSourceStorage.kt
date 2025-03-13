@@ -3,13 +3,12 @@ package io.horizontalsystems.bankwallet.core.storage
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class EvmSyncSourceStorage(appDatabase: AppDatabase) {
-
+class EvmSyncSourceStorage(
+    appDatabase: AppDatabase,
+) {
     private val dao by lazy { appDatabase.evmSyncSourceDao() }
 
-    fun evmSyncSources(blockchainType: BlockchainType): List<EvmSyncSourceRecord> {
-        return dao.getEvmSyncSources(blockchainType.uid)
-    }
+    fun evmSyncSources(blockchainType: BlockchainType): List<EvmSyncSourceRecord> = dao.getEvmSyncSources(blockchainType.uid)
 
     fun getAll() = dao.getAll()
 
@@ -17,8 +16,10 @@ class EvmSyncSourceStorage(appDatabase: AppDatabase) {
         dao.insert(evmSyncSourceRecord)
     }
 
-    fun delete(blockchainTypeUid: String, url: String) {
+    fun delete(
+        blockchainTypeUid: String,
+        url: String,
+    ) {
         dao.delete(blockchainTypeUid, url)
     }
-
 }

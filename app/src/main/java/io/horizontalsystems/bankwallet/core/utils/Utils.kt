@@ -7,14 +7,18 @@ import android.view.inputmethod.InputMethodManager
 import kotlinx.coroutines.delay
 
 object Utils {
-
     fun isUsingCustomKeyboard(context: Context): Boolean {
-
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val inputMethodProperties = inputMethodManager.enabledInputMethodList
         for (i in 0 until inputMethodProperties.size) {
             val imi = inputMethodProperties[i]
-            if (imi.id == Settings.Secure.getString(context.contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)) {
+            if (imi.id ==
+                Settings.Secure.getString(
+                    context.contentResolver,
+                    Settings.Secure.DEFAULT_INPUT_METHOD,
+                )
+            ) {
                 if ((imi.serviceInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) {
                     return true
                 }
@@ -24,7 +28,11 @@ object Utils {
         return false
     }
 
-    suspend fun waitUntil(timeout: Long, checkPeriod: Long, condition: () -> Boolean) {
+    suspend fun waitUntil(
+        timeout: Long,
+        checkPeriod: Long,
+        condition: () -> Boolean,
+    ) {
         var waited = 0L
         while (!condition.invoke() && waited < timeout) {
             delay(checkPeriod)
@@ -34,9 +42,7 @@ object Utils {
 }
 
 object EthInputParser {
-
     fun parse(input: String): InputData? {
-
         val transferIndex = input.indexOf("a9059cbb")
         if (transferIndex > -1) {
             val startIndex = transferIndex + 8
@@ -69,6 +75,9 @@ object EthInputParser {
         return null
     }
 
-    class InputData(var from: String?, var to: String, var value: String)
-
+    class InputData(
+        var from: String?,
+        var to: String,
+        var value: String,
+    )
 }

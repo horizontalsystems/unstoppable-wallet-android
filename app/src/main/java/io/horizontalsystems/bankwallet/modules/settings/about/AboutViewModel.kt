@@ -17,7 +17,6 @@ class AboutViewModel(
     private val termsManager: ITermsManager,
     private val systemInfoManager: ISystemInfoManager,
 ) : ViewModel() {
-
     val githubLink = appConfigProvider.appGithubLink
     val appWebPageLink = appConfigProvider.appWebPageLink
     val appVersion: String
@@ -40,5 +39,4 @@ class AboutViewModel(
             }
         }
     }
-
 }

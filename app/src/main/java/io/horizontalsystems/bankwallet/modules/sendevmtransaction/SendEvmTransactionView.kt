@@ -63,7 +63,7 @@ fun SendEvmTransactionView(
     cautions: List<CautionViewItem>,
     transactionFields: List<DataField>,
     networkFee: SendModule.AmountData?,
-    statPage: StatPage
+    statPage: StatPage,
 ) {
     Column {
         items.forEach { sectionViewItem ->
@@ -84,7 +84,7 @@ fun SendEvmTransactionView(
             DataFieldFee(
                 navController,
                 networkFee?.primary?.getFormattedPlain() ?: "---",
-                networkFee?.secondary?.getFormattedPlain() ?: "---"
+                networkFee?.secondary?.getFormattedPlain() ?: "---",
             )
         }
 
@@ -104,25 +104,29 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
             ) {
                 subhead2_grey(
-                    text = stringResource(id = R.string.Send_Confirmation_Nonce)
+                    text = stringResource(id = R.string.Send_Confirmation_Nonce),
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
                     text = nonce.toString(),
                     maxLines = 1,
                     style = ComposeAppTheme.typography.subhead1,
-                    color = setColorByType(ValueType.Regular)
+                    color = setColorByType(ValueType.Regular),
                 )
             }
-        }
+        },
     )
 }
 
 @Composable
-private fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
+private fun SectionView(
+    viewItems: List<ViewItem>,
+    navController: NavController,
+    statPage: StatPage,
+) {
     Spacer(Modifier.height(16.dp))
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
@@ -141,16 +145,29 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                     blockchainType = item.blockchainType,
                     navController = navController,
                     onCopy = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Copy(StatEntity.Address))
+                        stat(
+                            page = statPage,
+                            section = item.statSection,
+                            event = StatEvent.Copy(StatEntity.Address),
+                        )
                     },
                     onAddToExisting = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                        stat(
+                            page = statPage,
+                            section = item.statSection,
+                            event = StatEvent.Open(StatPage.ContactAddToExisting),
+                        )
                     },
                     onAddToNew = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactNew))
-                    }
+                        stat(
+                            page = statPage,
+                            section = item.statSection,
+                            event = StatEvent.Open(StatPage.ContactNew),
+                        )
+                    },
                 )
             }
+
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
             is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)
@@ -161,22 +178,22 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
 @Composable
 private fun Subhead(item: ViewItem.Subhead) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         item.iconRes?.let {
             Icon(
                 modifier = Modifier.padding(end = 16.dp),
                 painter = painterResource(id = it),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
         headline2_leah(
-            text = item.title
+            text = item.title,
         )
         Spacer(Modifier.weight(1f))
         subhead1_grey(
-            text = item.value
+            text = item.value,
         )
     }
 }
@@ -184,17 +201,17 @@ private fun Subhead(item: ViewItem.Subhead) {
 @Composable
 fun TitleValue(item: ViewItem.Value) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(
-            text = item.title
+            text = item.title,
         )
         Spacer(Modifier.weight(1f))
         Text(
             text = item.value,
             maxLines = 1,
             style = ComposeAppTheme.typography.subhead1,
-            color = setColorByType(item.type)
+            color = setColorByType(item.type),
         )
     }
 }
@@ -202,10 +219,10 @@ fun TitleValue(item: ViewItem.Value) {
 @Composable
 private fun TitleValueMulti(item: ViewItem.ValueMulti) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(
-            text = item.title
+            text = item.title,
         )
         Spacer(Modifier.weight(1f))
         Column(horizontalAlignment = Alignment.End) {
@@ -213,13 +230,13 @@ private fun TitleValueMulti(item: ViewItem.ValueMulti) {
                 text = item.primaryValue,
                 maxLines = 1,
                 style = ComposeAppTheme.typography.subhead1,
-                color = setColorByType(item.type)
+                color = setColorByType(item.type),
             )
             Text(
                 text = item.secondaryValue,
                 maxLines = 1,
                 style = ComposeAppTheme.typography.caption,
-                color = ComposeAppTheme.colors.grey
+                color = ComposeAppTheme.colors.grey,
             )
         }
     }
@@ -228,42 +245,43 @@ private fun TitleValueMulti(item: ViewItem.ValueMulti) {
 @Composable
 private fun AmountMulti(item: ViewItem.AmountMulti) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             token = item.token,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
         Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .fillMaxWidth(),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = item.amounts[0].coinAmount,
                     maxLines = 1,
                     style = ComposeAppTheme.typography.subhead1,
-                    color = setColorByType(item.type)
+                    color = setColorByType(item.type),
                 )
                 Spacer(Modifier.weight(1f))
                 subhead2_grey(
-                    text = item.amounts[0].fiatAmount ?: ""
+                    text = item.amounts[0].fiatAmount ?: "",
                 )
             }
             if (item.amounts.size > 1) {
                 Spacer(Modifier.height(3.dp))
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     caption_grey(
-                        text = item.amounts[1].coinAmount
+                        text = item.amounts[1].coinAmount,
                     )
                     Spacer(Modifier.weight(1f))
                     caption_grey(
-                        text = item.amounts[1].fiatAmount ?: ""
+                        text = item.amounts[1].fiatAmount ?: "",
                     )
                 }
             }
@@ -274,21 +292,21 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
 @Composable
 private fun Amount(item: ViewItem.Amount) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             token = item.token,
-            modifier = Modifier.padding(end = 16.dp).size(32.dp)
+            modifier = Modifier.padding(end = 16.dp).size(32.dp),
         )
         Text(
             text = item.coinAmount,
             maxLines = 1,
             style = ComposeAppTheme.typography.subhead1,
-            color = setColorByType(item.type)
+            color = setColorByType(item.type),
         )
         Spacer(Modifier.weight(1f))
         subhead2_grey(
-            text = item.fiatAmount ?: ""
+            text = item.fiatAmount ?: "",
         )
     }
 }
@@ -296,17 +314,17 @@ private fun Amount(item: ViewItem.Amount) {
 @Composable
 private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             token = item.token,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
         HSpacer(16.dp)
         Column {
             subhead2_leah(text = item.title)
             VSpacer(height = 1.dp)
-            caption_grey(text = item.badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+            caption_grey(text = item.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 8.dp)
         Column(horizontalAlignment = Alignment.End) {
@@ -314,7 +332,7 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
                 text = item.coinAmount,
                 maxLines = 1,
                 style = ComposeAppTheme.typography.subhead1,
-                color = setColorByType(item.type)
+                color = setColorByType(item.type),
             )
             item.fiatAmount?.let {
                 VSpacer(height = 1.dp)
@@ -327,7 +345,7 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
 @Composable
 private fun NftAmount(item: ViewItem.NftAmount) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         NftIcon(
             modifier = Modifier.padding(end = 16.dp),
@@ -337,7 +355,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
             text = item.amount,
             maxLines = 1,
             style = ComposeAppTheme.typography.subhead2,
-            color = setColorByType(item.type)
+            color = setColorByType(item.type),
         )
     }
 }
@@ -345,11 +363,11 @@ private fun NftAmount(item: ViewItem.NftAmount) {
 @Composable
 private fun Token(item: ViewItem.TokenItem) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             token = item.token,
-            modifier = Modifier.padding(end = 16.dp).size(32.dp)
+            modifier = Modifier.padding(end = 16.dp).size(32.dp),
         )
         subhead1_leah(item.token.coin.code)
     }
@@ -363,10 +381,10 @@ private fun TitleValueHex(
 ) {
     val localView = LocalView.current
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(
-            text = title
+            text = title,
         )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
@@ -375,7 +393,7 @@ private fun TitleValueHex(
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-            }
+            },
         )
     }
 }
@@ -412,20 +430,22 @@ private fun Preview_TitleValue() {
 @Preview
 @Composable
 private fun Preview_AmountMulti() {
-    val token = Token(
-        coin = Coin("uid", "KuCoin", "KCS"),
-        blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
-        type = TokenType.Eip20("eef"),
-        decimals = 18
-    )
-    val item = ViewItem.AmountMulti(
-        listOf(
-            AmountValues("0.104 KCS (est)", "$0.99"),
-            AmountValues("0.103 KCS (min)", "$0.95"),
-        ),
-        ValueType.Incoming,
-        token
-    )
+    val token =
+        Token(
+            coin = Coin("uid", "KuCoin", "KCS"),
+            blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
+            type = TokenType.Eip20("eef"),
+            decimals = 18,
+        )
+    val item =
+        ViewItem.AmountMulti(
+            listOf(
+                AmountValues("0.104 KCS (est)", "$0.99"),
+                AmountValues("0.103 KCS (min)", "$0.95"),
+            ),
+            ValueType.Incoming,
+            token,
+        )
     ComposeAppTheme {
         AmountMulti(item)
     }
@@ -434,18 +454,20 @@ private fun Preview_AmountMulti() {
 @Preview
 @Composable
 private fun Preview_Amount() {
-    val token = Token(
-        coin = Coin("uid", "KuCoin", "KCS"),
-        blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
-        type = TokenType.Eip20("eef"),
-        decimals = 18
-    )
-    val item = ViewItem.Amount(
-        "$0.99",
-        "0.104 KCS (est)",
-        ValueType.Outgoing,
-        token
-    )
+    val token =
+        Token(
+            coin = Coin("uid", "KuCoin", "KCS"),
+            blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
+            type = TokenType.Eip20("eef"),
+            decimals = 18,
+        )
+    val item =
+        ViewItem.Amount(
+            "$0.99",
+            "0.104 KCS (est)",
+            ValueType.Outgoing,
+            token,
+        )
     ComposeAppTheme {
         Amount(item)
     }

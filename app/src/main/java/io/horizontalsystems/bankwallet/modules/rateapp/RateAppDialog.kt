@@ -1,7 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.rateapp
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,13 +30,14 @@ fun RateApp(
     onCancelClick: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = onCancelClick
+        onDismissRequest = onCancelClick,
     ) {
         Column(
-            modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(color = ComposeAppTheme.colors.lawrence)
-                .padding(horizontal = 24.dp, vertical = 20.dp)
+            modifier =
+                Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(color = ComposeAppTheme.colors.lawrence)
+                    .padding(horizontal = 24.dp, vertical = 20.dp),
         ) {
             title3_leah(text = stringResource(R.string.RateApp_Title_Rate_This_App))
             Spacer(Modifier.height(12.dp))
@@ -37,18 +45,18 @@ fun RateApp(
             Spacer(Modifier.height(32.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 ButtonPrimaryTransparent(
                     onClick = onCancelClick,
-                    title = stringResource(R.string.RateApp_Button_NotNow)
+                    title = stringResource(R.string.RateApp_Button_NotNow),
                 )
 
                 Spacer(Modifier.width(8.dp))
 
                 ButtonPrimaryYellow(
                     onClick = onRateClick,
-                    title = stringResource(R.string.RateApp_Button_RateIt)
+                    title = stringResource(R.string.RateApp_Button_RateIt),
                 )
             }
         }

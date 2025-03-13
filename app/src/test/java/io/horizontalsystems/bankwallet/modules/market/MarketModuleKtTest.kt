@@ -1,14 +1,14 @@
-//package io.horizontalsystems.bankwallet.modules.market
+// package io.horizontalsystems.bankwallet.modules.market
 //
-//import io.horizontalsystems.bankwallet.entities.CurrencyValue
-//import io.horizontalsystems.coinkit.models.CoinType
-//import io.horizontalsystems.core.entities.Currency
-//import junit.framework.TestCase
-//import org.junit.Assert
-//import org.junit.Test
-//import java.math.BigDecimal
+// import io.horizontalsystems.bankwallet.entities.CurrencyValue
+// import io.horizontalsystems.coinkit.models.CoinType
+// import io.horizontalsystems.core.entities.Currency
+// import junit.framework.TestCase
+// import org.junit.Assert
+// import org.junit.Test
+// import java.math.BigDecimal
 //
-//class MarketModuleKtTest : TestCase() {
+// class MarketModuleKtTest : TestCase() {
 //
 //    private val usd = Currency("USD", "$", 2)
 //
@@ -91,4 +91,4 @@
 //        Assert.assertEquals(expected, sorted)
 //    }
 //
-//}
+// }

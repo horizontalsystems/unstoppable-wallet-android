@@ -11,23 +11,21 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.WalletBackupViewItem
 
 object RestoreLocalModule {
-
     class Factory(
         private val backupJsonString: String?,
         private val fileName: String?,
-        private val statPage: StatPage
+        private val statPage: StatPage,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreLocalViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            RestoreLocalViewModel(
                 backupJsonString = backupJsonString,
                 accountFactory = App.accountFactory,
                 backupProvider = App.backupProvider,
                 backupViewItemFactory = BackupViewItemFactory(),
                 statPage = statPage,
-                fileName = fileName
+                fileName = fileName,
             ) as T
-        }
     }
 
     data class UiState(
@@ -39,6 +37,6 @@ object RestoreLocalModule {
         val restored: Boolean,
         var walletBackupViewItems: List<WalletBackupViewItem>,
         var otherBackupViewItems: List<OtherBackupViewItem>,
-        val showBackupItems: Boolean
+        val showBackupItems: Boolean,
     )
 }

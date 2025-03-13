@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryYell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 
-
 @Composable
 fun PinNumpad(
     showFingerScanner: Boolean = false,
@@ -49,12 +48,12 @@ fun PinNumpad(
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val windowed = numpadNumbers.windowed(size = 3, step = 3)
         windowed.forEach {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp)
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 it.forEach {
                     NumberKey(it, enabled) { onNumberClick(it) }
@@ -64,13 +63,13 @@ fun PinNumpad(
         }
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             ImageKey(
                 image = R.drawable.icon_touch_id_24,
                 contentDescription = stringResource(R.string.Unlock_BiometricScanner),
                 visible = showFingerScanner,
-                enabled = enabled
+                enabled = enabled,
             ) {
                 showBiometricPrompt?.invoke()
             }
@@ -79,13 +78,13 @@ fun PinNumpad(
                 image = R.drawable.ic_backspace,
                 contentDescription = stringResource(R.string.Button_Delete),
                 visible = true,
-                enabled = enabled
+                enabled = enabled,
             ) {
                 onDeleteClick.invoke()
             }
         }
         Column(
-            modifier = Modifier.height(100.dp)
+            modifier = Modifier.height(100.dp),
         ) {
             pinRandomized?.let { isRandomized ->
                 VSpacer(24.dp)
@@ -109,43 +108,40 @@ fun PinNumpad(
             }
         }
     }
-
 }
 
-private fun getNumpadNumbers(pinRandomized: Boolean?): List<Int> = when(pinRandomized) {
-    true -> generateRandomNumpadNumbers()
-    false, null -> generateOriginalNumpadNumbers()
-}
+private fun getNumpadNumbers(pinRandomized: Boolean?): List<Int> =
+    when (pinRandomized) {
+        true -> generateRandomNumpadNumbers()
+        false, null -> generateOriginalNumpadNumbers()
+    }
 
-private fun generateOriginalNumpadNumbers(): List<Int> {
-    return listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
-}
+private fun generateOriginalNumpadNumbers(): List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
 
-private fun generateRandomNumpadNumbers(): List<Int> {
-    return listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0).shuffled()
-}
+private fun generateRandomNumpadNumbers(): List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0).shuffled()
 
 @Composable
 private fun NumberKey(
     number: Int,
     enabled: Boolean,
-    onClick: (Int) -> Unit
+    onClick: (Int) -> Unit,
 ) {
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier
-            .size(72.dp)
-            .clip(CircleShape)
-            .border(1.dp, ComposeAppTheme.colors.steel20, CircleShape)
-            .clickable(
-                enabled = enabled,
-                onClick = {
-                    HudHelper.vibrate(context)
-                    onClick.invoke(number)
-                }
-            ),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .size(72.dp)
+                .clip(CircleShape)
+                .border(1.dp, ComposeAppTheme.colors.steel20, CircleShape)
+                .clickable(
+                    enabled = enabled,
+                    onClick = {
+                        HudHelper.vibrate(context)
+                        onClick.invoke(number)
+                    },
+                ),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = number.toString(),
@@ -161,21 +157,22 @@ private fun ImageKey(
     contentDescription: String? = null,
     visible: Boolean,
     enabled: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier
-            .size(72.dp)
-            .clip(CircleShape)
-            .clickable(
-                enabled = visible && enabled,
-                onClick = {
-                    HudHelper.vibrate(context)
-                    onClick.invoke()
-                }
-            )
+        modifier =
+            Modifier
+                .size(72.dp)
+                .clip(CircleShape)
+                .clickable(
+                    enabled = visible && enabled,
+                    onClick = {
+                        HudHelper.vibrate(context)
+                        onClick.invoke()
+                    },
+                ),
     ) {
         if (visible) {
             Icon(
@@ -193,8 +190,9 @@ private fun ImageKey(
 fun Preview_Pin() {
     ComposeAppTheme {
         Column(
-            modifier = Modifier
-                .background(color = ComposeAppTheme.colors.tyler)
+            modifier =
+                Modifier
+                    .background(color = ComposeAppTheme.colors.tyler),
         ) {
             PinNumpad(
                 onNumberClick = { },
@@ -202,8 +200,7 @@ fun Preview_Pin() {
                 showFingerScanner = true,
                 pinRandomized = true,
                 showBiometricPrompt = {
-
-                }
+                },
             )
         }
     }
@@ -214,8 +211,9 @@ fun Preview_Pin() {
 fun Preview_PinLocked() {
     ComposeAppTheme {
         Column(
-            modifier = Modifier
-                .background(color = ComposeAppTheme.colors.tyler)
+            modifier =
+                Modifier
+                    .background(color = ComposeAppTheme.colors.tyler),
         ) {
             PinNumpad(
                 onNumberClick = { },
@@ -223,7 +221,7 @@ fun Preview_PinLocked() {
                 showFingerScanner = true,
                 pinRandomized = true,
                 showBiometricPrompt = {},
-                inputState = InputState.Locked("12:33")
+                inputState = InputState.Locked("12:33"),
             )
         }
     }

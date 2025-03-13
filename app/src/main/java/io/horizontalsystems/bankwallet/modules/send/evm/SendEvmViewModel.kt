@@ -27,7 +27,7 @@ class SendEvmViewModel(
     val coinMaxAllowedDecimals: Int,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
-    private val address: Address
+    private val address: Address,
 ) : ViewModelUiState<SendUiState>() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -51,13 +51,14 @@ class SendEvmViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        address = address,
-    )
+    override fun createState() =
+        SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput,
+            address = address,
+        )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -84,7 +85,5 @@ class SendEvmViewModel(
         return SendEvmData(transactionData)
     }
 
-    fun hasConnection(): Boolean {
-        return connectivityManager.isConnected
-    }
+    fun hasConnection(): Boolean = connectivityManager.isConnected
 }

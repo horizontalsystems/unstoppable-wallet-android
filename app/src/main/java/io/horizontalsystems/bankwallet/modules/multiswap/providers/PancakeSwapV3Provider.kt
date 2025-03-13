@@ -11,10 +11,12 @@ object PancakeSwapV3Provider : BaseUniswapV3Provider(DexType.PancakeSwap) {
     override val icon = R.drawable.pancake_v3
     override val priority = 0
 
-    override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Ethereum
-        -> true
-        else -> false
-    }
+    override fun supports(blockchainType: BlockchainType) =
+        when (blockchainType) {
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Ethereum,
+            -> true
+
+            else -> false
+        }
 }

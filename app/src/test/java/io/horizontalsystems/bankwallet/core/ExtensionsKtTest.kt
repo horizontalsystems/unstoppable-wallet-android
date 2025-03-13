@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ExtensionsKtTest {
-
     @Test
     fun shorten() {
         assertShorten("0x1234567890abcdef", "0x1234...cdef")
@@ -15,7 +14,10 @@ class ExtensionsKtTest {
         assertShorten("1234567890abcdef", "1234...cdef")
     }
 
-    private fun assertShorten(raw: String, expected: String) {
+    private fun assertShorten(
+        raw: String,
+        expected: String,
+    ) {
         assertEquals(expected, raw.shorten())
     }
 }

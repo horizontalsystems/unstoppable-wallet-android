@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.entities.Account
 
 object RecoveryPhraseModule {
-    class Factory(private val account: Account) : ViewModelProvider.Factory {
+    class Factory(
+        private val account: Account,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RecoveryPhraseViewModel(account) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = RecoveryPhraseViewModel(account) as T
     }
 
-    data class WordNumbered(val word: String, val number: Int)
-
+    data class WordNumbered(
+        val word: String,
+        val number: Int,
+    )
 }

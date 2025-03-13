@@ -24,7 +24,7 @@ fun PinSet(
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
     forDuress: Boolean = false,
-    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress))
+    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress)),
 ) {
     if (viewModel.uiState.finished) {
         dismissWithSuccess.invoke()
@@ -38,20 +38,21 @@ fun PinSet(
                 title = title,
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
-                }
+                },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = ComposeAppTheme.colors.tyler)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(color = ComposeAppTheme.colors.tyler),
             ) {
                 CrossSlide(
                     targetState = viewModel.uiState.stage,
                     modifier = Modifier.weight(1f),
-                    reverseAnimation = viewModel.uiState.reverseSlideAnimation
+                    reverseAnimation = viewModel.uiState.reverseSlideAnimation,
                 ) { stage ->
                     when (stage) {
                         PinSetModule.SetStage.Enter -> {
@@ -61,6 +62,7 @@ fun PinSet(
                                 enteredCount = viewModel.uiState.enteredCount,
                             )
                         }
+
                         PinSetModule.SetStage.Confirm -> {
                             PinTopBlock(
                                 title = stringResource(R.string.PinSet_ConfirmInfo),

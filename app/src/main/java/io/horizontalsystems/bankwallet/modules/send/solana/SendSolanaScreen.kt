@@ -40,7 +40,7 @@ fun SendSolanaScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
-    riskyAddress: Boolean
+    riskyAddress: Boolean,
 ) {
     val view = LocalView.current
     val wallet = viewModel.wallet
@@ -52,9 +52,10 @@ fun SendSolanaScreen(
     val amountInputType = amountInputModeViewModel.inputType
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
-    )
+    val paymentAddressViewModel =
+        viewModel<AddressParserViewModel>(
+            factory = AddressParserModule.Factory(wallet.token, amount),
+        )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
@@ -66,13 +67,13 @@ fun SendSolanaScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
         ) {
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),
                     value = uiState.address.hex,
-                    riskyAddress = riskyAddress
+                    riskyAddress = riskyAddress,
                 ) {
                     navController.popBackStack()
                 }
@@ -95,7 +96,7 @@ fun SendSolanaScreen(
                 },
                 inputType = amountInputType,
                 rate = viewModel.coinRate,
-                amountUnique = amountUnique
+                amountUnique = amountUnique,
             )
 
             VSpacer(8.dp)
@@ -105,13 +106,14 @@ fun SendSolanaScreen(
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = availableBalance,
                 amountInputType = amountInputType,
-                rate = viewModel.coinRate
+                rate = viewModel.coinRate,
             )
 
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                 title = stringResource(R.string.Button_Next),
                 onClick = {
                     if (!viewModel.hasConnection()) {
@@ -121,8 +123,8 @@ fun SendSolanaScreen(
                         navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
                             R.id.addressRiskyBottomSheetAlert,
                             AddressRiskyBottomSheetAlert.Input(
-                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                            )
+                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText),
+                            ),
                         ) {
                             openConfirm(navController, sendEntryPointDestId)
                         }
@@ -130,22 +132,21 @@ fun SendSolanaScreen(
                         openConfirm(navController, sendEntryPointDestId)
                     }
                 },
-                enabled = proceedEnabled
+                enabled = proceedEnabled,
             )
         }
     }
-
 }
 
 private fun openConfirm(
     navController: NavController,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
     navController.slideFromRight(
         R.id.sendConfirmation,
         SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Solana,
-            sendEntryPointDestId
-        )
+            sendEntryPointDestId,
+        ),
     )
 }

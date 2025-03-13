@@ -14,12 +14,15 @@ class TronContractCallTransactionRecord(
     val contractAddress: String,
     val method: String?,
     val incomingEvents: List<TransferEvent>,
-    val outgoingEvents: List<TransferEvent>
+    val outgoingEvents: List<TransferEvent>,
 ) : TronTransactionRecord(transaction, baseToken, source) {
-
     override val mainValue: TransactionValue?
         get() {
-            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(incomingEvents, outgoingEvents)
+            val (incomingValues, outgoingValues) =
+                EvmTransactionRecord.combined(
+                    incomingEvents,
+                    outgoingEvents,
+                )
 
             return when {
                 (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()
@@ -27,5 +30,4 @@ class TronContractCallTransactionRecord(
                 else -> null
             }
         }
-
 }

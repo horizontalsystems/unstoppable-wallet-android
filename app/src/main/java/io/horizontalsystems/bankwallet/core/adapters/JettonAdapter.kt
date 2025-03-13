@@ -21,8 +21,8 @@ class JettonAdapter(
     tonKitWrapper: TonKitWrapper,
     addressStr: String,
     wallet: Wallet,
-) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter {
-
+) : BaseTonAdapter(tonKitWrapper, wallet.decimal),
+    ISendTonAdapter {
     private val address = Address.parse(addressStr)
     private var jettonBalance = tonKit.jettonBalanceMap[address]
 
@@ -30,8 +30,9 @@ class JettonAdapter(
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
     private val balance: BigDecimal
-        get() = jettonBalance?.balance?.toBigDecimal()?.movePointLeft(decimals)
-            ?: BigDecimal.ZERO
+        get() =
+            jettonBalance?.balance?.toBigDecimal()?.movePointLeft(decimals)
+                ?: BigDecimal.ZERO
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceStateUpdatedFlowable: Flowable<Unit>
@@ -68,12 +69,16 @@ class JettonAdapter(
     override val availableBalance: BigDecimal
         get() = balance
 
-    override suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?) {
+    override suspend fun send(
+        amount: BigDecimal,
+        address: FriendlyAddress,
+        memo: String?,
+    ) {
         tonKit.send(
             jettonBalance?.walletAddress!!,
             address,
             amount.movePointRight(decimals).toBigInteger(),
-            memo
+            memo,
         )
     }
 
@@ -82,12 +87,13 @@ class JettonAdapter(
         address: FriendlyAddress,
         memo: String?,
     ): BigDecimal {
-        val estimateFee = tonKit.estimateFee(
-            jettonBalance?.walletAddress!!,
-            address,
-            amount.movePointRight(decimals).toBigInteger(),
-            memo
-        )
+        val estimateFee =
+            tonKit.estimateFee(
+                jettonBalance?.walletAddress!!,
+                address,
+                amount.movePointRight(decimals).toBigInteger(),
+                memo,
+            )
 
         return estimateFee.toBigDecimal(decimals).stripTrailingZeros()
     }

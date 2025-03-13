@@ -28,19 +28,20 @@ fun HsIconButton(
     enabled: Boolean = true,
     rippleColor: Color = ComposeAppTheme.colors.leah,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .defaultMinSize(48.dp)
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
-                role = Role.Button,
-                interactionSource = interactionSource,
-                indication = ripple(bounded = false, radius = RippleRadius, color = rippleColor)
-            ),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .defaultMinSize(48.dp)
+                .clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                    role = Role.Button,
+                    interactionSource = interactionSource,
+                    indication = ripple(bounded = false, radius = RippleRadius, color = rippleColor),
+                ),
+        contentAlignment = Alignment.Center,
     ) {
         val contentAlpha = if (enabled) LocalContentAlpha.current else ContentAlpha.disabled
         CompositionLocalProvider(LocalContentAlpha provides contentAlpha, content = content)
@@ -53,7 +54,7 @@ fun HsBackButton(onClick: () -> Unit) {
         Icon(
             painter = painterResource(id = R.drawable.ic_back),
             contentDescription = stringResource(R.string.Button_Back),
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.jacob,
         )
     }
 }

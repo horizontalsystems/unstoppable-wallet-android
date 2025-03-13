@@ -9,8 +9,9 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewModel() {
-
+class SolanaNetworkViewModel(
+    private val service: SolanaNetworkService,
+) : ViewModel() {
     var closeScreen by mutableStateOf(false)
         private set
 
@@ -40,7 +41,7 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
         return ViewItem(
             item.rpcSource.name,
             url,
-            item.selected
+            item.selected,
         )
     }
 
@@ -56,6 +57,6 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
     data class ViewItem(
         val name: String,
         val url: String,
-        val selected: Boolean
+        val selected: Boolean,
     )
 }

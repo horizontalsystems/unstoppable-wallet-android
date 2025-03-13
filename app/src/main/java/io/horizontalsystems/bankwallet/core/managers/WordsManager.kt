@@ -5,9 +5,8 @@ import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class WordsManager(
-    private val mnemonic: Mnemonic
+    private val mnemonic: Mnemonic,
 ) : IWordsManager {
-
     @Throws
     override fun validateChecksum(words: List<String>) {
         mnemonic.validate(words)
@@ -18,13 +17,9 @@ class WordsManager(
         mnemonic.validateStrict(words)
     }
 
-    override fun isWordValid(word: String): Boolean {
-        return mnemonic.isWordValid(word, false)
-    }
+    override fun isWordValid(word: String): Boolean = mnemonic.isWordValid(word, false)
 
-    override fun isWordPartiallyValid(word: String): Boolean {
-        return mnemonic.isWordValid(word, true)
-    }
+    override fun isWordPartiallyValid(word: String): Boolean = mnemonic.isWordValid(word, true)
 
     override fun generateWords(count: Int): List<String> {
         val strength = Mnemonic.EntropyStrength.fromWordCount(count)

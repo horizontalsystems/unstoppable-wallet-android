@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.StatRecord
 
 @Dao
 interface StatsDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(statRecord: StatRecord)
 
@@ -17,5 +16,4 @@ interface StatsDao {
 
     @Query("DELETE FROM StatRecord WHERE id IN (:ids)")
     fun delete(ids: List<Int>): Int
-
 }

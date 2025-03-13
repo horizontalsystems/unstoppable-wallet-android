@@ -56,7 +56,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import java.math.BigDecimal
 
-
 const val SendBtcPage = "send_btc"
 const val SendBtcAdvancedSettingsPage = "send_btc_advanced_settings"
 const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
@@ -70,7 +69,7 @@ fun SendBitcoinNavHost(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
-    riskyAddress: Boolean
+    riskyAddress: Boolean,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -86,7 +85,7 @@ fun SendBitcoinNavHost(
                 amountInputModeViewModel,
                 sendEntryPointDestId,
                 amount,
-                riskyAddress
+                riskyAddress,
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -108,7 +107,7 @@ fun SendBitcoinNavHost(
                 },
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
             )
         }
     }
@@ -139,9 +138,10 @@ fun SendBitcoinScreen(
 
     val rate = viewModel.coinRate
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
-    )
+    val paymentAddressViewModel =
+        viewModel<AddressParserViewModel>(
+            factory = AddressParserModule.Factory(wallet.token, amount),
+        )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
@@ -157,14 +157,15 @@ fun SendBitcoinScreen(
                 navigationIcon = {
                     HsBackButton(onClick = { fragmentNavController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                        icon = R.drawable.ic_manage_2,
-                        tint = ComposeAppTheme.colors.jacob,
-                        onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                            icon = R.drawable.ic_manage_2,
+                            tint = ComposeAppTheme.colors.jacob,
+                            onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) },
+                        ),
                     ),
-                )
             )
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -172,7 +173,7 @@ fun SendBitcoinScreen(
                     HSAddressCell(
                         title = stringResource(R.string.Send_Confirmation_To),
                         value = uiState.address.hex,
-                        riskyAddress = riskyAddress
+                        riskyAddress = riskyAddress,
                     ) {
                         fragmentNavController.popBackStack()
                     }
@@ -195,7 +196,7 @@ fun SendBitcoinScreen(
                     },
                     inputType = amountInputType,
                     rate = rate,
-                    amountUnique = amountUnique
+                    amountUnique = amountUnique,
                 )
 
                 VSpacer(8.dp)
@@ -205,7 +206,7 @@ fun SendBitcoinScreen(
                     fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                     availableBalance = availableBalance,
                     amountInputType = amountInputType,
-                    rate = rate
+                    rate = rate,
                 )
 
                 VSpacer(16.dp)
@@ -222,7 +223,7 @@ fun SendBitcoinScreen(
                                     utxoData = utxoData,
                                     onClick = {
                                         composeNavController.navigate(UtxoExpertModePage)
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -233,23 +234,24 @@ fun SendBitcoinScreen(
                                 fee = fee,
                                 amountInputType = amountInputType,
                                 rate = rate,
-                                navController = fragmentNavController
+                                navController = fragmentNavController,
                             )
                         }
-                    }
+                    },
                 )
 
                 feeRateCaution?.let {
                     FeeRateCaution(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                        feeRateCaution = feeRateCaution
+                        feeRateCaution = feeRateCaution,
                     )
                 }
 
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         if (riskyAddress) {
@@ -257,8 +259,8 @@ fun SendBitcoinScreen(
                             fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
                                 R.id.addressRiskyBottomSheetAlert,
                                 AddressRiskyBottomSheetAlert.Input(
-                                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                                )
+                                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText),
+                                ),
                             ) {
                                 openConfirm(fragmentNavController, sendEntryPointDestId)
                             }
@@ -266,7 +268,7 @@ fun SendBitcoinScreen(
                             openConfirm(fragmentNavController, sendEntryPointDestId)
                         }
                     },
-                    enabled = proceedEnabled
+                    enabled = proceedEnabled,
                 )
             }
         }
@@ -275,32 +277,33 @@ fun SendBitcoinScreen(
 
 private fun openConfirm(
     fragmentNavController: NavController,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
 ) {
     fragmentNavController.slideFromRight(
         R.id.sendConfirmation,
         SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Bitcoin,
-            sendEntryPointDestId
-        )
+            sendEntryPointDestId,
+        ),
     )
 }
 
 @Composable
 fun UtxoCell(
     utxoData: SendBitcoinModule.UtxoData,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        onClick = onClick
+        onClick = onClick,
     ) {
         subhead2_grey(
             text = stringResource(R.string.Send_Utxos),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         subhead2_leah(text = utxoData.value)
         HSpacer(8.dp)
@@ -309,7 +312,7 @@ fun UtxoCell(
                 Icon(
                     painter = painterResource(R.drawable.ic_edit_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
 
@@ -317,7 +320,7 @@ fun UtxoCell(
                 Icon(
                     painter = painterResource(R.drawable.ic_edit_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.jacob,
                 )
             }
 
@@ -325,7 +328,7 @@ fun UtxoCell(
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }

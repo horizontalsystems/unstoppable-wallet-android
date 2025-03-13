@@ -31,7 +31,7 @@ fun TokenSelectScreen(
     onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
     emptyItemsText: String,
-    header: @Composable (() -> Unit)? = null
+    header: @Composable (() -> Unit)? = null,
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -43,19 +43,19 @@ fun TokenSelectScreen(
                 onClose = { navController.popBackStack() },
                 onSearchTextChanged = { text ->
                     viewModel.updateFilter(text)
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         val uiState = viewModel.uiState
         if (uiState.noItems) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 header?.invoke()
                 ListEmptyView(
                     text = emptyItemsText,
-                    icon = R.drawable.ic_empty_wallet
+                    icon = R.drawable.ic_empty_wallet,
                 )
             }
         } else {
@@ -71,17 +71,18 @@ fun TokenSelectScreen(
                     val lastItem = index == balanceViewItems.size - 1
 
                     Box(
-                        modifier = Modifier.clickable {
-                            onClickItem.invoke(item)
-                        }
+                        modifier =
+                            Modifier.clickable {
+                                onClickItem.invoke(item)
+                            },
                     ) {
                         SectionUniversalItem(
                             borderTop = true,
-                            borderBottom = lastItem
+                            borderBottom = lastItem,
                         ) {
                             BalanceCardInner(
                                 viewItem = item,
-                                type = BalanceCardSubtitleType.CoinName
+                                type = BalanceCardSubtitleType.CoinName,
                             )
                         }
                     }

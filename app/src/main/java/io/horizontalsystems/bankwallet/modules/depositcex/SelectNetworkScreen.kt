@@ -38,7 +38,7 @@ fun SelectNetworkScreen(
                 title = stringResource(R.string.Cex_ChooseNetwork),
                 navigationIcon = { HsBackButton(onClick = onNavigateBack) },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             InfoText(text = stringResource(R.string.Cex_ChooseNetwork_Description))
@@ -64,14 +64,15 @@ private fun NetworkCell(
     RowUniversal(
         onClick = if (item.enabled) onItemClick else null,
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalPadding = 0.dp
+        verticalPadding = 0.dp,
     ) {
         HsImage(
             url = item.blockchain?.type?.imageUrl,
             placeholder = R.drawable.ic_platform_placeholder_24,
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .size(32.dp)
+            modifier =
+                Modifier
+                    .padding(vertical = 12.dp)
+                    .size(32.dp),
         )
         HSpacer(width = 16.dp)
         body_leah(
@@ -84,7 +85,7 @@ private fun NetworkCell(
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         } else {
             Badge(text = stringResource(R.string.Suspended))

@@ -26,12 +26,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 
 class SubscriptionFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         SubscriptionScreen(navController)
     }
-
 }
 
 @Composable
@@ -48,12 +46,12 @@ fun SubscriptionScreen(navController: NavController) {
                 title = stringResource(R.string.Settings_Subscription),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
         ) {
             VSpacer(12.dp)
 
@@ -63,12 +61,12 @@ fun SubscriptionScreen(navController: NavController) {
                         borderTop = false,
                         onClick = {
                             viewModel.launchManageSubscriptionScreen(context)
-                        }
+                        },
                     ) {
                         body_leah(
                             text = stringResource(R.string.SettingsSubscription_ManageSubscription),
                             maxLines = 1,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         Image(
                             modifier = Modifier.size(20.dp),
@@ -81,12 +79,12 @@ fun SubscriptionScreen(navController: NavController) {
                         borderTop = false,
                         onClick = {
                             navController.slideFromBottom(R.id.buySubscriptionFragment)
-                        }
+                        },
                     ) {
                         body_leah(
                             text = stringResource(R.string.SettingsSubscription_GetPremium),
                             maxLines = 1,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         Image(
                             modifier = Modifier.size(20.dp),
@@ -95,12 +93,12 @@ fun SubscriptionScreen(navController: NavController) {
                         )
                     }
                     CellUniversal(
-                        onClick = viewModel::restorePurchase
+                        onClick = viewModel::restorePurchase,
                     ) {
                         body_jacob(
                             text = stringResource(R.string.SettingsSubscription_RestorePurchase),
                             maxLines = 1,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         Image(
                             modifier = Modifier.size(20.dp),

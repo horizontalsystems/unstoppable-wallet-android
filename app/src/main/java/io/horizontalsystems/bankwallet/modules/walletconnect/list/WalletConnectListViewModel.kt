@@ -9,8 +9,8 @@ import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -29,7 +29,8 @@ class WalletConnectListViewModel(
     private val evmBlockchainManager: EvmBlockchainManager,
 ) : ViewModel() {
     enum class ConnectionResult {
-        Success, Error
+        Success,
+        Error,
     }
 
     private var pendingRequestCountMap = mutableMapOf<String, Int>()
@@ -38,9 +39,10 @@ class WalletConnectListViewModel(
     private var _refreshFlow: MutableSharedFlow<Unit> =
         MutableSharedFlow(replay = 0, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
     private var refreshFlow: SharedFlow<Unit> = _refreshFlow.asSharedFlow()
-    private val uiStateFlow = merge(WCDelegate.walletEvents, refreshFlow).map {
-        getUiState()
-    }
+    private val uiStateFlow =
+        merge(WCDelegate.walletEvents, refreshFlow).map {
+            getUiState()
+        }
 
     val uiState: StateFlow<WalletConnectListUiState> =
         uiStateFlow.stateIn(viewModelScope, SharingStarted.Eagerly, getUiState())
@@ -76,26 +78,27 @@ class WalletConnectListViewModel(
 
     fun setConnectionUri(uri: String) {
         if (uri.contains("requestId")) {
-            //wc also creates deeplinks for Pending Request
-            //we should ignore these deeplinks
+            // wc also creates deeplinks for Pending Request
+            // we should ignore these deeplinks
             return
         }
-        connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
-            2 -> {
-                Web3Wallet.pair(
-                    Wallet.Params.Pair(uri.trim()),
-                    onSuccess = {
-                        connectionResult = null
-                    },
-                    onError = {
-                        connectionResult = ConnectionResult.Error
-                    }
-                )
-                null
-            }
+        connectionResult =
+            when (WalletConnectListModule.getVersionFromUri(uri)) {
+                2 -> {
+                    Web3Wallet.pair(
+                        Wallet.Params.Pair(uri.trim()),
+                        onSuccess = {
+                            connectionResult = null
+                        },
+                        onError = {
+                            connectionResult = ConnectionResult.Error
+                        },
+                    )
+                    null
+                }
 
-            else -> ConnectionResult.Error
-        }
+                else -> ConnectionResult.Error
+            }
     }
 
     fun onDelete(topic: String) {
@@ -107,7 +110,7 @@ class WalletConnectListViewModel(
             onError = {
                 showError = it.message
                 _refreshFlow.tryEmit(Unit)
-            }
+            },
         )
     }
 
@@ -120,24 +123,29 @@ class WalletConnectListViewModel(
         _refreshFlow.tryEmit(Unit)
     }
 
-    private fun getUiState(): WalletConnectListUiState {
-        return WalletConnectListUiState(
+    private fun getUiState(): WalletConnectListUiState =
+        WalletConnectListUiState(
             sessionViewItems = getSessions(wcSessionManager.sessions),
             pairingsNumber = pairingsNumber,
         )
-    }
 
     private fun getSessions(sessions: List<Wallet.Model.Session>): List<WalletConnectListModule.SessionViewItem> {
-        val sessionItems = sessions.map { session ->
-            WalletConnectListModule.SessionViewItem(
-                sessionTopic = session.topic,
-                title = session.metaData?.name ?: "",
-                subtitle = getSubtitle(session.namespaces.values.map { it.accounts }.flatten()),
-                url = session.metaData?.url ?: "",
-                imageUrl = session.metaData?.icons?.lastOrNull(),
-                pendingRequestsCount = pendingRequestCountMap[session.topic] ?: 0,
-            )
-        }
+        val sessionItems =
+            sessions.map { session ->
+                WalletConnectListModule.SessionViewItem(
+                    sessionTopic = session.topic,
+                    title = session.metaData?.name ?: "",
+                    subtitle =
+                        getSubtitle(
+                            session.namespaces.values
+                                .map { it.accounts }
+                                .flatten(),
+                        ),
+                    url = session.metaData?.url ?: "",
+                    imageUrl = session.metaData?.icons?.lastOrNull(),
+                    pendingRequestsCount = pendingRequestCountMap[session.topic] ?: 0,
+                )
+            }
         return sessionItems
     }
 
@@ -158,19 +166,17 @@ class WalletConnectListViewModel(
         }
     }
 
-    private fun getPairingCount(): Int {
-        return CoreClient.Pairing.getPairings().size
-    }
+    private fun getPairingCount(): Int = CoreClient.Pairing.getPairings().size
 
     private fun getSubtitle(chains: List<String>): String {
-        val chainNames = chains.mapNotNull { chain ->
-            WCUtils.getChainData(chain)?.chain?.id?.let { chainId ->
-                evmBlockchainManager.getBlockchain(chainId)?.name
+        val chainNames =
+            chains.mapNotNull { chain ->
+                WCUtils.getChainData(chain)?.chain?.id?.let { chainId ->
+                    evmBlockchainManager.getBlockchain(chainId)?.name
+                }
             }
-        }
         return chainNames.joinToString(", ")
     }
-
 }
 
 data class WalletConnectListUiState(

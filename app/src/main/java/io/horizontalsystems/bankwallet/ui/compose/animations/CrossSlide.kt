@@ -1,9 +1,21 @@
 package io.horizontalsystems.bankwallet.ui.compose.animations
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.animateOffset
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
@@ -27,7 +39,7 @@ fun <T> CrossSlide(
     modifier: Modifier = Modifier,
     animationSpec: FiniteAnimationSpec<Offset> = tween(300),
     reverseAnimation: Boolean = false,
-    content: @Composable (T) -> Unit
+    content: @Composable (T) -> Unit,
 ) {
     val direction: Int = if (reverseAnimation) -1 else 1
     val items = remember { mutableStateListOf<SlideInOutAnimationState<T>>() }
@@ -38,25 +50,28 @@ fun <T> CrossSlide(
 
     if (targetChanged || items.isEmpty()) {
         // Only manipulate the list when the state is changed, or in the first run.
-        val keys = items.map { it.key }.run {
-            if (!contains(targetState)) {
-                toMutableList().also { it.add(targetState) }
-            } else {
-                this
+        val keys =
+            items.map { it.key }.run {
+                if (!contains(targetState)) {
+                    toMutableList().also { it.add(targetState) }
+                } else {
+                    this
+                }
             }
-        }
         items.clear()
         keys.mapTo(items) { key ->
 
             SlideInOutAnimationState(key) {
                 val xTransition by transition.animateOffset(
-                    transitionSpec = { animationSpec }, label = ""
+                    transitionSpec = { animationSpec },
+                    label = "",
                 ) { if (it == key) Offset(0f, 0f) else Offset(1000f, 1000f) }
-                Box(modifier.graphicsLayer {
-                    this.translationX =
-                        if (transition.targetState == key) direction * xTransition.x else direction * -xTransition.x
-                }) {
-
+                Box(
+                    modifier.graphicsLayer {
+                        this.translationX =
+                            if (transition.targetState == key) direction * xTransition.x else direction * -xTransition.x
+                    },
+                ) {
                     content(key)
                 }
             }
@@ -75,10 +90,9 @@ fun <T> CrossSlide(
     }
 }
 
-
 data class SlideInOutAnimationState<T>(
     val key: T,
-    val content: @Composable () -> Unit
+    val content: @Composable () -> Unit,
 )
 
 @Composable

@@ -62,7 +62,6 @@ import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
-
     private val vmFactory by lazy { TvlModule.Factory() }
     private val tvlChartViewModel by viewModels<TvlChartViewModel> { vmFactory }
     private val viewModel by viewModels<TvlViewModel> { vmFactory }
@@ -72,7 +71,10 @@ class TvlFragment : BaseComposeFragment() {
         TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
     }
 
-    private fun onCoinClick(coinUid: String?, navController: NavController) {
+    private fun onCoinClick(
+        coinUid: String?,
+        navController: NavController,
+    ) {
         if (coinUid != null) {
             val arguments = CoinFragment.Input(coinUid)
             navController.slideFromRight(R.id.coinFragment, arguments)
@@ -89,30 +91,34 @@ class TvlFragment : BaseComposeFragment() {
         tvlViewModel: TvlViewModel,
         chartViewModel: TvlChartViewModel,
         navController: NavController,
-        onCoinClick: (String?) -> Unit
+        onCoinClick: (String?) -> Unit,
     ) {
         val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
         val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
-        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
+        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(
+            SelectorDialogState.Closed,
+        )
 
         Column(
-            modifier = Modifier
-                .background(color = ComposeAppTheme.colors.tyler)
-                .navigationBarsPadding()
+            modifier =
+                Modifier
+                    .background(color = ComposeAppTheme.colors.tyler)
+                    .navigationBarsPadding(),
         ) {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                        ),
+                    ),
             )
 
             HSSwipeRefresh(
@@ -120,7 +126,7 @@ class TvlFragment : BaseComposeFragment() {
                 onRefresh = {
                     tvlViewModel.refresh()
                     chartViewModel.refresh()
-                }
+                },
             ) {
                 Crossfade(viewState, label = "") { viewState ->
                     when (viewState) {
@@ -134,16 +140,17 @@ class TvlFragment : BaseComposeFragment() {
                                 onClick = {
                                     tvlViewModel.onErrorClick()
                                     chartViewModel.refresh()
-                                }
+                                },
                             )
                         }
 
                         ViewState.Success -> {
-                            val listState = hsRememberLazyListState(
-                                2,
-                                tvlData?.chainSelect?.selected,
-                                tvlData?.sortDescending
-                            )
+                            val listState =
+                                hsRememberLazyListState(
+                                    2,
+                                    tvlData?.chainSelect?.selected,
+                                    tvlData?.sortDescending,
+                                )
 
                             LazyColumn(
                                 state = listState,
@@ -152,7 +159,11 @@ class TvlFragment : BaseComposeFragment() {
                             ) {
                                 item {
                                     tvlViewModel.header.let { header ->
-                                        DescriptionCard(header.title, header.description, header.icon)
+                                        DescriptionCard(
+                                            header.title,
+                                            header.description,
+                                            header.icon,
+                                        )
                                     }
                                 }
                                 item {
@@ -169,7 +180,7 @@ class TvlFragment : BaseComposeFragment() {
                                             tvlDiffType,
                                             tvlViewModel::onClickChainSelector,
                                             tvlViewModel::onToggleSortType,
-                                            tvlViewModel::onToggleTvlDiffType
+                                            tvlViewModel::onToggleTvlDiffType,
                                         )
                                     }
 
@@ -181,17 +192,19 @@ class TvlFragment : BaseComposeFragment() {
                                             item.iconPlaceholder,
                                             item.tvl,
                                             when (tvlDiffType) {
-                                                TvlDiffType.Percent -> item.tvlChangePercent?.let {
-                                                    MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
-                                                }
+                                                TvlDiffType.Percent ->
+                                                    item.tvlChangePercent?.let {
+                                                        MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
+                                                    }
 
-                                                TvlDiffType.Currency -> item.tvlChangeAmount?.let {
-                                                    MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
-                                                }
+                                                TvlDiffType.Currency ->
+                                                    item.tvlChangeAmount?.let {
+                                                        MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
+                                                    }
 
                                                 else -> null
                                             },
-                                            item.rank
+                                            item.rank,
                                         ) { onCoinClick(item.coinUid) }
                                     }
                                 }
@@ -211,7 +224,7 @@ class TvlFragment : BaseComposeFragment() {
                                 chartViewModel.onSelectChain(it)
                                 tvlViewModel.onSelectChain(it)
                             },
-                            onDismiss = tvlViewModel::onChainSelectorDialogDismiss
+                            onDismiss = tvlViewModel::onChainSelectorDialogDismiss,
                         )
                     }
 
@@ -228,30 +241,31 @@ class TvlFragment : BaseComposeFragment() {
         tvlDiffType: TvlDiffType?,
         onClickChainSelector: () -> Unit,
         onToggleSortType: () -> Unit,
-        onToggleTvlDiffType: () -> Unit
+        onToggleTvlDiffType: () -> Unit,
     ) {
         HeaderSorting(borderBottom = true, borderTop = true) {
             HSpacer(16.dp)
             ButtonSecondaryWithIcon(
                 modifier = Modifier.height(28.dp),
                 onClick = onClickChainSelector,
-                title =chainSelect.selected.title.getString(),
+                title = chainSelect.selected.title.getString(),
                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
             )
             HSpacer(8.dp)
             ButtonSecondaryWithIcon(
                 title = stringResource(R.string.Market_TVL),
-                iconRight = painterResource(
-                    if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                ),
-                onClick = onToggleSortType
+                iconRight =
+                    painterResource(
+                        if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                    ),
+                onClick = onToggleSortType,
             )
             tvlDiffType?.let {
                 HSpacer(8.dp)
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(end = 16.dp),
                     icon = if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20,
-                    onClick = { onToggleTvlDiffType() }
+                    onClick = { onToggleTvlDiffType() },
                 )
             }
             HSpacer(width = 16.dp)
@@ -267,27 +281,30 @@ class TvlFragment : BaseComposeFragment() {
         tvl: CurrencyValue,
         marketDataValue: MarketDataValue?,
         label: String? = null,
-        onClick: (() -> Unit)? = null
+        onClick: (() -> Unit)? = null,
     ) {
         SectionItemBorderedRowUniversalClear(
             onClick = onClick,
-            borderBottom = true
+            borderBottom = true,
         ) {
             Image(
-                painter = rememberAsyncImagePainter(
-                    model = iconUrl,
-                    error = painterResource(
-                        iconPlaceholder ?: R.drawable.ic_platform_placeholder_24
-                    )
-                ),
+                painter =
+                    rememberAsyncImagePainter(
+                        model = iconUrl,
+                        error =
+                            painterResource(
+                                iconPlaceholder ?: R.drawable.ic_platform_placeholder_24,
+                            ),
+                    ),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                modifier =
+                    Modifier
+                        .padding(end = 16.dp)
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp)),
             )
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 MarketCoinFirstRow(name, tvl.getFormattedShort())
                 Spacer(modifier = Modifier.height(3.dp))
@@ -295,5 +312,4 @@ class TvlFragment : BaseComposeFragment() {
             }
         }
     }
-
 }

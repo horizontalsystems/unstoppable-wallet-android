@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,7 +15,12 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun WalletSwitchBottomSheet(
@@ -19,7 +28,7 @@ fun WalletSwitchBottomSheet(
     watchingAddresses: List<Account>,
     selectedAccount: Account?,
     onSelectListener: (Account) -> Unit,
-    onCancelClick: () -> Unit
+    onCancelClick: () -> Unit,
 ) {
     val comparator = compareBy<Account> { it.name.lowercase() }
 
@@ -29,12 +38,11 @@ fun WalletSwitchBottomSheet(
         title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
         onCloseClick = onCancelClick,
     ) {
-
         Spacer(Modifier.height(12.dp))
 
         if (wallets.isNotEmpty()) {
             HeaderText(
-                text = stringResource(R.string.ManageAccount_Wallets)
+                text = stringResource(R.string.ManageAccount_Wallets),
             )
             Section(
                 items = wallets.sortedWith(comparator),
@@ -48,7 +56,7 @@ fun WalletSwitchBottomSheet(
                 Spacer(Modifier.height(24.dp))
             }
             HeaderText(
-                text = stringResource(R.string.ManageAccount_WatchAddresses)
+                text = stringResource(R.string.ManageAccount_WatchAddresses),
             )
             Section(
                 items = watchingAddresses.sortedWith(comparator),
@@ -78,7 +86,7 @@ private fun Section(
                 selected = item == selectedItem,
                 onClick = {
                     onSelectListener.invoke(item)
-                }
+                },
             )
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
@@ -90,7 +98,7 @@ private fun Section(
                     modifier = Modifier.padding(start = 16.dp),
                     painter = painterResource(id = R.drawable.ic_eye_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }

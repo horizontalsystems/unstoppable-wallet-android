@@ -22,14 +22,14 @@ import kotlinx.coroutines.launch
 class ReceiveTokenSelectViewModel(
     private val walletManager: IWalletManager,
     private val activeAccount: Account,
-    private val fullCoinsProvider: FullCoinsProvider
+    private val fullCoinsProvider: FullCoinsProvider,
 ) : ViewModel() {
     private var fullCoins: List<FullCoin> = listOf()
 
     var uiState by mutableStateOf(
         ReceiveTokenSelectUiState(
             fullCoins = fullCoins,
-        )
+        ),
     )
 
     init {
@@ -52,12 +52,12 @@ class ReceiveTokenSelectViewModel(
         fullCoins = fullCoinsProvider.getItems()
     }
 
-
     private fun emitState() {
         viewModelScope.launch {
-            uiState = ReceiveTokenSelectUiState(
-                fullCoins = fullCoins,
-            )
+            uiState =
+                ReceiveTokenSelectUiState(
+                    fullCoins = fullCoins,
+                )
         }
     }
 
@@ -116,12 +116,11 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    private suspend fun getOrCreateWallet(token: Token): Wallet {
-        return walletManager
+    private suspend fun getOrCreateWallet(token: Token): Wallet =
+        walletManager
             .activeWallets
             .find { it.token == token }
             ?: createWallet(token)
-    }
 
     private suspend fun createWallet(token: Token): Wallet {
         val wallet = Wallet(token, activeAccount)
@@ -135,29 +134,37 @@ class ReceiveTokenSelectViewModel(
         return wallet
     }
 
-    class Factory(private val activeAccount: Account) : ViewModelProvider.Factory {
+    class Factory(
+        private val activeAccount: Account,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val fullCoinsProvider = FullCoinsProvider(
-                App.marketKit,
-                activeAccount
-            )
+            val fullCoinsProvider =
+                FullCoinsProvider(
+                    App.marketKit,
+                    activeAccount,
+                )
             return ReceiveTokenSelectViewModel(
                 App.walletManager,
                 activeAccount,
-                fullCoinsProvider
+                fullCoinsProvider,
             ) as T
         }
     }
 }
 
 sealed interface CoinForReceiveType {
-    data class Single(val wallet: Wallet) : CoinForReceiveType
+    data class Single(
+        val wallet: Wallet,
+    ) : CoinForReceiveType
+
     object MultipleDerivations : CoinForReceiveType
+
     object MultipleAddressTypes : CoinForReceiveType
+
     object MultipleBlockchains : CoinForReceiveType
 }
 
 data class ReceiveTokenSelectUiState(
-    val fullCoins: List<FullCoin>
+    val fullCoins: List<FullCoin>,
 )

@@ -10,13 +10,16 @@ import kotlinx.parcelize.Parcelize
 
 object ManageAccountsModule {
     @Parcelize
-    data class Input(val popOffOnSuccess: Int, val popOffInclusive: Boolean) : Parcelable
+    data class Input(
+        val popOffOnSuccess: Int,
+        val popOffInclusive: Boolean,
+    ) : Parcelable
 
-    class Factory(private val mode: Mode) : ViewModelProvider.Factory {
+    class Factory(
+        private val mode: Mode,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ManageAccountsViewModel(App.accountManager, mode) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ManageAccountsViewModel(App.accountManager, mode) as T
     }
 
     data class AccountViewItem(
@@ -31,14 +34,14 @@ object ManageAccountsModule {
     )
 
     data class ActionViewItem(
-            @DrawableRes val icon: Int,
-            @StringRes val title: Int,
-            val callback: () -> Unit
+        @DrawableRes val icon: Int,
+        @StringRes val title: Int,
+        val callback: () -> Unit,
     )
 
     @Parcelize
     enum class Mode : Parcelable {
-        Manage, Switcher
+        Manage,
+        Switcher,
     }
-
 }

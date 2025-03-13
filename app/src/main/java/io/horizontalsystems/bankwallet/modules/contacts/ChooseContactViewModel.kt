@@ -10,9 +10,8 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 class ChooseContactViewModel(
     private val repository: ContactsRepository,
-    private val blockchainType: BlockchainType
+    private val blockchainType: BlockchainType,
 ) : ViewModel() {
-
     var items: List<ContactViewItem> by mutableStateOf(listOf())
         private set
 
@@ -29,22 +28,26 @@ class ChooseContactViewModel(
     }
 
     private fun rebuildItems() {
-        items = repository.getContactsFiltered(blockchainType, query)
-            .map {
-                ContactViewItem(
-                    it.name,
-                    it.addresses.first { it.blockchain.type == blockchainType }.address
-                )
-            }
+        items =
+            repository
+                .getContactsFiltered(blockchainType, query)
+                .map {
+                    ContactViewItem(
+                        it.name,
+                        it.addresses.first { it.blockchain.type == blockchainType }.address,
+                    )
+                }
     }
 
-    class Factory(private val blockchainType: BlockchainType) : ViewModelProvider.Factory {
-
+    class Factory(
+        private val blockchainType: BlockchainType,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChooseContactViewModel(App.contactsRepository, blockchainType) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ChooseContactViewModel(App.contactsRepository, blockchainType) as T
     }
 }
 
-data class ContactViewItem(val name: String, val address: String)
+data class ContactViewItem(
+    val name: String,
+    val address: String,
+)

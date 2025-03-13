@@ -31,24 +31,26 @@ import java.math.BigDecimal
 class TopSectorsViewModel(
     private val currencyManager: CurrencyManager,
     private val topSectorsRepository: TopSectorsRepository,
-    private val numberFormatter: IAppNumberFormatter
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<TopSectorsUiState>() {
     private var isRefreshing = false
     private var items = listOf<TopSectorViewItem>()
     private var viewState: ViewState = ViewState.Loading
 
-    val sortingOptions = listOf(
-        SortingField.HighestCap,
-        SortingField.LowestCap,
-        SortingField.TopGainers,
-        SortingField.TopLosers
-    )
+    val sortingOptions =
+        listOf(
+            SortingField.HighestCap,
+            SortingField.LowestCap,
+            SortingField.TopGainers,
+            SortingField.TopLosers,
+        )
 
-    val periods = listOf(
-        TimeDuration.OneDay,
-        TimeDuration.SevenDay,
-        TimeDuration.ThirtyDay,
-    )
+    val periods =
+        listOf(
+            TimeDuration.OneDay,
+            TimeDuration.SevenDay,
+            TimeDuration.ThirtyDay,
+        )
 
     private var sortingField = SortingField.TopGainers
 
@@ -68,13 +70,14 @@ class TopSectorsViewModel(
         }
     }
 
-    override fun createState() = TopSectorsUiState(
-        isRefreshing = isRefreshing,
-        items = items,
-        viewState = viewState,
-        sortingField = sortingField,
-        timePeriod = timePeriod,
-    )
+    override fun createState() =
+        TopSectorsUiState(
+            isRefreshing = isRefreshing,
+            items = items,
+            viewState = viewState,
+            sortingField = sortingField,
+            timePeriod = timePeriod,
+        )
 
     private suspend fun fetchItems(forceRefresh: Boolean = false) =
         withContext(Dispatchers.Default) {
@@ -82,13 +85,14 @@ class TopSectorsViewModel(
                 val topSectors =
                     topSectorsRepository.get(currencyManager.baseCurrency, forceRefresh)
 
-                val topCategoryWithDiffList = topSectors.map {
-                    TopSectorWithDiff(
-                        it.coinCategory,
-                        changeValue(it.coinCategory, timePeriod),
-                        it.topCoins
-                    )
-                }
+                val topCategoryWithDiffList =
+                    topSectors.map {
+                        TopSectorWithDiff(
+                            it.coinCategory,
+                            changeValue(it.coinCategory, timePeriod),
+                            it.topCoins,
+                        )
+                    }
                 val sortedTopSectors = topCategoryWithDiffList.sort(sortingField)
                 items = sortedTopSectors.map { getViewItem(it) }
                 viewState = ViewState.Success
@@ -103,37 +107,42 @@ class TopSectorsViewModel(
     private fun getViewItem(item: TopSectorWithDiff) =
         TopSectorViewItem(
             coinCategory = item.coinCategory,
-            marketCapValue = item.coinCategory.marketCap?.let {
-                numberFormatter.formatFiatShort(
-                    it,
-                    currencyManager.baseCurrency.symbol,
-                    2
-                )
-            },
-            changeValue = item.diff?.let {
-                MarketDataValue.DiffNew(Value.Percent(it))
-            },
+            marketCapValue =
+                item.coinCategory.marketCap?.let {
+                    numberFormatter.formatFiatShort(
+                        it,
+                        currencyManager.baseCurrency.symbol,
+                        2,
+                    )
+                },
+            changeValue =
+                item.diff?.let {
+                    MarketDataValue.DiffNew(Value.Percent(it))
+                },
             coin1 = item.topCoins[0],
             coin2 = item.topCoins[1],
             coin3 = item.topCoins[2],
         )
 
-    private fun changeValue(category: CoinCategory, timePeriod: TimeDuration): BigDecimal? {
-        return when (timePeriod) {
+    private fun changeValue(
+        category: CoinCategory,
+        timePeriod: TimeDuration,
+    ): BigDecimal? =
+        when (timePeriod) {
             TimeDuration.OneDay -> category.diff24H
             TimeDuration.SevenDay -> category.diff1W
             TimeDuration.ThirtyDay -> category.diff1M
             else -> null
         }
-    }
 
-    private fun List<TopSectorWithDiff>.sort(sortingField: SortingField) = when (sortingField) {
-        SortingField.HighestCap -> sortedByDescendingNullLast { it.coinCategory.marketCap }
-        SortingField.LowestCap -> sortedByNullLast { it.coinCategory.marketCap }
-        SortingField.TopGainers -> sortedByDescendingNullLast { it.diff }
-        SortingField.TopLosers -> sortedByNullLast { it.diff }
-        else -> this
-    }
+    private fun List<TopSectorWithDiff>.sort(sortingField: SortingField) =
+        when (sortingField) {
+            SortingField.HighestCap -> sortedByDescendingNullLast { it.coinCategory.marketCap }
+            SortingField.LowestCap -> sortedByNullLast { it.coinCategory.marketCap }
+            SortingField.TopGainers -> sortedByDescendingNullLast { it.diff }
+            SortingField.TopLosers -> sortedByNullLast { it.diff }
+            else -> this
+        }
 
     fun refresh() {
         viewModelScope.launch {
@@ -149,7 +158,7 @@ class TopSectorsViewModel(
         stat(
             page = StatPage.Markets,
             section = StatSection.Pairs,
-            event = StatEvent.Refresh
+            event = StatEvent.Refresh,
         )
     }
 
@@ -175,20 +184,19 @@ class TopSectorsViewModel(
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TopSectorsViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            TopSectorsViewModel(
                 App.currencyManager,
                 TopSectorsRepository(App.marketKit),
-                App.numberFormatter
+                App.numberFormatter,
             ) as T
-        }
     }
 }
 
 data class TopSectorWithDiff(
     val coinCategory: CoinCategory,
     val diff: BigDecimal?,
-    val topCoins: List<FullCoin>
+    val topCoins: List<FullCoin>,
 )
 
 data class TopSectorsUiState(

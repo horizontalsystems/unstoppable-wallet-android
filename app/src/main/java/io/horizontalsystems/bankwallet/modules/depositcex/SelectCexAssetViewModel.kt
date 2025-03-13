@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class SelectCexAssetViewModel(
     private val cexAssetManager: CexAssetManager,
     private val accountManager: IAccountManager,
-    private val withBalance: Boolean
+    private val withBalance: Boolean,
 ) : ViewModelUiState<SelectCexAssetUiState>() {
     private var allItems: List<DepositCexModule.CexCoinViewItem> = listOf()
     private var loading = true
@@ -29,24 +29,26 @@ class SelectCexAssetViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             allItems = accountManager.activeAccount?.let {
-                val assets = if (withBalance)
-                    cexAssetManager.getWithBalance(it)
-                else
-                    cexAssetManager.getAllForAccount(it)
+                val assets =
+                    if (withBalance) {
+                        cexAssetManager.getWithBalance(it)
+                    } else {
+                        cexAssetManager.getAllForAccount(it)
+                    }
 
-                assets.map { cexAsset ->
-                    DepositCexModule.CexCoinViewItem(
-                        title = cexAsset.id,
-                        subtitle = cexAsset.name,
-                        coinIconUrl = cexAsset.coin?.imageUrl,
-                        alternativeCoinUrl = cexAsset.coin?.alternativeImageUrl,
-                        coinIconPlaceholder = R.drawable.coin_placeholder,
-                        cexAsset = cexAsset,
-                        depositEnabled = cexAsset.depositEnabled,
-                        withdrawEnabled = cexAsset.withdrawEnabled,
-                    )
-                }
-                    .sortedBy { it.title }
+                assets
+                    .map { cexAsset ->
+                        DepositCexModule.CexCoinViewItem(
+                            title = cexAsset.id,
+                            subtitle = cexAsset.name,
+                            coinIconUrl = cexAsset.coin?.imageUrl,
+                            alternativeCoinUrl = cexAsset.coin?.alternativeImageUrl,
+                            coinIconPlaceholder = R.drawable.coin_placeholder,
+                            cexAsset = cexAsset,
+                            depositEnabled = cexAsset.depositEnabled,
+                            withdrawEnabled = cexAsset.withdrawEnabled,
+                        )
+                    }.sortedBy { it.title }
             } ?: listOf()
 
             items = allItems
@@ -55,31 +57,39 @@ class SelectCexAssetViewModel(
         }
     }
 
-    override fun createState() = SelectCexAssetUiState(
-        loading = loading,
-        items = items
-    )
+    override fun createState() =
+        SelectCexAssetUiState(
+            loading = loading,
+            items = items,
+        )
 
     fun onEnterQuery(q: String) {
         searchJob?.cancel()
-        searchJob = viewModelScope.launch(Dispatchers.IO) {
-            items = allItems.filter {
-                it.title.contains(q, true) || it.subtitle.contains(q, true)
+        searchJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                items =
+                    allItems.filter {
+                        it.title.contains(q, true) || it.subtitle.contains(q, true)
+                    }
+                ensureActive()
+                emitState()
             }
-            ensureActive()
-            emitState()
-        }
     }
 
-    class Factory(private val withBalance: Boolean) : ViewModelProvider.Factory {
+    class Factory(
+        private val withBalance: Boolean,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SelectCexAssetViewModel(App.cexAssetManager, App.accountManager, withBalance) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            SelectCexAssetViewModel(
+                App.cexAssetManager,
+                App.accountManager,
+                withBalance,
+            ) as T
     }
 }
 
 data class SelectCexAssetUiState(
     val loading: Boolean,
-    val items: List<DepositCexModule.CexCoinViewItem>?
+    val items: List<DepositCexModule.CexCoinViewItem>?,
 )

@@ -68,10 +68,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
 class MarketPlatformFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
-
         withInput<Platform>(navController) { platform ->
             val factory = MarketPlatformModule.Factory(platform)
 
@@ -84,7 +82,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
                     navController.slideFromRight(R.id.coinFragment, arguments)
 
                     stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
-                }
+                },
             )
         }
     }
@@ -100,7 +98,6 @@ private fun PlatformScreen(
     viewModel: MarketPlatformViewModel = viewModel(factory = factory),
     chartViewModel: ChartViewModel = viewModel(factory = factory),
 ) {
-
     val uiState = viewModel.uiState
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
@@ -117,25 +114,27 @@ private fun PlatformScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onCloseButtonClick)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
-                            isInfoBottomSheetVisible = true
-                        },
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                coroutineScope.launch {
+                                    infoModalBottomSheetState.show()
+                                }
+                                isInfoBottomSheetVisible = true
+                            },
+                        ),
+                    ),
             )
         },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .navigationBarsPadding()
+            modifier =
+                Modifier
+                    .padding(innerPaddings)
+                    .navigationBarsPadding(),
         ) {
             HSSwipeRefresh(
                 refreshing = uiState.isRefreshing,
@@ -144,7 +143,7 @@ private fun PlatformScreen(
                     chartViewModel.refresh()
 
                     stat(page = StatPage.TopPlatform, event = StatEvent.Refresh)
-                }
+                },
             ) {
                 Crossfade(uiState.viewState, label = "") { state ->
                     when (state) {
@@ -158,7 +157,7 @@ private fun PlatformScreen(
                                 onClick = {
                                     viewModel.onErrorClick()
                                     chartViewModel.refresh()
-                                }
+                                },
                             )
                         }
 
@@ -172,7 +171,7 @@ private fun PlatformScreen(
 
                                         stat(
                                             page = StatPage.TopPlatform,
-                                            event = StatEvent.AddToWatchlist(uid)
+                                            event = StatEvent.AddToWatchlist(uid),
                                         )
                                     },
                                     onRemoveFavorite = { uid ->
@@ -180,7 +179,7 @@ private fun PlatformScreen(
 
                                         stat(
                                             page = StatPage.TopPlatform,
-                                            event = StatEvent.RemoveFromWatchlist(uid)
+                                            event = StatEvent.RemoveFromWatchlist(uid),
                                         )
                                     },
                                     onCoinClick = onCoinClick,
@@ -195,11 +194,11 @@ private fun PlatformScreen(
                                                     uiState.sortingField.titleResId,
                                                     onOptionClick = {
                                                         openSortingSelector = true
-                                                    }
+                                                    },
                                                 )
                                             }
                                         }
-                                    }
+                                    },
                                 )
                                 if (scrollToTopAfterUpdate) {
                                     scrollToTopAfterUpdate = false
@@ -221,42 +220,49 @@ private fun PlatformScreen(
                 openSortingSelector = false
                 stat(
                     page = StatPage.TopPlatform,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
+                    event = StatEvent.SwitchSortType(selected.statSortType),
                 )
             },
-            { openSortingSelector = false }
+            { openSortingSelector = false },
         )
     }
     if (isInfoBottomSheetVisible) {
         InfoBottomSheet(
             icon = R.drawable.ic_info_24,
             title = platform.name,
-            description = stringResource(
-                R.string.MarketPlatformCoins_PlatformEcosystemDescription,
-                platform.name
-            ),
+            description =
+                stringResource(
+                    R.string.MarketPlatformCoins_PlatformEcosystemDescription,
+                    platform.name,
+                ),
             bottomSheetState = infoModalBottomSheetState,
             hideBottomSheet = {
                 coroutineScope.launch {
                     infoModalBottomSheetState.hide()
                 }
                 isInfoBottomSheetVisible = false
-            }
+            },
         )
     }
 }
 
 @Composable
-private fun HeaderContent(title: String, description: String, image: ImageSource) {
+private fun HeaderContent(
+    title: String,
+    description: String,
+    image: ImageSource,
+) {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .background(ComposeAppTheme.colors.tyler)
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .background(ComposeAppTheme.colors.tyler),
     ) {
         Column(
-            modifier = Modifier
-                .padding(top = 12.dp, bottom = 16.dp)
-                .weight(1f)
+            modifier =
+                Modifier
+                    .padding(top = 12.dp, bottom = 16.dp)
+                    .weight(1f),
         ) {
             title3_leah(
                 text = title,
@@ -265,16 +271,17 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
                 text = description,
                 modifier = Modifier.padding(top = 4.dp),
                 maxLines = 3,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
         Image(
             painter = image.painter(),
             contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(start = 24.dp)
-                .size(32.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 24.dp)
+                    .size(32.dp),
         )
     }
 }
@@ -286,36 +293,38 @@ fun InfoBottomSheet(
     title: String,
     description: String,
     hideBottomSheet: () -> Unit,
-    bottomSheetState: SheetState
+    bottomSheetState: SheetState,
 ) {
     ModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        containerColor = ComposeAppTheme.colors.transparent,
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(icon),
             title = title,
             titleColor = ComposeAppTheme.colors.leah,
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
-            onCloseClick = hideBottomSheet
+            onCloseClick = hideBottomSheet,
         ) {
             Column(
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 24.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(vertical = 12.dp, horizontal = 24.dp)
+                        .fillMaxWidth(),
             ) {
                 body_bran(
                     text = description,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
                 )
                 VSpacer(56.dp)
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Close),
-                    onClick = hideBottomSheet
+                    onClick = hideBottomSheet,
                 )
                 VSpacer(32.dp)
             }
@@ -330,7 +339,7 @@ fun HeaderContentPreview() {
         HeaderContent(
             "Solana Ecosystem",
             "Market cap of all protocols on the Solana chain",
-            ImageSource.Local(R.drawable.logo_ethereum_24)
+            ImageSource.Local(R.drawable.logo_ethereum_24),
         )
     }
 }

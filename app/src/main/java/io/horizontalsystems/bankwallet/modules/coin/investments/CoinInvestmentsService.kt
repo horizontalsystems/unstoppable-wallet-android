@@ -16,7 +16,7 @@ import kotlinx.coroutines.rx2.await
 class CoinInvestmentsService(
     private val coinUid: String,
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: CurrencyManager
+    private val currencyManager: CurrencyManager,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 

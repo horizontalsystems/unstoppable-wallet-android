@@ -13,18 +13,18 @@ import io.horizontalsystems.core.helpers.LocaleType
 
 class LanguageSettingsViewModel(
     private val languageManager: LanguageManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
 ) : ViewModel() {
-
-    val languageItems = LocaleType.values().map {
-        LanguageViewItem(
-            it,
-            languageManager.getName(it.tag),
-            languageManager.getNativeName(it.tag),
-            it.icon,
-            currentLocaleTag == it.tag
-        )
-    }
+    val languageItems =
+        LocaleType.values().map {
+            LanguageViewItem(
+                it,
+                languageManager.getName(it.tag),
+                languageManager.getNativeName(it.tag),
+                it.icon,
+                currentLocaleTag == it.tag,
+            )
+        }
 
     private var currentLocaleTag: String
         get() = languageManager.currentLocaleTag
@@ -49,5 +49,4 @@ class LanguageSettingsViewModel(
             stat(page = StatPage.Language, event = StatEvent.SwitchLanguage(localeType.tag))
         }
     }
-
 }

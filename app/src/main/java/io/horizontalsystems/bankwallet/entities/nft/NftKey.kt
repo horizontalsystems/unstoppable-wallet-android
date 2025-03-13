@@ -5,5 +5,5 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 data class NftKey(
     val account: Account,
-    val blockchainType: BlockchainType
+    val blockchainType: BlockchainType,
 )

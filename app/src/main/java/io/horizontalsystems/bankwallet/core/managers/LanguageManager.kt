@@ -2,10 +2,9 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.helpers.LocaleHelper
-import java.util.*
+import java.util.Locale
 
 class LanguageManager {
-
     val fallbackLocale by LocaleHelper::fallbackLocale
 
     var currentLocale: Locale = App.instance.getLocale()
@@ -27,15 +26,14 @@ class LanguageManager {
     val currentLanguage: String
         get() = currentLocale.language
 
-    fun getName(tag: String): String {
-        return Locale.forLanguageTag(tag)
+    fun getName(tag: String): String =
+        Locale
+            .forLanguageTag(tag)
             .getDisplayName(currentLocale)
             .replaceFirstChar(Char::uppercase)
-    }
 
     fun getNativeName(tag: String): String {
         val locale = Locale.forLanguageTag(tag)
         return locale.getDisplayName(locale).replaceFirstChar(Char::uppercase)
     }
-
 }

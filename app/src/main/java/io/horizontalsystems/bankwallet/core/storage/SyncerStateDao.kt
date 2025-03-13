@@ -8,11 +8,9 @@ import io.horizontalsystems.bankwallet.entities.SyncerState
 
 @Dao
 interface SyncerStateDao {
-
     @Query("SELECT * FROM SyncerState WHERE `key` = :key")
     fun get(key: String): SyncerState?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(state: SyncerState)
-
 }

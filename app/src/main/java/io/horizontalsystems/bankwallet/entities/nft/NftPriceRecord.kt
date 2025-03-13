@@ -5,7 +5,7 @@ import java.math.BigDecimal
 
 data class NftPriceRecord(
     val tokenQueryId: String,
-    val value: BigDecimal
+    val value: BigDecimal,
 ) {
     constructor(nftPrice: NftPrice) : this(nftPrice.token.tokenQuery.id, nftPrice.value)
 }

@@ -12,22 +12,20 @@ import java.math.BigDecimal
 import java.util.Date
 
 class DatabaseConverters {
-
     private val gson by lazy { Gson() }
 
     // BigDecimal
 
     @TypeConverter
-    fun fromString(value: String?): BigDecimal? = try {
-        value?.let { BigDecimal(it) }
-    } catch (e: Exception) {
-        null
-    }
+    fun fromString(value: String?): BigDecimal? =
+        try {
+            value?.let { BigDecimal(it) }
+        } catch (e: Exception) {
+            null
+        }
 
     @TypeConverter
-    fun toString(bigDecimal: BigDecimal?): String? {
-        return bigDecimal?.toPlainString()
-    }
+    fun toString(bigDecimal: BigDecimal?): String? = bigDecimal?.toPlainString()
 
     // SecretString
 
@@ -43,9 +41,7 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun encryptSecretString(secretString: SecretString?): String? {
-        return secretString?.value?.let { App.encryptionManager.encrypt(it) }
-    }
+    fun encryptSecretString(secretString: SecretString?): String? = secretString?.value?.let { App.encryptionManager.encrypt(it) }
 
     // SecretList
 
@@ -61,75 +57,52 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun encryptSecretList(secretList: SecretList?): String? {
-        return secretList?.list?.joinToString(separator = ",")?.let {
+    fun encryptSecretList(secretList: SecretList?): String? =
+        secretList?.list?.joinToString(separator = ",")?.let {
             App.encryptionManager.encrypt(it)
         }
-    }
 
     @TypeConverter
-    fun fromDate(date: Date): Long {
-        return date.time
-    }
+    fun fromDate(date: Date): Long = date.time
 
     @TypeConverter
-    fun toDate(timestamp: Long): Date {
-        return Date(timestamp)
-    }
+    fun toDate(timestamp: Long): Date = Date(timestamp)
 
     @TypeConverter
-    fun fromBlockchainType(blockchainType: BlockchainType): String {
-        return blockchainType.uid
-    }
+    fun fromBlockchainType(blockchainType: BlockchainType): String = blockchainType.uid
 
     @TypeConverter
-    fun toBlockchainType(string: String): BlockchainType {
-        return BlockchainType.fromUid(string)
-    }
+    fun toBlockchainType(string: String): BlockchainType = BlockchainType.fromUid(string)
 
     @TypeConverter
-    fun fromNftUid(nftUid: NftUid): String {
-        return nftUid.uid
-    }
+    fun fromNftUid(nftUid: NftUid): String = nftUid.uid
 
     @TypeConverter
-    fun toNftUid(string: String): NftUid {
-        return NftUid.fromUid(string)
-    }
+    fun toNftUid(string: String): NftUid = NftUid.fromUid(string)
 
     @TypeConverter
-    fun fromCexDepositNetworkList(networks: List<CexDepositNetworkRaw>): String {
-        return gson.toJson(networks)
-    }
+    fun fromCexDepositNetworkList(networks: List<CexDepositNetworkRaw>): String = gson.toJson(networks)
 
     @TypeConverter
-    fun toCexDepositNetworkList(json: String): List<CexDepositNetworkRaw>? {
-        return gson.fromJson(
+    fun toCexDepositNetworkList(json: String): List<CexDepositNetworkRaw>? =
+        gson.fromJson(
             json,
-            object : TypeToken<List<CexDepositNetworkRaw>>() {}.type
+            object : TypeToken<List<CexDepositNetworkRaw>>() {}.type,
         )
-    }
 
     @TypeConverter
-    fun fromCexWithdrawNetworkList(networks: List<CexWithdrawNetworkRaw>): String {
-        return gson.toJson(networks)
-    }
+    fun fromCexWithdrawNetworkList(networks: List<CexWithdrawNetworkRaw>): String = gson.toJson(networks)
 
     @TypeConverter
-    fun toCexWithdrawNetworkList(json: String): List<CexWithdrawNetworkRaw>? {
-        return gson.fromJson(
+    fun toCexWithdrawNetworkList(json: String): List<CexWithdrawNetworkRaw>? =
+        gson.fromJson(
             json,
-            object : TypeToken<List<CexWithdrawNetworkRaw>>() {}.type
+            object : TypeToken<List<CexWithdrawNetworkRaw>>() {}.type,
         )
-    }
 
     @TypeConverter
-    fun fromMap(v: Map<String, String?>): String {
-        return gson.toJson(v)
-    }
+    fun fromMap(v: Map<String, String?>): String = gson.toJson(v)
 
     @TypeConverter
-    fun toMap(v: String): Map<String, String?> {
-        return gson.fromJson(v, object : TypeToken<Map<String, String?>>() {}.type)
-    }
+    fun toMap(v: String): Map<String, String?> = gson.fromJson(v, object : TypeToken<Map<String, String?>>() {}.type)
 }

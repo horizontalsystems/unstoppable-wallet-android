@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 
 class TokenBalanceFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Wallet>(navController) { wallet ->
@@ -21,7 +20,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             TokenBalanceScreen(
                 viewModel,
                 transactionsViewModel,
-                navController
+                navController,
             )
         }
     }

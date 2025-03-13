@@ -6,17 +6,20 @@ import android.graphics.Path
 import android.graphics.RectF
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartCurve2(private val config: ChartConfig) : ChartDraw {
+class ChartCurve2(
+    private val config: ChartConfig,
+) : ChartDraw {
     override var isVisible: Boolean = true
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
-    private val paint = Paint().apply {
-        style = Paint.Style.STROKE
-        color = config.curveColor
-        strokeWidth = config.strokeWidth
-        isAntiAlias = true
-    }
+    private val paint =
+        Paint().apply {
+            style = Paint.Style.STROKE
+            color = config.curveColor
+            strokeWidth = config.strokeWidth
+            isAntiAlias = true
+        }
 
     private var curveAnimator: CurveAnimator? = null
 
@@ -55,5 +58,4 @@ class ChartCurve2(private val config: ChartConfig) : ChartDraw {
 
         canvas.drawPath(path, paint)
     }
-
 }

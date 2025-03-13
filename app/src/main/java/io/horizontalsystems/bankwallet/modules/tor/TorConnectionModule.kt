@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
 object TorConnectionModule {
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TorConnectionViewModel(App.torKitManager, App.connectivityManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            TorConnectionViewModel(App.torKitManager, App.connectivityManager) as T
     }
 
     data class TorViewState(
@@ -19,5 +17,4 @@ object TorConnectionModule {
         val torIsActive: Boolean,
         val showNetworkConnectionError: Boolean,
     )
-
 }

@@ -40,43 +40,47 @@ import io.horizontalsystems.core.helpers.HudHelper
 fun LocalBackupPasswordScreen(
     backupType: BackupType,
     onBackClick: () -> Unit,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
 ) {
-    val viewModel = viewModel<BackupLocalPasswordViewModel>(factory = BackupLocalPasswordModule.Factory(backupType))
+    val viewModel =
+        viewModel<BackupLocalPasswordViewModel>(
+            factory = BackupLocalPasswordModule.Factory(backupType),
+        )
 
     val view = LocalView.current
     val context = LocalContext.current
     var hidePassphrase by remember { mutableStateOf(true) }
     val uiState = viewModel.uiState
 
-    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        uri?.let {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                uiState.backupJson?.let { backupJson ->
-                    try {
-                        outputStream.bufferedWriter().use { bw ->
-                            bw.write(backupJson)
-                            bw.flush()
+    val backupLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            uri?.let {
+                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    uiState.backupJson?.let { backupJson ->
+                        try {
+                            outputStream.bufferedWriter().use { bw ->
+                                bw.write(backupJson)
+                                bw.flush()
 
-                            HudHelper.showSuccessMessage(
-                                contenView = view,
-                                resId = R.string.LocalBackup_BackupSaved,
-                                duration = SnackbarDuration.SHORT,
-                                icon = R.drawable.ic_download_24,
-                                iconTint = R.color.white
-                            )
+                                HudHelper.showSuccessMessage(
+                                    contenView = view,
+                                    resId = R.string.LocalBackup_BackupSaved,
+                                    duration = SnackbarDuration.SHORT,
+                                    icon = R.drawable.ic_download_24,
+                                    iconTint = R.color.white,
+                                )
 
-                            viewModel.backupFinished()
+                                viewModel.backupFinished()
+                            }
+                        } catch (e: Throwable) {
+                            HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                         }
-                    } catch (e: Throwable) {
-                        HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                     }
                 }
+            } ?: run {
+                viewModel.backupCanceled()
             }
-        } ?: run {
-            viewModel.backupCanceled()
         }
-    }
 
     if (uiState.error != null) {
         Toast.makeText(App.instance, uiState.error, Toast.LENGTH_SHORT).show()
@@ -101,19 +105,19 @@ fun LocalBackupPasswordScreen(
                 title = stringResource(R.string.LocalBackup_SetPassword),
                 navigationIcon = {
                     HsBackButton(onClick = onBackClick)
-                }
+                },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(
+                            rememberScrollState(),
+                        ),
             ) {
-
                 InfoText(text = stringResource(R.string.LocalBackup_ProtextBackupWithPasswordInfo))
                 VSpacer(24.dp)
                 FormsInputPassword(
@@ -125,7 +129,7 @@ fun LocalBackupPasswordScreen(
                     hide = hidePassphrase,
                     onToggleHide = {
                         hidePassphrase = !hidePassphrase
-                    }
+                    },
                 )
                 VSpacer(16.dp)
                 FormsInputPassword(
@@ -137,21 +141,21 @@ fun LocalBackupPasswordScreen(
                     hide = hidePassphrase,
                     onToggleHide = {
                         hidePassphrase = !hidePassphrase
-                    }
+                    },
                 )
                 VSpacer(32.dp)
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.LocalBackup_DontForgetPasswordWarning)
+                    text = stringResource(R.string.LocalBackup_DontForgetPasswordWarning),
                 )
                 VSpacer(32.dp)
-
             }
             ButtonsGroupWithShade {
                 ButtonPrimaryYellowWithSpinner(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.LocalBackup_SaveAndBackup),
                     showSpinner = uiState.showButtonSpinner,
                     enabled = uiState.showButtonSpinner.not(),

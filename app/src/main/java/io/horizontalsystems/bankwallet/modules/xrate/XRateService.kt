@@ -10,19 +10,18 @@ import kotlinx.coroutines.rx2.asFlow
 
 class XRateService(
     private val marketKit: MarketKitWrapper,
-    private val currency: Currency
+    private val currency: Currency,
 ) : ViewModel() {
-
-    fun getRate(coinUid: String): CurrencyValue? {
-        return marketKit.coinPrice(coinUid, currency.code)?.let {
+    fun getRate(coinUid: String): CurrencyValue? =
+        marketKit.coinPrice(coinUid, currency.code)?.let {
             CurrencyValue(currency, it.value)
         }
-    }
 
-    fun getRateFlow(coinUid: String): Flow<CurrencyValue> {
-        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code).asFlow()
+    fun getRateFlow(coinUid: String): Flow<CurrencyValue> =
+        marketKit
+            .coinPriceObservable("xrate-service", coinUid, currency.code)
+            .asFlow()
             .map {
                 CurrencyValue(currency, it.value)
             }
-    }
 }

@@ -8,18 +8,21 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiState<GuidesUiState>() {
+class GuidesViewModel(
+    private val repository: GuidesRepository,
+) : ViewModelUiState<GuidesUiState>() {
     private var viewState: ViewState = ViewState.Loading
     private var categories = listOf<GuideCategory>()
     private var selectedCategory: GuideCategory? = null
     private var expandedSections = setOf<String>()
 
-    override fun createState() = GuidesUiState(
-        viewState = viewState,
-        categories = categories,
-        selectedCategory = selectedCategory,
-        expandedSections = expandedSections
-    )
+    override fun createState() =
+        GuidesUiState(
+            viewState = viewState,
+            categories = categories,
+            selectedCategory = selectedCategory,
+            expandedSections = expandedSections,
+        )
 
     init {
         viewModelScope.launch {
@@ -43,12 +46,16 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiSta
         emitState()
     }
 
-    fun toggleSection(sectionTitle: String, expanded: Boolean) {
-        expandedSections = if (expanded) {
-            expandedSections.minus(sectionTitle)
-        } else {
-            expandedSections.plus(sectionTitle)
-        }
+    fun toggleSection(
+        sectionTitle: String,
+        expanded: Boolean,
+    ) {
+        expandedSections =
+            if (expanded) {
+                expandedSections.minus(sectionTitle)
+            } else {
+                expandedSections.plus(sectionTitle)
+            }
 
         emitState()
     }
@@ -69,5 +76,5 @@ data class GuidesUiState(
     val viewState: ViewState,
     val categories: List<GuideCategory>,
     val selectedCategory: GuideCategory?,
-    val expandedSections: Set<String>
+    val expandedSections: Set<String>,
 )

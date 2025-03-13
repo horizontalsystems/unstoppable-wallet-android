@@ -15,7 +15,10 @@ import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 abstract class EvmSwapProvider : IMultiSwapProvider {
-    protected suspend fun getAllowance(token: Token, spenderAddress: Address): BigDecimal? {
+    protected suspend fun getAllowance(
+        token: Token,
+        spenderAddress: Address,
+    ): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
 
         val eip20Adapter = App.adapterManager.getAdapterForToken(token)
@@ -35,10 +38,11 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
         val eip20Adapter = App.adapterManager.getAdapterForToken(token)
         if (eip20Adapter !is Eip20Adapter) return null
 
-        val approveTransaction = eip20Adapter.pendingTransactions
-            .filterIsInstance<ApproveTransactionRecord>()
-            .filter { it.spender.equals(routerAddress.eip55, true) }
-            .maxByOrNull { it.timestamp }
+        val approveTransaction =
+            eip20Adapter.pendingTransactions
+                .filterIsInstance<ApproveTransactionRecord>()
+                .filter { it.spender.equals(routerAddress.eip55, true) }
+                .maxByOrNull { it.timestamp }
 
         val revoke = allowance > BigDecimal.ZERO && isUsdt(token)
 
@@ -48,15 +52,16 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
                 token,
                 routerAddress.eip55,
                 revokeInProgress,
-                allowance
+                allowance,
             )
         } else {
-            val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue
+            val approveInProgress =
+                approveTransaction != null && !approveTransaction.value.zeroValue
             ActionApprove(
                 amountIn,
                 routerAddress.eip55,
                 token,
-                approveInProgress
+                approveInProgress,
             )
         }
     }
@@ -64,9 +69,8 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
     private fun isUsdt(token: Token): Boolean {
         val tokenType = token.type
 
-        return token.blockchainType is BlockchainType.Ethereum
-            && tokenType is TokenType.Eip20
-            && tokenType.address.lowercase() == "0xdac17f958d2ee523a2206206994597c13d831ec7"
+        return token.blockchainType is BlockchainType.Ethereum &&
+            tokenType is TokenType.Eip20 &&
+            tokenType.address.lowercase() == "0xdac17f958d2ee523a2206206994597c13d831ec7"
     }
-
 }

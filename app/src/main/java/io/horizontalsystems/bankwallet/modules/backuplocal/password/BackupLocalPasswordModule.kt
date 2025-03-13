@@ -7,17 +7,17 @@ import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.entities.DataState
 
 object BackupLocalPasswordModule {
-
-    class Factory(private val backupType: BackupType) : ViewModelProvider.Factory {
+    class Factory(
+        private val backupType: BackupType,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BackupLocalPasswordViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            BackupLocalPasswordViewModel(
                 backupType,
                 PassphraseValidator(),
                 App.accountManager,
                 App.backupProvider,
             ) as T
-        }
     }
 
     data class UiState(
@@ -26,6 +26,6 @@ object BackupLocalPasswordModule {
         val showButtonSpinner: Boolean,
         val backupJson: String?,
         val closeScreen: Boolean,
-        val error: String?
+        val error: String?,
     )
 }

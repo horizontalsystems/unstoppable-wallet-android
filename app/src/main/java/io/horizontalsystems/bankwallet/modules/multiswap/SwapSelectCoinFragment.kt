@@ -19,26 +19,29 @@ class SwapSelectCoinFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val token: Token?, val title: String) : Parcelable
-
+    data class Input(
+        val token: Token?,
+        val title: String,
+    ) : Parcelable
 }
 
 @Composable
 private fun SwapSelectCoinScreen(
     navController: NavController,
     token: Token?,
-    title: String?
+    title: String?,
 ) {
-    val viewModel = viewModel<SwapSelectCoinViewModel>(
-        factory = SwapSelectCoinViewModel.Factory(token)
-    )
+    val viewModel =
+        viewModel<SwapSelectCoinViewModel>(
+            factory = SwapSelectCoinViewModel.Factory(token),
+        )
     val uiState = viewModel.uiState
 
     SelectSwapCoinDialogScreen(
         title = title ?: "",
         coinBalanceItems = uiState.coinBalanceItems,
         onSearchTextChanged = viewModel::setQuery,
-        onClose = navController::popBackStack
+        onClose = navController::popBackStack,
     ) {
         navController.setNavigationResultX(it.token)
         navController.popBackStack()

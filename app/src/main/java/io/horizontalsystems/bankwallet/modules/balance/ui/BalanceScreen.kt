@@ -15,15 +15,16 @@ fun BalanceScreen(navController: NavController) {
 
     when (val tmpAccount = viewModel.balanceScreenState) {
         BalanceScreenState.NoAccount -> BalanceNoAccount(navController)
-        is BalanceScreenState.HasAccount -> when (tmpAccount.accountViewItem.type) {
-            is AccountType.Cex -> {
-                BalanceForAccountCex(navController, tmpAccount.accountViewItem)
-            }
+        is BalanceScreenState.HasAccount ->
+            when (tmpAccount.accountViewItem.type) {
+                is AccountType.Cex -> {
+                    BalanceForAccountCex(navController, tmpAccount.accountViewItem)
+                }
 
-            else -> {
-                BalanceForAccount(navController, tmpAccount.accountViewItem)
+                else -> {
+                    BalanceForAccount(navController, tmpAccount.accountViewItem)
+                }
             }
-        }
 
         else -> {}
     }

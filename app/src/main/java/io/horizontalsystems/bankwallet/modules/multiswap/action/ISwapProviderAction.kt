@@ -7,13 +7,16 @@ interface ISwapProviderAction {
     val inProgress: Boolean
 
     @Composable
-    fun getTitle() : String
+    fun getTitle(): String
 
     @Composable
-    fun getTitleInProgress() : String
+    fun getTitleInProgress(): String
 
     @Composable
-    fun getDescription() : String? = null
+    fun getDescription(): String? = null
 
-    fun execute(navController: NavController, onActionCompleted: () -> Unit)
+    fun execute(
+        navController: NavController,
+        onActionCompleted: () -> Unit,
+    )
 }

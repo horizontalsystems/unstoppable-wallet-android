@@ -19,37 +19,40 @@ class MetricsPageChartService(
     private val metricsType: MetricsType,
     private val globalMarketRepository: GlobalMarketRepository,
 ) : AbstractChartService() {
-
     override val initialChartInterval: HsTimePeriod = HsTimePeriod.Day1
 
-    override val chartIntervals = listOf(
-        HsTimePeriod.Day1,
-        HsTimePeriod.Week1,
-        HsTimePeriod.Month1,
-        HsTimePeriod.Month3,
-        HsTimePeriod.Month6,
-        HsTimePeriod.Year1,
-        HsTimePeriod.Year2,
-    )
+    override val chartIntervals =
+        listOf(
+            HsTimePeriod.Day1,
+            HsTimePeriod.Week1,
+            HsTimePeriod.Month1,
+            HsTimePeriod.Month3,
+            HsTimePeriod.Month6,
+            HsTimePeriod.Year1,
+            HsTimePeriod.Year2,
+        )
 
     override val chartViewType = ChartViewType.Line
 
     override fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
-        return globalMarketRepository.getGlobalMarketPoints(
-            currency.code,
-            chartInterval,
-            metricsType
-        ).map {
-            ChartPointsWrapper(it)
-        }
-    }
+    ): Single<ChartPointsWrapper> =
+        globalMarketRepository
+            .getGlobalMarketPoints(
+                currency.code,
+                chartInterval,
+                metricsType,
+            ).map {
+                ChartPointsWrapper(it)
+            }
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = metricsType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = metricsType.statPage,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod),
+        )
     }
 }

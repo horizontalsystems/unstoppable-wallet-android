@@ -34,18 +34,20 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
 
                 ComposeAppTheme {
                     WCAccountTypeNotSupportedScreen(
-                        accountTypeDescription = navController.getInput<Input>()?.accountTypeDescription ?: "",
+                        accountTypeDescription =
+                            navController.getInput<Input>()?.accountTypeDescription
+                                ?: "",
                         onCloseClick = {
                             navController.popBackStack()
                         },
@@ -53,41 +55,47 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
                             navController.popBackStack()
                             navController.slideFromRight(
                                 R.id.manageAccountsFragment,
-                                ManageAccountsModule.Mode.Manage
+                                ManageAccountsModule.Mode.Manage,
                             )
-                        }
+                        },
                     )
                 }
             }
         }
-    }
 
     @Parcelize
-    data class Input(val accountTypeDescription: String) : Parcelable
+    data class Input(
+        val accountTypeDescription: String,
+    ) : Parcelable
 }
 
 @Composable
 fun WCAccountTypeNotSupportedScreen(
     accountTypeDescription: String,
     onCloseClick: () -> Unit,
-    onSwitchClick: () -> Unit
+    onSwitchClick: () -> Unit,
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            text = stringResource(id = R.string.WalletConnect_NotSupportedDescription, accountTypeDescription)
+            text =
+                stringResource(
+                    id = R.string.WalletConnect_NotSupportedDescription,
+                    accountTypeDescription,
+                ),
         )
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(vertical = 20.dp, horizontal = 24.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(vertical = 20.dp, horizontal = 24.dp)
+                    .fillMaxWidth(),
             title = stringResource(R.string.Button_Switch),
-            onClick = onSwitchClick
+            onClick = onSwitchClick,
         )
         Spacer(Modifier.height(12.dp))
     }

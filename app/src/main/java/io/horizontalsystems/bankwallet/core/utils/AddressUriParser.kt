@@ -10,14 +10,23 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import java.net.URI
 
-
-class AddressUriParser(private val blockchainType: BlockchainType?, private val tokenType: TokenType?) : IAddressParser {
-    private fun pair(type: BlockchainType, s2: String?): String {
+class AddressUriParser(
+    private val blockchainType: BlockchainType?,
+    private val tokenType: TokenType?,
+) : IAddressParser {
+    private fun pair(
+        type: BlockchainType,
+        s2: String?,
+    ): String {
         val prefix = if (type.removeScheme) null else type.uriScheme
         return listOfNotNull(prefix, s2).joinToString(separator = ":")
     }
 
-    private fun fullAddress(scheme: String, address: String, uriBlockchainUid: String? = null): String {
+    private fun fullAddress(
+        scheme: String,
+        address: String,
+        uriBlockchainUid: String? = null,
+    ): String {
         // there is no explicit indication of the blockchain in the uri. We use the rules of the blockchain parser
         uriBlockchainUid ?: run {
             // if has blockchainType check if needed prefix
@@ -38,15 +47,17 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     }
 
     override fun parse(addressUri: String): AddressUriResult {
-        val uri = try {
-            URI(addressUri)
-        } catch (e: Throwable) {
-            null
-        } ?: return AddressUriResult.WrongUri
+        val uri =
+            try {
+                URI(addressUri)
+            } catch (e: Throwable) {
+                null
+            } ?: return AddressUriResult.WrongUri
 
         val schemeSpecificPart = uri.schemeSpecificPart
 
-        val pathEndIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it else schemeSpecificPart.length }
+        val pathEndIndex =
+            schemeSpecificPart.indexOf('?').let { if (it != -1) it else schemeSpecificPart.length }
         val path = schemeSpecificPart.substring(0, pathEndIndex)
 
         val scheme = uri.scheme ?: return AddressUriResult.NoUri
@@ -59,7 +70,10 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
 
         val parsedUri = AddressUri(scheme = scheme)
 
-        val queryStartIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it + 1 else schemeSpecificPart.length }
+        val queryStartIndex =
+            schemeSpecificPart
+                .indexOf('?')
+                .let { if (it != -1) it + 1 else schemeSpecificPart.length }
         val query = schemeSpecificPart.substring(queryStartIndex)
 
         val parameters = parseQueryParameters(query)
@@ -87,7 +101,8 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
             }
         }
 
-        parsedUri.address = fullAddress(scheme, path, parsedUri.value(AddressUri.Field.BlockchainUid))
+        parsedUri.address =
+            fullAddress(scheme, path, parsedUri.value(AddressUri.Field.BlockchainUid))
         return AddressUriResult.Uri(parsedUri)
     }
 
@@ -106,9 +121,13 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     }
 
     fun uri(addressUri: AddressUri): String {
-        val uriBuilder = Uri.Builder()
-            .scheme(blockchainType?.uriScheme)
-            .path(addressUri.address.removePrefix(blockchainType?.uriScheme ?: "").removePrefix(":"))
+        val uriBuilder =
+            Uri
+                .Builder()
+                .scheme(blockchainType?.uriScheme)
+                .path(
+                    addressUri.address.removePrefix(blockchainType?.uriScheme ?: "").removePrefix(":"),
+                )
 
         for ((key, value) in addressUri.parameters) {
             uriBuilder.appendQueryParameter(key.value, value)
@@ -126,16 +145,20 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     }
 
     companion object {
-        fun hasUriPrefix(text: String): Boolean {
-            return text.split(":").size > 1
-        }
+        fun hasUriPrefix(text: String): Boolean = text.split(":").size > 1
     }
 }
 
 sealed class AddressUriResult {
     object WrongUri : AddressUriResult()
+
     object InvalidBlockchainType : AddressUriResult()
+
     object InvalidTokenType : AddressUriResult()
+
     object NoUri : AddressUriResult()
-    class Uri(val addressUri: AddressUri) : AddressUriResult()
+
+    class Uri(
+        val addressUri: AddressUri,
+    ) : AddressUriResult()
 }

@@ -22,37 +22,34 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 class FeePriorityInfoFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         InfoScreen(
-            navController
+            navController,
         )
     }
-
 }
 
 @Composable
-private fun InfoScreen(
-    navController: NavController
-) {
-
+private fun InfoScreen(navController: NavController) {
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = { navController.popBackStack() },
+                        ),
+                    ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 InfoHeader(R.string.FeeInfo_Title)
                 InfoBody(R.string.FeeInfo_Description)

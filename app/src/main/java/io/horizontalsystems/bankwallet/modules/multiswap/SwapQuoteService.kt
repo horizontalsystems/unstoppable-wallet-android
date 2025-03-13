@@ -23,14 +23,15 @@ import kotlinx.coroutines.withTimeout
 import java.math.BigDecimal
 
 class SwapQuoteService {
-    private val allProviders = listOf(
-        OneInchProvider,
-        PancakeSwapProvider,
-        PancakeSwapV3Provider,
-        QuickSwapProvider,
-        UniswapProvider,
-        UniswapV3Provider,
-    )
+    private val allProviders =
+        listOf(
+            OneInchProvider,
+            PancakeSwapProvider,
+            PancakeSwapV3Provider,
+            QuickSwapProvider,
+            UniswapProvider,
+            UniswapV3Provider,
+        )
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
@@ -41,18 +42,19 @@ class SwapQuoteService {
     private var error: Throwable? = null
     private var quote: SwapProviderQuote? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            amountIn = amountIn,
-            tokenIn = tokenIn,
-            tokenOut = tokenOut,
-            quoting = quoting,
-            quotes = quotes,
-            preferredProvider = preferredProvider,
-            quote = quote,
-            error = error,
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                amountIn = amountIn,
+                tokenIn = tokenIn,
+                tokenOut = tokenOut,
+                quoting = quoting,
+                quotes = quotes,
+                preferredProvider = preferredProvider,
+                quote = quote,
+                error = error,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -97,24 +99,25 @@ class SwapQuoteService {
                 quoting = true
                 emitState()
 
-                quotingJob = coroutineScope.launch {
-                    quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
+                quotingJob =
+                    coroutineScope.launch {
+                        quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
 
-                    if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
-                        preferredProvider = null
+                        if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
+                            preferredProvider = null
+                        }
+
+                        if (quotes.isEmpty()) {
+                            error = SwapRouteNotFound()
+                        } else {
+                            quote = preferredProvider
+                                ?.let { provider -> quotes.find { it.provider == provider } }
+                                ?: quotes.firstOrNull()
+                        }
+
+                        quoting = false
+                        emitState()
                     }
-
-                    if (quotes.isEmpty()) {
-                        error = SwapRouteNotFound()
-                    } else {
-                        quote = preferredProvider
-                            ?.let { provider -> quotes.find { it.provider == provider } }
-                            ?: quotes.firstOrNull()
-                    }
-
-                    quoting = false
-                    emitState()
-                }
             }
         }
     }
@@ -138,12 +141,11 @@ class SwapQuoteService {
                         null
                     }
                 }
-            }
-            .awaitAll()
+            }.awaitAll()
             .filterNotNull()
             .sortedWith(
                 compareByDescending<SwapProviderQuote> { it.provider.priority }
-                    .thenByDescending { it.amountOut }
+                    .thenByDescending { it.amountOut },
             )
     }
 

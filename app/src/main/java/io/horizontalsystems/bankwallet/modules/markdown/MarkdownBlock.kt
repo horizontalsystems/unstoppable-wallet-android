@@ -12,14 +12,33 @@ sealed class MarkdownBlock {
     var listTightTop = false
     var listTightBottom = false
 
-    data class Heading1(val text: SpannableStringBuilder) : MarkdownBlock()
-    data class Heading2(val text: SpannableStringBuilder) : MarkdownBlock()
-    data class Heading3(val text: SpannableStringBuilder) : MarkdownBlock()
-    data class Paragraph(val text: SpannableStringBuilder) : MarkdownBlock() {
+    data class Heading1(
+        val text: SpannableStringBuilder,
+    ) : MarkdownBlock()
+
+    data class Heading2(
+        val text: SpannableStringBuilder,
+    ) : MarkdownBlock()
+
+    data class Heading3(
+        val text: SpannableStringBuilder,
+    ) : MarkdownBlock()
+
+    data class Paragraph(
+        val text: SpannableStringBuilder,
+    ) : MarkdownBlock() {
         constructor(text: SpannableStringBuilder, quoted: Boolean) : this(text) {
             this.quoted = quoted
         }
     }
-    data class Image(val destination: String, val title: String?, val mainImage: Boolean) : MarkdownBlock()
-    data class Footer(val text: String): MarkdownBlock()
+
+    data class Image(
+        val destination: String,
+        val title: String?,
+        val mainImage: Boolean,
+    ) : MarkdownBlock()
+
+    data class Footer(
+        val text: String,
+    ) : MarkdownBlock()
 }

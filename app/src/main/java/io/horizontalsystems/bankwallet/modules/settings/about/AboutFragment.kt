@@ -35,12 +35,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
 class AboutFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         AboutNavHost(navController)
     }
-
 }
 
 private const val AboutPage = "about"
@@ -58,7 +56,7 @@ private fun AboutNavHost(fragmentNavController: NavController) {
         composable(AboutPage) {
             AboutScreen(
                 navController,
-                { fragmentNavController.popBackStack() }
+                { fragmentNavController.popBackStack() },
             )
         }
         composablePage(ReleaseNotesPage) {
@@ -81,7 +79,7 @@ private fun AboutScreen(
                 title = stringResource(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
-                }
+                },
             )
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -96,9 +94,8 @@ private fun AboutScreen(
 @Composable
 private fun SettingSections(
     viewModel: AboutViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
-
     val context = LocalContext.current
     val termsShowAlert = viewModel.termsShowAlert
 
@@ -112,9 +109,9 @@ private fun SettingSections(
                     navController.navigate(ReleaseNotesPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.WhatsNew))
-                }
+                },
             )
-        }
+        },
     )
 
     Spacer(Modifier.height(32.dp))
@@ -128,7 +125,7 @@ private fun SettingSections(
                     navController.navigate(AppStatusPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.AppStatus))
-                }
+                },
             )
         }, {
             HsSettingCell(
@@ -139,9 +136,9 @@ private fun SettingSections(
                     navController.navigate(TermsPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
-                }
+                },
             )
-        })
+        }),
     )
 
     Spacer(Modifier.height(32.dp))
@@ -155,7 +152,7 @@ private fun SettingSections(
                     LinkHelper.openLinkInAppBrowser(context, viewModel.githubLink)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.ExternalGithub))
-                }
+                },
             )
         }, {
             HsSettingCell(
@@ -165,9 +162,9 @@ private fun SettingSections(
                     LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.ExternalWebsite))
-                }
+                },
             )
-        })
+        }),
     )
 
     VSpacer(32.dp)

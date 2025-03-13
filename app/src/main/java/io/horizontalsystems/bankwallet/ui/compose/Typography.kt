@@ -29,92 +29,107 @@ class Typography internal constructor(
     val micro: TextStyle,
     val microSB: TextStyle,
 ) {
-
     constructor(
         defaultFontFamily: FontFamily = FontFamily.Default,
-        title1: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 38.sp,
-            letterSpacing = 0.sp,
-        ),
-        title2: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 32.sp,
-            letterSpacing = 0.sp,
-        ),
-        title2R: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 32.sp,
-            letterSpacing = 0.sp,
-        ),
-        title3: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp,
-            letterSpacing = 0.sp,
-        ),
-        headline1: TextStyle = TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 20.sp,
-            letterSpacing = 0.sp,
-        ),
-        headline2: TextStyle = TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
-            letterSpacing = 0.sp,
-        ),
-        body: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            letterSpacing = 0.sp,
-        ),
-        bodyItalic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            fontStyle = FontStyle.Italic,
-            letterSpacing = 0.sp,
-        ),
-        subhead1: TextStyle = TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            letterSpacing = 0.sp,
-        ),
-        subhead2: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            letterSpacing = 0.sp,
-        ),
-        subheadItalic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
-            letterSpacing = 0.sp,
-        ),
-        subhead1Italic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
-            letterSpacing = 0.sp,
-        ),
-        caption: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp,
-            letterSpacing = 0.sp,
-        ),
-        captionSB: TextStyle = TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 12.sp,
-            letterSpacing = 0.sp,
-        ),
-        micro: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 10.sp,
-            letterSpacing = 0.sp,
-        ),
-        microSB: TextStyle = TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 10.sp,
-            letterSpacing = 0.sp,
-        ),
+        title1: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 38.sp,
+                letterSpacing = 0.sp,
+            ),
+        title2: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 32.sp,
+                letterSpacing = 0.sp,
+            ),
+        title2R: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 32.sp,
+                letterSpacing = 0.sp,
+            ),
+        title3: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                letterSpacing = 0.sp,
+            ),
+        headline1: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                letterSpacing = 0.sp,
+            ),
+        headline2: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
+                letterSpacing = 0.sp,
+            ),
+        body: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                letterSpacing = 0.sp,
+            ),
+        bodyItalic: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 0.sp,
+            ),
+        subhead1: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                letterSpacing = 0.sp,
+            ),
+        subhead2: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                letterSpacing = 0.sp,
+            ),
+        subheadItalic: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 0.sp,
+            ),
+        subhead1Italic: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 0.sp,
+            ),
+        caption: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp,
+                letterSpacing = 0.sp,
+            ),
+        captionSB: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                letterSpacing = 0.sp,
+            ),
+        micro: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 10.sp,
+                letterSpacing = 0.sp,
+            ),
+        microSB: TextStyle =
+            TextStyle(
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 10.sp,
+                letterSpacing = 0.sp,
+            ),
     ) : this(
         title1 = title1.withFontFamily(defaultFontFamily),
         title2 = title2.withFontFamily(defaultFontFamily),
@@ -133,21 +148,21 @@ class Typography internal constructor(
         micro = micro.withFontFamily(defaultFontFamily),
         microSB = microSB.withFontFamily(defaultFontFamily),
     )
-
 }
 
-fun ColoredTextStyle(textStyle: TextStyle, color: Color, textAlign: TextAlign = TextAlign.Unspecified): TextStyle {
-    return TextStyle(
+fun ColoredTextStyle(
+    textStyle: TextStyle,
+    color: Color,
+    textAlign: TextAlign = TextAlign.Unspecified,
+): TextStyle =
+    TextStyle(
         color = color,
         fontWeight = textStyle.fontWeight,
         fontSize = textStyle.fontSize,
         fontStyle = textStyle.fontStyle,
-        textAlign = textAlign
+        textAlign = textAlign,
     )
-}
 
-private fun TextStyle.withFontFamily(default: FontFamily): TextStyle {
-    return if (fontFamily != null) this else copy(fontFamily = default)
-}
+private fun TextStyle.withFontFamily(default: FontFamily): TextStyle = if (fontFamily != null) this else copy(fontFamily = default)
 
 internal val LocalTypography = staticCompositionLocalOf { Typography() }

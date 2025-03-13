@@ -51,7 +51,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import kotlin.system.exitProcess
 
 class PrivacySettingsFragment : BaseComposeFragment() {
-
     private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
         SecurityTorSettingsModule.Factory()
     }
@@ -67,17 +66,19 @@ class PrivacySettingsFragment : BaseComposeFragment() {
     }
 
     private fun showAppRestartAlert() {
-        val warningTitle = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Tor_Connection_Enable)
-        } else {
-            getString(R.string.Tor_Connection_Disable)
-        }
+        val warningTitle =
+            if (torViewModel.torCheckEnabled) {
+                getString(R.string.Tor_Connection_Enable)
+            } else {
+                getString(R.string.Tor_Connection_Disable)
+            }
 
-        val actionButton = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Button_Enable)
-        } else {
-            getString(R.string.Button_Disable)
-        }
+        val actionButton =
+            if (torViewModel.torCheckEnabled) {
+                getString(R.string.Button_Enable)
+            } else {
+                getString(R.string.Button_Disable)
+            }
 
         ConfirmationDialog.show(
             icon = R.drawable.ic_tor_connection_24,
@@ -87,19 +88,20 @@ class PrivacySettingsFragment : BaseComposeFragment() {
             actionButtonTitle = actionButton,
             transparentButtonTitle = getString(R.string.Alert_Cancel),
             fragmentManager = childFragmentManager,
-            listener = object : ConfirmationDialog.Listener {
-                override fun onActionButtonClick() {
-                    torViewModel.setTorEnabled()
-                }
+            listener =
+                object : ConfirmationDialog.Listener {
+                    override fun onActionButtonClick() {
+                        torViewModel.setTorEnabled()
+                    }
 
-                override fun onTransparentButtonClick() {
-                    torViewModel.resetSwitch()
-                }
+                    override fun onTransparentButtonClick() {
+                        torViewModel.resetSwitch()
+                    }
 
-                override fun onCancelButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-            }
+                    override fun onCancelButtonClick() {
+                        torViewModel.resetSwitch()
+                    }
+                },
         )
     }
 
@@ -127,21 +129,23 @@ fun PrivacyScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .background(ComposeAppTheme.colors.tyler)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .background(ComposeAppTheme.colors.tyler),
     ) {
         AppBar(
             title = stringResource(R.string.Settings_Privacy),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
-            }
+            },
         )
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
         ) {
             VSpacer(12.dp)
             TextImportantWarning(
@@ -155,7 +159,7 @@ fun PrivacyScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_share_24px),
                         contentDescription = "Share",
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.jacob,
                     )
                     HSpacer(width = 16.dp)
                     body_leah(text = stringResource(R.string.ShareUiData))
@@ -166,7 +170,7 @@ fun PrivacyScreen(
                             viewModel.toggleUiStats(it)
 
                             stat(page = StatPage.Privacy, event = StatEvent.EnableUiStats(it))
-                        }
+                        },
                     )
                 }
             }
@@ -186,7 +190,7 @@ fun PrivacyScreen(
         Divider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
+            color = ComposeAppTheme.colors.steel10,
         )
 
         Spacer(Modifier.height(12.dp))
@@ -195,9 +199,10 @@ fun PrivacyScreen(
             text = stringResource(R.string.FooterText, uiState.currentYear),
             style = ComposeAppTheme.typography.caption,
             color = ComposeAppTheme.colors.grey,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .align(Alignment.CenterHorizontally)
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.CenterHorizontally),
         )
 
         Spacer(Modifier.height(28.dp))
@@ -205,24 +210,25 @@ fun PrivacyScreen(
 }
 
 @Composable
-private fun BulletedText(@StringRes text: Int) {
+private fun BulletedText(
+    @StringRes text: Int,
+) {
     Row(
-        modifier = Modifier.padding(start = 24.dp, top = 12.dp, end = 32.dp, bottom = 12.dp)
+        modifier = Modifier.padding(start = 24.dp, top = 12.dp, end = 32.dp, bottom = 12.dp),
     ) {
         Text(
             text = "\u2022 ",
             style = ComposeAppTheme.typography.body,
             color = ComposeAppTheme.colors.bran,
             modifier = Modifier.width(15.dp),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         HSpacer(width = 8.dp)
         Text(
             text = stringResource(text),
             style = ComposeAppTheme.typography.body,
             color = ComposeAppTheme.colors.bran,
-            modifier = Modifier.padding(end = 32.dp)
+            modifier = Modifier.padding(end = 32.dp),
         )
     }
-
 }

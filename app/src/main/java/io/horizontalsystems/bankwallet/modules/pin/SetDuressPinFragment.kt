@@ -14,12 +14,12 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class SetDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel = viewModel<SetDuressPinViewModel>(
-            factory = SetDuressPinViewModel.Factory(navController.getInput())
-        )
+        val viewModel =
+            viewModel<SetDuressPinViewModel>(
+                factory = SetDuressPinViewModel.Factory(navController.getInput()),
+            )
         val view = LocalView.current
         PinSet(
             title = stringResource(id = R.string.SetDuressPin_Title),
@@ -30,10 +30,12 @@ class SetDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
                 navController.popBackStack(R.id.setDuressPinIntroFragment, true)
             },
             onBackPress = { navController.popBackStack() },
-            forDuress = true
+            forDuress = true,
         )
     }
 
     @Parcelize
-    data class Input(val accountIds: List<String>) : Parcelable
+    data class Input(
+        val accountIds: List<String>,
+    ) : Parcelable
 }

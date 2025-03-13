@@ -25,7 +25,6 @@ class PlatformChartService(
     override val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
 ) : AbstractChartService() {
-
     override val initialChartInterval = HsTimePeriod.Week1
     override var chartIntervals = listOf<HsTimePeriod?>()
     override val chartViewType = ChartViewType.Line
@@ -51,33 +50,33 @@ class PlatformChartService(
         super.start()
     }
 
-    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
-        return getChartPointsWrapper(currency, HsPeriodType.ByStartTime(chartStartTime))
-    }
+    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> =
+        getChartPointsWrapper(currency, HsPeriodType.ByStartTime(chartStartTime))
 
     override fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
-        return getChartPointsWrapper(currency, HsPeriodType.ByPeriod(chartInterval))
-    }
+    ): Single<ChartPointsWrapper> = getChartPointsWrapper(currency, HsPeriodType.ByPeriod(chartInterval))
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = StatPage.TopPlatform, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = StatPage.TopPlatform,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod),
+        )
     }
 
     private fun getChartPointsWrapper(
         currency: Currency,
         periodType: HsPeriodType,
-    ): Single<ChartPointsWrapper> {
-        return try {
-            marketKit.topPlatformMarketCapPointsSingle(platform.uid, currency.code, periodType)
+    ): Single<ChartPointsWrapper> =
+        try {
+            marketKit
+                .topPlatformMarketCapPointsSingle(platform.uid, currency.code, periodType)
                 .map { info -> info.map { ChartPoint(it.marketCap.toFloat(), it.timestamp) } }
                 .map { ChartPointsWrapper(it) }
         } catch (e: Exception) {
             Single.error(e)
         }
-    }
 }

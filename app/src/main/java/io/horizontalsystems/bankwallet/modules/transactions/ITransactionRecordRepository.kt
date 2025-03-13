@@ -14,8 +14,10 @@ interface ITransactionRecordRepository : Clearable {
         wallet: TransactionWallet?,
         transactionType: FilterTransactionType,
         blockchain: Blockchain?,
-        contact: Contact?
+        contact: Contact?,
     )
+
     fun loadNext()
+
     fun reload()
 }

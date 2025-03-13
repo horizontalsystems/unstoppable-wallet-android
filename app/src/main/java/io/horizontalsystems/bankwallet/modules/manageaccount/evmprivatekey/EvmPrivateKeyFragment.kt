@@ -40,9 +40,10 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Parcelize
-    data class Input(val evmPrivateKey: String) : Parcelable
+    data class Input(
+        val evmPrivateKey: String,
+    ) : Parcelable
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -50,7 +51,6 @@ class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
             EvmPrivateKeyScreen(navController, input.evmPrivateKey)
         }
     }
-
 }
 
 @Composable
@@ -60,9 +60,10 @@ private fun EvmPrivateKeyScreen(
 ) {
     val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val sheetState =
+        rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+        )
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -75,16 +76,19 @@ private fun EvmPrivateKeyScreen(
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
 
-                        stat(page = StatPage.EvmPrivateKey, event = StatEvent.Copy(StatEntity.EvmPrivateKey))
+                        stat(
+                            page = StatPage.EvmPrivateKey,
+                            event = StatEvent.Copy(StatEntity.EvmPrivateKey),
+                        )
                     }
                 },
                 onCancel = {
                     coroutineScope.launch {
                         sheetState.hide()
                     }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -94,40 +98,42 @@ private fun EvmPrivateKeyScreen(
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                                stat(
-                                    page = StatPage.EvmPrivateKey,
-                                    event = StatEvent.Open(StatPage.Info)
-                                )
-                            }
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Info_Title),
+                                icon = R.drawable.ic_info_24,
+                                onClick = {
+                                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                                    stat(
+                                        page = StatPage.EvmPrivateKey,
+                                        event = StatEvent.Open(StatPage.Info),
+                                    )
+                                },
+                            ),
+                        ),
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
                 modifier = Modifier.padding(paddingValues),
             ) {
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.Top
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.Top,
                 ) {
                     VSpacer(12.dp)
                     TextImportantWarning(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                        text = stringResource(R.string.PrivateKeys_NeverShareWarning),
                     )
                     VSpacer(24.dp)
                     HidableContent(
                         evmPrivateKey,
-                        stringResource(R.string.EvmPrivateKey_ShowPrivateKey)
+                        stringResource(R.string.EvmPrivateKey_ShowPrivateKey),
                     ) {
                         stat(page = StatPage.EvmPrivateKey, event = StatEvent.ToggleHidden)
                     }

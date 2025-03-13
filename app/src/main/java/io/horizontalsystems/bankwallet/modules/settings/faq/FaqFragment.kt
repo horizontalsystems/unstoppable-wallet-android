@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import java.net.UnknownHostException
 
 class FaqListFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         FaqScreen(
@@ -46,32 +45,33 @@ class FaqListFragment : BaseComposeFragment() {
             onItemClick = { faqItem ->
                 navController.slideFromRight(
                     R.id.markdownFragment,
-                    MarkdownFragment.Input(faqItem.markdown)
+                    MarkdownFragment.Input(faqItem.markdown),
                 )
 
                 stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))
-            }
+            },
         )
     }
-
 }
 
 @Composable
 private fun FaqScreen(
     onCloseClick: () -> Unit,
     onItemClick: (Faq) -> Unit,
-    viewModel: FaqViewModel = viewModel(factory = FaqModule.Factory())
+    viewModel: FaqViewModel = viewModel(factory = FaqModule.Factory()),
 ) {
     val viewState = viewModel.viewState
-    Column(modifier = Modifier
-        .background(color = ComposeAppTheme.colors.tyler)
-        .navigationBarsPadding()
+    Column(
+        modifier =
+            Modifier
+                .background(color = ComposeAppTheme.colors.tyler)
+                .navigationBarsPadding(),
     ) {
         AppBar(
             title = stringResource(R.string.Settings_Faq),
             navigationIcon = {
                 HsBackButton(onClick = onCloseClick)
-            }
+            },
         )
         Crossfade(viewState) { viewState ->
             when (viewState) {
@@ -80,11 +80,12 @@ private fun FaqScreen(
                 }
 
                 is ViewState.Error -> {
-                    val s = when (val error = viewState.t) {
-                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
-                        is LocalizedException -> stringResource(error.errorTextRes)
-                        else -> stringResource(R.string.Hud_UnknownError, error)
-                    }
+                    val s =
+                        when (val error = viewState.t) {
+                            is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                            is LocalizedException -> stringResource(error.errorTextRes)
+                            else -> stringResource(R.string.Hud_UnknownError, error)
+                        }
 
                     ScreenMessageWithAction(s, R.drawable.ic_error_48)
                 }
@@ -96,7 +97,7 @@ private fun FaqScreen(
                                 TabItem(
                                     it.section,
                                     it == viewModel.selectedSection,
-                                    it
+                                    it,
                                 )
                             }
                         ScrollableTabs(tabItems) { tab ->
@@ -108,7 +109,7 @@ private fun FaqScreen(
                             CellUniversalLawrenceSection(viewModel.faqItems) { faq ->
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    onClick = { onItemClick(faq) }
+                                    onClick = { onItemClick(faq) },
                                 ) {
                                     subhead1_leah(text = faq.title)
                                 }

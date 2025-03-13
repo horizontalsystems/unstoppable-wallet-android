@@ -7,17 +7,15 @@ import io.reactivex.Observable
 
 class BalanceActiveWalletRepository(
     private val walletManager: IWalletManager,
-    evmSyncSourceManager: EvmSyncSourceManager
+    evmSyncSourceManager: EvmSyncSourceManager,
 ) {
-
     val itemsObservable: Observable<List<Wallet>> =
         Observable
             .merge(
                 Observable.just(Unit),
                 walletManager.activeWalletsUpdatedObservable,
-                evmSyncSourceManager.syncSourceObservable
-            )
-            .map {
+                evmSyncSourceManager.syncSourceObservable,
+            ).map {
                 walletManager.activeWallets
             }
 
@@ -28,5 +26,4 @@ class BalanceActiveWalletRepository(
     fun enable(wallet: Wallet) {
         walletManager.save(listOf(wallet))
     }
-
 }

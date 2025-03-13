@@ -73,7 +73,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class RestoreLocalFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -83,7 +82,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
                 input.statPage,
                 navController,
                 input.popOffOnSuccess,
-                input.popOffInclusive
+                input.popOffInclusive,
             ) { activity?.let { MainModule.startAsNewTask(it) } }
         }
     }
@@ -94,7 +93,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
         val popOffInclusive: Boolean,
         val jsonFile: String,
         val fileName: String?,
-        val statPage: StatPage
+        val statPage: StatPage,
     ) : Parcelable
 }
 
@@ -110,7 +109,15 @@ private fun RestoreLocalNavHost(
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName, statPage))
+    val viewModel =
+        viewModel<RestoreLocalViewModel>(
+            factory =
+                RestoreLocalModule.Factory(
+                    backupJsonString,
+                    fileName,
+                    statPage,
+                ),
+        )
     NavHost(
         navController = navController,
         startDestination = "restore_local",
@@ -123,7 +130,7 @@ private fun RestoreLocalNavHost(
                 onBackClick = { fragmentNavController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
                 openSelectCoins = { navController.navigate("restore_select_coins") },
-                openBackupItems = { navController.navigate("backup_file") }
+                openBackupItems = { navController.navigate("backup_file") },
             )
         }
         composablePage("backup_file") {
@@ -131,14 +138,14 @@ private fun RestoreLocalNavHost(
                 viewModel,
                 onBackClick = { navController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
-                reloadApp = reloadApp
+                reloadApp = reloadApp,
             )
         }
         composablePage("restore_select_coins") {
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
                 openZCashConfigure = { navController.navigate("zcash_configure") },
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
         composablePopup("zcash_configure") {
@@ -150,7 +157,7 @@ private fun RestoreLocalNavHost(
                 onCloseClick = {
                     mainViewModel.cancelZCashConfig = true
                     navController.popBackStack()
-                }
+                },
             )
         }
     }
@@ -165,7 +172,7 @@ private fun RestoreLocalScreen(
     onBackClick: () -> Unit,
     close: () -> Unit,
     openSelectCoins: () -> Unit,
-    openBackupItems: () -> Unit
+    openBackupItems: () -> Unit,
 ) {
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
@@ -178,7 +185,7 @@ private fun RestoreLocalScreen(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
                 icon = R.drawable.icon_add_to_wallet_2_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             close.invoke()
@@ -187,14 +194,25 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
-            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            Toast
+                .makeText(
+                    App.instance,
+                    error.message ?: error.javaClass.simpleName,
+                    Toast.LENGTH_LONG,
+                ).show()
             onBackClick.invoke()
         }
     }
 
     LaunchedEffect(uiState.showSelectCoins) {
         uiState.showSelectCoins?.let { accountType ->
-            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true, statPage)
+            mainViewModel.setAccountData(
+                accountType,
+                viewModel.accountName,
+                uiState.manualBackup,
+                true,
+                statPage,
+            )
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
@@ -218,25 +236,26 @@ private fun RestoreLocalScreen(
         topBar = {
             AppBar(
                 title = stringResource(R.string.ImportBackupFile_EnterPassword),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onBackClick
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = onBackClick,
+                        ),
+                    ),
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(
+                            rememberScrollState(),
+                        ),
             ) {
-
                 InfoText(text = stringResource(R.string.ImportBackupFile_EnterPassword_Description))
                 VSpacer(24.dp)
                 FormsInputPassword(
@@ -248,16 +267,17 @@ private fun RestoreLocalScreen(
                     hide = hidePassphrase,
                     onToggleHide = {
                         hidePassphrase = !hidePassphrase
-                    }
+                    },
                 )
                 VSpacer(32.dp)
             }
 
             ButtonsGroupWithShade {
                 ButtonPrimaryYellowWithSpinner(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Restore),
                     showSpinner = uiState.showButtonSpinner,
                     enabled = uiState.showButtonSpinner.not(),
@@ -275,7 +295,7 @@ private fun BackupFileItems(
     viewModel: RestoreLocalViewModel,
     onBackClick: () -> Unit,
     close: () -> Unit,
-    reloadApp: () -> Unit
+    reloadApp: () -> Unit,
 ) {
     val uiState = viewModel.uiState
     val walletBackupViewItems = viewModel.uiState.walletBackupViewItems
@@ -288,7 +308,7 @@ private fun BackupFileItems(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
                 icon = R.drawable.icon_add_to_wallet_2_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             close.invoke()
@@ -298,7 +318,12 @@ private fun BackupFileItems(
 
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
-            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            Toast
+                .makeText(
+                    App.instance,
+                    error.message ?: error.javaClass.simpleName,
+                    Toast.LENGTH_LONG,
+                ).show()
             onBackClick.invoke()
         }
     }
@@ -324,9 +349,9 @@ private fun BackupFileItems(
                 },
                 onClose = {
                     coroutineScope.launch { bottomSheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -341,9 +366,10 @@ private fun BackupFileItems(
             bottomBar = {
                 ButtonsGroupWithShade {
                     ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
                         title = stringResource(R.string.BackupManager_Restore),
                         onClick = {
                             if (viewModel.shouldShowReplaceWarning()) {
@@ -351,24 +377,29 @@ private fun BackupFileItems(
                             } else {
                                 viewModel.restoreFullBackup()
                             }
-                        }
+                        },
                     )
                 }
-            }
+            },
         ) {
             LazyColumn(modifier = Modifier.padding(it)) {
                 item {
-                    InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
+                    InfoText(
+                        text = stringResource(R.string.BackupManager_BackupFileContents),
+                        paddingBottom = 32.dp,
+                    )
                 }
 
                 if (walletBackupViewItems.isNotEmpty()) {
                     item {
                         HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                        CellUniversalLawrenceSection(items = walletBackupViewItems, showFrame = true) { walletBackupViewItem ->
+                        CellUniversalLawrenceSection(
+                            items = walletBackupViewItems,
+                            showFrame = true,
+                        ) { walletBackupViewItem ->
                             RowUniversal(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                             ) {
-
                                 Column(modifier = Modifier.weight(1f)) {
                                     body_leah(text = walletBackupViewItem.name)
                                     if (walletBackupViewItem.backupRequired) {
@@ -377,7 +408,7 @@ private fun BackupFileItems(
                                         subhead2_grey(
                                             text = walletBackupViewItem.type,
                                             overflow = TextOverflow.Ellipsis,
-                                            maxLines = 1
+                                            maxLines = 1,
                                         )
                                     }
                                 }

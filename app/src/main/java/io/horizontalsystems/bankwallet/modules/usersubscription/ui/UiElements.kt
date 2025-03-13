@@ -81,16 +81,19 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.numberOfDays
 
-val yellowGradient = Brush.horizontalGradient(
-    colors = listOf(
-        Color(0xFFFFD000),
-        Color(0xFFFFA800),
+val yellowGradient =
+    Brush.horizontalGradient(
+        colors =
+            listOf(
+                Color(0xFFFFD000),
+                Color(0xFFFFA800),
+            ),
     )
-)
 
-val steelBrush = Brush.horizontalGradient(
-    colors = listOf(Steel20, Steel20)
-)
+val steelBrush =
+    Brush.horizontalGradient(
+        colors = listOf(Steel20, Steel20),
+    )
 
 @Composable
 fun SelectSubscriptionBottomSheet(
@@ -119,24 +122,25 @@ fun SelectSubscriptionBottomSheet(
     }
 
     val selectedItemIndex = uiState.selectedIndex
-    val freeTrialPeriodDays = uiState.freeTrialPeriod?.let {
-        stringResource(R.string.Period_Days, it.numberOfDays())
-    }
+    val freeTrialPeriodDays =
+        uiState.freeTrialPeriod?.let {
+            stringResource(R.string.Period_Days, it.numberOfDays())
+        }
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_circle_clock_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.Premium_SelectSubscription),
-        onCloseClick = onDismiss
+        onCloseClick = onDismiss,
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 uiState.basePlans.forEachIndexed { index, basePlan ->
                     SubscriptionOption(
@@ -147,34 +151,35 @@ fun SelectSubscriptionBottomSheet(
                         badgeText = basePlan.badge(),
                         onClick = {
                             viewModel.select(index)
-                        }
+                        },
                     )
                 }
             }
 
-            val bottomText = if (freeTrialPeriodDays != null) {
-                buildAnnotatedString {
-                    withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
-                        append(
-                            text = stringResource(
-                                R.string.Premium_EnjoyFreePeriod,
-                                freeTrialPeriodDays
+            val bottomText =
+                if (freeTrialPeriodDays != null) {
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
+                            append(
+                                text =
+                                    stringResource(
+                                        R.string.Premium_EnjoyFreePeriod,
+                                        freeTrialPeriodDays,
+                                    ),
                             )
-                        )
+                        }
+                        append(" ")
+                        withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
+                            append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                        }
                     }
-                    append(" ")
-                    withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
-                        append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                } else {
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
+                            append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                        }
                     }
                 }
-            } else {
-                buildAnnotatedString {
-                    withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
-                        append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
-                    }
-                }
-            }
-
 
             VSpacer(12.dp)
             Text(
@@ -182,15 +187,16 @@ fun SelectSubscriptionBottomSheet(
                 color = ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.subhead2,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
+                modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
             )
             VSpacer(24.dp)
 
-            val buttonTitle = if (freeTrialPeriodDays != null) {
-                stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
-            } else {
-                stringResource(R.string.Premium_Subscribe)
-            }
+            val buttonTitle =
+                if (freeTrialPeriodDays != null) {
+                    stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
+                } else {
+                    stringResource(R.string.Premium_Subscribe)
+                }
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = buttonTitle,
@@ -199,10 +205,10 @@ fun SelectSubscriptionBottomSheet(
                         viewModel.launchPurchaseFlow(
                             subscriptionId = subscriptionId,
                             offerToken = uiState.basePlans[selectedItemIndex].offerToken,
-                            activity = it
+                            activity = it,
                         )
                     }
-                }
+                },
             )
             VSpacer(36.dp)
         }
@@ -216,18 +222,19 @@ fun SubscriptionOption(
     note: String,
     isSelected: Boolean,
     badgeText: String?,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val borderColor =
         if (isSelected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, borderColor, shape = RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .border(1.dp, borderColor, shape = RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(12.dp))
+                .clickable { onClick() }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -235,12 +242,12 @@ fun SubscriptionOption(
                 if (badgeText != null) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Box(
-                        modifier = Modifier
-                            .background(
-                                ComposeAppTheme.colors.remus,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                        modifier =
+                            Modifier
+                                .background(
+                                    ComposeAppTheme.colors.remus,
+                                    shape = RoundedCornerShape(8.dp),
+                                ).padding(horizontal = 6.dp, vertical = 2.dp),
                     ) {
                         Text(
                             text = badgeText,
@@ -251,7 +258,7 @@ fun SubscriptionOption(
                 }
             }
 
-            Row() {
+            Row {
                 subhead2_jacob(price)
                 if (note.isNotEmpty()) {
                     HSpacer(4.dp)
@@ -265,14 +272,14 @@ fun SubscriptionOption(
 @Composable
 fun ColumnScope.PlanItems(
     items: List<IPaidAction>,
-    onItemClick: (IPaidAction) -> Unit
+    onItemClick: (IPaidAction) -> Unit,
 ) {
     items.forEachIndexed { index, item ->
         PremiumFeatureItem(
             icon = item.iconRes,
             title = item.titleStringRes,
             subtitle = item.descriptionStringRes,
-            click = { onItemClick(item) }
+            click = { onItemClick(item) },
         )
         if (index < items.size - 1) {
             Divider(color = ComposeAppTheme.colors.steel20)
@@ -285,21 +292,22 @@ fun PremiumFeatureItem(
     icon: Int,
     title: Int,
     subtitle: Int,
-    click: () -> Unit = {}
+    click: () -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { click() }
-            .background(ComposeAppTheme.colors.steel10)
-            .padding(vertical = 12.dp, horizontal = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { click() }
+                .background(ComposeAppTheme.colors.steel10)
+                .padding(vertical = 12.dp, horizontal = 16.dp),
     ) {
         Icon(
             painter = painterResource(icon),
             modifier = Modifier.size(24.dp),
             tint = ComposeAppTheme.colors.jacob,
-            contentDescription = null
+            contentDescription = null,
         )
         HSpacer(16.dp)
         Column {
@@ -314,38 +322,37 @@ fun highlightText(
     text: String,
     textColor: Color,
     highlightPart: String,
-    highlightColor: Color
-): AnnotatedString {
-
-    return buildAnnotatedString {
+    highlightColor: Color,
+): AnnotatedString =
+    buildAnnotatedString {
         withStyle(SpanStyle(color = textColor)) {
-            val highlightIndex = text
-                .lowercase()
-                .indexOf(highlightPart.lowercase())
+            val highlightIndex =
+                text
+                    .lowercase()
+                    .indexOf(highlightPart.lowercase())
 
             if (highlightIndex != -1) {
                 append(text.substring(0, highlightIndex))
 
                 withStyle(
-                    SpanStyle(color = highlightColor)
+                    SpanStyle(color = highlightColor),
                 ) {
                     append(
                         text.substring(
                             highlightIndex,
-                            highlightIndex + highlightPart.length
-                        )
+                            highlightIndex + highlightPart.length,
+                        ),
                     )
                 }
 
                 append(
-                    text.substring(highlightIndex + highlightPart.length)
+                    text.substring(highlightIndex + highlightPart.length),
                 )
             } else {
                 append(text)
             }
         }
     }
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -358,9 +365,10 @@ fun ButtonPrimaryCustomColor(
     contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
 ) {
     Surface(
-        modifier = modifier
-            .clip(RoundedCornerShape(25.dp))
-            .background(brush),
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(25.dp))
+                .background(brush),
         shape = RoundedCornerShape(25.dp),
         color = Color.Transparent,
         contentColor = ComposeAppTheme.colors.dark,
@@ -368,15 +376,14 @@ fun ButtonPrimaryCustomColor(
         enabled = enabled,
     ) {
         ProvideTextStyle(
-            value = ComposeAppTheme.typography.headline2
+            value = ComposeAppTheme.typography.headline2,
         ) {
             Row(
                 Modifier
                     .defaultMinSize(
                         minWidth = ButtonPrimaryDefaults.MinWidth,
-                        minHeight = ButtonPrimaryDefaults.MinHeight
-                    )
-                    .padding(contentPadding),
+                        minHeight = ButtonPrimaryDefaults.MinHeight,
+                    ).padding(contentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -395,21 +402,22 @@ fun ButtonPrimaryCustomColor(
 fun TitleCenteredTopBar(
     title: String,
     modifier: Modifier = Modifier,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-            .height(64.dp)
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+                .height(64.dp)
+                .fillMaxWidth(),
     ) {
         headline1_leah(
             text = title,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center),
         )
         HsIconButton(
             modifier = Modifier.align(Alignment.CenterEnd),
-            onClick = onCloseClick
+            onClick = onCloseClick,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_close),
@@ -425,17 +433,18 @@ fun ColoredTextSecondaryButton(
     title: String,
     color: Color,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = buttonColors(
-            backgroundColor = ComposeAppTheme.colors.transparent,
-            contentColor = color,
-            disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
-        ),
+        buttonColors =
+            buttonColors(
+                backgroundColor = ComposeAppTheme.colors.transparent,
+                contentColor = color,
+                disabledBackgroundColor = ComposeAppTheme.colors.transparent,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
         content = {
             Text(
                 text = title,
@@ -452,7 +461,7 @@ fun SubscriptionTabs(
     subscriptions: List<Subscription>,
     selectedTabIndex: Int,
     modifier: Modifier,
-    onTabSelected: (Int) -> Unit = {}
+    onTabSelected: (Int) -> Unit = {},
 ) {
     if (subscriptions.isNotEmpty()) {
         TabRow(
@@ -465,9 +474,9 @@ fun SubscriptionTabs(
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .height(0.dp), // No indicator line
-                    color = Color.Transparent
+                    color = Color.Transparent,
                 )
-            }
+            },
         ) {
             subscriptions.forEachIndexed { index, tab ->
                 Tab(
@@ -475,28 +484,30 @@ fun SubscriptionTabs(
                     onClick = {
                         onTabSelected(index)
                     },
-                    modifier = Modifier.background(
-                        brush =
-                        if (selectedTabIndex == index) yellowGradient else steelBrush,
-                    ),
+                    modifier =
+                        Modifier.background(
+                            brush =
+                                if (selectedTabIndex == index) yellowGradient else steelBrush,
+                        ),
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(44.dp)
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                        modifier =
+                            Modifier
+                                .height(44.dp)
+                                .padding(vertical = 8.dp, horizontal = 16.dp),
                     ) {
                         Icon(
                             painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
                             contentDescription = null,
                             tint = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(18.dp),
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = tab.name,
                             color = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.captionSB
+                            style = ComposeAppTheme.typography.captionSB,
                         )
                     }
                 }
@@ -512,36 +523,38 @@ fun InfoBottomSheet(
     title: String,
     description: String,
     hideBottomSheet: () -> Unit,
-    bottomSheetState: SheetState
+    bottomSheetState: SheetState,
 ) {
     ModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        containerColor = ComposeAppTheme.colors.transparent,
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(icon),
             title = title,
             titleColor = ComposeAppTheme.colors.jacob,
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-            onCloseClick = hideBottomSheet
+            onCloseClick = hideBottomSheet,
         ) {
             Column(
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 24.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(vertical = 12.dp, horizontal = 24.dp)
+                        .fillMaxWidth(),
             ) {
                 body_bran(
                     text = description,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
                 )
                 VSpacer(56.dp)
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Close),
-                    onClick = hideBottomSheet
+                    onClick = hideBottomSheet,
                 )
                 VSpacer(32.dp)
             }
@@ -556,12 +569,12 @@ fun SubscriptionBottomSheet(
     subscription: Subscription,
     navController: NavController,
     hideBottomSheet: () -> Unit,
-    onError: (Throwable) -> Unit
+    onError: (Throwable) -> Unit,
 ) {
     ModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = modalBottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        containerColor = ComposeAppTheme.colors.transparent,
     ) {
         SelectSubscriptionBottomSheet(
             subscriptionId = subscription.id,
@@ -570,7 +583,7 @@ fun SubscriptionBottomSheet(
                 hideBottomSheet()
                 navController.navigate("premium_subscribed_page")
             },
-            onError = onError
+            onError = onError,
         )
     }
 }

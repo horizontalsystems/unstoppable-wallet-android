@@ -11,9 +11,8 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 class BackupConfirmKeyViewModel(
     private val account: Account,
     private val accountManager: IAccountManager,
-    private val randomProvider: IRandomProvider
+    private val randomProvider: IRandomProvider,
 ) : ViewModelUiState<BackupConfirmUiState>() {
-
     private val wordsIndexed: List<Pair<Int, String>>
     private var hiddenWordItems = listOf<HiddenWordItem>()
     private var wordOptions = listOf<WordOption>()
@@ -23,9 +22,10 @@ class BackupConfirmKeyViewModel(
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            wordsIndexed = account.type.words.mapIndexed { index, s ->
-                Pair(index, s)
-            }
+            wordsIndexed =
+                account.type.words.mapIndexed { index, s ->
+                    Pair(index, s)
+                }
 
             reset()
             emitState()
@@ -34,36 +34,40 @@ class BackupConfirmKeyViewModel(
         }
     }
 
-    override fun createState() = BackupConfirmUiState(
-        hiddenWordItems = hiddenWordItems,
-        wordOptions = wordOptions,
-        currentHiddenWordItemIndex = currentHiddenWordItemIndex,
-        confirmed = confirmed,
-        error = error
-    )
+    override fun createState() =
+        BackupConfirmUiState(
+            hiddenWordItems = hiddenWordItems,
+            wordOptions = wordOptions,
+            currentHiddenWordItemIndex = currentHiddenWordItemIndex,
+            confirmed = confirmed,
+            error = error,
+        )
 
     private fun reset() {
-        val wordsCountToGuess = when (wordsIndexed.size) {
-            12 -> 2
-            15, 18, 21 -> 3
-            24 -> 4
-            else -> 2
-        }
+        val wordsCountToGuess =
+            when (wordsIndexed.size) {
+                12 -> 2
+                15, 18, 21 -> 3
+                24 -> 4
+                else -> 2
+            }
 
         val shuffled = wordsIndexed.shuffled().take(12)
         val randomNumbers = randomProvider.getRandomNumbers(wordsCountToGuess, shuffled.size)
 
-        hiddenWordItems = randomNumbers.map { number ->
-            val wordIndexed = shuffled[number]
-            HiddenWordItem(
-                index = wordIndexed.first,
-                word = wordIndexed.second,
-                isRevealed = false
-            )
-        }
-        wordOptions = shuffled.map {
-            WordOption(it.second, true)
-        }
+        hiddenWordItems =
+            randomNumbers.map { number ->
+                val wordIndexed = shuffled[number]
+                HiddenWordItem(
+                    index = wordIndexed.first,
+                    word = wordIndexed.second,
+                    isRevealed = false,
+                )
+            }
+        wordOptions =
+            shuffled.map {
+                WordOption(it.second, true)
+            }
         currentHiddenWordItemIndex = 0
     }
 
@@ -73,14 +77,16 @@ class BackupConfirmKeyViewModel(
             reset()
             error = Exception(Translator.getString(R.string.BackupConfirmKey_Error_InvalidWord))
         } else {
-            hiddenWordItems = hiddenWordItems.toMutableList().apply {
-                set(currentHiddenWordItemIndex, hiddenWordItem.copy(isRevealed = true))
-            }
+            hiddenWordItems =
+                hiddenWordItems.toMutableList().apply {
+                    set(currentHiddenWordItemIndex, hiddenWordItem.copy(isRevealed = true))
+                }
 
             val indexOfWordOption = wordOptions.indexOf(wordOption)
-            wordOptions = wordOptions.toMutableList().apply {
-                set(indexOfWordOption, wordOption.copy(enabled = false))
-            }
+            wordOptions =
+                wordOptions.toMutableList().apply {
+                    set(indexOfWordOption, wordOption.copy(enabled = false))
+                }
 
             if (currentHiddenWordItemIndex != hiddenWordItems.lastIndex) {
                 currentHiddenWordItemIndex++
@@ -104,18 +110,22 @@ data class BackupConfirmUiState(
     val wordOptions: List<WordOption>,
     val currentHiddenWordItemIndex: Int,
     val confirmed: Boolean,
-    val error: Throwable?
+    val error: Throwable?,
 )
 
-data class WordOption(val word: String, val enabled: Boolean)
+data class WordOption(
+    val word: String,
+    val enabled: Boolean,
+)
 
 data class HiddenWordItem(
     val index: Int,
     val word: String,
-    val isRevealed: Boolean
+    val isRevealed: Boolean,
 ) {
-    override fun toString() = when {
-        isRevealed -> "${index + 1}. $word"
-        else -> "${index + 1}."
-    }
+    override fun toString() =
+        when {
+            isRevealed -> "${index + 1}. $word"
+            else -> "${index + 1}."
+        }
 }

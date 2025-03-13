@@ -28,18 +28,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 
 class PublicKeysFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Account>(navController) { account ->
             ManageAccountScreen(navController, account)
         }
     }
-
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, account: Account) {
+fun ManageAccountScreen(
+    navController: NavController,
+    account: Account,
+) {
     val viewModel = viewModel<PublicKeysViewModel>(factory = PublicKeysModule.Factory(account))
 
     Scaffold(
@@ -49,24 +50,25 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 title = stringResource(R.string.PublicKeys_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(12.dp))
             viewModel.viewState.evmAddress?.let { evmAddress ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PublicKeys_EvmAddress),
-                    description = stringResource(R.string.PublicKeys_EvmAddress_Description)
+                    description = stringResource(R.string.PublicKeys_EvmAddress_Description),
                 ) {
                     navController.slideFromRight(
                         R.id.evmAddressFragment,
-                        EvmAddressFragment.Input(evmAddress)
+                        EvmAddressFragment.Input(evmAddress),
                     )
 
                     stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
@@ -81,11 +83,14 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         R.id.showExtendedKeyFragment,
                         ShowExtendedKeyFragment.Input(
                             publicKey.hdKey,
-                            publicKey.accountPublicKey
-                        )
+                            publicKey.accountPublicKey,
+                        ),
                     )
 
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.AccountExtendedPublicKey))
+                    stat(
+                        page = StatPage.PublicKeys,
+                        event = StatEvent.Open(StatPage.AccountExtendedPublicKey),
+                    )
                 }
             }
         }

@@ -38,33 +38,35 @@ fun PinTopBlock(
     enteredCount: Int,
     showShakeAnimation: Boolean = false,
     inputState: InputState = InputState.Enabled(),
-    onShakeAnimationFinish: (() -> Unit)? = null
+    onShakeAnimationFinish: (() -> Unit)? = null,
 ) {
     when (inputState) {
         is InputState.Enabled -> {
             Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.Bottom
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     subhead2_grey(
                         text = title,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                     Spacer(Modifier.height(16.dp))
                 }
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.shake(
-                        enabled = showShakeAnimation,
-                        onAnimationFinish = { onShakeAnimationFinish?.invoke() }
-                    )
+                    modifier =
+                        Modifier.shake(
+                            enabled = showShakeAnimation,
+                            onAnimationFinish = { onShakeAnimationFinish?.invoke() },
+                        ),
                 ) {
                     repeat(PinModule.PIN_COUNT) {
                         IndicatorCircle(it < enteredCount)
@@ -79,33 +81,41 @@ fun PinTopBlock(
                         error != null -> {
                             subhead2_lucian(text = error)
                         }
+
                         inputState.attemptsLeft != null -> {
                             subhead2_jacob(
-                                text = stringResource(R.string.Unlock_AttemptsLeft, inputState.attemptsLeft)
+                                text =
+                                    stringResource(
+                                        R.string.Unlock_AttemptsLeft,
+                                        inputState.attemptsLeft,
+                                    ),
                             )
                         }
                     }
                 }
             }
         }
+
         is InputState.Locked -> {
             Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     painter = painterResource(R.drawable.icon_lock_48),
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Spacer(Modifier.height(16.dp))
                 subhead2_grey(
-                    text = stringResource(
-                        R.string.Unlock_WalletDisabledUntil,
-                        inputState.until
-                    )
+                    text =
+                        stringResource(
+                            R.string.Unlock_WalletDisabledUntil,
+                            inputState.until,
+                        ),
                 )
             }
         }
@@ -116,10 +126,11 @@ fun PinTopBlock(
 private fun IndicatorCircle(active: Boolean) {
     val color = if (active) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20
     Box(
-        modifier = Modifier
-            .size(12.dp)
-            .clip(CircleShape)
-            .background(color)
+        modifier =
+            Modifier
+                .size(12.dp)
+                .clip(CircleShape)
+                .background(color),
     )
 }
 
@@ -128,8 +139,9 @@ private fun IndicatorCircle(active: Boolean) {
 fun Preview_PinTopBlockEnabled() {
     ComposeAppTheme {
         Column(
-            modifier = Modifier
-                .background(color = ComposeAppTheme.colors.tyler)
+            modifier =
+                Modifier
+                    .background(color = ComposeAppTheme.colors.tyler),
         ) {
             PinTopBlock(
                 title = "text",
@@ -145,14 +157,15 @@ fun Preview_PinTopBlockEnabled() {
 fun Preview_PinTopBlockLocked() {
     ComposeAppTheme {
         Column(
-            modifier = Modifier
-                .background(color = ComposeAppTheme.colors.tyler)
+            modifier =
+                Modifier
+                    .background(color = ComposeAppTheme.colors.tyler),
         ) {
             PinTopBlock(
                 title = "text",
                 enteredCount = 3,
                 showShakeAnimation = false,
-                inputState = InputState.Locked("12:33")
+                inputState = InputState.Locked("12:33"),
             )
         }
     }

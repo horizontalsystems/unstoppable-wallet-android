@@ -66,7 +66,7 @@ import java.math.BigDecimal
 class SendTransactionServiceEvm(
     blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
-    initialNonce: Long? = null
+    initialNonce: Long? = null,
 ) : ISendTransactionService() {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
@@ -77,21 +77,22 @@ class SendTransactionServiceEvm(
             Eip1559GasPriceService(
                 gasProvider = gasPriceProvider,
                 refreshSignalFlowable = Flowable.empty(),
-                initialGasPrice = initialGasPrice as? GasPrice.Eip1559
+                initialGasPrice = initialGasPrice as? GasPrice.Eip1559,
             )
         } else {
             val gasPriceProvider = LegacyGasPriceProvider(evmKit)
             LegacyGasPriceService(
                 gasPriceProvider = gasPriceProvider,
-                initialGasPrice = (initialGasPrice as? GasPrice.Legacy)?.legacyGasPrice
+                initialGasPrice = (initialGasPrice as? GasPrice.Legacy)?.legacyGasPrice,
             )
         }
     }
     private val feeService by lazy {
-        val gasDataService = EvmCommonGasDataService.instance(
-            evmKitWrapper.evmKit,
-            evmKitWrapper.blockchainType
-        )
+        val gasDataService =
+            EvmCommonGasDataService.instance(
+                evmKitWrapper.evmKit,
+                evmKitWrapper.blockchainType,
+            )
         EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService)
     }
     private val coinServiceFactory by lazy {
@@ -99,7 +100,7 @@ class SendTransactionServiceEvm(
             token,
             App.marketKit,
             App.currencyManager,
-            App.coinManager
+            App.coinManager,
         )
     }
     private val nonceService by lazy {
@@ -110,9 +111,10 @@ class SendTransactionServiceEvm(
     private val baseCoinService = coinServiceFactory.baseCoinService
     private val cautionViewItemFactory by lazy { CautionViewItemFactory(baseCoinService) }
 
-    private val _sendTransactionSettingsFlow = MutableStateFlow(
-        SendTransactionSettings.Evm(null, evmKitWrapper.evmKit.receiveAddress)
-    )
+    private val _sendTransactionSettingsFlow =
+        MutableStateFlow(
+            SendTransactionSettings.Evm(null, evmKitWrapper.evmKit.receiveAddress),
+        )
     override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
 
     private var transaction: SendEvmSettingsService.Transaction? = null
@@ -122,13 +124,14 @@ class SendTransactionServiceEvm(
     private var loading = true
     private var fields = listOf<DataField>()
 
-    override fun createState() = SendTransactionServiceState(
-        networkFee = feeAmountData,
-        cautions = cautions,
-        sendable = sendable,
-        loading = loading,
-        fields = fields
-    )
+    override fun createState() =
+        SendTransactionServiceState(
+            networkFee = feeAmountData,
+            cautions = cautions,
+            sendable = sendable,
+            loading = loading,
+            fields = fields,
+        )
 
     override fun start(coroutineScope: CoroutineScope) {
         gasPriceService.start()
@@ -137,7 +140,10 @@ class SendTransactionServiceEvm(
         coroutineScope.launch {
             gasPriceService.stateFlow.collect { gasPriceState ->
                 _sendTransactionSettingsFlow.update {
-                    SendTransactionSettings.Evm(gasPriceState.dataOrNull, evmKitWrapper.evmKit.receiveAddress)
+                    SendTransactionSettings.Evm(
+                        gasPriceState.dataOrNull,
+                        evmKitWrapper.evmKit.receiveAddress,
+                    )
                 }
             }
         }
@@ -174,28 +180,31 @@ class SendTransactionServiceEvm(
     private fun handleTransactionState(transactionState: DataState<SendEvmSettingsService.Transaction>) {
         loading = transactionState.loading
         transaction = transactionState.dataOrNull
-        feeAmountData = transaction?.let {
-            baseCoinService.amountData(
-                it.gasData.estimatedFee,
-                it.gasData.isSurcharged
-            )
-        }
+        feeAmountData =
+            transaction?.let {
+                baseCoinService.amountData(
+                    it.gasData.estimatedFee,
+                    it.gasData.isSurcharged,
+                )
+            }
         cautions = listOf()
         sendable = false
 
         when (transactionState) {
             is DataState.Error -> {
-                cautions = cautionViewItemFactory.cautionViewItems(
-                    listOf(),
-                    listOf(transactionState.error)
-                )
+                cautions =
+                    cautionViewItemFactory.cautionViewItems(
+                        listOf(),
+                        listOf(transactionState.error),
+                    )
             }
 
             is DataState.Success -> {
-                cautions = cautionViewItemFactory.cautionViewItems(
-                    transactionState.data.warnings,
-                    transactionState.data.errors
-                )
+                cautions =
+                    cautionViewItemFactory.cautionViewItems(
+                        transactionState.data.warnings,
+                        transactionState.data.errors,
+                    )
                 sendable = transactionState.data.errors.isEmpty()
             }
 
@@ -213,7 +222,7 @@ class SendTransactionServiceEvm(
         feeService.setTransactionData(data.transactionData)
     }
 
-    override suspend fun sendTransaction() : SendTransactionResult.Evm {
+    override suspend fun sendTransaction(): SendTransactionResult.Evm {
         val transaction = transaction ?: throw Exception()
         if (transaction.errors.isNotEmpty()) throw Exception()
 
@@ -222,14 +231,14 @@ class SendTransactionServiceEvm(
         val gasLimit = transaction.gasData.gasLimit
         val nonce = transaction.nonce
 
-        val fullTransaction = evmKitWrapper
-            .sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+        val fullTransaction =
+            evmKitWrapper
+                .sendSingle(transactionData, gasPrice, gasLimit, nonce)
+                .await()
         return SendTransactionResult.Evm(fullTransaction)
     }
 
-    fun decorate(transactionData: TransactionData): TransactionDecoration? {
-        return evmKitWrapper.evmKit.decorate(transactionData)
-    }
+    fun decorate(transactionData: TransactionData): TransactionDecoration? = evmKitWrapper.evmKit.decorate(transactionData)
 
     fun fixNonce(nonce: Long) {
         nonceService.fixNonce(nonce)
@@ -237,25 +246,29 @@ class SendTransactionServiceEvm(
 
     @Composable
     override fun GetSettingsContent(navController: NavController) {
-        val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
-            SendEvmNonceViewModel(nonceService)
-        })
+        val nonceViewModel =
+            viewModel<SendEvmNonceViewModel>(initializer = {
+                SendEvmNonceViewModel(nonceService)
+            })
 
-        val feeSettingsViewModel = viewModel<ViewModel>(
-            factory = EvmFeeModule.Factory(
-                feeService,
-                gasPriceService,
-                baseCoinService
+        val feeSettingsViewModel =
+            viewModel<ViewModel>(
+                factory =
+                    EvmFeeModule.Factory(
+                        feeService,
+                        gasPriceService,
+                        baseCoinService,
+                    ),
             )
-        )
-        val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-            factory = SendEvmSettingsModule.Factory(settingsService, baseCoinService)
-        )
+        val sendSettingsViewModel =
+            viewModel<SendEvmSettingsViewModel>(
+                factory = SendEvmSettingsModule.Factory(settingsService, baseCoinService),
+            )
         SendEvmFeeSettingsScreen(
             viewModel = sendSettingsViewModel,
             feeSettingsViewModel = feeSettingsViewModel,
             nonceViewModel = nonceViewModel,
-            navController = navController
+            navController = navController,
         )
     }
 }
@@ -265,13 +278,14 @@ fun SendEvmFeeSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     feeSettingsViewModel: ViewModel,
     nonceViewModel: SendEvmNonceViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
+        modifier =
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .background(color = ComposeAppTheme.colors.tyler),
     ) {
         AppBar(
             title = stringResource(R.string.SendEvmSettings_Title),
@@ -280,17 +294,18 @@ fun SendEvmFeeSettingsScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.jacob,
                     )
                 }
             },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Reset),
-                    enabled = !viewModel.isRecommendedSettingsSelected,
-                    onClick = { viewModel.onClickReset() }
-                )
-            )
+            menuItems =
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Reset),
+                        enabled = !viewModel.isRecommendedSettingsSelected,
+                        onClick = { viewModel.onClickReset() },
+                    ),
+                ),
         )
 
         when (feeSettingsViewModel) {
@@ -318,7 +333,7 @@ fun SendEvmFeeSettingsScreen(
                     nonceViewModel.onEnterNonce(it.toLong())
                 },
                 onClickIncrement = nonceViewModel::onIncrementNonce,
-                onClickDecrement = nonceViewModel::onDecrementNonce
+                onClickDecrement = nonceViewModel::onDecrementNonce,
             )
         }
 

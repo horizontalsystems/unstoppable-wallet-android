@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 class SyncErrorViewModel(
     private val service: SyncErrorService,
 ) : ViewModel() {
-
     val sourceChangeable by service::sourceChangeable
     val blockchainWrapper by service::blockchainWrapper
     val coinName by service::coinName
@@ -14,5 +13,4 @@ class SyncErrorViewModel(
     fun retry() {
         service.retry()
     }
-
 }

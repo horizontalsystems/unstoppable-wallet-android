@@ -1,7 +1,13 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,20 +23,22 @@ fun StackedBarChart(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .height(40.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(1.dp)
+        modifier =
+            modifier
+                .height(40.dp)
+                .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(1.dp),
     ) {
         slices
             .filter { it.value >= 1f }
             .forEach {
                 Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(it.color)
-                        .weight(it.value),
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(2.dp))
+                            .background(it.color)
+                            .weight(it.value),
                 )
             }
     }
@@ -44,16 +52,17 @@ data class StackBarSlice(
 @Preview
 @Composable
 private fun StackedBarChart_Preview() {
-    val slices = listOf(
-        StackBarSlice(value = 60f, color = Color(0xFF6B7196)),
-        StackBarSlice(value = 31f, color = Color(0xFFF3BA2F)),
-        StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
-        StackBarSlice(value = 1f, color = Color(0xFFD74F49))
-    )
+    val slices =
+        listOf(
+            StackBarSlice(value = 60f, color = Color(0xFF6B7196)),
+            StackBarSlice(value = 31f, color = Color(0xFFF3BA2F)),
+            StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
+            StackBarSlice(value = 1f, color = Color(0xFFD74F49)),
+        )
     ComposeAppTheme {
         StackedBarChart(
             slices,
-            Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
         )
     }
 }

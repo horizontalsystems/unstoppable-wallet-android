@@ -31,38 +31,35 @@ class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 ComposeAppTheme {
                     ProUsersActivateScreen(
                         { findNavController().popBackStack() },
-                        { authorizationViewModel.onActivateClick() }
+                        { authorizationViewModel.onActivateClick() },
                     )
                 }
             }
         }
-    }
-
 }
 
 @Composable
 private fun ProUsersActivateScreen(
     onCloseClick: () -> Unit,
-    onActivateClick: () -> Unit
+    onActivateClick: () -> Unit,
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_pro_user),
         title = stringResource(R.string.ProUsersActivate_Title),
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
-
         Box(
-            modifier = Modifier.fillMaxWidth().padding(start = 32.dp, top = 12.dp, end = 32.dp)
+            modifier = Modifier.fillMaxWidth().padding(start = 32.dp, top = 12.dp, end = 32.dp),
         ) {
             subhead2_grey(
                 text = stringResource(R.string.ProUsersActivate_Description),
@@ -71,14 +68,15 @@ private fun ProUsersActivateScreen(
         }
 
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(horizontal = 24.dp, vertical = 32.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(horizontal = 24.dp, vertical = 32.dp)
+                    .fillMaxWidth(),
             title = stringResource(R.string.Hud_Text_Activate),
             onClick = {
                 onActivateClick()
                 onCloseClick()
-            }
+            },
         )
     }
 }
@@ -88,7 +86,8 @@ private fun ProUsersActivateScreen(
 private fun ProUsersActivateScreenPreview() {
     ComposeAppTheme {
         ProUsersActivateScreen(
-            {}, {}
+            {},
+            {},
         )
     }
 }

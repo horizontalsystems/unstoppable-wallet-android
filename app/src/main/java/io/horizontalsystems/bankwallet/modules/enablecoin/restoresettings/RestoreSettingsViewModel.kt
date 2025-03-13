@@ -14,9 +14,8 @@ import kotlinx.parcelize.Parcelize
 
 class RestoreSettingsViewModel(
     private val service: RestoreSettingsService,
-    private val clearables: List<Clearable>
+    private val clearables: List<Clearable>,
 ) : ViewModel() {
-
     var openZcashConfigure by mutableStateOf<Token?>(null)
         private set
 
@@ -66,4 +65,7 @@ class RestoreSettingsViewModel(
 }
 
 @Parcelize
-data class ZCashConfig(val birthdayHeight: String?, val restoreAsNew: Boolean) : Parcelable
+data class ZCashConfig(
+    val birthdayHeight: String?,
+    val restoreAsNew: Boolean,
+) : Parcelable

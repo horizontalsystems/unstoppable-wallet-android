@@ -25,7 +25,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewModel() {
+class SwapSelectCoinViewModel(
+    private val otherSelectedToken: Token?,
+) : ViewModel() {
     private val activeAccount = App.accountManager.activeAccount!!
     private val coinsProvider = FullCoinsProvider(App.marketKit, activeAccount)
     private val adapterManager = App.adapterManager
@@ -37,8 +39,8 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
     var uiState by mutableStateOf(
         SwapSelectCoinUiState(
-            coinBalanceItems = coinBalanceItems
-        )
+            coinBalanceItems = coinBalanceItems,
+        ),
     )
 
     init {
@@ -58,113 +60,121 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         }
     }
 
-    private suspend fun reloadItems() = withContext(Dispatchers.Default) {
-        val activeWallets = App.walletManager.activeWallets
-        val resultTokens = mutableListOf<CoinBalanceItem>()
+    private suspend fun reloadItems() =
+        withContext(Dispatchers.Default) {
+            val activeWallets = App.walletManager.activeWallets
+            val resultTokens = mutableListOf<CoinBalanceItem>()
 
-        if (query.isEmpty()) {
-            //Enabled Tokens
-            activeWallets.map { wallet ->
-                val balance =
-                    adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-                CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
-            }.sortedWith(
-                if (otherSelectedToken != null) {
-                    compareBy<CoinBalanceItem> { it.token.blockchainType != otherSelectedToken.blockchainType }
-                        .thenByDescending { it.fiatBalanceValue?.value }
-                } else {
-                    compareByDescending { it.fiatBalanceValue?.value }
-                }
-                    .thenBy { it.token.coin.code }
-                    .thenBy { it.token.blockchainType.order }
-                    .thenBy { it.token.badge }
-            )
-                .let {
-                    resultTokens.addAll(it)
-                }
-
-            // Suggested Tokens
-            otherSelectedToken?.let { otherToken ->
-                val topFullCoins = marketKit.fullCoins("", limit = 100)
-                val tokens =
-                    topFullCoins.map { fullCoin ->
-                        fullCoin.tokens.filter { it.blockchainType == otherToken.blockchainType }
-                    }
-                        .flatten()
-                val suggestedTokens = tokens.filter { tokenToFilter ->
-                    tokenToFilter.blockchainType.supports(activeAccount.type) && resultTokens.none { tokenToFilter == it.token }
-                }
-
-                suggestedTokens
-                    .sortedWith(
-                        compareBy<Token> { it.coin.marketCapRank }
-                            .thenBy { it.blockchainType.order }
-                            .thenBy { it.badge }
-                    )
-                    .map { CoinBalanceItem(it, null, null) }
-                    .let {
+            if (query.isEmpty()) {
+                // Enabled Tokens
+                activeWallets
+                    .map { wallet ->
+                        val balance =
+                            adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+                        CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
+                    }.sortedWith(
+                        if (otherSelectedToken != null) {
+                            compareBy<CoinBalanceItem> { it.token.blockchainType != otherSelectedToken.blockchainType }
+                                .thenByDescending { it.fiatBalanceValue?.value }
+                        } else {
+                            compareByDescending { it.fiatBalanceValue?.value }
+                        }.thenBy { it.token.coin.code }
+                            .thenBy { it.token.blockchainType.order }
+                            .thenBy { it.token.badge },
+                    ).let {
                         resultTokens.addAll(it)
                     }
-            }
 
-            // Featured Tokens
-            val tokenQueries: List<TokenQuery> = when (activeAccount.type) {
-                is AccountType.HdExtendedKey -> {
-                    BlockchainType.supported.map { it.nativeTokenQueries }.flatten()
-                }
-
-                else -> {
-                    BlockchainType.supported.map { it.defaultTokenQuery }
-                }
-            }
-
-            val supportedNativeTokens = marketKit.tokens(tokenQueries)
-            supportedNativeTokens.filter { token ->
-                token.blockchainType.supports(activeAccount.type) && resultTokens.none { it.token == token }
-            }
-                .sortedWith(
-                    compareBy<Token> { it.blockchainType.order }
-                        .thenBy { it.badge }
-                ).map {
-                    CoinBalanceItem(it, null, null)
-                }.let {
-                    resultTokens.addAll(it)
-                }
-
-            coinBalanceItems = resultTokens
-            return@withContext
-        }
-
-        coinBalanceItems = coinsProvider.getItems()
-            .map { it.eligibleTokens(activeAccount.type) }
-            .flatten()
-            .map {
-                val balance: BigDecimal? =
-                    activeWallets.firstOrNull { wallet -> wallet.coin.uid == it.coin.uid && wallet.token.blockchainType == it.blockchainType }
-                        ?.let { wallet ->
-                            adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+                // Suggested Tokens
+                otherSelectedToken?.let { otherToken ->
+                    val topFullCoins = marketKit.fullCoins("", limit = 100)
+                    val tokens =
+                        topFullCoins
+                            .map { fullCoin ->
+                                fullCoin.tokens.filter { it.blockchainType == otherToken.blockchainType }
+                            }.flatten()
+                    val suggestedTokens =
+                        tokens.filter { tokenToFilter ->
+                            tokenToFilter.blockchainType.supports(activeAccount.type) && resultTokens.none { tokenToFilter == it.token }
                         }
 
-                CoinBalanceItem(it, balance, getFiatValue(it, balance))
+                    suggestedTokens
+                        .sortedWith(
+                            compareBy<Token> { it.coin.marketCapRank }
+                                .thenBy { it.blockchainType.order }
+                                .thenBy { it.badge },
+                        ).map { CoinBalanceItem(it, null, null) }
+                        .let {
+                            resultTokens.addAll(it)
+                        }
+                }
+
+                // Featured Tokens
+                val tokenQueries: List<TokenQuery> =
+                    when (activeAccount.type) {
+                        is AccountType.HdExtendedKey -> {
+                            BlockchainType.supported.map { it.nativeTokenQueries }.flatten()
+                        }
+
+                        else -> {
+                            BlockchainType.supported.map { it.defaultTokenQuery }
+                        }
+                    }
+
+                val supportedNativeTokens = marketKit.tokens(tokenQueries)
+                supportedNativeTokens
+                    .filter { token ->
+                        token.blockchainType.supports(activeAccount.type) && resultTokens.none { it.token == token }
+                    }.sortedWith(
+                        compareBy<Token> { it.blockchainType.order }
+                            .thenBy { it.badge },
+                    ).map {
+                        CoinBalanceItem(it, null, null)
+                    }.let {
+                        resultTokens.addAll(it)
+                    }
+
+                coinBalanceItems = resultTokens
+                return@withContext
             }
-            .sortedWith(compareByDescending { it.balance })
-    }
+
+            coinBalanceItems =
+                coinsProvider
+                    .getItems()
+                    .map { it.eligibleTokens(activeAccount.type) }
+                    .flatten()
+                    .map {
+                        val balance: BigDecimal? =
+                            activeWallets
+                                .firstOrNull { wallet ->
+                                    wallet.coin.uid == it.coin.uid && wallet.token.blockchainType == it.blockchainType
+                                }?.let { wallet ->
+                                    adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+                                }
+
+                        CoinBalanceItem(it, balance, getFiatValue(it, balance))
+                    }.sortedWith(compareByDescending { it.balance })
+        }
 
     private fun emitState() {
         viewModelScope.launch {
-            uiState = SwapSelectCoinUiState(
-                coinBalanceItems = coinBalanceItems
-            )
+            uiState =
+                SwapSelectCoinUiState(
+                    coinBalanceItems = coinBalanceItems,
+                )
         }
     }
 
-    private fun getFiatValue(token: Token, balance: BigDecimal?): CurrencyValue? {
-        return balance?.let {
-            getXRate(token)?.multiply(it)
-        }?.let { fiatBalance ->
-            CurrencyValue(currencyManager.baseCurrency, fiatBalance)
-        }
-    }
+    private fun getFiatValue(
+        token: Token,
+        balance: BigDecimal?,
+    ): CurrencyValue? =
+        balance
+            ?.let {
+                getXRate(token)?.multiply(it)
+            }?.let { fiatBalance ->
+                CurrencyValue(currencyManager.baseCurrency, fiatBalance)
+            }
 
     private fun getXRate(token: Token): BigDecimal? {
         val currency = currencyManager.baseCurrency
@@ -177,12 +187,14 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         }
     }
 
-    class Factory(private val otherSelectedToken: Token?) : ViewModelProvider.Factory {
+    class Factory(
+        private val otherSelectedToken: Token?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectCoinViewModel(otherSelectedToken) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = SwapSelectCoinViewModel(otherSelectedToken) as T
     }
 }
 
-data class SwapSelectCoinUiState(val coinBalanceItems: List<CoinBalanceItem>)
+data class SwapSelectCoinUiState(
+    val coinBalanceItems: List<CoinBalanceItem>,
+)

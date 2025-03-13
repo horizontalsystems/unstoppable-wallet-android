@@ -24,7 +24,7 @@ class MarketWidgetRepository(
     private val favoritesManager: MarketFavoritesManager,
     private val favoritesMenuService: MarketFavoritesMenuService,
     private val topPlatformsRepository: TopPlatformsRepository,
-    private val currencyManager: CurrencyManager
+    private val currencyManager: CurrencyManager,
 ) {
     companion object {
         private const val topGainers = 100
@@ -40,7 +40,7 @@ class MarketWidgetRepository(
                 getWatchlist(
                     favoritesMenuService.listSorting,
                     favoritesMenuService.manualSortOrder,
-                    favoritesMenuService.timeDuration
+                    favoritesMenuService.timeDuration,
                 )
             }
 
@@ -54,43 +54,49 @@ class MarketWidgetRepository(
         }
 
     private suspend fun getTopPlatforms(): List<MarketWidgetItem> {
-        val platformItems = topPlatformsRepository.get(
-            sortingField = SortingField.HighestCap,
-            timeDuration = TimeDuration.OneDay,
-            currencyCode = currency.code,
-            forceRefresh = true,
-            limit = itemsLimit
-        )
+        val platformItems =
+            topPlatformsRepository.get(
+                sortingField = SortingField.HighestCap,
+                timeDuration = TimeDuration.OneDay,
+                currencyCode = currency.code,
+                forceRefresh = true,
+                limit = itemsLimit,
+            )
         return platformItems.map { item ->
             MarketWidgetItem(
                 uid = item.platform.uid,
                 title = item.platform.name,
-                subtitle = Translator.getString(
-                    R.string.MarketTopPlatforms_Protocols,
-                    item.protocols
-                ),
+                subtitle =
+                    Translator.getString(
+                        R.string.MarketTopPlatforms_Protocols,
+                        item.protocols,
+                    ),
                 label = item.rank.toString(),
-                value = App.numberFormatter.formatFiatShort(
-                    item.marketCap,
-                    currency.symbol,
-                    2
-                ),
+                value =
+                    App.numberFormatter.formatFiatShort(
+                        item.marketCap,
+                        currency.symbol,
+                        2,
+                    ),
                 diff = item.changeDiff,
                 blockchainTypeUid = null,
-                imageRemoteUrl = item.platform.iconUrl
+                imageRemoteUrl = item.platform.iconUrl,
             )
         }
     }
 
     private suspend fun getTopGainers(): List<MarketWidgetItem> {
-        val marketItems = marketKit.marketInfosSingle(topGainers, currency.code, false)
-            .await()
-            .map { MarketItem.createFromCoinMarket(it, currency) }
+        val marketItems =
+            marketKit
+                .marketInfosSingle(topGainers, currency.code, false)
+                .await()
+                .map { MarketItem.createFromCoinMarket(it, currency) }
 
-        val sortedMarketItems = marketItems
-            .subList(0, Integer.min(marketItems.size, topGainers))
-            .sort(SortingField.TopGainers)
-            .subList(0, Integer.min(marketItems.size, itemsLimit))
+        val sortedMarketItems =
+            marketItems
+                .subList(0, Integer.min(marketItems.size, topGainers))
+                .sort(SortingField.TopGainers)
+                .subList(0, Integer.min(marketItems.size, itemsLimit))
 
         return sortedMarketItems.map { marketWidgetItem(it) }
     }
@@ -98,31 +104,35 @@ class MarketWidgetRepository(
     private suspend fun getWatchlist(
         listSorting: WatchlistSorting,
         manualSortOrder: List<String>,
-        timeDuration: TimeDuration
+        timeDuration: TimeDuration,
     ): List<MarketWidgetItem> {
         val favoriteCoins = favoritesManager.getAll()
         var marketItems = listOf<MarketItem>()
 
         if (favoriteCoins.isNotEmpty()) {
             val favoriteCoinUids = favoriteCoins.map { it.coinUid }
-            marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code)
-                .await()
-                .map { marketInfo ->
-                    MarketItem.createFromCoinMarket(marketInfo, currency, timeDuration.period)
-                }
+            marketItems =
+                marketKit
+                    .marketInfosSingle(favoriteCoinUids, currency.code)
+                    .await()
+                    .map { marketInfo ->
+                        MarketItem.createFromCoinMarket(marketInfo, currency, timeDuration.period)
+                    }
 
             if (listSorting == WatchlistSorting.Manual) {
-                marketItems = marketItems.sortedBy {
-                    manualSortOrder.indexOf(it.fullCoin.coin.uid)
-                }
+                marketItems =
+                    marketItems.sortedBy {
+                        manualSortOrder.indexOf(it.fullCoin.coin.uid)
+                    }
             } else {
-                val sortField = when (listSorting) {
-                    WatchlistSorting.HighestCap -> SortingField.HighestCap
-                    WatchlistSorting.LowestCap -> SortingField.LowestCap
-                    WatchlistSorting.Gainers -> SortingField.TopGainers
-                    WatchlistSorting.Losers -> SortingField.TopLosers
-                    else -> throw IllegalStateException("Manual sorting should be handled separately")
-                }
+                val sortField =
+                    when (listSorting) {
+                        WatchlistSorting.HighestCap -> SortingField.HighestCap
+                        WatchlistSorting.LowestCap -> SortingField.LowestCap
+                        WatchlistSorting.Gainers -> SortingField.TopGainers
+                        WatchlistSorting.Losers -> SortingField.TopLosers
+                        else -> throw IllegalStateException("Manual sorting should be handled separately")
+                    }
                 marketItems = marketItems.sort(sortField)
             }
         }
@@ -130,24 +140,22 @@ class MarketWidgetRepository(
         return marketItems.map { marketWidgetItem(it) }
     }
 
-    private fun marketWidgetItem(
-        marketItem: MarketItem,
-    ): MarketWidgetItem {
-
-        return MarketWidgetItem(
+    private fun marketWidgetItem(marketItem: MarketItem): MarketWidgetItem =
+        MarketWidgetItem(
             uid = marketItem.fullCoin.coin.uid,
             title = marketItem.fullCoin.coin.code,
             subtitle = marketItem.marketCap.getFormattedShort(),
-            label = marketItem.fullCoin.coin.marketCapRank?.toString() ?: "",
-            value = App.numberFormatter.formatFiatFull(
-                marketItem.rate.value,
-                marketItem.rate.currency.symbol
-            ),
+            label =
+                marketItem.fullCoin.coin.marketCapRank
+                    ?.toString() ?: "",
+            value =
+                App.numberFormatter.formatFiatFull(
+                    marketItem.rate.value,
+                    marketItem.rate.currency.symbol,
+                ),
             diff = marketItem.diff,
             blockchainTypeUid = null,
             imageRemoteUrl = marketItem.fullCoin.coin.imageUrl,
-            alternativeRemoteUrl = marketItem.fullCoin.coin.alternativeImageUrl
+            alternativeRemoteUrl = marketItem.fullCoin.coin.alternativeImageUrl,
         )
-    }
-
 }

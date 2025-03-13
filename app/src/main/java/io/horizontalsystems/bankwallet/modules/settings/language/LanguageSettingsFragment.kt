@@ -35,24 +35,23 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class LanguageSettingsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         LanguageScreen(
             navController,
-            { activity?.let { MainModule.startAsNewTask(it) } }
+            { activity?.let { MainModule.startAsNewTask(it) } },
         )
     }
-
 }
 
 @Composable
 private fun LanguageScreen(
     navController: NavController,
     reloadApp: () -> Unit,
-    viewModel: LanguageSettingsViewModel = viewModel(
-        factory = LanguageSettingsModule.Factory()
-    )
+    viewModel: LanguageSettingsViewModel =
+        viewModel(
+            factory = LanguageSettingsModule.Factory(),
+        ),
 ) {
     if (viewModel.closeScreen) {
         navController.popBackStack()
@@ -63,18 +62,19 @@ private fun LanguageScreen(
     }
 
     Column(
-        modifier = Modifier
-            .background(color = ComposeAppTheme.colors.tyler)
-            .navigationBarsPadding()
+        modifier =
+            Modifier
+                .background(color = ComposeAppTheme.colors.tyler)
+                .navigationBarsPadding(),
     ) {
         AppBar(
             title = stringResource(R.string.Settings_Language),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
-            }
+            },
         )
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            Modifier.verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(12.dp))
             CellUniversalLawrenceSection(viewModel.languageItems) { item ->
@@ -83,7 +83,7 @@ private fun LanguageScreen(
                     subtitle = item.nativeName,
                     icon = item.icon,
                     checked = item.current,
-                    onClick = { viewModel.onSelectLocale(item.localeType) }
+                    onClick = { viewModel.onSelectLocale(item.localeType) },
                 )
             }
             Spacer(Modifier.height(24.dp))
@@ -97,17 +97,18 @@ private fun LanguageCell(
     subtitle: String,
     icon: Int,
     checked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         Image(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(32.dp),
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(32.dp),
             painter = painterResource(icon),
-            contentDescription = null
+            contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
             body_leah(
@@ -123,10 +124,11 @@ private fun LanguageCell(
             )
         }
         Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .width(52.dp)
+                    .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
         ) {
             if (checked) {
                 Icon(

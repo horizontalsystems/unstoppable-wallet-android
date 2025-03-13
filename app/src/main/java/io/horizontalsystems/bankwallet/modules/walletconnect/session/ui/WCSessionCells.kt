@@ -29,9 +29,10 @@ fun BlockchainCell(
     value: String?,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
@@ -43,11 +44,15 @@ fun BlockchainCell(
 }
 
 @Composable
-fun TitleValueCell(title: String, value: String) {
+fun TitleValueCell(
+    title: String,
+    value: String,
+) {
     RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
     ) {
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
@@ -58,22 +63,24 @@ fun TitleValueCell(title: String, value: String) {
 @Composable
 fun StatusCell(connectionStatus: Status?) {
     RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
     ) {
         subhead2_grey(text = stringResource(id = R.string.WalletConnect_Status))
         Spacer(Modifier.weight(1f))
         connectionStatus?.let { status ->
-            val color = when (status) {
-                Status.OFFLINE -> ComposeAppTheme.colors.lucian
-                Status.CONNECTING -> ComposeAppTheme.colors.leah
-                Status.ONLINE -> ComposeAppTheme.colors.remus
-            }
+            val color =
+                when (status) {
+                    Status.OFFLINE -> ComposeAppTheme.colors.lucian
+                    Status.CONNECTING -> ComposeAppTheme.colors.leah
+                    Status.ONLINE -> ComposeAppTheme.colors.remus
+                }
             Text(
                 text = stringResource(status.value),
                 color = color,
-                style = ComposeAppTheme.typography.subhead1
+                style = ComposeAppTheme.typography.subhead1,
             )
         }
     }
@@ -87,10 +94,11 @@ fun DropDownCell(
     onSelect: () -> Unit,
 ) {
     RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clickable(enabled = enabled, onClick = onSelect),
-        onClick = if (enabled) onSelect else null
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .clickable(enabled = enabled, onClick = onSelect),
+        onClick = if (enabled) onSelect else null,
     ) {
         subhead2_grey(
             text = title,
@@ -102,14 +110,14 @@ fun DropDownCell(
             subhead1_leah(
                 text = value,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
             )
             if (enabled) {
                 HSpacer(8.dp)
                 Icon(
                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
         }

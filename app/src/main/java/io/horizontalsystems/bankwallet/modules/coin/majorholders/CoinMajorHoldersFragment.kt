@@ -55,7 +55,6 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
 
 class CoinMajorHoldersFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -68,7 +67,10 @@ class CoinMajorHoldersFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val coinUid: String, val blockchain: Blockchain) : Parcelable
+    data class Input(
+        val coinUid: String,
+        val blockchain: Blockchain,
+    ) : Parcelable
 }
 
 @Composable
@@ -76,22 +78,23 @@ private fun CoinMajorHoldersScreen(
     coinUid: String,
     blockchain: Blockchain,
     navController: NavController,
-    viewModel: CoinMajorHoldersViewModel = viewModel(
-        factory = CoinMajorHoldersModule.Factory(coinUid, blockchain)
-    )
+    viewModel: CoinMajorHoldersViewModel =
+        viewModel(
+            factory = CoinMajorHoldersModule.Factory(coinUid, blockchain),
+        ),
 ) {
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 title = blockchain.name,
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = { navController.popBackStack() },
+                        ),
+                    ),
             )
 
             Crossfade(viewModel.uiState.viewState) { viewState ->
@@ -118,16 +121,13 @@ private fun CoinMajorHoldersScreen(
 }
 
 @Composable
-private fun CoinMajorHoldersContent(
-    viewModel: CoinMajorHoldersViewModel,
-) {
+private fun CoinMajorHoldersContent(viewModel: CoinMajorHoldersViewModel) {
     val uiState = viewModel.uiState
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(bottom = 30.dp)
+        contentPadding = PaddingValues(bottom = 30.dp),
     ) {
-
         item {
             HoldersGeneralInfo(uiState.top10Share, uiState.totalHoldersCount)
         }
@@ -135,7 +135,7 @@ private fun CoinMajorHoldersContent(
         item {
             StackedBarChart(
                 slices = uiState.chartData,
-                modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+                modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 24.dp),
             )
         }
 
@@ -153,11 +153,14 @@ private fun CoinMajorHoldersContent(
 }
 
 @Composable
-private fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
+private fun HoldersGeneralInfo(
+    top10Share: String,
+    totalHoldersCount: String,
+) {
     VSpacer(12.dp)
     subhead2_grey(
         modifier = Modifier.padding(horizontal = 16.dp),
-        text = stringResource(R.string.CoinPage_MajorHolders_HoldersNumber, totalHoldersCount)
+        text = stringResource(R.string.CoinPage_MajorHolders_HoldersNumber, totalHoldersCount),
     )
     VSpacer(12.dp)
     Row(
@@ -165,12 +168,12 @@ private fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
     ) {
         headline1_bran(
             text = top10Share,
-            modifier = Modifier.alignByBaseline()
+            modifier = Modifier.alignByBaseline(),
         )
         HSpacer(8.dp)
         subhead1_grey(
             text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets),
-            modifier = Modifier.alignByBaseline()
+            modifier = Modifier.alignByBaseline(),
         )
     }
 }
@@ -181,22 +184,23 @@ private fun SeeAllButton(onClick: () -> Unit) {
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onClick = onClick
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                onClick = onClick,
             ) {
                 body_leah(
                     text = stringResource(R.string.Market_SeeAll),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
-        }
+        },
     )
     VSpacer(32.dp)
 }
@@ -219,14 +223,15 @@ private fun TopWalletCell(item: MajorHolderItem) {
         }
 
         ButtonSecondaryDefault(
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .height(28.dp),
+            modifier =
+                Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .height(28.dp),
             title = item.address.shorten(),
             onClick = {
                 TextHelper.copyText(item.address)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-            }
+            },
         )
     }
 }

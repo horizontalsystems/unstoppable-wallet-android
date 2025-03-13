@@ -8,9 +8,28 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.Surface
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.primarySurface
+import androidx.compose.material.ripple
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -21,7 +40,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.layout.*
+import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
@@ -66,13 +90,13 @@ fun HsBottomNavigation(
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = BottomNavigationDefaults.Elevation,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Surface(
         color = backgroundColor,
         contentColor = contentColor,
         elevation = elevation,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row(
             Modifier
@@ -81,7 +105,7 @@ fun HsBottomNavigation(
                 .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            content = content
+            content = content,
         )
     }
 }
@@ -131,14 +155,15 @@ fun RowScope.HsBottomNavigationItem(
     alwaysShowLabel: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     selectedContentColor: Color = LocalContentColor.current,
-    unselectedContentColor: Color = selectedContentColor.copy(alpha = ContentAlpha.medium)
+    unselectedContentColor: Color = selectedContentColor.copy(alpha = ContentAlpha.medium),
 ) {
-    val styledLabel: @Composable (() -> Unit)? = label?.let {
-        @Composable {
-            val style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center)
-            ProvideTextStyle(style, content = label)
+    val styledLabel: @Composable (() -> Unit)? =
+        label?.let {
+            @Composable {
+                val style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center)
+                ProvideTextStyle(style, content = label)
+            }
         }
-    }
     // The color of the Ripple should always the selected color, as we want to show the color
     // before the item is considered selected, and hence before the new contentColor is
     // provided by BottomNavigationTransition.
@@ -153,22 +178,21 @@ fun RowScope.HsBottomNavigationItem(
                 enabled = enabled,
                 role = Role.Tab,
                 interactionSource = interactionSource,
-                indication = ripple
-            )
-            .weight(1f),
-        contentAlignment = Alignment.Center
+                indication = ripple,
+            ).weight(1f),
+        contentAlignment = Alignment.Center,
     ) {
         BottomNavigationTransition(
             selectedContentColor,
             unselectedContentColor,
-            selected
+            selected,
         ) { progress ->
             val animationProgress = if (alwaysShowLabel) 1f else progress
 
             BottomNavigationItemBaselineLayout(
                 icon = icon,
                 label = styledLabel,
-                iconPositionAnimationProgress = animationProgress
+                iconPositionAnimationProgress = animationProgress,
             )
         }
     }
@@ -201,11 +225,11 @@ private fun BottomNavigationTransition(
     activeColor: Color,
     inactiveColor: Color,
     selected: Boolean,
-    content: @Composable (animationProgress: Float) -> Unit
+    content: @Composable (animationProgress: Float) -> Unit,
 ) {
     val animationProgress by animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
-        animationSpec = BottomNavigationAnimationSpec
+        animationSpec = BottomNavigationAnimationSpec,
     )
 
     val color = lerp(inactiveColor, activeColor, animationProgress)
@@ -232,8 +256,8 @@ private fun BottomNavigationTransition(
 private fun BottomNavigationItemBaselineLayout(
     icon: @Composable () -> Unit,
     label: @Composable (() -> Unit)?,
-    /*@FloatRange(from = 0.0, to = 1.0)*/
-    iconPositionAnimationProgress: Float
+    // @FloatRange(from = 0.0, to = 1.0)
+    iconPositionAnimationProgress: Float,
 ) {
     Layout(
         {
@@ -243,20 +267,21 @@ private fun BottomNavigationItemBaselineLayout(
                     Modifier
                         .layoutId("label")
                         .alpha(iconPositionAnimationProgress)
-                        .padding(horizontal = BottomNavigationItemHorizontalPadding)
+                        .padding(horizontal = BottomNavigationItemHorizontalPadding),
                 ) { label() }
             }
-        }
+        },
     ) { measurables, constraints ->
         val iconPlaceable = measurables.first { it.layoutId == "icon" }.measure(constraints)
 
-        val labelPlaceable = label?.let {
-            measurables.first { it.layoutId == "label" }.measure(
-                // Measure with loose constraints for height as we don't want the label to take up more
-                // space than it needs
-                constraints.copy(minHeight = 0)
-            )
-        }
+        val labelPlaceable =
+            label?.let {
+                measurables.first { it.layoutId == "label" }.measure(
+                    // Measure with loose constraints for height as we don't want the label to take up more
+                    // space than it needs
+                    constraints.copy(minHeight = 0),
+                )
+            }
 
         // If there is no label, just place the icon.
         if (label == null) {
@@ -266,7 +291,7 @@ private fun BottomNavigationItemBaselineLayout(
                 labelPlaceable!!,
                 iconPlaceable,
                 constraints,
-                iconPositionAnimationProgress
+                iconPositionAnimationProgress,
             )
         }
     }
@@ -277,7 +302,7 @@ private fun BottomNavigationItemBaselineLayout(
  */
 private fun MeasureScope.placeIcon(
     iconPlaceable: Placeable,
-    constraints: Constraints
+    constraints: Constraints,
 ): MeasureResult {
     val height = constraints.maxHeight
     val iconY = (height - iconPlaceable.height) / 2
@@ -310,8 +335,8 @@ private fun MeasureScope.placeLabelAndIcon(
     labelPlaceable: Placeable,
     iconPlaceable: Placeable,
     constraints: Constraints,
-    /*@FloatRange(from = 0.0, to = 1.0)*/
-    iconPositionAnimationProgress: Float
+    // @FloatRange(from = 0.0, to = 1.0)
+    iconPositionAnimationProgress: Float,
 ): MeasureResult {
     val height = constraints.maxHeight
 
@@ -355,10 +380,11 @@ private fun MeasureScope.placeLabelAndIcon(
  * [VectorizedAnimationSpec] controlling the transition between unselected and selected
  * [BottomNavigationItem]s.
  */
-private val BottomNavigationAnimationSpec = TweenSpec<Float>(
-    durationMillis = 300,
-    easing = FastOutSlowInEasing
-)
+private val BottomNavigationAnimationSpec =
+    TweenSpec<Float>(
+        durationMillis = 300,
+        easing = FastOutSlowInEasing,
+    )
 
 /**
  * Height of a [BottomNavigation] component

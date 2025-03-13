@@ -39,12 +39,13 @@ fun AddTokenBlockchainSelectorScreen(
                 },
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler
+        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(12.dp))
             SectionUniversalLawrence {

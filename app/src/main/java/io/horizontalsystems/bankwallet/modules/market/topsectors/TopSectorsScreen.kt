@@ -52,9 +52,7 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TopSectorsScreen(
-    navController: NavController
-) {
+fun TopSectorsScreen(navController: NavController) {
     val viewModel = viewModel<TopSectorsViewModel>(factory = TopSectorsViewModel.Factory())
     val uiState = viewModel.uiState
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
@@ -65,11 +63,11 @@ fun TopSectorsScreen(
             LazyListState(0, 0)
         }
 
-    Column() {
+    Column {
         HSSwipeRefresh(
             topPadding = 44,
             refreshing = uiState.isRefreshing,
-            onRefresh = viewModel::refresh
+            onRefresh = viewModel::refresh,
         ) {
             Crossfade(uiState.viewState, label = "") { viewState ->
                 when (viewState) {
@@ -80,14 +78,14 @@ fun TopSectorsScreen(
                     is ViewState.Error -> {
                         ListErrorView(
                             stringResource(R.string.SyncError),
-                            viewModel::onErrorClick
+                            viewModel::onErrorClick,
                         )
                     }
 
                     ViewState.Success -> {
                         LazyColumn(
                             state = state,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
                         ) {
                             stickyHeader {
                                 HeaderSorting(borderBottom = true) {
@@ -96,14 +94,14 @@ fun TopSectorsScreen(
                                         uiState.sortingField.titleResId,
                                         onOptionClick = {
                                             openSortingSelector = true
-                                        }
+                                        },
                                     )
                                     HSpacer(width = 12.dp)
                                     OptionController(
                                         uiState.timePeriod.titleResId,
                                         onOptionClick = {
                                             openPeriodSelector = true
-                                        }
+                                        },
                                     )
                                     HSpacer(width = 16.dp)
                                 }
@@ -111,11 +109,11 @@ fun TopSectorsScreen(
                             itemsIndexed(uiState.items) { i, item ->
                                 TopSectorItem(
                                     item,
-                                    borderBottom = true
+                                    borderBottom = true,
                                 ) { coinCategory ->
                                     navController.slideFromRight(
                                         R.id.marketCategoryFragment,
-                                        coinCategory
+                                        coinCategory,
                                     )
                                 }
                             }
@@ -128,7 +126,7 @@ fun TopSectorsScreen(
             }
         }
     }
-    //Dialogs
+    // Dialogs
     if (openPeriodSelector) {
         AlertGroup(
             R.string.CoinPage_Period,
@@ -139,10 +137,10 @@ fun TopSectorsScreen(
                 stat(
                     page = StatPage.Markets,
                     section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
                 )
             },
-            { openPeriodSelector = false }
+            { openPeriodSelector = false },
         )
     }
     if (openSortingSelector) {
@@ -155,10 +153,10 @@ fun TopSectorsScreen(
                 stat(
                     page = StatPage.Markets,
                     section = StatSection.Platforms,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
+                    event = StatEvent.SwitchSortType(selected.statSortType),
                 )
             },
-            { openSortingSelector = false }
+            { openSortingSelector = false },
         )
     }
 }
@@ -173,37 +171,39 @@ fun TopSectorItem(
     SectionItemBorderedRowUniversalClear(
         borderTop = borderTop,
         borderBottom = borderBottom,
-        onClick = { onItemClick(viewItem.coinCategory) }
+        onClick = { onItemClick(viewItem.coinCategory) },
     ) {
         Box(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .width(76.dp)
+            modifier =
+                Modifier
+                    .padding(end = 16.dp)
+                    .width(76.dp),
         ) {
-            val iconModifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(ComposeAppTheme.colors.tyler)
+            val iconModifier =
+                Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.tyler)
 
             CoinImage(
                 coin = viewItem.coin3.coin,
-                modifier = iconModifier.align(Alignment.TopEnd)
+                modifier = iconModifier.align(Alignment.TopEnd),
             )
             CoinImage(
                 coin = viewItem.coin2.coin,
-                modifier = iconModifier.align(Alignment.TopCenter)
+                modifier = iconModifier.align(Alignment.TopCenter),
             )
             CoinImage(
                 coin = viewItem.coin1.coin,
-                modifier = iconModifier.align(Alignment.TopStart)
+                modifier = iconModifier.align(Alignment.TopStart),
             )
         }
         body_leah(
             text = viewItem.coinCategory.name,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Column(
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.End,
         ) {
             body_leah(
                 text = viewItem.marketCapValue ?: "n/a",

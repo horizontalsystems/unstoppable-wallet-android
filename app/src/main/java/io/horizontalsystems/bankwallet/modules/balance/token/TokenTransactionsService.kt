@@ -62,7 +62,8 @@ class TokenTransactionsService(
             }
         }
         coroutineScope.launch {
-            transactionSyncStateRepository.lastBlockInfoObservable.asFlow()
+            transactionSyncStateRepository.lastBlockInfoObservable
+                .asFlow()
                 .collect { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
@@ -78,7 +79,8 @@ class TokenTransactionsService(
             }
         }
 
-        val transactionWallet = TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
+        val transactionWallet =
+            TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
 
         transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
         transactionRecordRepository.set(
@@ -86,7 +88,7 @@ class TokenTransactionsService(
             transactionWallet,
             FilterTransactionType.All,
             null,
-            null
+            null,
         )
     }
 
@@ -123,10 +125,18 @@ class TokenTransactionsService(
     }
 
     @Synchronized
-    private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
+    private fun handleLastBlockInfo(
+        source: TransactionSource,
+        lastBlockInfo: LastBlockInfo,
+    ) {
         var updated = false
         transactionItems.forEachIndexed { index, item ->
-            if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
+            if (item.record.source == source &&
+                item.record.changedBy(
+                    item.lastBlockInfo,
+                    lastBlockInfo,
+                )
+            ) {
                 transactionItems[index] = item.copy(lastBlockInfo = lastBlockInfo)
                 updated = true
             }
@@ -138,7 +148,10 @@ class TokenTransactionsService(
     }
 
     @Synchronized
-    private fun handleUpdatedHistoricalRate(key: HistoricalRateKey, rate: CurrencyValue) {
+    private fun handleUpdatedHistoricalRate(
+        key: HistoricalRateKey,
+        rate: CurrencyValue,
+    ) {
         var updated = false
         for (i in 0 until transactionItems.size) {
             val item = transactionItems[i]
@@ -195,14 +208,15 @@ class TokenTransactionsService(
 
             if (record.spam && spamManager.hideSuspiciousTx) return@forEach
 
-            transactionItem = if (transactionItem == null) {
-                val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
-                val currencyValue = getCurrencyValue(record)
+            transactionItem =
+                if (transactionItem == null) {
+                    val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
+                    val currencyValue = getCurrencyValue(record)
 
-                TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
-            } else {
-                transactionItem.copy(record = record)
-            }
+                    TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
+                } else {
+                    transactionItem.copy(record = record)
+                }
 
             tmpList.add(transactionItem)
         }
@@ -220,7 +234,8 @@ class TokenTransactionsService(
         val decimalValue = record.mainValue?.decimalValue ?: return null
         val coinUid = record.mainValue?.coin?.uid ?: return null
 
-        return rateRepository.getHistoricalRate(HistoricalRateKey(coinUid, record.timestamp))
+        return rateRepository
+            .getHistoricalRate(HistoricalRateKey(coinUid, record.timestamp))
             ?.let { rate -> CurrencyValue(rate.currency, decimalValue * rate.value) }
     }
 
@@ -241,17 +256,19 @@ class TokenTransactionsService(
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
                 if (transactionItem.currencyValue == null) {
                     transactionItem.record.mainValue?.coin?.uid?.let { coinUid ->
-                        rateRepository.fetchHistoricalRate(HistoricalRateKey(coinUid, transactionItem.record.timestamp))
+                        rateRepository.fetchHistoricalRate(
+                            HistoricalRateKey(
+                                coinUid,
+                                transactionItem.record.timestamp,
+                            ),
+                        )
                     }
                 }
             }
         }
     }
 
-    fun getTransactionItem(recordUid: String): TransactionItem? {
-        return transactionItems.find { it.record.uid == recordUid }
-    }
-
+    fun getTransactionItem(recordUid: String): TransactionItem? = transactionItems.find { it.record.uid == recordUid }
 
     override fun clear() {
         transactionRecordRepository.clear()

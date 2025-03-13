@@ -12,16 +12,27 @@ import io.horizontalsystems.marketkit.models.RankMultiValue
 import io.horizontalsystems.marketkit.models.RankValue
 
 object CoinRankModule {
-    class Factory(private val rankType: CoinAnalyticsModule.RankType) : ViewModelProvider.Factory {
+    class Factory(
+        private val rankType: CoinAnalyticsModule.RankType,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CoinRankViewModel(rankType, App.currencyManager.baseCurrency, App.marketKit, App.numberFormatter) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            CoinRankViewModel(
+                rankType,
+                App.currencyManager.baseCurrency,
+                App.marketKit,
+                App.numberFormatter,
+            ) as T
     }
 
     sealed class RankAnyValue {
-        class SingleValue(val rankValue: RankValue) : RankAnyValue()
-        class MultiValue(val rankMultiValue: RankMultiValue) : RankAnyValue()
+        class SingleValue(
+            val rankValue: RankValue,
+        ) : RankAnyValue()
+
+        class MultiValue(
+            val rankMultiValue: RankMultiValue,
+        ) : RankAnyValue()
     }
 
     data class RankViewItem(
@@ -38,6 +49,6 @@ object CoinRankModule {
         val rankViewItems: List<RankViewItem>,
         val periodSelect: Select<TimeDuration>?,
         val sortDescending: Boolean,
-        val header: MarketModule.Header
+        val header: MarketModule.Header,
     )
 }

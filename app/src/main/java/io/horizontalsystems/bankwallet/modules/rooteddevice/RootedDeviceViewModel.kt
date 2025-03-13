@@ -10,8 +10,7 @@ import io.horizontalsystems.bankwallet.core.utils.RootUtil
 class RootedDeviceViewModel(
     private val localStorage: ILocalStorage,
     rootUtil: RootUtil,
-): ViewModel() {
-
+) : ViewModel() {
     var showRootedDeviceWarning by mutableStateOf(!localStorage.ignoreRootedDeviceWarning && rootUtil.isRooted)
         private set
 
@@ -19,5 +18,4 @@ class RootedDeviceViewModel(
         localStorage.ignoreRootedDeviceWarning = true
         showRootedDeviceWarning = false
     }
-
 }

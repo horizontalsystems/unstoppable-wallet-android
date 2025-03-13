@@ -16,21 +16,22 @@ fun HsSwitch(
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-){
+) {
     CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         Switch(
             modifier = modifier,
             checked = checked,
             onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = ComposeAppTheme.colors.white,
-                uncheckedThumbColor = ComposeAppTheme.colors.lightGrey,
-                checkedTrackColor = ComposeAppTheme.colors.yellowD,
-                uncheckedTrackColor = ComposeAppTheme.colors.elenaD,
-                checkedTrackAlpha = 1f,
-                uncheckedTrackAlpha = 0.2f,
-            ),
-            enabled = enabled
+            colors =
+                SwitchDefaults.colors(
+                    checkedThumbColor = ComposeAppTheme.colors.white,
+                    uncheckedThumbColor = ComposeAppTheme.colors.lightGrey,
+                    checkedTrackColor = ComposeAppTheme.colors.yellowD,
+                    uncheckedTrackColor = ComposeAppTheme.colors.elenaD,
+                    checkedTrackAlpha = 1f,
+                    uncheckedTrackAlpha = 0.2f,
+                ),
+            enabled = enabled,
         )
     }
 }

@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class EvmMethodLabel(
     @PrimaryKey
     val methodId: String,
-    val label: String
+    val label: String,
 )

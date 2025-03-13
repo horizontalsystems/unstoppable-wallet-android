@@ -7,5 +7,5 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 data class RecentAddress(
     val accountId: String,
     val blockchainType: BlockchainType,
-    val address: String
+    val address: String,
 )

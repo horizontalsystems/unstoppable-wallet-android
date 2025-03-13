@@ -1,8 +1,14 @@
 package io.horizontalsystems.bankwallet.entities
 
 sealed class DataState<out T> {
-    data class Success<out T>(val data: T) : DataState<T>()
-    data class Error(val error: Throwable) : DataState<Nothing>()
+    data class Success<out T>(
+        val data: T,
+    ) : DataState<T>()
+
+    data class Error(
+        val error: Throwable,
+    ) : DataState<Nothing>()
+
     object Loading : DataState<Nothing>()
 
     val loading: Boolean
@@ -15,9 +21,10 @@ sealed class DataState<out T> {
         get() = (this as? Error)?.error
 
     val viewState: ViewState?
-        get() = when (this) {
-            is Error -> ViewState.Error(error)
-            is Success -> ViewState.Success
-            else -> null
-        }
+        get() =
+            when (this) {
+                is Error -> ViewState.Error(error)
+                is Success -> ViewState.Success
+                else -> null
+            }
 }

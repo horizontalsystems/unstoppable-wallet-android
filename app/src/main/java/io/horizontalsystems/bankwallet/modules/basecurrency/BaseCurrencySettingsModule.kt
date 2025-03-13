@@ -8,13 +8,14 @@ import io.horizontalsystems.bankwallet.entities.Currency
 object BaseCurrencySettingsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BaseCurrencySettingsViewModel(App.currencyManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = BaseCurrencySettingsViewModel(App.currencyManager) as T
     }
 }
 
-data class CurrencyViewItem(val currency: Currency, val selected: Boolean) {
+data class CurrencyViewItem(
+    val currency: Currency,
+    val selected: Boolean,
+) {
     override fun equals(other: Any?): Boolean {
         if (other is CurrencyViewItem) {
             return currency == other.currency
@@ -23,7 +24,5 @@ data class CurrencyViewItem(val currency: Currency, val selected: Boolean) {
         return super.equals(other)
     }
 
-    override fun hashCode(): Int {
-        return currency.hashCode()
-    }
+    override fun hashCode(): Int = currency.hashCode()
 }

@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
 ) : ITransactionRecordRepository {
-
     private var selectedFilterTransactionType: FilterTransactionType = FilterTransactionType.All
 
     private var selectedWallet: TransactionWallet? = null
@@ -50,13 +49,16 @@ class TransactionRecordRepository(
             val tmpSelectedWallet = selectedWallet
             val tmpSelectedBlockchain = selectedBlockchain
 
-            val activeWallets = when {
-                tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
-                tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
-                    it.source.blockchain == tmpSelectedBlockchain
+            val activeWallets =
+                when {
+                    tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
+                    tmpSelectedBlockchain != null ->
+                        walletsGroupedBySource.filter {
+                            it.source.blockchain == tmpSelectedBlockchain
+                        }
+
+                    else -> walletsGroupedBySource
                 }
-                else -> walletsGroupedBySource
-            }
             return activeWallets.mapNotNull { adaptersMap[it] }
         }
 
@@ -70,7 +72,8 @@ class TransactionRecordRepository(
                 BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-                BlockchainType.Zcash -> mergedWallets.add(wallet)
+                BlockchainType.Zcash,
+                -> mergedWallets.add(wallet)
 
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
@@ -84,7 +87,8 @@ class TransactionRecordRepository(
                 BlockchainType.Fantom,
                 BlockchainType.Solana,
                 BlockchainType.Tron,
-                BlockchainType.Ton -> {
+                BlockchainType.Ton,
+                -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
@@ -94,7 +98,6 @@ class TransactionRecordRepository(
             }
         }
         return mergedWallets
-
     }
 
     override fun set(
@@ -115,12 +118,13 @@ class TransactionRecordRepository(
                 var adapter = currentAdapters.remove(transactionWallet)
                 if (adapter == null) {
                     adapterManager.getAdapter(transactionWallet.source)?.let {
-                        adapter = TransactionAdapterWrapper(
-                            it,
-                            transactionWallet,
-                            selectedFilterTransactionType,
-                            contact
-                        )
+                        adapter =
+                            TransactionAdapterWrapper(
+                                it,
+                                transactionWallet,
+                                selectedFilterTransactionType,
+                                contact,
+                            )
                     }
                 }
 
@@ -190,14 +194,15 @@ class TransactionRecordRepository(
     }
 
     private fun subscribeForUpdates() {
-        updatesJob = coroutineScope.launch {
-            activeAdapters
-                .map { it.updatedObservable.asFlow() }
-                .merge()
-                .collect {
-                    handleUpdates()
-                }
-        }
+        updatesJob =
+            coroutineScope.launch {
+                activeAdapters
+                    .map { it.updatedObservable.asFlow() }
+                    .merge()
+                    .collect {
+                        handleUpdates()
+                    }
+            }
     }
 
     @Synchronized
@@ -214,14 +219,14 @@ class TransactionRecordRepository(
 
         coroutineScope.launch {
             try {
-                val records = activeAdapters
-                    .map { async { it.get(itemsCount).await() } }
-                    .awaitAll()
-                    .flatten()
+                val records =
+                    activeAdapters
+                        .map { async { it.get(itemsCount).await() } }
+                        .awaitAll()
+                        .flatten()
 
                 handleRecords(records, page)
             } catch (e: Throwable) {
-
             } finally {
                 loading.set(false)
             }
@@ -235,7 +240,10 @@ class TransactionRecordRepository(
     }
 
     @Synchronized
-    private fun handleRecords(records: List<TransactionRecord>, page: Int) {
+    private fun handleRecords(
+        records: List<TransactionRecord>,
+        page: Int,
+    ) {
         val expectedItemsCount = page * itemsPerPage
 
         records
@@ -257,5 +265,4 @@ class TransactionRecordRepository(
     companion object {
         const val itemsPerPage = 20
     }
-
 }

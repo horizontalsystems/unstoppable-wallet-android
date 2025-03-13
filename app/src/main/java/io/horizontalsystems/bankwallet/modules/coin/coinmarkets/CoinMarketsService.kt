@@ -24,10 +24,10 @@ class CoinMarketsService(
     private var verifiedType: VerifiedType = VerifiedType.All
 
     val verifiedMenu = Select(verifiedType, VerifiedType.entries)
-    val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.create()
+    val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> =
+        BehaviorSubject.create()
 
     val currency get() = currencyManager.baseCurrency
-
 
     fun start() {
         coroutineScope.launch {
@@ -58,22 +58,24 @@ class CoinMarketsService(
 
     @Synchronized
     private fun emitItems() {
-        val filtered = when (verifiedType) {
-            VerifiedType.Verified -> marketTickers.filter { it.verified }
-            VerifiedType.All -> marketTickers
-        }
+        val filtered =
+            when (verifiedType) {
+                VerifiedType.Verified -> marketTickers.filter { it.verified }
+                VerifiedType.All -> marketTickers
+            }
 
         stateObservable.onNext(DataState.Success(filtered.map { createItem(it) }))
     }
 
-    private fun createItem(marketTicker: MarketTicker): MarketTickerItem = MarketTickerItem(
-        market = marketTicker.marketName,
-        marketImageUrl = marketTicker.marketImageUrl,
-        baseCoinCode = marketTicker.base,
-        targetCoinCode = marketTicker.target,
-        volumeFiat = marketTicker.fiatVolume,
-        volumeToken = marketTicker.volume,
-        tradeUrl = marketTicker.tradeUrl,
-        verified = marketTicker.verified
-    )
+    private fun createItem(marketTicker: MarketTicker): MarketTickerItem =
+        MarketTickerItem(
+            market = marketTicker.marketName,
+            marketImageUrl = marketTicker.marketImageUrl,
+            baseCoinCode = marketTicker.base,
+            targetCoinCode = marketTicker.target,
+            volumeFiat = marketTicker.fiatVolume,
+            volumeToken = marketTicker.volume,
+            tradeUrl = marketTicker.tradeUrl,
+            verified = marketTicker.verified,
+        )
 }

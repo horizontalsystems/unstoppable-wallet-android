@@ -14,8 +14,10 @@ import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper, decimal), ISendSolanaAdapter {
-
+class SolanaAdapter(
+    kitWrapper: SolanaKitWrapper,
+) : BaseSolanaAdapter(kitWrapper, decimal),
+    ISendSolanaAdapter {
     // IAdapter
 
     override fun start() {
@@ -47,11 +49,15 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     // ISendSolanaAdapter
     override val availableBalance: BigDecimal
         get() {
-            val availableBalance = balanceData.available - SolanaKit.fee - SolanaKit.accountRentAmount
+            val availableBalance =
+                balanceData.available - SolanaKit.fee - SolanaKit.accountRentAmount
             return if (availableBalance < BigDecimal.ZERO) BigDecimal.ZERO else availableBalance
         }
 
-    override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
+    override suspend fun send(
+        amount: BigDecimal,
+        to: Address,
+    ): FullTransaction {
         if (signer == null) throw Exception()
 
         return solanaKit.sendSol(to, amount.movePointRight(decimal).toLong(), signer)
@@ -67,15 +73,20 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     companion object {
         const val decimal = 9
 
-        private fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
-            return amount.movePointLeft(decimals).stripTrailingZeros()
-        }
+        private fun scaleDown(
+            amount: BigDecimal,
+            decimals: Int = decimal,
+        ): BigDecimal = amount.movePointLeft(decimals).stripTrailingZeros()
 
-        private fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
-            return amount.movePointRight(decimals).toBigInteger()
-        }
+        private fun scaleUp(
+            amount: BigDecimal,
+            decimals: Int = decimal,
+        ): BigInteger = amount.movePointRight(decimals).toBigInteger()
 
-        fun balanceInBigDecimal(balance: Long?, decimal: Int): BigDecimal {
+        fun balanceInBigDecimal(
+            balance: Long?,
+            decimal: Int,
+        ): BigDecimal {
             balance?.toBigDecimal()?.let {
                 return scaleDown(it, decimal)
             } ?: return BigDecimal.ZERO
@@ -85,5 +96,4 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
             SolanaKit.clear(App.instance, walletId)
         }
     }
-
 }

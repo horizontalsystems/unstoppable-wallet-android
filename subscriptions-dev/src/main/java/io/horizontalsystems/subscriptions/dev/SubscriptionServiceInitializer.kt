@@ -11,7 +11,5 @@ class SubscriptionServiceInitializer : Initializer<SubscriptionServiceDev> {
         return service
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> {
-        return emptyList()
-    }
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }

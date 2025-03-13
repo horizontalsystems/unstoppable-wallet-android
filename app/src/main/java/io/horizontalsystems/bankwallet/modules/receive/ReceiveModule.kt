@@ -10,17 +10,22 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveAddress
 import java.math.BigDecimal
 
 object ReceiveModule {
-
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveAddressViewModel(wallet, App.adapterManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ReceiveAddressViewModel(wallet, App.adapterManager) as T
     }
 
     sealed class AdditionalData {
-        class Amount(val value: String) : AdditionalData()
-        class Memo(val value: String) : AdditionalData()
+        class Amount(
+            val value: String,
+        ) : AdditionalData()
+
+        class Memo(
+            val value: String,
+        ) : AdditionalData()
+
         object AccountNotActive : AdditionalData()
     }
 
@@ -38,8 +43,12 @@ object ReceiveModule {
     )
 
     sealed class AlertText {
-        class Normal(val content: String) : AlertText()
-        class Critical(val content: String) : AlertText()
-    }
+        class Normal(
+            val content: String,
+        ) : AlertText()
 
+        class Critical(
+            val content: String,
+        ) : AlertText()
+    }
 }

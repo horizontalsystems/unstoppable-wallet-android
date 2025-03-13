@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 
-class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
+class SendBitcoinFeeRateService(
+    private val feeRateProvider: IFeeRateProvider,
+) {
     val feeRateChangeable = feeRateProvider.feeRateChangeable
 
     private var feeRate: Int? = null
@@ -21,28 +23,30 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
     private var recommendedFeeRate: Int? = null
     private var minimumFeeRate = 0
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            feeRate = feeRate,
-            feeRateCaution = feeRateCaution,
-            canBeSend = canBeSend
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                feeRate = feeRate,
+                feeRateCaution = feeRateCaution,
+                canBeSend = canBeSend,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
-    suspend fun start() = withContext(Dispatchers.IO) {
-        try {
-            val feeRates = feeRateProvider.getFeeRates()
+    suspend fun start() =
+        withContext(Dispatchers.IO) {
+            try {
+                val feeRates = feeRateProvider.getFeeRates()
 
-            recommendedFeeRate = feeRates.recommended
-            minimumFeeRate = feeRates.minimum
-            feeRate = recommendedFeeRate
-        } catch (e: Throwable) {
+                recommendedFeeRate = feeRates.recommended
+                minimumFeeRate = feeRates.minimum
+                feeRate = recommendedFeeRate
+            } catch (e: Throwable) {
+            }
+
+            validateFeeRate()
+            emitState()
         }
-
-        validateFeeRate()
-        emitState()
-    }
 
     fun setFeeRate(v: Int) {
         feeRate = v
@@ -63,7 +67,7 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
             State(
                 feeRate = feeRate,
                 feeRateCaution = feeRateCaution,
-                canBeSend = canBeSend
+                canBeSend = canBeSend,
             )
         }
     }
@@ -77,14 +81,17 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
                 feeRateCaution = SendErrorFetchFeeRateFailed
                 canBeSend = false
             }
+
             tmpFeeRate < minimumFeeRate -> {
                 feeRateCaution = SendErrorLowFee
                 canBeSend = true
             }
+
             tmpRecommendedFeeRate != null && tmpFeeRate < tmpRecommendedFeeRate -> {
                 feeRateCaution = SendWarningRiskOfGettingStuck
                 canBeSend = true
             }
+
             else -> {
                 feeRateCaution = null
                 canBeSend = true

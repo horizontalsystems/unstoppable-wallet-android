@@ -4,12 +4,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRowDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -31,31 +43,34 @@ fun <T> CardTabs(
     ComposeAppTheme(darkTheme) {
         ScrollableTabRow(
             selectedTabIndex = tabIndex,
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .height(94.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 12.dp)
+                    .height(94.dp),
             backgroundColor = Color.Transparent,
             edgePadding = edgePadding,
             indicator = {},
-            divider = {}
+            divider = {},
         ) {
             tabItems.forEachIndexed { index, tabItem ->
                 val selected = tabIndex == index
                 val lastElement = index == tabItems.lastIndex
 
-                val border = if (selected) {
-                    Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
-                } else {
-                    Modifier
-                }
+                val border =
+                    if (selected) {
+                        Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
+                    } else {
+                        Modifier
+                    }
 
                 Tab(
-                    modifier = Modifier
-                        .padding(end = if (lastElement) 0.dp else 12.dp)
-                        .then(border)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
+                    modifier =
+                        Modifier
+                            .padding(end = if (lastElement) 0.dp else 12.dp)
+                            .then(border)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(ComposeAppTheme.colors.lawrence),
                     selected = selected,
                     onClick = {
                         onClick(if (selected) null else tabItem.item)
@@ -67,7 +82,7 @@ fun <T> CardTabs(
                                 Image(
                                     modifier = Modifier.size(24.dp),
                                     painter = icon.painter(),
-                                    contentDescription = ""
+                                    contentDescription = "",
                                 )
                             }
                             Spacer(modifier = Modifier.width(10.dp))
@@ -78,7 +93,7 @@ fun <T> CardTabs(
                         Spacer(modifier = Modifier.weight(1f))
                         subhead1_leah(
                             text = tabItem.title,
-                            maxLines = 1
+                            maxLines = 1,
                         )
                     }
                 }
@@ -87,20 +102,21 @@ fun <T> CardTabs(
     }
 }
 
-
 @Preview
 @Composable
 fun PreviewCardTabs() {
     var selectedIndex by remember { mutableStateOf(0) }
-    val map = mapOf(
-        "BTC" to ImageSource.Local(R.drawable.coin_placeholder),
-        "ETH" to ImageSource.Local(R.drawable.coin_placeholder),
-        "ZCASH-LONGNAME" to ImageSource.Local(R.drawable.coin_placeholder)
-    )
+    val map =
+        mapOf(
+            "BTC" to ImageSource.Local(R.drawable.coin_placeholder),
+            "ETH" to ImageSource.Local(R.drawable.coin_placeholder),
+            "ZCASH-LONGNAME" to ImageSource.Local(R.drawable.coin_placeholder),
+        )
 
-    val tabItems = map.toList().mapIndexed { index, (title, icon) ->
-        TabItem(title, selectedIndex == index, title, icon, if (index == 1) null else "ERC20")
-    }
+    val tabItems =
+        map.toList().mapIndexed { index, (title, icon) ->
+            TabItem(title, selectedIndex == index, title, icon, if (index == 1) null else "ERC20")
+        }
 
     CardTabs(
         tabItems = tabItems,

@@ -24,7 +24,7 @@ fun HSFee(
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
     navController: NavController,
-    viewState: ViewState? = null
+    viewState: ViewState? = null,
 ) {
     CellUniversalLawrenceSection(
         listOf {
@@ -35,9 +35,10 @@ fun HSFee(
                 amountInputType = amountInputType,
                 rate = rate,
                 navController = navController,
-                viewState = viewState
+                viewState = viewState,
             )
-        })
+        },
+    )
 }
 
 @Composable
@@ -50,9 +51,8 @@ fun HSFeeRaw(
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
     navController: NavController,
-    viewState: ViewState? = null
+    viewState: ViewState? = null,
 ) {
-
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
 
     LaunchedEffect(fee, amountInputType, rate) {
@@ -64,7 +64,7 @@ fun HSFeeRaw(
         info = info,
         value = formatted,
         viewState = viewState,
-        navController = navController
+        navController = navController,
     )
 }
 
@@ -78,7 +78,7 @@ fun HSFeeRawWithViewState(
     viewState: ViewState,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: NavController
+    navController: NavController,
 ) {
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
 
@@ -91,7 +91,7 @@ fun HSFeeRawWithViewState(
         info = info,
         value = formatted,
         viewState = viewState,
-        navController = navController
+        navController = navController,
     )
 }
 
@@ -100,15 +100,15 @@ private fun getFormatted(
     rate: CurrencyValue?,
     coinCode: String,
     coinDecimal: Int,
-    amountInputType: AmountInputType
+    amountInputType: AmountInputType,
 ): FeeItem? {
-
     if (fee == null) return null
 
     val coinAmount = App.numberFormatter.formatCoinFull(fee, coinCode, coinDecimal)
-    val currencyAmount = rate?.let {
-        it.copy(value = fee.times(it.value)).getFormattedFull()
-    }
+    val currencyAmount =
+        rate?.let {
+            it.copy(value = fee.times(it.value)).getFormattedFull()
+        }
 
     return if (amountInputType == AmountInputType.CURRENCY && currencyAmount != null) {
         FeeItem(currencyAmount, coinAmount)

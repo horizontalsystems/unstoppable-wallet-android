@@ -9,7 +9,6 @@ class SetDuressPinViewModel(
     private val input: SetDuressPinFragment.Input?,
     private val userManager: UserManager,
 ) : ViewModel() {
-
     fun onDuressPinSet() {
         val accountIds = input?.accountIds
         if (!accountIds.isNullOrEmpty()) {
@@ -17,11 +16,10 @@ class SetDuressPinViewModel(
         }
     }
 
-    class Factory(private val input: SetDuressPinFragment.Input?) : ViewModelProvider.Factory {
+    class Factory(
+        private val input: SetDuressPinFragment.Input?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SetDuressPinViewModel(input, App.userManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = SetDuressPinViewModel(input, App.userManager) as T
     }
-
 }

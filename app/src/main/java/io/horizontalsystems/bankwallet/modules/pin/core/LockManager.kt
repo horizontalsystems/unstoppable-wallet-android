@@ -7,9 +7,8 @@ import java.util.Date
 
 class LockManager(
     private val pinManager: PinManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
 ) {
-
     var isLocked: Boolean = true
         private set
     private val lockTimeout = 60L
@@ -60,5 +59,4 @@ class LockManager(
     fun keepUnlocked() {
         keepUnlocked = true
     }
-
 }

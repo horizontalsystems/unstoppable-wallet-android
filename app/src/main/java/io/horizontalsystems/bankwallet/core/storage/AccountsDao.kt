@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.reactivex.Flowable
 
 @Dao
 interface AccountsDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(accountRow: AccountRecord)
 
@@ -17,7 +20,10 @@ interface AccountsDao {
     fun delete(id: String)
 
     @Query("UPDATE AccountRecord SET level = :level WHERE id IN(:accountIds)")
-    fun updateLevels(accountIds: List<String>, level: Int)
+    fun updateLevels(
+        accountIds: List<String>,
+        level: Int,
+    )
 
     @Query("UPDATE AccountRecord SET level = :level WHERE level > :level")
     fun updateMaxLevel(level: Int)

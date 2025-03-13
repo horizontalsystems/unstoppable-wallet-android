@@ -8,11 +8,9 @@ import io.horizontalsystems.bankwallet.entities.EnabledWalletCache
 
 @Dao
 interface EnabledWalletsCacheDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(list: List<EnabledWalletCache>)
 
     @Query("SELECT * FROM `EnabledWalletCache`")
-    fun getAll() : List<EnabledWalletCache>
-
+    fun getAll(): List<EnabledWalletCache>
 }

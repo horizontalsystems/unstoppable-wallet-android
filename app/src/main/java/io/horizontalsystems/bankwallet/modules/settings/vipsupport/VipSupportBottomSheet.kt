@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 @Composable
 fun VipSupportBottomSheet(
     isBottomSheetVisible: Boolean,
-    close: () -> Unit
+    close: () -> Unit,
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val viewModel = viewModel<VipSupportViewModel>(factory = VipSupportModule.Factory())
@@ -45,11 +45,12 @@ fun VipSupportBottomSheet(
     }
     LaunchedEffect(uiState.showError) {
         if (uiState.showError) {
-            Toast.makeText(
-                context,
-                R.string.Settings_PersonalSupport_Requestfailed,
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast
+                .makeText(
+                    context,
+                    R.string.Settings_PersonalSupport_Requestfailed,
+                    Toast.LENGTH_SHORT,
+                ).show()
             viewModel.errorShown()
         }
     }
@@ -60,13 +61,13 @@ fun VipSupportBottomSheet(
                 close.invoke()
             },
             sheetState = modalBottomSheetState,
-            containerColor = ComposeAppTheme.colors.transparent
+            containerColor = ComposeAppTheme.colors.transparent,
         ) {
             VipSupportView(
                 showSpinner = uiState.showSpinner,
                 buttonEnabled = uiState.buttonEnabled,
                 close = close,
-                onRequestClicked = { viewModel.onRequestClicked() }
+                onRequestClicked = { viewModel.onRequestClicked() },
             )
         }
     }
@@ -77,34 +78,35 @@ private fun VipSupportView(
     showSpinner: Boolean,
     buttonEnabled: Boolean,
     close: () -> Unit,
-    onRequestClicked: () -> Unit
+    onRequestClicked: () -> Unit,
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.prem_vip_support_24),
         title = stringResource(R.string.Settings_VipSupport),
         onCloseClick = close,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
     ) {
         VSpacer(24.dp)
         Image(
             painter = painterResource(id = R.drawable.ic_support_106_112),
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         VSpacer(24.dp)
         InfoText(
             text = stringResource(R.string.Settings_VipSupport_Description),
-            paddingBottom = 32.dp
+            paddingBottom = 32.dp,
         )
         VSpacer(24.dp)
         ButtonPrimaryYellowWithSpinner(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             title = stringResource(R.string.Settings_VipSupport_StartChat),
             showSpinner = showSpinner,
             enabled = buttonEnabled,
-            onClick = onRequestClicked
+            onClick = onRequestClicked,
         )
         VSpacer(32.dp)
     }
@@ -118,7 +120,7 @@ fun VipSupportBottomSheetPreview() {
             showSpinner = false,
             buttonEnabled = true,
             close = {},
-            onRequestClicked = {}
+            onRequestClicked = {},
         )
     }
 }

@@ -17,11 +17,12 @@ class BackupAlertViewModel : ViewModel() {
     private var job: Job? = null
 
     fun resume() {
-        job = viewModelScope.launch {
-            App.accountManager.newAccountBackupRequiredFlow.collect {
-                account = it
+        job =
+            viewModelScope.launch {
+                App.accountManager.newAccountBackupRequiredFlow.collect {
+                    account = it
+                }
             }
-        }
     }
 
     fun pause() {
@@ -31,5 +32,4 @@ class BackupAlertViewModel : ViewModel() {
     fun onHandled() {
         App.accountManager.onHandledBackupRequiredNewAccount()
     }
-
 }

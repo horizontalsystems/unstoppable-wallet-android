@@ -24,10 +24,13 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 data class DataFieldRecipientExtended(
     val address: Address,
-    val blockchainType: BlockchainType
+    val blockchainType: BlockchainType,
 ) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(
+        navController: NavController,
+        borderTop: Boolean,
+    ) {
         QuoteInfoRow(
             borderTop = borderTop,
             title = {
@@ -37,7 +40,7 @@ data class DataFieldRecipientExtended(
                 subhead2_leah(
                     modifier = Modifier.weight(1f, false),
                     text = address.hex,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
                 )
 
                 val view = LocalView.current
@@ -47,15 +50,17 @@ data class DataFieldRecipientExtended(
                     onClick = {
                         TextHelper.copyText(address.hex)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                    }
+                    },
                 )
-            }
+            },
         )
 
-        val contact = App.contactsRepository.getContactsFiltered(
-            blockchainType,
-            addressQuery = address.hex
-        ).firstOrNull()
+        val contact =
+            App.contactsRepository
+                .getContactsFiltered(
+                    blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
 
         contact?.name?.let { name ->
             QuoteInfoRow(
@@ -66,9 +71,9 @@ data class DataFieldRecipientExtended(
                 value = {
                     subhead2_leah(
                         text = name,
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
                     )
-                }
+                },
             )
         }
     }
@@ -81,7 +86,7 @@ fun DataFieldRecipientExtendedPreview() {
     ComposeAppTheme {
         DataFieldRecipientExtended(
             Address("0x1234567890abcdef1234567890abcdef12345678"),
-            BlockchainType.Bitcoin
+            BlockchainType.Bitcoin,
         ).GetContent(navController = navController, borderTop = true)
     }
 }

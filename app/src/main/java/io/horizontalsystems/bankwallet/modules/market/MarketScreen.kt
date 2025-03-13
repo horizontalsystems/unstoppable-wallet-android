@@ -74,47 +74,48 @@ fun MarketScreen(navController: NavController) {
         topBar = {
             AppBar(
                 title = stringResource(R.string.Market_Title),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Market_Search),
-                        icon = R.drawable.icon_search,
-                        tint = ComposeAppTheme.colors.jacob,
-                        onClick = {
-                            navController.slideFromRight(R.id.marketSearchFragment)
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Market_Search),
+                            icon = R.drawable.icon_search,
+                            tint = ComposeAppTheme.colors.jacob,
+                            onClick = {
+                                navController.slideFromRight(R.id.marketSearchFragment)
 
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.MarketSearch)
-                            )
-                        },
-                    ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Market_Filters),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = {
-                            navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+                                stat(
+                                    page = StatPage.Markets,
+                                    event = StatEvent.Open(StatPage.MarketSearch),
+                                )
+                            },
+                        ),
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Market_Filters),
+                            icon = R.drawable.ic_manage_2_24,
+                            onClick = {
+                                navController.slideFromRight(R.id.marketAdvancedSearchFragment)
 
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.AdvancedSearch)
-                            )
-                        },
+                                stat(
+                                    page = StatPage.Markets,
+                                    event = StatEvent.Open(StatPage.AdvancedSearch),
+                                )
+                            },
+                        ),
                     ),
-                )
             )
-        }
+        },
     ) {
         Column(
             Modifier
                 .padding(it)
-                .background(ComposeAppTheme.colors.tyler)
+                .background(ComposeAppTheme.colors.tyler),
         ) {
             Crossfade(uiState.marketGlobal, label = "") {
                 MetricsBoard(navController, it, uiState.currency)
             }
             Divider(
                 color = ComposeAppTheme.colors.steel10,
-                thickness = 1.dp
+                thickness = 1.dp,
             )
             TabsSection(navController, tabs, uiState.selectedTab) { tab ->
                 viewModel.onSelect(tab)
@@ -129,7 +130,7 @@ fun TabsSection(
     navController: NavController,
     tabs: Array<Tab>,
     selectedTab: Tab,
-    onTabClick: (Tab) -> Unit
+    onTabClick: (Tab) -> Unit,
 ) {
     val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
 
@@ -138,9 +139,10 @@ fun TabsSection(
 
         stat(page = StatPage.Markets, event = StatEvent.SwitchTab(selectedTab.statTab))
     })
-    val tabItems = tabs.map {
-        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
-    }
+    val tabItems =
+        tabs.map {
+            TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+        }
 
     ScrollableTabs(tabItems) {
         onTabClick(it)
@@ -148,7 +150,7 @@ fun TabsSection(
 
     HorizontalPager(
         state = pagerState,
-        userScrollEnabled = false
+        userScrollEnabled = false,
     ) { page ->
         when (tabs[page]) {
             Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navController) })
@@ -161,27 +163,27 @@ fun TabsSection(
     }
 }
 
-private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-    return App.numberFormatter.formatFiatShort(value, symbol, 2)
-}
+private fun formatFiatShortened(
+    value: BigDecimal,
+    symbol: String,
+): String = App.numberFormatter.formatFiatShort(value, symbol, 2)
 
-private fun getDiff(it: BigDecimal): String {
-    return App.numberFormatter.format(it.abs(), 0, 2, "", "%")
-}
+private fun getDiff(it: BigDecimal): String = App.numberFormatter.format(it.abs(), 0, 2, "", "%")
 
 @Composable
 fun MetricsBoard(
     navController: NavController,
     marketGlobal: MarketGlobal?,
-    currency: Currency
+    currency: Currency,
 ) {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .clip(RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .clip(RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence),
     ) {
         MarketTotalCard(
             title = stringResource(R.string.MarketGlobalMetrics_TotalMarketCap),
@@ -190,7 +192,7 @@ fun MetricsBoard(
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.TotalMarketCap, navController)
-            }
+            },
         )
 
         VDivider()
@@ -202,7 +204,7 @@ fun MetricsBoard(
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.Volume24h, navController)
-            }
+            },
         )
 
         VDivider()
@@ -214,7 +216,7 @@ fun MetricsBoard(
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.TvlInDefi, navController)
-            }
+            },
         )
 
         VDivider()
@@ -226,7 +228,7 @@ fun MetricsBoard(
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.Etf, navController)
-            }
+            },
         )
     }
 }
@@ -237,7 +239,7 @@ private fun VDivider() {
         Modifier
             .fillMaxHeight()
             .width(1.dp)
-            .background(color = ComposeAppTheme.colors.steel10)
+            .background(color = ComposeAppTheme.colors.steel10),
     )
 }
 
@@ -265,21 +267,22 @@ private fun RowScope.MarketTotalCard(
     }
 
     Column(
-        modifier = Modifier
-            .weight(1f)
-            .padding(12.dp)
-            .clickable(onClick = onClick)
+        modifier =
+            Modifier
+                .weight(1f)
+                .padding(12.dp)
+                .clickable(onClick = onClick),
     ) {
         micro_grey(
             text = title,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
         )
         VSpacer(4.dp)
         caption_bran(
             text = value?.let { formatFiatShortened(it, currency.symbol) } ?: "---",
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
         )
         VSpacer(4.dp)
 
@@ -287,32 +290,37 @@ private fun RowScope.MarketTotalCard(
             caption_grey(
                 text = "---",
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
             )
         } else if (changePositive) {
             caption_remus(
                 text = "+$changeStr",
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
             )
         } else {
             caption_lucian(
                 text = "-$changeStr",
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
             )
         }
     }
 }
 
-private fun openMetricsPage(metricsType: MetricsType, navController: NavController) {
+private fun openMetricsPage(
+    metricsType: MetricsType,
+    navController: NavController,
+) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
             navController.slideFromBottom(R.id.tvlFragment)
         }
+
         MetricsType.Etf -> {
             navController.slideFromBottom(R.id.etfFragment)
         }
+
         else -> {
             navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
         }
@@ -321,7 +329,10 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
     stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
 }
 
-private fun onCoinClick(coinUid: String, navController: NavController) {
+private fun onCoinClick(
+    coinUid: String,
+    navController: NavController,
+) {
     val arguments = CoinFragment.Input(coinUid)
 
     navController.slideFromRight(R.id.coinFragment, arguments)

@@ -12,20 +12,20 @@ fun HsRadioButton(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val painterResource = if (selected) {
-        painterResource(id = R.drawable.radio_on_24)
-    } else {
-        painterResource(id = R.drawable.radio_off_24)
-    }
+    val painterResource =
+        if (selected) {
+            painterResource(id = R.drawable.radio_on_24)
+        } else {
+            painterResource(id = R.drawable.radio_off_24)
+        }
 
     HsIconButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Image(
             painter = painterResource,
-            contentDescription = null
+            contentDescription = null,
         )
     }
-
 }

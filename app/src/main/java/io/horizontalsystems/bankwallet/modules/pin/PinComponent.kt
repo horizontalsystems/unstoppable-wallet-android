@@ -19,9 +19,8 @@ class PinComponent(
     private val pinSettingsStorage: IPinSettingsStorage,
     private val userManager: UserManager,
     private val pinDbStorage: PinDbStorage,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
 ) : IPinComponent {
-
     private val scope = CoroutineScope(Dispatchers.Default)
 
     init {
@@ -31,11 +30,13 @@ class PinComponent(
                     BackgroundManagerState.EnterForeground -> {
                         willEnterForeground()
                     }
+
                     BackgroundManagerState.EnterBackground -> {
                         didEnterBackground()
                     }
+
                     BackgroundManagerState.AllActivitiesDestroyed -> {
-                       lock()
+                        lock()
                     }
                 }
             }
@@ -65,12 +66,16 @@ class PinComponent(
     override val isPinSet: Boolean
         get() = pinManager.isPinSet
 
-    override fun isUnique(pin: String, forDuress: Boolean): Boolean {
-        val level = if (forDuress) {
-            userManager.getUserLevel() + 1
-        } else {
-            userManager.getUserLevel()
-        }
+    override fun isUnique(
+        pin: String,
+        forDuress: Boolean,
+    ): Boolean {
+        val level =
+            if (forDuress) {
+                userManager.getUserLevel() + 1
+            } else {
+                userManager.getUserLevel()
+            }
         return pinManager.isUnique(pin, level)
     }
 
@@ -91,9 +96,7 @@ class PinComponent(
         return pinLevel == userManager.getUserLevel()
     }
 
-    override fun isDuressPinSet(): Boolean {
-        return pinManager.isPinSetForLevel(userManager.getUserLevel() + 1)
-    }
+    override fun isDuressPinSet(): Boolean = pinManager.isPinSetForLevel(userManager.getUserLevel() + 1)
 
     override fun disablePin() {
         pinManager.disablePin(userManager.getUserLevel())

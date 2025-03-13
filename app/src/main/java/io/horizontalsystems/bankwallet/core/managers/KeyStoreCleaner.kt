@@ -6,11 +6,10 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.core.IKeyStoreCleaner
 
 class KeyStoreCleaner(
-        private val localStorage: ILocalStorage,
-        private val accountManager: IAccountManager,
-        private val walletManager: IWalletManager)
-    : IKeyStoreCleaner {
-
+    private val localStorage: ILocalStorage,
+    private val accountManager: IAccountManager,
+    private val walletManager: IWalletManager,
+) : IKeyStoreCleaner {
     override var encryptedSampleText: String?
         get() = localStorage.encryptedSampleText
         set(value) {

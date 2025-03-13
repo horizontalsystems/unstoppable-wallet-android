@@ -47,14 +47,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 
 class PersonalSupportFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         PersonalSupportScreen(
-            navController
+            navController,
         )
     }
-
 }
 
 @Composable
@@ -85,7 +83,7 @@ private fun PersonalSupportScreen(navController: NavController) {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
-        }
+        },
     ) { paddingValues ->
         if (uiState.showRequestForm) {
             RequestForm(paddingValues, viewModel, uiState)
@@ -103,54 +101,60 @@ private fun SupportEnabled(
     val context = LocalContext.current
     Column(modifier = Modifier.padding(paddingValues)) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(
-                        color = ComposeAppTheme.colors.raina,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(100.dp)
+                        .background(
+                            color = ComposeAppTheme.colors.raina,
+                            shape = CircleShape,
+                        ),
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     modifier = Modifier.size(48.dp),
                     painter = painterResource(R.drawable.ic_support_24),
                     contentDescription = "",
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.grey,
                 )
             }
             Spacer(Modifier.height(32.dp))
             subhead2_grey(
                 text = stringResource(R.string.Settings_PersonalSupport_YouAlreadyRequestedSupportDescription),
-                modifier = Modifier.padding(horizontal = 48.dp)
+                modifier = Modifier.padding(horizontal = 48.dp),
             )
             Spacer(Modifier.height(32.dp))
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 48.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp),
                 title = stringResource(R.string.Settings_PersonalSupport_OpenTelegram),
                 onClick = {
-                    context.packageManager.getLaunchIntentForPackage("org.telegram.messenger")?.let {
-                        context.startActivity(it)
-                    }
-                }
+                    context.packageManager
+                        .getLaunchIntentForPackage("org.telegram.messenger")
+                        ?.let {
+                            context.startActivity(it)
+                        }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             ButtonPrimaryTransparent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 48.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp),
                 title = stringResource(R.string.Settings_PersonalSupport_NewRequest),
                 onClick = {
                     viewModel.showRequestForm()
-                }
+                },
             )
         }
     }
@@ -160,36 +164,39 @@ private fun SupportEnabled(
 private fun RequestForm(
     paddingValues: PaddingValues,
     viewModel: PersonalSupportViewModel,
-    uiState: PersonalSupportModule.UiState
+    uiState: PersonalSupportModule.UiState,
 ) {
     val focusRequester = remember { FocusRequester() }
 
     Column(modifier = Modifier.padding(paddingValues)) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(
-                    rememberScrollState()
-                )
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(
+                        rememberScrollState(),
+                    ),
         ) {
             VSpacer(12.dp)
             HeaderText(text = stringResource(R.string.Settings_PersonalSupport_Account).uppercase())
             FormsInput(
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .padding(horizontal = 16.dp),
+                modifier =
+                    Modifier
+                        .focusRequester(focusRequester)
+                        .padding(horizontal = 16.dp),
                 pasteEnabled = false,
                 hint = stringResource(R.string.Settings_PersonalSupport_UsernameHint),
-                onValueChange = viewModel::onUsernameChange
+                onValueChange = viewModel::onUsernameChange,
             )
             InfoText(text = stringResource(R.string.Settings_PersonalSupport_EnterTelegramAccountDescription))
             VSpacer(32.dp)
         }
         ButtonsGroupWithShade {
             ButtonPrimaryYellowWithSpinner(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
                 title = stringResource(R.string.Settings_PersonalSupport_Request),
                 showSpinner = uiState.showSpinner,
                 enabled = uiState.buttonEnabled,

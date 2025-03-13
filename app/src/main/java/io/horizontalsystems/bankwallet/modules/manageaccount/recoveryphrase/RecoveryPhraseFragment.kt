@@ -44,14 +44,12 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Account>(navController) { input ->
             RecoveryPhraseScreen(navController, input)
         }
     }
-
 }
 
 @Composable
@@ -59,13 +57,15 @@ private fun RecoveryPhraseScreen(
     navController: NavController,
     account: Account,
 ) {
-    val viewModel = viewModel<RecoveryPhraseViewModel>(factory = RecoveryPhraseModule.Factory(account))
+    val viewModel =
+        viewModel<RecoveryPhraseViewModel>(factory = RecoveryPhraseModule.Factory(account))
 
     val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val sheetState =
+        rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+        )
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -78,16 +78,19 @@ private fun RecoveryPhraseScreen(
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
 
-                        stat(page = StatPage.RecoveryPhrase, event = StatEvent.Copy(StatEntity.RecoveryPhrase))
+                        stat(
+                            page = StatPage.RecoveryPhrase,
+                            event = StatEvent.Copy(StatEntity.RecoveryPhrase),
+                        )
                     }
                 },
                 onCancel = {
                     coroutineScope.launch {
                         sheetState.hide()
                     }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -97,34 +100,36 @@ private fun RecoveryPhraseScreen(
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                                stat(
-                                    page = StatPage.RecoveryPhrase,
-                                    event = StatEvent.Open(StatPage.Info)
-                                )
-                            }
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Info_Title),
+                                icon = R.drawable.ic_info_24,
+                                onClick = {
+                                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                                    stat(
+                                        page = StatPage.RecoveryPhrase,
+                                        event = StatEvent.Open(StatPage.Info),
+                                    )
+                                },
+                            ),
+                        ),
                 )
-            }
+            },
         ) { paddingValues ->
             Column(
                 modifier = Modifier.padding(paddingValues),
             ) {
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
                 ) {
                     VSpacer(12.dp)
                     TextImportantWarning(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                        text = stringResource(R.string.PrivateKeys_NeverShareWarning),
                     )
                     VSpacer(24.dp)
                     var hidden by remember { mutableStateOf(true) }

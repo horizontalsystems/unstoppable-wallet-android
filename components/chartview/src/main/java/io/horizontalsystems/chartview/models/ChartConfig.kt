@@ -8,8 +8,10 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.R
 import java.math.BigDecimal
 
-class ChartConfig(private val context: Context, attrs: AttributeSet?) {
-
+class ChartConfig(
+    private val context: Context,
+    attrs: AttributeSet?,
+) {
     //  colors
     val textFont: Typeface = Typeface.DEFAULT
     var timelineTextColor = context.getColor(R.color.nina)
@@ -29,11 +31,14 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var neutralColor = context.getColor(R.color.jacob)
     var barColor = context.getColor(R.color.jacob)
     var barPressedColor = context.getColor(R.color.nina)
-    var neutralGradientColor = GradientColor(Color.parseColor("#FFA800"), Color.parseColor("#FFA800"))
+    var neutralGradientColor =
+        GradientColor(Color.parseColor("#FFA800"), Color.parseColor("#FFA800"))
     var trendUpGradient = GradientColor(Color.parseColor("#416BFF"), Color.parseColor("#13D670"))
     var trendDownGradient = GradientColor(Color.parseColor("#7413D6"), Color.parseColor("#FF0303"))
-    var pressedGradient = GradientColor(context.getColor(R.color.leah), context.getColor(R.color.leah))
-    var outdatedGradient = GradientColor(context.getColor(R.color.grey_50), context.getColor(R.color.grey_50))
+    var pressedGradient =
+        GradientColor(context.getColor(R.color.leah), context.getColor(R.color.leah))
+    var outdatedGradient =
+        GradientColor(context.getColor(R.color.grey_50), context.getColor(R.color.grey_50))
 
     var curveColor = trendUpColor
     var curveGradient = trendUpGradient
@@ -79,14 +84,17 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
                 curveColor = curveDisabledColor
                 curveGradient = outdatedGradient
             }
+
             !chartData.isMovementChart -> {
                 curveColor = neutralColor
                 curveGradient = neutralGradientColor
             }
+
             chartData.diff() < BigDecimal.ZERO -> {
                 curveColor = trendDownColor
                 curveGradient = trendDownGradient
             }
+
             else -> {
                 curveColor = trendUpColor
                 curveGradient = trendUpGradient
@@ -101,5 +109,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
         return dps * scale + 0.5f
     }
 
-    data class GradientColor(val startColor: Int, val endColor: Int)
+    data class GradientColor(
+        val startColor: Int,
+        val endColor: Int,
+    )
 }

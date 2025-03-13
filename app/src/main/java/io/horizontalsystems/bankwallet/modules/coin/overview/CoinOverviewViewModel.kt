@@ -36,9 +36,8 @@ class CoinOverviewViewModel(
     private val factory: CoinViewFactory,
     private val walletManager: IWalletManager,
     private val accountManager: IAccountManager,
-    private val chartIndicatorManager: ChartIndicatorManager
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModel() {
-
     val isRefreshingLiveData = MutableLiveData<Boolean>(false)
     val overviewLiveData = MutableLiveData<CoinOverviewViewItem>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
@@ -51,8 +50,8 @@ class CoinOverviewViewModel(
     var chartIndicatorsState by mutableStateOf(
         ChartIndicatorsState(
             hasActiveSubscription = true,
-            enabled = chartIndicatorManager.isEnabled
-        )
+            enabled = chartIndicatorManager.isEnabled,
+        ),
     )
 
     private var hudMessage: HudMessage? = null
@@ -84,9 +83,19 @@ class CoinOverviewViewModel(
         viewModelScope.launch {
             walletManager.activeWalletsUpdatedObservable.asFlow().collect { wallets ->
                 if (wallets.size > activeWallets.size) {
-                    hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.ic_add_to_wallet_2_24)
+                    hudMessage =
+                        HudMessage(
+                            R.string.Hud_Added_To_Wallet,
+                            HudMessageType.Success,
+                            R.drawable.ic_add_to_wallet_2_24,
+                        )
                 } else if (wallets.size < activeWallets.size) {
-                    hudMessage = HudMessage(R.string.Hud_Removed_From_Wallet, HudMessageType.Error, R.drawable.ic_empty_wallet_24)
+                    hudMessage =
+                        HudMessage(
+                            R.string.Hud_Removed_From_Wallet,
+                            HudMessageType.Error,
+                            R.drawable.ic_empty_wallet_24,
+                        )
                 }
 
                 activeWallets = wallets
@@ -129,29 +138,35 @@ class CoinOverviewViewModel(
         service.refresh()
     }
 
-    private fun getTokenVariants(fullCoin: FullCoin, account: Account?, activeWallets: List<Wallet>): TokenVariants? {
+    private fun getTokenVariants(
+        fullCoin: FullCoin,
+        account: Account?,
+        activeWallets: List<Wallet>,
+    ): TokenVariants? {
         val items = mutableListOf<TokenVariant>()
         var type = TokenVariants.Type.Blockchains
 
-        val accountTypeNotWatch = if (account != null && !account.isWatchAccount) {
-            account.type
-        } else {
-            null
-        }
+        val accountTypeNotWatch =
+            if (account != null && !account.isWatchAccount) {
+                account.type
+            } else {
+                null
+            }
 
         fullCoin.tokens
-            .filter { when(val tokenType = it.type){
-                is TokenType.Unsupported -> tokenType.reference.isNotBlank()
-                else -> true
-            } }
-            .sortedWith(
-            compareBy<Token> { it.type.order }
-                .thenBy { it.blockchainType.order }
-        )
-            .forEach { token ->
-                val canAddToWallet = accountTypeNotWatch != null
-                        && token.isSupported
-                        && token.blockchainType.supports(accountTypeNotWatch)
+            .filter {
+                when (val tokenType = it.type) {
+                    is TokenType.Unsupported -> tokenType.reference.isNotBlank()
+                    else -> true
+                }
+            }.sortedWith(
+                compareBy<Token> { it.type.order }
+                    .thenBy { it.blockchainType.order },
+            ).forEach { token ->
+                val canAddToWallet =
+                    accountTypeNotWatch != null &&
+                        token.isSupported &&
+                        token.blockchainType.supports(accountTypeNotWatch)
 
                 when (val tokenType = token.type) {
                     is TokenType.Jetton -> {
@@ -166,10 +181,11 @@ class CoinOverviewViewModel(
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
+                                inWallet = inWallet,
+                            ),
                         )
                     }
+
                     is TokenType.Eip20 -> {
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.token == token }
@@ -182,8 +198,8 @@ class CoinOverviewViewModel(
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
+                                inWallet = inWallet,
+                            ),
                         )
                     }
 
@@ -199,8 +215,8 @@ class CoinOverviewViewModel(
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
+                                inWallet = inWallet,
+                            ),
                         )
                     }
 
@@ -221,7 +237,7 @@ class CoinOverviewViewModel(
                                 token = token,
                                 canAddToWallet = canAddToWallet,
                                 inWallet = inWallet,
-                            )
+                            ),
                         )
                     }
 
@@ -241,8 +257,8 @@ class CoinOverviewViewModel(
                                 name = bchCoinType.value,
                                 token = token,
                                 canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
+                                inWallet = inWallet,
+                            ),
                         )
                     }
 
@@ -258,8 +274,8 @@ class CoinOverviewViewModel(
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
+                                inWallet = inWallet,
+                            ),
                         )
                     }
 
@@ -269,18 +285,20 @@ class CoinOverviewViewModel(
                                 value = tokenType.reference.shorten(),
                                 copyValue = tokenType.reference,
                                 imgUrl = token.blockchainType.imageUrl,
-                                explorerUrl = when {
-                                    tokenType.reference.isNotBlank() -> token.blockchain.eip20TokenUrl(
-                                        tokenType.reference
-                                    )
+                                explorerUrl =
+                                    when {
+                                        tokenType.reference.isNotBlank() ->
+                                            token.blockchain.eip20TokenUrl(
+                                                tokenType.reference,
+                                            )
 
-                                    else -> null
-                                },
+                                        else -> null
+                                    },
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = false,
-                                inWallet = false
-                            )
+                                inWallet = false,
+                            ),
                         )
                     }
                 }
@@ -291,15 +309,22 @@ class CoinOverviewViewModel(
             else -> null
         }
     }
-
 }
 
-data class ChartIndicatorsState(val hasActiveSubscription: Boolean, val enabled: Boolean)
+data class ChartIndicatorsState(
+    val hasActiveSubscription: Boolean,
+    val enabled: Boolean,
+)
 
-data class TokenVariants(val items: List<TokenVariant>, val type: Type) {
-    enum class Type(@StringRes val titleResId: Int) {
+data class TokenVariants(
+    val items: List<TokenVariant>,
+    val type: Type,
+) {
+    enum class Type(
+        @StringRes val titleResId: Int,
+    ) {
         Blockchains(R.string.CoinPage_Blockchains),
         Bips(R.string.CoinPage_Bips),
-        CoinTypes(R.string.CoinPage_CoinTypes)
+        CoinTypes(R.string.CoinPage_CoinTypes),
     }
 }

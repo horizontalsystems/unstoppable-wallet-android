@@ -40,15 +40,14 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class SyncErrorDialog : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
@@ -57,14 +56,20 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
                 }
             }
         }
-    }
 
     @Parcelize
-    data class Input(val wallet: Wallet, val errorMessage: String?) : Parcelable
+    data class Input(
+        val wallet: Wallet,
+        val errorMessage: String?,
+    ) : Parcelable
 }
 
 @Composable
-private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error: String) {
+private fun SyncErrorScreen(
+    navController: NavController,
+    wallet: Wallet,
+    error: String,
+) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
 
     val context = LocalContext.current
@@ -75,26 +80,27 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_red_24),
             title = stringResource(R.string.BalanceSyncError_Title),
-            onCloseClick = { navController.popBackStack() }
+            onCloseClick = { navController.popBackStack() },
         ) {
-
             Spacer(Modifier.height(32.dp))
             ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BalanceSyncError_ButtonRetry),
                 onClick = {
                     viewModel.retry()
                     navController.popBackStack()
-                }
+                },
             )
             if (viewModel.sourceChangeable) {
                 Spacer(Modifier.height(12.dp))
                 ButtonPrimaryDefault(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
                     title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
                     onClick = {
                         navController.popBackStack()
@@ -104,31 +110,38 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                             SyncErrorModule.BlockchainWrapper.Type.Bitcoin -> {
                                 navController.slideFromBottom(
                                     R.id.btcBlockchainSettingsFragment,
-                                    blockchainWrapper.blockchain
+                                    blockchainWrapper.blockchain,
                                 )
                             }
+
                             SyncErrorModule.BlockchainWrapper.Type.Evm -> {
-                                navController.slideFromBottom(R.id.evmNetworkFragment, blockchainWrapper.blockchain)
+                                navController.slideFromBottom(
+                                    R.id.evmNetworkFragment,
+                                    blockchainWrapper.blockchain,
+                                )
                             }
+
                             else -> {}
                         }
-                    }
+                    },
                 )
             }
             Spacer(Modifier.height(12.dp))
             ButtonPrimaryTransparent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BalanceSyncError_ButtonReport),
                 onClick = {
                     navController.popBackStack()
 
-                    val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:")
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf(viewModel.reportEmail))
-                        putExtra(Intent.EXTRA_TEXT, error)
-                    }
+                    val intent =
+                        Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:")
+                            putExtra(Intent.EXTRA_EMAIL, arrayOf(viewModel.reportEmail))
+                            putExtra(Intent.EXTRA_TEXT, error)
+                        }
 
                     try {
                         context.startActivity(intent)
@@ -136,10 +149,9 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                         clipboardManager.setText(AnnotatedString(viewModel.reportEmail))
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_EmailAddressCopied)
                     }
-                }
+                },
             )
             Spacer(Modifier.height(32.dp))
         }
     }
 }
-

@@ -7,14 +7,18 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.horizontalsystems.bankwallet.core.storage.SecretString
 
-class PinDbStorage(private val pinDao: PinDao) {
-
+class PinDbStorage(
+    private val pinDao: PinDao,
+) {
     fun isLastLevelPinSet(): Boolean {
         val lastLevelPin = pinDao.getLastLevelPin()
         return lastLevelPin?.passcode != null
     }
 
-    fun store(passcode: String, level: Int) {
+    fun store(
+        passcode: String,
+        level: Int,
+    ) {
         val pin = Pin(level, SecretString(passcode))
         pinDao.insert(pin)
     }
@@ -24,28 +28,24 @@ class PinDbStorage(private val pinDao: PinDao) {
         pinDao.insert(pin)
     }
 
-    fun getLevel(passcode: String): Int? {
-        return pinDao.getAll().find {
-            it.passcode?.value == passcode
-        }?.level
-    }
+    fun getLevel(passcode: String): Int? =
+        pinDao
+            .getAll()
+            .find {
+                it.passcode?.value == passcode
+            }?.level
 
-    fun getPinLevelLast(): Int {
-        return pinDao.getLastLevelPin()?.level ?: 0
-    }
+    fun getPinLevelLast(): Int = pinDao.getLastLevelPin()?.level ?: 0
 
     fun deleteAllFromLevel(level: Int) {
         pinDao.deleteAllFromLevel(level)
     }
 
-    fun isPinSetForLevel(level: Int): Boolean {
-        return pinDao.get(level)?.passcode != null
-    }
+    fun isPinSetForLevel(level: Int): Boolean = pinDao.get(level)?.passcode != null
 }
 
 @Dao
 interface PinDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(pin: Pin)
 
@@ -53,7 +53,7 @@ interface PinDao {
     fun get(level: Int): Pin?
 
     @Query("SELECT * FROM Pin")
-    fun getAll() : List<Pin>
+    fun getAll(): List<Pin>
 
     @Query("SELECT * FROM Pin ORDER BY level DESC LIMIT 1")
     fun getLastLevelPin(): Pin?
@@ -63,4 +63,7 @@ interface PinDao {
 }
 
 @Entity(primaryKeys = ["level"])
-data class Pin(val level: Int, val passcode: SecretString?)
+data class Pin(
+    val level: Int,
+    val passcode: SecretString?,
+)

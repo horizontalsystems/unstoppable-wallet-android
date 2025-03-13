@@ -10,7 +10,5 @@ object PancakeSwapProvider : BaseUniswapProvider() {
     override val icon = R.drawable.pancake
     override val priority = 0
 
-    override fun supports(blockchainType: BlockchainType): Boolean {
-        return blockchainType == BlockchainType.BinanceSmartChain
-    }
+    override fun supports(blockchainType: BlockchainType): Boolean = blockchainType == BlockchainType.BinanceSmartChain
 }

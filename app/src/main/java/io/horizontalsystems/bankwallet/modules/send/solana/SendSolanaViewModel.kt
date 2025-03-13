@@ -48,7 +48,7 @@ class SendSolanaViewModel(
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
     private val address: Address,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
 ) : ViewModelUiState<SendUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -83,14 +83,15 @@ class SendSolanaViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        address = address,
-    )
+    override fun createState() =
+        SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput,
+            address = address,
+        )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -102,10 +103,12 @@ class SendSolanaViewModel(
 
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.address!!
-        val contact = contactsRepo.getContactsFiltered(
-            blockchainType,
-            addressQuery = address.hex
-        ).firstOrNull()
+        val contact =
+            contactsRepo
+                .getContactsFiltered(
+                    blockchainType,
+                    addressQuery = address.hex,
+                ).firstOrNull()
         return SendConfirmationData(
             amount = decimalAmount,
             fee = SolanaKit.fee,
@@ -113,7 +116,7 @@ class SendSolanaViewModel(
             contact = contact,
             coin = wallet.coin,
             feeCoin = feeToken.coin,
-            memo = null
+            memo = null,
         )
     }
 
@@ -123,40 +126,47 @@ class SendSolanaViewModel(
         }
     }
 
-    fun hasConnection(): Boolean {
-        return connectivityManager.isConnected
-    }
+    fun hasConnection(): Boolean = connectivityManager.isConnected
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
-        if (!hasConnection()) {
-            sendResult = SendResult.Failed(createCaution(UnknownHostException()))
-            return@withContext
+    private suspend fun send() =
+        withContext(Dispatchers.IO) {
+            if (!hasConnection()) {
+                sendResult = SendResult.Failed(createCaution(UnknownHostException()))
+                return@withContext
+            }
+
+            try {
+                sendResult = SendResult.Sending
+
+                val totalSolAmount =
+                    (if (sendToken.type == TokenType.Native) decimalAmount else BigDecimal.ZERO) + SolanaKit.fee
+
+                if (totalSolAmount > solBalance) {
+                    throw EvmError.InsufficientBalanceWithFee
+                }
+
+                adapter.send(decimalAmount, addressState.solanaAddress!!)
+
+                sendResult = SendResult.Sent()
+
+                recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Solana)
+            } catch (e: Throwable) {
+                sendResult = SendResult.Failed(createCaution(e))
+            }
         }
 
-        try {
-            sendResult = SendResult.Sending
-
-            val totalSolAmount = (if (sendToken.type == TokenType.Native) decimalAmount else BigDecimal.ZERO) + SolanaKit.fee
-
-            if (totalSolAmount > solBalance)
-                throw EvmError.InsufficientBalanceWithFee
-
-            adapter.send(decimalAmount, addressState.solanaAddress!!)
-
-            sendResult = SendResult.Sent()
-
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Solana)
-        } catch (e: Throwable) {
-            sendResult = SendResult.Failed(createCaution(e))
+    private fun createCaution(error: Throwable) =
+        when (error) {
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            is EvmError.InsufficientBalanceWithFee -> SendErrorInsufficientBalance(feeToken.coin.code)
+            else ->
+                HSCaution(
+                    TranslatableString.PlainString(
+                        error.cause?.message ?: error.message ?: "",
+                    ),
+                )
         }
-    }
-
-    private fun createCaution(error: Throwable) = when (error) {
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        is EvmError.InsufficientBalanceWithFee -> SendErrorInsufficientBalance(feeToken.coin.code)
-        else -> HSCaution(TranslatableString.PlainString(error.cause?.message ?: error.message ?: ""))
-    }
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
@@ -169,5 +179,4 @@ class SendSolanaViewModel(
 
         emitState()
     }
-
 }

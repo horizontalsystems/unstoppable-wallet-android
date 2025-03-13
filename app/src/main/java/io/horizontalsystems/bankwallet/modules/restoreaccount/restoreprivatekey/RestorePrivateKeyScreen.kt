@@ -36,7 +36,8 @@ fun RestorePrivateKey(
     openSelectCoinsScreen: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val viewModel = viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
+    val viewModel =
+        viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -46,26 +47,37 @@ fun RestorePrivateKey(
                 navigationIcon = {
                     HsBackButton(onClick = onBackClick)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Next),
-                        onClick = {
-                            viewModel.resolveAccountType()?.let { accountType ->
-                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletFromKeyAdvanced)
-                                openSelectCoinsScreen.invoke()
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Next),
+                            onClick = {
+                                viewModel.resolveAccountType()?.let { accountType ->
+                                    mainViewModel.setAccountData(
+                                        accountType,
+                                        viewModel.accountName,
+                                        true,
+                                        false,
+                                        StatPage.ImportWalletFromKeyAdvanced,
+                                    )
+                                    openSelectCoinsScreen.invoke()
 
-                                stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.RestoreSelect))
-                            }
-                        }
-                    )
-                )
+                                    stat(
+                                        page = StatPage.ImportWalletFromKeyAdvanced,
+                                        event = StatEvent.Open(StatPage.RestoreSelect),
+                                    )
+                                }
+                            },
+                        ),
+                    ),
             )
-        }
+        },
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState()),
         ) {
             Spacer(Modifier.height(12.dp))
 
@@ -75,7 +87,7 @@ fun RestorePrivateKey(
                 initial = viewModel.accountName,
                 pasteEnabled = false,
                 hint = viewModel.defaultName,
-                onValueChange = viewModel::onEnterName
+                onValueChange = viewModel::onEnterName,
             )
             Spacer(Modifier.height(32.dp))
 
@@ -92,14 +104,24 @@ fun RestorePrivateKey(
                     viewModel.onEnterPrivateKey(it)
                 },
                 onClear = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Clear(StatEntity.Key))
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.Clear(StatEntity.Key),
+                    )
                 },
                 onPaste = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Paste(StatEntity.Key))
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.Paste(StatEntity.Key),
+                    )
                 },
                 onScanQR = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.ScanQr(StatEntity.Key))
-                })
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.ScanQr(StatEntity.Key),
+                    )
+                },
+            )
 
             Spacer(Modifier.height(32.dp))
         }

@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class MarketWidgetManager {
-
     private var coroutineScope: CoroutineScope? = CoroutineScope(Dispatchers.Default)
 
     fun updateWatchListWidgets() {
@@ -46,11 +45,12 @@ class MarketWidgetManager {
             } catch (exception: Exception) {
                 var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
 
-                val errorText = if (exception is UnknownHostException)
-                    context.getString(R.string.Hud_Text_NoInternet)
-                else {
-                    context.getString(R.string.SyncError) + "\n\n\n" + "[ ${state.error} ]"
-                }
+                val errorText =
+                    if (exception is UnknownHostException) {
+                        context.getString(R.string.Hud_Text_NoInternet)
+                    } else {
+                        context.getString(R.string.SyncError) + "\n\n\n" + "[ ${state.error} ]"
+                    }
 
                 state = state.copy(loading = false, error = errorText)
                 setWidgetState(context, glanceId, state)
@@ -62,31 +62,35 @@ class MarketWidgetManager {
         val context = App.instance
         val marketRepository = App.marketWidgetRepository
         var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-        val imagePathCache = buildMap {
-            state.items.forEach { item ->
-                item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
+        val imagePathCache =
+            buildMap {
+                state.items.forEach { item ->
+                    item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
+                }
             }
-        }
         var marketItems = marketRepository.getMarketItems(state.type)
-        marketItems = marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
+        marketItems =
+            marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
 
         state = state.copy(items = marketItems, loading = false, error = null)
         setWidgetState(context, glanceId, state)
 
-        marketItems = marketItems.map { item ->
-            item.copy(
-                imageLocalPath = item.imageLocalPath ?: getImage(
-                    context,
-                    item.imageRemoteUrl,
-                    item.alternativeRemoteUrl
+        marketItems =
+            marketItems.map { item ->
+                item.copy(
+                    imageLocalPath =
+                        item.imageLocalPath ?: getImage(
+                            context,
+                            item.imageRemoteUrl,
+                            item.alternativeRemoteUrl,
+                        ),
                 )
-            )
-        }
+            }
 
         state =
             state.copy(
                 items = marketItems,
-                updateTimestampMillis = System.currentTimeMillis()
+                updateTimestampMillis = System.currentTimeMillis(),
             )
         setWidgetState(context, glanceId, state)
     }
@@ -95,19 +99,23 @@ class MarketWidgetManager {
     private suspend fun getImage(
         context: Context,
         url: String,
-        alternativeUrl: String?
+        alternativeUrl: String?,
     ): String? {
         var downloadedUrl = url
-        val request = ImageRequest.Builder(context)
-            .data(url)
-            .build()
+        val request =
+            ImageRequest
+                .Builder(context)
+                .data(url)
+                .build()
 
         with(context.imageLoader) {
             var result = execute(request)
             if (result is ErrorResult && alternativeUrl != null) {
-                val fallbackRequest = ImageRequest.Builder(context)
-                    .data(alternativeUrl)
-                    .build()
+                val fallbackRequest =
+                    ImageRequest
+                        .Builder(context)
+                        .data(alternativeUrl)
+                        .build()
                 result = execute(fallbackRequest)
                 if (result is ErrorResult) {
                     return null
@@ -116,14 +124,19 @@ class MarketWidgetManager {
             }
         }
 
-        val localPath = context.imageLoader.diskCache?.openSnapshot(downloadedUrl)?.use { snapshot ->
-            snapshot.data.toFile().path
-        }
+        val localPath =
+            context.imageLoader.diskCache?.openSnapshot(downloadedUrl)?.use { snapshot ->
+                snapshot.data.toFile().path
+            }
 
         return localPath
     }
 
-    private suspend fun setWidgetState(context: Context, glanceId: GlanceId, state: MarketWidgetState) {
+    private suspend fun setWidgetState(
+        context: Context,
+        glanceId: GlanceId,
+        state: MarketWidgetState,
+    ) {
         updateAppWidgetState(context, MarketWidgetStateDefinition, glanceId) {
             state
         }
@@ -157,5 +170,4 @@ class MarketWidgetManager {
             return types
         }
     }
-
 }

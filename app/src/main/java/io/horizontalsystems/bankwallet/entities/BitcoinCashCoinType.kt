@@ -1,9 +1,14 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType.values
 
-enum class BitcoinCashCoinType(val value: String) {
-    type0("type0"), type145("type145");
+enum class BitcoinCashCoinType(
+    val value: String,
+) {
+    type0("type0"),
+    type145("type145"),
+    ;
 
     val title: String
         get() {
@@ -21,10 +26,10 @@ enum class BitcoinCashCoinType(val value: String) {
             }
         }
 
-        companion object {
-            val default = type145
-            private val map = values().associateBy(BitcoinCashCoinType::value)
+    companion object {
+        val default = type145
+        private val map = values().associateBy(BitcoinCashCoinType::value)
 
-            fun fromString(value: String?): BitcoinCashCoinType? = map[value]
-        }
+        fun fromString(value: String?): BitcoinCashCoinType? = map[value]
+    }
 }

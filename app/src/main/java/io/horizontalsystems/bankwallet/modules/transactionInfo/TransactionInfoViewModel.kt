@@ -12,9 +12,8 @@ import kotlinx.coroutines.launch
 class TransactionInfoViewModel(
     private val service: TransactionInfoService,
     private val factory: TransactionInfoViewItemFactory,
-    private val contactsRepository: ContactsRepository
+    private val contactsRepository: ContactsRepository,
 ) : ViewModel() {
-
     val source: TransactionSource by service::source
     val transactionRecord by service::transactionRecord
 

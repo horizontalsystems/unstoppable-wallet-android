@@ -16,12 +16,14 @@ class Eip20ApproveTransactionSettingsFragment : BaseComposeFragment() {
 
 @Composable
 fun Eip20ApproveTransactionSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
-    val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.eip20ApproveFragment)
+        }
+    val viewModel =
+        viewModel<Eip20ApproveViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+        )
 
     val sendTransactionService = viewModel.sendTransactionService
 

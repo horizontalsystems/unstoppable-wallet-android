@@ -54,18 +54,30 @@ class Eip20RevokeConfirmFragment : BaseComposeFragment() {
     ) : Parcelable
 
     @Parcelize
-    data class Result(val revoked: Boolean) : Parcelable
+    data class Result(
+        val revoked: Boolean,
+    ) : Parcelable
 }
 
 @Composable
-fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFragment.Input) {
-    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
-    }
-    val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry,
-        factory = Eip20RevokeConfirmViewModel.Factory(input.token, input.spenderAddress, input.allowance)
-    )
+fun Eip20RevokeScreen(
+    navController: NavController,
+    input: Eip20RevokeConfirmFragment.Input,
+) {
+    val currentBackStackEntry =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
+        }
+    val viewModel =
+        viewModel<Eip20RevokeConfirmViewModel>(
+            viewModelStoreOwner = currentBackStackEntry,
+            factory =
+                Eip20RevokeConfirmViewModel.Factory(
+                    input.token,
+                    input.spenderAddress,
+                    input.allowance,
+                ),
+        )
 
     val uiState = viewModel.uiState
 
@@ -89,26 +101,27 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                         HudHelper.showInProcessMessage(
                             view,
                             R.string.Swap_Revoking,
-                            SnackbarDuration.INDEFINITE
+                            SnackbarDuration.INDEFINITE,
                         )
 
-                        val result = try {
-                            viewModel.revoke()
+                        val result =
+                            try {
+                                viewModel.revoke()
 
-                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                            delay(1200)
-                            Eip20RevokeConfirmFragment.Result(true)
-                        } catch (t: Throwable) {
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            Eip20RevokeConfirmFragment.Result(false)
-                        }
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                                Eip20RevokeConfirmFragment.Result(true)
+                            } catch (t: Throwable) {
+                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                Eip20RevokeConfirmFragment.Result(false)
+                            }
 
                         buttonEnabled = true
                         navController.setNavigationResultX(result)
                         navController.popBackStack()
                     }
                 },
-                enabled = uiState.revokeEnabled && buttonEnabled
+                enabled = uiState.revokeEnabled && buttonEnabled,
             )
             VSpacer(16.dp)
             ButtonPrimaryDefault(
@@ -116,9 +129,9 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                 title = stringResource(R.string.Button_Cancel),
                 onClick = {
                     navController.popBackStack()
-                }
+                },
             )
-        }
+        },
     ) {
         SectionUniversalLawrence {
             TokenRow(
@@ -128,7 +141,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                 currency = uiState.currency,
                 borderTop = false,
                 title = stringResource(R.string.Approve_YouRevoke),
-                amountColor = ComposeAppTheme.colors.leah
+                amountColor = ComposeAppTheme.colors.leah,
             )
 
             BoxBorderedTop {
@@ -137,7 +150,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                     value = uiState.spenderAddress,
                     showAdd = uiState.contact == null,
                     blockchainType = uiState.token.blockchainType,
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -153,7 +166,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
             DataFieldFee(
                 navController,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
             )
         }
 

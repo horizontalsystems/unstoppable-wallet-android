@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 
 class MovingAverageSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
-    private val chartIndicatorManager: ChartIndicatorManager
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModelUiState<MovingAverageSettingUiState>() {
     val name = indicatorSetting.name
     val maTypes = listOf("EMA", "SMA", "WMA")
@@ -20,26 +20,26 @@ class MovingAverageSettingViewModel(
     private var periodError: Throwable? = null
     private var finish = false
 
-    override fun createState() = MovingAverageSettingUiState(
-        maType = maType,
-        period = period,
-        periodError = periodError,
-        applyEnabled = applyEnabled(),
-        finish = finish,
-        resetEnabled = resetEnabled()
-    )
+    override fun createState() =
+        MovingAverageSettingUiState(
+            maType = maType,
+            period = period,
+            periodError = periodError,
+            applyEnabled = applyEnabled(),
+            finish = finish,
+            resetEnabled = resetEnabled(),
+        )
 
     private fun applyEnabled(): Boolean {
-        if (periodError != null)
+        if (periodError != null) {
             return false
+        }
 
         return maType != indicatorSetting.extraData["maType"] ||
             period != indicatorSetting.extraData["period"]
     }
 
-    private fun resetEnabled(): Boolean {
-        return maType != null || period != null
-    }
+    private fun resetEnabled(): Boolean = maType != null || period != null
 
     fun onSelectMaType(v: String) {
         maType = v
@@ -63,12 +63,13 @@ class MovingAverageSettingViewModel(
     }
 
     fun save() {
-        val extraData = indicatorSetting.extraData.plus(
-            mapOf(
-                "maType" to maType,
-                "period" to period,
+        val extraData =
+            indicatorSetting.extraData.plus(
+                mapOf(
+                    "maType" to maType,
+                    "period" to period,
+                ),
             )
-        )
         val updated = indicatorSetting.copy(extraData = extraData)
         chartIndicatorManager.update(updated)
 
@@ -83,11 +84,12 @@ class MovingAverageSettingViewModel(
         emitState()
     }
 
-    class Factory(private val indicatorSetting: ChartIndicatorSetting) : ViewModelProvider.Factory {
+    class Factory(
+        private val indicatorSetting: ChartIndicatorSetting,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MovingAverageSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            MovingAverageSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
     }
 }
 

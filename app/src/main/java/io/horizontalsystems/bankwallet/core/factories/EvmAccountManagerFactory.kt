@@ -12,17 +12,17 @@ class EvmAccountManagerFactory(
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
-    private val tokenAutoEnableManager: TokenAutoEnableManager
+    private val tokenAutoEnableManager: TokenAutoEnableManager,
 ) {
-
-    fun evmAccountManager(blockchainType: BlockchainType, evmKitManager: EvmKitManager) =
-        EvmAccountManager(
-            blockchainType,
-            accountManager,
-            walletManager,
-            marketKit,
-            evmKitManager,
-            tokenAutoEnableManager
-        )
-
+    fun evmAccountManager(
+        blockchainType: BlockchainType,
+        evmKitManager: EvmKitManager,
+    ) = EvmAccountManager(
+        blockchainType,
+        accountManager,
+        walletManager,
+        marketKit,
+        evmKitManager,
+        tokenAutoEnableManager,
+    )
 }

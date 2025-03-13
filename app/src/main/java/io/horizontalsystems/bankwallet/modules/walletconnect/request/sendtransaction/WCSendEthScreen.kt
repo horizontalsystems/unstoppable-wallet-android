@@ -36,17 +36,20 @@ fun WCSendEthRequestScreen(
     transaction: WalletConnectTransaction,
     peerName: String,
 ) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.wcRequestFragment)
-    }
-    val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-        factory = WCSendEthereumTransactionRequestViewModel.Factory(
-            blockchainType = blockchainType,
-            transaction = transaction,
-            peerName = peerName
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.wcRequestFragment)
+        }
+    val viewModel =
+        viewModel<WCSendEthereumTransactionRequestViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+            factory =
+                WCSendEthereumTransactionRequestViewModel.Factory(
+                    blockchainType = blockchainType,
+                    transaction = transaction,
+                    peerName = peerName,
+                ),
         )
-    )
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
@@ -68,7 +71,11 @@ fun WCSendEthRequestScreen(
                 onClick = {
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+                        HudHelper.showInProcessMessage(
+                            view,
+                            R.string.Send_Sending,
+                            SnackbarDuration.INDEFINITE,
+                        )
 
                         try {
                             logger.info("click confirm button")
@@ -85,7 +92,7 @@ fun WCSendEthRequestScreen(
                         buttonEnabled = true
                         navController.popBackStack()
                     }
-                }
+                },
             )
             VSpacer(16.dp)
             ButtonPrimaryDefault(
@@ -94,9 +101,9 @@ fun WCSendEthRequestScreen(
                 onClick = {
                     viewModel.reject()
                     navController.popBackStack()
-                }
+                },
             )
-        }
+        },
     ) {
         SendEvmTransactionView(
             navController,
@@ -104,7 +111,7 @@ fun WCSendEthRequestScreen(
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
-            StatPage.WalletConnect
+            StatPage.WalletConnect,
         )
     }
 }

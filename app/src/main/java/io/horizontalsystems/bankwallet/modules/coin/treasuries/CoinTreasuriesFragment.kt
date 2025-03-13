@@ -47,25 +47,22 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.marketkit.models.Coin
 
 class CoinTreasuriesFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Coin>(navController) { input ->
             CoinTreasuriesScreen(
-                viewModel(factory = CoinTreasuriesModule.Factory(input))
+                viewModel(factory = CoinTreasuriesModule.Factory(input)),
             )
         }
     }
 
     @Composable
-    private fun CoinTreasuriesScreen(
-        viewModel: CoinTreasuriesViewModel
-    ) {
+    private fun CoinTreasuriesScreen(viewModel: CoinTreasuriesViewModel) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
         val treasuriesData by viewModel.coinTreasuriesLiveData.observeAsState()
         val chainSelectorDialogState by viewModel.treasuryTypeSelectorDialogStateLiveData.observeAsState(
-            TvlModule.SelectorDialogState.Closed
+            TvlModule.SelectorDialogState.Closed,
         )
 
         Scaffold(
@@ -75,9 +72,9 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                     title = stringResource(R.string.CoinPage_Treasuries),
                     navigationIcon = {
                         HsBackButton(onClick = { findNavController().popBackStack() })
-                    }
+                    },
                 )
-            }
+            },
         ) { paddingValues ->
             HSSwipeRefresh(
                 refreshing = isRefreshing,
@@ -95,7 +92,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                             is ViewState.Error -> {
                                 ListErrorView(
                                     stringResource(R.string.SyncError),
-                                    viewModel::onErrorClick
+                                    viewModel::onErrorClick,
                                 )
                             }
 
@@ -107,28 +104,29 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                                                 treasuryTypeSelect = treasuriesData.treasuryTypeSelect,
                                                 sortDescending = treasuriesData.sortDescending,
                                                 onClickTreasuryTypeSelector = viewModel::onClickTreasuryTypeSelector,
-                                                onToggleSortType = viewModel::onToggleSortType
+                                                onToggleSortType = viewModel::onToggleSortType,
                                             )
                                         }
 
                                         items(treasuriesData.coinTreasuries) { item ->
                                             SectionItemBorderedRowUniversalClear(
-                                                borderBottom = true
+                                                borderBottom = true,
                                             ) {
                                                 HsImage(
                                                     url = item.fundLogoUrl,
-                                                    modifier = Modifier
-                                                        .padding(end = 16.dp)
-                                                        .size(32.dp)
+                                                    modifier =
+                                                        Modifier
+                                                            .padding(end = 16.dp)
+                                                            .size(32.dp),
                                                 )
                                                 Column(
-                                                    modifier = Modifier.fillMaxWidth()
+                                                    modifier = Modifier.fillMaxWidth(),
                                                 ) {
                                                     MarketCoinFirstRow(item.fund, item.amount)
                                                     VSpacer(3.dp)
                                                     CoinTreasurySecondRow(
                                                         item.country,
-                                                        item.amountInCurrency
+                                                        item.amountInCurrency,
                                                     )
                                                 }
                                             }
@@ -153,11 +151,11 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                                 R.string.CoinPage_Treasuries_FilterTitle,
                                 option.select,
                                 viewModel::onSelectTreasuryType,
-                                viewModel::onTreasuryTypeSelectorDialogDismiss
+                                viewModel::onTreasuryTypeSelectorDialogDismiss,
                             )
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -167,7 +165,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
         treasuryTypeSelect: Select<CoinTreasuriesModule.TreasuryTypeFilter>,
         sortDescending: Boolean,
         onClickTreasuryTypeSelector: () -> Unit,
-        onToggleSortType: () -> Unit
+        onToggleSortType: () -> Unit,
     ) {
         HeaderSorting(borderTop = true, borderBottom = true) {
             Box(modifier = Modifier.weight(1f)) {
@@ -176,7 +174,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
             ButtonSecondaryCircle(
                 modifier = Modifier.padding(end = 16.dp),
                 icon = if (sortDescending) R.drawable.ic_sort_h2l_20 else R.drawable.ic_sort_l2h_20,
-                onClick = { onToggleSortType() }
+                onClick = { onToggleSortType() },
             )
         }
     }
@@ -184,10 +182,10 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
     @Composable
     private fun CoinTreasurySecondRow(
         country: String,
-        fiatAmount: String
+        fiatAmount: String,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             subhead2_grey(
                 text = country,

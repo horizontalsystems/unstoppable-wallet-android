@@ -25,7 +25,7 @@ fun TextImportantWarning(
     modifier: Modifier = Modifier,
     text: String,
     title: String? = null,
-    @DrawableRes icon: Int? = null
+    @DrawableRes icon: Int? = null,
 ) {
     TextImportant(
         modifier = modifier,
@@ -35,7 +35,7 @@ fun TextImportantWarning(
         borderColor = ComposeAppTheme.colors.jacob,
         backgroundColor = ComposeAppTheme.colors.yellow20,
         textColor = ComposeAppTheme.colors.jacob,
-        iconColor = ComposeAppTheme.colors.jacob
+        iconColor = ComposeAppTheme.colors.jacob,
     )
 }
 
@@ -44,7 +44,7 @@ fun TextImportantError(
     modifier: Modifier = Modifier,
     text: String,
     title: String? = null,
-    @DrawableRes icon: Int? = null
+    @DrawableRes icon: Int? = null,
 ) {
     TextImportant(
         modifier = modifier,
@@ -54,7 +54,7 @@ fun TextImportantError(
         borderColor = ComposeAppTheme.colors.lucian,
         backgroundColor = ComposeAppTheme.colors.red20,
         textColor = ComposeAppTheme.colors.lucian,
-        iconColor = ComposeAppTheme.colors.lucian
+        iconColor = ComposeAppTheme.colors.lucian,
     )
 }
 
@@ -67,34 +67,35 @@ fun TextImportant(
     borderColor: Color,
     backgroundColor: Color,
     textColor: Color,
-    iconColor: Color
+    iconColor: Color,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-            .background(backgroundColor)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .background(backgroundColor)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (title != null || icon != null) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 icon?.let {
                     Icon(
                         painter = painterResource(id = icon),
                         contentDescription = null,
-                        tint = iconColor
+                        tint = iconColor,
                     )
                 }
                 title?.let {
                     Text(
                         text = it,
                         color = textColor,
-                        style = ComposeAppTheme.typography.subhead1
+                        style = ComposeAppTheme.typography.subhead1,
                     )
                 }
             }

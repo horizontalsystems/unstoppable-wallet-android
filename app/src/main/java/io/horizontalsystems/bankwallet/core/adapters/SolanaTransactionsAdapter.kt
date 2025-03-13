@@ -19,17 +19,15 @@ import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.rx2.rxSingle
 
 class SolanaTransactionsAdapter(
-        solanaKitWrapper: SolanaKitWrapper,
-        private val solanaTransactionConverter: SolanaTransactionConverter
+    solanaKitWrapper: SolanaKitWrapper,
+    private val solanaTransactionConverter: SolanaTransactionConverter,
 ) : ITransactionsAdapter {
-
     private val kit = solanaKitWrapper.solanaKit
 
     override val explorerTitle: String
         get() = "Solscan.io"
 
-    override fun getTransactionUrl(transactionHash: String): String =
-        "https://solscan.io/tx/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String = "https://solscan.io/tx/$transactionHash"
 
     override val lastBlockInfo: LastBlockInfo?
         get() = kit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
@@ -60,21 +58,36 @@ class SolanaTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType,
     ): Single<List<TransactionRecord>> {
-        val incoming = when (transactionType) {
-            FilterTransactionType.All -> null
-            FilterTransactionType.Incoming -> true
-            FilterTransactionType.Outgoing -> false
-            else -> return Single.just(listOf())
-        }
-
-        val transactions = rxSingle(Dispatchers.IO) {
-            when {
-                token == null -> kit.getAllTransactions(incoming, from?.transactionHash, limit)
-                token.type is TokenType.Native -> kit.getSolTransactions(incoming, from?.transactionHash, limit)
-                token.type is TokenType.Spl -> kit.getSplTransactions((token.type as TokenType.Spl).address, incoming, from?.transactionHash, limit)
-                else -> listOf()
+        val incoming =
+            when (transactionType) {
+                FilterTransactionType.All -> null
+                FilterTransactionType.Incoming -> true
+                FilterTransactionType.Outgoing -> false
+                else -> return Single.just(listOf())
             }
-        }
+
+        val transactions =
+            rxSingle(Dispatchers.IO) {
+                when {
+                    token == null -> kit.getAllTransactions(incoming, from?.transactionHash, limit)
+                    token.type is TokenType.Native ->
+                        kit.getSolTransactions(
+                            incoming,
+                            from?.transactionHash,
+                            limit,
+                        )
+
+                    token.type is TokenType.Spl ->
+                        kit.getSplTransactions(
+                            (token.type as TokenType.Spl).address,
+                            incoming,
+                            from?.transactionHash,
+                            limit,
+                        )
+
+                    else -> listOf()
+                }
+            }
 
         return transactions.map { txList ->
             txList.map { solanaTransactionConverter.transactionRecord(it) }
@@ -85,37 +98,49 @@ class SolanaTransactionsAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
-        else -> Flowable.empty()
-    }
-
-    private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
-        val incoming: Boolean? = when (transactionType) {
-            FilterTransactionType.All -> null
-            FilterTransactionType.Incoming -> true
-            FilterTransactionType.Outgoing -> false
-            else -> return Flowable.just(listOf())
+    ): Flowable<List<TransactionRecord>> =
+        when (address) {
+            null -> getTransactionRecordsFlowable(token, transactionType)
+            else -> Flowable.empty()
         }
 
-        val transactionsFlow =  when {
-            token == null -> kit.allTransactionsFlow(incoming)
-            token.type is TokenType.Native -> kit.solTransactionsFlow(incoming)
-            token.type is TokenType.Spl -> kit.splTransactionsFlow((token.type as TokenType.Spl).address, incoming)
-            else -> emptyFlow()
-        }
+    private fun getTransactionRecordsFlowable(
+        token: Token?,
+        transactionType: FilterTransactionType,
+    ): Flowable<List<TransactionRecord>> {
+        val incoming: Boolean? =
+            when (transactionType) {
+                FilterTransactionType.All -> null
+                FilterTransactionType.Incoming -> true
+                FilterTransactionType.Outgoing -> false
+                else -> return Flowable.just(listOf())
+            }
 
-        return transactionsFlow.map { txList ->
-            txList.map { solanaTransactionConverter.transactionRecord(it) }
-        }.asFlowable()
+        val transactionsFlow =
+            when {
+                token == null -> kit.allTransactionsFlow(incoming)
+                token.type is TokenType.Native -> kit.solTransactionsFlow(incoming)
+                token.type is TokenType.Spl ->
+                    kit.splTransactionsFlow(
+                        (token.type as TokenType.Spl).address,
+                        incoming,
+                    )
+
+                else -> emptyFlow()
+            }
+
+        return transactionsFlow
+            .map { txList ->
+                txList.map { solanaTransactionConverter.transactionRecord(it) }
+            }.asFlowable()
     }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState =
-            when (syncState) {
-                is SolanaKit.SyncState.Synced -> AdapterState.Synced
-                is SolanaKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-                is SolanaKit.SyncState.Syncing -> AdapterState.Syncing()
-            }
+        when (syncState) {
+            is SolanaKit.SyncState.Synced -> AdapterState.Synced
+            is SolanaKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
+            is SolanaKit.SyncState.Syncing -> AdapterState.Syncing()
+        }
 
     companion object {
         const val decimal = 18

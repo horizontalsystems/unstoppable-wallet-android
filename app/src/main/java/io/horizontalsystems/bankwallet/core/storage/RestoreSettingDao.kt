@@ -8,17 +8,18 @@ import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 
 @Dao
 interface RestoreSettingDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(records: List<RestoreSettingRecord>)
 
     @Query("SELECT * FROM `RestoreSettingRecord` WHERE accountId = :accountId AND blockchainTypeUid = :blockchainTypeUid")
-    fun get(accountId: String, blockchainTypeUid: String): List<RestoreSettingRecord>
+    fun get(
+        accountId: String,
+        blockchainTypeUid: String,
+    ): List<RestoreSettingRecord>
 
     @Query("SELECT * FROM `RestoreSettingRecord` WHERE accountId = :accountId")
     fun get(accountId: String): List<RestoreSettingRecord>
 
     @Query("DELETE FROM `RestoreSettingRecord` WHERE accountId = :accountId")
     fun delete(accountId: String)
-
 }

@@ -6,11 +6,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 
 object ManageAccountModule {
-    class Factory(private val accountId: String) : ViewModelProvider.Factory {
+    class Factory(
+        private val accountId: String,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ManageAccountViewModel(accountId, App.accountManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ManageAccountViewModel(accountId, App.accountManager) as T
     }
 
     data class ViewState(
@@ -29,9 +29,18 @@ object ManageAccountModule {
         PrivateKeys,
     }
 
-    sealed class BackupItem{
-        class ManualBackup(val showAttention: Boolean, val completed: Boolean = false) : BackupItem()
-        class LocalBackup(val showAttention: Boolean) : BackupItem()
-        class InfoText(val textRes: Int) : BackupItem()
+    sealed class BackupItem {
+        class ManualBackup(
+            val showAttention: Boolean,
+            val completed: Boolean = false,
+        ) : BackupItem()
+
+        class LocalBackup(
+            val showAttention: Boolean,
+        ) : BackupItem()
+
+        class InfoText(
+            val textRes: Int,
+        ) : BackupItem()
     }
 }

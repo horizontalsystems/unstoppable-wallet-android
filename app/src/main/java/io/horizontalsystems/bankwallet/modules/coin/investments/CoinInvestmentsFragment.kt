@@ -45,7 +45,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.parcelize.Parcelize
 
 class CoinInvestmentsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -56,20 +55,22 @@ class CoinInvestmentsFragment : BaseComposeFragment() {
                 },
                 onClickFundUrl = {
                     LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
+                },
             )
         }
     }
 
     @Parcelize
-    data class Input(val coinUid: String) : Parcelable
+    data class Input(
+        val coinUid: String,
+    ) : Parcelable
 }
 
 @Composable
 private fun CoinInvestmentsScreen(
     viewModel: CoinInvestmentsViewModel,
     onClickNavigation: () -> Unit,
-    onClickFundUrl: (url: String) -> Unit
+    onClickFundUrl: (url: String) -> Unit,
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
@@ -82,15 +83,16 @@ private fun CoinInvestmentsScreen(
                 title = stringResource(R.string.CoinPage_FundsInvested),
                 navigationIcon = {
                     HsBackButton(onClick = onClickNavigation)
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         HSSwipeRefresh(
             refreshing = isRefreshing,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
             onRefresh = viewModel::refresh,
             content = {
                 Crossfade(viewState, label = "") { viewState ->
@@ -102,7 +104,7 @@ private fun CoinInvestmentsScreen(
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
+                                viewModel::onErrorClick,
                             )
                         }
 
@@ -118,7 +120,7 @@ private fun CoinInvestmentsScreen(
                                         CellSingleLineLawrenceSection(viewItem.fundViewItems) { fundViewItem ->
                                             CoinInvestmentFund(fundViewItem) {
                                                 onClickFundUrl(
-                                                    fundViewItem.url
+                                                    fundViewItem.url,
                                                 )
                                             }
                                         }
@@ -131,13 +133,16 @@ private fun CoinInvestmentsScreen(
                         null -> {}
                     }
                 }
-            }
+            },
         )
     }
 }
 
 @Composable
-fun CoinInvestmentHeader(amount: String, info: String) {
+fun CoinInvestmentHeader(
+    amount: String,
+    info: String,
+) {
     CellSingleLineClear(borderTop = true) {
         body_jacob(
             modifier = Modifier.weight(1f),
@@ -149,24 +154,29 @@ fun CoinInvestmentHeader(amount: String, info: String) {
 }
 
 @Composable
-fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
+fun CoinInvestmentFund(
+    fundViewItem: FundViewItem,
+    onClick: () -> Unit,
+) {
     val hasWebsiteUrl = fundViewItem.url.isNotBlank()
     Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick, enabled = hasWebsiteUrl),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .clickable(onClick = onClick, enabled = hasWebsiteUrl),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         HsImage(
             url = fundViewItem.logoUrl,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .size(24.dp)
+            modifier =
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp),
         )
         body_leah(
             modifier = Modifier.weight(1f),
             text = fundViewItem.name,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         if (fundViewItem.isLead) {
             subhead2_remus(
@@ -177,7 +187,7 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
         if (hasWebsiteUrl) {
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = "arrow icon"
+                contentDescription = "arrow icon",
             )
         }
         Spacer(Modifier.width(16.dp))

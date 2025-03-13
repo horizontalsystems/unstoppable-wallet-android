@@ -88,8 +88,10 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class ZcashConfigure : BaseComposeFragment() {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         activity?.onBackPressedDispatcher?.addCallback(this) {
             close(findNavController())
         }
@@ -99,11 +101,14 @@ class ZcashConfigure : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         ZcashConfigureScreen(
             onCloseWithResult = { closeWithConfigt(it, navController) },
-            onCloseClick = { close(navController) }
+            onCloseClick = { close(navController) },
         )
     }
 
-    private fun closeWithConfigt(config: ZCashConfig, navController: NavController) {
+    private fun closeWithConfigt(
+        config: ZCashConfig,
+        navController: NavController,
+    ) {
         navController.setNavigationResultX(Result(config))
         navController.popBackStack()
     }
@@ -114,7 +119,9 @@ class ZcashConfigure : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Result(val config: ZCashConfig?) : Parcelable
+    data class Result(
+        val config: ZCashConfig?,
+    ) : Parcelable
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
@@ -122,19 +129,20 @@ class ZcashConfigure : BaseComposeFragment() {
 fun ZcashConfigureScreen(
     onCloseClick: () -> Unit,
     onCloseWithResult: (ZCashConfig) -> Unit,
-    viewModel: ZcashConfigureViewModel = viewModel()
+    viewModel: ZcashConfigureViewModel = viewModel(),
 ) {
     var showSlowSyncWarning by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden,
-        confirmValueChange = {
-            if (it == ModalBottomSheetValue.Hidden) {
-                showSlowSyncWarning = false
-            }
-            true
-        }
-    )
+    val sheetState =
+        rememberModalBottomSheetState(
+            ModalBottomSheetValue.Hidden,
+            confirmValueChange = {
+                if (it == ModalBottomSheetValue.Hidden) {
+                    showSlowSyncWarning = false
+                }
+                true
+            },
+        )
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -172,18 +180,19 @@ fun ZcashConfigureScreen(
                     scope.launch { sheetState.hide() }
                 },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
+            topBar = { ZcashAppBar(onCloseClick = onCloseClick) },
         ) {
             Column(modifier = Modifier.padding(it)) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
                 ) {
                     Spacer(Modifier.height(12.dp))
                     CellMultilineLawrenceSection(
@@ -198,7 +207,7 @@ fun ZcashConfigureScreen(
                                         textState =
                                             textState.copy(text = "", selection = TextRange(0))
                                         focusManager.clearFocus()
-                                    }
+                                    },
                                 )
                             },
                             {
@@ -211,10 +220,10 @@ fun ZcashConfigureScreen(
                                         textState =
                                             textState.copy(text = "", selection = TextRange(0))
                                         focusManager.clearFocus()
-                                    }
+                                    },
                                 )
                             },
-                        )
+                        ),
                     )
 
                     Spacer(Modifier.height(24.dp))
@@ -223,15 +232,14 @@ fun ZcashConfigureScreen(
                     BirthdayHeightInput(
                         textState = textState,
                         focusRequester = focusRequester,
-                        textPreprocessor = object : TextPreprocessor {
-                            override fun process(text: String): String {
-                                return text.replace("[^0-9]".toRegex(), "")
-                            }
-                        },
+                        textPreprocessor =
+                            object : TextPreprocessor {
+                                override fun process(text: String): String = text.replace("[^0-9]".toRegex(), "")
+                            },
                         onValueChange = { textFieldValue ->
                             textState = textFieldValue
                             viewModel.setBirthdayHeight(textFieldValue.text)
-                        }
+                        },
                     )
 
                     InfoText(
@@ -243,12 +251,13 @@ fun ZcashConfigureScreen(
 
                 ButtonsGroupWithShade {
                     ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
                         title = stringResource(R.string.Button_Done),
                         onClick = { viewModel.onDoneClick() },
-                        enabled = viewModel.uiState.doneButtonEnabled
+                        enabled = viewModel.uiState.doneButtonEnabled,
                     )
                 }
             }
@@ -261,18 +270,20 @@ private fun OptionCell(
     title: String,
     subtitle: String,
     checked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .weight(1f)
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f),
         ) {
             body_leah(
                 text = title,
@@ -287,10 +298,11 @@ private fun OptionCell(
             )
         }
         Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .width(52.dp)
+                    .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
         ) {
             if (checked) {
                 Icon(
@@ -304,36 +316,37 @@ private fun OptionCell(
 }
 
 @Composable
-fun ZcashAppBar(
-    onCloseClick: () -> Unit,
-) {
+fun ZcashAppBar(onCloseClick: () -> Unit) {
     AppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(24.dp),
-                    painter = rememberAsyncImagePainter(
-                        model = BlockchainType.Zcash.imageUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_32)
-                    ),
-                    contentDescription = null
+                    modifier =
+                        Modifier
+                            .padding(end = 16.dp)
+                            .size(24.dp),
+                    painter =
+                        rememberAsyncImagePainter(
+                            model = BlockchainType.Zcash.imageUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_32),
+                        ),
+                    contentDescription = null,
                 )
                 title3_leah(
                     text = stringResource(R.string.Restore_ZCash),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         },
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
-                onClick = onCloseClick
-            )
-        )
+        menuItems =
+            listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Close),
+                    icon = R.drawable.ic_close,
+                    onClick = onCloseClick,
+                ),
+            ),
     )
 }
 
@@ -347,27 +360,29 @@ private fun SlowSyncWarningBottomSheet(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         title = stringResource(R.string.Alert_TitleWarning),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            text = text
+            text = text,
         )
 
         ButtonPrimaryYellow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, top = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 20.dp),
             title = stringResource(id = R.string.Button_Continue),
-            onClick = onContinueClick
+            onClick = onContinueClick,
         )
 
         ButtonPrimaryTransparent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 12.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
             title = stringResource(id = R.string.Button_Cancel),
-            onClick = onCloseClick
+            onClick = onCloseClick,
         )
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -381,31 +396,33 @@ private fun BirthdayHeightInput(
     focusRequester: FocusRequester,
 ) {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .height(44.dp)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .height(44.dp)
+                .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         BasicTextField(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(vertical = 12.dp)
+                    .weight(1f),
             value = textState,
             onValueChange = { textFieldValue ->
                 val textFieldValueProcessed =
                     textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
                 onValueChange.invoke(textFieldValueProcessed)
             },
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.leah,
-                textStyle = ComposeAppTheme.typography.body
-            ),
+            textStyle =
+                ColoredTextStyle(
+                    color = ComposeAppTheme.colors.leah,
+                    textStyle = ComposeAppTheme.typography.body,
+                ),
             maxLines = 1,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             decorationBox = { innerTextField ->

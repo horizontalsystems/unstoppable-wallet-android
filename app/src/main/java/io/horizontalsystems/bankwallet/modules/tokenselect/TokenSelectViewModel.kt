@@ -30,17 +30,16 @@ class TokenSelectViewModel(
     private val balanceSorter: BalanceSorter,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val blockchainTypes: List<BlockchainType>?,
-    private val tokenTypes: List<TokenType>?
+    private val tokenTypes: List<TokenType>?,
 ) : ViewModel() {
-
     private var noItems = false
     private var query: String? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
     var uiState by mutableStateOf(
         TokenSelectUiState(
             items = balanceViewItems,
-            noItems = noItems
-        )
+            noItems = noItems,
+        ),
     )
         private set
 
@@ -59,14 +58,16 @@ class TokenSelectViewModel(
             if (balanceItems != null) {
                 var itemsFiltered: List<BalanceModule.BalanceItem> = balanceItems
                 blockchainTypes?.let { types ->
-                    itemsFiltered = itemsFiltered.filter { item ->
-                        types.contains(item.wallet.token.blockchainType)
-                    }
+                    itemsFiltered =
+                        itemsFiltered.filter { item ->
+                            types.contains(item.wallet.token.blockchainType)
+                        }
                 }
                 tokenTypes?.let { types ->
-                    itemsFiltered = itemsFiltered.filter { item ->
-                        types.contains(item.wallet.token.type)
-                    }
+                    itemsFiltered =
+                        itemsFiltered.filter { item ->
+                            types.contains(item.wallet.token.type)
+                        }
                 }
                 itemsFilter?.let {
                     itemsFiltered = itemsFiltered.filter(it)
@@ -75,23 +76,25 @@ class TokenSelectViewModel(
 
                 val tmpQuery = query
                 if (!tmpQuery.isNullOrBlank()) {
-                    itemsFiltered = itemsFiltered.filter {
-                        val coin = it.wallet.coin
-                        coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
-                    }
+                    itemsFiltered =
+                        itemsFiltered.filter {
+                            val coin = it.wallet.coin
+                            coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
+                        }
                 }
 
                 val itemsSorted = balanceSorter.sort(itemsFiltered, BalanceSortType.Value)
-                balanceViewItems = itemsSorted.map { balanceItem ->
-                    balanceViewItemFactory.viewItem2(
-                        item = balanceItem,
-                        currency = service.baseCurrency,
-                        hideBalance = balanceHiddenManager.balanceHidden,
-                        watchAccount = service.isWatchAccount,
-                        balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
-                        networkAvailable = service.networkAvailable
-                    )
-                }
+                balanceViewItems =
+                    itemsSorted.map { balanceItem ->
+                        balanceViewItemFactory.viewItem2(
+                            item = balanceItem,
+                            currency = service.baseCurrency,
+                            hideBalance = balanceHiddenManager.balanceHidden,
+                            watchAccount = service.isWatchAccount,
+                            balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
+                            networkAvailable = service.networkAvailable,
+                        )
+                    }
             } else {
                 balanceViewItems = listOf()
             }
@@ -109,10 +112,11 @@ class TokenSelectViewModel(
 
     private fun emitState() {
         viewModelScope.launch {
-            uiState = TokenSelectUiState(
-                items = balanceViewItems,
-                noItems = noItems,
-            )
+            uiState =
+                TokenSelectUiState(
+                    items = balanceViewItems,
+                    noItems = noItems,
+                )
         }
     }
 
@@ -122,11 +126,11 @@ class TokenSelectViewModel(
 
     class FactoryForSend(
         private val blockchainTypes: List<BlockchainType>? = null,
-        private val tokenTypes: List<TokenType>? = null
+        private val tokenTypes: List<TokenType>? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TokenSelectViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            TokenSelectViewModel(
                 service = BalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
@@ -136,13 +140,12 @@ class TokenSelectViewModel(
                 blockchainTypes = blockchainTypes,
                 tokenTypes = tokenTypes,
             ) as T
-        }
     }
 
     class FactoryForSwap : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TokenSelectViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            TokenSelectViewModel(
                 service = BalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
@@ -154,7 +157,6 @@ class TokenSelectViewModel(
                 blockchainTypes = null,
                 tokenTypes = null,
             ) as T
-        }
     }
 }
 

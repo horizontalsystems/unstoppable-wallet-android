@@ -5,7 +5,9 @@ import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.marketkit.models.Token
 
-enum class StatPage(val key: String) {
+enum class StatPage(
+    val key: String,
+) {
     AboutApp("about_app"),
     Academy("academy"),
     AccountExtendedPrivateKey("account_extended_private_key"),
@@ -137,7 +139,9 @@ enum class StatPage(val key: String) {
     Widget("widget"),
 }
 
-enum class StatSection(val key: String) {
+enum class StatSection(
+    val key: String,
+) {
     AddressFrom("address_from"),
     AddressRecipient("address_recipient"),
     AddressSpender("address_spender"),
@@ -155,357 +159,561 @@ enum class StatSection(val key: String) {
     Watchlist("watchlist"),
     News("news"),
     Platforms("platforms"),
-    Pairs("pairs")
+    Pairs("pairs"),
 }
 
 sealed class StatEvent {
-
     object Send : StatEvent()
 
-    data class AddEvmSource(val chainUid: String) : StatEvent()
-    data class DeleteCustomEvmSource(val chainUid: String) : StatEvent()
-    data class DisableToken(val token: Token) : StatEvent()
-    data class EnableToken(val token: Token) : StatEvent()
+    data class AddEvmSource(
+        val chainUid: String,
+    ) : StatEvent()
 
-    data class ImportWallet(val walletType: String) : StatEvent()
+    data class DeleteCustomEvmSource(
+        val chainUid: String,
+    ) : StatEvent()
+
+    data class DisableToken(
+        val token: Token,
+    ) : StatEvent()
+
+    data class EnableToken(
+        val token: Token,
+    ) : StatEvent()
+
+    data class ImportWallet(
+        val walletType: String,
+    ) : StatEvent()
+
     object ImportFull : StatEvent()
 
-    data class ExportWallet(val walletType: String) : StatEvent()
+    data class ExportWallet(
+        val walletType: String,
+    ) : StatEvent()
+
     object ExportFull : StatEvent()
 
-    data class OpenArticle(val relativeUrl: String): StatEvent()
+    data class OpenArticle(
+        val relativeUrl: String,
+    ) : StatEvent()
 
-    data class OpenBlockchainSettingsBtc(val chainUid: String) : StatEvent()
-    data class OpenBlockchainSettingsEvm(val chainUid: String) : StatEvent()
-    data class OpenBlockchainSettingsEvmAdd(val chainUid: String) : StatEvent()
+    data class OpenBlockchainSettingsBtc(
+        val chainUid: String,
+    ) : StatEvent()
 
-    data class OpenCategory(val categoryUid: String) : StatEvent()
-    data class OpenCoin(val coinUid: String) : StatEvent()
-    data class OpenPlatform(val chainUid: String) : StatEvent()
-    data class OpenReceive(val token: Token) : StatEvent()
-    data class OpenResend(val chainUid: String, val type: StatResendType) : StatEvent()
-    data class OpenSend(val token: Token) : StatEvent()
-    data class OpenTokenPage(val token: Token?, val assetId: String? = null) : StatEvent()
-    data class OpenTokenInfo(val token: Token) : StatEvent()
-    data class Open(val page: StatPage) : StatEvent()
+    data class OpenBlockchainSettingsEvm(
+        val chainUid: String,
+    ) : StatEvent()
 
-    data class HideBalanceButtons(val shown: Boolean): StatEvent()
-    data class SelectTheme(val type: String): StatEvent()
-    data class SelectLaunchScreen(val type: String): StatEvent()
-    data class SelectBalanceConversion(val coinUid: String): StatEvent()
-    data class SelectBalanceValue(val type: String): StatEvent()
-    data class SelectAppIcon(val iconUid: String): StatEvent()
-    data class ShowMarketsTab(val shown: Boolean): StatEvent()
-    data class SwitchPriceChangeMode(val changeMode: String): StatEvent()
-    data class SwitchLanguage(val language: String): StatEvent()
-    data class ShowSignals(val shown: Boolean): StatEvent()
-    data class EnableUiStats(val enabled: Boolean): StatEvent()
+    data class OpenBlockchainSettingsEvmAdd(
+        val chainUid: String,
+    ) : StatEvent()
 
-    data class SwitchBaseCurrency(val code: String) : StatEvent()
-    data class SwitchBtcSource(val chainUid: String, val type: BtcRestoreMode) : StatEvent()
-    data class SwitchEvmSource(val chainUid: String, val type: String) : StatEvent()
-    data class SwitchTab(val tab: StatTab) : StatEvent()
-    data class SwitchMarketTop(val marketTop: StatMarketTop) : StatEvent()
-    data class SwitchPeriod(val period: StatPeriod) : StatEvent()
-    data class SwitchField(val field: StatField) : StatEvent()
-    data class SwitchSortType(val sortType: StatSortType) : StatEvent()
-    data class SwitchChartPeriod(val period: StatPeriod) : StatEvent()
-    data class SwitchTvlChain(val chain: String) : StatEvent()
-    data class SwitchFilterType(val type: String) : StatEvent()
+    data class OpenCategory(
+        val categoryUid: String,
+    ) : StatEvent()
+
+    data class OpenCoin(
+        val coinUid: String,
+    ) : StatEvent()
+
+    data class OpenPlatform(
+        val chainUid: String,
+    ) : StatEvent()
+
+    data class OpenReceive(
+        val token: Token,
+    ) : StatEvent()
+
+    data class OpenResend(
+        val chainUid: String,
+        val type: StatResendType,
+    ) : StatEvent()
+
+    data class OpenSend(
+        val token: Token,
+    ) : StatEvent()
+
+    data class OpenTokenPage(
+        val token: Token?,
+        val assetId: String? = null,
+    ) : StatEvent()
+
+    data class OpenTokenInfo(
+        val token: Token,
+    ) : StatEvent()
+
+    data class Open(
+        val page: StatPage,
+    ) : StatEvent()
+
+    data class HideBalanceButtons(
+        val shown: Boolean,
+    ) : StatEvent()
+
+    data class SelectTheme(
+        val type: String,
+    ) : StatEvent()
+
+    data class SelectLaunchScreen(
+        val type: String,
+    ) : StatEvent()
+
+    data class SelectBalanceConversion(
+        val coinUid: String,
+    ) : StatEvent()
+
+    data class SelectBalanceValue(
+        val type: String,
+    ) : StatEvent()
+
+    data class SelectAppIcon(
+        val iconUid: String,
+    ) : StatEvent()
+
+    data class ShowMarketsTab(
+        val shown: Boolean,
+    ) : StatEvent()
+
+    data class SwitchPriceChangeMode(
+        val changeMode: String,
+    ) : StatEvent()
+
+    data class SwitchLanguage(
+        val language: String,
+    ) : StatEvent()
+
+    data class ShowSignals(
+        val shown: Boolean,
+    ) : StatEvent()
+
+    data class EnableUiStats(
+        val enabled: Boolean,
+    ) : StatEvent()
+
+    data class SwitchBaseCurrency(
+        val code: String,
+    ) : StatEvent()
+
+    data class SwitchBtcSource(
+        val chainUid: String,
+        val type: BtcRestoreMode,
+    ) : StatEvent()
+
+    data class SwitchEvmSource(
+        val chainUid: String,
+        val type: String,
+    ) : StatEvent()
+
+    data class SwitchTab(
+        val tab: StatTab,
+    ) : StatEvent()
+
+    data class SwitchMarketTop(
+        val marketTop: StatMarketTop,
+    ) : StatEvent()
+
+    data class SwitchPeriod(
+        val period: StatPeriod,
+    ) : StatEvent()
+
+    data class SwitchField(
+        val field: StatField,
+    ) : StatEvent()
+
+    data class SwitchSortType(
+        val sortType: StatSortType,
+    ) : StatEvent()
+
+    data class SwitchChartPeriod(
+        val period: StatPeriod,
+    ) : StatEvent()
+
+    data class SwitchTvlChain(
+        val chain: String,
+    ) : StatEvent()
+
+    data class SwitchFilterType(
+        val type: String,
+    ) : StatEvent()
+
     object ToggleSortDirection : StatEvent()
-    data class ToggleTvlField(val fieldArg: String) : StatEvent()
+
+    data class ToggleTvlField(
+        val fieldArg: String,
+    ) : StatEvent()
 
     object Refresh : StatEvent()
 
     object ToggleBalanceHidden : StatEvent()
+
     object ToggleConversionCoin : StatEvent()
 
+    data class AddToWatchlist(
+        val coinUid: String,
+    ) : StatEvent()
 
-    data class AddToWatchlist(val coinUid: String) : StatEvent()
-    data class RemoveFromWatchlist(val coinUid: String) : StatEvent()
+    data class RemoveFromWatchlist(
+        val coinUid: String,
+    ) : StatEvent()
 
-    data class ToggleIndicators(val shown: Boolean) : StatEvent()
+    data class ToggleIndicators(
+        val shown: Boolean,
+    ) : StatEvent()
+
     object AddToWallet : StatEvent()
+
     object RemoveFromWallet : StatEvent()
 
-    data class Copy(val entity: StatEntity) : StatEvent()
-    data class CopyAddress(val chainUid: String) : StatEvent()
+    data class Copy(
+        val entity: StatEntity,
+    ) : StatEvent()
 
-    data class Share(val entity: StatEntity) : StatEvent()
+    data class CopyAddress(
+        val chainUid: String,
+    ) : StatEvent()
+
+    data class Share(
+        val entity: StatEntity,
+    ) : StatEvent()
 
     object SetAmount : StatEvent()
+
     object RemoveAmount : StatEvent()
 
     object ToggleHidden : StatEvent()
+
     object TogglePrice : StatEvent()
 
-    data class SwapSelectTokenIn(val token: Token) : StatEvent()
-    data class SwapSelectTokenOut(val token: Token) : StatEvent()
-    data class SwapSelectProvider(val uid: String) : StatEvent()
+    data class SwapSelectTokenIn(
+        val token: Token,
+    ) : StatEvent()
+
+    data class SwapSelectTokenOut(
+        val token: Token,
+    ) : StatEvent()
+
+    data class SwapSelectProvider(
+        val uid: String,
+    ) : StatEvent()
+
     object SwapSwitchPairs : StatEvent()
 
-    data class Select(val entity: StatEntity) : StatEvent()
-    data class Edit(val entity: StatEntity) : StatEvent()
-    data class Delete(val entity: StatEntity) : StatEvent()
+    data class Select(
+        val entity: StatEntity,
+    ) : StatEvent()
 
-    data class ScanQr(val entity: StatEntity) : StatEvent()
-    data class Paste(val entity: StatEntity) : StatEvent()
-    data class Clear(val entity: StatEntity) : StatEvent()
+    data class Edit(
+        val entity: StatEntity,
+    ) : StatEvent()
 
-    data class CreateWallet(val walletType: String) : StatEvent()
-    data class WatchWallet(val walletType: String) : StatEvent()
+    data class Delete(
+        val entity: StatEntity,
+    ) : StatEvent()
 
-    data class Add(val entity: StatEntity) : StatEvent()
-    data class AddToken(val token: Token) : StatEvent()
+    data class ScanQr(
+        val entity: StatEntity,
+    ) : StatEvent()
+
+    data class Paste(
+        val entity: StatEntity,
+    ) : StatEvent()
+
+    data class Clear(
+        val entity: StatEntity,
+    ) : StatEvent()
+
+    data class CreateWallet(
+        val walletType: String,
+    ) : StatEvent()
+
+    data class WatchWallet(
+        val walletType: String,
+    ) : StatEvent()
+
+    data class Add(
+        val entity: StatEntity,
+    ) : StatEvent()
+
+    data class AddToken(
+        val token: Token,
+    ) : StatEvent()
 
     val name: String
-        get() = when (this) {
-            is AddEvmSource -> "add_evm_source"
-            is DeleteCustomEvmSource -> "delete_custom_evm_source"
-            is DisableToken -> "disable_token"
-            is EnableToken -> "enable_token"
+        get() =
+            when (this) {
+                is AddEvmSource -> "add_evm_source"
+                is DeleteCustomEvmSource -> "delete_custom_evm_source"
+                is DisableToken -> "disable_token"
+                is EnableToken -> "enable_token"
 
-            is ImportFull -> "import_full"
-            is ImportWallet -> "import_wallet"
+                is ImportFull -> "import_full"
+                is ImportWallet -> "import_wallet"
 
-            is ExportFull -> "export_full"
-            is ExportWallet -> "export_wallet"
+                is ExportFull -> "export_full"
+                is ExportWallet -> "export_wallet"
 
-            is OpenArticle -> "open_article"
-            is OpenBlockchainSettingsBtc,
-            is OpenBlockchainSettingsEvm,
-            is OpenBlockchainSettingsEvmAdd,
-            is OpenCategory,
-            is OpenCoin,
-            is OpenPlatform,
-            is OpenReceive,
-            is OpenSend,
-            is OpenTokenPage,
-            is OpenResend,
-            is Open -> "open_page"
+                is OpenArticle -> "open_article"
+                is OpenBlockchainSettingsBtc,
+                is OpenBlockchainSettingsEvm,
+                is OpenBlockchainSettingsEvmAdd,
+                is OpenCategory,
+                is OpenCoin,
+                is OpenPlatform,
+                is OpenReceive,
+                is OpenSend,
+                is OpenTokenPage,
+                is OpenResend,
+                is Open,
+                -> "open_page"
 
-            is OpenTokenInfo -> "open_token_info"
+                is OpenTokenInfo -> "open_token_info"
 
-            is HideBalanceButtons -> "hide_balance_buttons"
-            is SelectTheme -> "select_theme"
-            is SelectLaunchScreen -> "select_launch_screen"
-            is SelectBalanceConversion -> "select_balance_conversion"
-            is SelectBalanceValue -> "select_balance_value"
-            is SelectAppIcon -> "select_app_icon"
-            is ShowMarketsTab -> "show_markets_tab"
-            is SwitchPriceChangeMode -> "switch_price_change_mode"
-            is SwitchLanguage -> "switch_language"
-            is ShowSignals -> "show_signals"
-            is EnableUiStats -> "enable_ui_stats"
+                is HideBalanceButtons -> "hide_balance_buttons"
+                is SelectTheme -> "select_theme"
+                is SelectLaunchScreen -> "select_launch_screen"
+                is SelectBalanceConversion -> "select_balance_conversion"
+                is SelectBalanceValue -> "select_balance_value"
+                is SelectAppIcon -> "select_app_icon"
+                is ShowMarketsTab -> "show_markets_tab"
+                is SwitchPriceChangeMode -> "switch_price_change_mode"
+                is SwitchLanguage -> "switch_language"
+                is ShowSignals -> "show_signals"
+                is EnableUiStats -> "enable_ui_stats"
 
-            is SwapSelectTokenIn -> "swap_select_token_in"
-            is SwapSelectTokenOut -> "swap_select_token_out"
-            is SwapSelectProvider -> "swap_select_provider"
-            is SwapSwitchPairs -> "swap_switch_pairs"
+                is SwapSelectTokenIn -> "swap_select_token_in"
+                is SwapSelectTokenOut -> "swap_select_token_out"
+                is SwapSelectProvider -> "swap_select_provider"
+                is SwapSwitchPairs -> "swap_switch_pairs"
 
-            is Send -> "send"
-            is SwitchBaseCurrency -> "switch_base_currency"
-            is SwitchBtcSource -> "switch_btc_source"
-            is SwitchEvmSource -> "switch_evm_source"
-            is SwitchTab -> "switch_tab"
-            is SwitchMarketTop -> "switch_market_top"
-            is SwitchPeriod -> "switch_period"
-            is SwitchField -> "switch_field"
-            is SwitchSortType -> "switch_sort_type"
-            is SwitchChartPeriod -> "switch_chart_period"
-            is SwitchTvlChain -> "switch_tvl_platform"
-            is SwitchFilterType -> "switch_filter_type"
-            is ToggleSortDirection -> "toggle_sort_direction"
-            is ToggleTvlField -> "toggle_tvl_field"
-            is Refresh -> "refresh"
-            is ToggleBalanceHidden -> "toggle_balance_hidden"
-            is ToggleConversionCoin -> "toggle_conversion_coin"
-            is TogglePrice -> "toggle_price"
+                is Send -> "send"
+                is SwitchBaseCurrency -> "switch_base_currency"
+                is SwitchBtcSource -> "switch_btc_source"
+                is SwitchEvmSource -> "switch_evm_source"
+                is SwitchTab -> "switch_tab"
+                is SwitchMarketTop -> "switch_market_top"
+                is SwitchPeriod -> "switch_period"
+                is SwitchField -> "switch_field"
+                is SwitchSortType -> "switch_sort_type"
+                is SwitchChartPeriod -> "switch_chart_period"
+                is SwitchTvlChain -> "switch_tvl_platform"
+                is SwitchFilterType -> "switch_filter_type"
+                is ToggleSortDirection -> "toggle_sort_direction"
+                is ToggleTvlField -> "toggle_tvl_field"
+                is Refresh -> "refresh"
+                is ToggleBalanceHidden -> "toggle_balance_hidden"
+                is ToggleConversionCoin -> "toggle_conversion_coin"
+                is TogglePrice -> "toggle_price"
 
-            is AddToWatchlist -> "add_to_watchlist"
-            is RemoveFromWatchlist -> "remove_from_watchlist"
-            is ToggleIndicators -> "toggle_indicators"
-            is AddToWallet -> "add_to_wallet"
-            is RemoveFromWallet -> "remove_from_wallet"
-            is Copy,
-            is CopyAddress -> "copy"
+                is AddToWatchlist -> "add_to_watchlist"
+                is RemoveFromWatchlist -> "remove_from_watchlist"
+                is ToggleIndicators -> "toggle_indicators"
+                is AddToWallet -> "add_to_wallet"
+                is RemoveFromWallet -> "remove_from_wallet"
+                is Copy,
+                is CopyAddress,
+                -> "copy"
 
-            is Share -> "share"
-            is SetAmount -> "set_amount"
-            is RemoveAmount -> "remove_amount"
-            is ToggleHidden -> "toggle_hidden"
-            is Select -> "select"
-            is Edit -> "edit"
-            is Delete -> "delete"
-            is ScanQr -> "scan_qr"
-            is Paste -> "paste"
-            is Clear -> "clear"
-            is CreateWallet -> "create_wallet"
-            is WatchWallet -> "watch_wallet"
-            is Add -> "add"
-            is AddToken -> "add_token"
-        }
-
-    val params: Map<StatParam, Any>?
-        get() = when (this) {
-
-            is AddEvmSource -> mapOf(
-                StatParam.ChainUid to chainUid
-            )
-
-            is DeleteCustomEvmSource -> mapOf(
-                StatParam.ChainUid to chainUid
-            )
-
-            is DisableToken -> tokenParams(token)
-
-            is EnableToken -> tokenParams(token)
-
-            is OpenArticle -> mapOf(
-                StatParam.RelativeUrl to relativeUrl
-            )
-
-            is OpenBlockchainSettingsBtc -> mapOf(
-                StatParam.Page to StatPage.BlockchainSettingsBtc.key,
-                StatParam.ChainUid to chainUid
-            )
-
-            is OpenBlockchainSettingsEvm -> mapOf(
-                StatParam.Page to StatPage.BlockchainSettingsEvm.key,
-                StatParam.ChainUid to chainUid
-            )
-
-            is OpenBlockchainSettingsEvmAdd -> mapOf(
-                StatParam.Page to StatPage.BlockchainSettingsEvmAdd.key,
-                StatParam.ChainUid to chainUid
-            )
-
-            is OpenCategory -> mapOf(
-                StatParam.Page to StatPage.CoinCategory.key,
-                StatParam.CategoryUid to categoryUid
-            )
-
-            is OpenCoin -> mapOf(
-                StatParam.Page to StatPage.CoinPage.key,
-                StatParam.CoinUid to coinUid
-            )
-
-            is OpenPlatform -> mapOf(
-                StatParam.Page to StatPage.TopPlatform.key,
-                StatParam.ChainUid to chainUid
-            )
-
-            is OpenReceive -> mapOf(StatParam.Page to StatPage.Receive.key) + tokenParams(token)
-
-            is OpenSend -> mapOf(StatParam.Page to StatPage.Send.key) + tokenParams(token)
-
-            is OpenTokenPage -> buildMap {
-                put(StatParam.Page, StatPage.TokenPage.key)
-                putAll(tokenParams(token))
-                assetId?.let { put(StatParam.AssetId, it) }
+                is Share -> "share"
+                is SetAmount -> "set_amount"
+                is RemoveAmount -> "remove_amount"
+                is ToggleHidden -> "toggle_hidden"
+                is Select -> "select"
+                is Edit -> "edit"
+                is Delete -> "delete"
+                is ScanQr -> "scan_qr"
+                is Paste -> "paste"
+                is Clear -> "clear"
+                is CreateWallet -> "create_wallet"
+                is WatchWallet -> "watch_wallet"
+                is Add -> "add"
+                is AddToken -> "add_token"
             }
 
-            is OpenTokenInfo -> tokenParams(token)
+    val params: Map<StatParam, Any>?
+        get() =
+            when (this) {
 
-            is OpenResend -> mapOf(StatParam.Page to StatPage.Resend.key, StatParam.ChainUid to chainUid, StatParam.Type to type.key)
+                is AddEvmSource ->
+                    mapOf(
+                        StatParam.ChainUid to chainUid,
+                    )
 
-            is Open -> mapOf(StatParam.Page to page.key)
+                is DeleteCustomEvmSource ->
+                    mapOf(
+                        StatParam.ChainUid to chainUid,
+                    )
 
-            //Appearance
-            is HideBalanceButtons -> mapOf(StatParam.Shown to shown)
-            is SelectTheme -> mapOf(StatParam.Type to type)
-            is SelectLaunchScreen -> mapOf(StatParam.Type to type )
-            is SelectBalanceConversion -> mapOf(StatParam.CoinUid to coinUid)
-            is SelectBalanceValue -> mapOf(StatParam.Type to type)
-            is SelectAppIcon -> mapOf(StatParam.IconUid to iconUid)
-            is ShowMarketsTab -> mapOf(StatParam.Shown to shown)
-            is SwitchPriceChangeMode -> mapOf(StatParam.ChangeMode to changeMode)
-            is SwitchLanguage -> mapOf(StatParam.Language to language)
-            is ShowSignals -> mapOf(StatParam.Shown to shown)
+                is DisableToken -> tokenParams(token)
 
-            is SwapSelectTokenIn -> tokenParams(token)
+                is EnableToken -> tokenParams(token)
 
-            is SwapSelectTokenOut -> tokenParams(token)
+                is OpenArticle ->
+                    mapOf(
+                        StatParam.RelativeUrl to relativeUrl,
+                    )
 
-            is SwapSelectProvider -> mapOf(StatParam.Provider to uid)
+                is OpenBlockchainSettingsBtc ->
+                    mapOf(
+                        StatParam.Page to StatPage.BlockchainSettingsBtc.key,
+                        StatParam.ChainUid to chainUid,
+                    )
 
-            is SwitchBaseCurrency -> mapOf(StatParam.CurrencyCode to code)
+                is OpenBlockchainSettingsEvm ->
+                    mapOf(
+                        StatParam.Page to StatPage.BlockchainSettingsEvm.key,
+                        StatParam.ChainUid to chainUid,
+                    )
 
-            is SwitchBtcSource -> mapOf(StatParam.ChainUid to chainUid, StatParam.Type to type.raw)
+                is OpenBlockchainSettingsEvmAdd ->
+                    mapOf(
+                        StatParam.Page to StatPage.BlockchainSettingsEvmAdd.key,
+                        StatParam.ChainUid to chainUid,
+                    )
 
-            is SwitchEvmSource -> mapOf(StatParam.ChainUid to chainUid, StatParam.Type to type)
+                is OpenCategory ->
+                    mapOf(
+                        StatParam.Page to StatPage.CoinCategory.key,
+                        StatParam.CategoryUid to categoryUid,
+                    )
 
-            is SwitchTab -> mapOf(StatParam.Tab to tab.key)
+                is OpenCoin ->
+                    mapOf(
+                        StatParam.Page to StatPage.CoinPage.key,
+                        StatParam.CoinUid to coinUid,
+                    )
 
-            is SwitchMarketTop -> mapOf(StatParam.MarketTop to marketTop.key)
+                is OpenPlatform ->
+                    mapOf(
+                        StatParam.Page to StatPage.TopPlatform.key,
+                        StatParam.ChainUid to chainUid,
+                    )
 
-            is SwitchPeriod -> mapOf(StatParam.Period to period.key)
+                is OpenReceive -> mapOf(StatParam.Page to StatPage.Receive.key) + tokenParams(token)
 
-            is SwitchField -> mapOf(StatParam.Field to this.field.key)
+                is OpenSend -> mapOf(StatParam.Page to StatPage.Send.key) + tokenParams(token)
 
-            is SwitchSortType -> mapOf(StatParam.Type to sortType.key)
+                is OpenTokenPage ->
+                    buildMap {
+                        put(StatParam.Page, StatPage.TokenPage.key)
+                        putAll(tokenParams(token))
+                        assetId?.let { put(StatParam.AssetId, it) }
+                    }
 
-            is SwitchChartPeriod -> mapOf(StatParam.Period to period.key)
+                is OpenTokenInfo -> tokenParams(token)
 
-            is SwitchTvlChain -> mapOf(StatParam.TvlChain to chain)
+                is OpenResend ->
+                    mapOf(
+                        StatParam.Page to StatPage.Resend.key,
+                        StatParam.ChainUid to chainUid,
+                        StatParam.Type to type.key,
+                    )
 
-            is SwitchFilterType -> mapOf(StatParam.Type to type)
+                is Open -> mapOf(StatParam.Page to page.key)
 
-            is EnableUiStats -> mapOf(StatParam.Enabled to enabled)
+                // Appearance
+                is HideBalanceButtons -> mapOf(StatParam.Shown to shown)
+                is SelectTheme -> mapOf(StatParam.Type to type)
+                is SelectLaunchScreen -> mapOf(StatParam.Type to type)
+                is SelectBalanceConversion -> mapOf(StatParam.CoinUid to coinUid)
+                is SelectBalanceValue -> mapOf(StatParam.Type to type)
+                is SelectAppIcon -> mapOf(StatParam.IconUid to iconUid)
+                is ShowMarketsTab -> mapOf(StatParam.Shown to shown)
+                is SwitchPriceChangeMode -> mapOf(StatParam.ChangeMode to changeMode)
+                is SwitchLanguage -> mapOf(StatParam.Language to language)
+                is ShowSignals -> mapOf(StatParam.Shown to shown)
 
-            is AddToWatchlist -> mapOf(StatParam.CoinUid to coinUid)
+                is SwapSelectTokenIn -> tokenParams(token)
 
-            is RemoveFromWatchlist -> mapOf(StatParam.CoinUid to coinUid)
+                is SwapSelectTokenOut -> tokenParams(token)
 
-            is ToggleIndicators -> mapOf(StatParam.Shown to shown)
+                is SwapSelectProvider -> mapOf(StatParam.Provider to uid)
 
-            is ToggleTvlField -> mapOf(StatParam.Field to fieldArg)
+                is SwitchBaseCurrency -> mapOf(StatParam.CurrencyCode to code)
 
-            is Copy -> mapOf(StatParam.Entity to entity.key)
+                is SwitchBtcSource -> mapOf(StatParam.ChainUid to chainUid, StatParam.Type to type.raw)
 
-            is CopyAddress -> mapOf(StatParam.ChainUid to chainUid)
+                is SwitchEvmSource -> mapOf(StatParam.ChainUid to chainUid, StatParam.Type to type)
 
-            is Select -> mapOf(StatParam.Entity to entity.key)
+                is SwitchTab -> mapOf(StatParam.Tab to tab.key)
 
-            is Edit -> mapOf(StatParam.Entity to entity.key)
+                is SwitchMarketTop -> mapOf(StatParam.MarketTop to marketTop.key)
 
-            is Delete -> mapOf(StatParam.Entity to entity.key)
+                is SwitchPeriod -> mapOf(StatParam.Period to period.key)
 
-            is ScanQr -> mapOf(StatParam.Entity to entity.key)
+                is SwitchField -> mapOf(StatParam.Field to this.field.key)
 
-            is Paste -> mapOf(StatParam.Entity to entity.key)
+                is SwitchSortType -> mapOf(StatParam.Type to sortType.key)
 
-            is Clear -> mapOf(StatParam.Entity to entity.key)
+                is SwitchChartPeriod -> mapOf(StatParam.Period to period.key)
 
-            is CreateWallet -> mapOf(StatParam.WalletType to walletType)
+                is SwitchTvlChain -> mapOf(StatParam.TvlChain to chain)
 
-            is ExportWallet -> mapOf(StatParam.WalletType to walletType)
+                is SwitchFilterType -> mapOf(StatParam.Type to type)
 
-            is ImportWallet -> mapOf(StatParam.WalletType to walletType)
+                is EnableUiStats -> mapOf(StatParam.Enabled to enabled)
 
-            is WatchWallet -> mapOf(StatParam.WalletType to walletType)
+                is AddToWatchlist -> mapOf(StatParam.CoinUid to coinUid)
 
-            is Add -> mapOf(StatParam.Entity to entity.key)
+                is RemoveFromWatchlist -> mapOf(StatParam.CoinUid to coinUid)
 
-            is AddToken -> tokenParams(token) + mapOf(StatParam.Entity to StatEntity.Token.key)
+                is ToggleIndicators -> mapOf(StatParam.Shown to shown)
 
-            is Share -> mapOf(StatParam.Entity to entity.key)
+                is ToggleTvlField -> mapOf(StatParam.Field to fieldArg)
 
-            else -> null
+                is Copy -> mapOf(StatParam.Entity to entity.key)
+
+                is CopyAddress -> mapOf(StatParam.ChainUid to chainUid)
+
+                is Select -> mapOf(StatParam.Entity to entity.key)
+
+                is Edit -> mapOf(StatParam.Entity to entity.key)
+
+                is Delete -> mapOf(StatParam.Entity to entity.key)
+
+                is ScanQr -> mapOf(StatParam.Entity to entity.key)
+
+                is Paste -> mapOf(StatParam.Entity to entity.key)
+
+                is Clear -> mapOf(StatParam.Entity to entity.key)
+
+                is CreateWallet -> mapOf(StatParam.WalletType to walletType)
+
+                is ExportWallet -> mapOf(StatParam.WalletType to walletType)
+
+                is ImportWallet -> mapOf(StatParam.WalletType to walletType)
+
+                is WatchWallet -> mapOf(StatParam.WalletType to walletType)
+
+                is Add -> mapOf(StatParam.Entity to entity.key)
+
+                is AddToken -> tokenParams(token) + mapOf(StatParam.Entity to StatEntity.Token.key)
+
+                is Share -> mapOf(StatParam.Entity to entity.key)
+
+                else -> null
+            }
+
+    private fun tokenParams(token: Token?) =
+        buildMap {
+            token?.let {
+                put(StatParam.CoinUid, token.coin.uid)
+                put(StatParam.ChainUid, token.blockchainType.uid)
+
+                token.type.derivation?.let { put(StatParam.Derivation, it.name.lowercase()) }
+                token.type.bitcoinCashCoinType?.let {
+                    put(
+                        StatParam.BitcoinCashCoinType,
+                        it.name.lowercase(),
+                    )
+                }
+            }
         }
-
-    private fun tokenParams(token: Token?) = buildMap {
-        token?.let {
-            put(StatParam.CoinUid, token.coin.uid)
-            put(StatParam.ChainUid, token.blockchainType.uid)
-
-            token.type.derivation?.let { put(StatParam.Derivation, it.name.lowercase()) }
-            token.type.bitcoinCashCoinType?.let { put(StatParam.BitcoinCashCoinType, it.name.lowercase()) }
-        }
-    }
 }
 
-enum class StatParam(val key: String) {
+enum class StatParam(
+    val key: String,
+) {
     AssetId("asset_id"),
     BitcoinCashCoinType("bitcoin_cash_coin_type"),
     CategoryUid("category_uid"),
@@ -528,10 +736,12 @@ enum class StatParam(val key: String) {
     Tab("tab"),
     TvlChain("tvl_chain"),
     Type("type"),
-    WalletType("wallet_type")
+    WalletType("wallet_type"),
 }
 
-enum class StatTab(val key: String) {
+enum class StatTab(
+    val key: String,
+) {
     Markets("markets"),
     Balance("balance"),
     Transactions("transactions"),
@@ -551,7 +761,9 @@ enum class StatTab(val key: String) {
     Platforms("platforms"),
 }
 
-enum class StatSortType(val key: String) {
+enum class StatSortType(
+    val key: String,
+) {
     Balance("balance"),
     Name("name"),
     PriceChange("price_change"),
@@ -565,10 +777,12 @@ enum class StatSortType(val key: String) {
     HighestAssets("highest_assets"),
     LowestAssets("lowest_assets"),
     Inflow("inflow"),
-    Outflow("outflow")
+    Outflow("outflow"),
 }
 
-enum class StatPeriod(val key: String) {
+enum class StatPeriod(
+    val key: String,
+) {
     Day1("1d"),
     Week1("1w"),
     Week2("2w"),
@@ -578,23 +792,29 @@ enum class StatPeriod(val key: String) {
     Year1("1y"),
     Year2("2y"),
     Year5("5y"),
-    All("all")
+    All("all"),
 }
 
-enum class StatField(val key: String) {
+enum class StatField(
+    val key: String,
+) {
     MarketCap("market_cap"),
     Volume("volume"),
-    Price("price")
+    Price("price"),
 }
 
-enum class StatMarketTop(val key: String) {
+enum class StatMarketTop(
+    val key: String,
+) {
     Top100("top100"),
     Top200("top200"),
     Top300("top300"),
     Top500("top500"),
 }
 
-enum class StatEntity(val key: String) {
+enum class StatEntity(
+    val key: String,
+) {
     Account("account"),
     Address("address"),
     Blockchain("blockchain"),
@@ -612,10 +832,12 @@ enum class StatEntity(val key: String) {
     Token("token"),
     TransactionId("transaction_id"),
     Wallet("wallet"),
-    WalletName("wallet_name")
+    WalletName("wallet_name"),
 }
 
-enum class StatResendType(val key: String) {
+enum class StatResendType(
+    val key: String,
+) {
     SpeedUp("speed_up"),
-    Cancel("cancel")
+    Cancel("cancel"),
 }

@@ -4,43 +4,64 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
-
-enum class SnackbarDuration(val value: Int) {
+enum class SnackbarDuration(
+    val value: Int,
+) {
     SHORT(Snackbar.LENGTH_SHORT),
     LONG(Snackbar.LENGTH_LONG),
     INDEFINITE(Snackbar.LENGTH_INDEFINITE),
 }
 
 // Snackbar placement on screen
-enum class SnackbarGravity(val value: Int) {
+enum class SnackbarGravity(
+    val value: Int,
+) {
     TOP(1),
     BOTTOM(2),
     TOP_OF_VIEW(3),
-    BOTTOM_OF_VIEW(4)
+    BOTTOM_OF_VIEW(4),
 }
 
-class CustomSnackbar (
-        parent: ViewGroup,
-        content: View,
-        contentViewCallback: ContentViewCallback)
-    : BaseTransientBottomBar<CustomSnackbar?>(parent, content, contentViewCallback) {
-
+class CustomSnackbar(
+    parent: ViewGroup,
+    content: View,
+    contentViewCallback: ContentViewCallback,
+) : BaseTransientBottomBar<CustomSnackbar?>(parent, content, contentViewCallback) {
     init {
-        getView().setBackgroundColor(ContextCompat.getColor(view.context, android.R.color.transparent))
-        getView().setPadding(0,0,0,0)
+        getView().setBackgroundColor(
+            ContextCompat.getColor(
+                view.context,
+                android.R.color.transparent,
+            ),
+        )
+        getView().setPadding(0, 0, 0, 0)
     }
 
-    class ContentViewCallback(private val view: View) : com.google.android.material.snackbar.ContentViewCallback {
-        override fun animateContentIn(delay: Int, duration: Int) {}
+    class ContentViewCallback(
+        private val view: View,
+    ) : com.google.android.material.snackbar.ContentViewCallback {
+        override fun animateContentIn(
+            delay: Int,
+            duration: Int,
+        ) {
+        }
 
-        override fun animateContentOut(delay: Int, duration: Int) {}
+        override fun animateContentOut(
+            delay: Int,
+            duration: Int,
+        ) {
+        }
     }
 
     companion object {
@@ -52,7 +73,7 @@ class CustomSnackbar (
             gravity: SnackbarGravity,
             showProgressBar: Boolean,
             @DrawableRes iconRes: Int?,
-            iconTint: Int?
+            iconTint: Int?,
         ): CustomSnackbar? {
             val parentViewGroup = contentView.findSuitableParent() ?: return null
             val context = contentView.context
@@ -78,9 +99,10 @@ class CustomSnackbar (
                 val icon = view.findViewById<ImageView>(R.id.icon)
                 icon.setImageResource(iconRes)
                 iconTint?.let {
-                    icon.imageTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(context, iconTint)
-                    )
+                    icon.imageTintList =
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(context, iconTint),
+                        )
                 }
 
                 icon.visibility = View.VISIBLE
@@ -88,9 +110,9 @@ class CustomSnackbar (
 
             contentLayout.background.setTint(ContextCompat.getColor(context, backgroundColor))
 
-            if (gravity == SnackbarGravity.TOP_OF_VIEW)
+            if (gravity == SnackbarGravity.TOP_OF_VIEW) {
                 customSnackbar.anchorView = contentView
-
+            }
 
             return customSnackbar
         }
@@ -119,4 +141,3 @@ internal fun View?.findSuitableParent(): ViewGroup? {
 
     return fallback
 }
-

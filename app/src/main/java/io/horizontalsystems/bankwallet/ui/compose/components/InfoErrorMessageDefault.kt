@@ -20,32 +20,36 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun InfoErrorMessageDefault(painter: Painter, text: String) {
+fun InfoErrorMessageDefault(
+    painter: Painter,
+    text: String,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(
-                    color = ComposeAppTheme.colors.raina,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(100.dp)
+                    .background(
+                        color = ComposeAppTheme.colors.raina,
+                        shape = CircleShape,
+                    ),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 modifier = Modifier.size(48.dp),
                 painter = painter,
                 contentDescription = "",
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
         VSpacer(height = 32.dp)
         subhead2_grey(
             text = text,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -56,7 +60,7 @@ fun InfoErrorMessageDefaultPreview() {
     ComposeAppTheme(darkTheme = true) {
         InfoErrorMessageDefault(
             painter = painterResource(id = R.drawable.ic_wallet_48),
-            text = "You don't have any wallets"
+            text = "You don't have any wallets",
         )
     }
 }

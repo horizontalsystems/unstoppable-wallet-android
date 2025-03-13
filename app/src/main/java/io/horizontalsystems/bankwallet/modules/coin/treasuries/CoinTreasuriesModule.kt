@@ -12,7 +12,9 @@ import io.horizontalsystems.marketkit.models.Coin
 
 object CoinTreasuriesModule {
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val coin: Coin) : ViewModelProvider.Factory {
+    class Factory(
+        private val coin: Coin,
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = CoinTreasuriesRepository(App.marketKit)
             val service = CoinTreasuriesService(coin, repository, App.currencyManager)
@@ -24,7 +26,7 @@ object CoinTreasuriesModule {
     data class CoinTreasuriesData(
         val treasuryTypeSelect: Select<TreasuryTypeFilter>,
         val sortDescending: Boolean,
-        val coinTreasuries: List<CoinTreasuryItem>
+        val coinTreasuries: List<CoinTreasuryItem>,
     )
 
     @Immutable
@@ -33,21 +35,29 @@ object CoinTreasuriesModule {
         val fundLogoUrl: String,
         val country: String,
         val amount: String,
-        val amountInCurrency: String
+        val amountInCurrency: String,
     )
 
     enum class TreasuryTypeFilter : WithTranslatableTitle {
-        All, Public, Private, ETF;
+        All,
+        Public,
+        Private,
+        ETF,
+        ;
 
         override val title: TranslatableString
-            get() = when (this) {
-                All -> TranslatableString.ResString(R.string.MarketGlobalMetrics_ChainSelectorAll)
-                else -> TranslatableString.PlainString(name)
-            }
+            get() =
+                when (this) {
+                    All -> TranslatableString.ResString(R.string.MarketGlobalMetrics_ChainSelectorAll)
+                    else -> TranslatableString.PlainString(name)
+                }
     }
 
     sealed class SelectorDialogState {
         object Closed : SelectorDialogState()
-        class Opened(val select: Select<TreasuryTypeFilter>) : SelectorDialogState()
+
+        class Opened(
+            val select: Select<TreasuryTypeFilter>,
+        ) : SelectorDialogState()
     }
 }

@@ -43,25 +43,23 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Blockchain
 
 class BtcBlockchainSettingsFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Blockchain>(navController) { input ->
-            val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
-                factory = BtcBlockchainSettingsModule.Factory(input)
-            )
+            val viewModel =
+                viewModel<BtcBlockchainSettingsViewModel>(
+                    factory = BtcBlockchainSettingsModule.Factory(input),
+                )
             BtcBlockchainSettingsScreen(viewModel, navController)
         }
     }
-
 }
 
 @Composable
 private fun BtcBlockchainSettingsScreen(
     viewModel: BtcBlockchainSettingsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
-
     if (viewModel.closeScreen) {
         navController.popBackStack()
     }
@@ -72,62 +70,64 @@ private fun BtcBlockchainSettingsScreen(
                 title = viewModel.title,
                 navigationIcon = {
                     Image(
-                        painter = rememberAsyncImagePainter(
-                            model = viewModel.blockchainIconUrl,
-                            error = painterResource(R.drawable.ic_platform_placeholder_32)
-                        ),
+                        painter =
+                            rememberAsyncImagePainter(
+                                model = viewModel.blockchainIconUrl,
+                                error = painterResource(R.drawable.ic_platform_placeholder_32),
+                            ),
                         contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 14.dp)
-                            .size(24.dp)
+                        modifier =
+                            Modifier
+                                .padding(start = 14.dp)
+                                .size(24.dp),
                     )
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                        ),
+                    ),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Spacer(Modifier.height(12.dp))
                 RestoreSourceSettings(viewModel)
                 Spacer(Modifier.height(32.dp))
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceChangeWarning)
+                    text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceChangeWarning),
                 )
                 Spacer(Modifier.height(32.dp))
             }
 
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .padding(start = 16.dp, end = 16.dp)
+                            .fillMaxWidth(),
                     title = stringResource(R.string.Button_Save),
                     enabled = viewModel.saveButtonEnabled,
-                    onClick = { viewModel.onSaveClick() }
+                    onClick = { viewModel.onSaveClick() },
                 )
             }
         }
-
     }
 }
 
 @Composable
-private fun RestoreSourceSettings(
-    viewModel: BtcBlockchainSettingsViewModel
-) {
+private fun RestoreSourceSettings(viewModel: BtcBlockchainSettingsViewModel) {
     BlockchainSettingSection(viewModel.restoreSources) { viewItem ->
         viewModel.onSelectRestoreMode(viewItem)
     }
@@ -136,11 +136,11 @@ private fun RestoreSourceSettings(
 @Composable
 private fun BlockchainSettingSection(
     restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
-    onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit
+    onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
 ) {
     subhead2_grey(
         modifier = Modifier.padding(horizontal = 32.dp),
-        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription),
     )
     VSpacer(32.dp)
     CellUniversalLawrenceSection(restoreSources) { item ->
@@ -148,7 +148,6 @@ private fun BlockchainSettingSection(
             onItemClick(item)
         }
     }
-
 }
 
 @Composable
@@ -157,30 +156,36 @@ fun BlockchainSettingCell(
     subtitle: String,
     checked: Boolean,
     icon: BlockchainSettingsIcon?,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = onClick
+        onClick = onClick,
     ) {
         icon?.let {
             HSpacer(width = 16.dp)
             Image(
-                modifier = Modifier
-                    .size(32.dp),
-                painter = when (icon) {
-                    is BlockchainSettingsIcon.ApiIcon -> painterResource(icon.resId)
-                    is BlockchainSettingsIcon.BlockchainIcon -> rememberAsyncImagePainter(
-                        model = icon.url,
-                        error = painterResource(R.drawable.ic_platform_placeholder_32)
-                    )
-                },
+                modifier =
+                    Modifier
+                        .size(32.dp),
+                painter =
+                    when (icon) {
+                        is BlockchainSettingsIcon.ApiIcon -> painterResource(icon.resId)
+                        is BlockchainSettingsIcon.BlockchainIcon ->
+                            rememberAsyncImagePainter(
+                                model = icon.url,
+                                error = painterResource(R.drawable.ic_platform_placeholder_32),
+                            )
+                    },
                 contentDescription = null,
             )
         }
 
-        Column(modifier = Modifier
-            .padding(start = 16.dp)
-            .weight(1f)) {
+        Column(
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f),
+        ) {
             body_leah(
                 text = title,
                 maxLines = 1,
@@ -194,10 +199,11 @@ fun BlockchainSettingCell(
             )
         }
         Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .width(52.dp)
+                    .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
         ) {
             if (checked) {
                 Icon(

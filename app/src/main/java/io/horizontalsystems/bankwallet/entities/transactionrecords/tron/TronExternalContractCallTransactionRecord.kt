@@ -14,18 +14,21 @@ class TronExternalContractCallTransactionRecord(
     source: TransactionSource,
     spamManager: SpamManager,
     val incomingEvents: List<TransferEvent>,
-    val outgoingEvents: List<TransferEvent>
+    val outgoingEvents: List<TransferEvent>,
 ) : TronTransactionRecord(
-    transaction = transaction,
-    baseToken = baseToken,
-    source = source,
-    foreignTransaction = true,
-    spam = spamManager.isSpam(incomingEvents, outgoingEvents)
-) {
-
+        transaction = transaction,
+        baseToken = baseToken,
+        source = source,
+        foreignTransaction = true,
+        spam = spamManager.isSpam(incomingEvents, outgoingEvents),
+    ) {
     override val mainValue: TransactionValue?
         get() {
-            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(incomingEvents, outgoingEvents)
+            val (incomingValues, outgoingValues) =
+                EvmTransactionRecord.combined(
+                    incomingEvents,
+                    outgoingEvents,
+                )
 
             return when {
                 (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()
@@ -33,5 +36,4 @@ class TronExternalContractCallTransactionRecord(
                 else -> null
             }
         }
-
 }

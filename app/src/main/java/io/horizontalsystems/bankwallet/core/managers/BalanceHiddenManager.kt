@@ -57,5 +57,4 @@ class BalanceHiddenManager(
         localStorage.balanceHidden = hidden
         _balanceHiddenFlow.update { localStorage.balanceHidden }
     }
-
 }

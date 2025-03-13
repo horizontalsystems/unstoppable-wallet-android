@@ -51,16 +51,17 @@ fun TonConnectSendRequestScreen(navController: NavController) {
     val logger = remember { AppLogger("ton-connect request") }
     val mainActivityViewModel =
         viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
-    val viewModel = viewModel<TonConnectSendRequestViewModel>(initializer = {
-        val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
-        mainActivityViewModel.onTcSendRequestHandled()
+    val viewModel =
+        viewModel<TonConnectSendRequestViewModel>(initializer = {
+            val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
+            mainActivityViewModel.onTcSendRequestHandled()
 
-        TonConnectSendRequestViewModel(
-            sendRequestEntity,
-            App.accountManager,
-            App.tonConnectManager
-        )
-    })
+            TonConnectSendRequestViewModel(
+                sendRequestEntity,
+                App.accountManager,
+                App.tonConnectManager,
+            )
+        })
 
     val uiState = viewModel.uiState
 
@@ -79,7 +80,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     enabled = true,
                     onClick = {
                         navController.popBackStack()
-                    }
+                    },
                 )
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
@@ -94,7 +95,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             HudHelper.showInProcessMessage(
                                 view,
                                 R.string.Send_Sending,
-                                SnackbarDuration.INDEFINITE
+                                SnackbarDuration.INDEFINITE,
                             )
 
                             try {
@@ -112,7 +113,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             buttonEnabled = true
                             navController.popBackStack()
                         }
-                    }
+                    },
                 )
                 VSpacer(16.dp)
                 ButtonPrimaryDefault(
@@ -122,23 +123,24 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     onClick = {
                         viewModel.reject()
                         navController.popBackStack()
-                    }
+                    },
                 )
             }
-        }
+        },
     ) {
         uiState.error?.let { error ->
             TextImportantError(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = error.message ?: error.javaClass.simpleName
+                text = error.message ?: error.javaClass.simpleName,
             )
         }
 
         Crossfade(uiState.tonTransactionRecord) { record ->
             if (record != null) {
-                val transactionInfoHelper = remember {
-                    TransactionInfoHelper()
-                }
+                val transactionInfoHelper =
+                    remember {
+                        TransactionInfoHelper()
+                    }
 
                 Column {
                     record.actions.forEachIndexed { index, action ->
@@ -148,7 +150,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                         TonConnectRequestActionSection(
                             action = action,
                             transactionInfoHelper = transactionInfoHelper,
-                            navController = navController
+                            navController = navController,
                         )
                     }
                     VSpacer(12.dp)
@@ -156,7 +158,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     FeeSection(
                         transactionInfoHelper = transactionInfoHelper,
                         fee = record.fee,
-                        navController = navController
+                        navController = navController,
                     )
                 }
             }
@@ -175,7 +177,7 @@ fun TonConnectRequestActionSection(
             BurnSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -186,13 +188,13 @@ fun TonConnectRequestActionSection(
                 address = actionType.address,
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                blockchainType = BlockchainType.Ton
+                blockchainType = BlockchainType.Ton,
             )
         }
 
         is TonTransactionRecord.Action.Type.ContractDeploy -> {
             ContractDeploySection(
-                interfaces = actionType.interfaces
+                interfaces = actionType.interfaces,
             )
         }
 
@@ -200,7 +202,7 @@ fun TonConnectRequestActionSection(
             MintSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -212,7 +214,7 @@ fun TonConnectRequestActionSection(
                 statPage = StatPage.TonConnect,
                 navController = navController,
                 transactionInfoHelper = transactionInfoHelper,
-                blockchainType = BlockchainType.Ton
+                blockchainType = BlockchainType.Ton,
             )
         }
 
@@ -225,7 +227,7 @@ fun TonConnectRequestActionSection(
                 statPage = StatPage.TonConnect,
                 navController = navController,
                 transactionInfoHelper = transactionInfoHelper,
-                blockchainType = BlockchainType.Ton
+                blockchainType = BlockchainType.Ton,
             )
         }
 
@@ -234,7 +236,7 @@ fun TonConnectRequestActionSection(
                 transactionInfoHelper = transactionInfoHelper,
                 navController = navController,
                 transactionValueIn = actionType.valueIn,
-                transactionValueOut = actionType.valueOut
+                transactionValueOut = actionType.valueOut,
             )
         }
 
@@ -243,7 +245,7 @@ fun TonConnectRequestActionSection(
                 HeaderCell(
                     title = stringResource(R.string.Send_Confirmation_Action),
                     value = actionType.type,
-                    painter = null
+                    painter = null,
                 )
             }
         }

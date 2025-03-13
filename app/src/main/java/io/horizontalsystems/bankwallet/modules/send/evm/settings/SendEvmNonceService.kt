@@ -70,39 +70,50 @@ class SendEvmNonceService(
         }
     }
 
-    private fun sync(nonce: Long, default: Boolean = false) {
+    private fun sync(
+        nonce: Long,
+        default: Boolean = false,
+    ) {
         val fixedNonce = fixedNonce
-        state = if (fixedNonce != null) {
-            DataState.Success(State(nonce = fixedNonce, default = true, fixed = true))
-        } else {
-            DataState.Success(State(nonce = nonce, default = default, errors = errors(nonce), fixed = false))
-        }
+        state =
+            if (fixedNonce != null) {
+                DataState.Success(State(nonce = fixedNonce, default = true, fixed = true))
+            } else {
+                DataState.Success(
+                    State(
+                        nonce = nonce,
+                        default = default,
+                        errors = errors(nonce),
+                        fixed = false,
+                    ),
+                )
+            }
     }
 
-    private fun errors(nonce: Long): List<FeeSettingsError> {
-        return latestNonce?.let {
+    private fun errors(nonce: Long): List<FeeSettingsError> =
+        latestNonce?.let {
             if (it > nonce) {
                 listOf(FeeSettingsError.UsedNonce)
             } else {
                 listOf()
             }
         } ?: listOf()
-    }
 
-    private suspend fun setRecommended() = withContext(Dispatchers.IO) {
-        try {
-            val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
-            sync(nonce, default = true)
-        } catch (e: Throwable) {
-            state = DataState.Error(e)
+    private suspend fun setRecommended() =
+        withContext(Dispatchers.IO) {
+            try {
+                val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
+                sync(nonce, default = true)
+            } catch (e: Throwable) {
+                state = DataState.Error(e)
+            }
         }
-    }
 
     data class State(
         val nonce: Long,
         val default: Boolean,
         val fixed: Boolean,
         val warnings: List<Warning> = listOf(),
-        val errors: List<Throwable> = listOf()
+        val errors: List<Throwable> = listOf(),
     )
 }

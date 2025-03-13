@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupP
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
 
 class BackupLocalFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val account = navController.getInput<Account>()
@@ -38,18 +37,26 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
         composable("select_backup_items") {
             SelectBackupItemsScreen(
                 onNextClick = { accountIdsList ->
-                    val accountIds = if (accountIdsList.isNotEmpty()) "?accountIds=" + accountIdsList.joinToString(separator = ",") else ""
+                    val accountIds =
+                        if (accountIdsList.isNotEmpty()) {
+                            "?accountIds=" +
+                                accountIdsList.joinToString(
+                                    separator = ",",
+                                )
+                        } else {
+                            ""
+                        }
                     navController.navigate("terms_page$accountIds")
                 },
                 onBackClick = {
                     fragmentNavController.popBackStack()
-                }
+                },
             )
         }
 
         composablePage(
             route = "terms_page?accountIds={accountIds}",
-            arguments = listOf(navArgument("accountIds") { nullable = true })
+            arguments = listOf(navArgument("accountIds") { nullable = true }),
         ) { backStackEntry ->
             val accountIds = backStackEntry.arguments?.getString("accountIds")
             LocalBackupTermsScreen(
@@ -58,15 +65,16 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
                 },
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
             )
         }
 
         composablePage(
             route = "password_page?accountIds={accountIds}",
-            arguments = listOf(navArgument("accountIds") { nullable = true })
+            arguments = listOf(navArgument("accountIds") { nullable = true }),
         ) { backStackEntry ->
-            val accountIds = backStackEntry.arguments?.getString("accountIds")?.split(",") ?: listOf()
+            val accountIds =
+                backStackEntry.arguments?.getString("accountIds")?.split(",") ?: listOf()
             LocalBackupPasswordScreen(
                 backupType = BackupType.FullBackup(accountIds),
                 onBackClick = {
@@ -74,14 +82,17 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
                 },
                 onFinish = {
                     fragmentNavController.popBackStack()
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-private fun SingleWalletBackupNavHost(fragmentNavController: NavController, accountId: String) {
+private fun SingleWalletBackupNavHost(
+    fragmentNavController: NavController,
+    accountId: String,
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -94,7 +105,7 @@ private fun SingleWalletBackupNavHost(fragmentNavController: NavController, acco
                 },
                 onBackClick = {
                     fragmentNavController.popBackStack()
-                }
+                },
             )
         }
         composablePage("password_page") {
@@ -105,7 +116,7 @@ private fun SingleWalletBackupNavHost(fragmentNavController: NavController, acco
                 },
                 onFinish = {
                     fragmentNavController.popBackStack()
-                }
+                },
             )
         }
     }

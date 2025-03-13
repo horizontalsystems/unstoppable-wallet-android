@@ -1,12 +1,11 @@
 package io.horizontalsystems.bankwallet.entities.nft
 
 import io.horizontalsystems.marketkit.models.NftPrice
-import java.util.*
+import java.util.Date
 
 data class NftAssetMetadata(
     val nftUid: NftUid,
     val providerCollectionUid: String,
-
     val name: String?,
     val imageUrl: String?,
     val previewImageUrl: String?,
@@ -14,11 +13,10 @@ data class NftAssetMetadata(
     val nftType: String?,
     val externalLink: String?,
     val providerLink: String?,
-
     val traits: List<Trait>,
     val lastSalePrice: NftPrice?,
     val offers: List<NftPrice>,
-    val saleInfo: SaleInfo?
+    val saleInfo: SaleInfo?,
 ) {
     val displayName = name ?: "#${nftUid.tokenId}"
 
@@ -26,20 +24,21 @@ data class NftAssetMetadata(
         val type: String,
         val value: String,
         val count: Int,
-        val searchUrl: String?
+        val searchUrl: String?,
     )
 
     data class SaleInfo(
         val type: SaleType,
-        val listings: List<SaleListing>
+        val listings: List<SaleListing>,
     )
 
     enum class SaleType {
-        OnSale, OnAuction
+        OnSale,
+        OnAuction,
     }
 
     data class SaleListing(
         val untilDate: Date,
-        val price: NftPrice
+        val price: NftPrice,
     )
 }

@@ -9,9 +9,8 @@ class EvmNftRecord(
     val contractAddress: String,
     val tokenId: String,
     val tokenName: String?,
-    balance: Int
+    balance: Int,
 ) : NftRecord(blockchainType, balance) {
-
     override val nftUid: NftUid
         get() = NftUid.Evm(blockchainType, contractAddress, tokenId)
 

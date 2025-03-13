@@ -28,10 +28,17 @@ class Eip20Adapter(
     baseToken: Token,
     coinManager: ICoinManager,
     wallet: Wallet,
-    evmLabelManager: EvmLabelManager
+    evmLabelManager: EvmLabelManager,
 ) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
-
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, App.spamManager, baseToken, evmLabelManager)
+    private val transactionConverter =
+        EvmTransactionConverter(
+            coinManager,
+            evmKitWrapper,
+            wallet.transactionSource,
+            App.spamManager,
+            baseToken,
+            evmLabelManager,
+        )
 
     private val contractAddress: Address = Address(contractAddress)
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
@@ -69,29 +76,38 @@ class Eip20Adapter(
 
     // ISendEthereumAdapter
 
-    override fun getTransactionData(amount: BigDecimal, address: Address): TransactionData {
+    override fun getTransactionData(
+        amount: BigDecimal,
+        address: Address,
+    ): TransactionData {
         val amountBigInt = amount.movePointRight(decimal).toBigInteger()
         return eip20Kit.buildTransferTransactionData(address, amountBigInt)
     }
 
-    private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
-        is SyncState.Synced -> AdapterState.Synced
-        is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-        is SyncState.Syncing -> AdapterState.Syncing()
-    }
+    private fun convertToAdapterState(syncState: SyncState): AdapterState =
+        when (syncState) {
+            is SyncState.Synced -> AdapterState.Synced
+            is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
+            is SyncState.Syncing -> AdapterState.Syncing()
+        }
 
-    fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
-        return eip20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
-                .map {
-                    scaleDown(it.toBigDecimal())
-                }
-    }
+    fun allowance(
+        spenderAddress: Address,
+        defaultBlockParameter: DefaultBlockParameter,
+    ): Single<BigDecimal> =
+        eip20Kit
+            .getAllowanceAsync(spenderAddress, defaultBlockParameter)
+            .map {
+                scaleDown(it.toBigDecimal())
+            }
 
-    fun buildRevokeTransactionData(spenderAddress: Address): TransactionData {
-        return eip20Kit.buildApproveTransactionData(spenderAddress, BigInteger.ZERO)
-    }
+    fun buildRevokeTransactionData(spenderAddress: Address): TransactionData =
+        eip20Kit.buildApproveTransactionData(spenderAddress, BigInteger.ZERO)
 
-    fun buildApproveTransactionData(spenderAddress: Address, amount: BigDecimal): TransactionData {
+    fun buildApproveTransactionData(
+        spenderAddress: Address,
+        amount: BigDecimal,
+    ): TransactionData {
         val amountBigInt = amount.movePointRight(decimal).toBigInteger()
         return eip20Kit.buildApproveTransactionData(spenderAddress, amountBigInt)
     }
@@ -103,20 +119,20 @@ class Eip20Adapter(
 
     companion object {
         fun clear(walletId: String) {
-            val networkTypes = listOf(
-                Chain.Ethereum,
-                Chain.BinanceSmartChain,
-                Chain.Polygon,
-                Chain.Avalanche,
-                Chain.Optimism,
-                Chain.ArbitrumOne,
-                Chain.Gnosis,
-            )
+            val networkTypes =
+                listOf(
+                    Chain.Ethereum,
+                    Chain.BinanceSmartChain,
+                    Chain.Polygon,
+                    Chain.Avalanche,
+                    Chain.Optimism,
+                    Chain.ArbitrumOne,
+                    Chain.Gnosis,
+                )
 
             networkTypes.forEach {
                 Erc20Kit.clear(App.instance, it, walletId)
             }
         }
     }
-
 }

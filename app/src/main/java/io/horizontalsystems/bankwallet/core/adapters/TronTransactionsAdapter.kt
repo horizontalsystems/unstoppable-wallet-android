@@ -21,19 +21,19 @@ import kotlinx.coroutines.rx2.rxSingle
 
 class TronTransactionsAdapter(
     val tronKitWrapper: TronKitWrapper,
-    private val transactionConverter: TronTransactionConverter
+    private val transactionConverter: TronTransactionConverter,
 ) : ITransactionsAdapter {
-
     private val tronKit = tronKitWrapper.tronKit
 
     override val explorerTitle: String
         get() = "Tronscan"
 
-    override fun getTransactionUrl(transactionHash: String): String = when (tronKit.network) {
-        Network.Mainnet -> "https://tronscan.io/#/transaction/$transactionHash"
-        Network.ShastaTestnet -> "https://shasta.tronscan.org/#/transaction/$transactionHash"
-        Network.NileTestnet -> "https://nile.tronscan.org/#/transaction/$transactionHash"
-    }
+    override fun getTransactionUrl(transactionHash: String): String =
+        when (tronKit.network) {
+            Network.Mainnet -> "https://tronscan.io/#/transaction/$transactionHash"
+            Network.ShastaTestnet -> "https://shasta.tronscan.org/#/transaction/$transactionHash"
+            Network.NileTestnet -> "https://nile.tronscan.org/#/transaction/$transactionHash"
+        }
 
     override val lastBlockInfo: LastBlockInfo
         get() = tronKit.lastBlockHeight.toInt().let { LastBlockInfo(it) }
@@ -53,29 +53,28 @@ class TronTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> {
-        return rxSingle {
-            tronKit.getFullTransactions(
-                getFilters(token, transactionType, address),
-                from?.transactionHash?.hexStringToByteArray(),
-                limit
-            ).map {
-                transactionConverter.transactionRecord(it)
-            }
+    ): Single<List<TransactionRecord>> =
+        rxSingle {
+            tronKit
+                .getFullTransactions(
+                    getFilters(token, transactionType, address),
+                    from?.transactionHash?.hexStringToByteArray(),
+                    limit,
+                ).map {
+                    transactionConverter.transactionRecord(it)
+                }
         }
-    }
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
-        return tronKit.getFullTransactionsFlow(getFilters(token, transactionType, address))
+    ): Flowable<List<TransactionRecord>> =
+        tronKit
+            .getFullTransactionsFlow(getFilters(token, transactionType, address))
             .map { transactions ->
                 transactions.map { transactionConverter.transactionRecord(it) }
-            }
-            .asFlowable()
-    }
+            }.asFlowable()
 
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =
         when (syncState) {
@@ -84,23 +83,26 @@ class TronTransactionsAdapter(
             is TronKit.SyncState.Syncing -> AdapterState.Syncing()
         }
 
-    private fun coinTagName(token: Token) = when (val type = token.type) {
-        TokenType.Native -> TransactionTag.TRX_COIN
-        is TokenType.Eip20 -> type.address
-        else -> ""
-    }
+    private fun coinTagName(token: Token) =
+        when (val type = token.type) {
+            TokenType.Native -> TransactionTag.TRX_COIN
+            is TokenType.Eip20 -> type.address
+            else -> ""
+        }
 
-    private fun incomingTag(token: Token) = when (val type = token.type) {
-        TokenType.Native -> TransactionTag.TRX_COIN_INCOMING
-        is TokenType.Eip20 -> TransactionTag.trc20Incoming(type.address)
-        else -> ""
-    }
+    private fun incomingTag(token: Token) =
+        when (val type = token.type) {
+            TokenType.Native -> TransactionTag.TRX_COIN_INCOMING
+            is TokenType.Eip20 -> TransactionTag.trc20Incoming(type.address)
+            else -> ""
+        }
 
-    private fun outgoingTag(token: Token) = when (val type = token.type) {
-        TokenType.Native -> TransactionTag.TRX_COIN_OUTGOING
-        is TokenType.Eip20 -> TransactionTag.trc20Outgoing(type.address)
-        else -> ""
-    }
+    private fun outgoingTag(token: Token) =
+        when (val type = token.type) {
+            TokenType.Native -> TransactionTag.TRX_COIN_OUTGOING
+            is TokenType.Eip20 -> TransactionTag.trc20Outgoing(type.address)
+            else -> ""
+        }
 
     private fun getFilters(
         token: Token?,
@@ -111,19 +113,24 @@ class TronTransactionsAdapter(
             add(listOf(coinTagName(it)))
         }
 
-        val filterType = when (transactionType) {
-            FilterTransactionType.All -> null
-            FilterTransactionType.Incoming -> when {
-                token != null -> incomingTag(token)
-                else -> TransactionTag.INCOMING
+        val filterType =
+            when (transactionType) {
+                FilterTransactionType.All -> null
+                FilterTransactionType.Incoming ->
+                    when {
+                        token != null -> incomingTag(token)
+                        else -> TransactionTag.INCOMING
+                    }
+
+                FilterTransactionType.Outgoing ->
+                    when {
+                        token != null -> outgoingTag(token)
+                        else -> TransactionTag.OUTGOING
+                    }
+
+                FilterTransactionType.Swap -> TransactionTag.SWAP
+                FilterTransactionType.Approve -> TransactionTag.TRC20_APPROVE
             }
-            FilterTransactionType.Outgoing -> when {
-                token != null -> outgoingTag(token)
-                else -> TransactionTag.OUTGOING
-            }
-            FilterTransactionType.Swap -> TransactionTag.SWAP
-            FilterTransactionType.Approve -> TransactionTag.TRC20_APPROVE
-        }
 
         filterType?.let {
             add(listOf(it))

@@ -7,20 +7,20 @@ data class Guide(
 
 data class GuideCategory(
     val category: String,
-    val sections: List<GuideSection>
+    val sections: List<GuideSection>,
 )
 
 data class GuideCategoryMultiLang(
     val category: Map<String, String>,
-    val sections: List<GuideSectionMultiLang>
+    val sections: List<GuideSectionMultiLang>,
 )
 
 data class GuideSection(
     val title: String,
-    val items: List<Guide>
+    val items: List<Guide>,
 )
 
 data class GuideSectionMultiLang(
     val title: Map<String, String>,
-    val items: List<Map<String, Guide>>
+    val items: List<Map<String, Guide>>,
 )

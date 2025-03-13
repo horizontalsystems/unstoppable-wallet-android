@@ -1,20 +1,18 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.core.ICurrentDateProvider
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutUntilDateFactory
+import io.horizontalsystems.core.ICurrentDateProvider
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
-import java.util.*
+import java.util.Date
 
 class LockoutUntilDateFactoryTest {
-
     private val currentDateProvider = Mockito.mock(ICurrentDateProvider::class.java)
     private val factory = LockoutUntilDateFactory(currentDateProvider)
     var lockoutTimeStamp = 1L
     var uptime = 1L
-
 
     @Test
     fun testUnlockTime_0Min() {
@@ -68,5 +66,4 @@ class LockoutUntilDateFactoryTest {
         date2.time = date.time + 30 * 60 * 1000
         Assert.assertEquals(factory.lockoutUntilDate(9, lockoutTimeStamp, uptime), date2)
     }
-
 }

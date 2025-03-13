@@ -1,20 +1,20 @@
-//package io.horizontalsystems.bankwallet.modules.send
+// package io.horizontalsystems.bankwallet.modules.send
 //
-//import com.nhaarman.mockito_kotlin.any
-//import com.nhaarman.mockito_kotlin.verify
-//import com.nhaarman.mockito_kotlin.whenever
-//import io.horizontalsystems.bankwallet.R
-//import io.horizontalsystems.bankwallet.core.FeeRatePriority
-//import io.horizontalsystems.bankwallet.entities.Coin
-//import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-//import io.horizontalsystems.bankwallet.entities.Rate
-//import org.junit.Assert
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mockito.mock
-//import java.math.BigDecimal
+// import com.nhaarman.mockito_kotlin.any
+// import com.nhaarman.mockito_kotlin.verify
+// import com.nhaarman.mockito_kotlin.whenever
+// import io.horizontalsystems.bankwallet.R
+// import io.horizontalsystems.bankwallet.core.FeeRatePriority
+// import io.horizontalsystems.bankwallet.entities.Coin
+// import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+// import io.horizontalsystems.bankwallet.entities.Rate
+// import org.junit.Assert
+// import org.junit.Before
+// import org.junit.Test
+// import org.mockito.Mockito.mock
+// import java.math.BigDecimal
 //
-//class SendPresenterTest {
+// class SendPresenterTest {
 //
 //    private val interactor = mock(SendModule.IInteractor::class.java)
 //    private val view = mock(SendModule.IView::class.java)
@@ -206,4 +206,4 @@
 //        Assert.assertEquals(true, feeAdjustable)
 //    }
 //
-//}
+// }

@@ -23,15 +23,17 @@ fun AvailableBalance(
     fiatDecimal: Int,
     availableBalance: BigDecimal?,
     amountInputType: AmountInputType,
-    rate: CurrencyValue?
+    rate: CurrencyValue?,
 ) {
-    val viewModel = viewModel<AvailableBalanceViewModel>(
-        factory = AvailableBalanceModule.Factory(
-            coinCode,
-            coinDecimal,
-            fiatDecimal
+    val viewModel =
+        viewModel<AvailableBalanceViewModel>(
+            factory =
+                AvailableBalanceModule.Factory(
+                    coinCode,
+                    coinDecimal,
+                    fiatDecimal,
+                ),
         )
-    )
     val formatted = viewModel.formatted
 
     LaunchedEffect(availableBalance, amountInputType, rate) {
@@ -41,14 +43,13 @@ fun AvailableBalance(
         viewModel.refreshFormatted()
     }
 
-
     Row(
         modifier = Modifier.padding(horizontal = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         caption_grey(
             text = stringResource(R.string.Send_DialogAvailableBalance),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
 
         if (formatted != null) {

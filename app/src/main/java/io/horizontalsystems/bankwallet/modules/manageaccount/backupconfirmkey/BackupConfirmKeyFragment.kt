@@ -37,20 +37,22 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
 class BackupConfirmKeyFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Account>(navController) { input ->
             RecoveryPhraseVerifyScreen(navController, input)
         }
     }
-
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
-    val viewModel = viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
+fun RecoveryPhraseVerifyScreen(
+    navController: NavController,
+    account: Account,
+) {
+    val viewModel =
+        viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
     val uiState = viewModel.uiState
     val contenView = LocalView.current
 
@@ -60,7 +62,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 contenView = contenView,
                 resId = R.string.Hud_Text_Verified,
                 icon = R.drawable.icon_check_1_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             navController.popBackStack(R.id.backupKeyFragment, true)
@@ -79,9 +81,9 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 title = stringResource(R.string.RecoveryPhraseVerify_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
-                }
+                },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))
@@ -92,21 +94,23 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
-                    ComposeAppTheme.colors.yellow50
-                } else {
-                    ComposeAppTheme.colors.steel20
-                }
+                val borderColor =
+                    if (uiState.currentHiddenWordItemIndex == index) {
+                        ComposeAppTheme.colors.yellow50
+                    } else {
+                        ComposeAppTheme.colors.steel20
+                    }
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(44.dp)
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                            .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     body_leah(text = it.toString())
                 }
@@ -115,24 +119,26 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
             VSpacer(8.dp)
 
             FlowRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 uiState.wordOptions.forEach { wordOption ->
                     Box(
-                        modifier = Modifier
-                            .height(28.dp)
-                            .padding(horizontal = 4.dp)
+                        modifier =
+                            Modifier
+                                .height(28.dp)
+                                .padding(horizontal = 4.dp),
                     ) {
                         ButtonSecondaryDefault(
                             title = wordOption.word,
                             enabled = wordOption.enabled,
                             onClick = {
                                 viewModel.onSelectWord(wordOption)
-                            }
+                            },
                         )
                     }
                 }

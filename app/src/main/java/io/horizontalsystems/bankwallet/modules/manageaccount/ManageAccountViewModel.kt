@@ -17,9 +17,8 @@ import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountViewModel(
     accountId: String,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
-
     val account: Account = accountManager.account(accountId)!!
 
     var viewState by mutableStateOf(
@@ -31,7 +30,7 @@ class ManageAccountViewModel(
             headerNote = account.headerNote(false),
             keyActions = getKeyActions(account),
             backupActions = getBackupItems(account),
-        )
+        ),
     )
         private set
 
@@ -39,7 +38,8 @@ class ManageAccountViewModel(
 
     init {
         viewModelScope.launch {
-            accountManager.accountsFlowable.asFlow()
+            accountManager.accountsFlowable
+                .asFlow()
                 .collect { handleUpdatedAccounts(it) }
         }
     }
@@ -47,10 +47,11 @@ class ManageAccountViewModel(
     fun onChange(name: String) {
         newName = name.trim().replace("\n", " ")
         val canSave = newName != account.name && newName.isNotEmpty()
-        viewState = viewState.copy(
-            canSave = canSave,
-            newName = newName
-        )
+        viewState =
+            viewState.copy(
+                canSave = canSave,
+                newName = newName,
+            )
     }
 
     fun onSave() {
@@ -67,9 +68,9 @@ class ManageAccountViewModel(
         if (account.isWatchAccount) {
             return emptyList()
         }
-        if (account.type is AccountType.HdExtendedKey
-            || account.type is AccountType.EvmPrivateKey
-            || account.type is AccountType.Cex
+        if (account.type is AccountType.HdExtendedKey ||
+            account.type is AccountType.EvmPrivateKey ||
+            account.type is AccountType.Cex
         ) {
             return listOf(BackupItem.LocalBackup(false))
         }
@@ -80,7 +81,12 @@ class ManageAccountViewModel(
             items.add(BackupItem.LocalBackup(true))
             items.add(BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRequiredText))
         } else {
-            items.add(BackupItem.ManualBackup(showAttention = !account.isBackedUp, completed = account.isBackedUp))
+            items.add(
+                BackupItem.ManualBackup(
+                    showAttention = !account.isBackedUp,
+                    completed = account.isBackedUp,
+                ),
+            )
             items.add(BackupItem.LocalBackup(false))
             items.add(BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRecomendedText))
         }
@@ -93,16 +99,18 @@ class ManageAccountViewModel(
             return emptyList()
         }
         return when (account.type) {
-            is AccountType.Mnemonic -> listOf(
-                KeyAction.RecoveryPhrase,
-                KeyAction.PrivateKeys,
-                KeyAction.PublicKeys,
-            )
+            is AccountType.Mnemonic ->
+                listOf(
+                    KeyAction.RecoveryPhrase,
+                    KeyAction.PrivateKeys,
+                    KeyAction.PublicKeys,
+                )
 
-            is AccountType.EvmPrivateKey -> listOf(
-                KeyAction.PrivateKeys,
-                KeyAction.PublicKeys,
-            )
+            is AccountType.EvmPrivateKey ->
+                listOf(
+                    KeyAction.PrivateKeys,
+                    KeyAction.PublicKeys,
+                )
 
             is AccountType.EvmAddress -> listOf()
             is AccountType.SolanaAddress -> listOf()
@@ -123,14 +131,14 @@ class ManageAccountViewModel(
 
     private fun handleUpdatedAccounts(accounts: List<Account>) {
         val account = accounts.find { it.id == account.id }
-        viewState = if (account != null) {
-            viewState.copy(
-                keyActions = getKeyActions(account),
-                backupActions = getBackupItems(account)
-            )
-        } else {
-            viewState.copy(closeScreen = true)
-        }
+        viewState =
+            if (account != null) {
+                viewState.copy(
+                    keyActions = getKeyActions(account),
+                    backupActions = getBackupItems(account),
+                )
+            } else {
+                viewState.copy(closeScreen = true)
+            }
     }
-
 }

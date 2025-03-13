@@ -11,21 +11,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter) {
-
+class SendBitcoinAddressService(
+    private val adapter: ISendBitcoinAdapter,
+) {
     private var address: Address? = null
     private var validAddress: Address? = null
     private var addressError: Throwable? = null
 
     private var pluginData: Map<Byte, IPluginData>? = null
 
-    private val _stateFlow = MutableStateFlow(
-        State(
-            validAddress = validAddress,
-            addressError = addressError,
-            canBeSend = validAddress != null
+    private val _stateFlow =
+        MutableStateFlow(
+            State(
+                validAddress = validAddress,
+                addressError = addressError,
+                canBeSend = validAddress != null,
+            ),
         )
-    )
     val stateFlow = _stateFlow.asStateFlow()
 
     fun setAddress(address: Address?) {
@@ -62,11 +64,12 @@ class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter) {
     }
 
     private fun getError(error: Throwable): Throwable {
-        val message = when (error) {
-            is HodlerPlugin.UnsupportedAddressType -> Translator.getString(R.string.Send_Error_UnsupportedAddress)
-            is AddressFormatException -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
-            else -> error.message ?: error.javaClass.simpleName
-        }
+        val message =
+            when (error) {
+                is HodlerPlugin.UnsupportedAddressType -> Translator.getString(R.string.Send_Error_UnsupportedAddress)
+                is AddressFormatException -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+                else -> error.message ?: error.javaClass.simpleName
+            }
 
         return Throwable(message)
     }
@@ -76,7 +79,7 @@ class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter) {
             State(
                 validAddress = validAddress,
                 addressError = addressError,
-                canBeSend = validAddress != null
+                canBeSend = validAddress != null,
             )
         }
     }
@@ -84,6 +87,6 @@ class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter) {
     data class State(
         val validAddress: Address?,
         val addressError: Throwable?,
-        val canBeSend: Boolean
+        val canBeSend: Boolean,
     )
 }

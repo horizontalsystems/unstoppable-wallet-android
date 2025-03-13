@@ -15,7 +15,7 @@ fun headline1_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -36,7 +36,7 @@ fun headline1_bran(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -57,7 +57,7 @@ fun body_bran(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -78,7 +78,7 @@ fun L2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -91,6 +91,7 @@ fun L2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun headline1_leah(
     text: String,
@@ -98,7 +99,7 @@ fun headline1_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     L2(
         text = text,
@@ -117,7 +118,7 @@ fun headline1_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -138,7 +139,7 @@ fun L5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -151,6 +152,7 @@ fun L5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun headline1_lucian(
     text: String,
@@ -158,7 +160,7 @@ fun headline1_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     L5(
         text = text,
@@ -177,7 +179,7 @@ fun A1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -190,6 +192,7 @@ fun A1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun headline2_grey(
     text: String,
@@ -197,7 +200,7 @@ fun headline2_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A1(
         text = text,
@@ -216,7 +219,7 @@ fun A2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -229,6 +232,7 @@ fun A2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun headline2_leah(
     text: String,
@@ -236,7 +240,7 @@ fun headline2_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A2(
         text = text,
@@ -255,7 +259,7 @@ fun A3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -268,6 +272,7 @@ fun A3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun headline2_jacob(
     text: String,
@@ -275,7 +280,7 @@ fun headline2_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A3(
         text = text,
@@ -294,7 +299,7 @@ fun A4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -307,6 +312,7 @@ fun A4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun headline2_remus(
     text: String,
@@ -314,7 +320,7 @@ fun headline2_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A4(
         text = text,
@@ -333,7 +339,7 @@ fun A5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -346,6 +352,7 @@ fun A5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun headline2_lucian(
     text: String,
@@ -353,7 +360,7 @@ fun headline2_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A5(
         text = text,
@@ -372,7 +379,7 @@ fun A6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -385,6 +392,7 @@ fun A6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun headline2_issykBlue(
     text: String,
@@ -392,7 +400,7 @@ fun headline2_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A6(
         text = text,
@@ -411,7 +419,7 @@ fun A7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -424,6 +432,7 @@ fun A7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun headline2_grey50(
     text: String,
@@ -431,7 +440,7 @@ fun headline2_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A7(
         text = text,
@@ -450,7 +459,7 @@ fun A8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -463,6 +472,7 @@ fun A8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun headline2_yellow50(
     text: String,
@@ -470,7 +480,7 @@ fun headline2_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A8(
         text = text,
@@ -489,7 +499,7 @@ fun A9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -502,6 +512,7 @@ fun A9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun headline2_green50(
     text: String,
@@ -509,7 +520,7 @@ fun headline2_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A9(
         text = text,
@@ -528,7 +539,7 @@ fun A10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -541,6 +552,7 @@ fun A10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun headline2_red50(
     text: String,
@@ -548,7 +560,7 @@ fun headline2_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     A10(
         text = text,
@@ -567,7 +579,7 @@ fun B1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -580,6 +592,7 @@ fun B1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun body_grey(
     text: String,
@@ -587,7 +600,7 @@ fun body_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B1(
         text = text,
@@ -606,7 +619,7 @@ fun B2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -619,6 +632,7 @@ fun B2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun body_leah(
     text: String,
@@ -626,7 +640,7 @@ fun body_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B2(
         text = text,
@@ -645,7 +659,7 @@ fun B3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -658,6 +672,7 @@ fun B3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun body_jacob(
     text: String,
@@ -665,7 +680,7 @@ fun body_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B3(
         text = text,
@@ -684,7 +699,7 @@ fun B4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -697,6 +712,7 @@ fun B4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun body_remus(
     text: String,
@@ -704,7 +720,7 @@ fun body_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B4(
         text = text,
@@ -723,7 +739,7 @@ fun B5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -736,6 +752,7 @@ fun B5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun body_lucian(
     text: String,
@@ -743,7 +760,7 @@ fun body_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B5(
         text = text,
@@ -762,7 +779,7 @@ fun B6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -775,6 +792,7 @@ fun B6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun body_issykBlue(
     text: String,
@@ -782,7 +800,7 @@ fun body_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B6(
         text = text,
@@ -801,7 +819,7 @@ fun B7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -814,6 +832,7 @@ fun B7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun body_grey50(
     text: String,
@@ -821,7 +840,7 @@ fun body_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B7(
         text = text,
@@ -840,7 +859,7 @@ fun B8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -853,6 +872,7 @@ fun B8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun body_yellow50(
     text: String,
@@ -860,7 +880,7 @@ fun body_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B8(
         text = text,
@@ -879,7 +899,7 @@ fun B9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -892,6 +912,7 @@ fun B9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun body_green50(
     text: String,
@@ -899,7 +920,7 @@ fun body_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B9(
         text = text,
@@ -918,7 +939,7 @@ fun B10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -931,6 +952,7 @@ fun B10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun body_red50(
     text: String,
@@ -938,7 +960,7 @@ fun body_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     B10(
         text = text,
@@ -957,7 +979,7 @@ fun C1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -970,6 +992,7 @@ fun C1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun subhead1_grey(
     text: String,
@@ -977,7 +1000,7 @@ fun subhead1_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C1(
         text = text,
@@ -996,7 +1019,7 @@ fun C2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1009,6 +1032,7 @@ fun C2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun subhead1_leah(
     text: String,
@@ -1016,7 +1040,7 @@ fun subhead1_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C2(
         text = text,
@@ -1035,7 +1059,7 @@ fun C3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1048,6 +1072,7 @@ fun C3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun subhead1_jacob(
     text: String,
@@ -1055,7 +1080,7 @@ fun subhead1_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C3(
         text = text,
@@ -1074,7 +1099,7 @@ fun C4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1087,6 +1112,7 @@ fun C4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun subhead1_remus(
     text: String,
@@ -1094,7 +1120,7 @@ fun subhead1_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C4(
         text = text,
@@ -1113,7 +1139,7 @@ fun C5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1126,6 +1152,7 @@ fun C5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun subhead1_lucian(
     text: String,
@@ -1133,7 +1160,7 @@ fun subhead1_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C5(
         text = text,
@@ -1152,7 +1179,7 @@ fun C6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1165,6 +1192,7 @@ fun C6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun subhead1_issykBlue(
     text: String,
@@ -1172,7 +1200,7 @@ fun subhead1_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C6(
         text = text,
@@ -1191,7 +1219,7 @@ fun C7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1204,6 +1232,7 @@ fun C7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun subhead1_grey50(
     text: String,
@@ -1211,7 +1240,7 @@ fun subhead1_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C7(
         text = text,
@@ -1230,7 +1259,7 @@ fun C8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1243,6 +1272,7 @@ fun C8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun subhead1_yellow50(
     text: String,
@@ -1250,7 +1280,7 @@ fun subhead1_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C8(
         text = text,
@@ -1269,7 +1299,7 @@ fun C9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1282,6 +1312,7 @@ fun C9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun subhead1_green50(
     text: String,
@@ -1289,7 +1320,7 @@ fun subhead1_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C9(
         text = text,
@@ -1308,7 +1339,7 @@ fun C10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1321,6 +1352,7 @@ fun C10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun subhead1_red50(
     text: String,
@@ -1328,7 +1360,7 @@ fun subhead1_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     C10(
         text = text,
@@ -1347,7 +1379,7 @@ fun D1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1360,6 +1392,7 @@ fun D1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun subhead2_grey(
     text: String,
@@ -1367,7 +1400,7 @@ fun subhead2_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D1(
         text = text,
@@ -1386,7 +1419,7 @@ fun D2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1399,6 +1432,7 @@ fun D2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun subhead2_leah(
     text: String,
@@ -1406,7 +1440,7 @@ fun subhead2_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D2(
         text = text,
@@ -1425,7 +1459,7 @@ fun D3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1438,6 +1472,7 @@ fun D3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun subhead2_jacob(
     text: String,
@@ -1445,7 +1480,7 @@ fun subhead2_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D3(
         text = text,
@@ -1464,7 +1499,7 @@ fun D4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1477,6 +1512,7 @@ fun D4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun subhead2_remus(
     text: String,
@@ -1484,7 +1520,7 @@ fun subhead2_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D4(
         text = text,
@@ -1503,7 +1539,7 @@ fun D5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1516,6 +1552,7 @@ fun D5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun subhead2_lucian(
     text: String,
@@ -1523,7 +1560,7 @@ fun subhead2_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D5(
         text = text,
@@ -1542,7 +1579,7 @@ fun D6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1555,6 +1592,7 @@ fun D6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun subhead2_issykBlue(
     text: String,
@@ -1562,7 +1600,7 @@ fun subhead2_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D6(
         text = text,
@@ -1581,7 +1619,7 @@ fun D7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1594,6 +1632,7 @@ fun D7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun subhead2_grey50(
     text: String,
@@ -1601,7 +1640,7 @@ fun subhead2_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D7(
         text = text,
@@ -1620,7 +1659,7 @@ fun D8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1633,6 +1672,7 @@ fun D8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun subhead2_yellow50(
     text: String,
@@ -1640,7 +1680,7 @@ fun subhead2_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D8(
         text = text,
@@ -1659,7 +1699,7 @@ fun D9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1672,6 +1712,7 @@ fun D9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun subhead2_green50(
     text: String,
@@ -1679,7 +1720,7 @@ fun subhead2_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D9(
         text = text,
@@ -1698,7 +1739,7 @@ fun D10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1711,6 +1752,7 @@ fun D10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun subhead2_red50(
     text: String,
@@ -1718,7 +1760,7 @@ fun subhead2_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     D10(
         text = text,
@@ -1737,7 +1779,7 @@ fun micro_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1758,7 +1800,7 @@ fun microSB_claude(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1779,7 +1821,7 @@ fun micro_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1800,7 +1842,7 @@ fun E1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1813,6 +1855,7 @@ fun E1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun captionSB_grey(
     text: String,
@@ -1820,7 +1863,7 @@ fun captionSB_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E1(
         text = text,
@@ -1839,7 +1882,7 @@ fun E2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1852,6 +1895,7 @@ fun E2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun captionSB_leah(
     text: String,
@@ -1859,7 +1903,7 @@ fun captionSB_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E2(
         text = text,
@@ -1878,7 +1922,7 @@ fun E3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1891,6 +1935,7 @@ fun E3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun captionSB_jacob(
     text: String,
@@ -1898,7 +1943,7 @@ fun captionSB_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E3(
         text = text,
@@ -1917,7 +1962,7 @@ fun E4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1930,6 +1975,7 @@ fun E4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun captionSB_remus(
     text: String,
@@ -1937,7 +1983,7 @@ fun captionSB_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E4(
         text = text,
@@ -1956,7 +2002,7 @@ fun E5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -1969,6 +2015,7 @@ fun E5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun captionSB_lucian(
     text: String,
@@ -1976,7 +2023,7 @@ fun captionSB_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E5(
         text = text,
@@ -1995,7 +2042,7 @@ fun E6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2008,6 +2055,7 @@ fun E6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun captionSB_issykBlue(
     text: String,
@@ -2015,7 +2063,7 @@ fun captionSB_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E6(
         text = text,
@@ -2034,7 +2082,7 @@ fun E7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2047,6 +2095,7 @@ fun E7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun captionSB_grey50(
     text: String,
@@ -2054,7 +2103,7 @@ fun captionSB_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E7(
         text = text,
@@ -2073,7 +2122,7 @@ fun E8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2086,6 +2135,7 @@ fun E8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun captionSB_yellow50(
     text: String,
@@ -2093,7 +2143,7 @@ fun captionSB_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E8(
         text = text,
@@ -2112,7 +2162,7 @@ fun E9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2125,6 +2175,7 @@ fun E9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun captionSB_green50(
     text: String,
@@ -2132,7 +2183,7 @@ fun captionSB_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E9(
         text = text,
@@ -2151,7 +2202,7 @@ fun E10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2164,6 +2215,7 @@ fun E10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun captionSB_red50(
     text: String,
@@ -2171,7 +2223,7 @@ fun captionSB_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     E10(
         text = text,
@@ -2190,7 +2242,7 @@ fun F1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2203,6 +2255,7 @@ fun F1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun caption_grey(
     text: String,
@@ -2210,7 +2263,7 @@ fun caption_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F1(
         text = text,
@@ -2229,7 +2282,7 @@ fun F2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2242,6 +2295,7 @@ fun F2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun caption_leah(
     text: String,
@@ -2249,7 +2303,7 @@ fun caption_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F2(
         text = text,
@@ -2268,7 +2322,7 @@ fun F3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2281,6 +2335,7 @@ fun F3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun caption_jacob(
     text: String,
@@ -2288,7 +2343,7 @@ fun caption_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F3(
         text = text,
@@ -2307,7 +2362,7 @@ fun F4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2320,6 +2375,7 @@ fun F4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun caption_remus(
     text: String,
@@ -2327,7 +2383,7 @@ fun caption_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F4(
         text = text,
@@ -2346,7 +2402,7 @@ fun F5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2359,6 +2415,7 @@ fun F5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun caption_lucian(
     text: String,
@@ -2366,7 +2423,7 @@ fun caption_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F5(
         text = text,
@@ -2385,7 +2442,7 @@ fun F6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2398,6 +2455,7 @@ fun F6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun caption_issykBlue(
     text: String,
@@ -2405,7 +2463,7 @@ fun caption_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F6(
         text = text,
@@ -2424,7 +2482,7 @@ fun F7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2437,6 +2495,7 @@ fun F7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun caption_grey50(
     text: String,
@@ -2444,7 +2503,7 @@ fun caption_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F7(
         text = text,
@@ -2463,7 +2522,7 @@ fun F8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2476,6 +2535,7 @@ fun F8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun caption_yellow50(
     text: String,
@@ -2483,7 +2543,7 @@ fun caption_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F8(
         text = text,
@@ -2502,7 +2562,7 @@ fun F9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2515,6 +2575,7 @@ fun F9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun caption_green50(
     text: String,
@@ -2522,7 +2583,7 @@ fun caption_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F9(
         text = text,
@@ -2541,7 +2602,7 @@ fun F10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2554,6 +2615,7 @@ fun F10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun caption_red50(
     text: String,
@@ -2561,7 +2623,7 @@ fun caption_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F10(
         text = text,
@@ -2580,7 +2642,7 @@ fun F11(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2601,7 +2663,7 @@ fun caption_bran(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     F11(
         text = text,
@@ -2620,7 +2682,7 @@ fun G1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2633,6 +2695,7 @@ fun G1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
 @Composable
 fun subhead1Italic_grey(
     text: String,
@@ -2640,7 +2703,7 @@ fun subhead1Italic_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G1(
         text = text,
@@ -2659,7 +2722,7 @@ fun G2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2672,6 +2735,7 @@ fun G2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun subhead1Italic_leah(
     text: String,
@@ -2679,7 +2743,7 @@ fun subhead1Italic_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G2(
         text = text,
@@ -2698,7 +2762,7 @@ fun G3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2711,6 +2775,7 @@ fun G3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun subhead1Italic_jacob(
     text: String,
@@ -2718,7 +2783,7 @@ fun subhead1Italic_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G3(
         text = text,
@@ -2737,7 +2802,7 @@ fun G4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2750,6 +2815,7 @@ fun G4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun subhead1Italic_remus(
     text: String,
@@ -2757,7 +2823,7 @@ fun subhead1Italic_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G4(
         text = text,
@@ -2776,7 +2842,7 @@ fun G5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2789,6 +2855,7 @@ fun G5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun subhead1Italic_lucian(
     text: String,
@@ -2796,7 +2863,7 @@ fun subhead1Italic_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G5(
         text = text,
@@ -2815,7 +2882,7 @@ fun G6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2828,6 +2895,7 @@ fun G6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun subhead1Italic_issykBlue(
     text: String,
@@ -2835,7 +2903,7 @@ fun subhead1Italic_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G6(
         text = text,
@@ -2854,7 +2922,7 @@ fun G7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2867,6 +2935,7 @@ fun G7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun subhead1Italic_grey50(
     text: String,
@@ -2874,7 +2943,7 @@ fun subhead1Italic_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G7(
         text = text,
@@ -2893,7 +2962,7 @@ fun G8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2906,6 +2975,7 @@ fun G8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun subhead1Italic_yellow50(
     text: String,
@@ -2913,7 +2983,7 @@ fun subhead1Italic_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G8(
         text = text,
@@ -2932,7 +3002,7 @@ fun G9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2945,6 +3015,7 @@ fun G9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun subhead1Italic_green50(
     text: String,
@@ -2952,7 +3023,7 @@ fun subhead1Italic_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G9(
         text = text,
@@ -2971,7 +3042,7 @@ fun G10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -2984,6 +3055,7 @@ fun G10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun subhead1Italic_red50(
     text: String,
@@ -2991,7 +3063,7 @@ fun subhead1Italic_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     G10(
         text = text,
@@ -3010,7 +3082,7 @@ fun H1(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3031,7 +3103,7 @@ fun title2_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3052,7 +3124,7 @@ fun title2R_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3073,7 +3145,7 @@ fun title3_grey(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H1(
         text = text,
@@ -3092,7 +3164,7 @@ fun H2(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3105,6 +3177,7 @@ fun H2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun title3_leah(
     text: String,
@@ -3112,7 +3185,7 @@ fun title3_leah(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H2(
         text = text,
@@ -3131,7 +3204,7 @@ fun H3(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3144,6 +3217,7 @@ fun H3(
         color = ComposeAppTheme.colors.jacob,
     )
 }
+
 @Composable
 fun title3_jacob(
     text: String,
@@ -3151,7 +3225,7 @@ fun title3_jacob(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H3(
         text = text,
@@ -3170,7 +3244,7 @@ fun H4(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3183,6 +3257,7 @@ fun H4(
         color = ComposeAppTheme.colors.remus,
     )
 }
+
 @Composable
 fun title3_remus(
     text: String,
@@ -3190,7 +3265,7 @@ fun title3_remus(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H4(
         text = text,
@@ -3209,7 +3284,7 @@ fun H5(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3222,6 +3297,7 @@ fun H5(
         color = ComposeAppTheme.colors.lucian,
     )
 }
+
 @Composable
 fun title3_lucian(
     text: String,
@@ -3229,7 +3305,7 @@ fun title3_lucian(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H5(
         text = text,
@@ -3248,7 +3324,7 @@ fun H6(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3261,6 +3337,7 @@ fun H6(
         color = ComposeAppTheme.colors.issykBlue,
     )
 }
+
 @Composable
 fun title3_issykBlue(
     text: String,
@@ -3268,7 +3345,7 @@ fun title3_issykBlue(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H6(
         text = text,
@@ -3287,7 +3364,7 @@ fun H7(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3300,6 +3377,7 @@ fun H7(
         color = ComposeAppTheme.colors.grey50,
     )
 }
+
 @Composable
 fun title3_grey50(
     text: String,
@@ -3307,7 +3385,7 @@ fun title3_grey50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H7(
         text = text,
@@ -3326,7 +3404,7 @@ fun H8(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3339,6 +3417,7 @@ fun H8(
         color = ComposeAppTheme.colors.yellow50,
     )
 }
+
 @Composable
 fun title3_yellow50(
     text: String,
@@ -3346,7 +3425,7 @@ fun title3_yellow50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H8(
         text = text,
@@ -3365,7 +3444,7 @@ fun H9(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3378,6 +3457,7 @@ fun H9(
         color = ComposeAppTheme.colors.green50,
     )
 }
+
 @Composable
 fun title3_green50(
     text: String,
@@ -3385,7 +3465,7 @@ fun title3_green50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H9(
         text = text,
@@ -3404,7 +3484,7 @@ fun H10(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Text(
         text = text,
@@ -3417,6 +3497,7 @@ fun H10(
         color = ComposeAppTheme.colors.red50,
     )
 }
+
 @Composable
 fun title3_red50(
     text: String,
@@ -3424,7 +3505,7 @@ fun title3_red50(
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     H10(
         text = text,

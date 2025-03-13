@@ -12,9 +12,8 @@ import kotlinx.coroutines.launch
 
 class ContactsViewModel(
     private val repository: ContactsRepository,
-    private val mode: Mode
+    private val mode: Mode,
 ) : ViewModelUiState<ContactsViewModel.UiState>() {
-
     private val readOnly = mode != Mode.Full
     private val showAddContact = !readOnly
     private val showMoreOptions = !readOnly
@@ -37,13 +36,14 @@ class ContactsViewModel(
         }
     }
 
-    override fun createState() = UiState(
-        contacts = contacts,
-        nameQuery = nameQuery,
-        searchMode = nameQuery.isNotEmpty(),
-        showAddContact = showAddContact,
-        showMoreOptions = showMoreOptions
-    )
+    override fun createState() =
+        UiState(
+            contacts = contacts,
+            nameQuery = nameQuery,
+            searchMode = nameQuery.isNotEmpty(),
+            showAddContact = showAddContact,
+            showMoreOptions = showMoreOptions,
+        )
 
     fun onEnterQuery(query: String) {
         nameQuery = query
@@ -54,13 +54,13 @@ class ContactsViewModel(
         repository.restore(json)
     }
 
-    fun shouldShowReplaceWarning(contact: Contact): Boolean {
-        return mode is Mode.AddAddressToExistingContact && contact.addresses.any { it.blockchain.type == mode.blockchainType }
-    }
+    fun shouldShowReplaceWarning(contact: Contact): Boolean =
+        mode is Mode.AddAddressToExistingContact &&
+            contact.addresses.any {
+                it.blockchain.type == mode.blockchainType
+            }
 
-    fun shouldShowRestoreWarning(): Boolean {
-        return contacts.isNotEmpty()
-    }
+    fun shouldShowRestoreWarning(): Boolean = contacts.isNotEmpty()
 
     fun replaceWarningMessage(contact: Contact): TranslatableString? {
         val blockchainType =
@@ -73,7 +73,7 @@ class ContactsViewModel(
             R.string.Contacts_AddAddress_ReplaceWarning,
             oldAddress.blockchain.name,
             oldAddress.address.shorten(),
-            address.shorten()
+            address.shorten(),
         )
     }
 
@@ -82,7 +82,6 @@ class ContactsViewModel(
         val nameQuery: String?,
         val searchMode: Boolean,
         val showAddContact: Boolean,
-        val showMoreOptions: Boolean
+        val showMoreOptions: Boolean,
     )
-
 }

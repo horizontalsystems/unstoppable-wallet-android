@@ -22,22 +22,24 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun ProFeaturesBanner(
     title: String,
     description: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .clickable {
-                onClick.invoke()
-            }
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .clickable {
+                    onClick.invoke()
+                },
     ) {
         Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp)),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp)),
             painter = painterResource(R.drawable.ic_pro_nft_banner),
             contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Column {
@@ -46,16 +48,15 @@ fun ProFeaturesBanner(
                 text = title,
                 color = Color.Black,
                 style = ComposeAppTheme.typography.headline2,
-                maxLines = 1
+                maxLines = 1,
             )
 
             Text(
                 modifier = Modifier.padding(12.dp),
                 text = description,
                 color = Color.Black,
-                style = ComposeAppTheme.typography.caption
+                style = ComposeAppTheme.typography.caption,
             )
         }
     }
-
 }

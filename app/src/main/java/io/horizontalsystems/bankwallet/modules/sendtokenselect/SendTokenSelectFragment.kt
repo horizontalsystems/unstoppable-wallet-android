@@ -21,7 +21,6 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class SendTokenSelectFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
@@ -36,7 +35,11 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 when {
                     it.sendEnabled -> {
-                        val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+                        val sendTitle =
+                            Translator.getString(
+                                R.string.Send_Title,
+                                it.wallet.token.fullCoin.coin.code,
+                            )
                         navController.slideFromRight(
                             R.id.enterAddressFragment,
                             EnterAddressFragment.Input(
@@ -45,7 +48,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 address = input?.address,
                                 amount = input?.amount,
-                            )
+                            ),
                         )
                     }
 
@@ -58,8 +61,15 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                     }
                 }
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
-            emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
+            viewModel =
+                viewModel(
+                    factory =
+                        TokenSelectViewModel.FactoryForSend(
+                            blockchainTypes,
+                            tokenTypes,
+                        ),
+                ),
+            emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend),
         )
     }
 

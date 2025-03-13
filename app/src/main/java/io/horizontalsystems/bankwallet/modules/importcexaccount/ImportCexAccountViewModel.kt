@@ -8,8 +8,6 @@ class ImportCexAccountViewModel : ViewModel() {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ImportCexAccountViewModel() as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ImportCexAccountViewModel() as T
     }
 }

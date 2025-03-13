@@ -17,13 +17,15 @@ class WCEvmTransactionSettingsFragment : BaseComposeFragment() {
 
 @Composable
 fun WCEvmTransactionSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.wcRequestFragment)
-    }
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.wcRequestFragment)
+        }
 
-    val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+    val viewModel =
+        viewModel<WCSendEthereumTransactionRequestViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+        )
 
     val sendTransactionService = viewModel.sendTransactionService
 

@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 
-class SubscriptionServiceDev(private val context: Context) : SubscriptionService {
+class SubscriptionServiceDev(
+    private val context: Context,
+) : SubscriptionService {
     private val prefs: SharedPreferences by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
@@ -27,7 +29,8 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
                 getActiveSubscriptions().firstOrNull()
             }
         }
-    override val activeSubscriptionStateFlow = MutableStateFlow(getActiveSubscriptions().firstOrNull())
+    override val activeSubscriptionStateFlow =
+        MutableStateFlow(getActiveSubscriptions().firstOrNull())
 
     override fun launchManageSubscriptionScreen(context: Context) {
         setActiveSubscription(null)
@@ -35,9 +38,7 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
 
     override suspend fun onResume() = Unit
 
-    override fun isActionAllowed(paidAction: IPaidAction): Boolean {
-        return prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null) != null
-    }
+    override fun isActionAllowed(paidAction: IPaidAction): Boolean = prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null) != null
 
     private fun setActiveSubscription(subscriptionId: String?) {
         prefs.edit().putString(KEY_ACTIVE_SUBSCRIPTION, subscriptionId).apply()
@@ -49,71 +50,76 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
 
     override fun getBasePlans(subscriptionId: String): List<BasePlan> =
         if (subscriptionId == "test.subscription_1") {
-            //PRO plans
+            // PRO plans
             listOf(
                 BasePlan(
                     id = "plan-1",
-                    pricingPhases = listOf(
-                        PricingPhase(
-                            formattedPrice = "$10.00",
-                            billingPeriod = "P1M",
-                            priceAmountMicros = 10L,
-                            priceCurrencyCode = "USD"
-                        )
-                    ),
-                    offerToken = "offerToken"
+                    pricingPhases =
+                        listOf(
+                            PricingPhase(
+                                formattedPrice = "$10.00",
+                                billingPeriod = "P1M",
+                                priceAmountMicros = 10L,
+                                priceCurrencyCode = "USD",
+                            ),
+                        ),
+                    offerToken = "offerToken",
                 ),
                 BasePlan(
                     id = "plan-2",
-                    pricingPhases = listOf(
-                        PricingPhase(
-                            formattedPrice = "$100.00",
-                            billingPeriod = "P1Y",
-                            priceAmountMicros = 100L,
-                            priceCurrencyCode = "USD"
-                        )
-                    ),
-                    offerToken = "offerToken"
+                    pricingPhases =
+                        listOf(
+                            PricingPhase(
+                                formattedPrice = "$100.00",
+                                billingPeriod = "P1Y",
+                                priceAmountMicros = 100L,
+                                priceCurrencyCode = "USD",
+                            ),
+                        ),
+                    offerToken = "offerToken",
                 ),
             )
         } else {
-            //VIP plans
+            // VIP plans
             listOf(
                 BasePlan(
                     id = "plan-0",
-                    pricingPhases = listOf(
-                        PricingPhase(
-                            formattedPrice = "$0.00",
-                            billingPeriod = "P1M",
-                            priceAmountMicros = 0L,
-                            priceCurrencyCode = "USD"
-                        )
-                    ),
-                    offerToken = "offerToken"
+                    pricingPhases =
+                        listOf(
+                            PricingPhase(
+                                formattedPrice = "$0.00",
+                                billingPeriod = "P1M",
+                                priceAmountMicros = 0L,
+                                priceCurrencyCode = "USD",
+                            ),
+                        ),
+                    offerToken = "offerToken",
                 ),
                 BasePlan(
                     id = "plan-1",
-                    pricingPhases = listOf(
-                        PricingPhase(
-                            formattedPrice = "$15.00",
-                            billingPeriod = "P1M",
-                            priceAmountMicros = 15L,
-                            priceCurrencyCode = "USD"
-                        )
-                    ),
-                    offerToken = "offerToken"
+                    pricingPhases =
+                        listOf(
+                            PricingPhase(
+                                formattedPrice = "$15.00",
+                                billingPeriod = "P1M",
+                                priceAmountMicros = 15L,
+                                priceCurrencyCode = "USD",
+                            ),
+                        ),
+                    offerToken = "offerToken",
                 ),
                 BasePlan(
                     id = "plan-2",
-                    pricingPhases = listOf(
-                        PricingPhase(
-                            formattedPrice = "$150.00",
-                            billingPeriod = "P1Y",
-                            priceAmountMicros = 150L,
-                            priceCurrencyCode = "USD"
-                        )
-                    ),
-                    offerToken = "offerToken"
+                    pricingPhases =
+                        listOf(
+                            PricingPhase(
+                                formattedPrice = "$150.00",
+                                billingPeriod = "P1Y",
+                                priceAmountMicros = 150L,
+                                priceCurrencyCode = "USD",
+                            ),
+                        ),
+                    offerToken = "offerToken",
                 ),
             )
         }
@@ -132,9 +138,9 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
         offerToken: String,
         activity: Activity,
     ): HSPurchase? {
-        //toggle actionsAllowed value
+        // toggle actionsAllowed value
         val activeSubscription = prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null)
-        if(activeSubscription == null) {
+        if (activeSubscription == null) {
             setActiveSubscription(subscriptionId)
             return HSPurchase(HSPurchase.Status.Purchased)
         } else {

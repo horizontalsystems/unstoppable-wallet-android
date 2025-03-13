@@ -13,9 +13,8 @@ class AmountInputViewModel2(
     private val coinCode: String,
     private val coinDecimal: Int,
     private val fiatDecimal: Int,
-    private var inputType: AmountInputType
+    private var inputType: AmountInputType,
 ) : ViewModel() {
-
     private var availableBalance = BigDecimal.ZERO
 
     var isMaxEnabled by mutableStateOf(false)
@@ -39,7 +38,8 @@ class AmountInputViewModel2(
     }
 
     fun onEnterAmount(text: String) {
-        val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
+        val amount =
+            if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
 
         when (inputType) {
             AmountInputType.COIN -> setCoinAmount(amount)
@@ -70,41 +70,59 @@ class AmountInputViewModel2(
     }
 
     private fun calculateCurrencyAmount() {
-        currencyAmount = rate?.let { rate ->
-            coinAmount?.times(rate.value)?.setScale(fiatDecimal, RoundingMode.DOWN)?.stripTrailingZeros()
-        }
+        currencyAmount =
+            rate?.let { rate ->
+                coinAmount
+                    ?.times(rate.value)
+                    ?.setScale(fiatDecimal, RoundingMode.DOWN)
+                    ?.stripTrailingZeros()
+            }
     }
 
     private fun calculateCoinAmount() {
-        coinAmount = rate?.let { rate ->
-            currencyAmount?.divide(rate.value, coinDecimal, RoundingMode.CEILING)
-                ?.stripTrailingZeros()
-        }
+        coinAmount =
+            rate?.let { rate ->
+                currencyAmount
+                    ?.divide(rate.value, coinDecimal, RoundingMode.CEILING)
+                    ?.stripTrailingZeros()
+            }
     }
 
     fun getEnterAmount(): String {
-        val amount = when (inputType) {
-            AmountInputType.COIN -> coinAmount
-            AmountInputType.CURRENCY -> currencyAmount
-        }
+        val amount =
+            when (inputType) {
+                AmountInputType.COIN -> coinAmount
+                AmountInputType.CURRENCY -> currencyAmount
+            }
         return amount?.toPlainString() ?: ""
     }
 
     private fun refreshHint() {
         val tmpRate = rate
 
-        hint = if (tmpRate == null) {
-            null
-        } else {
-            when (inputType) {
-                AmountInputType.COIN -> {
-                    App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
-                }
-                AmountInputType.CURRENCY -> {
-                    App.numberFormatter.formatCoinFull(coinAmount ?: BigDecimal.ZERO, coinCode, coinDecimal)
+        hint =
+            if (tmpRate == null) {
+                null
+            } else {
+                when (inputType) {
+                    AmountInputType.COIN -> {
+                        App.numberFormatter.format(
+                            currencyAmount ?: BigDecimal.ZERO,
+                            fiatDecimal,
+                            fiatDecimal,
+                            prefix = tmpRate.currency.symbol,
+                        )
+                    }
+
+                    AmountInputType.CURRENCY -> {
+                        App.numberFormatter.formatCoinFull(
+                            coinAmount ?: BigDecimal.ZERO,
+                            coinCode,
+                            coinDecimal,
+                        )
+                    }
                 }
             }
-        }
     }
 
     fun setInputType(inputType: AmountInputType) {
@@ -135,22 +153,23 @@ class AmountInputViewModel2(
     }
 
     private fun refreshInputPrefix() {
-        inputPrefix = when (inputType) {
-            AmountInputType.COIN -> null
-            AmountInputType.CURRENCY -> rate?.currency?.symbol
-        }
+        inputPrefix =
+            when (inputType) {
+                AmountInputType.COIN -> null
+                AmountInputType.CURRENCY -> rate?.currency?.symbol
+            }
     }
 
     fun isValid(text: String): Boolean {
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull() else null
         if (amount == null) return true
 
-        val maxAllowedScale = when (inputType) {
-            AmountInputType.COIN -> coinDecimal
-            AmountInputType.CURRENCY -> fiatDecimal
-        }
+        val maxAllowedScale =
+            when (inputType) {
+                AmountInputType.COIN -> coinDecimal
+                AmountInputType.CURRENCY -> fiatDecimal
+            }
 
         return amount.scale() <= maxAllowedScale
     }
-
 }

@@ -24,15 +24,14 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
+        savedInstanceState: Bundle?,
+    ): View =
+        ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner),
             )
             setContent {
                 val navController = findNavController()
@@ -43,19 +42,25 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
                 }
             }
         }
-    }
 
     @Parcelize
-    data class Input(val title: String, val text: String) : Parcelable
+    data class Input(
+        val title: String,
+        val text: String,
+    ) : Parcelable
 }
 
 @Composable
-fun FeeSettingsInfoScreen(title: String?, text: String?, onCloseClick: () -> Unit) {
+fun FeeSettingsInfoScreen(
+    title: String?,
+    text: String?,
+    onCloseClick: () -> Unit,
+) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_info_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
         title = title ?: "",
-        onCloseClick = onCloseClick
+        onCloseClick = onCloseClick,
     ) {
         InfoTextBody(text = text ?: "")
         Spacer(modifier = Modifier.height(52.dp))

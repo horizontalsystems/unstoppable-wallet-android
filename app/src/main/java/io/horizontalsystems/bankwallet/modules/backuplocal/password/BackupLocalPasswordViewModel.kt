@@ -21,8 +21,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 sealed class BackupType {
-    class SingleWalletBackup(val accountId: String) : BackupType()
-    class FullBackup(val accountIds: List<String>) : BackupType()
+    class SingleWalletBackup(
+        val accountId: String,
+    ) : BackupType()
+
+    class FullBackup(
+        val accountIds: List<String>,
+    ) : BackupType()
 }
 
 class BackupLocalPasswordViewModel(
@@ -31,7 +36,6 @@ class BackupLocalPasswordViewModel(
     private val accountManager: IAccountManager,
     private val backupProvider: BackupProvider,
 ) : ViewModelUiState<BackupLocalPasswordModule.UiState>() {
-
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
@@ -55,40 +59,41 @@ class BackupLocalPasswordViewModel(
                 val account = accountManager.account(type.accountId)
                 if (account == null) {
                     error = "Account is NULL"
-
                 } else {
                     val walletName = account.name.replace(" ", "_")
-                    backupFileName = "UW_Backup_${walletName}_${currentDateTime}.json"
+                    backupFileName = "UW_Backup_${walletName}_$currentDateTime.json"
                 }
             }
 
             is BackupType.FullBackup -> {
-                backupFileName = "UW_App_Backup_${currentDateTime}.json"
+                backupFileName = "UW_App_Backup_$currentDateTime.json"
             }
         }
 
         emitState()
     }
 
-    override fun createState() = BackupLocalPasswordModule.UiState(
-        passphraseState = passphraseState,
-        passphraseConfirmState = passphraseConfirmState,
-        showButtonSpinner = showButtonSpinner,
-        backupJson = backupJson,
-        closeScreen = closeScreen,
-        error = error
-    )
+    override fun createState() =
+        BackupLocalPasswordModule.UiState(
+            passphraseState = passphraseState,
+            passphraseConfirmState = passphraseConfirmState,
+            showButtonSpinner = showButtonSpinner,
+            backupJson = backupJson,
+            closeScreen = closeScreen,
+            error = error,
+        )
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.containsValidCharacters(v)) {
             passphraseState = null
             passphrase = v
         } else {
-            passphraseState = DataState.Error(
-                Exception(
-                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+            passphraseState =
+                DataState.Error(
+                    Exception(
+                        Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols),
+                    ),
                 )
-            )
         }
         emitState()
     }
@@ -120,7 +125,10 @@ class BackupLocalPasswordViewModel(
                             accountManager.update(account.copy(isFileBackedUp = true))
                         }
 
-                        stat(page = StatPage.ExportWalletToFiles, event = StatEvent.ExportWallet(account.type.statAccountType))
+                        stat(
+                            page = StatPage.ExportWalletToFiles,
+                            event = StatEvent.ExportWallet(account.type.statAccountType),
+                        )
                     }
                 }
 
@@ -130,7 +138,7 @@ class BackupLocalPasswordViewModel(
                     stat(page = StatPage.ExportFullToFiles, event = StatEvent.ExportFull)
                 }
             }
-            delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
+            delay(1700) // Wait for showing Snackbar (SHORT duration ~ 1500ms)
             closeScreen = true
             emitState()
         }
@@ -155,22 +163,25 @@ class BackupLocalPasswordViewModel(
     private fun saveAccount() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                backupJson = when (type) {
-                    is BackupType.FullBackup -> {
-                        backupProvider.createFullBackup(
-                            accountIds = type.accountIds,
-                            passphrase = passphrase
-                        )
-                    }
+                backupJson =
+                    when (type) {
+                        is BackupType.FullBackup -> {
+                            backupProvider.createFullBackup(
+                                accountIds = type.accountIds,
+                                passphrase = passphrase,
+                            )
+                        }
 
-                    is BackupType.SingleWalletBackup -> {
-                        val account = accountManager.account(type.accountId) ?: throw Exception("Account is NULL")
-                        backupProvider.createWalletBackup(
-                            account = account.copy(isFileBackedUp = true),
-                            passphrase = passphrase
-                        )
+                        is BackupType.SingleWalletBackup -> {
+                            val account =
+                                accountManager.account(type.accountId)
+                                    ?: throw Exception("Account is NULL")
+                            backupProvider.createWalletBackup(
+                                account = account.copy(isFileBackedUp = true),
+                                passphrase = passphrase,
+                            )
+                        }
                     }
-                }
             } catch (t: Throwable) {
                 error = t.message ?: t.javaClass.simpleName
             }
@@ -188,17 +199,19 @@ class BackupLocalPasswordViewModel(
         try {
             passphraseValidator.validatePassword(passphrase)
         } catch (e: PasswordError) {
-            passphraseState = DataState.Error(
-                Exception(Translator.getString(R.string.LocalBackup_PasswordInvalid))
-            )
+            passphraseState =
+                DataState.Error(
+                    Exception(Translator.getString(R.string.LocalBackup_PasswordInvalid)),
+                )
             emitState()
             return
         }
 
         if (passphrase != passphraseConfirmation) {
-            passphraseConfirmState = DataState.Error(
-                Exception(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation))
-            )
+            passphraseConfirmState =
+                DataState.Error(
+                    Exception(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)),
+                )
         }
 
         emitState()

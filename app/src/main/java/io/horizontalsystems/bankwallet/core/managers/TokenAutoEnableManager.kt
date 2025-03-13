@@ -6,13 +6,17 @@ import io.horizontalsystems.bankwallet.entities.TokenAutoEnabledBlockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class TokenAutoEnableManager(
-    private val tokenAutoEnabledBlockchainDao: TokenAutoEnabledBlockchainDao
+    private val tokenAutoEnabledBlockchainDao: TokenAutoEnabledBlockchainDao,
 ) {
-    fun markAutoEnable(account: Account, blockchainType: BlockchainType) {
+    fun markAutoEnable(
+        account: Account,
+        blockchainType: BlockchainType,
+    ) {
         tokenAutoEnabledBlockchainDao.insert(TokenAutoEnabledBlockchain(account.id, blockchainType))
     }
 
-    fun isAutoEnabled(account: Account, blockchainType: BlockchainType): Boolean {
-        return tokenAutoEnabledBlockchainDao.get(account.id, blockchainType) != null
-    }
+    fun isAutoEnabled(
+        account: Account,
+        blockchainType: BlockchainType,
+    ): Boolean = tokenAutoEnabledBlockchainDao.get(account.id, blockchainType) != null
 }

@@ -8,35 +8,51 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-class HSProFeaturesAdapter(baseUrl: String, apiKey: String) {
-
+class HSProFeaturesAdapter(
+    baseUrl: String,
+    apiKey: String,
+) {
     private val service by lazy {
-        RetrofitUtils.build("${baseUrl}/v1/", mapOf("apikey" to apiKey)).create(HsService::class.java)
+        RetrofitUtils
+            .build("$baseUrl/v1/", mapOf("apikey" to apiKey))
+            .create(HsService::class.java)
     }
 
-    suspend fun getMessage(address: String): String = withContext(Dispatchers.IO) {
-        service.getKey(address).key
-    }
+    suspend fun getMessage(address: String): String =
+        withContext(Dispatchers.IO) {
+            service.getKey(address).key
+        }
 
-    suspend fun authenticate(address: String, signature: String): String = withContext(Dispatchers.IO) {
-        service.authenticate(SignatureData(address, signature)).token
-    }
+    suspend fun authenticate(
+        address: String,
+        signature: String,
+    ): String =
+        withContext(Dispatchers.IO) {
+            service.authenticate(SignatureData(address, signature)).token
+        }
 
     private interface HsService {
         @GET("auth/get-key")
         suspend fun getKey(
-            @Query("address") address: String
+            @Query("address") address: String,
         ): AuthKeyResponse
 
         @POST("auth/authenticate")
         suspend fun authenticate(
-            @Body signatureData: SignatureData
+            @Body signatureData: SignatureData,
         ): AuthenticationResponse
     }
 
-    data class SignatureData(val address: String, val signature: String)
+    data class SignatureData(
+        val address: String,
+        val signature: String,
+    )
 
-    data class AuthKeyResponse(val key: String)
-    data class AuthenticationResponse(val token: String)
+    data class AuthKeyResponse(
+        val key: String,
+    )
 
+    data class AuthenticationResponse(
+        val token: String,
+    )
 }

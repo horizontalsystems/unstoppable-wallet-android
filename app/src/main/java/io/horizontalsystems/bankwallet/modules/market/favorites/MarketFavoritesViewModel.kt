@@ -19,22 +19,23 @@ import kotlinx.coroutines.rx2.asFlow
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
 ) : ViewModelUiState<MarketFavoritesModule.UiState>() {
-
     private var marketItemsWrapper: List<MarketItemWrapper> = listOf()
-    val periods = listOf(
-        TimeDuration.OneDay,
-        TimeDuration.SevenDay,
-        TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
-    )
+    val periods =
+        listOf(
+            TimeDuration.OneDay,
+            TimeDuration.SevenDay,
+            TimeDuration.ThirtyDay,
+            TimeDuration.ThreeMonths,
+        )
 
-    val sortingOptions = listOf(
-        WatchlistSorting.Manual,
-        WatchlistSorting.HighestCap,
-        WatchlistSorting.LowestCap,
-        WatchlistSorting.Gainers,
-        WatchlistSorting.Losers,
-    )
+    val sortingOptions =
+        listOf(
+            WatchlistSorting.Manual,
+            WatchlistSorting.HighestCap,
+            WatchlistSorting.LowestCap,
+            WatchlistSorting.Gainers,
+            WatchlistSorting.Losers,
+        )
 
     private var isRefreshing = false
     private var viewState: ViewState = ViewState.Loading
@@ -67,18 +68,18 @@ class MarketFavoritesViewModel(
         service.start()
     }
 
-    override fun createState(): MarketFavoritesModule.UiState {
-        return MarketFavoritesModule.UiState(
-            viewItems = marketItemsWrapper.map {
-                MarketViewItem.create(it.marketItem, favorited = true, advice = it.signal)
-            },
+    override fun createState(): MarketFavoritesModule.UiState =
+        MarketFavoritesModule.UiState(
+            viewItems =
+                marketItemsWrapper.map {
+                    MarketViewItem.create(it.marketItem, favorited = true, advice = it.signal)
+                },
             viewState = viewState,
             isRefreshing = isRefreshing,
             sortingField = service.watchlistSorting,
             period = service.timeDuration,
             showSignal = service.showSignals,
         )
-    }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
         isRefreshing = true
@@ -122,17 +123,24 @@ class MarketFavoritesViewModel(
         stat(
             page = StatPage.Markets,
             section = StatSection.Watchlist,
-            event = StatEvent.ShowSignals(false)
+            event = StatEvent.ShowSignals(false),
         )
     }
 
     fun showSignals() {
         service.showSignals()
 
-        stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(true))
+        stat(
+            page = StatPage.Markets,
+            section = StatSection.Watchlist,
+            event = StatEvent.ShowSignals(true),
+        )
     }
 
-    fun reorder(from: Int, to: Int) {
+    fun reorder(
+        from: Int,
+        to: Int,
+    ) {
         service.reorder(from, to)
     }
 }

@@ -24,9 +24,8 @@ class AddressViewModel(
     private val contactsRepository: ContactsRepository,
     private val addressUriParser: AddressUriParser,
     private val addressParserChain: AddressParserChain,
-    initial: Address?
+    initial: Address?,
 ) : ViewModel() {
-
     var address by mutableStateOf<Address?>(initial)
         private set
     var inputState by mutableStateOf<DataState<Address>?>(null)
@@ -41,8 +40,7 @@ class AddressViewModel(
         }
     }
 
-    fun hasContacts() =
-        contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
+    fun hasContacts() = contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
 
     fun parseText(value: String) {
         parseAddressJob?.cancel()
@@ -74,11 +72,23 @@ class AddressViewModel(
             }
 
             AddressUriResult.InvalidBlockchainType -> {
-                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Blockchain Type"), blockchainType.title))
+                inputState =
+                    DataState.Error(
+                        AddressValidationException.Invalid(
+                            Throwable("Invalid Blockchain Type"),
+                            blockchainType.title,
+                        ),
+                    )
             }
 
             AddressUriResult.InvalidTokenType -> {
-                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Token Type"), blockchainType.title))
+                inputState =
+                    DataState.Error(
+                        AddressValidationException.Invalid(
+                            Throwable("Invalid Token Type"),
+                            blockchainType.title,
+                        ),
+                    )
             }
 
             AddressUriResult.NoUri, AddressUriResult.WrongUri -> {
@@ -89,29 +99,31 @@ class AddressViewModel(
 
     private fun parseAddress(addressText: String) {
         value = addressText
-        parseAddressJob = viewModelScope.launch(Dispatchers.IO) {
-            val handler = addressParserChain.supportedHandler(addressText) ?: run {
-                ensureActive()
-                withContext(Dispatchers.Main) {
-                    inputState = DataState.Error(AddressValidationException.Unsupported())
-                }
-                return@launch
-            }
+        parseAddressJob =
+            viewModelScope.launch(Dispatchers.IO) {
+                val handler =
+                    addressParserChain.supportedHandler(addressText) ?: run {
+                        ensureActive()
+                        withContext(Dispatchers.Main) {
+                            inputState = DataState.Error(AddressValidationException.Unsupported())
+                        }
+                        return@launch
+                    }
 
-            try {
-                val parsedAddress = handler.parseAddress(addressText)
-                ensureActive()
-                withContext(Dispatchers.Main) {
-                    address = parsedAddress
-                    inputState = DataState.Success(parsedAddress)
-                }
-            } catch (t: Throwable) {
-                ensureActive()
-                withContext(Dispatchers.Main) {
-                    inputState = DataState.Error(t)
+                try {
+                    val parsedAddress = handler.parseAddress(addressText)
+                    ensureActive()
+                    withContext(Dispatchers.Main) {
+                        address = parsedAddress
+                        inputState = DataState.Success(parsedAddress)
+                    }
+                } catch (t: Throwable) {
+                    ensureActive()
+                    withContext(Dispatchers.Main) {
+                        inputState = DataState.Error(t)
+                    }
                 }
             }
-        }
     }
 
     fun onAddressError(addressError: Throwable?) {

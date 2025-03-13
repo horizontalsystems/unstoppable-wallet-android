@@ -46,7 +46,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 class ChooseContactFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<BlockchainType>(navController) { blockchainType ->
@@ -55,15 +54,18 @@ class ChooseContactFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Result(val address: String) : Parcelable
+    data class Result(
+        val address: String,
+    ) : Parcelable
 }
 
 @Composable
 fun ChooseContactScreen(
     blockchainType: BlockchainType,
-    navController: NavController
+    navController: NavController,
 ) {
-    val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
+    val viewModel =
+        viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
 
     val items = viewModel.items
 
@@ -79,18 +81,20 @@ fun ChooseContactScreen(
                         val focusRequester = remember { FocusRequester() }
 
                         BasicTextField(
-                            modifier = Modifier
-                                .focusRequester(focusRequester),
+                            modifier =
+                                Modifier
+                                    .focusRequester(focusRequester),
                             value = searchText,
                             onValueChange = { value ->
                                 searchText = value
                                 viewModel.onEnterQuery(value)
                             },
                             singleLine = true,
-                            textStyle = ColoredTextStyle(
-                                color = ComposeAppTheme.colors.leah,
-                                textStyle = ComposeAppTheme.typography.body
-                            ),
+                            textStyle =
+                                ColoredTextStyle(
+                                    color = ComposeAppTheme.colors.leah,
+                                    textStyle = ComposeAppTheme.typography.body,
+                                ),
                             decorationBox = { innerTextField ->
                                 if (searchText.isEmpty()) {
                                     body_grey50(stringResource(R.string.Market_Search_Hint))
@@ -116,41 +120,46 @@ fun ChooseContactScreen(
                         }
                     })
                 },
-                menuItems = if (searchMode) {
-                    listOf()
-                } else {
-                    listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Search),
-                            icon = R.drawable.icon_search,
-                            onClick = {
-                                searchMode = true
-                            }
+                menuItems =
+                    if (searchMode) {
+                        listOf()
+                    } else {
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Search),
+                                icon = R.drawable.icon_search,
+                                onClick = {
+                                    searchMode = true
+                                },
+                            ),
                         )
-                    )
-                }
+                    },
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             Crossfade(items.isEmpty(), label = "") { empty ->
                 if (empty) {
                     ListEmptyView(
                         text = stringResource(R.string.EmptyResults),
-                        icon = R.drawable.ic_not_found
+                        icon = R.drawable.ic_not_found,
                     )
                 } else {
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                         VSpacer(height = 12.dp)
                         CellUniversalLawrenceSection(items, showFrame = true) { contact ->
                             Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        navController.setNavigationResultX(ChooseContactFragment.Result(contact.address))
-                                        navController.popBackStack()
-                                    }
-                                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navController.setNavigationResultX(
+                                                ChooseContactFragment.Result(
+                                                    contact.address,
+                                                ),
+                                            )
+                                            navController.popBackStack()
+                                        }.padding(horizontal = 16.dp, vertical = 12.dp),
                             ) {
                                 body_leah(text = contact.name)
                                 VSpacer(height = 1.dp)

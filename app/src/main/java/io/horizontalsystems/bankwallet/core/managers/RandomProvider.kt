@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IRandomProvider
-import java.util.*
+import java.util.Random
 
 class RandomProvider : IRandomProvider {
-
-    override fun getRandomNumbers(count: Int, maxIndex: Int): List<Int> {
+    override fun getRandomNumbers(
+        count: Int,
+        maxIndex: Int,
+    ): List<Int> {
         val numbers = mutableListOf<Int>()
 
         val random = Random()
@@ -20,5 +22,4 @@ class RandomProvider : IRandomProvider {
 
         return numbers
     }
-
 }

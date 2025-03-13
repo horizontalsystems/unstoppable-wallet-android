@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-//class TransactionViewItemFactoryTest {
+// class TransactionViewItemFactoryTest {
 //
 //    private val txViewItemFactory = TransactionViewItemFactory(mock())
 //    private val fromTxAddress = TransactionAddress("fromAddress", false)
@@ -125,4 +125,4 @@ package io.horizontalsystems.bankwallet.core.factories
 //        Assert.assertEquals(expectedItem, item)
 //    }
 //
-//}
+// }

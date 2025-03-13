@@ -40,7 +40,7 @@ class MarketFavoritesService(
     private val currencyManager: CurrencyManager,
     private val backgroundManager: BackgroundManager,
     private val priceManager: PriceManager,
-    private val signalsControlManager: SignalsControlManager
+    private val signalsControlManager: SignalsControlManager,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var favoritesJob: Job? = null
@@ -71,45 +71,49 @@ class MarketFavoritesService(
 
     private fun fetch() {
         favoritesJob?.cancel()
-        favoritesJob = coroutineScope.launch {
-            try {
-                marketItems = repository.get(timeDuration.period, currencyManager.baseCurrency)
-                updateItems()
-                if (signalsControlManager.showSignals) {
-                    syncSignals()
+        favoritesJob =
+            coroutineScope.launch {
+                try {
+                    marketItems = repository.get(timeDuration.period, currencyManager.baseCurrency)
+                    updateItems()
+                    if (signalsControlManager.showSignals) {
+                        syncSignals()
+                    }
+                } catch (e: CancellationException) {
+                    // no-op
+                } catch (e: Throwable) {
+                    marketItemsSubject.onNext(DataState.Error(e))
                 }
-            } catch (e: CancellationException) {
-                // no-op
-            } catch (e: Throwable) {
-                marketItemsSubject.onNext(DataState.Error(e))
             }
-        }
     }
 
     private fun updateItems() {
         val sorting = watchlistSorting
         if (sorting == WatchlistSorting.Manual) {
             val manualSortOrder = menuService.manualSortOrder
-            marketItems = marketItems.sortedBy {
-                manualSortOrder.indexOf(it.fullCoin.coin.uid)
-            }
+            marketItems =
+                marketItems.sortedBy {
+                    manualSortOrder.indexOf(it.fullCoin.coin.uid)
+                }
         } else {
-            val sortField = when (sorting) {
-                WatchlistSorting.HighestCap -> SortingField.HighestCap
-                WatchlistSorting.LowestCap -> SortingField.LowestCap
-                WatchlistSorting.Gainers -> SortingField.TopGainers
-                WatchlistSorting.Losers -> SortingField.TopLosers
-                else -> throw IllegalStateException("Manual sorting should be handled separately")
-            }
+            val sortField =
+                when (sorting) {
+                    WatchlistSorting.HighestCap -> SortingField.HighestCap
+                    WatchlistSorting.LowestCap -> SortingField.LowestCap
+                    WatchlistSorting.Gainers -> SortingField.TopGainers
+                    WatchlistSorting.Losers -> SortingField.TopLosers
+                    else -> throw IllegalStateException("Manual sorting should be handled separately")
+                }
             marketItems = marketItems.sort(sortField)
         }
-        val wrapperItems = marketItems.map {
-            MarketItemWrapper(
-                marketItem = it,
-                favorited = true,
-                signal = if (signalsControlManager.showSignals) signals[it.fullCoin.coin.uid] else null
-            )
-        }
+        val wrapperItems =
+            marketItems.map {
+                MarketItemWrapper(
+                    marketItem = it,
+                    favorited = true,
+                    signal = if (signalsControlManager.showSignals) signals[it.fullCoin.coin.uid] else null,
+                )
+            }
         marketItemsSubject.onNext(DataState.Success(wrapperItems))
     }
 
@@ -195,13 +199,17 @@ class MarketFavoritesService(
         }
     }
 
-    fun reorder(from: Int, to: Int) {
+    fun reorder(
+        from: Int,
+        to: Int,
+    ) {
         if (to < 0 || to >= marketItems.size) return
         coroutineScope.launch {
             val order = marketItems.map { it.fullCoin.coin.uid }
-            menuService.manualSortOrder = order.toMutableList().apply {
-                add(to, removeAt(from))
-            }
+            menuService.manualSortOrder =
+                order.toMutableList().apply {
+                    add(to, removeAt(from))
+                }
             updateItems()
         }
     }

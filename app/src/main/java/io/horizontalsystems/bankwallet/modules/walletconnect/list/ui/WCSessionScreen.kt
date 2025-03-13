@@ -49,20 +49,24 @@ import kotlinx.coroutines.launch
 @Composable
 fun WCSessionsScreen(
     navController: NavController,
-    deepLinkUri: String?
+    deepLinkUri: String?,
 ) {
     val context = LocalContext.current
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModel = viewModel<WalletConnectListViewModel>(
-        factory = WalletConnectListModule.Factory()
-    )
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.setConnectionUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+    val viewModel =
+        viewModel<WalletConnectListViewModel>(
+            factory = WalletConnectListModule.Factory(),
+        )
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.setConnectionUri(
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "",
+                )
+            }
         }
-    }
 
     val uiState by viewModel.uiState.collectAsState(initial = WalletConnectListUiState())
 
@@ -110,9 +114,9 @@ fun WCSessionsScreen(
                 },
                 onClose = {
                     coroutineScope.launch { invalidUrlBottomSheetState.hide() }
-                }
+                },
             )
-        }
+        },
     ) {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -122,39 +126,48 @@ fun WCSessionsScreen(
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
-                            }
-                        )
-                    )
+                    menuItems =
+                        listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Info_Title),
+                                icon = R.drawable.ic_info_24,
+                                onClick = {
+                                    FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
+                                },
+                            ),
+                        ),
                 )
-            }
+            },
         ) {
             Column(modifier = Modifier.padding(it)) {
                 Column(modifier = Modifier.weight(1f)) {
                     if (uiState.sessionViewItems.isEmpty() && uiState.pairingsNumber == 0) {
                         ListEmptyView(
                             text = stringResource(R.string.WalletConnect_NoConnection),
-                            icon = R.drawable.ic_wallet_connet_48
+                            icon = R.drawable.ic_wallet_connet_48,
                         )
                     } else {
                         WCSessionList(
                             viewModel,
-                            navController
+                            navController,
                         )
                     }
                 }
                 ButtonsGroupWithShade {
                     ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp)
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .padding(start = 16.dp, end = 16.dp)
+                                .fillMaxWidth(),
                         title = stringResource(R.string.WalletConnect_NewConnect),
-                        onClick = { qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true)) }
+                        onClick = {
+                            qrScannerLauncher.launch(
+                                QRScannerActivity.getScanQrIntent(
+                                    context,
+                                    true,
+                                ),
+                            )
+                        },
                     )
                 }
             }

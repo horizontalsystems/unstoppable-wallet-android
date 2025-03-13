@@ -24,24 +24,23 @@ class BitcoinOutgoingTransactionRecord(
     val sentToSelf: Boolean,
     memo: String?,
     source: TransactionSource,
-    val replaceable: Boolean
+    val replaceable: Boolean,
 ) : BitcoinTransactionRecord(
-    uid = uid,
-    transactionHash = transactionHash,
-    transactionIndex = transactionIndex,
-    blockHeight = blockHeight,
-    confirmationsThreshold = confirmationsThreshold,
-    timestamp = timestamp,
-    fee = fee?.let { TransactionValue.CoinValue(token, it) },
-    failed = failed,
-    lockInfo = lockInfo,
-    conflictingHash = conflictingHash,
-    showRawTransaction = showRawTransaction,
-    memo = memo,
-    source = source
-) {
+        uid = uid,
+        transactionHash = transactionHash,
+        transactionIndex = transactionIndex,
+        blockHeight = blockHeight,
+        confirmationsThreshold = confirmationsThreshold,
+        timestamp = timestamp,
+        fee = fee?.let { TransactionValue.CoinValue(token, it) },
+        failed = failed,
+        lockInfo = lockInfo,
+        conflictingHash = conflictingHash,
+        showRawTransaction = showRawTransaction,
+        memo = memo,
+        source = source,
+    ) {
     val value: TransactionValue = TransactionValue.CoinValue(token, amount)
 
     override val mainValue = value
-
 }

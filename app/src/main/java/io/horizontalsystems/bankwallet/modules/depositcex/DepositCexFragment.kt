@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 
 class DepositCexFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<CexAsset>()
@@ -44,25 +43,26 @@ object ReceiveRoutes {
 @Composable
 fun CexDepositScreen(
     asset: CexAsset?,
-    fragmentNavController: NavController
+    fragmentNavController: NavController,
 ) {
-    val startDestination = if (asset == null) {
-        ASSET_SELECT_SCREEN
-    } else if (asset.depositNetworks.isEmpty() || asset.depositNetworks.size == 1) {
-        DEPOSIT_SCREEN
-    } else {
-        NETWORK_SELECT_SCREEN
-    }
+    val startDestination =
+        if (asset == null) {
+            ASSET_SELECT_SCREEN
+        } else if (asset.depositNetworks.isEmpty() || asset.depositNetworks.size == 1) {
+            DEPOSIT_SCREEN
+        } else {
+            NETWORK_SELECT_SCREEN
+        }
 
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = "deposit_address"
+        startDestination = "deposit_address",
     ) {
         navigation(
             startDestination = startDestination,
-            route = "deposit_address"
+            route = "deposit_address",
         ) {
             composablePage(DEPOSIT_SCREEN) { entry ->
                 val viewModel = entry.sharedViewModel<CexDepositSharedViewModel>(navController)
@@ -73,7 +73,13 @@ fun CexDepositScreen(
                 }
 
                 val addressViewModel =
-                    viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, viewModel.network))
+                    viewModel<DepositAddressViewModel>(
+                        factory =
+                            DepositAddressViewModel.Factory(
+                                cexAsset,
+                                viewModel.network,
+                            ),
+                    )
                 val context = LocalContext.current
 
                 ReceiveAddressScreen(
@@ -82,14 +88,17 @@ fun CexDepositScreen(
                     onErrorClick = { addressViewModel.onErrorClick() },
                     setAmount = { amount -> addressViewModel.setAmount(amount) },
                     onShareClick = { address ->
-                        context.startActivity(Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, address)
-                            type = "text/plain"
-                        })
+                        context.startActivity(
+                            Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, address)
+                                type = "text/plain"
+                            },
+                        )
                     },
                     showUsedAddresses = { usedAddresses, usedChangeAddresses ->
-                        viewModel.usedAddressesParams = UsedAddressesParams(cexAsset.name, usedAddresses, usedChangeAddresses)
+                        viewModel.usedAddressesParams =
+                            UsedAddressesParams(cexAsset.name, usedAddresses, usedChangeAddresses)
                         navController.navigate(USED_ADDRESS_SCREEN)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),
@@ -119,7 +128,7 @@ fun CexDepositScreen(
                             navController.navigate(NETWORK_SELECT_SCREEN)
                         }
                     },
-                    withBalance = false
+                    withBalance = false,
                 )
             }
             composablePage(NETWORK_SELECT_SCREEN) { entry ->
@@ -135,7 +144,7 @@ fun CexDepositScreen(
                     onSelectNetwork = {
                         viewModel.network = it
                         navController.navigate(DEPOSIT_SCREEN)
-                    }
+                    },
                 )
             }
         }

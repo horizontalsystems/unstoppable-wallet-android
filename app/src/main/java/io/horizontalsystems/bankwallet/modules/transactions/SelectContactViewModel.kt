@@ -13,16 +13,16 @@ class SelectContactViewModel(
     private val selected: Contact?,
     private val blockchainType: BlockchainType?,
 ) : ViewModelUiState<SelectContactUiState>() {
-
     private var items: List<Contact?>
 
     init {
         val contacts = fetchContacts()
 
-        items = when {
-            contacts.isNotEmpty() -> listOf(null) + contacts
-            else -> contacts
-        }
+        items =
+            when {
+                contacts.isNotEmpty() -> listOf(null) + contacts
+                else -> contacts
+            }
         emitState()
     }
 
@@ -38,10 +38,11 @@ class SelectContactViewModel(
         }
     }
 
-    override fun createState() = SelectContactUiState(
-        items = items,
-        selected = selected
-    )
+    override fun createState() =
+        SelectContactUiState(
+            items = items,
+            selected = selected,
+        )
 
     companion object {
         val supportedBlockchainTypes =
@@ -49,9 +50,13 @@ class SelectContactViewModel(
                 BlockchainType.Tron +
                 BlockchainType.Ton
 
-        fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
-            SelectContactViewModel(App.contactsRepository, selected, blockchainType)
-        }
+        fun init(
+            selected: Contact?,
+            blockchainType: BlockchainType?,
+        ): CreationExtras.() -> SelectContactViewModel =
+            {
+                SelectContactViewModel(App.contactsRepository, selected, blockchainType)
+            }
     }
 }
 

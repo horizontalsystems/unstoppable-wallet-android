@@ -11,9 +11,8 @@ import java.util.Objects
 @Parcelize
 data class Wallet(
     val token: Token,
-    val account: Account
+    val account: Account,
 ) : Parcelable {
-
     val coin
         get() = token.coin
 
@@ -33,7 +32,5 @@ data class Wallet(
         return super.equals(other)
     }
 
-    override fun hashCode(): Int {
-        return Objects.hash(token, account)
-    }
+    override fun hashCode(): Int = Objects.hash(token, account)
 }

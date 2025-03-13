@@ -15,14 +15,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
 class TransactionSyncStateRepository(
-    private val adapterManager: TransactionAdapterManager
+    private val adapterManager: TransactionAdapterManager,
 ) : Clearable {
     private val adapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
 
     private val syncingSubject = PublishSubject.create<Boolean>()
     val syncingObservable: Observable<Boolean> get() = syncingSubject.distinctUntilChanged()
 
-    private val lastBlockInfoSubject = PublishSubject.create<Pair<TransactionSource, LastBlockInfo>>()
+    private val lastBlockInfoSubject =
+        PublishSubject.create<Pair<TransactionSource, LastBlockInfo>>()
     val lastBlockInfoObservable: Observable<Pair<TransactionSource, LastBlockInfo>> get() = lastBlockInfoSubject
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -60,9 +61,10 @@ class TransactionSyncStateRepository(
     }
 
     private fun emitSyncing() {
-        val syncing = adapters.any {
-            it.value.transactionsState is AdapterState.Syncing
-        }
+        val syncing =
+            adapters.any {
+                it.value.transactionsState is AdapterState.Syncing
+            }
         syncingSubject.onNext(syncing)
     }
 

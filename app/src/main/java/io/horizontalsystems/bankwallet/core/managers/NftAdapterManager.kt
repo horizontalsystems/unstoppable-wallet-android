@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class NftAdapterManager(
     private val walletManager: IWalletManager,
-    private val evmBlockchainManager: EvmBlockchainManager
+    private val evmBlockchainManager: EvmBlockchainManager,
 ) {
     private val _adaptersUpdatedFlow = MutableStateFlow<Map<NftKey, INftAdapter>>(mapOf())
     private var adaptersMap = ConcurrentHashMap<NftKey, INftAdapter>()
@@ -27,17 +27,16 @@ class NftAdapterManager(
 
     init {
         coroutineScope.launch {
-            walletManager.activeWalletsUpdatedObservable.asFlow()
+            walletManager.activeWalletsUpdatedObservable
+                .asFlow()
                 .collect {
-                    //disable NFT adapters for now
-                    //initAdapters(it)
+                    // disable NFT adapters for now
+                    // initAdapters(it)
                 }
         }
     }
 
-    fun adapter(nftKey: NftKey): INftAdapter? {
-        return adaptersMap[nftKey]
-    }
+    fun adapter(nftKey: NftKey): INftAdapter? = adaptersMap[nftKey]
 
     fun refresh() {
         coroutineScope.launch {
@@ -61,11 +60,17 @@ class NftAdapterManager(
                 adaptersMap[nftKey] = adapter
             } else if (evmBlockchainManager.getBlockchain(nftKey.blockchainType) != null) {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(nftKey.blockchainType)
-                val evmKitWrapper = evmKitManager.getEvmKitWrapper(nftKey.account, nftKey.blockchainType)
+                val evmKitWrapper =
+                    evmKitManager.getEvmKitWrapper(nftKey.account, nftKey.blockchainType)
 
                 val nftKit = evmKitWrapper.nftKit
                 if (nftKit != null) {
-                    adaptersMap[nftKey] = EvmNftAdapter(nftKey.blockchainType, nftKit, evmKitWrapper.evmKit.receiveAddress)
+                    adaptersMap[nftKey] =
+                        EvmNftAdapter(
+                            nftKey.blockchainType,
+                            nftKit,
+                            evmKitWrapper.evmKit.receiveAddress,
+                        )
                 } else {
                     evmKitManager.unlink(nftKey.account)
                 }

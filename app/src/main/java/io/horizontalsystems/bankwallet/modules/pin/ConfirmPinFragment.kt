@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
 import kotlinx.parcelize.Parcelize
 
 class ConfirmPinFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         PinConfirm(
@@ -19,10 +18,12 @@ class ConfirmPinFragment : BaseComposeFragment(screenshotEnabled = false) {
             },
             onCancel = {
                 navController.popBackStack()
-            }
+            },
         )
     }
 
     @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(
+        val success: Boolean,
+    ) : Parcelable
 }

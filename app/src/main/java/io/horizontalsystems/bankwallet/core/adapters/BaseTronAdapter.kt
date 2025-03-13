@@ -14,9 +14,10 @@ import java.math.BigInteger
 
 abstract class BaseTronAdapter(
     tronKitWrapper: TronKitWrapper,
-    val decimal: Int
-) : IAdapter, IBalanceAdapter, IReceiveAdapter {
-
+    val decimal: Int,
+) : IAdapter,
+    IBalanceAdapter,
+    IReceiveAdapter {
     val tronKit = tronKitWrapper.tronKit
     protected val signer: Signer? = tronKitWrapper.signer
 
@@ -41,30 +42,33 @@ abstract class BaseTronAdapter(
 
     // ISendTronAdapter
 
-    suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
-        tronKit.isAccountActive(address)
-    }
+    suspend fun isAddressActive(address: Address): Boolean =
+        withContext(Dispatchers.IO) {
+            tronKit.isAccountActive(address)
+        }
 
-    fun isOwnAddress(address: Address): Boolean {
-        return address == tronKit.address
-    }
+    fun isOwnAddress(address: Address): Boolean = address == tronKit.address
 
-    protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
+    protected fun balanceInBigDecimal(
+        balance: BigInteger?,
+        decimal: Int,
+    ): BigDecimal {
         balance?.toBigDecimal()?.let {
             return scaleDown(it, decimal)
         } ?: return BigDecimal.ZERO
     }
 
-    protected fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
-        return amount.movePointLeft(decimals).stripTrailingZeros()
-    }
+    protected fun scaleDown(
+        amount: BigDecimal,
+        decimals: Int = decimal,
+    ): BigDecimal = amount.movePointLeft(decimals).stripTrailingZeros()
 
-    protected fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
-        return amount.movePointRight(decimals).toBigInteger()
-    }
+    protected fun scaleUp(
+        amount: BigDecimal,
+        decimals: Int = decimal,
+    ): BigInteger = amount.movePointRight(decimals).toBigInteger()
 
     companion object {
         const val confirmationsThreshold: Int = 19
     }
-
 }

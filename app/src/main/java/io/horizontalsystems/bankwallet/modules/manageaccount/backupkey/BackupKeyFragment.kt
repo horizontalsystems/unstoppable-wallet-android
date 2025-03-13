@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
-
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Account>(navController) { account ->
@@ -44,7 +43,7 @@ class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 @Composable
 fun RecoveryPhraseScreen(
     navController: NavController,
-    account: Account
+    account: Account,
 ) {
     val viewModel = viewModel<BackupKeyViewModel>(factory = BackupKeyModule.Factory(account))
 
@@ -53,24 +52,25 @@ fun RecoveryPhraseScreen(
         topBar = {
             AppBar(
                 title = stringResource(R.string.RecoveryPhrase_Title),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                        }
+                menuItems =
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                            },
+                        ),
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                        ),
                     ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
             )
-        }
+        },
     ) {
         Column(modifier = Modifier.padding(it)) {
             var hidden by remember { mutableStateOf(true) }
@@ -79,7 +79,7 @@ fun RecoveryPhraseScreen(
             Spacer(Modifier.height(12.dp))
             SeedPhraseList(
                 wordsNumbered = viewModel.wordsNumbered,
-                hidden = hidden
+                hidden = hidden,
             ) {
                 hidden = !hidden
             }
@@ -88,14 +88,15 @@ fun RecoveryPhraseScreen(
             Spacer(modifier = Modifier.weight(1f))
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.RecoveryPhrase_Verify),
                     onClick = {
                         navController.slideFromRight(
                             R.id.backupConfirmationKeyFragment,
-                            viewModel.account
+                            viewModel.account,
                         )
                     },
                 )

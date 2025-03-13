@@ -25,7 +25,7 @@ import io.horizontalsystems.subscriptions.core.DuressMode
 @Composable
 fun DuressPasscodeBlock(
     viewModel: SecuritySettingsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState
     PremiumHeader()
@@ -40,11 +40,12 @@ fun DuressPasscodeBlock(
                 )
             },
             center = {
-                val text = if (uiState.duressPinEnabled) {
-                    R.string.SettingsSecurity_EditDuressPin
-                } else {
-                    R.string.SettingsSecurity_SetDuressPin
-                }
+                val text =
+                    if (uiState.duressPinEnabled) {
+                        R.string.SettingsSecurity_EditDuressPin
+                    } else {
+                        R.string.SettingsSecurity_SetDuressPin
+                    }
                 body_leah(
                     text = stringResource(text),
                     maxLines = 1,
@@ -67,7 +68,7 @@ fun DuressPasscodeBlock(
                         }
                     }
                 }
-            }
+            },
         )
         if (uiState.duressPinEnabled) {
             SecurityCenterCell(
@@ -90,7 +91,7 @@ fun DuressPasscodeBlock(
                     navController.authorizedAction {
                         viewModel.disableDuressPin()
                     }
-                }
+                },
             )
         }
     }

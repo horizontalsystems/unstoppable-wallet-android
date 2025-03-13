@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 
 @Dao
 interface EvmSyncSourceDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: EvmSyncSourceRecord)
 
@@ -19,6 +18,8 @@ interface EvmSyncSourceDao {
     fun getEvmSyncSources(blockchainTypeUid: String): List<EvmSyncSourceRecord>
 
     @Query("DELETE FROM EvmSyncSourceRecord WHERE blockchainTypeUid = :blockchainTypeUid AND url = :url")
-    fun delete(blockchainTypeUid: String, url: String)
-
+    fun delete(
+        blockchainTypeUid: String,
+        url: String,
+    )
 }

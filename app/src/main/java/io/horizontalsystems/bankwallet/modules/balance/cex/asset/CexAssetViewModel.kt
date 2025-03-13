@@ -25,17 +25,16 @@ class CexAssetViewModel(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val priceManager: PriceManager
+    private val priceManager: PriceManager,
 ) : ViewModel() {
-
     private val title = cexAsset.id
     private var balanceViewItem: BalanceCexViewItem? = null
 
     var uiState by mutableStateOf(
         UiState(
             title = title,
-            balanceViewItem = balanceViewItem
-        )
+            balanceViewItem = balanceViewItem,
+        ),
     )
         private set
 
@@ -67,7 +66,7 @@ class CexAssetViewModel(
 
     private fun createBalanceCexViewItem(
         cexAsset: CexAsset,
-        latestRate: CoinPrice?
+        latestRate: CoinPrice?,
     ): BalanceCexViewItem {
         val currency = xRateRepository.baseCurrency
         val balanceHidden = balanceHiddenManager.balanceHidden
@@ -79,42 +78,45 @@ class CexAssetViewModel(
             hideBalance = balanceHidden,
             balanceViewType = BalanceViewType.CoinThenFiat,
             fullFormat = true,
-            adapterState = AdapterState.Synced
+            adapterState = AdapterState.Synced,
         )
     }
 
     @Synchronized
     private fun updateBalanceViewItem() {
         val latestRates = xRateRepository.getLatestRates()
-        balanceViewItem = createBalanceCexViewItem(cexAsset, cexAsset.coin?.let { latestRates[it.uid] })
+        balanceViewItem =
+            createBalanceCexViewItem(cexAsset, cexAsset.coin?.let { latestRates[it.uid] })
 
         emitUiState()
     }
 
     private fun emitUiState() {
         viewModelScope.launch {
-            uiState = UiState(
-                title = title,
-                balanceViewItem = balanceViewItem,
-            )
+            uiState =
+                UiState(
+                    title = title,
+                    balanceViewItem = balanceViewItem,
+                )
         }
     }
 
-    class Factory(private val cexAsset: CexAsset) : ViewModelProvider.Factory {
+    class Factory(
+        private val cexAsset: CexAsset,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CexAssetViewModel(
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            CexAssetViewModel(
                 cexAsset,
                 App.balanceHiddenManager,
                 BalanceXRateRepository("cex-asset", App.currencyManager, App.marketKit),
                 BalanceViewItemFactory(),
-                App.priceManager
-                ) as T
-        }
+                App.priceManager,
+            ) as T
     }
 
     data class UiState(
         val title: String,
-        val balanceViewItem: BalanceCexViewItem?
+        val balanceViewItem: BalanceCexViewItem?,
     )
 }

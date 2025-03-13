@@ -11,9 +11,8 @@ import io.horizontalsystems.bankwallet.R
 
 abstract class BaseFragment(
     @LayoutRes layoutResId: Int = 0,
-    private val screenshotEnabled: Boolean = true
+    private val screenshotEnabled: Boolean = true,
 ) : Fragment(layoutResId) {
-
     override fun onResume() {
         super.onResume()
         if (screenshotEnabled) {
@@ -29,10 +28,15 @@ abstract class BaseFragment(
     }
 
     protected fun hideKeyboard() {
-        activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+        activity
+            ?.getSystemService(InputMethodManager::class.java)
+            ?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 
-    protected fun setMenuItemEnabled(menuItem: MenuItem, enabled: Boolean) {
+    protected fun setMenuItemEnabled(
+        menuItem: MenuItem,
+        enabled: Boolean,
+    ) {
         menuItem.isEnabled = enabled
         context?.let { ctx ->
             val color = ctx.getColor(if (enabled) R.color.jacob else R.color.grey)
@@ -49,5 +53,4 @@ abstract class BaseFragment(
     private fun disallowScreenshot() {
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
-
 }

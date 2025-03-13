@@ -17,13 +17,15 @@ class SendEvmSettingsFragment : BaseComposeFragment() {
 
 @Composable
 fun SendEvmSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
-    }
+    val viewModelStoreOwner =
+        remember(navController.currentBackStackEntry) {
+            navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
+        }
 
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+    val viewModel =
+        viewModel<SendEvmConfirmationViewModel>(
+            viewModelStoreOwner = viewModelStoreOwner,
+        )
 
     val sendTransactionService = viewModel.sendTransactionService
 

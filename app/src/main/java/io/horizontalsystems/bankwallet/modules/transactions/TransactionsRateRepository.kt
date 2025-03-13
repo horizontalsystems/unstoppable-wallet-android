@@ -25,8 +25,10 @@ class TransactionsRateRepository(
     private val dataExpiredSubject = PublishSubject.create<Unit>()
     val dataExpiredObservable: Observable<Unit> = dataExpiredSubject
 
-    private val historicalRateSubject = PublishSubject.create<Pair<HistoricalRateKey, CurrencyValue>>()
-    val historicalRateObservable: Observable<Pair<HistoricalRateKey, CurrencyValue>> = historicalRateSubject
+    private val historicalRateSubject =
+        PublishSubject.create<Pair<HistoricalRateKey, CurrencyValue>>()
+    val historicalRateObservable: Observable<Pair<HistoricalRateKey, CurrencyValue>> =
+        historicalRateSubject
 
     private val requestedXRates = mutableMapOf<HistoricalRateKey, Unit>()
 
@@ -38,11 +40,10 @@ class TransactionsRateRepository(
         }
     }
 
-    fun getHistoricalRate(key: HistoricalRateKey): CurrencyValue? {
-        return marketKit.coinHistoricalPrice(key.coinUid, baseCurrency.code, key.timestamp)?.let {
+    fun getHistoricalRate(key: HistoricalRateKey): CurrencyValue? =
+        marketKit.coinHistoricalPrice(key.coinUid, baseCurrency.code, key.timestamp)?.let {
             CurrencyValue(baseCurrency, it)
         }
-    }
 
     fun fetchHistoricalRate(key: HistoricalRateKey) {
         if (requestedXRates.containsKey(key)) return
@@ -51,17 +52,22 @@ class TransactionsRateRepository(
 
         coroutineScope.launch {
             try {
-                val rate = marketKit.coinHistoricalPriceSingle(
-                    key.coinUid,
-                    baseCurrency.code,
-                    key.timestamp
-                ).await()
+                val rate =
+                    marketKit
+                        .coinHistoricalPriceSingle(
+                            key.coinUid,
+                            baseCurrency.code,
+                            key.timestamp,
+                        ).await()
 
                 if (rate.compareTo(BigDecimal.ZERO) != 0) {
                     historicalRateSubject.onNext(Pair(key, CurrencyValue(baseCurrency, rate)))
                 }
             } catch (e: Throwable) {
-                Log.w("XRate", "Could not fetch xrate for ${key.coinUid}:${key.timestamp}, ${e.javaClass.simpleName}:${e.message}")
+                Log.w(
+                    "XRate",
+                    "Could not fetch xrate for ${key.coinUid}:${key.timestamp}, ${e.javaClass.simpleName}:${e.message}",
+                )
             } finally {
                 requestedXRates.remove(key)
             }
@@ -73,4 +79,7 @@ class TransactionsRateRepository(
     }
 }
 
-data class HistoricalRateKey(val coinUid: String, val timestamp: Long)
+data class HistoricalRateKey(
+    val coinUid: String,
+    val timestamp: Long,
+)

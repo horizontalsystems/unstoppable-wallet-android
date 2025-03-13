@@ -5,21 +5,23 @@ import java.net.InetSocketAddress
 import java.net.Socket
 
 class NetworkUtils {
-
     companion object {
-
-        fun isPortOpen(ip: String?, port: Int, timeout: Int): Boolean {
-            return try {
+        fun isPortOpen(
+            ip: String?,
+            port: Int,
+            timeout: Int,
+        ): Boolean =
+            try {
                 val socket = Socket()
                 socket.connect(InetSocketAddress(ip, port), timeout)
                 socket.close()
                 true
-            } catch (ce: ConnectException) { //ce.printStackTrace();
+            } catch (ce: ConnectException) {
+                // ce.printStackTrace();
                 false
-            } catch (ex: Exception) { //ex.printStackTrace();
+            } catch (ex: Exception) {
+                // ex.printStackTrace();
                 false
             }
-        }
-
     }
 }

@@ -1,26 +1,34 @@
 package io.horizontalsystems.bankwallet.modules.markdown
 
-import org.commonmark.node.*
+import org.commonmark.node.AbstractVisitor
+import org.commonmark.node.BlockQuote
+import org.commonmark.node.BulletList
+import org.commonmark.node.Heading
+import org.commonmark.node.Image
+import org.commonmark.node.ListBlock
+import org.commonmark.node.ListItem
+import org.commonmark.node.OrderedList
+import org.commonmark.node.Paragraph
 import java.net.URL
 
 class MarkdownVisitorBlock(
     private var markdownUrl: String = "",
     val level: Int = 0,
-    private val listItemMarkerGenerator: ListItemMarkerGenerator? = null
+    private val listItemMarkerGenerator: ListItemMarkerGenerator? = null,
 ) : AbstractVisitor() {
-
     val blocks = mutableListOf<MarkdownBlock>()
     private var quoted = false
 
     override fun visit(heading: Heading) {
         val content = MarkdownVisitorString.getNodeContent(heading, markdownUrl)
 
-        val block = when (heading.level) {
-            1 -> MarkdownBlock.Heading1(content)
-            2 -> MarkdownBlock.Heading2(content)
-            3 -> MarkdownBlock.Heading3(content)
-            else -> null
-        }
+        val block =
+            when (heading.level) {
+                1 -> MarkdownBlock.Heading1(content)
+                2 -> MarkdownBlock.Heading2(content)
+                3 -> MarkdownBlock.Heading3(content)
+                else -> null
+            }
 
         block?.let {
             blocks.add(block)
@@ -33,7 +41,15 @@ class MarkdownVisitorBlock(
             return visit(firstChild)
         }
 
-        blocks.add(MarkdownBlock.Paragraph(MarkdownVisitorString.getNodeContent(paragraph, markdownUrl), quoted))
+        blocks.add(
+            MarkdownBlock.Paragraph(
+                MarkdownVisitorString.getNodeContent(
+                    paragraph,
+                    markdownUrl,
+                ),
+                quoted,
+            ),
+        )
     }
 
     override fun visit(image: Image) {
@@ -61,7 +77,10 @@ class MarkdownVisitorBlock(
     }
 
     override fun visit(orderedList: OrderedList) {
-        visitListBlock(orderedList, ListItemMarkerGenerator.Ordered(orderedList.startNumber, orderedList.delimiter))
+        visitListBlock(
+            orderedList,
+            ListItemMarkerGenerator.Ordered(orderedList.startNumber, orderedList.delimiter),
+        )
     }
 
     override fun visit(listItem: ListItem) {
@@ -77,7 +96,10 @@ class MarkdownVisitorBlock(
         }
     }
 
-    private fun visitListBlock(listBlock: ListBlock, listItemMarkerGenerator: ListItemMarkerGenerator) {
+    private fun visitListBlock(
+        listBlock: ListBlock,
+        listItemMarkerGenerator: ListItemMarkerGenerator,
+    ) {
         val markdownVisitor = MarkdownVisitorBlock(markdownUrl, level + 1, listItemMarkerGenerator)
         markdownVisitor.visitChildren(listBlock)
         markdownVisitor.blocks.let { subblocks ->
@@ -94,7 +116,5 @@ class MarkdownVisitorBlock(
         }
     }
 
-    private fun getNextListItemMarker(): String? {
-        return listItemMarkerGenerator?.getNext()
-    }
+    private fun getNextListItemMarker(): String? = listItemMarkerGenerator?.getNext()
 }

@@ -51,7 +51,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 fun TonConnectSessionList(
     dapps: Map<String, List<DAppEntity>>,
     navController: NavController,
-    onDelete: (DAppEntity) -> Unit
+    onDelete: (DAppEntity) -> Unit,
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
@@ -79,14 +79,13 @@ fun TonConnectSessionList(
                 onConceal = {
                     revealedCardId = null
                 },
-                onDelete = onDelete
+                onDelete = onDelete,
             )
 
             item {
                 VSpacer(24.dp)
             }
         }
-
     }
 }
 
@@ -96,21 +95,22 @@ private fun LazyListScope.TCSection(
     revealedCardId: String?,
     onReveal: (String) -> Unit,
     onConceal: () -> Unit,
-    onDelete: (DAppEntity) -> Unit
+    onDelete: (DAppEntity) -> Unit,
 ) {
     itemsIndexed(dapps, key = { _, item -> item.uniqueId }) { index, dapp ->
         val showDivider = showDivider(dapps.size, index)
         val shape = getShape(dapps.size, index)
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             ActionsRow(
                 content = {
                     HsIconButton(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(88.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .width(88.dp),
                         onClick = { onDelete(dapp) },
                         content = {
                             Icon(
@@ -118,7 +118,7 @@ private fun LazyListScope.TCSection(
                                 tint = Color.Gray,
                                 contentDescription = "delete",
                             )
-                        }
+                        },
                     )
                 },
             )
@@ -133,14 +133,13 @@ private fun LazyListScope.TCSection(
                         shape = shape,
                         showDivider = showDivider,
                         dapp = dapp,
-                        navController = navController
+                        navController = navController,
                     )
-                }
+                },
             )
         }
     }
 }
-
 
 @Composable
 fun TCSessionCell(
@@ -150,40 +149,44 @@ fun TCSessionCell(
     navController: NavController,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(shape)
-            .background(ComposeAppTheme.colors.lawrence),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(shape)
+                .background(ComposeAppTheme.colors.lawrence),
+        contentAlignment = Alignment.Center,
     ) {
         if (showDivider) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
         Row(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                painter = rememberAsyncImagePainter(
-                    model = dapp.manifest.iconUrl,
-                    error = painterResource(R.drawable.ic_platform_placeholder_24)
-                ),
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                painter =
+                    rememberAsyncImagePainter(
+                        model = dapp.manifest.iconUrl,
+                        error = painterResource(R.drawable.ic_platform_placeholder_24),
+                    ),
                 contentDescription = null,
             )
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                val title = when {
-                    dapp.manifest.name.isNotBlank() -> dapp.manifest.name
-                    else -> stringResource(id = R.string.TonConnect_Unnamed)
-                }
+                val title =
+                    when {
+                        dapp.manifest.name.isNotBlank() -> dapp.manifest.name
+                        else -> stringResource(id = R.string.TonConnect_Unnamed)
+                    }
 
                 body_leah(
                     text = title,

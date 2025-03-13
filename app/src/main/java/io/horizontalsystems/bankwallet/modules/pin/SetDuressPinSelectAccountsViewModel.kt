@@ -6,8 +6,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 
-class SetDuressPinSelectAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
-
+class SetDuressPinSelectAccountsViewModel(
+    accountManager: IAccountManager,
+) : ViewModel() {
     val watchAccounts: List<Account>
     val regularAccounts: List<Account>
 
@@ -19,8 +20,6 @@ class SetDuressPinSelectAccountsViewModel(accountManager: IAccountManager) : Vie
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SetDuressPinSelectAccountsViewModel(App.accountManager) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = SetDuressPinSelectAccountsViewModel(App.accountManager) as T
     }
 }

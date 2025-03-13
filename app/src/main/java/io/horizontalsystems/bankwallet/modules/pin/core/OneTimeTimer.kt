@@ -1,23 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.pin.core
 
-import java.util.*
+import java.util.Date
+import java.util.Timer
+import java.util.TimerTask
 
 class OneTimeTimer {
-
     var delegate: OneTimerDelegate? = null
     private var timer: Timer? = null
 
     fun schedule(time: Date) {
-
         if (timer == null) {
             timer = Timer()
         }
 
-        timer?.schedule(object : TimerTask() {
-            override fun run() {
-                delegate?.onFire()
-            }
-        }, time)
-
+        timer?.schedule(
+            object : TimerTask() {
+                override fun run() {
+                    delegate?.onFire()
+                }
+            },
+            time,
+        )
     }
 }

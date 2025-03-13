@@ -10,10 +10,11 @@ class TimerService : ServiceState<TimerService.State>() {
     private var secondsRemaining: Long? = null
     private var timeout = false
 
-    override fun createState() = State(
-        remaining = secondsRemaining,
-        timeout = timeout
-    )
+    override fun createState() =
+        State(
+            remaining = secondsRemaining,
+            timeout = timeout,
+        )
 
     fun start(seconds: Long) {
         secondsRemaining = seconds
@@ -30,7 +31,7 @@ class TimerService : ServiceState<TimerService.State>() {
             onFinish = {
                 timeout = true
                 emitState()
-            }
+            },
         )
     }
 
@@ -38,12 +39,18 @@ class TimerService : ServiceState<TimerService.State>() {
         expirationTimer?.cancel()
     }
 
-    private fun runExpirationTimer(millisInFuture: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
+    private fun runExpirationTimer(
+        millisInFuture: Long,
+        onTick: (Long) -> Unit,
+        onFinish: () -> Unit,
+    ) {
         expirationTimer?.cancel()
-        expirationTimer = object : CountDownTimer(millisInFuture, 1000) {
-            override fun onTick(millisUntilFinished: Long) = onTick.invoke(millisUntilFinished)
-            override fun onFinish() = onFinish.invoke()
-        }
+        expirationTimer =
+            object : CountDownTimer(millisInFuture, 1000) {
+                override fun onTick(millisUntilFinished: Long) = onTick.invoke(millisUntilFinished)
+
+                override fun onFinish() = onFinish.invoke()
+            }
         expirationTimer?.start()
     }
 
@@ -55,5 +62,8 @@ class TimerService : ServiceState<TimerService.State>() {
         emitState()
     }
 
-    data class State(val remaining: Long?, val timeout: Boolean)
+    data class State(
+        val remaining: Long?,
+        val timeout: Boolean,
+    )
 }

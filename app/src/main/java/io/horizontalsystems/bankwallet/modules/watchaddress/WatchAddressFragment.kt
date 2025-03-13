@@ -38,7 +38,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
 class WatchAddressFragment : BaseComposeFragment() {
-
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<ManageAccountsModule.Input>()
@@ -46,11 +45,14 @@ class WatchAddressFragment : BaseComposeFragment() {
         val inclusive = input?.popOffInclusive ?: true
         WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
     }
-
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, inclusive: Boolean) {
+fun WatchAddressScreen(
+    navController: NavController,
+    popUpToInclusiveId: Int,
+    inclusive: Boolean,
+) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
@@ -66,7 +68,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 contenView = view,
                 resId = R.string.Hud_Text_AddressAdded,
                 icon = R.drawable.icon_binocule_24,
-                iconTint = R.color.white
+                iconTint = R.color.white,
             )
             delay(300)
             navController.popBackStack(popUpToInclusiveId, inclusive)
@@ -82,8 +84,8 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 popUpToInclusiveId,
                 inclusive,
                 accountType,
-                accountName
-            )
+                accountName,
+            ),
         )
     }
 
@@ -93,36 +95,38 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
-            menuItems = buildList {
-                when (submitType) {
-                    is SubmitButtonType.Watch -> {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Watch_Address_Watch),
-                                onClick = viewModel::onClickWatch,
-                                enabled = submitType.enabled
+            menuItems =
+                buildList {
+                    when (submitType) {
+                        is SubmitButtonType.Watch -> {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                                    onClick = viewModel::onClickWatch,
+                                    enabled = submitType.enabled,
+                                ),
                             )
-                        )
-                    }
+                        }
 
-                    is SubmitButtonType.Next -> {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Watch_Address_Watch),
-                                onClick = viewModel::onClickNext,
-                                enabled = submitType.enabled
+                        is SubmitButtonType.Next -> {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                                    onClick = viewModel::onClickNext,
+                                    enabled = submitType.enabled,
+                                ),
                             )
-                        )
+                        }
                     }
-                }
-            }
+                },
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -132,7 +136,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 initial = viewModel.accountName,
                 pasteEnabled = false,
                 hint = viewModel.defaultAccountName,
-                onValueChange = viewModel::onEnterAccountName
+                onValueChange = viewModel::onEnterAccountName,
             )
             Spacer(Modifier.height(32.dp))
             FormsInputMultiline(
@@ -151,7 +155,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 },
                 onPaste = {
                     stat(page = StatPage.WatchWallet, event = StatEvent.Paste(StatEntity.Key))
-                }
+                },
             )
             Spacer(Modifier.height(32.dp))
         }

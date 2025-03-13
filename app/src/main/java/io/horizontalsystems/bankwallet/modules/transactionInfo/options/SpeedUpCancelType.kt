@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class SpeedUpCancelType : Parcelable {
-    SpeedUp, Cancel
+    SpeedUp,
+    Cancel,
 }
