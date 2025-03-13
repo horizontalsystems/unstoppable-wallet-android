@@ -63,7 +63,7 @@
     <string name="Any">Any</string>
     <string name="SyncError">Sync error. Try Again</string>
 
-    <string name="FooterText" translatable="false">© Horizontal Systems 2022</string>
+    <string name="FooterText" translatable="false">© Horizontal Systems %d</string>
 
     <string name="Keyboard">Keyboard</string>
 

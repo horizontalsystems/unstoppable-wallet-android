@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <View
@@ -20,6 +21,6 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="32dp"
         android:textColor="@color/grey"
-        android:text="@string/FooterText" />
+        tools:text="© Horizontal Systems" />
 
 </LinearLayout>

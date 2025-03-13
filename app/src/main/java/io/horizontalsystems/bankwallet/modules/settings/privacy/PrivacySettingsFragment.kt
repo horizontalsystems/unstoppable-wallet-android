@@ -192,7 +192,7 @@ fun PrivacyScreen(
         Spacer(Modifier.height(12.dp))
 
         Text(
-            text = stringResource(R.string.FooterText),
+            text = stringResource(R.string.FooterText, uiState.currentYear),
             style = ComposeAppTheme.typography.caption,
             color = ComposeAppTheme.colors.grey,
             modifier = Modifier
