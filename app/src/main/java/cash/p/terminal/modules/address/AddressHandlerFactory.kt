@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.address
 
+import cash.p.dogecoinkit.MainNetDogecoin
 import cash.p.terminal.core.supported
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.bitcoinkit.MainNet
@@ -37,6 +38,12 @@ class AddressHandlerFactory(
 
             BlockchainType.Litecoin -> {
                 val network = MainNetLitecoin()
+                addressHandlers.add(AddressHandlerBase58(network, blockchainType))
+                addressHandlers.add(AddressHandlerBech32(network, blockchainType))
+            }
+
+            BlockchainType.Dogecoin -> {
+                val network = MainNetDogecoin()
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
                 addressHandlers.add(AddressHandlerBech32(network, blockchainType))
             }

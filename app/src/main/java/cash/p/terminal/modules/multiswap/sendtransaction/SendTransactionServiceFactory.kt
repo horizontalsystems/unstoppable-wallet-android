@@ -44,11 +44,9 @@ object SendTransactionServiceFactory {
             }
 
             TokenType.Native -> when (token.blockchainType) {
+                BlockchainType.Dash,
+                BlockchainType.Dogecoin,
                 BlockchainType.ECash -> {
-                    BitcoinSendTransactionService(token)
-                }
-
-                BlockchainType.Dash -> {
                     BitcoinSendTransactionService(token)
                 }
 

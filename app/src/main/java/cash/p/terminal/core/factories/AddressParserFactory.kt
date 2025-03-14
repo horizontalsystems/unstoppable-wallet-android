@@ -14,6 +14,7 @@ val BlockchainType.uriScheme: String?
             BlockchainType.BitcoinCash -> "bitcoincash"
             BlockchainType.ECash -> "ecash"
             BlockchainType.Litecoin -> "litecoin"
+            BlockchainType.Dogecoin -> "dogecoin"
             BlockchainType.Dash -> "dash"
             BlockchainType.Zcash -> "zcash"
             BlockchainType.Ethereum -> "ethereum"

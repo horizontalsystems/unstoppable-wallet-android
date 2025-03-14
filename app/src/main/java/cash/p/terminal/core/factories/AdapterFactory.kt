@@ -10,6 +10,7 @@ import cash.p.terminal.core.adapters.BinanceAdapter
 import cash.p.terminal.core.adapters.BitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinCashAdapter
 import cash.p.terminal.core.adapters.DashAdapter
+import cash.p.terminal.core.adapters.DogecoinAdapter
 import cash.p.terminal.core.adapters.ECashAdapter
 import cash.p.terminal.core.adapters.Eip20Adapter
 import cash.p.terminal.core.adapters.EvmAdapter
@@ -203,6 +204,18 @@ class AdapterFactory(
                         backgroundManager = backgroundManager,
                         customPeers = localStorage.customDashPeers,
                         masterNodesRepository = masterNodesRepository
+                    )
+                }
+
+                BlockchainType.Dogecoin -> {
+                    val syncMode = btcBlockchainManager.syncMode(
+                        BlockchainType.Dogecoin,
+                        wallet.account.origin
+                    )
+                    DogecoinAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager
                     )
                 }
 

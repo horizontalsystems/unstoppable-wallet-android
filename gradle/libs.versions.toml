@@ -4,7 +4,6 @@ androidGradlePlugin = "8.6.1"
 kotlin = "2.0.21"
 koin-bom = "4.0.0"
 compose-bom = "2024.12.01"
-kotlinStdlibJdk7 = "2.0.21"
 material = "1.12.0"
 metaplexAndroid = "1.5.0"
 navigationUiKtx = "2.8.5"
@@ -26,7 +25,7 @@ javax-inject = "1"
 appcompat = "1.7.0"
 
 horizontalsystems-ton = "763a5c3"
-piratecash-bitcoin = "eb243fc"
+piratecash-bitcoin = "f85266c"
 horizontalsystems-ethereum = "d423acf"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
@@ -62,7 +61,7 @@ compose-material = { module = "androidx.compose.material:material" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling-preview" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
-kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlinStdlibJdk7" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-compose" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment-ktx" }

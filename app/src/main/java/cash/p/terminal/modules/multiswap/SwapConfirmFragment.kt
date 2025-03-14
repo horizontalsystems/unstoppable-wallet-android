@@ -92,8 +92,12 @@ fun SwapConfirmScreen(navController: NavController) {
 
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
-        onClickSettings = {
-            navController.slideFromRight(R.id.swapTransactionSettings)
+        onClickSettings = if(uiState.isAdvancedSettingsAvailable) {
+            {
+                navController.slideFromRight(R.id.swapTransactionSettings)
+            }
+        } else {
+            null
         },
         onClickClose = null,
         buttonsSlot = {

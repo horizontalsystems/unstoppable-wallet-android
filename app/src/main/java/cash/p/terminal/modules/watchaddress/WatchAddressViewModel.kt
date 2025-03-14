@@ -138,6 +138,7 @@ class WatchAddressViewModel(
         BlockchainType.BitcoinCash,
         BlockchainType.ECash,
         BlockchainType.Litecoin,
+        BlockchainType.Dogecoin,
         BlockchainType.Dash -> Type.BitcoinAddress
 
         BlockchainType.Ethereum,

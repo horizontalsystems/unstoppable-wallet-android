@@ -70,6 +70,7 @@ val TokenQuery.isSupported: Boolean
         }
 
         BlockchainType.ECash,
+        BlockchainType.Dogecoin,
         BlockchainType.Dash -> {
             tokenType is TokenType.Native
         }
@@ -351,6 +352,7 @@ fun Token.supports(accountType: AccountType): Boolean {
         is AccountType.HdExtendedKey -> {
             when (blockchainType) {
                 BlockchainType.Bitcoin,
+                BlockchainType.Dogecoin,
                 BlockchainType.Litecoin -> {
                     val type = type
                     if (type is TokenType.Derived) {

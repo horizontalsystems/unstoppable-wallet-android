@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import cash.p.dogecoinkit.MainNetDogecoin
 import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
@@ -92,6 +93,7 @@ class ShowExtendedKeyViewModel(
             Blockchain.Litecoin -> ExtendedKeyCoinType.Litecoin
             Blockchain.Bitcoin,
             Blockchain.BitcoinCash,
+            Blockchain.Dogecoin,
             Blockchain.Dash -> ExtendedKeyCoinType.Bitcoin
         }
 
@@ -105,6 +107,7 @@ class ShowExtendedKeyViewModel(
         Bitcoin("Bitcoin", MainNet().coinType),
         BitcoinCash("Bitcoin Cash", MainNetBitcoinCash().coinType),
         Litecoin("Litecoin", MainNetLitecoin().coinType),
+        Dogecoin("Dogecoin", MainNetDogecoin().coinType),
         Dash("Dash", MainNetDash().coinType)
     }
 }

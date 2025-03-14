@@ -7,6 +7,11 @@ import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import cash.p.terminal.modules.balance.cex.CexAddress
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.ActiveAccountState
+import cash.p.terminal.wallet.CexType
+import cash.p.terminal.wallet.IAccountManager
 import io.horizontalsystems.core.entities.Blockchain
 import cash.p.terminal.wallet.entities.Coin
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class CexProviderManager(private val accountManager: cash.p.terminal.wallet.IAccountManager) {
+class CexProviderManager(private val accountManager: IAccountManager) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _cexProviderFlow = MutableStateFlow<ICexProvider?>(null)
@@ -27,14 +32,14 @@ class CexProviderManager(private val accountManager: cash.p.terminal.wallet.IAcc
     init {
         coroutineScope.launch {
             accountManager.activeAccountStateFlow.collect {
-                handleAccount((it as? cash.p.terminal.wallet.ActiveAccountState.ActiveAccount)?.account)
+                handleAccount((it as? ActiveAccountState.ActiveAccount)?.account)
             }
         }
     }
 
-    private fun handleAccount(account: cash.p.terminal.wallet.Account?) {
-        val cexProvider = when (val cexType = (account?.type as? cash.p.terminal.wallet.AccountType.Cex)?.cexType) {
-            is cash.p.terminal.wallet.CexType.Binance -> BinanceCexProvider(cexType.apiKey, cexType.secretKey, account)
+    private fun handleAccount(account: Account?) {
+        val cexProvider = when (val cexType = (account?.type as? AccountType.Cex)?.cexType) {
+            is CexType.Binance -> BinanceCexProvider(cexType.apiKey, cexType.secretKey, account)
             null -> null
         }
 
@@ -43,7 +48,7 @@ class CexProviderManager(private val accountManager: cash.p.terminal.wallet.IAcc
 }
 
 interface ICexProvider {
-    val account: cash.p.terminal.wallet.Account
+    val account: Account
 
     suspend fun getAssets(): List<CexAssetRaw>
     suspend fun getAddress(assetId: String, networkId: String?): CexAddress
@@ -152,7 +157,7 @@ data class CexWithdrawNetwork(
     val networkName get() = blockchain?.name ?: name
 }
 
-class BinanceCexProvider(apiKey: String, secretKey: String, override val account: cash.p.terminal.wallet.Account) : ICexProvider {
+class BinanceCexProvider(apiKey: String, secretKey: String, override val account: Account) : ICexProvider {
     private val client = SpotClientImpl(apiKey, secretKey)
     private val wallet = client.createWallet()
     private val gson = Gson()
@@ -366,6 +371,7 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         "LRC" to "loopring",
         "LSK" to "lisk",
         "LTC" to "litecoin",
+        "DOGE" to "dogecoin",
         "LTO" to "lto-network",
         "LUNA" to "terra-luna-2",
         "MAGIC" to "magic",
@@ -565,6 +571,7 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         "FIL" to "filecoin",
         "FLOW" to "flow",
         "LTC" to "litecoin",
+        "DOGE" to "dogecoin",
         "XRP" to "ripple",
         "ZEC" to "zcash",
     )

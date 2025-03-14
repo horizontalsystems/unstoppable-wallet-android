@@ -85,6 +85,7 @@ val BlockchainType.title: String
         BlockchainType.BitcoinCash -> "Bitcoin Cash"
         BlockchainType.ECash -> "Ecash"
         BlockchainType.Litecoin -> "Litecoin"
+        BlockchainType.Dogecoin -> "Doge"
         BlockchainType.Dash -> "Dash"
         BlockchainType.Zcash -> "Zcash"
         BlockchainType.Ethereum -> "Ethereum"

@@ -31,6 +31,7 @@ import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +73,7 @@ class SwapConfirmViewModel(
     private var amountOutMin: BigDecimal? = null
     private var quoteFields: List<DataField> = listOf()
     private var criticalError: String? = null
+    private var isAdvancedSettingsAvailable: Boolean = tokenIn.blockchainType != BlockchainType.Dogecoin
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -202,7 +204,8 @@ class SwapConfirmViewModel(
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
-            criticalError = criticalError
+            criticalError = criticalError,
+            isAdvancedSettingsAvailable = isAdvancedSettingsAvailable
         )
     }
 
@@ -368,5 +371,6 @@ data class SwapConfirmUiState(
     val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
-    val criticalError: String? = null
+    val criticalError: String? = null,
+    var isAdvancedSettingsAvailable: Boolean
 )
