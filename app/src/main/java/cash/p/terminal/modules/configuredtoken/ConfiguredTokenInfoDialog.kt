@@ -39,6 +39,7 @@ import cash.p.terminal.ui.extensions.BottomSheetHeaderMultiline
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.wallet.Token
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
@@ -148,7 +149,7 @@ private fun ContractInfo(tokenInfoType: ConfiguredTokenInfoType.Contract) {
         ) {
             Image(
                 modifier = Modifier.size(32.dp),
-                painter = rememberAsyncImagePainter(
+                painter = rememberAsyncImagePainterWithFallback(
                     model = tokenInfoType.platformImageUrl,
                     error = painterResource(R.drawable.ic_platform_placeholder_32)
                 ),

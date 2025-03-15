@@ -44,6 +44,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 
 @Composable
 internal fun BtcBlockchainSettingsScreen(
@@ -65,7 +66,7 @@ internal fun BtcBlockchainSettingsScreen(
                 title = uiState.title,
                 navigationIcon = {
                     Image(
-                        painter = rememberAsyncImagePainter(
+                        painter = rememberAsyncImagePainterWithFallback(
                             model = uiState.blockchainIconUrl,
                             error = painterResource(R.drawable.ic_platform_placeholder_32)
                         ),
@@ -184,7 +185,7 @@ internal fun BlockchainSettingCell(
                     .size(32.dp),
                 painter = when (icon) {
                     is BlockchainSettingsIcon.ApiIcon -> painterResource(icon.resId)
-                    is BlockchainSettingsIcon.BlockchainIcon -> rememberAsyncImagePainter(
+                    is BlockchainSettingsIcon.BlockchainIcon -> rememberAsyncImagePainterWithFallback(
                         model = icon.url,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     )

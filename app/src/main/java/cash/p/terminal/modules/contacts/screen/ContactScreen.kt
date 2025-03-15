@@ -60,6 +60,7 @@ import cash.p.terminal.ui_compose.components.body_lucian
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.imageUrl
@@ -364,7 +365,7 @@ private fun ContactAddress(
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp),
-            painter = rememberAsyncImagePainter(
+            painter = rememberAsyncImagePainterWithFallback(
                 model = addressViewItem.blockchain.type.imageUrl,
                 error = painterResource(R.drawable.ic_platform_placeholder_32)
             ),

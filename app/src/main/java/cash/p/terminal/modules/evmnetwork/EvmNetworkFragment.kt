@@ -69,6 +69,7 @@ import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.imageUrl
@@ -133,7 +134,7 @@ private fun EvmNetworkScreen(
                 title = viewModel.title,
                 navigationIcon = {
                     Image(
-                        painter = rememberAsyncImagePainter(
+                        painter = rememberAsyncImagePainterWithFallback(
                             model = viewModel.blockchain.type.imageUrl,
                             error = painterResource(R.drawable.ic_platform_placeholder_32)
                         ),

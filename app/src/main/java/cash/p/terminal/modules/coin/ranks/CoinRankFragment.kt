@@ -64,6 +64,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.captionSB_grey
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 
 class CoinRankFragment : BaseComposeFragment() {
 
@@ -232,7 +233,7 @@ private fun CoinRankCell(
                 text = rank
             )
             Image(
-                painter = rememberAsyncImagePainter(
+                painter = rememberAsyncImagePainterWithFallback(
                     model = iconUrl,
                     error = painterResource(R.drawable.coin_placeholder)
                 ),

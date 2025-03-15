@@ -47,6 +47,7 @@ import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClea
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.entities.FullCoin
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import kotlinx.coroutines.launch
 
 @Composable
@@ -168,7 +169,7 @@ fun CoinMarketCell(
     ) {
         if(iconUrl.isNotEmpty()) {
             Image(
-                painter = rememberAsyncImagePainter(
+                painter = rememberAsyncImagePainterWithFallback(
                     model = iconUrl,
                     error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),

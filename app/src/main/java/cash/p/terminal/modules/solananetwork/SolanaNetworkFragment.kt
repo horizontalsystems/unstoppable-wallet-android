@@ -34,6 +34,7 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.imageUrl
 
 class SolanaNetworkFragment : BaseComposeFragment() {
@@ -68,7 +69,7 @@ private fun SolanaNetworkScreen(
                 title = viewModel.title,
                 navigationIcon = {
                     Image(
-                        painter = rememberAsyncImagePainter(
+                        painter = rememberAsyncImagePainterWithFallback(
                             model = viewModel.blockchainType.imageUrl,
                             error = painterResource(R.drawable.ic_platform_placeholder_32)
                         ),

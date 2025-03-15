@@ -25,6 +25,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.ui_compose.components.CellSingleLineClear
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.RowUniversal
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.imageUrl
 
 @Preview
@@ -70,7 +71,7 @@ fun Contracts(
             ) {
                 Image(
                     modifier = Modifier.size(32.dp),
-                    painter = rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainterWithFallback(
                         model = contractInfo.imgUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),

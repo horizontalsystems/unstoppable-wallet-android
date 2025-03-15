@@ -34,6 +34,7 @@ import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.imageUrl
 
@@ -103,7 +104,7 @@ private fun BlockchainCell(
             val blockchain = filterItem.item
             if (blockchain != null) {
                 Image(
-                    painter = rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainterWithFallback(
                         model = blockchain.type.imageUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),

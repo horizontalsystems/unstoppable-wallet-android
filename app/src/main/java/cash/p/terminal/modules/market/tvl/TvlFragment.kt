@@ -58,6 +58,7 @@ import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui.compose.hsRememberLazyListState
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
@@ -265,7 +266,7 @@ class TvlFragment : BaseComposeFragment() {
             borderBottom = true
         ) {
             Image(
-                painter = rememberAsyncImagePainter(
+                painter = rememberAsyncImagePainterWithFallback(
                     model = iconUrl,
                     error = painterResource(
                         iconPlaceholder ?: R.drawable.ic_platform_placeholder_24

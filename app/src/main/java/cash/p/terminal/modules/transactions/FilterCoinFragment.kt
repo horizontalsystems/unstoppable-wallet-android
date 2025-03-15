@@ -40,6 +40,7 @@ import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.badge
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 
 class FilterCoinFragment : BaseComposeFragment() {
 
@@ -94,7 +95,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                 val token = it.item?.token
                                 if (token != null) {
                                     Image(
-                                        painter = rememberAsyncImagePainter(
+                                        painter = rememberAsyncImagePainterWithFallback(
                                             model = token.coin.imageUrl,
                                             error = painterResource(token.iconPlaceholder)
                                         ),

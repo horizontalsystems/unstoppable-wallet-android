@@ -26,6 +26,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 
 @Composable
 fun TokenVariants(
@@ -51,7 +52,7 @@ fun TokenVariants(
             ) {
                 Image(
                     modifier = Modifier.size(32.dp),
-                    painter = rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainterWithFallback(
                         model = tokenVariant.imgUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),

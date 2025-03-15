@@ -31,6 +31,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.entities.FullCoin
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 
@@ -101,7 +102,7 @@ fun NetworkCell(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .size(32.dp),
-            painter = rememberAsyncImagePainter(
+            painter = rememberAsyncImagePainterWithFallback(
                 model = imageUrl,
                 error = painterResource(R.drawable.ic_platform_placeholder_32)
             ),

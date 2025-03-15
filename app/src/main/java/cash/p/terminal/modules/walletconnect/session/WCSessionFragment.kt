@@ -47,6 +47,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.findNavController
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.helpers.HudHelper
 
 class WCSessionFragment : BaseComposeFragment() {
@@ -139,7 +140,7 @@ private fun ColumnScope.WCSessionListContent(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(RoundedCornerShape(15.dp)),
-                painter = rememberAsyncImagePainter(
+                painter = rememberAsyncImagePainterWithFallback(
                     model = uiState.peerMeta?.icon,
                     error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),

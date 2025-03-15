@@ -42,6 +42,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import kotlinx.coroutines.launch
 
 @Composable
@@ -109,7 +110,7 @@ private fun ContractBottomSheet(
             ) {
                 Image(
                     modifier = Modifier.size(32.dp),
-                    painter = rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainterWithFallback(
                         model = contract.imgUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),
@@ -302,7 +303,7 @@ fun NftEvent(
     ) {
         iconUrl?.let {
             Image(
-                painter = rememberAsyncImagePainter(
+                painter = rememberAsyncImagePainterWithFallback(
                     model = iconUrl,
                     error = painterResource(R.drawable.coin_placeholder)
                 ),

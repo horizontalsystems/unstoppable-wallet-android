@@ -82,6 +82,7 @@ import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
@@ -312,7 +313,7 @@ fun ZcashAppBar(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(24.dp),
-                    painter = rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainterWithFallback(
                         model = BlockchainType.Zcash.imageUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),

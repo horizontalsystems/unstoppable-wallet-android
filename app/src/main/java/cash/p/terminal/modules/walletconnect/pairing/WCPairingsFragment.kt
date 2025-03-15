@@ -37,6 +37,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.body_lucian
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 
 class WCPairingsFragment : BaseComposeFragment() {
 
@@ -125,7 +126,7 @@ fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
             modifier = Modifier
                 .size(32.dp)
                 .clip(RoundedCornerShape(8.dp)),
-            painter = rememberAsyncImagePainter(
+            painter = rememberAsyncImagePainterWithFallback(
                 model = pairing.icon,
                 error = painterResource(R.drawable.ic_platform_placeholder_24)
             ),
