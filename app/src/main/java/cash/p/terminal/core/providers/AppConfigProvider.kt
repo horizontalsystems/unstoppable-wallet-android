@@ -155,7 +155,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.Fantom to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.Ton to "UQCYTBH7n8OnQ6BgOfdkNRWF7socLJb9U-JMRcoz3UpL_0V6",
             BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2"
-        ).toList().sortedBy { (key, _) -> key.order }.toMap()
+        ).toList().sortedBy { it.first.uid }.toMap()
     }
 
 }
