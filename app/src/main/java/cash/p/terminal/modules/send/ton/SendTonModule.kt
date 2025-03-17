@@ -7,13 +7,14 @@ import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.isNative
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 
 object SendTonModule {
     class Factory(
-        private val wallet: cash.p.terminal.wallet.Wallet,
+        private val wallet: Wallet,
         private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
@@ -37,17 +38,17 @@ object SendTonModule {
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
 
                     SendTonViewModel(
-                        wallet,
-                        wallet.token,
-                        feeToken,
-                        adapter,
-                        xRateService,
-                        amountService,
-                        addressService,
-                        feeService,
-                        coinMaxAllowedDecimals,
-                        App.contactsRepository,
-                        predefinedAddress == null
+                        wallet = wallet,
+                        sendToken = wallet.token,
+                        feeToken = feeToken,
+                        adapter = adapter,
+                        xRateService = xRateService,
+                        amountService = amountService,
+                        addressService = addressService,
+                        feeService = feeService,
+                        coinMaxAllowedDecimals = coinMaxAllowedDecimals,
+                        contactsRepo = App.contactsRepository,
+                        showAddressInput = predefinedAddress == null
                     ) as T
                 }
 

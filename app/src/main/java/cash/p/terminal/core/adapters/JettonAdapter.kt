@@ -5,10 +5,10 @@ import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,7 @@ import java.math.BigDecimal
 class JettonAdapter(
     tonKitWrapper: TonKitWrapper,
     addressStr: String,
-    wallet: cash.p.terminal.wallet.Wallet,
+    wallet: Wallet,
 ) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter {
 
     private val address = Address.parse(addressStr)
@@ -84,10 +84,10 @@ class JettonAdapter(
         memo: String?,
     ): BigDecimal {
         val estimateFee = tonKit.estimateFee(
-            jettonBalance?.walletAddress!!,
-            address,
-            amount.movePointRight(decimals).toBigInteger(),
-            memo
+            jettonWallet = jettonBalance?.walletAddress!!,
+            recipient = address,
+            amount = amount.movePointRight(decimals).toBigInteger(),
+            comment = memo
         )
 
         return estimateFee.toBigDecimal(decimals).stripTrailingZeros()

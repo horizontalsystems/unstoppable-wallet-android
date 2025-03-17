@@ -2,6 +2,7 @@ package cash.p.terminal.modules.send.ton
 
 import cash.p.terminal.core.ISendTonAdapter
 import io.horizontalsystems.tonkit.FriendlyAddress
+import io.tonapi.infrastructure.ClientException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,11 +21,11 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : Closeable {
     private var address: FriendlyAddress? = null
     private var amount: BigDecimal? = null
 
-    private var fee: BigDecimal? = null
+    private var fee: FeeStatus? = null
     private var inProgress = false
     private val _stateFlow = MutableStateFlow(
         State(
-            fee = fee,
+            feeStatus = fee,
             inProgress = inProgress
         )
     )
@@ -46,8 +47,12 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : Closeable {
                 delay(1000)
                 ensureActive()
                 try {
-                    fee = adapter.estimateFee(amount, address, memo)
+                    fee = FeeStatus.Success(adapter.estimateFee(amount, address, memo))
                 } catch (e: Throwable) {
+                    if (e is ClientException) {
+                        fee = FeeStatus.NoEnoughBalance
+                    }
+                    e.printStackTrace()
                     delay(500)
                     refreshFeeAndEmitState()
                 }
@@ -81,7 +86,7 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : Closeable {
     private fun emitState() {
         _stateFlow.update {
             State(
-                fee = fee,
+                feeStatus = fee,
                 inProgress = inProgress
             )
         }
@@ -89,7 +94,7 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : Closeable {
 
 
     data class State(
-        val fee: BigDecimal?,
+        val feeStatus: FeeStatus?,
         val inProgress: Boolean
     )
 

@@ -67,6 +67,7 @@
     <string name="Button_Share">Share</string>
     <string name="Button_Apply">Apply</string>
     <string name="Button_SetAmount">Set Amount</string>
+    <string name="not_enough_ton_for_fee">Not enough TON for fee</string>
 
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>

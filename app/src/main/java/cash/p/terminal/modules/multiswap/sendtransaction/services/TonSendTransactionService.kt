@@ -20,6 +20,7 @@ import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.ton.FeeStatus
 import cash.p.terminal.modules.send.ton.SendTonAddressService
 import cash.p.terminal.modules.send.ton.SendTonAmountService
 import cash.p.terminal.modules.send.ton.SendTonFeeService
@@ -96,15 +97,15 @@ class TonSendTransactionService(
 
     private fun handleUpdatedFeeState(feeState: SendTonFeeService.State) {
         this.feeState = feeState
-        if(feeState.fee != null) {
-            val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(feeToken, feeState.fee))
+        if(feeState.feeStatus is FeeStatus.Success) {
+            val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(feeToken, feeState.feeStatus.fee))
             val secondaryAmountInfo = rate?.let {
-                SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * feeState.fee))
+                SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * feeState.feeStatus.fee))
             }
 
             feeAmountData = SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
         }
-        loading = feeState.fee == null
+        loading = feeState.feeStatus == null
         emitState()
     }
 

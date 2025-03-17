@@ -31,6 +31,7 @@ import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
@@ -59,7 +60,7 @@ fun SendTonScreen(
     val amountUnique = paymentAddressViewModel.amountUnique
 
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {

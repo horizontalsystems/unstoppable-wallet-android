@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import kotlin.math.abs
 
 class SendTonViewModel(
     val wallet: Wallet,
@@ -41,6 +42,14 @@ class SendTonViewModel(
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+
+    // Calculate the decimal rate between the send token and the fee token
+    private val decimalDiff = sendToken.decimals - feeToken.decimals
+    private val decimalRate = if(decimalDiff < 0) {
+        1.toBigDecimal().divide(BigDecimal.TEN.pow(abs(decimalDiff)))
+    } else {
+        BigDecimal.TEN.pow(decimalDiff)
+    }
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
@@ -88,11 +97,15 @@ class SendTonViewModel(
 
     override fun createState() = SendTonUiState(
         availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
+        amountCaution = amountState.amountCaution
+            ?: if(feeState.feeStatus is FeeStatus.NoEnoughBalance) { HSCaution(
+                TranslatableString.ResString(R.string.not_enough_ton_for_fee),
+                HSCaution.Type.Error
+            ) } else { null },
         addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        canBeSend = (feeState.feeStatus is FeeStatus.Success) && amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
-        fee = feeState.fee,
+        fee = (feeState.feeStatus as? FeeStatus.Success)?.fee?.multiply(decimalRate),
         feeInProgress = feeState.inProgress,
     )
 
@@ -112,7 +125,7 @@ class SendTonViewModel(
         ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
-            fee = feeState.fee!!,
+            fee = (feeState.feeStatus as? FeeStatus.Success)?.fee?.multiply(decimalRate) ?: BigDecimal.ZERO,
             address = address,
             contact = contact,
             coin = wallet.coin,
