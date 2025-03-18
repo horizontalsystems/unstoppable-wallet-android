@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.DropDownCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
@@ -93,8 +94,10 @@ fun TonConnectNewScreen(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
                         onClick = {
-                            viewModel.connect()
-                            onResult.invoke(true)
+                            navController.authorizedAction {
+                                viewModel.connect()
+                                onResult.invoke(true)
+                            }
                         },
                         enabled = uiState.connectEnabled
                     )
