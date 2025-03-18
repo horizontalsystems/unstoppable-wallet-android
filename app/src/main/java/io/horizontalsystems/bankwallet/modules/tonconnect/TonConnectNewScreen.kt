@@ -47,7 +47,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 @Composable
-fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequestEntity) {
+fun TonConnectNewScreen(
+    navController: NavController,
+    requestEntity: DAppRequestEntity,
+    onResult: (Boolean) -> Unit,
+) {
     val viewModel = viewModel<TonConnectNewViewModel>(initializer = {
         TonConnectNewViewModel(requestEntity)
     })
@@ -88,14 +92,20 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
-                        onClick = viewModel::connect,
+                        onClick = {
+                            viewModel.connect()
+                            onResult.invoke(true)
+                        },
                         enabled = uiState.connectEnabled
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Cancel),
-                        onClick = viewModel::reject
+                        onClick = {
+                            viewModel.reject()
+                            onResult.invoke(false)
+                        }
                     )
                 }
             }

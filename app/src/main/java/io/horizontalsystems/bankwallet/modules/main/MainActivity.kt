@@ -11,9 +11,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
 import io.horizontalsystems.core.hideKeyboard
 
 class MainActivity : BaseActivity() {
@@ -79,12 +81,31 @@ class MainActivity : BaseActivity() {
 
         viewModel.tcDappRequest.observe(this) { request ->
             if (request != null) {
-                navController.slideFromBottom(R.id.tcNewFragment, request)
+                navController.slideFromBottomForResult<TonConnectNewFragment.Result>(
+                    R.id.tcNewFragment,
+                    request.dAppRequest
+                ) { result ->
+                    if (request.closeAppOnResult) {
+                        if (result.approved) {
+                            //Need delay to get connected before closing activity
+                            closeAfterDelay()
+                        } else {
+                            finish()
+                        }
+                    }
+                }
                 viewModel.onTcDappRequestHandled()
             }
         }
 
         viewModel.setIntent(intent)
+    }
+
+    private fun closeAfterDelay() {
+        val handler = android.os.Handler()
+        handler.postDelayed({
+            finish()
+        }, 1000)
     }
 
     private fun validate() = try {
