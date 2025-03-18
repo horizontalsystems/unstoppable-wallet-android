@@ -19,7 +19,7 @@ class TonConnectManager(
     val transactionSigner = TonKit.getTransactionSigner(TonKit.getTonApi(Network.MainNet))
 
     val sendRequestFlow by kit::sendRequestFlow
-    private val _dappRequestFlow = MutableSharedFlow<DAppRequestEntity>()
+    private val _dappRequestFlow = MutableSharedFlow<DAppRequestEntityWrapper>()
     val dappRequestFlow
         get() = _dappRequestFlow.asSharedFlow()
 
@@ -27,12 +27,17 @@ class TonConnectManager(
         kit.start()
     }
 
-    suspend fun handle(scannedText: String) {
+    suspend fun handle(scannedText: String, closeAppOnResult: Boolean = false) {
         try {
             val dAppRequest = kit.readData(scannedText)
-            _dappRequestFlow.emit(dAppRequest)
+            _dappRequestFlow.emit(DAppRequestEntityWrapper(dAppRequest, closeAppOnResult))
         } catch (e: Throwable) {
 
         }
     }
 }
+
+data class DAppRequestEntityWrapper(
+    val dAppRequest: DAppRequestEntity,
+    val closeAppOnResult: Boolean
+)

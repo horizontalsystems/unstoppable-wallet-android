@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -24,7 +25,6 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
-import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
@@ -314,15 +314,6 @@ class MainViewModel(
                 }
             }
 
-            deeplinkString.startsWith("unstoppable.money:") ||
-            deeplinkString.startsWith("tc:") -> {
-                val v = deepLink.getQueryParameter("v")?.toIntOrNull()
-                if (v != null) {
-                    deeplinkPage = DeeplinkPage(R.id.tcListFragment, TonConnectMainFragment.Input(deeplinkString))
-                    tab = MainNavigation.Settings
-                }
-            }
-
             deeplinkString.startsWith("https://unstoppable.money/referral") -> {
                 val userId: String? = deepLink.getQueryParameter("userId")
                 val referralCode: String? = deepLink.getQueryParameter("referralCode")
@@ -385,6 +376,14 @@ class MainViewModel(
     }
 
     fun handleDeepLink(uri: Uri) {
+        val deeplinkString = uri.toString()
+        if (deeplinkString.startsWith("unstoppable.money:") || deeplinkString.startsWith("tc:")) {
+            viewModelScope.launch {
+                App.tonConnectManager.handle(uri.toString(), true)
+            }
+            return
+        }
+
         val (tab, deeplinkPageData) = getNavigationDataForDeeplink(uri)
         deeplinkPage = deeplinkPageData
         currentMainTab = tab
