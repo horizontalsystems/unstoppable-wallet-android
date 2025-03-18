@@ -6,11 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.DAppRequestEntityWrapper
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
@@ -34,7 +34,7 @@ class MainActivityViewModel(
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
     val tcSendRequest = MutableLiveData<SignTransaction?>()
-    val tcDappRequest = MutableLiveData<DAppRequestEntity?>()
+    val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
 
     private val _contentHidden = MutableLiveData(true)

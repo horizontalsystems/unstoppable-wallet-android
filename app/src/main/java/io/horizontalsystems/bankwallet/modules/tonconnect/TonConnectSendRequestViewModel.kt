@@ -178,10 +178,7 @@ class TonConnectSendRequestViewModel(
 
     private fun validUntilIsInvalid(sendRequestEntity: SendRequestEntity): Boolean {
         return try {
-            val result = sendRequestEntity.validUntil
-            if (result == 0L) {
-                throw IllegalArgumentException("Invalid validUntil")
-            }
+            sendRequestEntity.validUntil
             false
         } catch (e: IllegalArgumentException) {
             true
