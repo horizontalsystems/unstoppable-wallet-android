@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.pin.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +30,9 @@ fun PinConfirm(
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         topBar = {
             AppBar(
                 title = stringResource(R.string.Unlock_Title),
