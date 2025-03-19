@@ -52,7 +52,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.AccountViewItem
-import cash.p.terminal.wallet.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceUiState
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
@@ -64,23 +63,24 @@ import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.ui_compose.components.HSSwipeRefresh
+import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
+import cash.p.terminal.ui.compose.components.DoubleText
+import cash.p.terminal.ui.compose.components.SelectorDialogCompose
+import cash.p.terminal.ui.compose.components.SelectorItem
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
-import cash.p.terminal.ui.compose.components.DoubleText
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui_compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.SelectorDialogCompose
-import cash.p.terminal.ui.compose.components.SelectorItem
-import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.BalanceSortType
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -95,10 +95,10 @@ fun NoteWarning(
         text = text,
         title = stringResource(id = R.string.AccountRecovery_Note),
         icon = R.drawable.ic_attention_20,
-        borderColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow20,
-        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
-        iconColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
+        borderColor = ComposeAppTheme.colors.jacob,
+        backgroundColor = ComposeAppTheme.colors.yellow20,
+        textColor = ComposeAppTheme.colors.jacob,
+        iconColor = ComposeAppTheme.colors.jacob,
         onClose = onClose
     )
 }
@@ -114,10 +114,10 @@ fun NoteError(
         text = text,
         title = stringResource(id = R.string.AccountRecovery_Note),
         icon = R.drawable.ic_attention_20,
-        borderColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red20,
-        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
-        iconColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
+        borderColor = ComposeAppTheme.colors.lucian,
+        backgroundColor = ComposeAppTheme.colors.red20,
+        textColor = ComposeAppTheme.colors.lucian,
+        iconColor = ComposeAppTheme.colors.lucian
     )
 }
 
@@ -180,6 +180,7 @@ fun Note(
 fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
+    onItemClick: (BalanceViewItem2) -> Unit,
     onBalanceClick: (BalanceViewItem2) -> Unit,
     accountViewItem: AccountViewItem,
     navController: NavController,
@@ -197,17 +198,6 @@ fun BalanceItems(
     val context = LocalContext.current
     val view = LocalView.current
     var revealedCardId by remember { mutableStateOf<Int?>(null) }
-
-    val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
-        {
-            navController.slideFromRight(
-                R.id.tokenBalanceFragment,
-                it.wallet
-            )
-
-            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
-        }
-    }
 
     val onClickSyncError: (BalanceViewItem2) -> Unit = remember {
         {
@@ -275,32 +265,43 @@ fun BalanceItems(
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
 
-                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.SendTokenList))
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.SendTokenList)
+                                )
                             }
                         )
                         ButtonPrimaryDefault(
                             modifier = Modifier.weight(1f),
                             title = stringResource(R.string.Balance_Receive),
                             onClick = {
-                                when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
+                                when (val receiveAllowedState =
+                                    viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
                                         navController.slideFromRight(R.id.receiveFragment)
 
-                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ReceiveTokenList))
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
+                                        )
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
                                         val account = receiveAllowedState.account
-                                        val text = cash.p.terminal.strings.helpers.Translator.getString(
-                                            R.string.Balance_Receive_BackupRequired_Description,
-                                            account.name
-                                        )
+                                        val text =
+                                            cash.p.terminal.strings.helpers.Translator.getString(
+                                                R.string.Balance_Receive_BackupRequired_Description,
+                                                account.name
+                                            )
                                         navController.slideFromBottom(
                                             R.id.backupRequiredDialog,
                                             BackupRequiredDialog.Input(account, text)
                                         )
 
-                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.BackupRequired))
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.BackupRequired)
+                                        )
                                     }
 
                                     null -> Unit
@@ -314,7 +315,10 @@ fun BalanceItems(
                                 onClick = {
                                     navController.slideFromRight(R.id.multiswap)
 
-                                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Stacking))
+                                    stat(
+                                        page = StatPage.Balance,
+                                        event = StatEvent.Open(StatPage.Stacking)
+                                    )
                                 }
                             )
                         }
@@ -323,7 +327,10 @@ fun BalanceItems(
                             contentDescription = stringResource(R.string.stacking),
                             onClick = {
                                 navController.slideFromRight(R.id.stacking)
-                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Stacking))
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.Stacking)
+                                )
                             }
                         )
                     }
@@ -386,7 +393,10 @@ fun BalanceItems(
                         onClick = {
                             navController.slideFromRight(R.id.manageWalletsFragment)
 
-                            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.CoinManager))
+                            stat(
+                                page = StatPage.Balance,
+                                event = StatEvent.Open(StatPage.CoinManager)
+                            )
                         }
                     )
 
@@ -399,7 +409,12 @@ fun BalanceItems(
                     HeaderNote.None -> Unit
                     HeaderNote.NonStandardAccount -> {
                         NoteError(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                            modifier = Modifier.padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 12.dp,
+                                bottom = 24.dp
+                            ),
                             text = stringResource(R.string.AccountRecovery_MigrationRequired),
                             onClick = {
                                 FaqManager.showFaqPage(
@@ -412,7 +427,12 @@ fun BalanceItems(
 
                     HeaderNote.NonRecommendedAccount -> {
                         NoteWarning(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                            modifier = Modifier.padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 12.dp,
+                                bottom = 24.dp
+                            ),
                             text = stringResource(R.string.AccountRecovery_MigrationRecommended),
                             onClick = {
                                 FaqManager.showFaqPage(
@@ -451,7 +471,7 @@ fun BalanceItems(
                             revealedCardId = null
                         },
                         onClick = {
-                            navigateToTokenBalance.invoke(item)
+                            onItemClick(item)
                         },
                         onBalanceClick = {
                             onBalanceClick(item)

@@ -42,6 +42,7 @@ import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
+import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -50,6 +51,7 @@ import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -185,6 +187,17 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
         ) { paddingValues ->
             val uiState = viewModel.uiState
 
+            val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
+                {
+                    navController.slideFromRight(
+                        R.id.tokenBalanceFragment,
+                        it.wallet
+                    )
+
+                    stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
+                }
+            }
+
             Crossfade(
                 targetState = uiState.viewState,
                 modifier = Modifier
@@ -198,7 +211,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                         BalanceItems(
                             balanceViewItems = balanceViewItems,
                             viewModel = viewModel,
-                            onBalanceClick = viewModel::onBalanceClick,
+                            onItemClick = navigateToTokenBalance,
+                            onBalanceClick = {
+                                if(viewModel.balanceHidden) {
+                                    viewModel.onBalanceClick(it)
+                                } else {
+                                    navigateToTokenBalance(it)
+                                }
+                            },
                             accountViewItem = accountViewItem,
                             navController = navController,
                             uiState = uiState,

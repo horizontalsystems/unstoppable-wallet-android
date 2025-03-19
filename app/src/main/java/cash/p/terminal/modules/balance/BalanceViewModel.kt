@@ -73,7 +73,7 @@ class BalanceViewModel(
 
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val accountManager: IAccountManager by inject(IAccountManager::class.java)
-    private val itemsBalanceHidden = mutableSetOf<Wallet>()
+    private val itemsBalanceHidden by lazy { mutableSetOf<Wallet>() }
 
     private val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -96,8 +96,7 @@ class BalanceViewModel(
                         )
                     })
                     detectPirateAndCosanta(items)
-                    if (balanceHidden && items != null) {
-                        itemsBalanceHidden.clear()
+                    if (balanceHidden && items != null && balanceViewItems.isEmpty()) {
                         itemsBalanceHidden.addAll(items.map { it.wallet })
                     }
                     refreshViewItems(items)
@@ -106,6 +105,9 @@ class BalanceViewModel(
 
         viewModelScope.launch {
             totalBalance.stateFlow.collect {
+                if (it is TotalService.State.Hidden) {
+                    itemsBalanceHidden.addAll(balanceViewItems.map { it.wallet })
+                }
                 refreshViewItems(service.balanceItemsFlow.value)
             }
         }
