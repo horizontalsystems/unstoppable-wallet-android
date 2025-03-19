@@ -832,6 +832,7 @@
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
+    <string name="telegram_link">https://t.me/PirateCash_RUS</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Следите за нами</string>

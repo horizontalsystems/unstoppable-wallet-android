@@ -22,14 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class ContactOptionsDialog : BaseComposableBottomSheetFragment() {
 
@@ -59,10 +60,10 @@ private fun ContactOptionsScreen(
     onCloseClick: () -> Unit
 ) {
     val context = LocalContext.current
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_mail_24),
-            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.SettingsContact_Title),
             onCloseClick = onCloseClick
         ) {
@@ -83,7 +84,7 @@ private fun ContactOptionsScreen(
                     .padding(horizontal = 24.dp),
                 title = stringResource(R.string.Settings_Contact_ViaTelegram),
                 onClick = {
-                    navController.slideFromRight(R.id.personalSupportFragment)
+                    LinkHelper.openLinkInAppBrowser(context, App.instance.getString(R.string.telegram_link))
                 }
             )
             VSpacer(24.dp)

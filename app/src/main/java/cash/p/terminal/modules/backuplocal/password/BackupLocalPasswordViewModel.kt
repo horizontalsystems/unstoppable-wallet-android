@@ -8,9 +8,9 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
+import cash.p.terminal.wallet.IAccountManager
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.PassphraseValidator
-import cash.p.terminal.wallet.entities.PasswordError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ sealed class BackupType {
 class BackupLocalPasswordViewModel(
     private val type: BackupType,
     private val passphraseValidator: PassphraseValidator,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
     private val backupProvider: BackupProvider,
 ) : ViewModelUiState<BackupLocalPasswordModule.UiState>() {
 
@@ -182,16 +182,6 @@ class BackupLocalPasswordViewModel(
     private fun validatePassword() {
         passphraseState = null
         passphraseConfirmState = null
-
-        try {
-            passphraseValidator.validatePassword(passphrase)
-        } catch (e: PasswordError) {
-            passphraseState = DataState.Error(
-                Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.LocalBackup_PasswordInvalid))
-            )
-            emitState()
-            return
-        }
 
         if (passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
