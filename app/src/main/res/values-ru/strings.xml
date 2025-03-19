@@ -748,6 +748,7 @@
     <string name="Settings_Donate_GetAddress">Donation Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
     <string name="Settings_Donate_OrSelectCoinToDonate">Or select a coin to donate</string>
+    <string name="Settings_CryptoQuiz">Crypto Quiz</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
