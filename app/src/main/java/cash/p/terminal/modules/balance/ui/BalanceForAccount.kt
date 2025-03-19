@@ -196,12 +196,13 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     ViewState.Success -> {
                         val balanceViewItems = uiState.balanceViewItems
                         BalanceItems(
-                            balanceViewItems,
-                            viewModel,
-                            accountViewItem,
-                            navController,
-                            uiState,
-                            viewModel.totalUiState,
+                            balanceViewItems = balanceViewItems,
+                            viewModel = viewModel,
+                            onBalanceClick = viewModel::onBalanceClick,
+                            accountViewItem = accountViewItem,
+                            navController = navController,
+                            uiState = uiState,
+                            totalState = viewModel.totalUiState,
                         )
                     }
 

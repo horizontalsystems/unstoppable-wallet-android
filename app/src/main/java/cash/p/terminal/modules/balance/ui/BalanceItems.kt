@@ -180,6 +180,7 @@ fun Note(
 fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
+    onBalanceClick: (BalanceViewItem2) -> Unit,
     accountViewItem: AccountViewItem,
     navController: NavController,
     uiState: BalanceUiState,
@@ -451,6 +452,9 @@ fun BalanceItems(
                         },
                         onClick = {
                             navigateToTokenBalance.invoke(item)
+                        },
+                        onBalanceClick = {
+                            onBalanceClick(item)
                         },
                         onClickSyncError = {
                             onClickSyncError.invoke(item)

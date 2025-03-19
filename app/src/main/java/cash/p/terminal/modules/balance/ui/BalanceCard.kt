@@ -57,6 +57,7 @@ fun BalanceCardSwipable(
     onReveal: (Int) -> Unit,
     onConceal: () -> Unit,
     onClick: () -> Unit,
+    onBalanceClick: () -> Unit,
     onClickSyncError: () -> Unit,
     onDisable: () -> Unit,
 ) {
@@ -79,7 +80,6 @@ fun BalanceCardSwipable(
                 )
             }
         )
-
         DraggableCardSimple(
             key = viewItem.wallet,
             isRevealed = revealed,
@@ -90,7 +90,8 @@ fun BalanceCardSwipable(
                 BalanceCard(
                     onClick = onClick,
                     onClickSyncError = onClickSyncError,
-                    viewItem = viewItem
+                    viewItem = viewItem,
+                    onBalanceClick = onBalanceClick
                 )
             }
         )
@@ -101,6 +102,7 @@ fun BalanceCardSwipable(
 fun BalanceCard(
     onClick: () -> Unit,
     onClickSyncError: () -> Unit,
+    onBalanceClick: (() -> Unit)? = null,
     viewItem: BalanceViewItem2
 ) {
     Column(
@@ -118,7 +120,8 @@ fun BalanceCard(
         BalanceCardInner(
             viewItem = viewItem,
             type = BalanceCardSubtitleType.Rate,
-            onClickSyncError = onClickSyncError
+            onClickSyncError = onClickSyncError,
+            onBalanceClick = onBalanceClick
         )
     }
 }
@@ -131,9 +134,10 @@ enum class BalanceCardSubtitleType {
 fun BalanceCardInner(
     viewItem: BalanceViewItem2,
     type: BalanceCardSubtitleType,
-    onClickSyncError: (() -> Unit)? = null
+    onClickSyncError: (() -> Unit)? = null,
+    onBalanceClick: (() -> Unit)? = null,
 ) {
-    CellMultilineClear(height = if (viewItem.stackingUnpaid == null) 64.dp else 112.dp) {
+    CellMultilineClear(height = if (viewItem.stackingUnpaid == null) 64.dp else 112.dp, onBalanceClick = onBalanceClick) {
         Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

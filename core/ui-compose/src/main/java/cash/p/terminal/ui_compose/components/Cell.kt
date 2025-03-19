@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
@@ -271,6 +273,7 @@ fun CellMultilineClear(
     borderBottom: Boolean = false,
     height: Dp = 60.dp,
     onClick: (() -> Unit)? = null,
+    onBalanceClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     val clickableModifier = when (onClick) {
@@ -303,6 +306,19 @@ fun CellMultilineClear(
         }
 
         content.invoke()
+        if (onBalanceClick != null) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .width(70.dp)
+                    .fillMaxHeight()
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = { onBalanceClick() }
+                    )
+            )
+        }
     }
 }
 
@@ -377,7 +393,7 @@ fun RowUniversal(
     verticalPadding: Dp = 12.dp,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     onClick: (() -> Unit)? = null,
-    minHeight : Dp = 24.dp,
+    minHeight: Dp = 24.dp,
     content: @Composable RowScope.() -> Unit,
 ) {
     val clickableModifier = when (onClick) {
