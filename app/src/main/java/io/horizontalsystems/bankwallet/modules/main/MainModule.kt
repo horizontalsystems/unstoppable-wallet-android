@@ -84,7 +84,6 @@ object MainModule {
         val deeplinkPage: DeeplinkPage?,
         val mainNavItems: List<NavigationViewItem>,
         val showRateAppDialog: Boolean,
-        val contentHidden: Boolean,
         val showWhatsNew: Boolean,
         val activeWallet: Account?,
         val torEnabled: Boolean,

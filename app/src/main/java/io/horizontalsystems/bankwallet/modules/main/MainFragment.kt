@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -248,7 +247,6 @@ private fun MainScreen(
                 }
             }
         }
-        HideContentBox(uiState.contentHidden)
     }
 
     if (uiState.showWhatsNew) {
@@ -314,19 +312,6 @@ private fun MainScreen(
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         viewModel.onResume()
     }
-}
-
-@Composable
-private fun HideContentBox(contentHidden: Boolean) {
-    val backgroundModifier = if (contentHidden) {
-        Modifier.background(ComposeAppTheme.colors.tyler)
-    } else {
-        Modifier
-    }
-    Box(
-        Modifier
-            .fillMaxSize()
-            .then(backgroundModifier))
 }
 
 @Composable

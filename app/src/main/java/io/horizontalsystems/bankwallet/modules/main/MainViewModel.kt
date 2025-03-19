@@ -85,7 +85,6 @@ class MainViewModel(
     private var deeplinkPage: DeeplinkPage? = null
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
-    private var contentHidden = pinComponent.isLocked
     private var showWhatsNew = false
     private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
@@ -158,7 +157,6 @@ class MainViewModel(
         deeplinkPage = deeplinkPage,
         mainNavItems = mainNavItems,
         showRateAppDialog = showRateAppDialog,
-        contentHidden = contentHidden,
         showWhatsNew = showWhatsNew,
         activeWallet = activeWallet,
         wcSupportState = wcSupportState,
@@ -186,8 +184,6 @@ class MainViewModel(
     }
 
     fun onResume() {
-        contentHidden = pinComponent.isLocked
-        emitState()
         viewModelScope.launch {
             if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
                 showWhatsNew()
