@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -23,19 +24,19 @@ import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.market.filtersresult.SignalButton
 import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListOrderable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.subscriptions.core.TradeSignals
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -135,11 +136,13 @@ fun MarketFavoritesScreen(
                                             turnedOn = uiState.showSignal,
                                             onToggle = {
                                                 if (it) {
-                                                    navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                                        R.id.marketSignalsFragment
-                                                    ) {
-                                                        if (it.enabled) {
-                                                            viewModel.showSignals()
+                                                    navController.paidAction(TradeSignals) {
+                                                        navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
+                                                            R.id.marketSignalsFragment
+                                                        ) {
+                                                            if (it.enabled) {
+                                                                viewModel.showSignals()
+                                                            }
                                                         }
                                                     }
                                                 } else {
@@ -194,21 +197,4 @@ fun MarketFavoritesScreen(
         )
     }
 
-}
-
-@Composable
-private fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
-    val title = stringResource(id = R.string.Market_Signals)
-    val onClick = { onToggle.invoke(!turnedOn) }
-    if (turnedOn) {
-        ButtonSecondaryYellow(
-            title = title,
-            onClick = onClick
-        )
-    } else {
-        ButtonSecondaryDefault(
-            title = title,
-            onClick = onClick
-        )
-    }
 }

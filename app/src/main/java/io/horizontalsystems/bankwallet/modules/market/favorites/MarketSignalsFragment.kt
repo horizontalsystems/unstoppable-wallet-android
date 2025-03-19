@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -37,7 +36,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.sectionItemBorder
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 
 class MarketSignalsFragment : BaseComposeFragment() {
@@ -130,10 +128,8 @@ fun MarketSignalsScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Market_Signal_TurnOn),
                     onClick = {
-                        navController.paidAction(TradeSignals) {
-                            navController.setNavigationResultX(MarketSignalsFragment.Result(true))
-                            navController.popBackStack()
-                        }
+                        navController.setNavigationResultX(MarketSignalsFragment.Result(true))
+                        navController.popBackStack()
                     }
                 )
             }

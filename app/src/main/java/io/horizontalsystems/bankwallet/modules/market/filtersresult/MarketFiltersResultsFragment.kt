@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -47,6 +48,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
+import io.horizontalsystems.subscriptions.core.TradeSignals
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
 
@@ -153,11 +155,13 @@ private fun SearchResultsScreen(
                                             turnedOn = uiState.showSignal,
                                             onToggle = {
                                                 if (it) {
-                                                    navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                                        R.id.marketSignalsFragment
-                                                    ) {
-                                                        if (it.enabled) {
-                                                            viewModel.showSignals()
+                                                    navController.paidAction(TradeSignals) {
+                                                        navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
+                                                            R.id.marketSignalsFragment
+                                                        ) {
+                                                            if (it.enabled) {
+                                                                viewModel.showSignals()
+                                                            }
                                                         }
                                                     }
                                                 } else {
@@ -196,7 +200,7 @@ private fun SearchResultsScreen(
 }
 
 @Composable
-private fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
+fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
     val title = stringResource(id = R.string.Market_Signals)
     val onClick = { onToggle.invoke(!turnedOn) }
     val buttonColors = if (turnedOn) {
