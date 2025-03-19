@@ -13,6 +13,8 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class PinComponent(
@@ -52,6 +54,10 @@ class PinComponent(
 
     override val pinSetFlowable: Flowable<Unit>
         get() = pinManager.pinSetSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val _isLockedFlow = MutableStateFlow(true)
+    override val isLockedFlowable: StateFlow<Boolean>
+        get() = _isLockedFlow
 
     override val isLocked: Boolean
         get() = appLockManager.isLocked && isPinSet
@@ -109,6 +115,8 @@ class PinComponent(
         val pinLevel = pinManager.getPinLevel(pin) ?: return false
 
         appLockManager.onUnlock()
+        _isLockedFlow.value = false
+
         userManager.setUserLevel(pinLevel)
 
         return true
@@ -125,6 +133,7 @@ class PinComponent(
 
     override fun lock() {
         appLockManager.lock()
+        _isLockedFlow.value = true
     }
 
     override fun updateLastExitDateBeforeRestart() {

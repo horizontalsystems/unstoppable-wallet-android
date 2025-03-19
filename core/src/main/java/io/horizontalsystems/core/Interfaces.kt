@@ -1,6 +1,7 @@
 package io.horizontalsystems.core
 
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 import javax.crypto.SecretKey
 
@@ -35,6 +36,7 @@ interface IPinComponent {
     val isPinSet: Boolean
     val isLocked: Boolean
     val pinSetFlowable: Flowable<Unit>
+    val isLockedFlowable: StateFlow<Boolean>
 
     fun willEnterForeground()
     fun didEnterBackground()

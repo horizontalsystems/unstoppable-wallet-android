@@ -14,6 +14,7 @@
         <item name="colorControlHighlight">#6E7899</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
+        <item name="android:statusBarColor">@color/transparent</item>
 
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
