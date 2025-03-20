@@ -181,7 +181,8 @@ class AdapterFactory(
                                 wallet.token.blockchainType
                             ),
                             addressSpecTyped = tokenType.type,
-                            localStorage = localStorage
+                            localStorage = localStorage,
+                            backgroundManager = backgroundManager
                         )
                     }
                     else -> null
@@ -228,7 +229,8 @@ class AdapterFactory(
                             wallet.token.blockchainType
                         ),
                         addressSpecTyped = null,
-                        localStorage = localStorage
+                        localStorage = localStorage,
+                        backgroundManager = backgroundManager
                     )
                 }
 
