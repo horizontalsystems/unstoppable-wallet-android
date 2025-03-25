@@ -1582,7 +1582,7 @@
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
-    <string name="typical_fee"><![CDATA[Typical fee < 0.001]]></string>
+    <string name="typical_fee"><![CDATA[Typical fee < 0.001 ZEC]]></string>
 
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Hour">1H</string>

@@ -60,6 +60,7 @@
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Apply">Применить</string>
     <string name="Button_SetAmount">Установить сумму</string>
+    <string name="not_enough_ton_for_fee">Недостаточно TON для оплаты комиссии</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -329,6 +330,7 @@
     <string name="Balance_Withdraw">Вывод средств</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="shield_funds">Переместить на защищённый адрес</string>
     <string name="Balance_Swap">Обменять</string>
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Receive">Получить</string>
@@ -1261,6 +1263,7 @@
     <string name="Coin_Tab_Market">Рынки</string>
     <string name="Coin_Tab_Details">Аналитика</string>
     <string name="Coin_Tab_Tweets">Твиты</string>
+    <string name="typical_fee">"<![CDATA[Ожидаемая комиссия: < 0.001 ZEC]]> "</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
     <string name="CoinPage_TimeDuration_Hour">1Ч</string>
     <string name="CoinPage_TimeDuration_Day">1Д</string>
