@@ -4,14 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.LocalizedException
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -20,6 +18,9 @@ import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Wallet
+import cash.z.ecc.android.sdk.ext.collectWith
+import io.grpc.StatusRuntimeException
+import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,6 +76,7 @@ class SendZCashViewModel(
             else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
         }
     }
+
     override fun createState() = SendZCashUiState(
         fee = fee,
         availableBalance = amountState.availableBalance,
@@ -158,6 +160,10 @@ class SendZCashViewModel(
 
             logger.info("success")
             sendResult = SendResult.Sent()
+        } catch (e: StatusRuntimeException) {
+            logger.warning("failed", e)
+            sendResult =
+                SendResult.Failed(HSCaution(TranslatableString.ResString(R.string.transaction_error_need_to_check)))
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))

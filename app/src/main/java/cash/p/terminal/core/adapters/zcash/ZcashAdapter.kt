@@ -69,7 +69,7 @@ import kotlin.math.max
 class ZcashAdapter(
     context: Context,
     private val wallet: Wallet,
-    restoreSettings: RestoreSettings,
+    private val restoreSettings: RestoreSettings,
     private val addressSpecTyped: AddressSpecType?,
     private val localStorage: ILocalStorage,
     private val backgroundManager: BackgroundManager,
@@ -81,8 +81,8 @@ class ZcashAdapter(
     private val lightWalletEndpoint =
         LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
 
-    private val synchronizer: CloseableSynchronizer
-    private val transactionsProvider: ZcashTransactionsProvider
+    private var synchronizer: CloseableSynchronizer
+    private var transactionsProvider: ZcashTransactionsProvider
 
     private val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -94,7 +94,7 @@ class ZcashAdapter(
 
     private var zcashAccount: Account? = null
 
-    override val receiveAddress: String
+    override var receiveAddress: String
 
     override val isMainNet: Boolean = true
     private val scope = CoroutineScope(Dispatchers.Default)
@@ -235,7 +235,68 @@ class ZcashAdapter(
             }
         }
 
+    private fun createNewSynchronizer() {
+        val walletInitMode = if (existingWallet) {
+            WalletInitMode.ExistingWallet
+        } else when (wallet.account.origin) {
+            AccountOrigin.Created -> WalletInitMode.NewWallet
+            AccountOrigin.Restored -> WalletInitMode.RestoreWallet
+        }
+
+        val birthday = when (wallet.account.origin) {
+            AccountOrigin.Created -> runBlocking {
+                BlockHeight.ofLatestCheckpoint(App.instance, network)
+            }
+
+            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+                ?.let { height ->
+                    max(network.saplingActivationHeight.value, height)
+                }
+                ?.let {
+                    BlockHeight.new(it)
+                }
+        }
+
+        birthday?.value?.let {
+            accountBirthday = it
+        }
+
+        synchronizer = Synchronizer.newBlocking(
+            context = App.instance,
+            zcashNetwork = network,
+            alias = getValidAliasFromAccountId(wallet.account.id, addressSpecTyped),
+            lightWalletEndpoint = lightWalletEndpoint,
+            birthday = birthday,
+            walletInitMode = walletInitMode,
+            setup = AccountCreateSetup(
+                seed = FirstClassByteArray(seed),
+                accountName = wallet.account.name,
+                keySource = null
+            )
+        )
+
+        zcashAccount = runBlocking { getFirstAccount() }
+        receiveAddress = runBlocking {
+            when (addressSpecTyped) {
+                AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
+                AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
+                AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
+                null -> synchronizer.getSaplingAddress(getFirstAccount())
+            }
+        }
+        transactionsProvider =
+            ZcashTransactionsProvider(
+                receiveAddress = receiveAddress,
+                synchronizer = synchronizer as SdkSynchronizer
+            )
+        synchronizer.onProcessorErrorHandler = ::onProcessorError
+        synchronizer.onChainErrorHandler = ::onChainError
+    }
+
     override fun start() {
+        if ((synchronizer as SdkSynchronizer).status.value == Synchronizer.Status.STOPPED) {
+            createNewSynchronizer()
+        }
         subscribe(synchronizer as SdkSynchronizer)
         if (!existingWallet) {
             localStorage.zcashAccountIds += wallet.account.id
@@ -450,7 +511,7 @@ class ZcashAdapter(
         //       related viewModelScope instead of the synchronizer's scope.
         //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
         val scope = synchronizer.coroutineScope
-        synchronizer.transactions.collectWith(scope, transactionsProvider::onTransactions)
+        synchronizer.allTransactions.collectWith(scope, transactionsProvider::onTransactions)
         synchronizer.status.collectWith(scope, ::onStatus)
         synchronizer.progress.collectWith(scope, ::onDownloadProgress)
         synchronizer.walletBalances.collectWith(scope, ::onBalance)

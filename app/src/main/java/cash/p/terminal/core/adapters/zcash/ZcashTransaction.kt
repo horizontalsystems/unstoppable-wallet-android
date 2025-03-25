@@ -22,8 +22,8 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
 
     constructor(confirmedTransaction: TransactionOverview, recipient: String?, memo: String?) {
         confirmedTransaction.let {
-            rawId = it.rawId
-            transactionHash = it.rawId.byteArray
+            rawId = it.txId.value
+            transactionHash = it.txId.value.byteArray
             transactionIndex = it.index?.toInt() ?: -1
             toAddress = recipient
             expiryHeight = it.expiryHeight?.value?.toInt()

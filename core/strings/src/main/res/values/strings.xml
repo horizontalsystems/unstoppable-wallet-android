@@ -1268,6 +1268,7 @@
 
     <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
     <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
+    <string name="transaction_error_need_to_check">The transaction may not have been completed due to unexpected issues. We recommend checking the status before attempting to resend to avoid double payment</string>
 
     <!--Hud texts-->
 

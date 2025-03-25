@@ -1023,6 +1023,8 @@
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
+    <string name="transaction_error_need_to_check">Транзакция, возможно, не была завершена из-за непредвиденных проблем. Рекомендуем проверить статус перед повторной отправкой, чтобы избежать двойной оплаты.</string>
+
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Нет интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>

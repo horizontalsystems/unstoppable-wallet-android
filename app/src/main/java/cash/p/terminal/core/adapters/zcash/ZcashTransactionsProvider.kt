@@ -25,14 +25,14 @@ class ZcashTransactionsProvider(
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
         synchronizer.coroutineScope.launch {
             val newTransactions = transactionOverviews.filter { tx ->
-                transactions.none { it.rawId == tx.rawId }
+                transactions.none { it.rawId == tx.txId.value }
             }
 
             if (newTransactions.isNotEmpty()) {
                 val newZcashTransactions = newTransactions.map {
                     val recipient = if (it.isSentTransaction) {
                         synchronizer.getRecipients(it)
-                            .filterIsInstance<TransactionRecipient.RecipientAddress>()
+                            .filterIsInstance<TransactionRecipient>()
                             .firstOrNull()
                             ?.addressValue
                     } else {
