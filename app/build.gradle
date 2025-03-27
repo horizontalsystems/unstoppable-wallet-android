@@ -175,11 +175,23 @@ android {
         disable 'LogNotTimber'
     }
 
+    def bcprovVersionsToRedirect = [
+            'bcprov-jdk15on:1.65.01',
+            'bcprov-jdk15on:1.66',
+            'bcprov-jdk15on:1.70',
+            'bcprov-jdk15to18:1.65.01',
+            'bcprov-jdk15to18:1.68',
+            'bcprov-jdk15to18:1.69'
+    ]
+
     configurations.all { c ->
         exclude(group: "com.github.metaplex-foundation.kborsh", module: "kborsh-jvm")
         c.resolutionStrategy.dependencySubstitution {
-            substitute module('org.bouncycastle:bcprov-jdk15to18:1.68') using module('org.bouncycastle:bcprov-jdk15on:1.65')
-            substitute module('org.bouncycastle:bcprov-jdk15to18:1.69') using module('org.bouncycastle:bcprov-jdk15on:1.65')
+            bcprovVersionsToRedirect.each { moduleId ->
+                def (name, version) = moduleId.split(':')
+                substitute module("org.bouncycastle:$name:$version") using module("org.bouncycastle:bcprov-jdk15to18:1.80")
+            }
+
             substitute module('com.google.protobuf:protobuf-java:3.6.1') using module('com.google.protobuf:protobuf-javalite:3.21.1')
             substitute module('net.jcip:jcip-annotations:1.0') using module('com.github.stephenc.jcip:jcip-annotations:1.0-1')
 

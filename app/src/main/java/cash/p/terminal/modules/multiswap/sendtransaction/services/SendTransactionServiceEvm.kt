@@ -29,6 +29,7 @@ import cash.p.terminal.modules.evmfee.EvmCommonGasDataService
 import cash.p.terminal.modules.evmfee.EvmFeeModule
 import cash.p.terminal.modules.evmfee.EvmFeeService
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
+import cash.p.terminal.modules.evmfee.GasPriceInfo
 import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.LegacyFeeSettings
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
@@ -77,7 +78,7 @@ class SendTransactionServiceEvm(
 ) : ISendTransactionService<BaseEvmAdapter>(token) {
 
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(token.blockchainType).evmKitWrapper!! }
-    private val gasPriceService: IEvmGasPriceService by lazy {
+    private val gasPriceService: IEvmGasPriceService<DataState<GasPriceInfo>> by lazy {
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
             val gasPriceProvider = Eip1559GasPriceProvider(evmKit)

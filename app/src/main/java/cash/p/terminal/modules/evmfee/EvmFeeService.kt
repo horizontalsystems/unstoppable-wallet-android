@@ -21,7 +21,7 @@ import java.math.BigInteger
 
 class EvmFeeService(
     private val evmKit: EthereumKit,
-    private val gasPriceService: IEvmGasPriceService,
+    private val gasPriceService: IEvmGasPriceService<DataState<GasPriceInfo>>,
     private val gasDataService: EvmCommonGasDataService,
     private var transactionData: TransactionData? = null,
 ) : IEvmFeeService {
