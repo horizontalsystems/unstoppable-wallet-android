@@ -709,6 +709,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.ECash,
         BlockchainType.Litecoin,
         BlockchainType.Dogecoin,
+        BlockchainType.Cosanta,
         BlockchainType.Dash -> {
             navController.slideFromRight(
                 R.id.resendBitcoinFragment,

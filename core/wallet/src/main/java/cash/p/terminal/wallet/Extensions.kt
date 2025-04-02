@@ -102,6 +102,7 @@ val BlockchainType.title: String
         BlockchainType.Fantom -> "Fantom"
         BlockchainType.Tron -> "Tron"
         BlockchainType.Ton -> "Ton"
+        BlockchainType.Cosanta -> "Cosanta"
         is BlockchainType.Unsupported -> this.uid
     }
 

@@ -37,9 +37,11 @@ val BitcoinAddress.tokenType: TokenType
     get() = when (this.blockchainType) {
         BlockchainType.Bitcoin -> TokenType.Derived(this.scriptType.derivation)
         BlockchainType.BitcoinCash -> TokenType.AddressTyped(TokenType.AddressType.Type145)
-        BlockchainType.ECash -> TokenType.Native
         BlockchainType.Litecoin -> TokenType.Derived(this.scriptType.derivation)
         BlockchainType.Dogecoin -> TokenType.Derived(this.scriptType.derivation)
+
+        BlockchainType.Cosanta,
+        BlockchainType.ECash,
         BlockchainType.Dash -> TokenType.Native
 
         BlockchainType.Zcash,

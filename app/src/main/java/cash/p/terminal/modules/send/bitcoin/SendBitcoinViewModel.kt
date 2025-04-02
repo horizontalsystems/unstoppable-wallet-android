@@ -45,6 +45,13 @@ class SendBitcoinViewModel(
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<SendBitcoinUiState>() {
+    private companion object {
+        val BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS  = listOf(
+            BlockchainType.Dogecoin,
+            BlockchainType.Cosanta
+        )
+    }
+
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -61,8 +68,8 @@ class SendBitcoinViewModel(
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
     private var memo: String? = null
-    private var isMemoAvailable: Boolean = blockchainType != BlockchainType.Dogecoin
-    private var isAdvancedSettingsAvailable: Boolean = blockchainType != BlockchainType.Dogecoin
+    private var isMemoAvailable: Boolean = blockchainType !in  BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
+    private var isAdvancedSettingsAvailable: Boolean =  blockchainType !in  BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 

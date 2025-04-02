@@ -10,6 +10,7 @@ import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.cosantakit.MainNetCosanta
 
 class AddressHandlerFactory(
     private val udnApiKey: String,
@@ -45,7 +46,11 @@ class AddressHandlerFactory(
             BlockchainType.Dogecoin -> {
                 val network = MainNetDogecoin()
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
-                addressHandlers.add(AddressHandlerBech32(network, blockchainType))
+            }
+
+            BlockchainType.Cosanta -> {
+                val network = MainNetCosanta()
+                addressHandlers.add(AddressHandlerBase58(network, blockchainType))
             }
 
             BlockchainType.Dash -> {

@@ -42,6 +42,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -172,7 +173,7 @@ class BalanceViewModel(
 
     fun onBalanceClick(item: BalanceViewItem2) {
         stat(page = StatPage.Balance, event = StatEvent.BalanceClick(item.wallet.token))
-        if(balanceHidden) {
+        if (balanceHidden) {
             HudHelper.vibrate(App.instance)
             itemsBalanceHidden[item.wallet] = itemsBalanceHidden[item.wallet] != true
             refreshViewItems(service.balanceItemsFlow.value)
@@ -255,7 +256,11 @@ class BalanceViewModel(
 
         stat(page = StatPage.Balance, event = StatEvent.Refresh)
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            Log.e("BalanceViewModel", "Error refreshing balance", throwable)
+            isRefreshing = false
+            emitState()
+        }) {
             isRefreshing = true
             emitState()
 
@@ -392,7 +397,8 @@ class BalanceViewModel(
     }
 
     private fun handleWalletConnectUri(scannedText: String) {
-        Web3Wallet.pair(Pair(scannedText.trim()),
+        Web3Wallet.pair(
+            Pair(scannedText.trim()),
             onSuccess = {
                 connectionResult = null
             },

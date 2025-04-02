@@ -80,6 +80,13 @@ class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRa
     }
 }
 
+class CosantaFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRates(): FeeRates {
+        val feeRate = feeRateProvider.dashFeeRate().await()
+        return FeeRates(feeRate.toInt())
+    }
+}
+
 class ECashFeeRateProvider : IFeeRateProvider {
     override suspend fun getFeeRates(): FeeRates {
         return FeeRates(1)

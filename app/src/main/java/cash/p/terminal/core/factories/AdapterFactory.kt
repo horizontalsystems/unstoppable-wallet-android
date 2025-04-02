@@ -9,6 +9,7 @@ import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.adapters.BinanceAdapter
 import cash.p.terminal.core.adapters.BitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinCashAdapter
+import cash.p.terminal.core.adapters.CosantaAdapter
 import cash.p.terminal.core.adapters.DashAdapter
 import cash.p.terminal.core.adapters.DogecoinAdapter
 import cash.p.terminal.core.adapters.ECashAdapter
@@ -205,6 +206,16 @@ class AdapterFactory(
                         backgroundManager = backgroundManager,
                         customPeers = localStorage.customDashPeers,
                         masterNodesRepository = masterNodesRepository
+                    )
+                }
+
+                BlockchainType.Cosanta -> {
+                    val syncMode =
+                        btcBlockchainManager.syncMode(BlockchainType.Cosanta, wallet.account.origin)
+                    CosantaAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager
                     )
                 }
 

@@ -126,6 +126,7 @@ class AddressHandlerUdn(
             BlockchainType.Solana -> "SOL"
             BlockchainType.Tron -> "TRX"
             BlockchainType.Ton -> "TON"
+            BlockchainType.Cosanta -> "COSA"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 

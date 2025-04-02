@@ -65,6 +65,9 @@ sealed class BlockchainType : Parcelable {
     object Base: BlockchainType()
 
     @Parcelize
+    object Cosanta: BlockchainType()
+
+    @Parcelize
     object ZkSync: BlockchainType()
 
     @Parcelize
@@ -93,6 +96,7 @@ sealed class BlockchainType : Parcelable {
             is Ton -> "the-open-network"
             is Base -> "base"
             is ZkSync -> "zksync"
+            is Cosanta -> "cosanta"
             is Unsupported -> this._uid
         }
 
@@ -126,6 +130,7 @@ sealed class BlockchainType : Parcelable {
         Ton -> "the-open-network"
         Base -> "base"
         ZkSync -> "zksync"
+        Cosanta -> "cosanta"
         is Unsupported -> "unsupported|$uid"
     }
 
@@ -153,6 +158,7 @@ sealed class BlockchainType : Parcelable {
                 "tron" -> Tron
                 "the-open-network" -> Ton
                 "base" -> Base
+                "cosanta" -> Cosanta
                 else -> Unsupported(uid)
             }
 

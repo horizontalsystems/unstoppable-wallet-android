@@ -3,8 +3,12 @@ package cash.p.terminal.core.utils
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import kotlinx.coroutines.delay
+import java.net.Inet6Address
+import java.net.InetAddress
+import java.net.UnknownHostException
 
 object Utils {
 
@@ -30,6 +34,16 @@ object Utils {
             delay(checkPeriod)
             waited += checkPeriod
         }
+    }
+
+    fun getIpByUrl(host: String): List<String>? = try {
+        InetAddress
+            .getAllByName(host)
+            .filter { it !is Inet6Address }
+            .mapNotNull { it.hostAddress }
+    } catch (e: UnknownHostException) {
+        Log.d("Utils", "getIpByUrl: $host not found")
+        null
     }
 }
 

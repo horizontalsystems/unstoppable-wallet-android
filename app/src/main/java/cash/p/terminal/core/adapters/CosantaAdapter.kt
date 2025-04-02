@@ -1,13 +1,9 @@
 package cash.p.terminal.core.adapters
 
-import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.splitToAddresses
-import cash.p.terminal.core.utils.Utils.getIpByUrl
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
-import cash.p.terminal.network.pirate.domain.repository.MasterNodesRepository
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.UsedAddress
@@ -18,32 +14,24 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.dashkit.DashKit
-import io.horizontalsystems.dashkit.DashKit.NetworkType
-import io.horizontalsystems.dashkit.MainNetDash
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import io.horizontalsystems.cosantakit.CosantaKit
+import io.horizontalsystems.cosantakit.CosantaKit.NetworkType
 import java.math.BigDecimal
 
-class DashAdapter(
-    override val kit: DashKit,
+class CosantaAdapter(
+    override val kit: CosantaKit,
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     wallet: Wallet
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold),
-    DashKit.Listener, ISendBitcoinAdapter {
+    CosantaKit.Listener, ISendBitcoinAdapter {
 
     constructor(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager,
-        customPeers: String,
-        masterNodesRepository: MasterNodesRepository
+        backgroundManager: BackgroundManager
     ) : this(
-        kit = createKit(wallet, syncMode, customPeers, masterNodesRepository),
+        kit = createKit(wallet, syncMode),
         syncMode = syncMode,
         backgroundManager = backgroundManager,
         wallet = wallet
@@ -61,14 +49,14 @@ class DashAdapter(
         BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
-    // DashKit Listener
+    // io.horizontalsystems.cosantakit.CosantaKit Listener
     //
 
     override val explorerTitle: String
-        get() = "blockchair.com"
+        get() = "explorer.cosanta.net"
 
     override fun getTransactionUrl(transactionHash: String): String =
-        "https://blockchair.com/dash/transaction/$transactionHash"
+        "https://explorer.cosanta.net/tx/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -106,71 +94,59 @@ class DashAdapter(
     override val unspentOutputs: List<UnspentOutputInfo>
         get() = kit.unspentOutputs
 
-    override val blockchainType = BlockchainType.Dash
+    override val blockchainType = BlockchainType.Cosanta
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
         kit.usedAddresses(change).map {
             UsedAddress(
                 index = it.index,
                 address = it.address,
-                explorerUrl = "https://blockchair.com/dash/address/${it.address}"
+                explorerUrl = "https://explorer.cosanta.net/address/${it.address}"
             )
         }
 
     companion object {
         private const val confirmationsThreshold = 3
-        private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
         private fun createKit(
             wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
-            userPeers: String,
-            masterNodesRepository: MasterNodesRepository
-        ): DashKit {
+        ): CosantaKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
-                    return DashKit(
+                    return CosantaKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold,
-                        initWithEmptySeeds = true
-                    ).apply {
-                        setupPeers(masterNodesRepository, userPeers)
-                    }
+                        confirmationsThreshold = confirmationsThreshold
+                    )
                 }
 
                 is AccountType.Mnemonic -> {
-                    return DashKit(
+                    return CosantaKit(
                         context = App.instance,
                         words = accountType.words,
                         passphrase = accountType.passphrase,
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold,
-                        initWithEmptySeeds = true
-                    ).apply {
-                        setupPeers(masterNodesRepository, userPeers)
-                    }
+                        confirmationsThreshold = confirmationsThreshold
+                    )
                 }
 
                 is AccountType.BitcoinAddress -> {
-                    return DashKit(
+                    return CosantaKit(
                         context = App.instance,
                         watchAddress = accountType.address,
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
-                        confirmationsThreshold = confirmationsThreshold,
-                        initWithEmptySeeds = true
-                    ).apply {
-                        setupPeers(masterNodesRepository, userPeers)
-                    }
+                        confirmationsThreshold = confirmationsThreshold
+                    )
                 }
 
                 else -> throw UnsupportedAccountException()
@@ -178,31 +154,7 @@ class DashAdapter(
         }
 
         fun clear(walletId: String) {
-            DashKit.clear(App.instance, NetworkType.MainNet, walletId)
+            CosantaKit.clear(App.instance, NetworkType.MainNet, walletId)
         }
-
-        private fun DashKit.setupPeers(
-            masterNodesRepository: MasterNodesRepository,
-            userPeers: String
-        ) {
-            coroutineScope.launch(CoroutineExceptionHandler { _, throwable ->
-                throwable.printStackTrace()
-                Log.d("DashAdapter", "Failed to set peers", throwable)
-            }) {
-                trySetPeers(userPeers.splitToAddresses()) ||
-                        trySetPeers(MainNetDash.defaultSeeds) ||
-                        trySetPeers(masterNodesRepository.getMasterNodes().ips)
-            }
-        }
-
-        private fun DashKit.trySetPeers(peers: List<String>) =
-            peers.mapNotNull(::getIpByUrl).flatten().run {
-                if (isNotEmpty()) {
-                    addPeers(this)
-                    true
-                } else {
-                    false
-                }
-            }
     }
 }

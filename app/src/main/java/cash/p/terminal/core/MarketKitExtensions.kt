@@ -69,6 +69,7 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.AddressTyped
         }
 
+        BlockchainType.Cosanta,
         BlockchainType.ECash,
         BlockchainType.Dogecoin,
         BlockchainType.Dash -> {
