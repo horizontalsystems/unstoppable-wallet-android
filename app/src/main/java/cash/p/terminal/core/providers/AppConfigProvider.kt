@@ -138,6 +138,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.BitcoinCash to "bitcoincash:qr4f0pkvx86vv6cuae48nj83txqhwyt2fgadd9smxg",
             BlockchainType.ECash to "ecash:qrzcal2fmm6vumxp3g2jndk0fepmt2racya9lc4yxy",
             BlockchainType.Litecoin to "MNbHsci3A8u6UiqjBMMckXzfPrLjeMxdRC",
+            BlockchainType.Cosanta to "CRrYMxgagsPEX4DNFWNdGypUUoBa43Dt4p",
             BlockchainType.Dash to "XcpUrR8LkohMNB9TfJaC97id6boUhRU3wk",
             BlockchainType.Dogecoin to "DThko7KFeu6eBag6bmPy5e7nGesmsTMRPD",
             BlockchainType.Zcash to "zs1hwyqs4mfrynq0ysjmhv8wuau5zam0gwpx8ujfv8epgyufkmmsp6t7cfk9y0th7qyx7fsc5azm08",
