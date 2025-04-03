@@ -63,16 +63,16 @@ fun Intent.putParcelableExtra(key: String, value: Parcelable) {
     putExtra(key, value)
 }
 
-inline fun <reified T: Parcelable> NavController.getInput() : T? {
+inline fun <reified T : Parcelable> NavController.getInput(): T? {
     return currentBackStackEntry?.arguments?.getInputX()
 }
 
-inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
+inline fun <reified T : Parcelable> Bundle.getInputX(): T? {
     return parcelable("input")
 }
 
 
-inline fun <reified T: Parcelable> NavController.requireInput() : T {
+inline fun <reified T : Parcelable> NavController.requireInput(): T {
     return getInput()!!
 }
 
@@ -104,3 +104,6 @@ fun Double.smartFormat(): String {
         String.format("%.0f", this)
     }
 }
+
+fun String.toBigDecimalOrNullExt(): BigDecimal? =
+    toBigDecimalOrNull() ?: replace(',', '.').toBigDecimalOrNull()

@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.toBigDecimalOrNullExt
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -39,7 +40,7 @@ class AmountInputViewModel2(
     }
 
     fun onEnterAmount(text: String) {
-        val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
+        val amount = if (text.isNotBlank()) text.toBigDecimalOrNullExt()?.stripTrailingZeros() else null
 
         when (inputType) {
             AmountInputType.COIN -> setCoinAmount(amount)

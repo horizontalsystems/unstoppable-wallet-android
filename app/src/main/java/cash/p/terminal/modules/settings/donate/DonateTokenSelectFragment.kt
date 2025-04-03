@@ -17,14 +17,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.headline2_leah
@@ -35,12 +35,18 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
+        val viewModel: TokenSelectViewModel =
+            viewModel(factory = TokenSelectViewModel.FactoryForSend())
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),
             onClickItem = {
-                val donateAddress: String? = App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
-                val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
+                val donateAddress: String? =
+                    App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
+                val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(
+                    R.string.Settings_DonateToken,
+                    it.wallet.token.fullCoin.coin.code
+                )
                 navController.slideFromRight(
                     R.id.sendXFragment,
                     SendFragment.Input(
@@ -53,7 +59,8 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
 
                 stat(page = StatPage.Donate, event = StatEvent.OpenSend(it.wallet.token))
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
+            uiState = viewModel.uiState,
+            updateFilter = viewModel::updateFilter,
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
         ) { DonateHeader(navController) }
     }
@@ -94,7 +101,9 @@ private fun GetAddressCell(
     VSpacer(24.dp)
     ButtonPrimaryDefault(
         title = stringResource(R.string.Settings_Donate_GetAddress),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp),
         onClick = onClick
     )
     VSpacer(24.dp)

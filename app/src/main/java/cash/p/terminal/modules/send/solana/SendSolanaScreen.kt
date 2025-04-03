@@ -16,7 +16,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
@@ -29,6 +28,7 @@ import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -67,16 +67,22 @@ fun SendSolanaScreen(
             title = title,
             onCloseClick = { navController.popBackStack() }
         ) {
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            if (uiState.showAddressInput) {
+                HSAddressInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = prefilledData?.address?.let { Address(it) },
+                    tokenQuery = wallet.token.tokenQuery,
+                    coinCode = wallet.coin.code,
+                    error = addressError,
+                    textPreprocessor = paymentAddressViewModel,
+                    navController = navController
+                ) {
+                    viewModel.onEnterAddress(it)
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
@@ -95,21 +101,16 @@ fun SendSolanaScreen(
                 rate = viewModel.coinRate,
                 amountUnique = amountUnique
             )
+            Spacer(modifier = Modifier.height(12.dp))
 
-            if (uiState.showAddressInput) {
-                Spacer(modifier = Modifier.height(12.dp))
-                HSAddressInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
-                    textPreprocessor = paymentAddressViewModel,
-                    navController = navController
-                ) {
-                    viewModel.onEnterAddress(it)
-                }
-            }
+            AvailableBalance(
+                coinCode = wallet.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                availableBalance = availableBalance,
+                amountInputType = amountInputType,
+                rate = viewModel.coinRate
+            )
 
             ButtonPrimaryYellow(
                 modifier = Modifier

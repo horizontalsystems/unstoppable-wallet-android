@@ -61,7 +61,7 @@ fun SendEip1155Screen(
 ) {
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.SendNft_Title),
@@ -164,8 +164,8 @@ private fun ItemCountInput(
     onValueChange: (Int) -> Unit,
 ) {
     val borderColor = when (state) {
-        is DataState.Error -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
-        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
+        is DataState.Error -> ComposeAppTheme.colors.red50
+        else -> ComposeAppTheme.colors.steel20
     }
 
     Row(

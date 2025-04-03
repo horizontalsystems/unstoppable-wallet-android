@@ -88,7 +88,6 @@ bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", v
 ethereum-kit = { group = "com.github.horizontalsystems", name = "ethereum-kit-android", version.ref = "horizontalsystems-ethereum" }
 blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
 binance-kit = { group = "com.github.horizontalsystems", name = "binance-chain-kit-android", version.ref = "horizontalsystems-binance" }
-solana-kit = { group = "com.github.horizontalsystems", name = "solana-kit-android", version.ref = "horizontalsystems-solana" }
 tron-kit = { group = "com.github.horizontalsystems", name = "tron-kit-android", version.ref = "horizontalsystems-tron" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }

@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
@@ -30,28 +31,26 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 fun TokenSelectScreen(
     navController: NavController,
     title: String,
+    uiState: TokenSelectUiState,
     searchHintText: String = "",
     onClickItem: (BalanceViewItem2) -> Unit,
-    viewModel: TokenSelectViewModel,
+    updateFilter: (String) -> Unit,
     emptyItemsText: String,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
     header: @Composable (() -> Unit)? = null
 ) {
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             SearchBar(
                 title = title,
                 searchHintText = searchHintText,
                 menuItems = listOf(),
                 onClose = { navController.popBackStack() },
-                onSearchTextChanged = { text ->
-                    viewModel.updateFilter(text)
-                }
+                onSearchTextChanged = updateFilter
             )
         }
     ) { paddingValues ->
-        val uiState = viewModel.uiState
         if (uiState.noItems) {
             Column(
                 modifier = Modifier
