@@ -99,6 +99,7 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
@@ -212,10 +213,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
             Logger.getLogger("").level = Level.SEVERE
+            // Enable Crashlytics in release builds
         }
 
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.w("RxJava ErrorHandler", e)
+            e?.let {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
         }
 
         instance = this

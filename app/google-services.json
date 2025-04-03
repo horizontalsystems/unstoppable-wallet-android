@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "828931881851",
+    "project_id": "p-cash-a17e9",
+    "storage_bucket": "p-cash-a17e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828931881851:android:eb4b29db5540f7a6485bde",
+        "android_client_info": {
+          "package_name": "cash.p.terminal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNu8cwjaGd7at4HxtYIS5dLQ2748KjTqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828931881851:android:9e419bbe095bd563485bde",
+        "android_client_info": {
+          "package_name": "cash.p.terminal.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNu8cwjaGd7at4HxtYIS5dLQ2748KjTqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

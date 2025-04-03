@@ -2,6 +2,9 @@
 activityCompose = "1.10.0"
 androidGradlePlugin = "8.6.1"
 desugar_jdk_libs = "2.1.5"
+firebaseBom = "33.12.0"
+firebaseCrashlyticsGradle = "2.9.9"
+googleServices = "4.4.1"
 grpcApi = "1.63.0"
 kotlin = "2.0.21"
 koin-bom = "4.0.0"
@@ -39,6 +42,7 @@ retrofit = "2.11.0"
 okhttp-logging-interceptor = "4.12.0"
 uiTextAndroid = "1.7.6"
 jetbrainsKotlinJvm = "2.0.21"
+crashlytics = "3.0.3"
 ktor = "2.3.13"
 kotlinx-serialization-json = "1.8.0-RC"
 androidx-constraintlayout = "2.2.0"
@@ -54,6 +58,10 @@ androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx",
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomRxjava2" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 grpc-api = { module = "io.grpc:grpc-api", version.ref = "grpcApi" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
@@ -123,3 +131,4 @@ kotlin-parcelize = { id = "kotlin-parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 devtools-ksp = { id = "com.google.devtools.ksp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
