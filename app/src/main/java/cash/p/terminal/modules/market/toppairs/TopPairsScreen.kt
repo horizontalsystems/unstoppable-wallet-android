@@ -16,7 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -63,7 +63,7 @@ fun TopPairsScreen() {
     }
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(modifier = Modifier.padding(it)) {
             HSSwipeRefresh(

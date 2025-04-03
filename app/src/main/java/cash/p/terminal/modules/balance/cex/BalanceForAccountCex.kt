@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,8 +22,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -40,31 +41,35 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.ui.BalanceSortingSelector
 import cash.p.terminal.modules.balance.ui.BalanceTitleRow
 import cash.p.terminal.modules.balance.ui.TotalBalanceRow
 import cash.p.terminal.modules.balance.ui.wallets
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.diffText
+import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellMultilineClear
-import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.diffColor
-import cash.p.terminal.ui.compose.components.diffText
-import cash.p.terminal.ui.extensions.RotatingCircleProgressView
-import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountViewItem) {
+fun BalanceForAccountCex(
+    navController: NavController,
+    accountViewItem: AccountViewItem,
+    paddingValuesParent: PaddingValues
+) {
     val viewModel = viewModel<BalanceCexViewModel>(factory = BalanceModule.FactoryCex())
     val uiState = viewModel.uiState
     val totalState = viewModel.totalUiState
@@ -74,7 +79,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
     val activeScreen = uiState.isActiveScreen
     if (activeScreen) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = {
@@ -83,7 +88,12 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                 )
             }
         ) { paddingValues ->
-            Column(Modifier.padding(paddingValues)) {
+            Column(
+                Modifier.padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValuesParent.calculateBottomPadding()
+                )
+            ) {
 
                 HSSwipeRefresh(
                     refreshing = uiState.isRefreshing,
@@ -323,7 +333,12 @@ fun WalletIconCex(
         if (viewItem.failedIconVisible) {
             val view = LocalView.current
             val clickableModifier = if (viewItem.errorMessage != null) {
-                Modifier.clickable(onClick = { HudHelper.showErrorMessage(view, viewItem.errorMessage) })
+                Modifier.clickable(onClick = {
+                    HudHelper.showErrorMessage(
+                        view,
+                        viewItem.errorMessage
+                    )
+                })
             } else {
                 Modifier
             }

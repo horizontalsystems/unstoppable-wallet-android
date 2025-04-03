@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,7 +32,7 @@ fun SelectNetworkScreen(
     onNavigateBack: (() -> Unit),
 ) {
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Cex_ChooseNetwork),

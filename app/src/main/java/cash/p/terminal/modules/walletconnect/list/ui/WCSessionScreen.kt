@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
@@ -45,6 +45,7 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -121,7 +122,7 @@ fun WCSessionsScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.WalletConnect_Title),

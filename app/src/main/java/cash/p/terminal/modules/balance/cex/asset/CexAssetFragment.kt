@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -77,7 +77,7 @@ fun CexAssetScreen(
     val uiState = viewModel.uiState
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = uiState.title,
@@ -141,14 +141,14 @@ private fun TokenBalanceHeader(
                     }
                 ),
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
-            color = if (balanceViewItem.primaryValue.dimmed) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
+            color = if (balanceViewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.title2R,
             textAlign = TextAlign.Center,
         )
         VSpacer(height = 6.dp)
         Text(
             text = if (balanceViewItem.secondaryValue.visible) balanceViewItem.secondaryValue.value else "*****",
-            color = if (balanceViewItem.secondaryValue.dimmed) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50 else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey,
+            color = if (balanceViewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.body,
             maxLines = 1,
         )

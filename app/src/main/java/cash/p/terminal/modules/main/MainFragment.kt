@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -18,7 +17,7 @@ import androidx.compose.material.BadgedBox
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -181,7 +180,7 @@ private fun MainScreen(
         },
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             bottomBar = {
                 Column {
                     if (uiState.torEnabled) {
@@ -230,13 +229,13 @@ private fun MainScreen(
                     }
                 }
             }
-        ) {
+        ) { paddingValues ->
             BackHandler(enabled = modalBottomSheetState.isVisible) {
                 coroutineScope.launch {
                     modalBottomSheetState.hide()
                 }
             }
-            Column(modifier = Modifier.padding(it)) {
+            Column {
                 LaunchedEffect(key1 = selectedPage, block = {
                     if (uiState.mainNavItems[selectedPage].mainNavItem != MainNavigation.Transactions) {
                         transactionsViewModel.showAllTransactions(false)
@@ -251,10 +250,11 @@ private fun MainScreen(
                     verticalAlignment = Alignment.Top
                 ) { page ->
                     when (uiState.mainNavItems[page].mainNavItem) {
-                        MainNavigation.Market -> MarketScreen(fragmentNavController)
-                        MainNavigation.Balance -> BalanceScreen(fragmentNavController)
+                        MainNavigation.Market -> MarketScreen(fragmentNavController, paddingValues)
+                        MainNavigation.Balance -> BalanceScreen(fragmentNavController, paddingValues)
                         MainNavigation.Transactions -> TransactionsScreen(
                             navController = fragmentNavController,
+                            paddingValues = paddingValues,
                             viewModel = transactionsViewModel,
                             onShowAllTransactionsClicked = {
                                 fragmentNavController.authorizedAction(
@@ -268,7 +268,7 @@ private fun MainScreen(
                             }
                         )
 
-                        MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                        MainNavigation.Settings -> SettingsScreen(fragmentNavController, paddingValues)
                     }
                 }
             }

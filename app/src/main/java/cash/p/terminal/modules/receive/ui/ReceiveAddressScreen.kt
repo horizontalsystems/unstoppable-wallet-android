@@ -25,7 +25,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -136,7 +136,7 @@ fun ReceiveAddressScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = title,

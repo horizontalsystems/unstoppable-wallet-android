@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
-import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseActivity
@@ -13,6 +12,7 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.intro.IntroActivity
 import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.lockscreen.LockScreenActivity
+import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.core.hideKeyboard
 
 class MainActivity : BaseActivity() {
@@ -54,9 +54,11 @@ class MainActivity : BaseActivity() {
                     is Wallet.Model.SessionRequest -> {
                         navController.slideFromBottom(R.id.wcRequestFragment)
                     }
+
                     is Wallet.Model.SessionProposal -> {
                         navController.slideFromBottom(R.id.wcSessionFragment)
                     }
+
                     else -> {}
                 }
 

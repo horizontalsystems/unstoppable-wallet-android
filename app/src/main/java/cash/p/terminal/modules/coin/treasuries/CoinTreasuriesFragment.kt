@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -44,6 +44,7 @@ import cash.p.terminal.ui.compose.components.SortMenu
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_jacob
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class CoinTreasuriesFragment : BaseComposeFragment() {
 
@@ -68,7 +69,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
         )
 
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.CoinPage_Treasuries),

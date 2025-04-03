@@ -6,10 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -90,7 +89,7 @@ private fun EvmPrivateKeyScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.EvmPrivateKey_Title),

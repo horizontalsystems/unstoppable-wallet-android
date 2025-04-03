@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,6 +28,7 @@ import cash.p.terminal.ui.compose.components.CellNews
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class CoinReportsFragment : BaseComposeFragment() {
@@ -62,7 +63,7 @@ private fun CoinReportsScreen(
     val reportViewItems by viewModel.reportViewItemsLiveData.observeAsState()
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.CoinPage_Reports),

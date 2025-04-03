@@ -7,6 +7,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,8 +19,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +35,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.RateAppManager
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
@@ -46,33 +45,39 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
-import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui.compose.components.BadgeText
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.subhead1_jacob
-import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun SettingsScreen(
     navController: NavController,
+    paddingValues: PaddingValues,
     viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 stringResource(R.string.Settings_Title),
             )
 
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .padding(bottom = paddingValues.calculateBottomPadding())
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Spacer(modifier = Modifier.height(12.dp))
                 SettingSections(viewModel, navController)
                 SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
@@ -132,7 +137,10 @@ private fun SettingSections(
                 R.string.Settings_GetYourTokens,
                 R.drawable.ic_uwt2_24,
                 onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/piratecash_bot?start=mobile")
+                    LinkHelper.openLinkInAppBrowser(
+                        context,
+                        "https://t.me/piratecash_bot?start=mobile"
+                    )
                 }
             )
         }
@@ -289,7 +297,10 @@ private fun SettingSections(
                     onClick = {
                         navController.slideFromRight(R.id.baseCurrencySettingsFragment)
 
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BaseCurrency))
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.Open(StatPage.BaseCurrency)
+                        )
                     }
                 )
             },
@@ -352,33 +363,33 @@ private fun SettingSections(
     )
 
     VSpacer(32.dp)
-/*
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.Settings_Faq,
-                R.drawable.ic_faq_20,
-                onClick = {
-                    navController.slideFromRight(R.id.faqListFragment)
+    /*
+        CellUniversalLawrenceSection(
+            listOf({
+                HsSettingCell(
+                    R.string.Settings_Faq,
+                    R.drawable.ic_faq_20,
+                    onClick = {
+                        navController.slideFromRight(R.id.faqListFragment)
 
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Faq))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Guides_Title,
-                R.drawable.ic_academy_20,
-                onClick = {
-                    navController.slideFromRight(R.id.academyFragment)
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Faq))
+                    }
+                )
+            }, {
+                HsSettingCell(
+                    R.string.Guides_Title,
+                    R.drawable.ic_academy_20,
+                    onClick = {
+                        navController.slideFromRight(R.id.academyFragment)
 
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Academy))
-                }
-            )
-        })
-    )
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Academy))
+                    }
+                )
+            })
+        )
 
-    VSpacer(32.dp)
-*/
+        VSpacer(32.dp)
+    */
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
@@ -526,7 +537,8 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
 }
 
 private fun shareAppLink(appLink: String, context: Context) {
-    val shareMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
+    val shareMessage =
+        cash.p.terminal.strings.helpers.Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
     val shareIntent = Intent(Intent.ACTION_SEND)
     shareIntent.type = "text/plain"
     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)

@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -33,6 +33,7 @@ import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -77,7 +78,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: cash.p.ter
     }
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.RecoveryPhraseVerify_Title),
@@ -97,9 +98,9 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: cash.p.ter
                 }
 
                 val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
-                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
+                    ComposeAppTheme.colors.yellow50
                 } else {
-                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
+                    ComposeAppTheme.colors.steel20
                 }
 
                 Row(

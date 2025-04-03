@@ -3,7 +3,7 @@ package cash.p.terminal.modules.nft.send
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +24,7 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.nftkit.models.NftType
 import kotlinx.parcelize.Parcelize
 
@@ -101,7 +102,7 @@ private fun getFactory(nftUidString: String): SendNftModule.Factory? {
 @Composable
 private fun ShowErrorMessage(navController: NavController) {
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.SendNft_Title),

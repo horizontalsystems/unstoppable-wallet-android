@@ -22,7 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -102,7 +102,7 @@ fun AppearanceScreen(navController: NavController) {
         }
     ) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.Settings_Appearance),
@@ -278,7 +278,7 @@ private fun AppCloseWarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(id = R.drawable.ic_attention_24),
         title = stringResource(id = R.string.Alert_TitleWarning),
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(

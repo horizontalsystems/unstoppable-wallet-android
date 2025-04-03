@@ -10,8 +10,16 @@ import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.primarySurface
+import androidx.compose.material.ripple
 import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -71,7 +79,7 @@ fun HsBottomNavigation(
     Surface(
         color = backgroundColor,
         contentColor = contentColor,
-        elevation = elevation,
+        shadowElevation = elevation,
         modifier = modifier
     ) {
         Row(

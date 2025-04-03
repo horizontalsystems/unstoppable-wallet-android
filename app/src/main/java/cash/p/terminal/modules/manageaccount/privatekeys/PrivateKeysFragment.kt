@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +29,7 @@ import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFrag
 import cash.p.terminal.modules.manageaccount.ui.KeyActionItem
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class PrivateKeysFragment : BaseComposeFragment() {
 
@@ -46,11 +47,11 @@ class PrivateKeysFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
+fun ManageAccountScreen(navController: NavController, account: Account) {
     val viewModel = viewModel<PrivateKeysViewModel>(factory = PrivateKeysModule.Factory(account))
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.PrivateKeys_Title),

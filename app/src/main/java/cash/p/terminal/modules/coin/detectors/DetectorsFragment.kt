@@ -21,7 +21,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -84,7 +84,7 @@ private fun DetectorsScreen(
     val uiState = viewModel.uiState
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = uiState.title,
@@ -163,30 +163,30 @@ fun DetectorCell(
     val issue = issueViewItem.issue
     val issues = issue.issues ?: emptyList()
     var iconResource = R.drawable.ic_check_24
-    var iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
+    var iconTint = ComposeAppTheme.colors.leah
 
     issues.firstOrNull()?.let {
         when (it.impact) {
             "Critical" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
+                iconTint = ComposeAppTheme.colors.lucian
             }
 
             "High" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
+                iconTint = ComposeAppTheme.colors.jacob
             }
 
             "Low" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus
+                iconTint = ComposeAppTheme.colors.remus
             }
 
             "Informational",
             "Optimization" -> {
                 if (issues.isNotEmpty()) {
                     iconResource = R.drawable.ic_warning_24
-                    iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.laguna
+                    iconTint = ComposeAppTheme.colors.laguna
                 }
             }
 

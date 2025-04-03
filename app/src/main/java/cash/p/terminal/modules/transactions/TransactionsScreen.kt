@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,6 +75,7 @@ import io.horizontalsystems.core.entities.ViewState
 @Composable
 fun TransactionsScreen(
     navController: NavController,
+    paddingValues: PaddingValues,
     viewModel: TransactionsViewModel,
     onShowAllTransactionsClicked: () -> Unit
 ) {
@@ -88,7 +90,7 @@ fun TransactionsScreen(
     val transactions = uiState.transactions
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+        Column(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
             AppBar(
                 title = stringResource(R.string.Transactions_Title),
                 showSpinner = syncing,

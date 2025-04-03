@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +36,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -88,7 +89,7 @@ private fun SwapSelectProviderScreenInner(
                 ),
             )
         },
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
     ) {
         LazyColumn(
             modifier = Modifier.padding(it),
@@ -99,9 +100,9 @@ private fun SwapSelectProviderScreenInner(
             }
             itemsIndexed(quotes) { i, viewItem ->
                 val borderColor = if (viewItem.quote == currentQuote) {
-                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
+                    ComposeAppTheme.colors.yellow50
                 } else {
-                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
+                    ComposeAppTheme.colors.steel20
                 }
 
                 RowUniversal(
@@ -150,7 +151,7 @@ private fun SwapSelectProviderScreenInner(
 @Preview
 @Composable
 private fun SwapSelectProviderScreenPreview() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = false) {
+    ComposeAppTheme(darkTheme = false) {
         SwapSelectProviderScreenInner(
             onClickClose = {},
             quotes = listOf(

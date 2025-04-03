@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,7 +19,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -31,15 +32,12 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.core.stats.statTab
-import io.horizontalsystems.core.entities.Currency
-import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.posts.MarketPostsScreen
@@ -47,7 +45,9 @@ import cash.p.terminal.modules.market.topcoins.TopCoins
 import cash.p.terminal.modules.market.toppairs.TopPairsScreen
 import cash.p.terminal.modules.market.topplatforms.TopPlatforms
 import cash.p.terminal.modules.metricchart.MetricsType
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.ScrollableTabs
@@ -60,16 +60,17 @@ import cash.p.terminal.ui_compose.components.caption_remus
 import cash.p.terminal.ui_compose.components.micro_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.models.MarketGlobal
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 @Composable
-fun MarketScreen(navController: NavController) {
+fun MarketScreen(navController: NavController, paddingValuesParent: PaddingValues) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Market_Title),
@@ -105,7 +106,10 @@ fun MarketScreen(navController: NavController) {
     ) {
         Column(
             Modifier
-                .padding(it)
+                .padding(
+                    top = it.calculateTopPadding(),
+                    bottom = paddingValuesParent.calculateBottomPadding()
+                )
                 .background(ComposeAppTheme.colors.tyler)
         ) {
             Crossfade(uiState.marketGlobal, label = "") {
@@ -311,9 +315,11 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
         MetricsType.TvlInDefi -> {
             navController.slideFromBottom(R.id.tvlFragment)
         }
+
         MetricsType.Etf -> {
             navController.slideFromBottom(R.id.etfFragment)
         }
+
         else -> {
             navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
         }

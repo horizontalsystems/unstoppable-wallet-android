@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -38,7 +39,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.utils.ModuleField
-import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
@@ -52,17 +52,22 @@ import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.MenuItem
-import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
+fun BalanceForAccount(
+    navController: NavController,
+    accountViewItem: AccountViewItem,
+    paddingValuesParent: PaddingValues
+) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     val context = LocalContext.current
@@ -124,7 +129,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            containerColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = {
@@ -201,7 +206,10 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             Crossfade(
                 targetState = uiState.viewState,
                 modifier = Modifier
-                    .padding(paddingValues)
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
+                        bottom = paddingValuesParent.calculateBottomPadding()
+                    )
                     .fillMaxSize(),
                 label = ""
             ) { viewState ->
@@ -213,7 +221,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                             viewModel = viewModel,
                             onItemClick = navigateToTokenBalance,
                             onBalanceClick = {
-                                if(viewModel.balanceHidden) {
+                                if (viewModel.balanceHidden) {
                                     viewModel.onBalanceClick(it)
                                 } else {
                                     navigateToTokenBalance(it)

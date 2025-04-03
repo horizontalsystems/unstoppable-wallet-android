@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -62,7 +62,7 @@ fun MarketSignalsScreen(navController: NavController) {
                 ),
             )
         },
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler
+        containerColor = ComposeAppTheme.colors.tyler
     ) {
         Column(modifier = Modifier.padding(it)) {
             LazyColumn(

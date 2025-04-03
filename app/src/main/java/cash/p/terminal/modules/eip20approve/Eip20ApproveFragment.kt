@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -33,6 +33,7 @@ import io.horizontalsystems.chartview.cell.CellUniversal
 import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.headline1_leah
 import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -100,7 +101,7 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                 )
             }
         },
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
             modifier = Modifier

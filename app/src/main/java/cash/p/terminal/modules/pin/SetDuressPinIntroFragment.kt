@@ -13,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +51,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
     val viewModel = viewModel<SetDuressPinIntroViewModel>(factory = SetDuressPinIntroViewModel.Factory())
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.DuressPin_Title),
@@ -76,7 +76,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+                    .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
             ) {
                 if (viewModel.biometricAuthSupported) {
                     NotesCell(
