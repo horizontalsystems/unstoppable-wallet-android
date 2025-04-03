@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.10.0"
 androidGradlePlugin = "8.6.1"
+desugar_jdk_libs = "2.1.5"
 grpcApi = "1.63.0"
 kotlin = "2.0.21"
 koin-bom = "4.0.0"
@@ -43,7 +44,7 @@ kotlinx-serialization-json = "1.8.0-RC"
 androidx-constraintlayout = "2.2.0"
 android-core-ktx = "1.13.1"
 material3Android = "1.3.1"
-zcashAndroidSdk = "2.2.8"
+zcashAndroidSdk = "2.2.9"
 junitJupiter = "5.8.1"
 google-play-core = "2.1.0"
 
@@ -52,6 +53,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomRxjava2" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 grpc-api = { module = "io.grpc:grpc-api", version.ref = "grpcApi" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }

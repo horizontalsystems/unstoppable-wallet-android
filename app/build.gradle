@@ -306,7 +306,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    coreLibraryDesugaring libs.desugar.jdk.libs
     implementation libs.zcash.android.sdk
     implementation(libs.grpc.api)
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
