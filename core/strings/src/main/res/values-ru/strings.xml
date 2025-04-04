@@ -612,6 +612,7 @@
     <string name="swap_create_wallets">Создать кошелёк</string>
     <string name="swap_creating_wallets">Создание кошельков..</string>
     <string name="swap_create_wallet_description">Не все выбранные кошельки доступны, сначала создайте их.</string>
+    <string name="swap_create_wallet_description_with_zcash">Не все выбранные кошельки доступны, сначала создайте их,\nдля обмена ZEC необходимо добавить transparent адрес</string>
     <string name="Swap_Approve">Разрешить</string>
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>

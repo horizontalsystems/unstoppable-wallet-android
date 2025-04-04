@@ -59,7 +59,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         }
     }
 
-    private suspend fun reloadItems() = withContext(Dispatchers.Default) {
+    private suspend fun reloadItems() = withContext(Dispatchers.IO) {
         val activeWallets = App.walletManager.activeWallets
         val resultTokens = mutableListOf<CoinBalanceItem>()
 

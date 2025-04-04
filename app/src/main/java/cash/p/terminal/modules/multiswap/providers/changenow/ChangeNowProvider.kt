@@ -24,8 +24,13 @@ import cash.p.terminal.network.changenow.domain.entity.NewTransactionResponse
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.changenow.domain.repository.ChangeNowRepository
 import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecTyped
 import cash.p.terminal.wallet.useCases.WalletUseCase
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +40,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
 class ChangeNowProvider(
@@ -49,6 +55,7 @@ class ChangeNowProvider(
     override val icon = R.drawable.ic_change_now
     override val priority = 0
 
+    private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val currencies = mutableListOf<ChangeNowCurrency>()
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
@@ -149,7 +156,7 @@ class ChangeNowProvider(
             val key = "$tickerFrom $tickerTo"
             val cachedValue = minAmount[key]
             val cachedTimestamp = minAmountTimestamp[key] ?: 0L
-            if(cachedValue != null && System.currentTimeMillis() - cachedTimestamp < CACHE_MIN_AMOUNT_DURATION) {
+            if (cachedValue != null && System.currentTimeMillis() - cachedTimestamp < CACHE_MIN_AMOUNT_DURATION) {
                 cachedValue
             } else {
                 changeNowRepository.getMinAmount(
@@ -189,15 +196,31 @@ class ChangeNowProvider(
     ): ActionCreate? {
         val tokenInWalletCreated = walletUseCase.getWallet(tokenIn) != null
         val tokenOutWalletCreated = walletUseCase.getWallet(tokenOut) != null
-        return if (!tokenInWalletCreated || !tokenOutWalletCreated) {
+
+        var tokenZCashToCreate: Token? = null
+        if (isZCashUnifiedOrShielded(tokenIn)) {
+            tokenZCashToCreate = getZCashTransparentToken()
+        }
+        val needCreateTransparentWallet =
+            tokenZCashToCreate != null && walletUseCase.getWallet(tokenZCashToCreate) == null
+
+        return if (!tokenInWalletCreated || !tokenOutWalletCreated || needCreateTransparentWallet) {
             ActionCreate(
                 inProgress = false,
+                descriptionResId = if (!needCreateTransparentWallet) {
+                    R.string.swap_create_wallet_description
+                } else {
+                    R.string.swap_create_wallet_description_with_zcash
+                },
                 onActionExecuted = { onActionCompleted ->
                     if (!tokenInWalletCreated) {
                         walletUseCase.createWallet(tokenIn)
                     }
                     if (!tokenOutWalletCreated) {
                         walletUseCase.createWallet(tokenOut)
+                    }
+                    if (needCreateTransparentWallet) {
+                        walletUseCase.createWallet(tokenZCashToCreate)
                     }
                     onActionCompleted()
                 }
@@ -206,6 +229,21 @@ class ChangeNowProvider(
             null
         }
     }
+
+    private fun getZCashTransparentToken() = marketKit.token(
+        TokenQuery(
+            BlockchainType.Zcash,
+            AddressSpecTyped(AddressSpecType.Transparent)
+        )
+    )
+
+    /**
+     * ChangeNow does not support Unified an Shielded addresses as return address,
+     */
+    private fun isZCashUnifiedOrShielded(tokenIn: Token): Boolean =
+        tokenIn.blockchainType == BlockchainType.Zcash &&
+                (tokenIn.type == AddressSpecTyped(AddressSpecType.Unified) ||
+                        tokenIn.type == AddressSpecTyped(AddressSpecType.Shielded))
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -220,12 +258,23 @@ class ChangeNowProvider(
                     async { getChangeNowTicker(tokenIn) },
                     async { getChangeNowTicker(tokenOut) }
                 )
+
+                var refundAddress = walletUseCase.getReceiveAddress(tokenIn)
+                // For ZCash unified or shielded we need to use transparent address as refund address
+                if (isZCashUnifiedOrShielded(tokenIn)) {
+                    getZCashTransparentToken()?.let {
+                        refundAddress = walletUseCase.getReceiveAddress(it)
+                    } ?: {
+                        throw IllegalStateException("Can't find ZCASH transparent wallet")
+                    }
+                }
+
                 val request = NewTransactionRequest(
                     from = tickerIn!!,
                     to = tickerOut!!,
                     amount = amountIn.toPlainString(),
                     address = walletUseCase.getReceiveAddress(tokenOut),
-                    refundAddress = walletUseCase.getReceiveAddress(tokenIn)
+                    refundAddress = refundAddress
                 )
                 if (System.currentTimeMillis() - cacheUpdateTimestamp < CACHE_FINAL_QUOTE_DURATION &&
                     cachedFinalQuote?.first == request
@@ -307,8 +356,9 @@ class ChangeNowProvider(
 
     fun onTransactionCompleted(result: SendTransactionResult) {
         changeNowTransaction?.let {
-            val recordUid = if(result is SendTransactionResult.Common &&
-                result.result is SendResult.Sent) {
+            val recordUid = if (result is SendTransactionResult.Common &&
+                result.result is SendResult.Sent
+            ) {
                 result.result.recordUid
             } else {
                 null

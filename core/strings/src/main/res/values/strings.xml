@@ -739,6 +739,7 @@
     <string name="swap_create_wallets">Create wallets</string>
     <string name="swap_creating_wallets">Creating wallets..</string>
     <string name="swap_create_wallet_description">You don\'t have all chosen wallets, need to create first</string>
+    <string name="swap_create_wallet_description_with_zcash">You don\'t have all chosen wallets, need to create first,\nto exchange ZEC you need to create transparent address first</string>
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
