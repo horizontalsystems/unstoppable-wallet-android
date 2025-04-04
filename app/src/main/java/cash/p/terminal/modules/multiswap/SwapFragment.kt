@@ -218,7 +218,6 @@ private fun SwapScreenInner(
         var amountInputHasFocus by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier
-            .padding(it)
             .fillMaxSize()) {
             Column(
                 modifier = Modifier
