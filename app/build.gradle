@@ -35,8 +35,8 @@ android {
         }
 
         resValue "string", "companyWebPageLink", "https://p.cash/"
-        resValue "string", "appWebPageLink", "https://p.cash/wallet"
-        resValue "string", "analyticsLink", "https://portfolio.cash/"
+        resValue "string", "appWebPageLink", "https://p.cash/#MOBILE_APPS"
+        resValue "string", "analyticsLink", "https://p.cash/"
         resValue "string", "appGithubLink", "https://github.com/piratecash/pcash-wallet-android"
         resValue "string", "appTwitterLink", "https://twitter.com/PirateCash_NET"
         resValue "string", "appTelegramLink", "https://t.me/pcash"
