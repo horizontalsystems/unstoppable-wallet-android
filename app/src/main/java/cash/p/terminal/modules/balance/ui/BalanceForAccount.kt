@@ -37,7 +37,6 @@ import cash.p.terminal.core.Caution
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.balance.AccountViewItem
@@ -148,11 +147,6 @@ fun BalanceForAccount(
                                                 qrScannerLauncher.launch(
                                                     QRScannerActivity.getScanQrIntent(context, true)
                                                 )
-
-                                                stat(
-                                                    page = StatPage.Balance,
-                                                    event = StatEvent.Open(StatPage.ScanQrCode)
-                                                )
                                             }
 
                                             WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
@@ -167,11 +161,6 @@ fun BalanceForAccount(
                                                 navController.slideFromBottom(
                                                     R.id.backupRequiredDialog,
                                                     BackupRequiredDialog.Input(state.account, text)
-                                                )
-
-                                                stat(
-                                                    page = StatPage.Balance,
-                                                    event = StatEvent.Open(StatPage.BackupRequired)
                                                 )
                                             }
 
@@ -198,8 +187,6 @@ fun BalanceForAccount(
                         R.id.tokenBalanceFragment,
                         it.wallet
                     )
-
-                    stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
                 }
             }
 
@@ -272,8 +259,6 @@ fun BalanceTitleRow(
                         R.id.manageAccountsFragment,
                         ManageAccountsModule.Mode.Switcher
                     )
-
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ManageWallets))
                 },
         )
     }

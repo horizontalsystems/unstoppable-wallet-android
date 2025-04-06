@@ -60,7 +60,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.receive.ReceiveModule
@@ -197,11 +196,6 @@ fun ReceiveAddressScreen(
                                                         localView,
                                                         R.string.Hud_Text_Copied
                                                     )
-
-                                                    stat(
-                                                        page = StatPage.Receive,
-                                                        event = StatEvent.Copy(StatEntity.ReceiveAddress)
-                                                    )
                                                 },
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                         ) {
@@ -234,8 +228,6 @@ fun ReceiveAddressScreen(
                                                 items = uiState.additionalItems,
                                                 onClearAmount = {
                                                     setAmount(null)
-
-                                                    stat(page = StatPage.Receive, event = StatEvent.RemoveAmount)
                                                 },
                                                 showAccountNotActiveWarningDialog = {
                                                     scope.launch { sheetState.show() }
@@ -294,8 +286,6 @@ fun ReceiveAddressScreen(
                         onAmountConfirm = { amount ->
                             setAmount(amount)
                             openAmountDialog.value = false
-
-                            stat(page = StatPage.Receive, event = StatEvent.SetAmount)
                         }
                     )
                 }
@@ -389,8 +379,6 @@ private fun ActionButtonsRow(
             buttonText = stringResource(R.string.Button_Share),
             onClick = {
                 onShareClick.invoke(uri)
-
-                stat(page = StatPage.Receive, event = StatEvent.Share(StatEntity.ReceiveAddress))
             },
         )
         if (watchAccount) {
@@ -403,8 +391,6 @@ private fun ActionButtonsRow(
             onClick = {
                 TextHelper.copyText(uri)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-
-                stat(page = StatPage.Receive, event = StatEvent.Copy(StatEntity.ReceiveAddress))
             },
         )
     }

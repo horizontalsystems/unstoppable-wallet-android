@@ -753,6 +753,7 @@
     <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
     <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
     <!-- Security Center -->
+    <string name="ShareCrashData">Compartilhar dados de falha</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Adicionar novo</string>

@@ -23,7 +23,6 @@ import io.horizontalsystems.core.requireInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.ui_compose.CoinFragmentInput
@@ -61,8 +60,6 @@ class MarketCategoryFragment : BaseComposeFragment() {
         val arguments = CoinFragmentInput(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
-
-        stat(page = StatPage.CoinCategory, event = StatEvent.OpenCoin(coinUid))
     }
 }
 

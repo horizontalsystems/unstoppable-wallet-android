@@ -23,7 +23,6 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -144,13 +143,10 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                     viewModel.onEnterInput(it)
                 },
                 onClear = {
-                    stat(page = StatPage.WatchWallet, event = StatEvent.Clear(StatEntity.Key))
                 },
                 onScanQR = {
-                    stat(page = StatPage.WatchWallet, event = StatEvent.ScanQr(StatEntity.Key))
                 },
                 onPaste = {
-                    stat(page = StatPage.WatchWallet, event = StatEvent.Paste(StatEntity.Key))
                 }
             )
             Spacer(Modifier.height(32.dp))

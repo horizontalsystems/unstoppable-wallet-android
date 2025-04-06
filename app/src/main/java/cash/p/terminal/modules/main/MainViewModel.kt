@@ -10,7 +10,6 @@ import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.usecase.CheckGooglePlayUpdateUseCase
 import cash.p.terminal.core.usecase.UpdateResult
 import cash.p.terminal.entities.LaunchPage
@@ -318,8 +317,6 @@ class MainViewModel(
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
                             deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragmentInput(it))
-
-                            stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
                         }
                     }
 
@@ -330,11 +327,6 @@ class MainViewModel(
                                 R.id.nftCollectionFragment,
                                 NftCollectionFragment.Input(uid, blockchainTypeUid)
                             )
-
-                            stat(
-                                page = StatPage.Widget,
-                                event = StatEvent.Open(StatPage.TopNftCollections)
-                            )
                         }
                     }
 
@@ -343,11 +335,6 @@ class MainViewModel(
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
-
-                            stat(
-                                page = StatPage.Widget,
-                                event = StatEvent.Open(StatPage.TopPlatform)
-                            )
                         }
                     }
                 }

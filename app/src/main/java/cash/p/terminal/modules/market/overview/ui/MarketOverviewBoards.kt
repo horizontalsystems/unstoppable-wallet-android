@@ -21,8 +21,6 @@ import cash.p.terminal.R
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statSection
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem
@@ -69,8 +67,6 @@ fun BoardsView(
             boardItem.marketViewItems.forEach { coin ->
                 MarketCoinWithBackground(coin) {
                     onItemClick.invoke(coin)
-
-                    stat(page = StatPage.MarketOverview, section = boardItem.type.statSection, event = StatEvent.OpenCoin(coin.coinUid))
                 }
             }
 

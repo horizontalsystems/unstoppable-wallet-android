@@ -1656,4 +1656,5 @@
     <string name="CexWithdraw_Error_MinimumAmount">La cantidad mínima que puedes retirar es %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">La cantidad máxima que puedes retirar es %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">Fallo al retirar</string>
+    <string name="ShareCrashData">Çökme verilerini paylaş</string>
 </resources>

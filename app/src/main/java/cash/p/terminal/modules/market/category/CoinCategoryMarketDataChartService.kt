@@ -3,8 +3,6 @@ package cash.p.terminal.modules.market.category
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPeriod
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper
@@ -35,7 +33,5 @@ class CoinCategoryMarketDataChartService(
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
-
-        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 }

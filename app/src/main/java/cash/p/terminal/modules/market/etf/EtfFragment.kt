@@ -45,9 +45,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.core.stats.statSortType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.chartview.chart.GraphicLine
@@ -206,8 +203,6 @@ fun EtfPage(
             onSelect = { selected ->
                 viewModel.onSelectTimeDuration(selected)
                 openPeriodSelector = false
-
-                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -221,8 +216,6 @@ fun EtfPage(
             onSelect = { selected ->
                 viewModel.onSelectSortBy(selected)
                 openSortingSelector = false
-
-                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchSortType(selected.statSortType))
             },
             onDismiss = {
                 openSortingSelector = false

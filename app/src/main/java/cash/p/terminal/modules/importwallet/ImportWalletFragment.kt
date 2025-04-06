@@ -34,7 +34,6 @@ import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
@@ -97,8 +96,6 @@ private fun ImportWalletScreen(
                                     StatPage.ImportWalletFromFiles
                                 )
                             )
-
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromFiles))
                         }
                     }
                 } catch (e: Throwable) {
@@ -160,8 +157,6 @@ private fun ImportWalletScreen(
                                 R.id.restoreAccountFragment,
                                 ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
                             )
-
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
                         }
                     }
                 )
@@ -184,8 +179,6 @@ private fun ImportWalletScreen(
                             R.id.importCexAccountFragment,
                             ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
                         )
-
-                        stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromExchangeWallet))
                     }
                 )
                 VSpacer(12.dp)

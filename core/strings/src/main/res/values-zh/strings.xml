@@ -892,7 +892,7 @@
     <string name="Privacy_Information">Unstoppable 不收集暴露您私人信息的个人数据，例如币余额或地址。虽然我们收集了一些用户界面使用统计数据，但这仅用于了解我们的用户群和应用程序使用趋势。如果您希望，可以禁用此功能。</string>
     <string name="Privacy_BulletedText2">我们没有用户账户或存储用户数据的数据库。</string>
     <string name="Privacy_BulletedText3">如果允许，钱包将与不可阻挡团队分享应用程序使用习惯。这是为了了解我们的用户正在使用哪些功能（或未使用）。作为一个关注隐私的应用程序，我们需要一种评估我们努力的方式，如果没有这个，我们就无法知道我们构建的功能是否被使用。</string>
-    <string name="ShareUiData">共享界面数据</string>
+    <string name="ShareCrashData">分享崩溃数据</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">网络</string>
     <!--Evm Network-->

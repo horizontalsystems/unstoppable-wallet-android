@@ -20,7 +20,6 @@ import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Faq
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -47,8 +46,6 @@ class FaqListFragment : BaseComposeFragment() {
                     R.id.markdownFragment,
                     MarkdownFragment.Input(faqItem.markdown)
                 )
-
-                stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))
             }
         )
     }

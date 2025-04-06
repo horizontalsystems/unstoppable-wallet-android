@@ -50,7 +50,6 @@ import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceUiState
 import cash.p.terminal.modules.balance.BalanceViewItem2
@@ -237,16 +236,12 @@ fun BalanceItems(
                         {
                             viewModel.toggleBalanceVisibility()
                             HudHelper.vibrate(context)
-
-                            stat(page = StatPage.Balance, event = StatEvent.ToggleBalanceHidden)
                         }
                     },
                     onClickSubtitle = remember {
                         {
                             viewModel.toggleTotalType()
                             HudHelper.vibrate(context)
-
-                            stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
                     }
                 )
@@ -264,11 +259,6 @@ fun BalanceItems(
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.SendTokenList)
-                                )
                             }
                         )
                         ButtonPrimaryDefault(
@@ -279,11 +269,6 @@ fun BalanceItems(
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
                                         navController.slideFromRight(R.id.receiveFragment)
-
-                                        stat(
-                                            page = StatPage.Balance,
-                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
-                                        )
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
@@ -297,11 +282,6 @@ fun BalanceItems(
                                             R.id.backupRequiredDialog,
                                             BackupRequiredDialog.Input(account, text)
                                         )
-
-                                        stat(
-                                            page = StatPage.Balance,
-                                            event = StatEvent.Open(StatPage.BackupRequired)
-                                        )
                                     }
 
                                     null -> Unit
@@ -314,11 +294,6 @@ fun BalanceItems(
                                 contentDescription = stringResource(R.string.Swap),
                                 onClick = {
                                     navController.slideFromRight(R.id.multiswap)
-
-                                    stat(
-                                        page = StatPage.Balance,
-                                        event = StatEvent.Open(StatPage.Stacking)
-                                    )
                                 }
                             )
                         }
@@ -327,10 +302,6 @@ fun BalanceItems(
                             contentDescription = stringResource(R.string.stacking),
                             onClick = {
                                 navController.slideFromRight(R.id.stacking)
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.Stacking)
-                                )
                             }
                         )
                     }
@@ -347,10 +318,6 @@ fun BalanceItems(
                             title = stringResource(R.string.staking_details),
                             onClick = {
                                 navController.slideFromRight(R.id.stacking)
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.Stacking)
-                                )
                             },
                             icon = R.drawable.ic_coins_stacking,
                             modifier = Modifier
@@ -392,11 +359,6 @@ fun BalanceItems(
                         contentDescription = stringResource(R.string.ManageCoins_title),
                         onClick = {
                             navController.slideFromRight(R.id.manageWalletsFragment)
-
-                            stat(
-                                page = StatPage.Balance,
-                                event = StatEvent.Open(StatPage.CoinManager)
-                            )
                         }
                     )
 

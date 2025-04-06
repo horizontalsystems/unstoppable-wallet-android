@@ -56,7 +56,6 @@ import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.FeeRateProvider
 import cash.p.terminal.core.providers.FeeTokenProvider
-import cash.p.terminal.core.stats.StatsManager
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
@@ -197,7 +196,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
         lateinit var spamManager: SpamManager
-        lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
     }
 
@@ -219,7 +217,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.w("RxJava ErrorHandler", e)
             e?.let {
-                FirebaseCrashlytics.getInstance().recordException(e)
+                if(localStorage.shareCrashDataEnabled) {
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                }
             }
         }
 
@@ -291,14 +291,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             userManager = userManager,
             pinDbStorage = PinDbStorage(appDatabase.pinDao()),
             backgroundManager = backgroundManager
-        )
-
-        statsManager = StatsManager(
-            appDatabase.statsDao(),
-            localStorage,
-            marketKit,
-            appConfigProvider,
-            backgroundManager
         )
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
@@ -378,6 +370,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tonConnectManager.start()
 
         startTasks()
+
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = localStorage.shareCrashDataEnabled
     }
 
     override fun newImageLoader(): ImageLoader {

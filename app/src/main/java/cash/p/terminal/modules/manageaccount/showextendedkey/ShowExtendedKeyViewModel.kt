@@ -9,7 +9,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
 import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
@@ -68,24 +67,14 @@ class ShowExtendedKeyViewModel(
         if (purpose != HDWallet.Purpose.BIP44 && (blockchain != Blockchain.Bitcoin && blockchain != Blockchain.Litecoin)) {
             blockchain = Blockchain.Bitcoin
         }
-
-        logEvent(StatEvent.Select(StatEntity.Derivation))
     }
 
     fun set(blockchain: Blockchain) {
         this.blockchain = blockchain
-
-        logEvent(StatEvent.Select(StatEntity.Blockchain))
     }
 
     fun set(account: Int) {
         this.account = account
-
-        logEvent(StatEvent.Select(StatEntity.Account))
-    }
-
-    fun logEvent(event: StatEvent) {
-        stat(page = statPage, event = event)
     }
 
     private val Blockchain.extendedKeyCoinType: ExtendedKeyCoinType

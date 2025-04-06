@@ -39,7 +39,6 @@ import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
@@ -200,8 +199,6 @@ private fun onTransactionClick(
     transactionsViewModel.tmpItemToShow = transactionItem
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
-
-    stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 @Composable
@@ -234,8 +231,6 @@ private fun TokenBalanceHeader(
                     onClick = {
                         viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
-
-                        stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
                     }
                 ),
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
@@ -428,8 +423,6 @@ private fun ButtonsRow(
         try {
             val wallet = viewModel.getWalletForReceive()
             navController.slideFromRight(R.id.receiveFragment, wallet)
-
-            stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
@@ -440,8 +433,6 @@ private fun ButtonsRow(
                 R.id.backupRequiredDialog,
                 BackupRequiredDialog.Input(e.account, text)
             )
-
-            stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
         }
     }
 
@@ -460,7 +451,6 @@ private fun ButtonsRow(
                     icon = R.drawable.ic_coins_stacking,
                     contentDescription = stringResource(R.string.stacking),
                     onClick = {
-                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
                         onStackingClicked()
                     }
                 )
@@ -478,11 +468,6 @@ private fun ButtonsRow(
                         navController.slideFromRight(
                             R.id.sendXFragment,
                             SendFragment.Input(viewItem.wallet, sendTitle)
-                        )
-
-                        stat(
-                            page = StatPage.TokenPage,
-                            event = StatEvent.OpenSend(viewItem.wallet.token)
                         )
                     },
                     enabled = viewItem.sendEnabled
@@ -512,8 +497,6 @@ private fun ButtonsRow(
                             R.id.multiswap,
                             SwapParams.TOKEN_IN to viewItem.wallet.token
                         )
-
-                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                     },
                     enabled = viewItem.swapEnabled
                 )
@@ -524,7 +507,6 @@ private fun ButtonsRow(
                     icon = R.drawable.ic_coins_stacking,
                     contentDescription = stringResource(R.string.stacking),
                     onClick = {
-                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
                         onStackingClicked()
                     }
                 )
@@ -540,8 +522,6 @@ private fun ButtonsRow(
                 val arguments = CoinFragmentInput(coinUid)
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
-
-                stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
             },
         )
     }

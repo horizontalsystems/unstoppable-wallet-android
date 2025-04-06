@@ -24,7 +24,6 @@ import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.manageaccount.ui.ActionButton
 import cash.p.terminal.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import cash.p.terminal.modules.manageaccount.ui.HidableContent
@@ -76,8 +75,6 @@ private fun EvmPrivateKeyScreen(
                         TextHelper.copyText(evmPrivateKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
-
-                        stat(page = StatPage.EvmPrivateKey, event = StatEvent.Copy(StatEntity.EvmPrivateKey))
                     }
                 },
                 onCancel = {
@@ -102,10 +99,6 @@ private fun EvmPrivateKeyScreen(
                             icon = R.drawable.ic_info_24,
                             onClick = {
                                 FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                                stat(
-                                    page = StatPage.EvmPrivateKey,
-                                    event = StatEvent.Open(StatPage.Info)
-                                )
                             }
                         )
                     )
@@ -131,7 +124,6 @@ private fun EvmPrivateKeyScreen(
                         evmPrivateKey,
                         stringResource(R.string.EvmPrivateKey_ShowPrivateKey)
                     ) {
-                        stat(page = StatPage.EvmPrivateKey, event = StatEvent.ToggleHidden)
                     }
                 }
 

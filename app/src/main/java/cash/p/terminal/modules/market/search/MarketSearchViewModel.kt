@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.FullCoin
 import kotlinx.coroutines.launch
@@ -94,12 +93,8 @@ class MarketSearchViewModel(
     fun onFavoriteClick(favourited: Boolean, coinUid: String) {
         if (favourited) {
             marketFavoritesManager.remove(coinUid)
-
-            stat(page = StatPage.MarketSearch, event = StatEvent.RemoveFromWatchlist(coinUid))
         } else {
             marketFavoritesManager.add(coinUid)
-
-            stat(page = StatPage.MarketSearch, event = StatEvent.AddToWatchlist(coinUid))
         }
     }
 

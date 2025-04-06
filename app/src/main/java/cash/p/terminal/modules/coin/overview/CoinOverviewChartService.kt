@@ -3,8 +3,6 @@ package cash.p.terminal.modules.coin.overview
 import android.util.Log
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPeriod
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper
@@ -16,7 +14,6 @@ import io.horizontalsystems.core.models.HsPeriodType
 import io.horizontalsystems.core.models.HsTimePeriod
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.reactivex.Single
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -106,8 +103,6 @@ class CoinOverviewChartService(
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
-
-        stat(page = StatPage.CoinOverview, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 
     private suspend fun getItemsByPeriodType(

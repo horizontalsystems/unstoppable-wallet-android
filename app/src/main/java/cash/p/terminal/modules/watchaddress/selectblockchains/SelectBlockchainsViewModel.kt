@@ -6,8 +6,6 @@ import cash.p.terminal.core.description
 import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.watchaddress.WatchAddressService
 import cash.p.terminal.ui_compose.components.ImageSource
@@ -102,8 +100,6 @@ class SelectBlockchainsViewModel(
         service.watchTokens(accountType, selectedCoins.toList(), accountName)
         accountCreated = true
         emitState()
-
-        stat(page = StatPage.WatchWallet, event = StatEvent.WatchWallet(accountType.statAccountType))
     }
 
 }

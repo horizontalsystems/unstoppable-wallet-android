@@ -40,8 +40,6 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPage
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
@@ -203,8 +201,6 @@ private fun LazyListScope.coinRankList(
             onClick = {
                 val arguments = CoinFragmentInput(item.coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
-
-                stat(page = type.statPage, event = StatEvent.OpenCoin(item.coinUid))
             }
         )
     }

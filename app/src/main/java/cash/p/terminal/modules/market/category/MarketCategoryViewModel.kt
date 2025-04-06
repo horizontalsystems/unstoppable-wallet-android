@@ -5,9 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statField
-import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.DataState
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.components.ImageSource
@@ -100,8 +97,6 @@ class MarketCategoryViewModel(
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
         selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
-
-        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchSortType(sortingField.statSortType))
     }
 
     fun onSelectMarketField(marketField: MarketField) {
@@ -109,8 +104,6 @@ class MarketCategoryViewModel(
 
         syncMarketViewItems()
         syncMenu()
-
-        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchField(marketField.statField))
     }
 
     fun onSelectorDialogDismiss() {
@@ -137,13 +130,9 @@ class MarketCategoryViewModel(
 
     fun onAddFavorite(uid: String) {
         service.addFavorite(uid)
-
-        stat(page = StatPage.CoinCategory, event = StatEvent.AddToWatchlist(uid))
     }
 
     fun onRemoveFavorite(uid: String) {
         service.removeFavorite(uid)
-
-        stat(page = StatPage.CoinCategory, event = StatEvent.RemoveFromWatchlist(uid))
     }
 }

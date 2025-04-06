@@ -40,6 +40,7 @@ import cash.p.terminal.core.storage.migrations.Migration_61_62
 import cash.p.terminal.core.storage.migrations.Migration_62_63
 import cash.p.terminal.core.storage.migrations.Migration_63_64
 import cash.p.terminal.core.storage.migrations.Migration_64_65
+import cash.p.terminal.core.storage.migrations.Migration_65_66
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
 import cash.p.terminal.entities.ChangeNowTransaction
@@ -49,7 +50,6 @@ import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.EvmSyncSourceRecord
 import cash.p.terminal.entities.LogEntry
 import cash.p.terminal.entities.RestoreSettingRecord
-import cash.p.terminal.entities.StatRecord
 import cash.p.terminal.entities.SyncerState
 import cash.p.terminal.entities.TokenAutoEnabledBlockchain
 import cash.p.terminal.entities.nft.NftAssetBriefMetadataRecord
@@ -68,7 +68,7 @@ import cash.p.terminal.wallet.entities.AccountRecord
 import cash.p.terminal.wallet.entities.EnabledWallet
 
 @Database(
-    version = 65,
+    version = 66,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -93,7 +93,6 @@ import cash.p.terminal.wallet.entities.EnabledWallet
         CexAssetRaw::class,
         ChartIndicatorSetting::class,
         Pin::class,
-        StatRecord::class,
         ChangeNowTransaction::class
     ]
 )
@@ -119,7 +118,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun syncerStateDao(): SyncerStateDao
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
     abstract fun pinDao(): PinDao
-    abstract fun statsDao(): StatsDao
     abstract fun changeNowTransactionsDao(): ChangeNowTransactionsDao
 
     companion object {
@@ -172,6 +170,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_62_63,
                             Migration_63_64,
                             Migration_64_65,
+                            Migration_65_66,
                     )
                     .build()
         }

@@ -1,9 +1,6 @@
 package cash.p.terminal.modules.market.metricspage
 
 import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPage
-import cash.p.terminal.core.stats.statPeriod
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper
@@ -44,7 +41,5 @@ class MetricsPageChartService(
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
-
-        stat(page = metricsType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 }

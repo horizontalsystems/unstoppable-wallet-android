@@ -55,7 +55,6 @@ import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
@@ -140,13 +139,9 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
             navController.slideFromBottom(R.id.swapSelectProvider)
-
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
         onClickProviderSettings = {
             navController.slideFromRight(R.id.swapSettings)
-
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapSettings))
         },
         onTimeout = viewModel::reQuote,
         onClickNext = {
@@ -155,8 +150,6 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
                     navController.popBackStack()
                 }
             }
-
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -512,8 +505,6 @@ fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut:
                         indication = null,
                         onClick = {
                             showRegularPrice = !showRegularPrice
-
-                            stat(page = statPage, event = StatEvent.TogglePrice)
                         }
                     ),
                 verticalAlignment = Alignment.CenterVertically,

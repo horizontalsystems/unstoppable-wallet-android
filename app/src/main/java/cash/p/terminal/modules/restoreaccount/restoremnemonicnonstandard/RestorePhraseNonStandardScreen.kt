@@ -61,7 +61,6 @@ import cash.p.terminal.core.displayNameStringRes
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.DataState
@@ -247,8 +246,6 @@ fun RestorePhraseNonStandard(
                                 onClick = {
                                     textState = textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
-
-                                    stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Clear(StatEntity.RecoveryPhrase))
                                 }
                             )
                         } else {
@@ -259,8 +256,6 @@ fun RestorePhraseNonStandard(
                                     qrScannerLauncher.launch(
                                         QRScannerActivity.getScanQrIntent(context)
                                     )
-
-                                    stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.ScanQr(StatEntity.RecoveryPhrase))
                                 }
                             )
 
@@ -278,8 +273,6 @@ fun RestorePhraseNonStandard(
                                             textInClipboard,
                                             textInClipboard.length
                                         )
-
-                                        stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Paste(StatEntity.RecoveryPhrase))
                                     }
                                 },
                             )
@@ -334,8 +327,6 @@ fun RestorePhraseNonStandard(
         mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletNonStandard)
         openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
-
-        stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Open(StatPage.RestoreSelect))
     }
 
     if (showCustomKeyboardDialog) {

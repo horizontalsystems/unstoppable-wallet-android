@@ -47,8 +47,6 @@ import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statSection
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
@@ -122,8 +120,6 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                     R.id.coinFragment,
                     CoinFragmentInput(coin.uid)
                 )
-
-                stat(page = StatPage.MarketSearch, section = section.statSection, event = StatEvent.OpenCoin(coin.uid))
             }
         ) { favorited, coinUid ->
             viewModel.onFavoriteClick(favorited, coinUid)

@@ -16,7 +16,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreByMenu
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
@@ -53,8 +52,6 @@ fun RestorePrivateKey(
                             viewModel.resolveAccountType()?.let { accountType ->
                                 mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletFromKeyAdvanced)
                                 openSelectCoinsScreen.invoke()
-
-                                stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.RestoreSelect))
                             }
                         }
                     )
@@ -92,13 +89,10 @@ fun RestorePrivateKey(
                     viewModel.onEnterPrivateKey(it)
                 },
                 onClear = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Clear(StatEntity.Key))
                 },
                 onPaste = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Paste(StatEntity.Key))
                 },
                 onScanQR = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.ScanQr(StatEntity.Key))
                 })
 
             Spacer(Modifier.height(32.dp))

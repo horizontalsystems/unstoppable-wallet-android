@@ -10,7 +10,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.StatSortType
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.overview.TopPairViewItem
 import io.horizontalsystems.core.CurrencyManager
@@ -82,12 +81,6 @@ class TopPairsViewModel(
             emitState()
         }
 
-        stat(
-            page = StatPage.Markets,
-            section = StatSection.Pairs,
-            event = StatEvent.Refresh
-        )
-
     }
 
     fun onErrorClick() {
@@ -101,12 +94,6 @@ class TopPairsViewModel(
             items = sortItems(items)
             emitState()
         }
-
-        stat(
-            page = StatPage.Markets,
-            section = StatSection.Pairs,
-            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume)
-        )
     }
 
     class Factory : ViewModelProvider.Factory {

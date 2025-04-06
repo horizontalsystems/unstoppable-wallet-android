@@ -452,6 +452,7 @@
     <string name="BackupManager_MergeTitle">هشدار</string>
     <!-- Privacy  -->
     <!-- Security Center -->
+    <string name="ShareCrashData">اشتراک‌گذاری داده‌های خرابی</string>
     <string name="SecurityCenter_Internet">اینترنت</string>
     <!--Evm Network-->
     <string name="EvmNetwork_SyncMode">حالت همگام سازی</string>

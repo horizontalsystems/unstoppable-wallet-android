@@ -4,8 +4,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import cash.p.terminal.wallet.IAccountManager
@@ -117,15 +115,11 @@ class BackupLocalPasswordViewModel(
                         if (!account.isFileBackedUp) {
                             accountManager.update(account.copy(isFileBackedUp = true))
                         }
-
-                        stat(page = StatPage.ExportWalletToFiles, event = StatEvent.ExportWallet(account.type.statAccountType))
                     }
                 }
 
                 is BackupType.FullBackup -> {
                     // FullBackup doesn't change account's backup state
-
-                    stat(page = StatPage.ExportFullToFiles, event = StatEvent.ExportFull)
                 }
             }
             delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)

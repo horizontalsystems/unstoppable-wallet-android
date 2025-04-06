@@ -26,7 +26,6 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HFillSpacer
@@ -65,8 +64,6 @@ fun SwapSelectProviderScreen(navController: NavController) {
     ) {
         swapViewModel.onSelectQuote(it)
         navController.popBackStack()
-
-        stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
     }
 }
 

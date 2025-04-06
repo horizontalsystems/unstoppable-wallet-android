@@ -49,7 +49,6 @@ import cash.p.terminal.core.composablePopup
 import io.horizontalsystems.core.requireInput
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.EvmSyncSource
 import cash.p.terminal.modules.btcblockchainsettings.BlockchainSettingCell
 import cash.p.terminal.modules.evmnetwork.addrpc.AddRpcScreen
@@ -174,11 +173,6 @@ private fun EvmNetworkScreen(
                     CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
                         BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectSyncSource(item.syncSource)
-
-                            stat(
-                                page = StatPage.BlockchainSettingsEvm,
-                                event = StatEvent.SwitchEvmSource(blockchain.uid, item.name)
-                            )
                         }
                     }
                 }
@@ -189,11 +183,6 @@ private fun EvmNetworkScreen(
                         revealedCardId,
                         onClick = { syncSource ->
                             viewModel.onSelectSyncSource(syncSource)
-
-                            stat(
-                                page = StatPage.BlockchainSettingsEvm,
-                                event = StatEvent.SwitchEvmSource(blockchain.uid, "custom")
-                            )
                         },
                         onReveal = { id ->
                             if (revealedCardId != id) {
@@ -206,11 +195,6 @@ private fun EvmNetworkScreen(
                     ) {
                         viewModel.onRemoveCustomRpc(it)
                         HudHelper.showErrorMessage(view, R.string.Hud_Removed)
-
-                        stat(
-                            page = StatPage.BlockchainSettingsEvm,
-                            event = StatEvent.DeleteCustomEvmSource(blockchain.uid)
-                        )
                     }
                 }
 
@@ -218,11 +202,6 @@ private fun EvmNetworkScreen(
                     Spacer(Modifier.height(32.dp))
                     AddButton {
                         navController.navigate(AddRpcPage)
-
-                        stat(
-                            page = StatPage.BlockchainSettingsEvm,
-                            event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid)
-                        )
                     }
                 }
             }

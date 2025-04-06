@@ -23,7 +23,6 @@ import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
@@ -140,13 +139,10 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                     blockchainType = item.blockchainType,
                     navController = navController,
                     onCopy = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Copy(StatEntity.Address))
                     },
                     onAddToExisting = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
                     },
                     onAddToNew = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactNew))
                     }
                 )
             }

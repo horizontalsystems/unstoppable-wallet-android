@@ -36,7 +36,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
@@ -110,8 +109,6 @@ fun ManageWalletsScreen(
     if (restoreSettingsViewModel.openZcashConfigure != null) {
         restoreSettingsViewModel.zcashConfigureOpened()
         openZCashConfigure.invoke()
-
-        stat(page = StatPage.RestoreSelect, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
     LaunchedEffect(restored) {

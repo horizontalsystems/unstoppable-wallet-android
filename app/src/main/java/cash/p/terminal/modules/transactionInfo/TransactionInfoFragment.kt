@@ -20,7 +20,6 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
@@ -155,8 +154,6 @@ fun TransactionInfoSection(
                                 onClick = viewItem.coinUid?.let {
                                     {
                                         navController.slideFromRight(R.id.coinFragment, CoinFragmentInput(it))
-
-                                        stat(page = StatPage.TransactionInfo, event = StatEvent.OpenCoin(it))
                                     }
                                 }
                             )
@@ -204,13 +201,10 @@ fun TransactionInfoSection(
                                 blockchainType = viewItem.blockchainType,
                                 navController = navController,
                                 onCopy = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Copy(StatEntity.Address))
                                 },
                                 onAddToExisting = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
                                 },
                                 onAddToNew = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactNew))
                                 }
                             )
                         }

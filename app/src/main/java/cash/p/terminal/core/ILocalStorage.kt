@@ -83,7 +83,7 @@ interface ILocalStorage {
     var utxoExpertModeEnabled: Boolean
     var rbfEnabled: Boolean
     var statsLastSyncTime: Long
-    var uiStatsEnabled: Boolean?
+    var shareCrashDataEnabled: Boolean
 
     var customDashPeers: String
 

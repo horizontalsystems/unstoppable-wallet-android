@@ -5,8 +5,6 @@ import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statValue
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
@@ -102,26 +100,18 @@ class AppearanceViewModel(
 
     fun onEnterLaunchPage(launchPage: LaunchPage) {
         launchScreenService.setLaunchScreen(launchPage)
-
-        stat(page = StatPage.Appearance, event = StatEvent.SelectLaunchScreen(launchPage.statValue))
     }
 
     fun onEnterAppIcon(enabledAppIcon: AppIcon) {
         appIconService.setAppIcon(enabledAppIcon)
-
-        stat(page = StatPage.Appearance, event = StatEvent.SelectAppIcon(enabledAppIcon.titleText.lowercase()))
     }
 
     fun onEnterTheme(themeType: ThemeType) {
         themeService.setThemeType(themeType)
-
-        stat(page = StatPage.Appearance, event = StatEvent.SelectTheme(themeType.statValue))
     }
 
     fun onEnterBalanceViewType(viewType: BalanceViewType) {
         balanceViewTypeManager.setViewType(viewType)
-
-        stat(page = StatPage.Appearance, event = StatEvent.SelectBalanceValue(viewType.statValue))
     }
 
     fun onSetMarketTabsHidden(hidden: Boolean) {
@@ -132,8 +122,6 @@ class AppearanceViewModel(
 
         marketsTabHidden = hidden
         emitState()
-
-        stat(page = StatPage.Appearance, event = StatEvent.ShowMarketsTab(shown = !hidden))
     }
 
     fun onSetBalanceTabButtonsHidden(hidden: Boolean) {
@@ -141,8 +129,6 @@ class AppearanceViewModel(
 
         balanceTabButtonsHidden = hidden
         emitState()
-
-        stat(page = StatPage.Appearance, event = StatEvent.HideBalanceButtons(shown = !hidden))
     }
 
     fun onSetPriceChangeInterval(priceChangeInterval: PriceChangeInterval) {
@@ -151,8 +137,6 @@ class AppearanceViewModel(
         this.priceChangeInterval = priceChangeInterval
         this.priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
         emitState()
-
-        stat(page = StatPage.Appearance, event = StatEvent.SwitchPriceChangeMode(priceChangeInterval.statValue))
     }
 
 }

@@ -19,7 +19,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui_compose.components.HSSwipeRefresh
@@ -38,8 +37,6 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
         refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
-
-            stat(page = StatPage.Markets, section = StatSection.News, event = StatEvent.Refresh)
         }
     ) {
         Crossfade(viewState) { viewState ->
@@ -61,8 +58,6 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                                 date = postItem.timeAgo,
                             ) {
                                 LinkHelper.openLinkInAppBrowser(context, postItem.url)
-
-                                stat(page = StatPage.Markets, section = StatSection.News, event = StatEvent.Open(StatPage.ExternalNews))
                             }
                         }
                         item {

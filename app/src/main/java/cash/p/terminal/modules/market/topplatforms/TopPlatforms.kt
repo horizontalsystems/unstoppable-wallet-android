@@ -30,9 +30,6 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.core.stats.statSortType
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
@@ -70,8 +67,6 @@ fun TopPlatforms(
             refreshing = uiState.isRefreshing,
             onRefresh = {
                 viewModel.refresh()
-
-                stat(page = StatPage.Markets, section = StatSection.Platforms, event = StatEvent.Refresh)
             }
         ) {
             Crossfade(uiState.viewState, label = "") { state ->
@@ -97,12 +92,6 @@ fun TopPlatforms(
                                     navController.slideFromRight(
                                         R.id.marketPlatformFragment,
                                         it
-                                    )
-
-                                    stat(
-                                        page = StatPage.Markets,
-                                        section = StatSection.Platforms,
-                                        event = StatEvent.OpenPlatform(it.uid)
                                     )
                                 },
                                 preItems = {
@@ -141,11 +130,6 @@ fun TopPlatforms(
             { selected ->
                 viewModel.onTimePeriodSelect(selected)
                 openPeriodSelector = false
-                stat(
-                    page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
-                )
             },
             { openPeriodSelector = false }
         )
@@ -157,11 +141,6 @@ fun TopPlatforms(
             { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
-                stat(
-                    page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
-                )
             },
             { openSortingSelector = false }
         )

@@ -35,9 +35,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPage
-import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.posts.MarketPostsScreen
@@ -81,11 +78,6 @@ fun MarketScreen(navController: NavController, paddingValuesParent: PaddingValue
                         tint = ComposeAppTheme.colors.jacob,
                         onClick = {
                             navController.slideFromRight(R.id.marketSearchFragment)
-
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.MarketSearch)
-                            )
                         },
                     ),
                     MenuItem(
@@ -93,11 +85,6 @@ fun MarketScreen(navController: NavController, paddingValuesParent: PaddingValue
                         icon = R.drawable.ic_manage_2_24,
                         onClick = {
                             navController.slideFromRight(R.id.marketAdvancedSearchFragment)
-
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.AdvancedSearch)
-                            )
                         },
                     ),
                 )
@@ -138,8 +125,6 @@ fun TabsSection(
 
     LaunchedEffect(key1 = selectedTab, block = {
         pagerState.scrollToPage(selectedTab.ordinal)
-
-        stat(page = StatPage.Markets, event = StatEvent.SwitchTab(selectedTab.statTab))
     })
     val tabItems = tabs.map {
         TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
@@ -324,14 +309,10 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
             navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
         }
     }
-
-    stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
 }
 
 private fun onCoinClick(coinUid: String, navController: NavController) {
     val arguments = CoinFragmentInput(coinUid)
 
     navController.slideFromRight(R.id.coinFragment, arguments)
-
-    stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.OpenCoin(coinUid))
 }

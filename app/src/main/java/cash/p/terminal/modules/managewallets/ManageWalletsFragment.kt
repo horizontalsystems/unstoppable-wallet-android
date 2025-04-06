@@ -36,7 +36,6 @@ import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
@@ -88,8 +87,6 @@ private fun ManageWalletsScreen(
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
-
-        stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
     Column(
@@ -105,8 +102,6 @@ private fun ManageWalletsScreen(
                         icon = R.drawable.ic_add_yellow,
                         onClick = {
                             navController.slideFromRight(R.id.addTokenFragment)
-
-                            stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.AddToken))
                         }
                     ))
             } else {
@@ -139,18 +134,12 @@ private fun ManageWalletsScreen(
                             onItemClick = {
                                 if (viewItem.enabled) {
                                     viewModel.disable(viewItem.item)
-
-                                    stat(page = StatPage.CoinManager, event = StatEvent.DisableToken(viewItem.item))
                                 } else {
                                     viewModel.enable(viewItem.item)
-
-                                    stat(page = StatPage.CoinManager, event = StatEvent.EnableToken(viewItem.item))
                                 }
                             },
                             onInfoClick = {
                                 navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
-
-                                stat(page = StatPage.CoinManager, event = StatEvent.OpenTokenInfo(viewItem.item))
                             }
                         )
                     }

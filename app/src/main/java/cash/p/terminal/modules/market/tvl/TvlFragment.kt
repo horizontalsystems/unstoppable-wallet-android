@@ -25,13 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.CoinFragmentInput
@@ -76,8 +74,6 @@ class TvlFragment : BaseComposeFragment() {
         if (coinUid != null) {
             val arguments = CoinFragmentInput(coinUid)
             navController.slideFromRight(R.id.coinFragment, arguments)
-
-            stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
         } else {
             HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)
         }

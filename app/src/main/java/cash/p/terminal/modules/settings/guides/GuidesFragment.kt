@@ -23,7 +23,6 @@ import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.markdown.MarkdownFragment
@@ -138,8 +137,6 @@ fun GuidesScreen(navController: NavController) {
                                                         R.id.markdownFragment,
                                                         MarkdownFragment.Input(guide.markdown, true)
                                                     )
-
-                                                    stat(page = StatPage.Academy, event = StatEvent.OpenArticle(guide.markdown))
                                                 }
                                             ) {
                                                 body_leah(guide.title)

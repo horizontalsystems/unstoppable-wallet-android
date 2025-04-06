@@ -5,8 +5,6 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
 import cash.p.terminal.entities.DataState
@@ -183,8 +181,6 @@ class WatchAddressViewModel(
 
             accountCreated = true
             emitState()
-
-            stat(page = StatPage.WatchWallet, event = StatEvent.WatchWallet(accountType.statAccountType))
         } catch (_: Exception) {
 
         }

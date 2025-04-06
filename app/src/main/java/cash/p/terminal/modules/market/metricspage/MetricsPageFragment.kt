@@ -24,8 +24,6 @@ import cash.p.terminal.wallet.imageUrl
 import io.horizontalsystems.core.requireInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPage
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.ui_compose.CoinFragmentInput
@@ -55,8 +53,6 @@ class MetricsPageFragment : BaseComposeFragment() {
         val viewModel by viewModels<MetricsPageViewModel> { factory }
         MetricsPage(viewModel, chartViewModel, navController) {
             onCoinClick(it, navController)
-
-            stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
         }
     }
 

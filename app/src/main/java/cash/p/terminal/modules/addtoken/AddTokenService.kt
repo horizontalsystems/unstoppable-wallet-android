@@ -6,7 +6,6 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Token
@@ -82,8 +81,6 @@ class AddTokenService(
         val account = accountManager.activeAccount ?: return
         val wallet = cash.p.terminal.wallet.Wallet(token.token, account)
         walletManager.save(listOf(wallet))
-
-        stat(page = StatPage.AddToken, event = StatEvent.AddToken(token.token))
     }
 
     sealed class TokenError : Exception() {

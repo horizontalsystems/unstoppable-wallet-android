@@ -28,8 +28,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.B2
@@ -70,8 +68,6 @@ fun CreateAccountAdvancedScreen(
             delay(300)
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
-
-            stat(page = StatPage.NewWalletAdvanced, event = StatEvent.CreateWallet(accountType.statAccountType))
         }
     }
 

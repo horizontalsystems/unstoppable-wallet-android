@@ -37,8 +37,6 @@ import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statResendType
 import cash.p.terminal.modules.contacts.ContactsFragment
 import cash.p.terminal.modules.contacts.ContactsModule
 import cash.p.terminal.modules.contacts.Mode
@@ -241,8 +239,6 @@ fun PriceWithToggleCell(
         HsIconButton(
             onClick = {
                 showValueOne = !showValueOne
-
-                stat(page = StatPage.TransactionInfo, event = StatEvent.TogglePrice)
             },
             modifier = Modifier
                 .size(28.dp)
@@ -361,7 +357,6 @@ fun TransactionInfoStatusCell(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(R.id.statusInfoDialog)
-                stat(page = StatPage.TransactionInfo, section = StatSection.Status, event = StatEvent.Open(StatPage.Info))
             }
         ) {
             Image(
@@ -503,8 +498,6 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
             onClick = {
                 TextHelper.copyText(transactionHash)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.TransactionId))
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -516,8 +509,6 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
                     putExtra(Intent.EXTRA_TEXT, transactionHash)
                     type = "text/plain"
                 })
-
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Share(StatEntity.TransactionId))
             }
         )
     }
@@ -533,8 +524,6 @@ fun TransactionInfoExplorerCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = {
             LinkHelper.openLinkInAppBrowser(context, url)
-
-            stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.ExternalBlockExplorer))
         }
     ) {
         Image(
@@ -573,8 +562,6 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
                 rawTransaction()?.let {
                     TextHelper.copyText(it)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-
-                    stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.RawTransaction))
                 }
             }
         )
@@ -607,8 +594,6 @@ fun TransactionInfoBtcLockCell(
                         R.id.transactionLockTimeInfoFragment,
                         TransactionLockTimeInfoFragment.Input(lockTime)
                     )
-
-                    stat(page = StatPage.TransactionInfo, section = StatSection.TimeLock, event = StatEvent.Open(StatPage.Info))
                 }
             ) {
                 Icon(
@@ -651,8 +636,6 @@ fun TransactionInfoDoubleSpendCell(
                         conflictingHash
                     )
                 )
-
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.DoubleSpend))
             }
         ) {
             Icon(
@@ -740,8 +723,6 @@ private fun openTransactionOptionsModule(
         BlockchainType.Ton,
         is BlockchainType.Unsupported -> Unit
     }
-
-    stat(page = StatPage.TransactionInfo, event = StatEvent.OpenResend(blockchainType.uid, type.statResendType))
 }
 
 private fun statusTitle(status: TransactionStatus) = when (status) {

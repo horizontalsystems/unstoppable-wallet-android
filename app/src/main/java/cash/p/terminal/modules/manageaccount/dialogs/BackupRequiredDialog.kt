@@ -21,7 +21,6 @@ import io.horizontalsystems.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaultWithIcon
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
@@ -86,11 +85,6 @@ fun BackupRequiredScreen(navController: NavController, account: cash.p.terminal.
                         R.id.backupKeyFragment,
                         account
                     )
-
-                    stat(
-                        page = StatPage.BackupRequired,
-                        event = StatEvent.Open(StatPage.ManualBackup)
-                    )
                 }
             )
             VSpacer(12.dp)
@@ -103,11 +97,6 @@ fun BackupRequiredScreen(navController: NavController, account: cash.p.terminal.
                 iconTint = ComposeAppTheme.colors.claude,
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
-
-                    stat(
-                        page = StatPage.BackupRequired,
-                        event = StatEvent.Open(StatPage.FileBackup)
-                    )
                 }
             )
             VSpacer(12.dp)

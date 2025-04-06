@@ -21,7 +21,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
@@ -103,8 +102,6 @@ private fun DonateAddress(
             onClick = {
                 TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-
-                stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
             }
         ) {
             Image(
@@ -128,8 +125,6 @@ private fun DonateAddress(
                 onClick = {
                     TextHelper.copyText(address)
                     HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-
-                    stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
                 }
             )
         }

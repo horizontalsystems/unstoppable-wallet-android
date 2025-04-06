@@ -25,7 +25,6 @@ import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.manageaccount.ui.ActionButton
 import cash.p.terminal.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import cash.p.terminal.modules.manageaccount.ui.PassphraseCell
@@ -90,11 +89,6 @@ private fun RecoveryPhraseScreen(
                                 showBottomSheet = false
                             }
                         }
-
-                        stat(
-                            page = StatPage.RecoveryPhrase,
-                            event = StatEvent.Copy(StatEntity.RecoveryPhrase)
-                        )
                     }
                 },
                 onCancel = {
@@ -121,10 +115,6 @@ private fun RecoveryPhraseScreen(
                         icon = R.drawable.ic_info_24,
                         onClick = {
                             FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                            stat(
-                                page = StatPage.RecoveryPhrase,
-                                event = StatEvent.Open(StatPage.Info)
-                            )
                         }
                     )
                 )
@@ -148,7 +138,6 @@ private fun RecoveryPhraseScreen(
                 var hidden by remember { mutableStateOf(true) }
                 SeedPhraseList(viewModel.wordsNumbered, hidden) {
                     hidden = !hidden
-                    stat(page = StatPage.RecoveryPhrase, event = StatEvent.ToggleHidden)
                 }
                 VSpacer(24.dp)
                 PassphraseCell(viewModel.passphrase, hidden)

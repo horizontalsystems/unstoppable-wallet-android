@@ -32,7 +32,6 @@ import cash.p.terminal.core.fiatIconUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
@@ -108,12 +107,6 @@ fun TopPairsScreen() {
                                     TopPairItem(item, borderBottom = true) {
                                         it.tradeUrl?.let {
                                             LinkHelper.openLinkInAppBrowser(context, it)
-
-                                            stat(
-                                                page = StatPage.Markets,
-                                                section = StatSection.Pairs,
-                                                event = StatEvent.Open(StatPage.ExternalMarketPair)
-                                            )
                                         }
                                     }
                                 }

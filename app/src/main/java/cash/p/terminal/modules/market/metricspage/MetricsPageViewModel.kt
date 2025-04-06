@@ -6,8 +6,6 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPage
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.core.entities.ViewState
@@ -38,7 +36,6 @@ class MetricsPageViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var isRefreshing: Boolean = false
-    private val statPage: StatPage = metricsType.statPage
     private var viewItems: List<CoinViewItem> = listOf()
     private var sortDescending: Boolean = true
     private var marketDataJob: Job? = null
@@ -177,8 +174,6 @@ class MetricsPageViewModel(
 
     fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
-
-        stat(page = statPage, event = StatEvent.Refresh)
     }
 
     fun onErrorClick() {
@@ -194,7 +189,6 @@ class MetricsPageViewModel(
         } else {
             syncMarketItems()
         }
-        stat(page = statPage, event = StatEvent.ToggleSortDirection)
     }
 
 }

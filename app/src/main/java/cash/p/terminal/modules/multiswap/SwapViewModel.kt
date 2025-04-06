@@ -8,7 +8,6 @@ import cash.p.terminal.core.HSCaution
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
@@ -192,18 +191,12 @@ class SwapViewModel(
     }
     fun onSelectTokenIn(token: Token)  {
         quoteService.setTokenIn(token)
-
-        stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenIn(token))
     }
     fun onSelectTokenOut(token: Token) {
         quoteService.setTokenOut(token)
-
-        stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenOut(token))
     }
     fun onSwitchPairs() {
         quoteService.switchPairs()
-
-        stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
     }
 
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)

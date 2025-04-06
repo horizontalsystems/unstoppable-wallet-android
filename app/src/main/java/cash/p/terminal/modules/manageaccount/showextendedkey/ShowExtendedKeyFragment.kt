@@ -121,8 +121,6 @@ private fun ShowExtendedKeyScreen(
                         TextHelper.copyText(viewModel.extendedKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
-
-                        viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
                     }
                 },
                 onCancel = {
@@ -147,7 +145,6 @@ private fun ShowExtendedKeyScreen(
                             icon = R.drawable.ic_info_24,
                             onClick = {
                                 FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                                viewModel.logEvent(StatEvent.Open(StatPage.Info))
                             }
                         )
                     )
@@ -220,7 +217,6 @@ private fun ShowExtendedKeyScreen(
                             viewModel.extendedKey,
                             stringResource(R.string.ExtendedKey_TapToShowPrivateKey)
                         ) {
-                            viewModel.logEvent(StatEvent.ToggleHidden)
                         }
                     } else {
                         HidableContent(viewModel.extendedKey)
@@ -278,8 +274,6 @@ private fun ShowExtendedKeyScreen(
                     } else {
                         TextHelper.copyText(viewModel.extendedKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-
-                        viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
                     }
                 }
             }

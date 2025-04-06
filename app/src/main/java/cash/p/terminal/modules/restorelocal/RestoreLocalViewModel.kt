@@ -7,8 +7,6 @@ import cash.p.terminal.core.IAccountFactory
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule.WalletBackup
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
@@ -158,8 +156,6 @@ class RestoreLocalViewModel(
             try {
                 backupProvider.restoreFullBackup(decryptedFullBackup, passphrase)
                 restored = true
-
-                stat(page = statPage, event = StatEvent.ImportFull)
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
@@ -191,8 +187,6 @@ class RestoreLocalViewModel(
                     backupProvider.restoreSingleWalletBackup(type, accountName, backup)
                     restored = true
                 }
-
-                stat(page = statPage, event = StatEvent.ImportWallet(type.statAccountType))
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {

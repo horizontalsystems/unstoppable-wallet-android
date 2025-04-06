@@ -19,10 +19,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statMarketTop
-import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.core.stats.statSortType
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.SortingField
@@ -58,8 +54,6 @@ fun TopCoins(
         refreshing = uiState.isRefreshing,
         onRefresh = {
             viewModel.refresh()
-
-            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.Refresh)
         }
     ) {
         Crossfade(uiState.viewState, label = "") { viewState ->
@@ -86,13 +80,9 @@ fun TopCoins(
                         onAddFavorite = { uid ->
                             viewModel.onAddFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.AddToWatchlist(uid))
-
                         },
                         onRemoveFavorite = { uid ->
                             viewModel.onRemoveFavorite(uid)
-
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.RemoveFromWatchlist(uid))
                         },
                         onCoinClick = onCoinClick,
                         preItems = {
@@ -138,8 +128,6 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
-
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchSortType(selected.statSortType))
             },
             onDismiss = {
                 openSortingSelector = false
@@ -153,8 +141,6 @@ fun TopCoins(
             onSelect = {
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
-
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchMarketTop(it.statMarketTop))
             },
             onDismiss = {
                 openTopSelector = false
@@ -168,8 +154,6 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
-
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },
             onDismiss = {
                 openPeriodSelector = false

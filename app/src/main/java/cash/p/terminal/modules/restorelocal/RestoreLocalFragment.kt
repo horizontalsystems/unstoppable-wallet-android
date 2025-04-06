@@ -45,7 +45,6 @@ import cash.p.terminal.core.composablePopup
 import io.horizontalsystems.core.requireInput
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.backuplocal.fullbackup.OtherBackupItems
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -200,8 +199,6 @@ private fun RestoreLocalScreen(
             delay(300)
             openSelectCoins.invoke()
             viewModel.onSelectCoinsShown()
-
-            stat(page = statPage, event = StatEvent.Open(StatPage.RestoreSelect))
         }
     }
 

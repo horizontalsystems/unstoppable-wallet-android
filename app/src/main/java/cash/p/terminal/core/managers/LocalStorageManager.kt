@@ -2,6 +2,7 @@ package cash.p.terminal.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
 import cash.p.terminal.core.valueOrDefault
@@ -97,7 +98,7 @@ class LocalStorageManager(
     private val RBF_ENABLED = "rbf_enabled"
     private val STATS_SYNC_TIME = "stats_sync_time"
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
-    private val UI_STATS_ENABLED = "ui_stats_enabled"
+    private val SHARE_CRASH_DATA_ENABLED = "share_crash_data_enabled"
     private val STACKING_UPDATE_TIME = "stacking_update_time"
     private val STACKING_UNPAID = "stacking_unpaid"
     private val DASH_PEERS = "dash_peers"
@@ -603,21 +604,10 @@ class LocalStorageManager(
 
     override val priceChangeIntervalFlow = MutableStateFlow(priceChangeInterval)
 
-    override var uiStatsEnabled: Boolean?
-        get() = when {
-            preferences.contains(UI_STATS_ENABLED) -> {
-                preferences.getBoolean(UI_STATS_ENABLED, false)
-            }
-
-            else -> null
-        }
+    override var shareCrashDataEnabled: Boolean
+        get() = preferences.getBoolean(SHARE_CRASH_DATA_ENABLED, true)
         set(value) {
-            val editor = preferences.edit()
-            if (value == null) {
-                editor.remove(UI_STATS_ENABLED).apply()
-            } else {
-                editor.putBoolean(UI_STATS_ENABLED, value).apply()
-            }
+            preferences.edit { putBoolean(SHARE_CRASH_DATA_ENABLED, value) }
         }
 
     override var customDashPeers: String

@@ -887,7 +887,7 @@
     <string name="Privacy_Information">Unstoppable sammelt keine persönlichen Daten, die Ihre privaten Informationen offen legen, z.B. Münzsalden oder Adressen. Während wir einige UI-Nutzungsstatistiken sammeln, dient es allein dazu, unsere Benutzer- und App-Nutzungstrends zu verstehen. Dies kann deaktiviert werden, wenn Sie es wünschen.</string>
     <string name="Privacy_BulletedText2">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten speichern.</string>
     <string name="Privacy_BulletedText3">Wenn erlaubt, teilt die Brieftasche App-Nutzungsgewohnheiten mit dem unaufhaltsamen Team. Dies ist zu verstehen, welche Funktionen von unseren Benutzern verwendet werden (oder nicht). Als datenschutzorientierte App brauchen wir eine Möglichkeit, unsere Bemühungen zu bewerten, und ohne dies haben wir keine Ahnung, ob die von uns erstellten Funktionen genutzt werden oder nicht.</string>
-    <string name="ShareUiData">UI-Daten teilen</string>
+    <string name="ShareCrashData">Absturzdaten teilen</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->

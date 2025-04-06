@@ -25,8 +25,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.extensions.MetricData
@@ -118,6 +116,4 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
     } else {
         navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
     }
-
-    stat(page = StatPage.MarketOverview, event = StatEvent.Open(metricsType.statPage))
 }

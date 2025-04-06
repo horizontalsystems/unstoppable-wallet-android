@@ -29,8 +29,6 @@ import io.horizontalsystems.core.getInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statSortType
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.ui_compose.CoinFragmentInput
@@ -71,8 +69,6 @@ class MarketPlatformFragment : BaseComposeFragment() {
             onCoinClick = { coinUid ->
                 val arguments = CoinFragmentInput(coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
-
-                stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
             }
         )
     }
@@ -100,8 +96,6 @@ private fun PlatformScreen(
                 refreshing = uiState.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
-
-                    stat(page = StatPage.TopPlatform, event = StatEvent.Refresh)
                 }
             ) {
                 Crossfade(uiState.viewState, label = "") { state ->
@@ -124,19 +118,9 @@ private fun PlatformScreen(
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid ->
                                         viewModel.onAddFavorite(uid)
-
-                                        stat(
-                                            page = StatPage.TopPlatform,
-                                            event = StatEvent.AddToWatchlist(uid)
-                                        )
                                     },
                                     onRemoveFavorite = { uid ->
                                         viewModel.onRemoveFavorite(uid)
-
-                                        stat(
-                                            page = StatPage.TopPlatform,
-                                            event = StatEvent.RemoveFromWatchlist(uid)
-                                        )
                                     },
                                     onCoinClick = onCoinClick,
                                     preItems = {
@@ -182,10 +166,6 @@ private fun PlatformScreen(
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
-                stat(
-                    page = StatPage.TopPlatform,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
-                )
             },
             { openSortingSelector = false }
         )

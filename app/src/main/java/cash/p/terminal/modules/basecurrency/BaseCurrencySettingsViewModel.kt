@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.Currency
 
@@ -65,8 +64,6 @@ class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager
     private fun doSetBaseCurrency(v: Currency) {
         baseCurrency = v
         closeScreen = true
-
-        stat(page = StatPage.BaseCurrency, event = StatEvent.SwitchBaseCurrency(v.code))
     }
 
     fun closeDisclaimer() {

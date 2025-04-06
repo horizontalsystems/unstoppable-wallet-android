@@ -29,7 +29,6 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
@@ -109,8 +108,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 hint = "",
                 onValueChange = {
                     viewModel.onChange(it)
-
-                    stat(page = StatPage.ManageWallet, event = StatEvent.Edit(StatEntity.WalletName))
                 }
             )
 
@@ -166,8 +163,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             R.id.unlinkConfirmationDialog,
                             viewModel.account
                         )
-
-                        stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.UnlinkWallet))
                     }
                 })
             VSpacer(32.dp)
@@ -199,8 +194,6 @@ private fun BackupActions(
                                 R.id.backupKeyFragment,
                                 account
                             )
-
-                            stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.ManualBackup))
                         }
                     }
                 }
@@ -215,8 +208,6 @@ private fun BackupActions(
                     ) {
                         navController.authorizedAction {
                             navController.slideFromBottom(R.id.backupLocalFragment, account)
-
-                            stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.FileBackup))
                         }
                     }
                 }
@@ -259,8 +250,6 @@ private fun KeyActions(
                                 R.id.recoveryPhraseFragment,
                                 viewModel.account
                             )
-
-                            stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.RecoveryPhrase))
                         }
                     }
                 }
@@ -276,8 +265,6 @@ private fun KeyActions(
                             R.id.privateKeysFragment,
                             viewModel.account
                         )
-
-                        stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.PrivateKeys))
                     }
                 }
             }
@@ -292,8 +279,6 @@ private fun KeyActions(
                             R.id.publicKeysFragment,
                             viewModel.account
                         )
-
-                        stat(page = StatPage.ManageWallet, event = StatEvent.Open(StatPage.PublicKeys))
                     }
                 }
             }

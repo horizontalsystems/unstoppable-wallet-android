@@ -19,7 +19,6 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -98,28 +97,13 @@ private fun SearchResultsScreen(
                             scrollToTop = scrollToTopAfterUpdate,
                             onAddFavorite = { uid ->
                                 viewModel.onAddFavorite(uid)
-
-                                stat(
-                                    page = StatPage.AdvancedSearchResults,
-                                    event = StatEvent.AddToWatchlist(uid)
-                                )
                             },
                             onRemoveFavorite = { uid ->
                                 viewModel.onRemoveFavorite(uid)
-
-                                stat(
-                                    page = StatPage.AdvancedSearchResults,
-                                    event = StatEvent.RemoveFromWatchlist(uid)
-                                )
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragmentInput(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
-
-                                stat(
-                                    page = StatPage.AdvancedSearchResults,
-                                    event = StatEvent.OpenCoin(coinUid)
-                                )
                             },
                             preItems = {
                                 stickyHeader {

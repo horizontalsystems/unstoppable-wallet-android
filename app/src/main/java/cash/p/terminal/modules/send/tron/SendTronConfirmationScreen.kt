@@ -35,7 +35,6 @@ import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.fee.HSFeeRaw
@@ -185,13 +184,10 @@ fun SendTronConfirmationScreen(
                             blockchainType = blockchainType,
                             navController = navController,
                             onCopy = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
                             },
                             onAddToExisting = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
                             },
                             onAddToNew = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
                             }
                         )
                     }
@@ -270,8 +266,6 @@ fun SendTronConfirmationScreen(
                 sendResult = sendResult,
                 onClickSend = {
                     sendViewModel.onClickSend()
-
-                    stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
                 },
                 enabled = sendEnabled
             )

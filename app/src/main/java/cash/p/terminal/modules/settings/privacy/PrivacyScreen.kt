@@ -13,28 +13,35 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.cell.CellUniversal
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 
 @Composable
-fun PrivacyScreen(navController: NavController) {
-    val viewModel = viewModel<PrivacyViewModel>(factory = PrivacyViewModel.Factory())
-
-    val uiState = viewModel.uiState
+fun PrivacyScreen(
+    navController: NavController,
+    uiState: PrivacyUiState,
+    toggleCrashData: (Boolean) -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -60,7 +67,7 @@ fun PrivacyScreen(navController: NavController) {
             BulletedText(R.string.Privacy_BulletedText2)
             BulletedText(R.string.Privacy_BulletedText3)
             VSpacer(height = 16.dp)
-            /*
+
             SectionUniversalLawrence {
                 CellUniversal {
                     Icon(
@@ -69,19 +76,14 @@ fun PrivacyScreen(navController: NavController) {
                         tint = ComposeAppTheme.colors.grey
                     )
                     HSpacer(width = 16.dp)
-                    body_leah(text = stringResource(R.string.ShareUiData))
+                    body_leah(text = stringResource(R.string.ShareCrashData))
                     HFillSpacer(minWidth = 8.dp)
                     HsSwitch(
                         checked = uiState.uiStatsEnabled,
-                        onCheckedChange = {
-                            viewModel.toggleUiStats(it)
-
-                            stat(page = StatPage.Privacy, event = StatEvent.EnableUiStats(it))
-                        }
+                        onCheckedChange = toggleCrashData
                     )
                 }
             }
-            */
         }
 
         Divider(

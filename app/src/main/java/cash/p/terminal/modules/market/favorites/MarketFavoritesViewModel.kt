@@ -5,7 +5,6 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.DataState
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
@@ -113,8 +112,6 @@ class MarketFavoritesViewModel(
     fun onToggleSignal() {
         if (service.showSignals) {
             service.hideSignals()
-
-            stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(false))
         } else {
             showSignalsInfo = true
             emitState()
@@ -128,8 +125,6 @@ class MarketFavoritesViewModel(
 
     fun showSignals() {
         service.showSignals()
-
-        stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(true))
     }
 
     fun reorder(from: Int, to: Int) {

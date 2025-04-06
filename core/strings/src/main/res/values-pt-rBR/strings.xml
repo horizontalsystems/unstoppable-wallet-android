@@ -896,7 +896,7 @@
     <string name="Privacy_Information">P.CASH não coleta dados pessoais que exponham suas informações privadas, como saldos de moedas ou endereços. Embora coletemos algumas estatísticas de uso da interface do usuário, é exclusivamente para entender nossa base de usuários e tendências de uso do aplicativo. Isso pode ser desativado se você desejar.</string>
     <string name="Privacy_BulletedText2">Não há contas de usuário ou bancos de dados armazenando dados do usuário.</string>
     <string name="Privacy_BulletedText3">Se permitido, a carteira compartilhará os hábitos de uso do aplicativo com a equipe do P.CASH. Isso é para entender quais recursos estão sendo usados (ou não) pelos nossos usuários. Sendo um aplicativo focado em privacidade, precisamos de alguma maneira de avaliar nossos esforços e sem isso não temos ideia se os recursos que construímos estão sendo utilizados ou não.</string>
-    <string name="ShareUiData">Compartilhar Dados de UI</string>
+    <string name="ShareCrashData">Compartir datos de fallos</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->

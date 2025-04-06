@@ -21,8 +21,6 @@ import cash.p.terminal.core.composablePage
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.receive.ReceiveRoutes.BCH_ADDRESS_FORMAT_SCREEN
 import cash.p.terminal.modules.receive.ReceiveRoutes.COIN_SELECT_SCREEN
 import cash.p.terminal.modules.receive.ReceiveRoutes.DERIVATION_SELECT_SCREEN
@@ -209,8 +207,6 @@ fun ReceiveScreen(
 private fun onSelectWallet(wallet: cash.p.terminal.wallet.Wallet, viewModel: ReceiveSharedViewModel, navController: NavController) {
     viewModel.wallet = wallet
     navController.navigate(RECEIVE_ADDRESS_SCREEN)
-
-    stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))
 }
 
 @Composable

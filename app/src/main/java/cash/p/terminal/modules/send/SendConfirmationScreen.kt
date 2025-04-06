@@ -31,7 +31,6 @@ import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
@@ -174,13 +173,10 @@ fun SendConfirmationScreen(
                             blockchainType = blockchainType,
                             navController = navController,
                             onCopy = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
                             },
                             onAddToExisting = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
                             },
                             onAddToNew = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
                             }
                         )
                     }
@@ -235,8 +231,6 @@ fun SendConfirmationScreen(
                 sendResult = sendResult,
                 onClickSend = {
                     onClickSend()
-
-                    stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
                 }
             )
         }

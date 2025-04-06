@@ -6,8 +6,6 @@ import cash.p.terminal.core.isNative
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.BalanceSortType
@@ -48,8 +46,6 @@ class DefaultBalanceService private constructor(
             localStorage.sortType = value
 
             sortAndEmitItems()
-
-            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(value.statSortType))
         }
 
     private var _isWatchAccount = false

@@ -24,7 +24,6 @@ import io.horizontalsystems.core.requireInput
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsCheckbox
@@ -113,8 +112,6 @@ private fun UnlinkAccountScreen(navController: NavController, account: cash.p.te
                 viewModel.onUnlink()
                 HudHelper.showSuccessMessage(view, doneConfirmationMessage)
                 navController.popBackStack()
-
-                stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
             },
             enabled = unlinkEnabled
         )

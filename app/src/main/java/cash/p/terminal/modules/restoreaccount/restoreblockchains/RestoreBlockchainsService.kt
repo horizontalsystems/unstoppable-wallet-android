@@ -11,8 +11,6 @@ import cash.p.terminal.core.order
 import cash.p.terminal.core.restoreSettingTypes
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
@@ -206,8 +204,6 @@ class RestoreBlockchainsService(
 
         val wallets = enabledTokens.map { cash.p.terminal.wallet.Wallet(it, account) }
         walletManager.save(wallets)
-
-        stat(page = statPage, event = StatEvent.ImportWallet(accountType.statAccountType))
     }
 
     override fun clear() {

@@ -21,7 +21,6 @@ import io.horizontalsystems.core.getInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
@@ -76,8 +75,6 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         R.id.evmAddressFragment,
                         EvmAddressFragment.Input(evmAddress)
                     )
-
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
                 }
             }
             viewModel.viewState.extendedPublicKey?.let { publicKey ->
@@ -92,8 +89,6 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             publicKey.accountPublicKey
                         )
                     )
-
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.AccountExtendedPublicKey))
                 }
             }
         }

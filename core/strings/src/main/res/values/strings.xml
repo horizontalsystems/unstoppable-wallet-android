@@ -1116,7 +1116,7 @@
     <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
     <string name="Privacy_BulletedText2">There are no user accounts or databases storing user data.</string>
     <string name="Privacy_BulletedText3">If allowed the wallet will share app usage habits with P.CASH team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
-    <string name="ShareUiData">Share UI data</string>
+    <string name="ShareCrashData">Share crash data</string>
 
     <!-- Security Center -->
 

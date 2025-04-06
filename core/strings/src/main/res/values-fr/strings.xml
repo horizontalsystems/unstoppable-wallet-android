@@ -887,7 +887,7 @@
     <string name="Privacy_Information">P.CASH ne collecte pas de données personnelles exposant vos informations privées, telles que les soldes de coins ou les adresses. Bien que nous recueillions certaines statistiques d\'utilisation de l\'interface utilisateur, cela sert uniquement à comprendre notre base d\'utilisateurs et les tendances d\'utilisation de l\'application. Cela peut être désactivé si vous le souhaitez.</string>
     <string name="Privacy_BulletedText2">Il n\'y a pas de comptes utilisateurs ni de bases de données stockant les données des utilisateurs.</string>
     <string name="Privacy_BulletedText3">Si autorisé, le portefeuille partagera les habitudes d\'utilisation de l\'application avec l\'équipe d\'P.CASH. Cela permet de comprendre quelles fonctionnalités sont utilisées (ou non) par nos utilisateurs. Étant une application axée sur la confidentialité, nous avons besoin d\'une manière d\'évaluer nos efforts, et sans cela, nous n\'avons aucune idée si les fonctionnalités que nous avons développées sont utilisées ou non.</string>
-    <string name="ShareUiData">Partager les données UI</string>
+    <string name="ShareCrashData">Partager les données de plantage</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->

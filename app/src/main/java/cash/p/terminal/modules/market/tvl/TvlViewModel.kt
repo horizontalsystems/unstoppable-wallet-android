@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statType
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketModule
@@ -78,20 +76,14 @@ class TvlViewModel(
     fun onSelectChain(chain: TvlModule.Chain) {
         service.chain = chain
         chainSelectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
-
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.SwitchTvlChain(chain.name))
     }
 
     fun onToggleSortType() {
         service.sortDescending = !service.sortDescending
-
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleSortDirection)
     }
 
     fun onToggleTvlDiffType() {
         tvlDiffType = if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
-
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField(tvlDiffType.statType))
     }
 
     fun onClickChainSelector() {
