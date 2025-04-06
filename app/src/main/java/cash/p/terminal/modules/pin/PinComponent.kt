@@ -26,7 +26,7 @@ class PinComponent(
     private val backgroundManager: BackgroundManager
 ) : IPinComponent {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     init {
         scope.launch {
@@ -63,7 +63,7 @@ class PinComponent(
     override val isLocked: StateFlow<Boolean> = appLockManager.isLocked
         .map { isLocked -> isLocked && isPinSet }
         .stateIn(
-            scope = CoroutineScope(Dispatchers.Default),
+            scope = CoroutineScope(Dispatchers.IO),
             started = SharingStarted.Eagerly,
             initialValue = false
         )

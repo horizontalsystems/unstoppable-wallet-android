@@ -27,8 +27,6 @@ import cash.p.terminal.wallet.IAccountManager
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ViewModelUiState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
