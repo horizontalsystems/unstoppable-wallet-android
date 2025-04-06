@@ -35,7 +35,7 @@ piratecash-bitcoin = "c53e4ea"
 horizontalsystems-ethereum = "aae7f27"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
-piratecash-solana = "61d55d6"
+piratecash-solana = "da0a0b8"
 horizontalsystems-tron = "bdd7602"
 
 gson = "2.10.1"
