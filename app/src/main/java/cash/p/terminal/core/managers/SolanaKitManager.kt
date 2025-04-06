@@ -1,7 +1,5 @@
 package cash.p.terminal.core.managers
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
@@ -29,7 +27,7 @@ class SolanaKitManager(
 ) {
 
     private val coroutineScope =
-        CoroutineScope(Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
+        CoroutineScope(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.d("SolanaKitManager", "Coroutine error", throwable)
         })
     private var backgroundEventListenerJob: Job? = null
@@ -135,11 +133,7 @@ class SolanaKitManager(
 
     private fun stopKit() {
         solanaKitWrapper?.solanaKit?.stop()
-        solanaKitWrapper = null
-        currentAccount = null
         tokenAccountJob?.cancel()
-        backgroundEventListenerJob?.cancel()
-        rpcUpdatedJob?.cancel()
     }
 
     private fun startKit() {
@@ -157,13 +151,7 @@ class SolanaKitManager(
         backgroundEventListenerJob = coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
-                    solanaKitWrapper?.solanaKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            if (!kit.refresh()) {
-                                startKit()
-                            }
-                        }, 1000)
-                    }
+                    startKit()
                 } else if (state == BackgroundManagerState.EnterBackground) {
                     stopKit()
                 }

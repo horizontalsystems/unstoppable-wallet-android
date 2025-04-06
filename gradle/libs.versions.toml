@@ -35,7 +35,7 @@ piratecash-bitcoin = "c53e4ea"
 horizontalsystems-ethereum = "aae7f27"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
-horizontalsystems-solana = "ce738d8"
+piratecash-solana = "61d55d6"
 horizontalsystems-tron = "bdd7602"
 
 gson = "2.10.1"
@@ -97,6 +97,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 sol4k = { module = "org.sol4k:sol4k", version.ref = "sol4k" }
 ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
+solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", version.ref = "piratecash-solana" }
 ethereum-kit = { group = "com.github.horizontalsystems", name = "ethereum-kit-android", version.ref = "horizontalsystems-ethereum" }
 blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
 binance-kit = { group = "com.github.horizontalsystems", name = "binance-chain-kit-android", version.ref = "horizontalsystems-binance" }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
 
 class SplAdapter(
-    solanaKitWrapper: SolanaKitWrapper,
+    private val solanaKitWrapper: SolanaKitWrapper,
     wallet: Wallet,
     private val mintAddressString: String
 ) : BaseSolanaAdapter(solanaKitWrapper, wallet.decimal), ISendSolanaAdapter {
@@ -35,7 +35,7 @@ class SplAdapter(
     }
 
     override fun refresh() {
-        // refreshed via EthereumKitManager
+        solanaKitWrapper.solanaKit.refresh()
     }
 
     // IBalanceAdapter

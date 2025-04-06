@@ -3,7 +3,6 @@ package cash.p.terminal.wallet
 import android.content.Context
 import android.os.storage.StorageManager
 import cash.p.terminal.wallet.chart.HsChartRequestHelper
-import io.horizontalsystems.core.entities.Blockchain
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -29,9 +28,7 @@ import cash.p.terminal.wallet.models.EtfPoint
 import cash.p.terminal.wallet.models.EtfPointResponse
 import cash.p.terminal.wallet.models.EtfResponse
 import cash.p.terminal.wallet.models.GlobalMarketPoint
-import io.horizontalsystems.core.models.HsPeriodType
 import cash.p.terminal.wallet.models.HsPointTimePeriod
-import io.horizontalsystems.core.models.HsTimePeriod
 import cash.p.terminal.wallet.models.IntervalData
 import cash.p.terminal.wallet.models.MarketGlobal
 import cash.p.terminal.wallet.models.MarketInfo
@@ -59,7 +56,10 @@ import cash.p.terminal.wallet.storage.GlobalMarketInfoStorage
 import cash.p.terminal.wallet.storage.MarketDatabase
 import cash.p.terminal.wallet.syncers.CoinSyncer
 import cash.p.terminal.wallet.syncers.HsDataSyncer
+import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.models.HsPeriodType
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.Single
 import managers.CoinManager
@@ -619,9 +619,11 @@ class MarketKit(
             // init cache
             (context.getSystemService(Context.STORAGE_SERVICE) as StorageManager?)?.let { storageManager ->
                 val cacheDir = context.cacheDir
-                val cacheQuotaBytes =
+                var cacheQuotaBytes =
                     storageManager.getCacheQuotaBytes(storageManager.getUuidForPath(cacheDir))
-
+                if (cacheQuotaBytes == 0L) { // on some Xiaomi we get 0
+                    cacheQuotaBytes = 10 * 1024 * 1024
+                }
                 HSCache.cacheDir = cacheDir
                 HSCache.cacheQuotaBytes = cacheQuotaBytes
             }

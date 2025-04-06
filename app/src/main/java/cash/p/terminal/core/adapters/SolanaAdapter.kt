@@ -1,21 +1,20 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
-import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.managers.SolanaKitWrapper
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.entities.BalanceData
 import io.horizontalsystems.solanakit.SolanaKit
 import io.horizontalsystems.solanakit.models.Address
 import io.horizontalsystems.solanakit.models.FullTransaction
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper, decimal), ISendSolanaAdapter {
+class SolanaAdapter(private val kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper, decimal),
+    ISendSolanaAdapter {
 
     // IAdapter
 
@@ -28,7 +27,7 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     }
 
     override fun refresh() {
-        // refreshed via EthereumKitManager
+        kitWrapper.solanaKit.refresh()
     }
 
     // IBalanceAdapter
@@ -48,7 +47,8 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     // ISendSolanaAdapter
     override val availableBalance: BigDecimal
         get() {
-            val availableBalance = balanceData.available - SolanaKit.fee - SolanaKit.accountRentAmount
+            val availableBalance =
+                balanceData.available - SolanaKit.fee - SolanaKit.accountRentAmount
             return if (availableBalance < BigDecimal.ZERO) BigDecimal.ZERO else availableBalance
         }
 
