@@ -92,6 +92,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.badge
 import io.horizontalsystems.core.parcelable
+import io.horizontalsystems.core.toBigDecimalOrNullExt
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -729,7 +730,7 @@ private fun FiatAmountInput(
                     val amount = if (it.isBlank()) {
                         null
                     } else {
-                        it.toBigDecimal()
+                        it.toBigDecimalOrNullExt()
                     }
                     text = it
                     onValueChange.invoke(amount)
@@ -825,7 +826,7 @@ private fun AmountInput(
                 amount = if (text.isBlank()) {
                     null
                 } else {
-                    text.toBigDecimal()
+                    text.toBigDecimalOrNullExt()
                 }
 
                 if (!setCursorToEndOnFocused) {
@@ -861,10 +862,10 @@ private fun AmountInput(
 @Composable
 fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
         PriceImpactLevel.Warning,
-        PriceImpactLevel.Forbidden -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
+        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
-        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey
+        else -> ComposeAppTheme.colors.grey
     }
 }
