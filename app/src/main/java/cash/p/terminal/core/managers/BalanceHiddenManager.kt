@@ -49,9 +49,7 @@ class BalanceHiddenManager(
         balanceAutoHide = enabled
         localStorage.balanceAutoHideEnabled = enabled
 
-        if (balanceAutoHide) {
-            setBalanceHidden(true)
-        }
+        setBalanceHidden(balanceAutoHide)
     }
 
     private fun setBalanceHidden(hidden: Boolean) {
