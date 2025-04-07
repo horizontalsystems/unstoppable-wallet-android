@@ -12,12 +12,13 @@ import io.horizontalsystems.core.IPinSettingsStorage
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 class PinComponent(
     private val pinSettingsStorage: IPinSettingsStorage,
@@ -26,7 +27,7 @@ class PinComponent(
     private val backgroundManager: BackgroundManager
 ) : IPinComponent {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(Executors.newFixedThreadPool(5).asCoroutineDispatcher())
 
     init {
         scope.launch {
@@ -63,7 +64,7 @@ class PinComponent(
     override val isLocked: StateFlow<Boolean> = appLockManager.isLocked
         .map { isLocked -> isLocked && isPinSet }
         .stateIn(
-            scope = CoroutineScope(Dispatchers.IO),
+            scope = scope,
             started = SharingStarted.Eagerly,
             initialValue = false
         )

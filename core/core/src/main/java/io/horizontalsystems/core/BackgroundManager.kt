@@ -4,15 +4,16 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
+import java.util.concurrent.Executors
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
+    private val scope = CoroutineScope(Executors.newFixedThreadPool(2).asCoroutineDispatcher())
     private val _stateFlow: MutableStateFlow<BackgroundManagerState> = MutableStateFlow(BackgroundManagerState.Unknown)
     val stateFlow: StateFlow<BackgroundManagerState>
         get() = _stateFlow
