@@ -2,7 +2,7 @@ package cash.p.terminal.modules.pin.core
 
 import io.reactivex.subjects.PublishSubject
 
-class PinManager(private val pinDbStorage: PinDbStorage, ) {
+class PinManager(private val pinDbStorage: PinDbStorage) {
     val pinSetSubject = PublishSubject.create<Unit>()
 
     val isPinSet: Boolean

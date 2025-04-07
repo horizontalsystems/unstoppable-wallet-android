@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.util.Locale
 import kotlin.math.absoluteValue
 
 val BlockchainType.imageUrl: String
@@ -55,6 +56,15 @@ fun ByteArray.toHexString(): String {
     return this.joinToString(separator = "") {
         it.toInt().and(0xff).toString(16).padStart(2, '0')
     }
+}
+
+fun ByteArray.toHexReversed(): String {
+    val sb = StringBuilder(size * 2)
+    var i = size - 1
+    while (i >= 0) {
+        sb.append(String.format(Locale.ROOT, "%02x", this[i--]))
+    }
+    return sb.toString()
 }
 
 //  Intent & Parcelable Enum

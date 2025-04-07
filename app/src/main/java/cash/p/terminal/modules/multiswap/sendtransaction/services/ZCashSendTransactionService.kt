@@ -27,6 +27,7 @@ import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.Token
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.toHexReversed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -137,14 +138,14 @@ class ZCashSendTransactionService(
 
     override suspend fun sendTransaction(): SendTransactionResult {
         try {
-            adapter.send(
+            val txId = adapter.send(
                 amount = amountState.amount!!,
                 address = addressState.address!!.hex,
                 memo = "",
                 logger = logger
             )
 
-            return SendTransactionResult.Common(SendResult.Sent())
+            return SendTransactionResult.Common(SendResult.Sent(txId.byteArray.toHexReversed()))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()
