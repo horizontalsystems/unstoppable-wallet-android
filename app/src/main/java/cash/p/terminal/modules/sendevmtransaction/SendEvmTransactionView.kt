@@ -20,9 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
@@ -30,16 +27,15 @@ import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui_compose.components.NftIcon
-import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
-import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.NftIcon
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.headline2_leah
@@ -48,10 +44,11 @@ import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.core.entities.Blockchain
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -61,11 +58,10 @@ fun SendEvmTransactionView(
     cautions: List<CautionViewItem>,
     transactionFields: List<DataField>,
     networkFee: SendModule.AmountData?,
-    statPage: StatPage
 ) {
     Column {
         items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController, statPage)
+            SectionView(sectionViewItem.viewItems, navController)
         }
 
         if (transactionFields.isNotEmpty()) {
@@ -120,7 +116,10 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
 }
 
 @Composable
-private fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
+private fun SectionView(
+    viewItems: List<ViewItem>,
+    navController: NavController,
+) {
     Spacer(Modifier.height(16.dp))
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
@@ -146,8 +145,14 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                     }
                 )
             }
+
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
-            is ViewItem.Input -> TitleValueHex("CoinFragmentInput", item.value.shorten(), item.value)
+            is ViewItem.Input -> TitleValueHex(
+                "CoinFragmentInput",
+                item.value.shorten(),
+                item.value
+            )
+
             is ViewItem.TokenItem -> Token(item)
         }
     }
@@ -273,7 +278,9 @@ private fun Amount(item: ViewItem.Amount) {
     ) {
         CoinImage(
             token = item.token,
-            modifier = Modifier.padding(end = 16.dp).size(32.dp)
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(32.dp)
         )
         Text(
             text = item.coinAmount,
@@ -301,7 +308,7 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
         Column {
             subhead2_leah(text = item.title)
             VSpacer(height = 1.dp)
-            caption_grey(text = item.badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+            caption_grey(text = item.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 8.dp)
         Column(horizontalAlignment = Alignment.End) {
@@ -344,7 +351,9 @@ private fun Token(item: ViewItem.TokenItem) {
     ) {
         CoinImage(
             token = item.token,
-            modifier = Modifier.padding(end = 16.dp).size(32.dp)
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(32.dp)
         )
         subhead1_leah(item.token.coin.code)
     }

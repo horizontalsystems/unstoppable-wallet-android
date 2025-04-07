@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.market.tvl
 
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper

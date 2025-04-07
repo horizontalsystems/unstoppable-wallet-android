@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.managers.EvmSyncSourceManager
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import io.horizontalsystems.core.entities.Blockchain
 import java.net.MalformedURLException
 import java.net.URI

@@ -21,9 +21,8 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import io.horizontalsystems.core.requireInput
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.manageaccount.ManageAccountFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem

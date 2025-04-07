@@ -1,24 +1,26 @@
 package cash.p.terminal.modules.restoreaccount.restoreblockchains
 
-import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.isDefault
-import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.nativeTokenQueries
 import cash.p.terminal.core.order
 import cash.p.terminal.core.restoreSettingTypes
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Clearable
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -30,24 +32,23 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class RestoreBlockchainsService(
     private val accountName: String,
-    private val accountType: cash.p.terminal.wallet.AccountType,
+    private val accountType: AccountType,
     private val manualBackup: Boolean,
     private val fileBackup: Boolean,
     private val accountFactory: IAccountFactory,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
     private val blockchainTokensService: BlockchainTokensService,
-    private val restoreSettingsService: RestoreSettingsService,
-    private val statPage: StatPage
+    private val restoreSettingsService: RestoreSettingsService
 ) : Clearable {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private var tokens = listOf<cash.p.terminal.wallet.Token>()
-    private val enabledTokens = CopyOnWriteArrayList<cash.p.terminal.wallet.Token>()
+    private var tokens = listOf<Token>()
+    private val enabledTokens = CopyOnWriteArrayList<Token>()
 
-    private var restoreSettingsMap = mutableMapOf<cash.p.terminal.wallet.Token, RestoreSettings>()
+    private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
 
     val cancelEnableBlockchainObservable = PublishSubject.create<Blockchain>()
     val canRestore = BehaviorSubject.createDefault(false)
@@ -96,7 +97,7 @@ class RestoreBlockchainsService(
             .sortedBy { it.type.order }
     }
 
-    private fun handleApproveTokens(blockchain: Blockchain, tokens: List<cash.p.terminal.wallet.Token>) {
+    private fun handleApproveTokens(blockchain: Blockchain, tokens: List<Token>) {
         val existingTokens = enabledTokens.filter { it.blockchain == blockchain }
 
         val newTokens = tokens.minus(existingTokens)
@@ -108,6 +109,7 @@ class RestoreBlockchainsService(
         syncCanRestore()
         syncState()
     }
+
     private fun handleApproveRestoreSettings(
         token: Token,
         restoreSettings: RestoreSettings
@@ -162,7 +164,10 @@ class RestoreBlockchainsService(
                 handleApproveRestoreSettings(token, RestoreSettings())
             }
         } else {
-            blockchainTokensService.approveTokens(blockchain, tokens, tokens.filter { it.type.isDefault })
+            blockchainTokensService.approveTokens(
+                blockchain,
+                tokens,
+                tokens.filter { it.type.isDefault })
         }
     }
 
@@ -186,7 +191,7 @@ class RestoreBlockchainsService(
         val account = accountFactory.account(
             accountName,
             accountType,
-            cash.p.terminal.wallet.AccountOrigin.Restored,
+            AccountOrigin.Restored,
             manualBackup,
             fileBackup,
         )
@@ -202,7 +207,7 @@ class RestoreBlockchainsService(
 
         if (enabledTokens.isEmpty()) return
 
-        val wallets = enabledTokens.map { cash.p.terminal.wallet.Wallet(it, account) }
+        val wallets = enabledTokens.map { Wallet(it, account) }
         walletManager.save(wallets)
     }
 

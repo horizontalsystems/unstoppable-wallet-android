@@ -26,8 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.B2

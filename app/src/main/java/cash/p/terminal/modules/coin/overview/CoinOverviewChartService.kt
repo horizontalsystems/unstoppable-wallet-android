@@ -1,8 +1,7 @@
 package cash.p.terminal.modules.coin.overview
 
 import android.util.Log
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper

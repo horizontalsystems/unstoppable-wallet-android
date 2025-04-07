@@ -8,8 +8,7 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.core.usecase.CheckGooglePlayUpdateUseCase
 import cash.p.terminal.core.usecase.UpdateResult
 import cash.p.terminal.entities.LaunchPage

@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
@@ -93,7 +93,6 @@ fun WCSignEthereumTransactionRequestScreen(
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
-            StatPage.WalletConnect
         )
     }
 }

@@ -48,8 +48,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceUiState
 import cash.p.terminal.modules.balance.BalanceViewItem2

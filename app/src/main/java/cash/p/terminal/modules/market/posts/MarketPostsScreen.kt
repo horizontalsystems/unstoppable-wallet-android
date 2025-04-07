@@ -16,9 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.StatSection
+
+
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui_compose.components.HSSwipeRefresh

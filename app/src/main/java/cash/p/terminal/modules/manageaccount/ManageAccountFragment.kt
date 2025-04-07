@@ -26,9 +26,8 @@ import cash.p.terminal.core.managers.FaqManager
 import io.horizontalsystems.core.requireInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning

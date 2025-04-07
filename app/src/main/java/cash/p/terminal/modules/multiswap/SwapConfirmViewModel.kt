@@ -12,8 +12,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService

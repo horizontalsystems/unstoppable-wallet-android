@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.transactionInfo
 
-import cash.p.terminal.core.stats.StatSection
+
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.ui_compose.ColoredValue
@@ -34,7 +34,7 @@ sealed class TransactionInfoViewItem {
 
     class PriceWithToggle(val title: String, val valueOne: String, val valueTwo: String) : TransactionInfoViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType, val statSection: StatSection) : TransactionInfoViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : TransactionInfoViewItem()
 
     class ContactItem(val contact: Contact) : TransactionInfoViewItem()
 

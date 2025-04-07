@@ -53,8 +53,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRightForResult
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
@@ -332,7 +331,7 @@ private fun SwapScreenInner(
                 if (quote != null) {
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
-                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut, StatPage.Swap)
+                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
                         PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                         quote.fields.forEach {
                             it.GetContent(navController, false)
@@ -489,7 +488,7 @@ private fun ProviderField(
 }
 
 @Composable
-fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
+fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal) {
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 

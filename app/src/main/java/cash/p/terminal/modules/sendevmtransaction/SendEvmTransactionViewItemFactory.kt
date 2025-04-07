@@ -3,7 +3,7 @@ package cash.p.terminal.modules.sendevmtransaction
 import cash.p.terminal.R
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.core.stats.StatSection
+
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendModule
@@ -151,7 +151,6 @@ class SendEvmTransactionViewItemFactory(
                     addressValue,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressTo
                 )
             )
 
@@ -192,7 +191,6 @@ class SendEvmTransactionViewItemFactory(
                     addressValue,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressRecipient
                 )
             )
             contact?.let {
@@ -323,7 +321,6 @@ class SendEvmTransactionViewItemFactory(
                 addressValue,
                 contact == null,
                 blockchainType,
-                StatSection.AddressTo
             )
         )
         contact?.let {
@@ -375,7 +372,6 @@ class SendEvmTransactionViewItemFactory(
                     addressValue,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressSpender
                 )
             )
             contact?.let {
@@ -408,7 +404,6 @@ class SendEvmTransactionViewItemFactory(
                     toValue,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressTo
                 )
             )
             contact?.let {
@@ -448,7 +443,6 @@ class SendEvmTransactionViewItemFactory(
                     toValue,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressTo
                 )
             )
             contact?.let {
@@ -566,7 +560,7 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType, val statSection: StatSection) : ViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : ViewItem()
     class Input(val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
     class ContactItem(val contact: Contact) : ViewItem()

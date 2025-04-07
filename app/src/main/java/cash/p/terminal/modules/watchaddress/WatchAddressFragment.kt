@@ -20,9 +20,8 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import cash.p.terminal.strings.helpers.TranslatableString

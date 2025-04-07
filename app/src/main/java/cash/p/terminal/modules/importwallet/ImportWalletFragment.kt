@@ -32,8 +32,7 @@ import cash.p.terminal.core.Caution
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
@@ -92,8 +91,7 @@ private fun ImportWalletScreen(
                                     popUpToInclusiveId,
                                     inclusive,
                                     jsonString,
-                                    fileName,
-                                    StatPage.ImportWalletFromFiles
+                                    fileName
                                 )
                             )
                         }

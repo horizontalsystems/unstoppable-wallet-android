@@ -3,8 +3,7 @@ package cash.p.terminal.modules.watchaddress
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
 import cash.p.terminal.entities.DataState

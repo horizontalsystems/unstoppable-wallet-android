@@ -58,9 +58,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.DataState
@@ -324,7 +323,7 @@ fun RestorePhraseNonStandard(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletNonStandard)
+        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
         openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
     }

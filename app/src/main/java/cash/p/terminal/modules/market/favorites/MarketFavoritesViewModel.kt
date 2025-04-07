@@ -2,9 +2,8 @@ package cash.p.terminal.modules.market.favorites
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.StatSection
+
+
 import cash.p.terminal.entities.DataState
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem

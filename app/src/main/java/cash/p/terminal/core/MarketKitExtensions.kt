@@ -479,7 +479,10 @@ val TokenType.isDefault
     }
 
 val TokenType.isNative: Boolean
-    get() = this is TokenType.Native || this is TokenType.Derived || this is TokenType.AddressTyped
+    get() = this is TokenType.Native ||
+            this is TokenType.Derived ||
+            this is TokenType.AddressTyped ||
+            this is TokenType.AddressSpecTyped
 
 val BlockchainType.Companion.supported: List<BlockchainType>
     get() = listOf(

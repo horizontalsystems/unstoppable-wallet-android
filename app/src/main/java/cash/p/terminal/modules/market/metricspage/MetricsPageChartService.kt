@@ -1,6 +1,4 @@
 package cash.p.terminal.modules.market.metricspage
-
-import cash.p.terminal.core.stats.StatEvent
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper

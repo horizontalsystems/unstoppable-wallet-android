@@ -6,10 +6,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.MarketKitWrapper
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.StatSortType
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.overview.TopPairViewItem
 import io.horizontalsystems.core.CurrencyManager

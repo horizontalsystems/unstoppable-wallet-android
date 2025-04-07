@@ -17,8 +17,7 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen

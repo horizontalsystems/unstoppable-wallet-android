@@ -64,9 +64,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.DataState
@@ -119,7 +118,6 @@ fun RestorePhrase(
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
-    val statPage = if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
@@ -369,7 +367,7 @@ fun RestorePhrase(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, statPage)
+        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
         openSelectCoins.invoke()
         viewModel.onSelectCoinsShown()
     }

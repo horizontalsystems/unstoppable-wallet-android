@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.ButtonPrimary
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaultWithIcon
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
@@ -34,8 +34,6 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.requireInput
@@ -60,7 +58,10 @@ class BackupRecoveryPhraseDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun BackupRecoveryPhraseScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
+fun BackupRecoveryPhraseScreen(
+    navController: NavController,
+    account: cash.p.terminal.wallet.Account
+) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),

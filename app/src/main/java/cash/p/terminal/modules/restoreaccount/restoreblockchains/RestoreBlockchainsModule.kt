@@ -3,7 +3,7 @@ package cash.p.terminal.modules.restoreaccount.restoreblockchains
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
@@ -17,8 +17,7 @@ object RestoreBlockchainsModule {
         private val accountName: String,
         private val accountType: cash.p.terminal.wallet.AccountType,
         private val manualBackup: Boolean,
-        private val fileBackup: Boolean,
-        private val statPage: StatPage
+        private val fileBackup: Boolean
     ) : ViewModelProvider.Factory {
 
         private val restoreSettingsService by lazy {
@@ -40,8 +39,7 @@ object RestoreBlockchainsModule {
                 App.marketKit,
                 App.tokenAutoEnableManager,
                 blockchainTokensService,
-                restoreSettingsService,
-                statPage
+                restoreSettingsService
             )
         }
 

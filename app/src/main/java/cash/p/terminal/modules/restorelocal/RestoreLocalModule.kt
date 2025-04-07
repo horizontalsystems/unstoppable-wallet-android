@@ -3,7 +3,7 @@ package cash.p.terminal.modules.restorelocal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupViewItemFactory
@@ -15,7 +15,6 @@ object RestoreLocalModule {
     class Factory(
         private val backupJsonString: String?,
         private val fileName: String?,
-        private val statPage: StatPage
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -24,7 +23,6 @@ object RestoreLocalModule {
                 accountFactory = App.accountFactory,
                 backupProvider = App.backupProvider,
                 backupViewItemFactory = BackupViewItemFactory(),
-                statPage = statPage,
                 fileName = fileName
             ) as T
         }

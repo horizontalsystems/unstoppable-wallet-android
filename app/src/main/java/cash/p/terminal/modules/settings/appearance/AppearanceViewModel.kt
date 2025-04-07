@@ -3,8 +3,7 @@ package cash.p.terminal.modules.settings.appearance
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager

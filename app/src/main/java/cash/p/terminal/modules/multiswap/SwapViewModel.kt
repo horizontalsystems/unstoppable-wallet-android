@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider

@@ -39,9 +39,8 @@ import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.findActivity
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog

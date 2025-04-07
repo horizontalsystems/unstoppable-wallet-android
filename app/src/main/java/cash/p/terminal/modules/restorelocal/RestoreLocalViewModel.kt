@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule.WalletBackup
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
@@ -27,7 +26,6 @@ class RestoreLocalViewModel(
     private val accountFactory: IAccountFactory,
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory,
-    private val statPage: StatPage,
     fileName: String?,
 ) : ViewModelUiState<UiState>() {
 

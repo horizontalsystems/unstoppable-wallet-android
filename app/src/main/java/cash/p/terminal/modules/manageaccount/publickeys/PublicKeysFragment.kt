@@ -19,8 +19,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment

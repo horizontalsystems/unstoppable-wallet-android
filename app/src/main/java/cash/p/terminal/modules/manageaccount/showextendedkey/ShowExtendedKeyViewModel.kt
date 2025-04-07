@@ -6,9 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.dogecoinkit.MainNetDogecoin
 import cash.p.terminal.R
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
 import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
@@ -54,12 +53,6 @@ class ShowExtendedKeyViewModel(
             val version = HDExtendedKeyVersion.initFrom(purpose, blockchain.extendedKeyCoinType, displayKeyType.isPrivate)
             return if (displayKeyType.isPrivate) key.serializePrivate(version.value) else key.serializePublic(version.value)
         }
-
-    private val statPage = when (displayKeyType) {
-        is DisplayKeyType.AccountPrivateKey -> StatPage.AccountExtendedPrivateKey
-        is DisplayKeyType.AccountPublicKey -> StatPage.AccountExtendedPublicKey
-        DisplayKeyType.Bip32RootKey -> StatPage.Bip32RootKey
-    }
 
     fun set(purpose: HDWallet.Purpose) {
         this.purpose = purpose

@@ -4,7 +4,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.isCustom
-import cash.p.terminal.core.stats.StatSection
+
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
@@ -275,7 +275,6 @@ object TransactionViewItemFactoryHelper {
                     fromAddress,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressFrom
                 )
             )
             contact?.let {
@@ -342,7 +341,6 @@ object TransactionViewItemFactoryHelper {
                     toAddress,
                     contact == null,
                     blockchainType,
-                    StatSection.AddressTo
                 )
             )
 
@@ -529,7 +527,6 @@ object TransactionViewItemFactoryHelper {
                 spenderAddress,
                 contact == null,
                 blockchainType,
-                StatSection.AddressSpender
             )
         )
 
@@ -612,7 +609,6 @@ object TransactionViewItemFactoryHelper {
                                 recipient,
                                 contact == null,
                                 blockchainType,
-                                StatSection.AddressRecipient
                             )
                         )
 

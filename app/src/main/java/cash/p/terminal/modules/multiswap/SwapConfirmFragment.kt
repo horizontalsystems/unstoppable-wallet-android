@@ -24,7 +24,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.setNavigationResultX
-import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
@@ -212,8 +211,7 @@ fun SwapConfirmScreen(navController: NavController) {
                     uiState.tokenIn,
                     uiState.tokenOut,
                     uiState.amountIn,
-                    amountOut,
-                    StatPage.SwapConfirmation
+                    amountOut
                 )
                 PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                 uiState.amountOutMin?.let { amountOutMin ->

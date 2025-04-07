@@ -45,8 +45,7 @@ import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple

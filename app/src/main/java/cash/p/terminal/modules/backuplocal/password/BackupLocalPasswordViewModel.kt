@@ -2,8 +2,7 @@ package cash.p.terminal.modules.backuplocal.password
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import cash.p.terminal.wallet.IAccountManager

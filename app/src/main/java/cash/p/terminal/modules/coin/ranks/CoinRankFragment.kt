@@ -39,7 +39,6 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import io.horizontalsystems.core.getInput
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.core.stats.StatEvent
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType

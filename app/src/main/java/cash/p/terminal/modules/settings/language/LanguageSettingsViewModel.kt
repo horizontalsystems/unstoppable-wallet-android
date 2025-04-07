@@ -6,8 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.LanguageManager
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.strings.helpers.LocaleType
 
 class LanguageSettingsViewModel(

@@ -13,9 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
+
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreByMenu
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
@@ -50,7 +49,7 @@ fun RestorePrivateKey(
                         title = TranslatableString.ResString(R.string.Button_Next),
                         onClick = {
                             viewModel.resolveAccountType()?.let { accountType ->
-                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletFromKeyAdvanced)
+                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
                                 openSelectCoinsScreen.invoke()
                             }
                         }

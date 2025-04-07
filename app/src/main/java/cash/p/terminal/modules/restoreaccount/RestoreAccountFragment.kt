@@ -11,8 +11,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import io.horizontalsystems.core.getInput
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
+
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuModule

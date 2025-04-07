@@ -2,15 +2,13 @@ package cash.p.terminal.modules.addtoken
 
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.order
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
-import io.horizontalsystems.core.entities.Blockchain
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 
 class AddTokenService(
     private val coinManager: ICoinManager,
