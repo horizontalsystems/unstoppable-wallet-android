@@ -67,6 +67,9 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }
+    val eduUrl by lazy {
+        Translator.getString(R.string.eduUrl)
+    }
     val faqUrl by lazy {
         Translator.getString(R.string.faqUrl)
     }
