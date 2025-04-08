@@ -376,7 +376,7 @@ private fun SwapScreenInner(
                     },
                     onSelect = {
                         focusManager.clearFocus()
-                        onEnterAmountPercentage.invoke(it)
+                        onEnterAmountPercentage(it)
                     },
                     selectEnabled = hasNonZeroBalance,
                     deleteEnabled = uiState.amountIn != null,

@@ -78,13 +78,13 @@ class ZCashSendTransactionService(
         _sendTransactionSettingsFlow.asStateFlow()
 
     private val feeAmountData: SendModule.AmountData by lazy {
-        val coinValue = CoinValue(token, adapter.fee)
+        val coinValue = CoinValue(token, adapter.fee.value)
         val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
         val secondaryAmountInfo = rate?.let {
             SendModule.AmountInfo.CurrencyValueInfo(
                 CurrencyValue(
                     it.currency,
-                    it.value * adapter.fee
+                    it.value * adapter.fee.value
                 )
             )
         }

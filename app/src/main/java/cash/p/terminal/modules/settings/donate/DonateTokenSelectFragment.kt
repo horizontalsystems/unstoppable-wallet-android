@@ -22,6 +22,7 @@ import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.VSpacer
@@ -41,7 +42,7 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 val donateAddress: String? =
                     App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
-                val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(
+                val sendTitle = Translator.getString(
                     R.string.Settings_DonateToken,
                     it.wallet.token.fullCoin.coin.code
                 )
@@ -112,7 +113,7 @@ private fun GetAddressCell(
 @Preview
 @Composable
 private fun DonateHeaderPreview() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         DonateHeader(navController = rememberNavController())
     }
 }

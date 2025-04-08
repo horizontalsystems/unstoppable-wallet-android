@@ -107,7 +107,8 @@ class SwapViewModel(
         quotes = quoteState.quotes,
         preferredProvider = quoteState.preferredProvider,
         quote = quoteState.quote,
-        error = networkState.error ?: quoteState.error ?: balanceState.error ?: priceImpactState.error,
+        error = networkState.error ?: quoteState.error ?: balanceState.error
+        ?: priceImpactState.error,
         availableBalance = balanceState.balance,
         priceImpact = priceImpactState.priceImpact,
         priceImpactLevel = priceImpactState.priceImpactLevel,
@@ -147,7 +148,10 @@ class SwapViewModel(
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
 
-        priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
+        priceImpactService.setPriceImpact(
+            quoteState.quote?.priceImpact,
+            quoteState.quote?.provider?.title
+        )
 
         fiatServiceIn.setToken(quoteState.tokenIn)
         fiatServiceIn.setAmount(quoteState.amountIn)
@@ -180,19 +184,26 @@ class SwapViewModel(
         val tokenIn = quoteState.tokenIn ?: return
         val availableBalance = balanceState.balance ?: return
 
-        val amount = availableBalance
+        var amount = availableBalance
             .times(BigDecimal(percentage / 100.0))
             .setScale(tokenIn.decimals, RoundingMode.DOWN)
             .stripTrailingZeros()
 
+        if (percentage == 100) {
+            amount = amount.subtract(balanceService.getFeeToTransferAll())
+        }
+
         quoteService.setAmount(amount)
     }
-    fun onSelectTokenIn(token: Token)  {
+
+    fun onSelectTokenIn(token: Token) {
         quoteService.setTokenIn(token)
     }
+
     fun onSelectTokenOut(token: Token) {
         quoteService.setTokenOut(token)
     }
+
     fun onSwitchPairs() {
         quoteService.switchPairs()
     }
@@ -206,7 +217,8 @@ class SwapViewModel(
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
 
-    class Factory(private val tokenIn: Token?, private val tokenOut: Token?) : ViewModelProvider.Factory {
+    class Factory(private val tokenIn: Token?, private val tokenOut: Token?) :
+        ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService()
@@ -257,7 +269,10 @@ data class SwapUiState(
         error != null -> SwapStep.Error(error)
         tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
-        amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0 -> SwapStep.InputRequired(InputType.Amount)
+        amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0 -> SwapStep.InputRequired(
+            InputType.Amount
+        )
+
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
         else -> SwapStep.Proceed
     }

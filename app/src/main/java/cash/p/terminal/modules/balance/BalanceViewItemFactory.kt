@@ -285,7 +285,7 @@ class BalanceViewItemFactory {
             (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent
         val isShowShieldFunds =
             (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent &&
-                    item.balanceData.total > ZcashAdapter.FEE
+                    item.balanceData.total > ZcashAdapter.MINERS_FEE
 
         return BalanceViewItem(
             wallet = item.wallet,

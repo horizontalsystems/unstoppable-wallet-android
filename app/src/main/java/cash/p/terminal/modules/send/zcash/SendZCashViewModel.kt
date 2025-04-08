@@ -78,7 +78,7 @@ class SendZCashViewModel(
     }
 
     override fun createState() = SendZCashUiState(
-        fee = fee,
+        fee = fee.value,
         availableBalance = amountState.availableBalance,
         addressError = addressState.addressError,
         amountCaution = amountState.amountCaution,
@@ -129,7 +129,7 @@ class SendZCashViewModel(
         ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
-            fee = fee,
+            fee = fee.value,
             address = address,
             contact = contact,
             coin = wallet.coin,

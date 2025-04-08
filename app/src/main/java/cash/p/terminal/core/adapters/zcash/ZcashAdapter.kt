@@ -28,6 +28,7 @@ import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
+import cash.z.ecc.android.sdk.exception.TransactionEncoderException
 import cash.z.ecc.android.sdk.ext.ZcashSdk
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
@@ -49,6 +50,7 @@ import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -56,7 +58,11 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -96,8 +102,9 @@ class ZcashAdapter(
 
     override var receiveAddress: String
 
+    private var statusJob: Job? = null
     override val isMainNet: Boolean = true
-    private val scope = CoroutineScope(Dispatchers.Default)
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     init {
         println("ZcashAdapter type $addressSpecTyped")
@@ -120,8 +127,8 @@ class ZcashAdapter(
             }
         }
 
-        private val DECIMAL_COUNT = 8
-        val FEE = ZcashSdk.MINERS_FEE.convertZatoshiToZec(DECIMAL_COUNT)
+        private const val DECIMAL_COUNT = 8
+        val MINERS_FEE = ZcashSdk.MINERS_FEE.convertZatoshiToZec(DECIMAL_COUNT)
 
         fun clear(accountId: String) {
             runBlocking {
@@ -220,6 +227,7 @@ class ZcashAdapter(
                 }
             }
         }
+        subscribeToStatus()
     }
 
 
@@ -291,6 +299,17 @@ class ZcashAdapter(
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
+    }
+
+    private fun subscribeToStatus() {
+        statusJob?.cancel()
+        statusJob = scope.launch {
+            synchronizer.status.collect {
+                if (it == Synchronizer.Status.SYNCED && fee.value == MINERS_FEE) {
+                    calculateFee()
+                }
+            }
+        }
     }
 
     override fun start() {
@@ -430,8 +449,8 @@ class ZcashAdapter(
         get() {
             return with(walletBalance) {
                 val available = available + pending
-                val defaultFee = ZcashSdk.MINERS_FEE
 
+                val defaultFee = fee.value.convertZecToZatoshi()
                 if (available <= defaultFee) {
                     BigDecimal.ZERO
                 } else {
@@ -441,8 +460,30 @@ class ZcashAdapter(
             }
         }
 
-    override val fee: BigDecimal
-        get() = FEE
+    private val _fee: MutableStateFlow<BigDecimal> = MutableStateFlow(MINERS_FEE)
+    override val fee: StateFlow<BigDecimal> = _fee.asStateFlow()
+
+    private suspend fun calculateFee(
+        balance: Zatoshi = walletBalance.available + walletBalance.pending,
+        tryCounter: Int = 4
+    ): Unit = withContext(Dispatchers.IO) {
+            try {
+                val calculatedFee = synchronizer.proposeTransfer(
+                    account = zcashAccount!!,
+                    recipient = App.appConfigProvider.donateAddresses[BlockchainType.Zcash]
+                        .orEmpty(),
+                    amount = balance
+                ).totalFeeRequired()
+                _fee.value = calculatedFee.convertZatoshiToZec(DECIMAL_COUNT)
+            } catch (ex: Exception) {
+                if (ex is TransactionEncoderException.ProposalFromParametersException && tryCounter > 0) {
+                    // Not enough money to send with commission
+                    calculateFee(balance - MINERS_FEE.convertZecToZatoshi(), tryCounter - 1)
+                } else {
+                    ex.printStackTrace()
+                }
+            }
+        }
 
     override suspend fun validate(address: String): ZCashAddressType {
         if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed

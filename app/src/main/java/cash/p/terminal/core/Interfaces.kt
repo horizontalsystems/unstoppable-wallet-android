@@ -197,7 +197,7 @@ interface ISendBinanceAdapter {
 
 interface ISendZcashAdapter {
     val availableBalance: BigDecimal
-    val fee: BigDecimal
+    val fee: StateFlow<BigDecimal>
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
     suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): FirstClassByteArray
