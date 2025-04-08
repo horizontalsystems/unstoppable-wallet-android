@@ -1,6 +1,8 @@
 package cash.p.terminal.core.adapters.zcash
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.ILocalStorage
@@ -59,6 +61,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -282,6 +285,7 @@ class ZcashAdapter(
                 keySource = null
             )
         )
+        synchronizer.close()
 
         zcashAccount = runBlocking { getFirstAccount() }
         receiveAddress = runBlocking {
@@ -313,12 +317,15 @@ class ZcashAdapter(
     }
 
     override fun start() {
-        if ((synchronizer as SdkSynchronizer).status.value == Synchronizer.Status.STOPPED) {
-            createNewSynchronizer()
-        }
-        subscribe(synchronizer as SdkSynchronizer)
-        if (!existingWallet) {
-            localStorage.zcashAccountIds += wallet.account.id
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(1000) //We need this delay to wait until previous synchronizer is closed
+            if ((synchronizer as SdkSynchronizer).status.value == Synchronizer.Status.STOPPED) {
+                createNewSynchronizer()
+            }
+            subscribe(synchronizer as SdkSynchronizer)
+            if (!existingWallet) {
+                localStorage.zcashAccountIds += wallet.account.id
+            }
         }
     }
 
