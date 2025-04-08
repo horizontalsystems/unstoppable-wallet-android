@@ -478,7 +478,9 @@ class ZcashAdapter(
             } catch (ex: Exception) {
                 if (ex is TransactionEncoderException.ProposalFromParametersException && tryCounter > 0) {
                     // Not enough money to send with commission
-                    calculateFee(balance - MINERS_FEE.convertZecToZatoshi(), tryCounter - 1)
+                    runCatching { // Prevent problems with negative Zatoshi
+                        calculateFee(balance - MINERS_FEE.convertZecToZatoshi(), tryCounter - 1)
+                    }
                 } else {
                     ex.printStackTrace()
                 }
