@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ITorManager
 import io.horizontalsystems.core.IPinComponent
 import kotlinx.coroutines.launch

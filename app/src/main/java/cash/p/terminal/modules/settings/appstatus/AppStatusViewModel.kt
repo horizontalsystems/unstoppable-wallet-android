@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.settings.appstatus
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.AppLog
+import io.horizontalsystems.core.logger.AppLog
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter

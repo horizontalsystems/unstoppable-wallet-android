@@ -1,4 +1,4 @@
-package cash.p.terminal.entities
+package io.horizontalsystems.core.storage
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

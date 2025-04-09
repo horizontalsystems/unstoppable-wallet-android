@@ -1,7 +1,7 @@
 package cash.p.terminal.core.managers
 
 import android.content.Context
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ITorManager
 import cash.p.terminal.core.tor.ConnectionStatus

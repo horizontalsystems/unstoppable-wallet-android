@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView

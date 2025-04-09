@@ -104,11 +104,13 @@ import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
+import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.logger.AppLog
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit

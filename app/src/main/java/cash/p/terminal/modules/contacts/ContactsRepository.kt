@@ -3,7 +3,7 @@ package cash.p.terminal.modules.contacts
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.contacts.ContactsModule.ContactValidationException
 import cash.p.terminal.modules.contacts.model.Contact

@@ -31,6 +31,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
+import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.transaction.Fee

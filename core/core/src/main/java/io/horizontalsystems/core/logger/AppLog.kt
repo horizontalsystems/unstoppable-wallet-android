@@ -1,10 +1,13 @@
-package cash.p.terminal.core
+package io.horizontalsystems.core.logger
 
 import android.util.Log
-import cash.p.terminal.core.storage.LogsDao
-import cash.p.terminal.entities.LogEntry
+import io.horizontalsystems.core.storage.LogEntry
+import io.horizontalsystems.core.storage.LogsDao
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import java.util.UUID
 import java.util.concurrent.Executors
 
 object AppLog {
@@ -61,4 +64,3 @@ object AppLog {
         return sb.toString()
     }
 }
-

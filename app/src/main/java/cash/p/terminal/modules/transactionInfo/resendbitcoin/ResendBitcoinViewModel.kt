@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.IFeeRateProvider
 import cash.p.terminal.core.LocalizedException

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager

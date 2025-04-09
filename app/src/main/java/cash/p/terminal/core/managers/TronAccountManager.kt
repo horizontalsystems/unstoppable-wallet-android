@@ -1,6 +1,6 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import io.horizontalsystems.core.entities.BlockchainType

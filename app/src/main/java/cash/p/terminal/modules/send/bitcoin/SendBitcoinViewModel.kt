@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter

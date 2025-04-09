@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinFeeInfo

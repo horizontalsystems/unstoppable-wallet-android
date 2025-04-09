@@ -246,8 +246,9 @@ dependencies {
     implementation libs.room.ktx
     implementation libs.androidx.room.rxjava2
     implementation libs.androidx.material3.android
-    testImplementation libs.junit.jupiter
     ksp libs.room.compiler
+
+    testImplementation libs.junit.jupiter
     // alternately - if using Java8, use the following instead of compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     // optional - ReactiveStreams support for LiveData

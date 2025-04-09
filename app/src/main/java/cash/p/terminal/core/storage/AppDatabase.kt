@@ -48,7 +48,7 @@ import cash.p.terminal.entities.EnabledWalletCache
 import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.EvmSyncSourceRecord
-import cash.p.terminal.entities.LogEntry
+import io.horizontalsystems.core.storage.LogEntry
 import cash.p.terminal.entities.RestoreSettingRecord
 import cash.p.terminal.entities.SyncerState
 import cash.p.terminal.entities.TokenAutoEnabledBlockchain
@@ -66,6 +66,7 @@ import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import cash.p.terminal.wallet.entities.AccountRecord
 import cash.p.terminal.wallet.entities.EnabledWallet
+import io.horizontalsystems.core.storage.LogsDao
 
 @Database(
     version = 66,

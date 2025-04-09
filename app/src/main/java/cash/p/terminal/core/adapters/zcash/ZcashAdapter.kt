@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ITransactionsAdapter

@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.adapters.BinanceAdapter
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.entities.Address

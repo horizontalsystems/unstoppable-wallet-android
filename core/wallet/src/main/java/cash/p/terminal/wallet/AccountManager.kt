@@ -1,5 +1,6 @@
 package cash.p.terminal.wallet
 
+import io.horizontalsystems.core.logger.AppLogger
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -15,11 +16,14 @@ class AccountManager(
     private val storage: IAccountsStorage,
     private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
+    private val logger: AppLogger = AppLogger("AccountManager")
+
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
-    private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
+    private val _activeAccountStateFlow =
+        MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
     private var currentLevel = Int.MAX_VALUE
 
     override val activeAccountStateFlow = _activeAccountStateFlow
@@ -154,7 +158,7 @@ class AccountManager(
                 ActiveAccountState.ActiveAccount(activeAccount)
             }
         }
-
+        logger.info("setLevel: $level, activeAccount: ${activeAccount?.id}, activeAccountIdForLevel: $activeAccountIdForLevel, accounts: ${accounts.size}, accountsCache: ${accountsCache.size}")
         accountsSubject.onNext(accounts)
     }
 

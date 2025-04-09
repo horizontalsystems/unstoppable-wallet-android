@@ -1,7 +1,7 @@
-package cash.p.terminal.core
+package io.horizontalsystems.core.logger
 
 import io.horizontalsystems.core.security.KeyStoreManager
-import java.util.*
+import java.util.UUID
 
 class AppLogger(private val scope: List<String> = listOf()) : KeyStoreManager.Logger {
 

@@ -15,7 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import cash.p.terminal.R
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.sendevmtransaction.TitleValue

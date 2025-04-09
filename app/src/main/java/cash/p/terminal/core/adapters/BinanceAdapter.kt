@@ -3,7 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.R
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.IBalanceAdapter

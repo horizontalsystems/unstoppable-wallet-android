@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.AppLogger
+import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.LocalizedException
