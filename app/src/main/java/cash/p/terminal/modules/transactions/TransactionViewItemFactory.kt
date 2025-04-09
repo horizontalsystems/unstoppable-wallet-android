@@ -49,6 +49,8 @@ import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.tronkit.models.Contract
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
 import java.util.Date
 
@@ -60,11 +62,11 @@ class TransactionViewItemFactory(
     private val walletUseCase: WalletUseCase,
     private val numberFormatter: IAppNumberFormatter
 ) {
-
+    private val mutex = Mutex()
     private var showAmount = !balanceHiddenManager.balanceHidden
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
 
-    fun updateCache() {
+    suspend fun updateCache() = mutex.withLock {
         showAmount = !balanceHiddenManager.balanceHidden
         cache.forEach { (recordUid, map) ->
             map.forEach { (createdAt, viewItem) ->
