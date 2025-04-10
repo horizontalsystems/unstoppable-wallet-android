@@ -4,6 +4,7 @@ import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
+import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
@@ -70,7 +71,7 @@ class TonTransactionsAdapter(
             platform = Tag.Platform.Native
         } else if (tokenType is TokenType.Jetton) {
             platform = Tag.Platform.Jetton
-            jettonAddress = Address.parse(tokenType.address)
+            jettonAddress = tryOrNull { Address.parse(tokenType.address) }
         }
 
         val tagType = when (transactionType) {
@@ -85,7 +86,7 @@ class TonTransactionsAdapter(
             tagType,
             platform,
             jettonAddress,
-            address?.let { Address.parse(it) }
+            address?.let { tryOrNull { Address.parse(it) } }
         )
     }
 

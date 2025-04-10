@@ -246,3 +246,11 @@ fun String.splitToAddresses(): List<String> {
         .map { it.trim() }
         .filter { it.isNotEmpty() }
 }
+
+inline fun <T> tryOrNull(block: () -> T): T? {
+    return try {
+       block()
+    } catch (_: Throwable) {
+       null
+    }
+}
