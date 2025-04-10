@@ -321,9 +321,17 @@ class BalanceViewModel(
     }
 
     private fun uri(text: String): AddressUri? {
-        if (AddressUriParser.hasUriPrefix(text)) {
+        var hasPrefix = AddressUriParser.hasUriPrefix(text)
+        val address = if(!hasPrefix && text.startsWith("t")) {
+            // parse as zcash
+            hasPrefix = true
+            "zcash:$text"
+        } else {
+            text
+        }
+        if (hasPrefix) {
             val abstractUriParse = AddressUriParser(null, null)
-            return when (val result = abstractUriParse.parse(text)) {
+            return when (val result = abstractUriParse.parse(address)) {
                 is AddressUriResult.Uri -> {
                     if (BlockchainType.supported.map { it.uriScheme }
                             .contains(result.addressUri.scheme))
