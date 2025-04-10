@@ -5,16 +5,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
 class AvailableBalanceViewModel(
     private val coinCode: String,
     private val coinDecimal: Int,
-    private val fiatDecimal: Int
+    private val fiatDecimal: Int,
 ) : ViewModel() {
+
+    private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
 
     var amountInputType: AmountInputType? = null
     var availableBalance: BigDecimal? = null
@@ -22,6 +33,13 @@ class AvailableBalanceViewModel(
 
     var formatted by mutableStateOf<String?>(null)
         private set
+
+    val balanceHidden: StateFlow<Boolean> = balanceHiddenManager.balanceHiddenFlow
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            balanceHiddenManager.balanceHidden
+        )
 
     fun refreshFormatted() {
         val tmpAvailableBalance = availableBalance
@@ -32,6 +50,7 @@ class AvailableBalanceViewModel(
             tmpAmountInputMode == AmountInputType.COIN -> {
                 App.numberFormatter.formatCoinFull(tmpAvailableBalance, coinCode, coinDecimal)
             }
+
             tmpAmountInputMode == AmountInputType.CURRENCY -> {
                 xRate
                     ?.let {
@@ -39,8 +58,14 @@ class AvailableBalanceViewModel(
                     }
                     ?.getFormattedFull()
             }
+
             else -> null
         }
+    }
+
+    fun toggleHideBalance() {
+        HudHelper.vibrate(App.instance)
+        balanceHiddenManager.toggleBalanceHidden()
     }
 }
 
