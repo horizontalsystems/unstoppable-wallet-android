@@ -5,6 +5,7 @@ import cash.p.terminal.core.IAddressParser
 import cash.p.terminal.core.factories.removeScheme
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.supported
+import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.AddressUri
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenType
@@ -62,7 +63,7 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
         val queryStartIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it + 1 else schemeSpecificPart.length }
         val query = schemeSpecificPart.substring(queryStartIndex)
 
-        val parameters = parseQueryParameters(query)
+        val parameters = tryOrNull { parseQueryParameters(query) }.orEmpty()
         if (parameters.isEmpty()) {
             parsedUri.address = fullAddress(scheme, path)
             return AddressUriResult.Uri(parsedUri)

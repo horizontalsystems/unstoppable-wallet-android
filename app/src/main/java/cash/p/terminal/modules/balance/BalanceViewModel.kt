@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.adapters.zcash.ZcashAddressValidator
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.managers.PriceManager
 
@@ -322,7 +323,7 @@ class BalanceViewModel(
 
     private fun uri(text: String): AddressUri? {
         var hasPrefix = AddressUriParser.hasUriPrefix(text)
-        val address = if(!hasPrefix && text.startsWith("t")) {
+        val address = if (!hasPrefix && isZCashAddress(text)) {
             // parse as zcash
             hasPrefix = true
             "zcash:$text"
@@ -344,6 +345,16 @@ class BalanceViewModel(
             }
         }
         return null
+    }
+
+    private fun isZCashAddress(text: String): Boolean {
+        if (!text.startsWith("t")) return false
+
+        val address = when (val pos = text.indexOf('?')) {
+            -1 -> text
+            else -> text.substring(0, pos)
+        }
+        return ZcashAddressValidator.validate(address)
     }
 
     private fun handleAddressData(text: String) {
