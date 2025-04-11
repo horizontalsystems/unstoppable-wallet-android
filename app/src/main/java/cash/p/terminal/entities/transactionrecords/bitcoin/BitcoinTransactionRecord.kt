@@ -3,6 +3,7 @@ package cash.p.terminal.entities.transactionrecords.bitcoin
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.modules.transactions.TransactionLockInfo
 import cash.p.terminal.wallet.transaction.TransactionSource
 import java.util.*
@@ -20,7 +21,8 @@ abstract class BitcoinTransactionRecord(
     val conflictingHash: String?,
     val showRawTransaction: Boolean,
     val memo: String?,
-    source: TransactionSource
+    source: TransactionSource,
+    transactionRecordType: TransactionRecordType
 ) : TransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -29,7 +31,8 @@ abstract class BitcoinTransactionRecord(
     confirmationsThreshold = confirmationsThreshold,
     timestamp = timestamp,
     failed = failed,
-    source = source
+    source = source,
+    transactionRecordType = transactionRecordType
 ) {
 
     override fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean {

@@ -3,6 +3,7 @@ package cash.p.terminal.entities.transactionrecords.solana
 import cash.p.terminal.core.adapters.BaseSolanaAdapter
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.solanakit.models.Transaction
@@ -11,7 +12,8 @@ open class SolanaTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
-    spam: Boolean = false
+    transactionRecordType: TransactionRecordType,
+    spam: Boolean = false,
 ) :
     TransactionRecord(
         uid = transaction.hash,
@@ -22,7 +24,8 @@ open class SolanaTransactionRecord(
         timestamp = transaction.timestamp,
         failed = transaction.error != null,
         spam = spam,
-        source = source
+        source = source,
+        transactionRecordType = transactionRecordType
     ) {
 
     data class Transfer(val address: String?, val value: TransactionValue)

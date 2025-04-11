@@ -1,6 +1,7 @@
 package cash.p.terminal.entities.transactionrecords.tron
 
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.wallet.Token
@@ -15,11 +16,17 @@ class TronContractCallTransactionRecord(
     val method: String?,
     val incomingEvents: List<TransferEvent>,
     val outgoingEvents: List<TransferEvent>
-) : TronTransactionRecord(transaction, baseToken, source) {
+) : TronTransactionRecord(
+    transaction, baseToken, source,
+    transactionRecordType = TransactionRecordType.TRON_CONTRACT_CALL
+) {
 
     override val mainValue: TransactionValue?
         get() {
-            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(incomingEvents, outgoingEvents)
+            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                incomingEvents,
+                outgoingEvents
+            )
 
             return when {
                 (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()

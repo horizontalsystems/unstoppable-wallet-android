@@ -2,6 +2,7 @@ package cash.p.terminal.entities.transactionrecords.evm
 
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
@@ -18,7 +19,8 @@ class EvmIncomingTransactionRecord(
     baseToken = baseToken,
     source = source,
     foreignTransaction = true,
-    spam = spamManager.isIncomingSpam(value)
+    spam = spamManager.isIncomingSpam(value),
+    transactionRecordType = TransactionRecordType.EVM_INCOMING,
 ) {
 
     override val mainValue = value

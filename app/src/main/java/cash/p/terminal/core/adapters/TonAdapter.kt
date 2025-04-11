@@ -7,6 +7,7 @@ import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
@@ -15,7 +16,6 @@ import io.horizontalsystems.tonkit.core.TonKit.SendAmount
 import io.horizontalsystems.tonkit.models.Account
 import io.horizontalsystems.tonkit.models.Event
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -111,6 +111,7 @@ class TonTransactionRecord(
     failed = false,
     spam = event.scam,
     source = source,
+    transactionRecordType = TransactionRecordType.TON
 ) {
     val lt = event.lt
     val inProgress = event.inProgress

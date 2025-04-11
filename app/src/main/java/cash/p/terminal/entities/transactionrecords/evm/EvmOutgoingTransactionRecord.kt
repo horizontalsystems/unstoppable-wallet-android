@@ -1,6 +1,7 @@
 package cash.p.terminal.entities.transactionrecords.evm
 
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
@@ -12,7 +13,10 @@ class EvmOutgoingTransactionRecord(
     val to: String,
     val value: TransactionValue,
     val sentToSelf: Boolean
-) : EvmTransactionRecord(transaction, baseToken, source) {
+) : EvmTransactionRecord(
+    transaction, baseToken, source,
+    transactionRecordType = TransactionRecordType.EVM_OUTGOING
+) {
 
     override val mainValue = value
 

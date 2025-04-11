@@ -3,6 +3,7 @@ package cash.p.terminal.entities.transactionrecords.tron
 import cash.p.terminal.core.adapters.BaseTronAdapter
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
@@ -13,7 +14,8 @@ open class TronTransactionRecord(
     baseToken: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
-    spam: Boolean = false
+    spam: Boolean = false,
+    transactionRecordType: TransactionRecordType
 ) :
     TransactionRecord(
         uid = transaction.hashString,
@@ -24,7 +26,8 @@ open class TronTransactionRecord(
         timestamp = transaction.timestamp / 1000,
         failed = transaction.isFailed,
         spam = spam,
-        source = source
+        source = source,
+        transactionRecordType = transactionRecordType
     ) {
 
     val fee: TransactionValue?

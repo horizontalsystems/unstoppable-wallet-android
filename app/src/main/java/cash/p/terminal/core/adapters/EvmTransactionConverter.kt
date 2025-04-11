@@ -7,6 +7,7 @@ import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.tokenIconPlaceholder
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCreationTransactionRecord
@@ -206,7 +207,8 @@ class EvmTransactionConverter(
             transaction = transaction,
             baseToken = baseToken,
             source = source,
-            foreignTransaction = transaction.from != evmKit.receiveAddress
+            foreignTransaction = transaction.from != evmKit.receiveAddress,
+            transactionRecordType = TransactionRecordType.EVM
         )
     }
 

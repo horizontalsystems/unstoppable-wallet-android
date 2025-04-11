@@ -1,6 +1,7 @@
 package cash.p.terminal.entities.transactionrecords.evm
 
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
@@ -12,4 +13,6 @@ class UnknownSwapTransactionRecord(
     val exchangeAddress: String,
     val valueIn: TransactionValue?,
     val valueOut: TransactionValue?,
-) : EvmTransactionRecord(transaction, baseToken, source)
+) : EvmTransactionRecord(transaction, baseToken, source,
+    transactionRecordType = TransactionRecordType.EVM_UNKNOWN_SWAP
+)

@@ -24,7 +24,8 @@ abstract class TransactionRecord(
     val timestamp: Long,
     val failed: Boolean = false,
     val spam: Boolean = false,
-    val source: TransactionSource
+    val source: TransactionSource,
+    val transactionRecordType: TransactionRecordType
 ) : Comparable<TransactionRecord> {
 
     open val mainValue: TransactionValue? = null

@@ -1,0 +1,34 @@
+package cash.p.terminal.entities.transactionrecords
+
+enum class TransactionRecordType {
+    TON,
+
+    SOLANA_INCOMING,
+    SOLANA_OUTGOING,
+    SOLANA_UNKNOWN,
+
+    BITCOIN_INCOMING,
+    BITCOIN_OUTGOING,
+
+    BINANCE_INCOMING,
+    BINANCE_OUTGOING,
+
+    EVM,
+    EVM_APPROVE,
+    EVM_CONTRACT_CALL,
+    EVM_CONTRACT_CREATION,
+    EVM_INCOMING,
+    EVM_OUTGOING,
+    EVM_EXTERNAL_CONTRACT_CALL,
+    EVM_SWAP,
+    EVM_UNKNOWN_SWAP,
+
+    TRON,
+    TRON_APPROVE,
+    TRON_CONTRACT_CALL,
+    TRON_EXTERNAL_CONTRACT_CALL,
+    TRON_INCOMING,
+    TRON_OUTGOING,
+
+    UNKNOWN,
+}

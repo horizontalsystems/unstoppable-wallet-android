@@ -1,6 +1,7 @@
 package cash.p.terminal.entities.transactionrecords.tron
 
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.tronkit.models.Transaction
@@ -12,7 +13,10 @@ class TronIncomingTransactionRecord(
     val from: String,
     val value: TransactionValue,
     spam: Boolean
-) : TronTransactionRecord(transaction, baseToken, source, true, spam) {
+) : TronTransactionRecord(
+    transaction, baseToken, source, true, spam,
+    transactionRecordType = TransactionRecordType.TRON_INCOMING
+) {
 
     override val mainValue = value
 

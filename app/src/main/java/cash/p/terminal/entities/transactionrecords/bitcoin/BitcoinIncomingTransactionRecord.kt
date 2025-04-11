@@ -1,6 +1,7 @@
 package cash.p.terminal.entities.transactionrecords.bitcoin
 
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.modules.transactions.TransactionLockInfo
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
@@ -36,7 +37,8 @@ class BitcoinIncomingTransactionRecord(
     conflictingHash = conflictingHash,
     showRawTransaction = showRawTransaction,
     memo = memo,
-    source = source
+    source = source,
+    transactionRecordType = TransactionRecordType.BITCOIN_INCOMING
 ) {
 
     val value: TransactionValue = TransactionValue.CoinValue(token, amount)

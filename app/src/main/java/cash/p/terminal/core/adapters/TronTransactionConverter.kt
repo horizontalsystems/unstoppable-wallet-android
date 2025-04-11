@@ -6,6 +6,7 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.TronKitWrapper
 import cash.p.terminal.core.tokenIconPlaceholder
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
@@ -139,7 +140,8 @@ class TronTransactionConverter(
         return transactionRecord ?: TronTransactionRecord(
             transaction = transaction,
             baseToken = baseToken,
-            source = source
+            source = source,
+            transactionRecordType = TransactionRecordType.TRON
         )
     }
 

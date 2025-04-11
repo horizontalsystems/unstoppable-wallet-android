@@ -2,6 +2,7 @@ package cash.p.terminal.entities.transactionrecords.tron
 
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.wallet.Token
@@ -20,7 +21,8 @@ class TronExternalContractCallTransactionRecord(
     baseToken = baseToken,
     source = source,
     foreignTransaction = true,
-    spam = spamManager.isSpam(incomingEvents, outgoingEvents)
+    spam = spamManager.isSpam(incomingEvents, outgoingEvents),
+    transactionRecordType = TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL
 ) {
 
     override val mainValue: TransactionValue?

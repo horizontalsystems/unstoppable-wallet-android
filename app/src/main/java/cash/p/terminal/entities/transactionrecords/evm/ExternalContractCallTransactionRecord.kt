@@ -2,6 +2,7 @@ package cash.p.terminal.entities.transactionrecords.evm
 
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
@@ -18,7 +19,8 @@ class ExternalContractCallTransactionRecord(
     baseToken = baseToken,
     source = source,
     foreignTransaction = true,
-    spam = spamManager.isSpam(incomingEvents, outgoingEvents)
+    spam = spamManager.isSpam(incomingEvents, outgoingEvents),
+    transactionRecordType = TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL,
 ) {
 
     override val mainValue: TransactionValue?
