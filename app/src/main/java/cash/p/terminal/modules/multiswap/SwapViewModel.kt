@@ -5,13 +5,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
-import io.horizontalsystems.core.ViewModelUiState
-import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -39,6 +42,7 @@ class SwapViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
+    private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
 
     init {
         viewModelScope.launch {
@@ -115,6 +119,7 @@ class SwapViewModel(
         priceImpactCaution = priceImpactState.priceImpactCaution,
         fiatPriceImpact = priceImpactState.fiatPriceImpact,
         fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
+        balanceHidden = balanceHiddenManager.balanceHiddenFlow.value,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
         currency = currency,
@@ -208,6 +213,12 @@ class SwapViewModel(
         quoteService.switchPairs()
     }
 
+    fun toggleHideBalance() {
+        HudHelper.vibrate(App.instance)
+        balanceHiddenManager.toggleBalanceHidden()
+        emitState()
+    }
+
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()
@@ -251,6 +262,7 @@ data class SwapUiState(
     val quote: SwapProviderQuote?,
     val error: Throwable?,
     val availableBalance: BigDecimal?,
+    val balanceHidden: Boolean,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: PriceImpactLevel?,
     val priceImpactCaution: HSCaution?,
