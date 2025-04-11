@@ -3,6 +3,7 @@ package cash.p.terminal.modules.transactionInfo
 import cash.p.terminal.R
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.TonHelper
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
@@ -16,9 +17,7 @@ import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.UnknownSwapTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
@@ -416,58 +415,62 @@ class TransactionInfoViewItemFactory(
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
-            is SolanaIncomingTransactionRecord ->
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                        value = transaction.value,
-                        fromAddress = transaction.from,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        nftMetadata = nftMetadata,
-                        blockchainType = blockchainType,
-                    )
-                )
-
-            is SolanaOutgoingTransactionRecord -> {
-                sentToSelf = transaction.sentToSelf
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getSendSectionItems(
-                        value = transaction.value,
-                        toAddress = transaction.to,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        sentToSelf = transaction.sentToSelf,
-                        nftMetadata = nftMetadata,
-                        blockchainType = blockchainType,
-                    )
-                )
-            }
-
-            is SolanaUnknownTransactionRecord -> {
-                for (transfer in transaction.outgoingTransfers) {
-                    itemSections.add(
-                        TransactionViewItemFactoryHelper.getSendSectionItems(
-                            value = transfer.value,
-                            toAddress = transfer.address,
-                            coinPrice = rates[transfer.value.coinUid],
-                            hideAmount = transactionItem.hideAmount,
-                            nftMetadata = nftMetadata,
-                            blockchainType = blockchainType,
+            is SolanaTransactionRecord -> {
+                when(transaction.transactionRecordType) {
+                    TransactionRecordType.SOLANA_INCOMING -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transaction.value!!,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
                         )
-                    )
-                }
-
-                for (transfer in transaction.incomingTransfers) {
-                    itemSections.add(
-                        TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                            value = transfer.value,
-                            fromAddress = transfer.address,
-                            coinPrice = rates[transfer.value.coinUid],
-                            hideAmount = transactionItem.hideAmount,
-                            nftMetadata = nftMetadata,
-                            blockchainType = blockchainType,
+                    }
+                    TransactionRecordType.SOLANA_OUTGOING -> {
+                        sentToSelf = transaction.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transaction.value!!,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transaction.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
                         )
-                    )
+                    }
+                    TransactionRecordType.SOLANA_UNKNOWN -> {
+                        for (transfer in transaction.outgoingSolanaTransfers!!) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getSendSectionItems(
+                                    value = transfer.value,
+                                    toAddress = transfer.address,
+                                    coinPrice = rates[transfer.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+
+                        for (transfer in transaction.incomingSolanaTransfers!!) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                    value = transfer.value,
+                                    fromAddress = transfer.address,
+                                    coinPrice = rates[transfer.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+                    }
+                    else -> {}
                 }
             }
 

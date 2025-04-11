@@ -9,31 +9,31 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.solanakit.models.Transaction
 
 open class SolanaTransactionRecord(
+    val sentToSelf: Boolean = false,
+    val incomingSolanaTransfers: List<SolanaTransfer>? = null,
+    val outgoingSolanaTransfers: List<SolanaTransfer>? = null,
     transaction: Transaction,
-    baseToken: Token,
+    val value: TransactionValue? = null, //mainValue
+    val to: String? = null,
+    val from: String? = null,
+    val baseToken: Token,
     source: TransactionSource,
     transactionRecordType: TransactionRecordType,
     spam: Boolean = false,
-) :
-    TransactionRecord(
-        uid = transaction.hash,
-        transactionHash = transaction.hash,
-        transactionIndex = 0,
-        blockHeight = if (transaction.pending) null else 0,
-        confirmationsThreshold = BaseSolanaAdapter.confirmationsThreshold,
-        timestamp = transaction.timestamp,
-        failed = transaction.error != null,
-        spam = spam,
-        source = source,
-        transactionRecordType = transactionRecordType
-    ) {
+) : TransactionRecord(
+    uid = transaction.hash,
+    transactionHash = transaction.hash,
+    transactionIndex = 0,
+    blockHeight = if (transaction.pending) null else 0,
+    confirmationsThreshold = BaseSolanaAdapter.confirmationsThreshold,
+    timestamp = transaction.timestamp,
+    failed = transaction.error != null,
+    spam = spam,
+    source = source,
+    transactionRecordType = transactionRecordType
+) {
 
-    data class Transfer(val address: String?, val value: TransactionValue)
+    data class SolanaTransfer(val address: String?, val value: TransactionValue)
 
-    val fee: TransactionValue?
-
-    init {
-        fee = transaction.fee?.let { TransactionValue.CoinValue(baseToken, it) }
-    }
-
+    val fee: TransactionValue? = transaction.fee?.let { TransactionValue.CoinValue(baseToken, it) }
 }

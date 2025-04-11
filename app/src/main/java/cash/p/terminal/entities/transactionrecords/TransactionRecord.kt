@@ -9,7 +9,7 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransa
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.wallet.transaction.TransactionSource
@@ -97,52 +97,59 @@ val List<TransactionRecord>.nftUids: Set<NftUid>
         return nftUids
     }
 
-fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransactionRecord? = when (this) {
-    is BinanceChainOutgoingTransactionRecord ->
-        ShortOutgoingTransactionRecord(
-            amountOut = mainValue.decimalValue.abs(),
-            token = value.token,
-            timestamp = timestamp * 1000
-        )
-
-    is BitcoinOutgoingTransactionRecord ->
-        ShortOutgoingTransactionRecord(
-            amountOut = mainValue.decimalValue?.abs(),
-            token = token,
-            timestamp = timestamp * 1000
-        )
-
-    is EvmOutgoingTransactionRecord ->
-        ShortOutgoingTransactionRecord(
-            amountOut = mainValue.decimalValue?.abs(),
-            token = (mainValue as? TransactionValue.CoinValue)?.token,
-            timestamp = timestamp * 1000
-        )
-
-    is SolanaOutgoingTransactionRecord ->
-        ShortOutgoingTransactionRecord(
-            amountOut = mainValue.decimalValue?.abs(),
-            token = baseToken,
-            timestamp = timestamp * 1000
-        )
-
-    is TronOutgoingTransactionRecord ->
-        ShortOutgoingTransactionRecord(
-            amountOut = mainValue.decimalValue?.abs(),
-            token = baseToken,
-            timestamp = timestamp * 1000
-        )
-
-    is TonTransactionRecord ->
-        if (actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Send) {
+fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransactionRecord? =
+    when (this) {
+        is BinanceChainOutgoingTransactionRecord ->
             ShortOutgoingTransactionRecord(
-                amountOut = this.mainValue?.decimalValue?.abs(),
+                amountOut = mainValue.decimalValue.abs(),
+                token = value.token,
+                timestamp = timestamp * 1000
+            )
+
+        is BitcoinOutgoingTransactionRecord ->
+            ShortOutgoingTransactionRecord(
+                amountOut = mainValue.decimalValue?.abs(),
+                token = token,
+                timestamp = timestamp * 1000
+            )
+
+        is EvmOutgoingTransactionRecord ->
+            ShortOutgoingTransactionRecord(
+                amountOut = mainValue.decimalValue?.abs(),
+                token = (mainValue as? TransactionValue.CoinValue)?.token,
+                timestamp = timestamp * 1000
+            )
+
+        is TronOutgoingTransactionRecord ->
+            ShortOutgoingTransactionRecord(
+                amountOut = mainValue.decimalValue?.abs(),
                 token = baseToken,
                 timestamp = timestamp * 1000
             )
-        } else {
-            null
+
+        is TonTransactionRecord ->
+            if (actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Send) {
+                ShortOutgoingTransactionRecord(
+                    amountOut = this.mainValue?.decimalValue?.abs(),
+                    token = baseToken,
+                    timestamp = timestamp * 1000
+                )
+            } else {
+                null
+            }
+
+        is SolanaTransactionRecord -> {
+            when (this.transactionRecordType) {
+                TransactionRecordType.SOLANA_INCOMING ->
+                    ShortOutgoingTransactionRecord(
+                        amountOut = mainValue?.decimalValue?.abs(),
+                        token = baseToken,
+                        timestamp = timestamp * 1000
+                    )
+
+                else -> null
+            }
         }
 
-    else -> null
-}
+        else -> null
+    }

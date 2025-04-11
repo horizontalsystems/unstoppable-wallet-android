@@ -10,6 +10,7 @@ import cash.p.terminal.entities.ChangeNowTransaction
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
@@ -24,9 +25,7 @@ import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTrans
 import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.evm.UnknownSwapTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
@@ -418,37 +417,11 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is SolanaIncomingTransactionRecord ->
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = record.baseToken,
-                    isIncoming = true
-                ) ?: createViewItemFromSolanaIncomingTransactionRecord(
-                    record = record,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-
-            is SolanaOutgoingTransactionRecord ->
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = record.baseToken,
-                    isIncoming = false
-                ) ?: createViewItemFromSolanaOutgoingTransactionRecord(
-                    record = record,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-
-            is SolanaUnknownTransactionRecord -> createViewItemFromSolanaUnknownTransactionRecord(
+            is SolanaTransactionRecord -> createViewItemFromSolanaTransactionRecord(
                 record = record,
-                currencyValue = transactionItem.currencyValue,
+                transactionItem = transactionItem,
                 progress = progress,
-                icon = icon
+                icon = icon,
             )
 
             is TronApproveTransactionRecord -> {
@@ -683,18 +656,18 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromSolanaUnknownTransactionRecord(
-        record: SolanaUnknownTransactionRecord,
+        record: SolanaTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         icon: TransactionViewItem.Icon.Failed?
     ): TransactionViewItem {
-        val incomingValues = record.incomingTransfers.map { it.value }
-        val outgoingValues = record.outgoingTransfers.map { it.value }
+        val incomingValues = record.incomingSolanaTransfers?.map { it.value }.orEmpty()
+        val outgoingValues = record.outgoingSolanaTransfers?.map { it.value }.orEmpty()
         val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(
-            incomingValues,
-            outgoingValues,
-            currencyValue,
-            mutableMapOf()
+            incomingValues = incomingValues,
+            outgoingValues = outgoingValues,
+            currencyValue = currencyValue,
+            nftMetadata = mutableMapOf()
         )
 
         return TransactionViewItem(
@@ -717,16 +690,16 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromSolanaOutgoingTransactionRecord(
-        record: SolanaOutgoingTransactionRecord,
+        record: SolanaTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         icon: TransactionViewItem.Icon.Failed?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.value!!, true), ColorName.Leah)
         } else {
-            getColoredValue(record.value, ColorName.Lucian)
+            getColoredValue(record.value!!, ColorName.Lucian)
         }
         val secondaryValue = singleValueSecondaryValue(record.value, currencyValue, nftMetadata)
 
@@ -746,18 +719,66 @@ class TransactionViewItemFactory(
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value, nftMetadata)
+            icon = icon ?: singleValueIconType(record.value!!, nftMetadata)
         )
     }
 
+    private fun createViewItemFromSolanaTransactionRecord(
+        record: SolanaTransactionRecord,
+        transactionItem: TransactionItem,
+        progress: Float?,
+        icon: TransactionViewItem.Icon.Failed?,
+    ): TransactionViewItem {
+        return when (record.transactionRecordType) {
+            TransactionRecordType.SOLANA_INCOMING -> {
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = true
+                ) ?: createViewItemFromSolanaIncomingTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon,
+                    nftMetadata = transactionItem.nftMetadata
+                )
+            }
+
+            TransactionRecordType.SOLANA_OUTGOING -> {
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = false
+                ) ?: createViewItemFromSolanaOutgoingTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon,
+                    nftMetadata = transactionItem.nftMetadata
+                )
+
+            }
+
+            TransactionRecordType.SOLANA_UNKNOWN ->
+                createViewItemFromSolanaUnknownTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon
+                )
+
+            else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
+        }
+    }
+
     private fun createViewItemFromSolanaIncomingTransactionRecord(
-        record: SolanaIncomingTransactionRecord,
+        record: SolanaTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         icon: TransactionViewItem.Icon.Failed?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
+        val primaryValue = getColoredValue(record.value!!, ColorName.Remus)
         val secondaryValue = singleValueSecondaryValue(record.value, currencyValue, nftMetadata)
 
         return TransactionViewItem(

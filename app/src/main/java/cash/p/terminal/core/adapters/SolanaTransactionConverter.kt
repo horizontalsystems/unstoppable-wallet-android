@@ -5,11 +5,9 @@ import cash.p.terminal.core.managers.SolanaKitWrapper
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
-import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
-import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
@@ -29,8 +27,8 @@ class SolanaTransactionConverter(
 
     fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
         val transaction = fullTransaction.transaction
-        val incomingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
-        val outgoingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
+        val incomingSolanaTransfers = mutableListOf<SolanaTransactionRecord.SolanaTransfer>()
+        val outgoingSolanaTransfers = mutableListOf<SolanaTransactionRecord.SolanaTransfer>()
 
         transaction.amount?.let {
             if (transaction.from == userAddress) {
@@ -38,8 +36,8 @@ class SolanaTransactionConverter(
                     baseToken,
                     it.multiply(BigDecimal.valueOf(-1)).movePointLeft(baseToken.decimals)
                 )
-                outgoingTransfers.add(
-                    SolanaTransactionRecord.Transfer(
+                outgoingSolanaTransfers.add(
+                    SolanaTransactionRecord.SolanaTransfer(
                         transaction.to,
                         transactionValue
                     )
@@ -47,8 +45,8 @@ class SolanaTransactionConverter(
             } else if (transaction.to == userAddress) {
                 val transactionValue =
                     TransactionValue.CoinValue(baseToken, it.movePointLeft(baseToken.decimals))
-                incomingTransfers.add(
-                    SolanaTransactionRecord.Transfer(
+                incomingSolanaTransfers.add(
+                    SolanaTransactionRecord.SolanaTransfer(
                         transaction.from,
                         transactionValue
                     )
@@ -80,15 +78,15 @@ class SolanaTransactionConverter(
             }
 
             if (tokenTransfer.incoming) {
-                incomingTransfers.add(
-                    SolanaTransactionRecord.Transfer(
+                incomingSolanaTransfers.add(
+                    SolanaTransactionRecord.SolanaTransfer(
                         fullTransaction.transaction.from,
                         transactionValue
                     )
                 )
             } else {
-                outgoingTransfers.add(
-                    SolanaTransactionRecord.Transfer(
+                outgoingSolanaTransfers.add(
+                    SolanaTransactionRecord.SolanaTransfer(
                         fullTransaction.transaction.to,
                         transactionValue
                     )
@@ -97,47 +95,50 @@ class SolanaTransactionConverter(
         }
 
         return when {
-            (incomingTransfers.size == 1 && outgoingTransfers.isEmpty()) -> {
-                val transfer = incomingTransfers.first()
-                SolanaIncomingTransactionRecord(
+            (incomingSolanaTransfers.size == 1 && outgoingSolanaTransfers.isEmpty()) -> {
+                val transfer = incomingSolanaTransfers.first()
+                SolanaTransactionRecord(
                     transaction = transaction,
                     baseToken = baseToken,
                     source = source,
                     from = transfer.address,
                     value = transfer.value,
-                    isSpam = spamManager.isSpam(
-                        incomingEvents = incomingTransfers.map {
+                    spam = spamManager.isSpam(
+                        incomingEvents = incomingSolanaTransfers.map {
                             TransferEvent(it.address, it.value)
-                        }, outgoingEvents = outgoingTransfers.map {
+                        }, outgoingEvents = outgoingSolanaTransfers.map {
                             TransferEvent(it.address, it.value)
-                        })
+                        }),
+                    transactionRecordType = TransactionRecordType.SOLANA_INCOMING
                 )
             }
 
-            (incomingTransfers.isEmpty() && outgoingTransfers.size == 1) -> {
-                val transfer = outgoingTransfers.first()
-                SolanaOutgoingTransactionRecord(
+            (incomingSolanaTransfers.isEmpty() && outgoingSolanaTransfers.size == 1) -> {
+                val transfer = outgoingSolanaTransfers.first()
+                SolanaTransactionRecord(
                     transaction = transaction,
                     baseToken = baseToken,
                     source = source,
                     to = transfer.address,
                     value = transfer.value,
-                    sentToSelf = transfer.address == userAddress
+                    sentToSelf = transfer.address == userAddress,
+                    transactionRecordType = TransactionRecordType.SOLANA_OUTGOING
                 )
             }
 
-            else -> SolanaUnknownTransactionRecord(
+            else -> SolanaTransactionRecord(
                 transaction = transaction,
                 baseToken = baseToken,
                 source = source,
-                incomingTransfers = incomingTransfers,
-                outgoingTransfers = outgoingTransfers,
-                isSpam = spamManager.isSpam(
-                    incomingEvents = incomingTransfers.map {
+                incomingSolanaTransfers = incomingSolanaTransfers,
+                outgoingSolanaTransfers = outgoingSolanaTransfers,
+                spam = spamManager.isSpam(
+                    incomingEvents = incomingSolanaTransfers.map {
                         TransferEvent(it.address, it.value)
-                    }, outgoingEvents = outgoingTransfers.map {
+                    }, outgoingEvents = outgoingSolanaTransfers.map {
                         TransferEvent(it.address, it.value)
-                    })
+                    }),
+                transactionRecordType = TransactionRecordType.SOLANA_UNKNOWN
             )
         }
     }
