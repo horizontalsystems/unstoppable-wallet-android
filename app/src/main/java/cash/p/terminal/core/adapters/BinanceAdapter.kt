@@ -1,28 +1,29 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.R
-import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.logger.AppLogger
-import cash.p.terminal.wallet.entities.BalanceData
-import cash.p.terminal.wallet.IAdapter
-import cash.p.terminal.wallet.IBalanceAdapter
-import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.ISendBinanceAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.entities.LastBlockInfo
+import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.BalanceData
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
+import io.horizontalsystems.core.logger.AppLogger
 import io.reactivex.Flowable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
@@ -154,25 +155,39 @@ class BinanceAdapter(
         val toMine = transaction.to == myAddress
 
         return when {
-            fromMine && !toMine -> BinanceChainOutgoingTransactionRecord(
-                transaction,
-                feeToken,
-                token,
-                false,
-                wallet.transactionSource
+            fromMine && !toMine -> BinanceChainTransactionRecord(
+                transaction = transaction,
+                feeToken = feeToken,
+                token = token,
+                sentToSelf = false,
+                source = wallet.transactionSource,
+                value = TransactionValue.CoinValue(
+                    token,
+                    transaction.amount.toBigDecimal().negate()
+                ),
+                transactionRecordType = TransactionRecordType.BINANCE_OUTGOING
             )
-            !fromMine && toMine -> BinanceChainIncomingTransactionRecord(
-                transaction,
-                feeToken,
-                token,
-                wallet.transactionSource
+
+            !fromMine && toMine -> BinanceChainTransactionRecord(
+                transaction = transaction,
+                feeToken = feeToken,
+                token = token,
+                source = wallet.transactionSource,
+                value = TransactionValue.CoinValue(token, transaction.amount.toBigDecimal()),
+                transactionRecordType = TransactionRecordType.BINANCE_INCOMING
             )
-            else -> BinanceChainOutgoingTransactionRecord(
-                transaction,
-                feeToken,
-                token,
-                true,
-                wallet.transactionSource
+
+            else -> BinanceChainTransactionRecord(
+                transaction = transaction,
+                feeToken = feeToken,
+                token = token,
+                sentToSelf = true,
+                source = wallet.transactionSource,
+                value = TransactionValue.CoinValue(
+                    token,
+                    transaction.amount.toBigDecimal().negate()
+                ),
+                transactionRecordType = TransactionRecordType.BINANCE_OUTGOING
             )
         }
     }

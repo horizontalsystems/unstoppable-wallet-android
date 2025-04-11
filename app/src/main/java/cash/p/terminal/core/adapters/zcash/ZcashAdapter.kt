@@ -475,6 +475,10 @@ class ZcashAdapter(
         tryCounter: Int = 4
     ): Unit = withContext(Dispatchers.IO) {
             try {
+                if (balance == Zatoshi(0)) {
+                    _fee.value = MINERS_FEE
+                    return@withContext
+                }
                 val calculatedFee = synchronizer.proposeTransfer(
                     account = zcashAccount!!,
                     recipient = App.appConfigProvider.donateAddresses[BlockchainType.Zcash]
@@ -488,8 +492,6 @@ class ZcashAdapter(
                     runCatching { // Prevent problems with negative Zatoshi
                         calculateFee(balance - MINERS_FEE.convertZecToZatoshi(), tryCounter - 1)
                     }
-                } else {
-                    ex.printStackTrace()
                 }
             }
         }

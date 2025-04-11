@@ -10,7 +10,7 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.TransactionLockState
@@ -644,7 +644,7 @@ object TransactionViewItemFactoryHelper {
             is BitcoinOutgoingTransactionRecord ->
                 transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
 
-            is BinanceChainOutgoingTransactionRecord ->
+            is BinanceChainTransactionRecord ->
                 items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
 
             is SolanaTransactionRecord -> {

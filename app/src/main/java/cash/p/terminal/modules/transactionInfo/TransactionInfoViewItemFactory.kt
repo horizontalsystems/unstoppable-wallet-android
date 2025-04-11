@@ -4,8 +4,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.TonHelper
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -385,38 +384,44 @@ class TransactionInfoViewItemFactory(
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
-            is BinanceChainIncomingTransactionRecord -> {
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                        value = transaction.value,
-                        fromAddress = transaction.from,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        blockchainType = blockchainType,
-                    )
-                )
+            is BinanceChainTransactionRecord -> {
+                when (transaction.transactionRecordType) {
+                    TransactionRecordType.BINANCE_INCOMING -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transaction.value,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
 
-                addMemoItem(transaction.memo, miscItemsSection)
-            }
+                        addMemoItem(transaction.memo, miscItemsSection)
+                    }
 
-            is BinanceChainOutgoingTransactionRecord -> {
-                sentToSelf = transaction.sentToSelf
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getSendSectionItems(
-                        value = transaction.value,
-                        toAddress = transaction.to,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        sentToSelf = transaction.sentToSelf,
-                        blockchainType = blockchainType,
-                    )
-                )
+                    TransactionRecordType.BINANCE_OUTGOING -> {
+                        sentToSelf = transaction.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transaction.value,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transaction.sentToSelf,
+                                blockchainType = blockchainType,
+                            )
+                        )
 
-                addMemoItem(transaction.memo, miscItemsSection)
+                        addMemoItem(transaction.memo, miscItemsSection)
+                    }
+
+                    else -> {}
+                }
             }
 
             is SolanaTransactionRecord -> {
-                when(transaction.transactionRecordType) {
+                when (transaction.transactionRecordType) {
                     TransactionRecordType.SOLANA_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
@@ -429,6 +434,7 @@ class TransactionInfoViewItemFactory(
                             )
                         )
                     }
+
                     TransactionRecordType.SOLANA_OUTGOING -> {
                         sentToSelf = transaction.sentToSelf
                         itemSections.add(
@@ -443,6 +449,7 @@ class TransactionInfoViewItemFactory(
                             )
                         )
                     }
+
                     TransactionRecordType.SOLANA_UNKNOWN -> {
                         for (transfer in transaction.outgoingSolanaTransfers!!) {
                             itemSections.add(
@@ -470,6 +477,7 @@ class TransactionInfoViewItemFactory(
                             )
                         }
                     }
+
                     else -> {}
                 }
             }

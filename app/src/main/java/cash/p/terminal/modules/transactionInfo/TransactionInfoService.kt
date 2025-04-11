@@ -7,8 +7,7 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -154,11 +153,22 @@ class TransactionInfoService(
 
                 is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
-                is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is BinanceChainOutgoingTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.value
-                ).map { it.coinUid }
+                is BinanceChainTransactionRecord -> {
+                    when(transactionRecord.transactionRecordType) {
+                        TransactionRecordType.BINANCE_INCOMING -> {
+                            listOf(tx.value.coinUid)
+                        }
+
+                        TransactionRecordType.BINANCE_OUTGOING -> {
+                            listOf(
+                                tx.fee,
+                                tx.value
+                            ).map { it.coinUid }
+                        }
+
+                        else -> emptyList()
+                    }
+                }
 
                 is SolanaTransactionRecord -> {
                     when(transactionRecord.transactionRecordType) {

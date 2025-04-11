@@ -11,8 +11,7 @@ import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -260,29 +259,15 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is BinanceChainIncomingTransactionRecord ->
-                tryConvertToChangeNowViewItemSwap(
+            is BinanceChainTransactionRecord -> {
+                createViewItemFromBinanceChaiTransactionRecord(
                     transactionItem = transactionItem,
-                    token = record.value.token,
-                    isIncoming = true
-                ) ?: createViewItemFromBinanceChainIncomingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon
                 )
-
-            is BinanceChainOutgoingTransactionRecord ->
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = record.value.token,
-                    isIncoming = false
-                ) ?: createViewItemFromBinanceChainOutgoingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
+            }
 
             is BitcoinIncomingTransactionRecord ->
                 tryConvertToChangeNowViewItemSwap(
@@ -1179,8 +1164,34 @@ class TransactionViewItemFactory(
         )
     }
 
+    private fun createViewItemFromBinanceChaiTransactionRecord(
+        transactionItem: TransactionItem,
+        record: BinanceChainTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem = tryConvertToChangeNowViewItemSwap(
+        transactionItem = transactionItem,
+        token = record.value.token,
+        isIncoming = record.transactionRecordType == TransactionRecordType.BINANCE_INCOMING
+    ) ?: if (record.transactionRecordType == TransactionRecordType.BINANCE_INCOMING) {
+        createViewItemFromBinanceChainIncomingTransactionRecord(
+            record,
+            currencyValue,
+            progress,
+            icon
+        )
+    } else {
+        createViewItemFromBinanceChainOutgoingTransactionRecord(
+            record,
+            currencyValue,
+            progress,
+            icon
+        )
+    }
+
     private fun createViewItemFromBinanceChainOutgoingTransactionRecord(
-        record: BinanceChainOutgoingTransactionRecord,
+        record: BinanceChainTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         icon: TransactionViewItem.Icon?
@@ -1201,7 +1212,7 @@ class TransactionViewItemFactory(
             title = Translator.getString(R.string.Transactions_Send),
             subtitle = Translator.getString(
                 R.string.Transactions_To,
-                mapped(record.to, record.blockchainType)
+                mapped(record.to!!, record.blockchainType)
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -1337,7 +1348,7 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromBinanceChainIncomingTransactionRecord(
-        record: BinanceChainIncomingTransactionRecord,
+        record: BinanceChainTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         icon: TransactionViewItem.Icon?
@@ -1353,7 +1364,7 @@ class TransactionViewItemFactory(
             title = Translator.getString(R.string.Transactions_Receive),
             subtitle = Translator.getString(
                 R.string.Transactions_From,
-                mapped(record.from, record.blockchainType)
+                mapped(record.from!!, record.blockchainType)
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
