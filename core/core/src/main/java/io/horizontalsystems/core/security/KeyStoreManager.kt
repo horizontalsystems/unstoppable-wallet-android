@@ -27,7 +27,7 @@ class KeyStoreManager(
     private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private val AUTH_DURATION_SEC = 86400 // 24 hours in seconds (24x60x60)
 
-    private val keyStore: KeyStore
+    private val keyStore: KeyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
 
     interface Logger {
         fun warning(message: String, e: Throwable)
@@ -35,7 +35,6 @@ class KeyStoreManager(
     }
 
     init {
-        keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
         keyStore.load(null)
     }
 

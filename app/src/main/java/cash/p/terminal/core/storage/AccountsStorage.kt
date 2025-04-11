@@ -66,13 +66,13 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             else -> null
                         }
                         Account(
-                            record.id,
-                            record.name,
-                            accountType!!,
-                            AccountOrigin.valueOf(record.origin),
-                            record.level,
-                            record.isBackedUp,
-                            record.isFileBackedUp
+                            id = record.id,
+                            name = record.name,
+                            type = accountType!!,
+                            origin = AccountOrigin.valueOf(record.origin),
+                            level = record.level,
+                            isBackedUp = record.isBackedUp,
+                            isFileBackedUp = record.isFileBackedUp
                         )
                     } catch (ex: Exception) {
                         null

@@ -147,11 +147,15 @@ class AccountManager(
     }
 
     override fun setLevel(level: Int) {
+        accountsCache = storage.allAccounts(level).associateBy { it.id }.toMutableMap()
+        val activeAccountIdForLevel = storage.getActiveAccountId(level)
+
+        if (activeAccountIdForLevel != null && accountsCache.isEmpty()) {
+            logger.info("Keystore problems, can't decode accounts, ignore account changing level")
+            return // looks like we can't decode accounts due to Keystore problems(found on Android 11 Oppo devices)
+        }
         currentLevel = level
 
-        accountsCache = storage.allAccounts(level).associateBy { it.id }.toMutableMap()
-
-        val activeAccountIdForLevel = storage.getActiveAccountId(level)
         if (activeAccount == null || activeAccount?.id != activeAccountIdForLevel) {
             activeAccount = accountsCache[activeAccountIdForLevel] ?: accounts.firstOrNull()
             _activeAccountStateFlow.update {
