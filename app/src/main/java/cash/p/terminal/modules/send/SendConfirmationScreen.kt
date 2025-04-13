@@ -101,7 +101,7 @@ fun SendConfirmationScreen(
             HudHelper.showSuccessMessage(
                 view,
                 R.string.Send_Success,
-                SnackbarDuration.LONG
+                SnackbarDuration.MEDIUM
             )
         }
 

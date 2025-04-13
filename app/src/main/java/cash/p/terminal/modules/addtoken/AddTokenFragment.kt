@@ -109,7 +109,7 @@ private fun AddTokenScreen(
 
     LaunchedEffect(uiState.finished) {
         if (uiState.finished) {
-            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.MEDIUM)
             delay(300)
             closeScreen.invoke()
         }

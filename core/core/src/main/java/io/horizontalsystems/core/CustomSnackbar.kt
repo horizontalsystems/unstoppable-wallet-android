@@ -19,7 +19,8 @@ import com.google.android.material.snackbar.Snackbar
 
 enum class SnackbarDuration(val value: Int) {
     SHORT(Snackbar.LENGTH_SHORT),
-    LONG(Snackbar.LENGTH_LONG),
+    MEDIUM(Snackbar.LENGTH_LONG),
+    LONG(7_000),
     INDEFINITE(Snackbar.LENGTH_INDEFINITE),
 }
 
