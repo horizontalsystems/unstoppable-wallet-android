@@ -24,11 +24,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.core.getInputX
-
-
-
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
 import cash.p.terminal.modules.fee.HSFeeRaw
@@ -66,9 +63,9 @@ class ResendBitcoinFragment : BaseComposeFragment() {
 
     private val vmFactory by lazy {
         ResendBitcoinModule.Factory(
-            input.optionType,
-            transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord,
-            transactionInfoViewModel.source
+            optionType = input.optionType,
+            transactionRecord = transactionInfoViewModel.transactionRecord as BitcoinTransactionRecord,
+            source = transactionInfoViewModel.source
         )
     }
 

@@ -5,7 +5,7 @@ import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
@@ -103,7 +103,7 @@ fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransact
             if (transactionRecordType == TransactionRecordType.BINANCE_OUTGOING) {
                 ShortOutgoingTransactionRecord(
                     amountOut = mainValue?.decimalValue?.abs(),
-                    token = value.token,
+                    token = mainValue.token,
                     timestamp = timestamp * 1000
                 )
             } else {
@@ -111,12 +111,17 @@ fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransact
             }
         }
 
-        is BitcoinOutgoingTransactionRecord ->
-            ShortOutgoingTransactionRecord(
-                amountOut = mainValue.decimalValue?.abs(),
-                token = token,
-                timestamp = timestamp * 1000
-            )
+        is BitcoinTransactionRecord ->
+            if (transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING) {
+                ShortOutgoingTransactionRecord(
+                    amountOut = mainValue.decimalValue?.abs(),
+                    token = token,
+                    timestamp = timestamp * 1000
+                )
+            } else {
+                null
+            }
+
 
         is EvmOutgoingTransactionRecord ->
             ShortOutgoingTransactionRecord(

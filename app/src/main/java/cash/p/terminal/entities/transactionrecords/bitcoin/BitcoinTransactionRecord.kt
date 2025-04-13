@@ -5,10 +5,16 @@ import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.modules.transactions.TransactionLockInfo
+import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
+import java.math.BigDecimal
 import java.util.*
 
-abstract class BitcoinTransactionRecord(
+class BitcoinTransactionRecord(
+    val token: Token,
+    amount: BigDecimal,
+    val to: String?,
+    val from: String?,
     uid: String,
     transactionHash: String,
     transactionIndex: Int,
@@ -22,6 +28,9 @@ abstract class BitcoinTransactionRecord(
     val showRawTransaction: Boolean,
     val memo: String?,
     source: TransactionSource,
+    val sentToSelf: Boolean = false,
+    val replaceable: Boolean = false,
+    override val mainValue: TransactionValue = TransactionValue.CoinValue(token, amount),
     transactionRecordType: TransactionRecordType
 ) : TransactionRecord(
     uid = uid,

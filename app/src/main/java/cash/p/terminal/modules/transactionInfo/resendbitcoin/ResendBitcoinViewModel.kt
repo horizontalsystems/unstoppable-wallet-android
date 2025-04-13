@@ -11,8 +11,8 @@ import cash.p.terminal.core.LocalizedException
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.entities.Address
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.core.entities.CurrencyValue
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendResult
@@ -33,7 +33,7 @@ import java.net.UnknownHostException
 
 class ResendBitcoinViewModel(
     private val type: SpeedUpCancelType,
-    private val transactionRecord: BitcoinOutgoingTransactionRecord,
+    private val transactionRecord: BitcoinTransactionRecord,
 
     private val replacementInfo: ReplacementTransactionInfo?,
 
@@ -112,7 +112,7 @@ class ResendBitcoinViewModel(
             }
 
             this.replacementTransaction = replacementTransaction
-            this.record = bitcoinTransactionRecord as BitcoinOutgoingTransactionRecord
+            this.record = bitcoinTransactionRecord
 
             feeCaution = if (minFee < recommendedFee) SendWarningRiskOfGettingStuck else null
         } catch (error: Throwable) {
@@ -145,7 +145,7 @@ class ResendBitcoinViewModel(
 
             coin = token.coin,
             feeCoin = token.coin,
-            amount = record.value.decimalValue!!.abs(),
+            amount = record.mainValue.decimalValue!!.abs(),
             fee = record.fee!!.decimalValue!!,
             address = address,
             addressTitleResId = addressTitleResId,

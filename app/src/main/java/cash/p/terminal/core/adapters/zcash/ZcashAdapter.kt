@@ -11,9 +11,10 @@ import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.entities.LastBlockInfo
+import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
@@ -606,7 +607,7 @@ class ZcashAdapter(
         val transactionHashHex = transaction.transactionHash.toReversedHex()
 
         return if (transaction.isIncoming) {
-            BitcoinIncomingTransactionRecord(
+            BitcoinTransactionRecord(
                 token = wallet.token,
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
@@ -614,18 +615,20 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.convertZatoshiToZec(DECIMAL_COUNT),
+                fee = transaction.feePaid?.convertZatoshiToZec(DECIMAL_COUNT)?.let { TransactionValue.CoinValue(wallet.token, it) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
                 amount = transaction.value.convertZatoshiToZec(DECIMAL_COUNT),
                 from = null,
+                to = null,
                 memo = transaction.memo,
-                source = wallet.transactionSource
+                source = wallet.transactionSource,
+                transactionRecordType = TransactionRecordType.BITCOIN_INCOMING
             )
         } else {
-            BitcoinOutgoingTransactionRecord(
+            BitcoinTransactionRecord(
                 token = wallet.token,
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
@@ -633,17 +636,19 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) },
+                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) }?.let { TransactionValue.CoinValue(wallet.token, it) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
                 amount = transaction.value.convertZatoshiToZec(DECIMAL_COUNT).negate(),
                 to = transaction.toAddress,
+                from = null,
                 sentToSelf = false,
                 memo = transaction.memo,
                 source = wallet.transactionSource,
-                replaceable = false
+                replaceable = false,
+                transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING
             )
         }
     }

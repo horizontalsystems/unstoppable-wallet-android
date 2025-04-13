@@ -5,8 +5,7 @@ import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.TonHelper
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCreationTransactionRecord
@@ -342,46 +341,53 @@ class TransactionInfoViewItemFactory(
                 )
             }
 
-            is BitcoinIncomingTransactionRecord -> {
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                        value = transaction.value,
-                        fromAddress = transaction.from,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        blockchainType = blockchainType,
-                    )
-                )
+            is BitcoinTransactionRecord -> {
+                when (transaction.transactionRecordType) {
+                    TransactionRecordType.BITCOIN_INCOMING -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transaction.mainValue,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
 
-                miscItemsSection.addAll(
-                    TransactionViewItemFactoryHelper.getBitcoinSectionItems(
-                        transaction,
-                        transactionItem.lastBlockInfo
-                    )
-                )
-                addMemoItem(transaction.memo, miscItemsSection)
-            }
+                        miscItemsSection.addAll(
+                            TransactionViewItemFactoryHelper.getBitcoinSectionItems(
+                                transaction,
+                                transactionItem.lastBlockInfo
+                            )
+                        )
+                        addMemoItem(transaction.memo, miscItemsSection)
+                    }
 
-            is BitcoinOutgoingTransactionRecord -> {
-                sentToSelf = transaction.sentToSelf
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getSendSectionItems(
-                        value = transaction.value,
-                        toAddress = transaction.to,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        sentToSelf = transaction.sentToSelf,
-                        blockchainType = blockchainType,
-                    )
-                )
+                    TransactionRecordType.BITCOIN_OUTGOING -> {
+                        sentToSelf = transaction.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transaction.mainValue,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transaction.sentToSelf,
+                                blockchainType = blockchainType,
+                            )
+                        )
 
-                miscItemsSection.addAll(
-                    TransactionViewItemFactoryHelper.getBitcoinSectionItems(
-                        transaction,
-                        transactionItem.lastBlockInfo
-                    )
-                )
-                addMemoItem(transaction.memo, miscItemsSection)
+                        miscItemsSection.addAll(
+                            TransactionViewItemFactoryHelper.getBitcoinSectionItems(
+                                transaction,
+                                transactionItem.lastBlockInfo
+                            )
+                        )
+                        addMemoItem(transaction.memo, miscItemsSection)
+                    }
+
+                    else -> {}
+
+                }
             }
 
             is BinanceChainTransactionRecord -> {
@@ -389,9 +395,9 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.BINANCE_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                                value = transaction.value,
+                                value = transaction.mainValue,
                                 fromAddress = transaction.from,
-                                coinPrice = rates[transaction.value.coinUid],
+                                coinPrice = rates[transaction.mainValue.coinUid],
                                 hideAmount = transactionItem.hideAmount,
                                 blockchainType = blockchainType,
                             )
@@ -404,9 +410,9 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getSendSectionItems(
-                                value = transaction.value,
+                                value = transaction.mainValue,
                                 toAddress = transaction.to,
-                                coinPrice = rates[transaction.value.coinUid],
+                                coinPrice = rates[transaction.mainValue.coinUid],
                                 hideAmount = transactionItem.hideAmount,
                                 sentToSelf = transaction.sentToSelf,
                                 blockchainType = blockchainType,
@@ -425,9 +431,9 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.SOLANA_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                                value = transaction.value!!,
+                                value = transaction.mainValue!!,
                                 fromAddress = transaction.from,
-                                coinPrice = rates[transaction.value.coinUid],
+                                coinPrice = rates[transaction.mainValue!!.coinUid],
                                 hideAmount = transactionItem.hideAmount,
                                 nftMetadata = nftMetadata,
                                 blockchainType = blockchainType,
@@ -439,9 +445,9 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getSendSectionItems(
-                                value = transaction.value!!,
+                                value = transaction.mainValue!!,
                                 toAddress = transaction.to,
-                                coinPrice = rates[transaction.value.coinUid],
+                                coinPrice = rates[transaction.mainValue!!.coinUid],
                                 hideAmount = transactionItem.hideAmount,
                                 sentToSelf = transaction.sentToSelf,
                                 nftMetadata = nftMetadata,
@@ -518,7 +524,10 @@ class TransactionInfoViewItemFactory(
                     )
                 )
             )
-        } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
+        } else if (transaction is BitcoinTransactionRecord &&
+            transaction.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING &&
+            transaction.replaceable && resendEnabled
+        ) {
             itemSections.add(
                 listOf(
                     SpeedUpCancel(

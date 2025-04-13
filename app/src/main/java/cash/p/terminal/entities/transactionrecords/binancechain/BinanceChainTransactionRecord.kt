@@ -14,7 +14,7 @@ class BinanceChainTransactionRecord(
     feeToken: Token,
     source: TransactionSource,
     val sentToSelf: Boolean = false,
-    val value: TransactionValue.CoinValue,
+    override val mainValue: TransactionValue.CoinValue,
     transactionRecordType: TransactionRecordType,
     val to: String? =  if(transactionRecordType == TransactionRecordType.BINANCE_OUTGOING) transaction.to else null,
     val from: String? = if(transactionRecordType == TransactionRecordType.BINANCE_INCOMING) transaction.from else null

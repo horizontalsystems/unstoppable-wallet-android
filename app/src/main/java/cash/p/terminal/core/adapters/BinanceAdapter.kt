@@ -161,7 +161,7 @@ class BinanceAdapter(
                 token = token,
                 sentToSelf = false,
                 source = wallet.transactionSource,
-                value = TransactionValue.CoinValue(
+                mainValue = TransactionValue.CoinValue(
                     token,
                     transaction.amount.toBigDecimal().negate()
                 ),
@@ -173,7 +173,7 @@ class BinanceAdapter(
                 feeToken = feeToken,
                 token = token,
                 source = wallet.transactionSource,
-                value = TransactionValue.CoinValue(token, transaction.amount.toBigDecimal()),
+                mainValue = TransactionValue.CoinValue(token, transaction.amount.toBigDecimal()),
                 transactionRecordType = TransactionRecordType.BINANCE_INCOMING
             )
 
@@ -183,7 +183,7 @@ class BinanceAdapter(
                 token = token,
                 sentToSelf = true,
                 source = wallet.transactionSource,
-                value = TransactionValue.CoinValue(
+                mainValue = TransactionValue.CoinValue(
                     token,
                     transaction.amount.toBigDecimal().negate()
                 ),

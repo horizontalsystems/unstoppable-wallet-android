@@ -102,7 +102,7 @@ class SolanaTransactionConverter(
                     baseToken = baseToken,
                     source = source,
                     from = transfer.address,
-                    value = transfer.value,
+                    mainValue = transfer.value,
                     spam = spamManager.isSpam(
                         incomingEvents = incomingSolanaTransfers.map {
                             TransferEvent(it.address, it.value)
@@ -120,7 +120,7 @@ class SolanaTransactionConverter(
                     baseToken = baseToken,
                     source = source,
                     to = transfer.address,
-                    value = transfer.value,
+                    mainValue = transfer.value,
                     sentToSelf = transfer.address == userAddress,
                     transactionRecordType = TransactionRecordType.SOLANA_OUTGOING
                 )

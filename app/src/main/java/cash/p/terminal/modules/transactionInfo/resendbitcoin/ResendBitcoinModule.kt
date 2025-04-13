@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.factories.FeeRateProviderFactory
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.transaction.TransactionSource
@@ -14,7 +14,7 @@ object ResendBitcoinModule {
 
     class Factory(
         private val optionType: SpeedUpCancelType,
-        private val transactionRecord: BitcoinOutgoingTransactionRecord,
+        private val transactionRecord: BitcoinTransactionRecord,
         private val source: TransactionSource
     ) : ViewModelProvider.Factory {
 

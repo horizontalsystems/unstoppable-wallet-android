@@ -8,8 +8,7 @@ import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmIncomingTransactionRecord
@@ -151,18 +150,33 @@ class TransactionInfoService(
                     tempCoinUidList
                 }
 
-                is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
+                is BitcoinTransactionRecord ->{
+                    when(transactionRecord.transactionRecordType) {
+                        TransactionRecordType.BITCOIN_INCOMING -> {
+                            listOf(tx.mainValue.coinUid)
+                        }
+
+                        TransactionRecordType.BITCOIN_OUTGOING -> {
+                            listOf(
+                                tx.fee,
+                                tx.mainValue
+                            ).map { it?.coinUid }
+                        }
+
+                        else -> emptyList()
+                    }
+                }
+
                 is BinanceChainTransactionRecord -> {
                     when(transactionRecord.transactionRecordType) {
                         TransactionRecordType.BINANCE_INCOMING -> {
-                            listOf(tx.value.coinUid)
+                            listOf(tx.mainValue.coinUid)
                         }
 
                         TransactionRecordType.BINANCE_OUTGOING -> {
                             listOf(
                                 tx.fee,
-                                tx.value
+                                tx.mainValue
                             ).map { it.coinUid }
                         }
 
@@ -173,11 +187,11 @@ class TransactionInfoService(
                 is SolanaTransactionRecord -> {
                     when(transactionRecord.transactionRecordType) {
                         TransactionRecordType.SOLANA_INCOMING -> {
-                            listOf(tx.value?.coinUid)
+                            listOf(tx.mainValue?.coinUid)
                         }
 
                         TransactionRecordType.SOLANA_OUTGOING -> {
-                            listOf(tx.fee?.coinUid, tx.value?.coinUid)
+                            listOf(tx.fee?.coinUid, tx.mainValue?.coinUid)
                         }
                         TransactionRecordType.SOLANA_UNKNOWN -> {
                             val tempCoinUidList = mutableListOf<String>()

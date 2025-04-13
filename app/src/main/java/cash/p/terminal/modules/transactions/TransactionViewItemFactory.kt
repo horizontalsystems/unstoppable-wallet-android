@@ -12,8 +12,7 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCreationTransactionRecord
@@ -269,30 +268,15 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is BitcoinIncomingTransactionRecord ->
-                tryConvertToChangeNowViewItemSwap(
+            is BitcoinTransactionRecord ->
+                createViewItemFromBitcoinTransactionRecord(
                     transactionItem = transactionItem,
-                    token = record.token,
-                    isIncoming = true
-                ) ?: createViewItemFromBitcoinIncomingTransactionRecord(
                     record,
                     transactionItem.currencyValue,
                     progress,
                     lastBlockTimestamp,
                     icon
                 )
-
-            is BitcoinOutgoingTransactionRecord -> tryConvertToChangeNowViewItemSwap(
-                transactionItem = transactionItem,
-                token = record.token,
-                isIncoming = false
-            ) ?: createViewItemFromBitcoinOutgoingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                lastBlockTimestamp,
-                icon
-            )
 
             is ContractCallTransactionRecord -> {
                 val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
@@ -682,11 +666,11 @@ class TransactionViewItemFactory(
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value!!, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.mainValue!!, true), ColorName.Leah)
         } else {
-            getColoredValue(record.value!!, ColorName.Lucian)
+            getColoredValue(record.mainValue!!, ColorName.Lucian)
         }
-        val secondaryValue = singleValueSecondaryValue(record.value, currencyValue, nftMetadata)
+        val secondaryValue = singleValueSecondaryValue(record.mainValue!!, currencyValue, nftMetadata)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -704,7 +688,7 @@ class TransactionViewItemFactory(
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value!!, nftMetadata)
+            icon = icon ?: singleValueIconType(record.mainValue!!, nftMetadata)
         )
     }
 
@@ -763,8 +747,8 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon.Failed?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
-        val primaryValue = getColoredValue(record.value!!, ColorName.Remus)
-        val secondaryValue = singleValueSecondaryValue(record.value, currencyValue, nftMetadata)
+        val primaryValue = getColoredValue(record.mainValue!!, ColorName.Remus)
+        val secondaryValue = singleValueSecondaryValue(record.mainValue!!, currencyValue, nftMetadata)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -781,7 +765,7 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            icon = icon ?: singleValueIconType(record.mainValue!!)
         )
     }
 
@@ -1073,8 +1057,39 @@ class TransactionViewItemFactory(
         )
     }
 
+    private fun createViewItemFromBitcoinTransactionRecord(
+        transactionItem: TransactionItem,
+        record: BitcoinTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        lastBlockTimestamp: Long?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        return tryConvertToChangeNowViewItemSwap(
+            transactionItem = transactionItem,
+            token = record.token,
+            isIncoming = record.transactionRecordType == TransactionRecordType.BITCOIN_INCOMING
+        ) ?: if (record.transactionRecordType == TransactionRecordType.BITCOIN_INCOMING) {
+            createViewItemFromBitcoinIncomingTransactionRecord(
+                record = record,
+                currencyValue = currencyValue,
+                progress = progress,
+                lastBlockTimestamp = lastBlockTimestamp,
+                icon = icon
+            )
+        } else {
+            createViewItemFromBitcoinOutgoingTransactionRecord(
+                record = record,
+                currencyValue = currencyValue,
+                progress = progress,
+                lastBlockTimestamp = lastBlockTimestamp,
+                icon = icon
+            )
+        }
+    }
+
     private fun createViewItemFromBitcoinOutgoingTransactionRecord(
-        record: BitcoinOutgoingTransactionRecord,
+        record: BitcoinTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         lastBlockTimestamp: Long?,
@@ -1088,9 +1103,9 @@ class TransactionViewItemFactory(
         } ?: "---"
 
         val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.mainValue, true), ColorName.Leah)
         } else {
-            getColoredValue(record.value, ColorName.Lucian)
+            getColoredValue(record.mainValue, ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
@@ -1117,12 +1132,12 @@ class TransactionViewItemFactory(
             doubleSpend = record.conflictingHash != null,
             locked = locked,
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            icon = icon ?: singleValueIconType(record.mainValue)
         )
     }
 
     private fun createViewItemFromBitcoinIncomingTransactionRecord(
-        record: BitcoinIncomingTransactionRecord,
+        record: BitcoinTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
         lastBlockTimestamp: Long?,
@@ -1135,7 +1150,7 @@ class TransactionViewItemFactory(
             )
         } ?: "---"
 
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
+        val primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
         val secondaryValue = currencyValue?.let {
             getColoredValue(it, ColorName.Grey)
         }
@@ -1160,7 +1175,7 @@ class TransactionViewItemFactory(
             doubleSpend = record.conflictingHash != null,
             locked = locked,
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            icon = icon ?: singleValueIconType(record.mainValue)
         )
     }
 
@@ -1172,7 +1187,7 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem = tryConvertToChangeNowViewItemSwap(
         transactionItem = transactionItem,
-        token = record.value.token,
+        token = record.mainValue.token,
         isIncoming = record.transactionRecordType == TransactionRecordType.BINANCE_INCOMING
     ) ?: if (record.transactionRecordType == TransactionRecordType.BINANCE_INCOMING) {
         createViewItemFromBinanceChainIncomingTransactionRecord(
@@ -1197,9 +1212,9 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.mainValue, true), ColorName.Leah)
         } else {
-            getColoredValue(record.value, ColorName.Lucian)
+            getColoredValue(record.mainValue, ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
@@ -1220,7 +1235,7 @@ class TransactionViewItemFactory(
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            icon = icon ?: singleValueIconType(record.mainValue)
         )
     }
 
@@ -1353,7 +1368,7 @@ class TransactionViewItemFactory(
         progress: Float?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
+        val primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
         val secondaryValue = currencyValue?.let {
             getColoredValue(it, ColorName.Grey)
         }
@@ -1371,7 +1386,7 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            icon = icon ?: singleValueIconType(record.mainValue)
         )
     }
 

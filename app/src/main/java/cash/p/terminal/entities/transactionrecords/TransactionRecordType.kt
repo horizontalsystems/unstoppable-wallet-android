@@ -29,6 +29,4 @@ enum class TransactionRecordType {
     TRON_EXTERNAL_CONTRACT_CALL,
     TRON_INCOMING,
     TRON_OUTGOING,
-
-    UNKNOWN,
 }

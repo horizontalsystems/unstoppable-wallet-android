@@ -13,7 +13,7 @@ open class SolanaTransactionRecord(
     val incomingSolanaTransfers: List<SolanaTransfer>? = null,
     val outgoingSolanaTransfers: List<SolanaTransfer>? = null,
     transaction: Transaction,
-    val value: TransactionValue? = null, //mainValue
+    override val mainValue: TransactionValue? = null,
     val to: String? = null,
     val from: String? = null,
     val baseToken: Token,
