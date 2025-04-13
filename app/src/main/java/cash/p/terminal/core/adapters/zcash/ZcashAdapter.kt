@@ -285,7 +285,6 @@ class ZcashAdapter(
                 keySource = null
             )
         )
-        synchronizer.close()
 
         zcashAccount = runBlocking { getFirstAccount() }
         receiveAddress = runBlocking {
