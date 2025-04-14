@@ -37,7 +37,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.slideFromBottom
-
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
@@ -75,7 +74,6 @@ import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-
 
 @Composable
 fun TokenBalanceScreen(

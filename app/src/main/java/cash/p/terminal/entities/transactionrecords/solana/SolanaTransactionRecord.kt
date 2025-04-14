@@ -8,7 +8,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.solanakit.models.Transaction
 
-open class SolanaTransactionRecord(
+class SolanaTransactionRecord(
     val sentToSelf: Boolean = false,
     val incomingSolanaTransfers: List<SolanaTransfer>? = null,
     val outgoingSolanaTransfers: List<SolanaTransfer>? = null,

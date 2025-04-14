@@ -4,6 +4,7 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.entities.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -58,7 +59,7 @@ class TransactionFilterService(
         }
     }
 
-    fun setWallets(wallets: List<cash.p.terminal.wallet.Wallet>) {
+    fun setWallets(wallets: List<Wallet>) {
         uniqueId = UUID.randomUUID().toString()
 
         val filterTokens = wallets.map {
