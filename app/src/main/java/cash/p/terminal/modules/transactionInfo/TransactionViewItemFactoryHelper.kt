@@ -13,9 +13,7 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.TransactionLockState
-import cash.p.terminal.entities.transactionrecords.evm.ContractCreationTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
@@ -162,7 +160,7 @@ object TransactionViewItemFactoryHelper {
         incoming: Boolean?,
         hideAmount: Boolean,
         amountType: AmountType,
-        amount: SwapTransactionRecord.Amount? = null,
+        amount: EvmTransactionRecord.Amount? = null,
         hasRecipient: Boolean = false,
     ): TransactionInfoViewItem {
         val valueInFiat = if (hideAmount) "*****" else rate?.let {
@@ -183,7 +181,7 @@ object TransactionViewItemFactoryHelper {
                 }
                 val valueWithCoinCode =
                     numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
-                if (amount is SwapTransactionRecord.Amount.Extremum && incoming != null) {
+                if (amount is EvmTransactionRecord.Amount.Extremum && incoming != null) {
                     val suffix =
                         if (incoming) Translator.getString(R.string.Swap_AmountMin) else Translator.getString(
                             R.string.Swap_AmountMax
@@ -364,7 +362,7 @@ object TransactionViewItemFactoryHelper {
         valueIn: TransactionValue?,
         valueOut: TransactionValue?,
         rates: Map<String, CurrencyValue>,
-        amount: SwapTransactionRecord.Amount?,
+        amount: EvmTransactionRecord.Amount?,
         hideAmount: Boolean,
         hasRecipient: Boolean,
     ) = buildList {
@@ -465,7 +463,7 @@ object TransactionViewItemFactoryHelper {
         return items
     }
 
-    fun getContractCreationItems(transaction: ContractCreationTransactionRecord): List<TransactionInfoViewItem> =
+    fun getContractCreationItems(transaction: EvmTransactionRecord): List<TransactionInfoViewItem> =
         listOf(
             TransactionInfoViewItem.Transaction(
                 Translator.getString(R.string.Transactions_ContractCreation),
@@ -603,7 +601,7 @@ object TransactionViewItemFactoryHelper {
                     items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
 
-                if (transaction is SwapTransactionRecord && transaction.valueOut != null) {
+                if (transaction.transactionRecordType == TransactionRecordType.EVM_SWAP && transaction.valueOut != null) {
                     val recipientItems = mutableListOf<TransactionInfoViewItem>()
 
                     val recipient = transaction.recipient
@@ -641,7 +639,7 @@ object TransactionViewItemFactoryHelper {
             }
 
             is BitcoinTransactionRecord -> {
-                if(transaction.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING) {
+                if (transaction.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING) {
                     transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
                 }
             }

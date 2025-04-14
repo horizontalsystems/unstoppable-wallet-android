@@ -6,9 +6,7 @@ import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.TransactionStatus
@@ -74,20 +72,21 @@ abstract class TransactionRecord(
 }
 
 val TransactionRecord.nftUids: Set<NftUid>
-    get() = when (this) {
-        is EvmOutgoingTransactionRecord -> {
-            value.nftUid?.let { setOf(it) } ?: emptySet()
-        }
+    get() = if (this is EvmTransactionRecord) {
+        when (transactionRecordType) {
+            TransactionRecordType.EVM_CONTRACT_CALL,
+            TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL -> {
+                ((incomingEvents!! + outgoingEvents!!).mapNotNull { it.value.nftUid }).toSet()
+            }
 
-        is ContractCallTransactionRecord -> {
-            ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
-        }
+            TransactionRecordType.EVM_OUTGOING -> {
+                value!!.nftUid?.let { setOf(it) } ?: emptySet()
+            }
 
-        is ExternalContractCallTransactionRecord -> {
-            ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
+            else -> emptySet()
         }
-
-        else -> emptySet()
+    } else {
+        emptySet()
     }
 
 val List<TransactionRecord>.nftUids: Set<NftUid>
@@ -122,13 +121,17 @@ fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransact
                 null
             }
 
-
-        is EvmOutgoingTransactionRecord ->
-            ShortOutgoingTransactionRecord(
-                amountOut = mainValue.decimalValue?.abs(),
-                token = (mainValue as? TransactionValue.CoinValue)?.token,
-                timestamp = timestamp * 1000
-            )
+        is EvmTransactionRecord -> {
+            if (transactionRecordType == TransactionRecordType.EVM_OUTGOING) {
+                ShortOutgoingTransactionRecord(
+                    amountOut = mainValue?.decimalValue?.abs(),
+                    token = (mainValue as? TransactionValue.CoinValue)?.token,
+                    timestamp = timestamp * 1000
+                )
+            } else {
+                null
+            }
+        }
 
         is TronOutgoingTransactionRecord ->
             ShortOutgoingTransactionRecord(

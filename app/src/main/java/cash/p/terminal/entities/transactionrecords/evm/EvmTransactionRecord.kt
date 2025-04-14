@@ -1,6 +1,7 @@
 package cash.p.terminal.entities.transactionrecords.evm
 
 import cash.p.terminal.core.adapters.BaseEvmAdapter
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
@@ -9,26 +10,63 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
 import java.math.BigDecimal
 
-open class EvmTransactionRecord(
+class EvmTransactionRecord(
+    val spender: String? = null,
+    val value: TransactionValue? = null,
+    val contractAddress: String? = null,
+    val method: String? = null,
+    val incomingEvents: List<TransferEvent>? = null,
+    val outgoingEvents: List<TransferEvent>? = null,
+    spamManager: SpamManager? = null,
+    val from: String? = null,
+    val to: String? = null,
+    val sentToSelf: Boolean = false,
+    val exchangeAddress: String? = null,
+    val amountIn: Amount? = null,
+    val amountOut: Amount? = null,
+    val valueIn: TransactionValue? = amountIn?.value,
+    val valueOut: TransactionValue? = amountOut?.value,
+    val recipient: String? = null,
     transaction: Transaction,
-    baseToken: Token,
+    val baseToken: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
     spam: Boolean = false,
     transactionRecordType: TransactionRecordType
-) :
-    TransactionRecord(
-        uid = transaction.hashString,
-        transactionHash = transaction.hashString,
-        transactionIndex = transaction.transactionIndex ?: 0,
-        blockHeight = transaction.blockNumber?.toInt(),
-        confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
-        timestamp = transaction.timestamp,
-        failed = transaction.isFailed,
-        spam = spam,
-        source = source,
-        transactionRecordType = transactionRecordType
-    ) {
+) : TransactionRecord(
+    uid = transaction.hashString,
+    transactionHash = transaction.hashString,
+    transactionIndex = transaction.transactionIndex ?: 0,
+    blockHeight = transaction.blockNumber?.toInt(),
+    confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
+    timestamp = transaction.timestamp,
+    failed = transaction.isFailed,
+    spam = spam,
+    source = source,
+    transactionRecordType = transactionRecordType
+) {
+
+    sealed class Amount(val value: TransactionValue) {
+        class Exact(value: TransactionValue) : Amount(value)
+        class Extremum(value: TransactionValue) : Amount(value)
+    }
+
+    override val mainValue: TransactionValue?
+        get() {
+            return if (transactionRecordType == TransactionRecordType.EVM_CONTRACT_CALL ||
+                transactionRecordType == TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL
+            ) {
+                val (incomingValues, outgoingValues) = combined(incomingEvents!!, outgoingEvents!!)
+
+                when {
+                    (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()
+                    (incomingValues.size == 1 && outgoingValues.isEmpty()) -> incomingValues.first()
+                    else -> null
+                }
+            } else {
+                value
+            }
+        }
 
     val fee: TransactionValue?
 

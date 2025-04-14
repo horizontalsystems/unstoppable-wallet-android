@@ -13,16 +13,8 @@ import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ContractCreationTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.EvmIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
-import cash.p.terminal.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
@@ -231,6 +223,132 @@ class TransactionViewItemFactory(
         }
     }
 
+    private fun createViewItemFromEvmTransactionRecord(
+        record: EvmTransactionRecord,
+        transactionItem: TransactionItem,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem = when (record.transactionRecordType) {
+        TransactionRecordType.EVM_APPROVE ->
+            createViewItemFromApproveTransactionRecord(
+                uid = record.uid,
+                value = record.value!!,
+                spender = record.spender!!,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                spam = record.spam,
+                icon = icon
+            )
+
+        TransactionRecordType.EVM_CONTRACT_CALL -> {
+            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                incomingEvents = record.incomingEvents!!,
+                outgoingEvents = record.outgoingEvents!!
+            )
+            createViewItemFromContractCallTransactionRecord(
+                uid = record.uid,
+                incomingValues = incomingValues,
+                outgoingValues = outgoingValues,
+                method = record.method,
+                contractAddress = record.contractAddress!!,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                icon = icon,
+                spam = record.spam,
+                nftMetadata = transactionItem.nftMetadata
+            )
+        }
+
+        TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL -> {
+            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                incomingEvents = record.incomingEvents!!,
+                outgoingEvents = record.outgoingEvents!!
+            )
+            createViewItemFromExternalContractCallTransactionRecord(
+                uid = record.uid,
+                incomingValues = incomingValues,
+                outgoingValues = outgoingValues,
+                incomingEvents = record.incomingEvents,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                spam = record.spam,
+                icon = icon,
+                nftMetadata = transactionItem.nftMetadata
+            )
+        }
+
+        TransactionRecordType.EVM_CONTRACT_CREATION -> createViewItemFromContractCreationTransactionRecord(
+            record = record,
+            progress = progress,
+            icon = icon
+        )
+
+        TransactionRecordType.EVM_INCOMING ->
+            tryConvertToChangeNowViewItemSwap(
+                transactionItem = transactionItem,
+                token = record.baseToken,
+                isIncoming = true
+            ) ?: createViewItemFromEvmIncomingTransactionRecord(
+                uid = record.uid,
+                value = record.value!!,
+                from = record.from!!,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                spam = record.spam,
+                icon = icon
+            )
+
+        TransactionRecordType.EVM_OUTGOING ->
+            tryConvertToChangeNowViewItemSwap(
+                transactionItem = transactionItem,
+                token = (record.mainValue as? TransactionValue.CoinValue)?.token,
+                isIncoming = false
+            ) ?: createViewItemFromEvmOutgoingTransactionRecord(
+                uid = record.uid,
+                value = record.value!!,
+                to = record.to!!,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                spam = record.spam,
+                icon = icon,
+                nftMetadata = transactionItem.nftMetadata
+            )
+
+        TransactionRecordType.EVM_SWAP -> createViewItemFromSwapTransactionRecord(
+            record = record,
+            progress = progress,
+            icon = icon
+        )
+
+        TransactionRecordType.EVM_UNKNOWN_SWAP -> createViewItemFromUnknownSwapTransactionRecord(
+            record = record,
+            progress = progress,
+            icon = icon
+        )
+
+        TransactionRecordType.EVM -> createViewItemFromEvmTransactionRecord(
+            uid = record.uid,
+            timestamp = record.timestamp,
+            blockchainType = record.blockchainType,
+            progress = progress,
+            spam = record.spam,
+            icon = icon
+        )
+
+        else -> throw IllegalStateException("Undefined record type ${record.javaClass.name}")
+    }
+
     private fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem {
         val record = transactionItem.record
         val status = record.status(transactionItem.lastBlockInfo?.height)
@@ -244,19 +362,12 @@ class TransactionViewItemFactory(
         val lastBlockTimestamp = transactionItem.lastBlockInfo?.timestamp
 
         return when (record) {
-            is ApproveTransactionRecord -> {
-                createViewItemFromApproveTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    spender = record.spender,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
+            is EvmTransactionRecord -> createViewItemFromEvmTransactionRecord(
+                record = record,
+                transactionItem = transactionItem,
+                progress = progress,
+                icon = icon
+            )
 
             is BinanceChainTransactionRecord -> {
                 createViewItemFromBinanceChaiTransactionRecord(
@@ -278,113 +389,16 @@ class TransactionViewItemFactory(
                     icon
                 )
 
-            is ContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
-                    record.incomingEvents,
-                    record.outgoingEvents
-                )
-                createViewItemFromContractCallTransactionRecord(
-                    uid = record.uid,
-                    incomingValues = incomingValues,
-                    outgoingValues = outgoingValues,
-                    method = record.method,
-                    contractAddress = record.contractAddress,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    spam = record.spam,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-            }
-
-            is ExternalContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
-                    record.incomingEvents,
-                    record.outgoingEvents
-                )
-                createViewItemFromExternalContractCallTransactionRecord(
-                    uid = record.uid,
-                    incomingValues = incomingValues,
-                    outgoingValues = outgoingValues,
-                    incomingEvents = record.incomingEvents,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-            }
-
-            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(
-                record,
-                progress,
-                icon
-            )
-
-            is EvmIncomingTransactionRecord -> {
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = record.baseToken,
-                    isIncoming = true
-                ) ?: createViewItemFromEvmIncomingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    from = record.from,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is EvmOutgoingTransactionRecord -> {
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = (record.mainValue as? TransactionValue.CoinValue)?.token,
-                    isIncoming = false
-                ) ?: createViewItemFromEvmOutgoingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    to = record.to,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    sentToSelf = record.sentToSelf,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-            }
-
-            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(
-                record,
-                progress,
-                icon
-            )
-
-            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(
-                record,
-                progress,
-                icon
-            )
-
-            is EvmTransactionRecord -> {
-                createViewItemFromEvmTransactionRecord(
-                    uid = record.uid,
-                    timestamp = record.timestamp,
-                    blockchainType = record.blockchainType,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
+            /* is EvmTransactionRecord -> {
+                 createViewItemFromEvmTransactionRecord(
+                     uid = record.uid,
+                     timestamp = record.timestamp,
+                     blockchainType = record.blockchainType,
+                     progress = progress,
+                     spam = record.spam,
+                     icon = icon
+                 )
+             }*/
 
             is SolanaTransactionRecord -> createViewItemFromSolanaTransactionRecord(
                 record = record,
@@ -670,7 +684,8 @@ class TransactionViewItemFactory(
         } else {
             getColoredValue(record.mainValue!!, ColorName.Lucian)
         }
-        val secondaryValue = singleValueSecondaryValue(record.mainValue!!, currencyValue, nftMetadata)
+        val secondaryValue =
+            singleValueSecondaryValue(record.mainValue!!, currencyValue, nftMetadata)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -748,7 +763,8 @@ class TransactionViewItemFactory(
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val primaryValue = getColoredValue(record.mainValue!!, ColorName.Remus)
-        val secondaryValue = singleValueSecondaryValue(record.mainValue!!, currencyValue, nftMetadata)
+        val secondaryValue =
+            singleValueSecondaryValue(record.mainValue!!, currencyValue, nftMetadata)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -779,20 +795,20 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromSwapTransactionRecord(
-        record: SwapTransactionRecord,
+        record: EvmTransactionRecord,
         progress: Float?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let {
             getColoredValue(it, if (record.recipient != null) ColorName.Grey else ColorName.Remus)
         }
-        val secondaryValue = getColoredValue(record.valueIn, ColorName.Lucian)
+        val secondaryValue = getColoredValue(record.valueIn!!, ColorName.Lucian)
 
         return TransactionViewItem(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = mapped(record.exchangeAddress, record.blockchainType),
+            subtitle = mapped(record.exchangeAddress!!, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             showAmount = showAmount,
@@ -803,7 +819,7 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromUnknownSwapTransactionRecord(
-        record: UnknownSwapTransactionRecord,
+        record: EvmTransactionRecord,
         progress: Float?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -814,7 +830,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = mapped(record.exchangeAddress, record.blockchainType),
+            subtitle = mapped(record.exchangeAddress!!, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             showAmount = showAmount,
@@ -951,7 +967,7 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromContractCreationTransactionRecord(
-        record: ContractCreationTransactionRecord,
+        record: EvmTransactionRecord,
         progress: Float?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {

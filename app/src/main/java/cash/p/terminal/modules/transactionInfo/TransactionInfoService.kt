@@ -9,14 +9,7 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.EvmIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
@@ -121,33 +114,36 @@ class TransactionInfoService(
                     }
                 }
 
-                is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is SwapTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.valueIn,
-                    tx.valueOut
-                ).map { it?.coinUid }
+                is EvmTransactionRecord -> {
+                    when(transactionRecord.transactionRecordType) {
+                        TransactionRecordType.EVM_INCOMING -> {
+                            listOf(tx.value!!.coinUid)
+                        }
 
-                is UnknownSwapTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.valueIn,
-                    tx.valueOut
-                ).map { it?.coinUid }
+                        TransactionRecordType.EVM_APPROVE,
+                        TransactionRecordType.EVM_OUTGOING -> {
+                            listOf(tx.fee?.coinUid, tx.value!!.coinUid)
+                        }
 
-                is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is ContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
-                }
+                        TransactionRecordType.EVM_UNKNOWN_SWAP,
+                        TransactionRecordType.EVM_SWAP -> {
+                            listOf(
+                                tx.fee,
+                                tx.valueIn,
+                                tx.valueOut
+                            ).map { it?.coinUid }
+                        }
 
-                is ExternalContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
+                        TransactionRecordType.EVM_CONTRACT_CALL,
+                        TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL-> {
+                            val tempCoinUidList = mutableListOf<String>()
+                            tempCoinUidList.addAll(tx.incomingEvents!!.map { it.value.coinUid })
+                            tempCoinUidList.addAll(tx.outgoingEvents!!.map { it.value.coinUid })
+                            tempCoinUidList
+                        }
+
+                        else -> emptyList()
+                    }
                 }
 
                 is BitcoinTransactionRecord ->{

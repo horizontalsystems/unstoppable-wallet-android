@@ -2,7 +2,8 @@ package cash.p.terminal.modules.multiswap.providers
 
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.Eip20Adapter
-import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.modules.multiswap.action.ActionApprove
 import cash.p.terminal.modules.multiswap.action.ActionRevoke
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
@@ -36,14 +37,17 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
         if (eip20Adapter !is Eip20Adapter) return null
 
         val approveTransaction = eip20Adapter.pendingTransactions
-            .filterIsInstance<ApproveTransactionRecord>()
-            .filter { it.spender.equals(routerAddress.eip55, true) }
+            .filterIsInstance<EvmTransactionRecord>()
+            .filter {
+                it.transactionRecordType == TransactionRecordType.EVM_APPROVE &&
+                        it.spender.equals(routerAddress.eip55, true)
+            }
             .maxByOrNull { it.timestamp }
 
         val revoke = allowance > BigDecimal.ZERO && isUsdt(token)
 
         return if (revoke) {
-            val revokeInProgress = approveTransaction != null && approveTransaction.value.zeroValue
+            val revokeInProgress = approveTransaction != null && approveTransaction.value!!.zeroValue
             ActionRevoke(
                 token,
                 routerAddress.eip55,
@@ -51,7 +55,7 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
                 allowance
             )
         } else {
-            val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue
+            val approveInProgress = approveTransaction != null && !approveTransaction.value!!.zeroValue
             ActionApprove(
                 amountIn,
                 routerAddress.eip55,
