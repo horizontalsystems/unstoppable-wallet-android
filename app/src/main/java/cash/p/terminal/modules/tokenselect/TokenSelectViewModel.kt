@@ -21,6 +21,7 @@ import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class TokenSelectViewModel(
     private val service: DefaultBalanceService,
@@ -57,7 +58,7 @@ class TokenSelectViewModel(
     private suspend fun refreshViewItems(balanceItems: List<BalanceItem>?) {
         withContext(Dispatchers.IO) {
             if (balanceItems != null) {
-                var itemsFiltered: List<BalanceItem> = balanceItems
+                var itemsFiltered: List<BalanceItem> = balanceItems.filter { it.balanceData.available > BigDecimal.ZERO }
                 blockchainTypes?.let { types ->
                     itemsFiltered = itemsFiltered.filter { item ->
                         types.contains(item.wallet.token.blockchainType)
@@ -81,7 +82,10 @@ class TokenSelectViewModel(
                     }
                 }
 
-                val itemsSorted = balanceSorter.sort(itemsFiltered, BalanceSortType.Value)
+                val itemsSorted = balanceSorter.sort(
+                    items = itemsFiltered,
+                    sortType = BalanceSortType.Value
+                )
                 balanceViewItems = itemsSorted.map { balanceItem ->
                     balanceViewItemFactory.viewItem2(
                         item = balanceItem,
@@ -89,7 +93,8 @@ class TokenSelectViewModel(
                         hideBalance = balanceHiddenManager.balanceHidden,
                         watchAccount = service.isWatchAccount,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
-                        networkAvailable = service.networkAvailable
+                        networkAvailable = service.networkAvailable,
+                        showStackingUnpaid = false
                     )
                 }
             } else {

@@ -316,7 +316,8 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         watchAccount: Boolean,
         balanceViewType: BalanceViewType,
-        networkAvailable: Boolean
+        networkAvailable: Boolean,
+        showStackingUnpaid: Boolean
     ): BalanceViewItem2 {
         val wallet = item.wallet
         val state = item.state
@@ -335,7 +336,7 @@ class BalanceViewItemFactory {
             balanceViewType = balanceViewType
         )
 
-        val stackingUnpaid = if (item.balanceData.stackingUnpaid != BigDecimal.ZERO) {
+        val stackingUnpaid = if (showStackingUnpaid && item.balanceData.stackingUnpaid != BigDecimal.ZERO) {
             coinValue(
                 balance = item.balanceData.stackingUnpaid,
                 visible = balanceTotalVisibility,

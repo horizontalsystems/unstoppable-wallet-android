@@ -71,7 +71,7 @@ fun SearchBar(
                 overflow = TextOverflow.Ellipsis
             )
         },
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        backgroundColor = ComposeAppTheme.colors.tyler,
         elevation = 0.dp,
         navigationIcon = {
             HsIconButton(onClick = {
@@ -115,8 +115,8 @@ fun SearchBar(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         backgroundColor = Color.Transparent,
-                        cursorColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
-                        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
+                        cursorColor = ComposeAppTheme.colors.jacob,
+                        textColor = ComposeAppTheme.colors.leah
                     ),
                     maxLines = 1,
                     singleLine = true,
@@ -177,7 +177,7 @@ fun SearchBar(
                                 ),
                             text = menuItem.title.getString(),
                             style = ComposeAppTheme.typography.headline2,
-                            color = if (menuItem.enabled) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
+                            color = if (menuItem.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.yellow50
                         )
                     }
                 }

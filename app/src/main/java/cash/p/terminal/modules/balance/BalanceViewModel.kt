@@ -199,7 +199,8 @@ class BalanceViewModel(
                         hideBalance = balanceHidden && itemsBalanceHidden[balanceItem.wallet] == true,
                         watchAccount = service.isWatchAccount,
                         balanceViewType = balanceViewType,
-                        networkAvailable = service.networkAvailable
+                        networkAvailable = service.networkAvailable,
+                        showStackingUnpaid = true
                     )
                 }
                 replaceOldZCashWithNew()

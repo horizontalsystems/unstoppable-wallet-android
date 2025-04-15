@@ -13,7 +13,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
@@ -28,7 +27,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TokenSelectScreen(
+internal fun TokenSelectScreen(
     navController: NavController,
     title: String,
     uiState: TokenSelectUiState,
