@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
@@ -20,12 +21,12 @@ import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.ui.BalanceCardInner
 import cash.p.terminal.modules.balance.ui.BalanceCardSubtitleType
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.SearchBar
+import cash.p.terminal.ui.compose.components.SearchBarV2
 import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 internal fun TokenSelectScreen(
     navController: NavController,
@@ -41,7 +42,7 @@ internal fun TokenSelectScreen(
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
-            SearchBar(
+            SearchBarV2(
                 title = title,
                 searchHintText = searchHintText,
                 menuItems = listOf(),
