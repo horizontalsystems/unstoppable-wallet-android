@@ -82,7 +82,8 @@ fun TokenBalanceScreen(
     sendResult: SendResult? = viewModel.sendResult,
     navController: NavController,
     onStackingClicked: () -> Unit,
-    onShowAllTransactionsClicked: () -> Unit
+    onShowAllTransactionsClicked: () -> Unit,
+    onClickSubtitle: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -132,7 +133,8 @@ fun TokenBalanceScreen(
                         balanceViewItem = it,
                         navController = navController,
                         viewModel = viewModel,
-                        onStackingClicked = onStackingClicked
+                        onStackingClicked = onStackingClicked,
+                        onClickSubtitle = onClickSubtitle
                     )
                 }
                 if (transactionItems == null) {
@@ -156,7 +158,8 @@ fun TokenBalanceScreen(
                             balanceViewItem = it,
                             navController = navController,
                             viewModel = viewModel,
-                            onStackingClicked = onStackingClicked
+                            onStackingClicked = onStackingClicked,
+                            onClickSubtitle = onClickSubtitle
                         )
                     }
                 }
@@ -203,7 +206,8 @@ private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
     viewModel: TokenBalanceViewModel,
-    onStackingClicked: () -> Unit
+    onStackingClicked: () -> Unit,
+    onClickSubtitle: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -244,10 +248,20 @@ private fun TokenBalanceHeader(
             )
         } else {
             Text(
-                text = if (balanceViewItem.secondaryValue.visible) balanceViewItem.secondaryValue.value else "*****",
+                text = if (balanceViewItem.secondaryValue.visible) viewModel.secondaryValue.value else "*****",
                 color = if (balanceViewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.body,
                 maxLines = 1,
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            if (balanceViewItem.secondaryValue.visible) {
+                                onClickSubtitle()
+                            }
+                        }
+                    )
             )
         }
         VSpacer(height = 24.dp)

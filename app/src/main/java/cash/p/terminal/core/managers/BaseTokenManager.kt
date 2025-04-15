@@ -2,10 +2,12 @@ package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.wallet.BuildConfig
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,6 +20,9 @@ class BaseTokenManager(
         listOf(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(BuildConfig.PIRATE_CONTRACT)),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(BuildConfig.COSANTA_CONTRACT)),
+            TokenQuery(BlockchainType.Zcash, TokenType.AddressSpecTyped(AddressSpecType.Shielded)),
         ).mapNotNull {
             coinManager.getToken(it)
         }

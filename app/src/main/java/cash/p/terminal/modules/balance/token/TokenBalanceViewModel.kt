@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
@@ -16,6 +15,8 @@ import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewModel
+import cash.p.terminal.modules.balance.TotalBalance
+import cash.p.terminal.modules.balance.TotalService
 import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
@@ -30,10 +31,12 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.logger.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -43,6 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceViewModel(
+    private val totalBalance: TotalBalance,
     private val wallet: Wallet,
     private val balanceService: TokenBalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
@@ -68,6 +72,11 @@ class TokenBalanceViewModel(
     private var statusCheckerJob: Job? = null
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
+
+    var secondaryValue by mutableStateOf<DeemedValue<String>>(DeemedValue<String>(""))
+        private set
+
+    private var showCurrencyAsSecondary = true
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -109,6 +118,35 @@ class TokenBalanceViewModel(
         viewModelScope.launch {
             transactionHiddenManager.transactionHiddenFlow.collectLatest {
                 transactionsService.refreshList()
+            }
+        }
+
+        viewModelScope.launch {
+            totalBalance.stateFlow.collectLatest { totalBalanceValue ->
+                updateSecondaryValue(totalBalanceValue)
+            }
+        }
+
+        totalBalance.start(viewModelScope)
+    }
+
+    private fun updateSecondaryValue(totalBalanceValue: TotalService.State = totalBalance.stateFlow.value) {
+        if (totalBalanceValue is TotalService.State.Visible) {
+            // Check if the current secondary value is the same as the wallet's coin and switch to next
+            if(!showCurrencyAsSecondary && totalBalanceValue.coinValue?.coin?.uid == wallet.coin.uid) {
+                toggleTotalType()
+                return
+            }
+            balanceViewItem?.let { oldBalanceViewItem ->
+                secondaryValue = DeemedValue(
+                    value = if (showCurrencyAsSecondary) {
+                        totalBalanceValue.currencyValue?.getFormattedFull().orEmpty()
+                    } else {
+                        totalBalanceValue.coinValue?.getFormattedFull().orEmpty()
+                    },
+                    dimmed = oldBalanceViewItem.secondaryValue.dimmed,
+                    visible = oldBalanceViewItem.secondaryValue.visible
+                )
             }
         }
     }
@@ -183,6 +221,16 @@ class TokenBalanceViewModel(
             primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.wallet.coin.code)
         )
 
+        totalBalance.setTotalServiceItems(
+            listOf(
+                TotalService.BalanceItem(
+                    value = balanceItem.balanceData.total,
+                    coinPrice = balanceItem.coinPrice,
+                    isValuePending = false
+                )
+            )
+        )
+
         emitState()
     }
 
@@ -212,6 +260,19 @@ class TokenBalanceViewModel(
 
     fun toggleBalanceVisibility() {
         balanceHiddenManager.toggleBalanceHidden()
+    }
+
+    fun toggleTotalType() {
+        val currentSecondaryToken = totalBalance.stateFlow.value as? TotalService.State.Visible
+        if (showCurrencyAsSecondary) {
+            showCurrencyAsSecondary = false
+            updateSecondaryValue()
+            return
+        } else if (currentSecondaryToken?.coinValue?.coin?.uid == BlockchainType.Bitcoin.uid) {
+            showCurrencyAsSecondary = true
+            updateSecondaryValue()
+        }
+        totalBalance.toggleTotalType()
     }
 
     fun getSyncErrorDetails(viewItem: BalanceViewItem): BalanceViewModel.SyncError = when {
@@ -245,5 +306,6 @@ class TokenBalanceViewModel(
         super.onCleared()
 
         balanceService.clear()
+        totalBalance.stop()
     }
 }

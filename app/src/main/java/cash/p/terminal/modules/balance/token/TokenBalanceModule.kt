@@ -9,6 +9,8 @@ import cash.p.terminal.modules.balance.BalanceCache
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import cash.p.terminal.modules.balance.TotalBalance
+import cash.p.terminal.modules.balance.TotalService
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionViewItem
@@ -38,7 +40,18 @@ class TokenBalanceModule {
                 spamManager = App.spamManager
             )
 
+            val totalService = TotalService(
+                currencyManager = App.currencyManager,
+                marketKit = App.marketKit,
+                baseTokenManager = App.baseTokenManager,
+                balanceHiddenManager = App.balanceHiddenManager
+            )
+
             return TokenBalanceViewModel(
+                totalBalance = TotalBalance(
+                    totalService = totalService,
+                    balanceHiddenManager = App.balanceHiddenManager
+                ),
                 wallet = wallet,
                 balanceService = balanceService,
                 balanceViewItemFactory = BalanceViewItemFactory(),

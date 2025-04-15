@@ -18,6 +18,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.isPirateCash
 import io.horizontalsystems.core.getInput
+import io.horizontalsystems.core.helpers.HudHelper
 
 class TokenBalanceFragment : BaseComposeFragment() {
     private var viewModel: TokenBalanceViewModel? = null
@@ -53,6 +54,10 @@ class TokenBalanceFragment : BaseComposeFragment() {
                 ) {
                     viewModel.showAllTransactions(true)
                 }
+            },
+            onClickSubtitle = {
+                viewModel.toggleTotalType()
+                HudHelper.vibrate(requireContext())
             }
         )
     }

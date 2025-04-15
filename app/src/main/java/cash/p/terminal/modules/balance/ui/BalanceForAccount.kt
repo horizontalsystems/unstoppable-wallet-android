@@ -100,7 +100,6 @@ fun BalanceForAccount(
         else -> Unit
     }
 
-
     BackupAlert(navController)
     ModalBottomSheetLayout(
         sheetState = invalidUrlBottomSheetState,
