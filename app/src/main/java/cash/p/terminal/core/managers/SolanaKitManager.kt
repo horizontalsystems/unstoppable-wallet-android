@@ -94,9 +94,7 @@ class SolanaKitManager(
             application = App.instance,
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
-            walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey,
-            debug = true
+            walletId = account.id
         )
 
         return SolanaKitWrapper(kit, signer)
@@ -112,9 +110,7 @@ class SolanaKitManager(
             application = App.instance,
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
-            walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey,
-            debug = true
+            walletId = account.id
         )
 
         return SolanaKitWrapper(kit, null)
