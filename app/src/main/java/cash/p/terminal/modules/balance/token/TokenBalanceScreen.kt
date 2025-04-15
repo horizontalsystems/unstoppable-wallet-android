@@ -60,6 +60,7 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsIconButton
@@ -81,9 +82,11 @@ fun TokenBalanceScreen(
     transactionsViewModel: TransactionsViewModel,
     sendResult: SendResult? = viewModel.sendResult,
     navController: NavController,
+    refreshing: Boolean,
     onStackingClicked: () -> Unit,
     onShowAllTransactionsClicked: () -> Unit,
-    onClickSubtitle: () -> Unit
+    onClickSubtitle: () -> Unit,
+    onRefresh: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -127,32 +130,12 @@ fun TokenBalanceScreen(
             null -> Unit
         }
         if (transactionItems == null || (transactionItems.isEmpty() && !uiState.hasHiddenTransactions)) {
-            Column(Modifier.padding(paddingValues)) {
-                uiState.balanceViewItem?.let {
-                    TokenBalanceHeader(
-                        balanceViewItem = it,
-                        navController = navController,
-                        viewModel = viewModel,
-                        onStackingClicked = onStackingClicked,
-                        onClickSubtitle = onClickSubtitle
-                    )
-                }
-                if (transactionItems == null) {
-                    ListEmptyView(
-                        text = stringResource(R.string.Transactions_WaitForSync),
-                        icon = R.drawable.ic_clock
-                    )
-                } else {
-                    ListEmptyView(
-                        text = stringResource(R.string.Transactions_EmptyList),
-                        icon = R.drawable.ic_outgoingraw
-                    )
-                }
-            }
-        } else {
-            val listState = rememberLazyListState()
-            LazyColumn(Modifier.padding(paddingValues), state = listState) {
-                item {
+            HSSwipeRefresh(
+                refreshing = refreshing,
+                modifier = Modifier.padding(paddingValues),
+                onRefresh = onRefresh
+            ) {
+                Column {
                     uiState.balanceViewItem?.let {
                         TokenBalanceHeader(
                             balanceViewItem = it,
@@ -162,26 +145,57 @@ fun TokenBalanceScreen(
                             onClickSubtitle = onClickSubtitle
                         )
                     }
-                }
-
-                transactionList(
-                    transactionsMap = transactionItems,
-                    willShow = { viewModel.willShow(it) },
-                    onClick = {
-                        onTransactionClick(
-                            it,
-                            viewModel,
-                            transactionsViewModel,
-                            navController
+                    if (transactionItems == null) {
+                        ListEmptyView(
+                            text = stringResource(R.string.Transactions_WaitForSync),
+                            icon = R.drawable.ic_clock
                         )
-                    },
-                    onBottomReached = { viewModel.onBottomReached() }
-                )
-                if (uiState.hasHiddenTransactions) {
-                    transactionsHiddenBlock(
-                        shortBlock = transactionItems.isNotEmpty(),
-                        onShowAllTransactionsClicked = onShowAllTransactionsClicked
+                    } else {
+                        ListEmptyView(
+                            text = stringResource(R.string.Transactions_EmptyList),
+                            icon = R.drawable.ic_outgoingraw
+                        )
+                    }
+                }
+            }
+        } else {
+            HSSwipeRefresh(
+                refreshing = refreshing,
+                modifier = Modifier.padding(paddingValues),
+                onRefresh = onRefresh
+            ) {
+                LazyColumn(state = rememberLazyListState()) {
+                    item {
+                        uiState.balanceViewItem?.let {
+                            TokenBalanceHeader(
+                                balanceViewItem = it,
+                                navController = navController,
+                                viewModel = viewModel,
+                                onStackingClicked = onStackingClicked,
+                                onClickSubtitle = onClickSubtitle
+                            )
+                        }
+                    }
+
+                    transactionList(
+                        transactionsMap = transactionItems,
+                        willShow = { viewModel.willShow(it) },
+                        onClick = {
+                            onTransactionClick(
+                                it,
+                                viewModel,
+                                transactionsViewModel,
+                                navController
+                            )
+                        },
+                        onBottomReached = { viewModel.onBottomReached() }
                     )
+                    if (uiState.hasHiddenTransactions) {
+                        transactionsHiddenBlock(
+                            shortBlock = transactionItems.isNotEmpty(),
+                            onShowAllTransactionsClicked = onShowAllTransactionsClicked
+                        )
+                    }
                 }
             }
         }

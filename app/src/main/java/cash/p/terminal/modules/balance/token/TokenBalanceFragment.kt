@@ -58,7 +58,9 @@ class TokenBalanceFragment : BaseComposeFragment() {
             onClickSubtitle = {
                 viewModel.toggleTotalType()
                 HudHelper.vibrate(requireContext())
-            }
+            },
+            onRefresh = viewModel::refresh,
+            refreshing = viewModel.refreshing
         )
     }
 

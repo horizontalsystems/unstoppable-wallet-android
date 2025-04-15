@@ -76,6 +76,9 @@ class TokenBalanceViewModel(
     var secondaryValue by mutableStateOf<DeemedValue<String>>(DeemedValue<String>(""))
         private set
 
+    var refreshing by mutableStateOf<Boolean>(false)
+        private set
+
     private var showCurrencyAsSecondary = true
 
     init {
@@ -300,6 +303,13 @@ class TokenBalanceViewModel(
             delay(1000)
             sendResult = null
         }
+    }
+
+    fun refresh() = viewModelScope.launch {
+        refreshing = true
+        adapterManager.refreshByWallet(wallet)
+        delay(1000) // to show refresh indicator because `refreshByWallet` works asynchronously
+        refreshing = false
     }
 
     override fun onCleared() {
