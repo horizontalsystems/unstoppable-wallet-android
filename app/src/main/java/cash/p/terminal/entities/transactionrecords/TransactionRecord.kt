@@ -137,7 +137,7 @@ fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransact
             if (transactionRecordType == TransactionRecordType.TRON_OUTGOING) {
                 ShortOutgoingTransactionRecord(
                     amountOut = mainValue?.decimalValue?.abs(),
-                    token = baseToken,
+                    token = token,
                     timestamp = timestamp * 1000
                 )
             } else {
@@ -159,7 +159,7 @@ fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransact
             if (transactionRecordType == TransactionRecordType.SOLANA_INCOMING) {
                 ShortOutgoingTransactionRecord(
                     amountOut = mainValue?.decimalValue?.abs(),
-                    token = baseToken,
+                    token = token,
                     timestamp = timestamp * 1000
                 )
 

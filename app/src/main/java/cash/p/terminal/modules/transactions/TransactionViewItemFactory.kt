@@ -288,7 +288,7 @@ class TransactionViewItemFactory(
         TransactionRecordType.EVM_INCOMING ->
             tryConvertToChangeNowViewItemSwap(
                 transactionItem = transactionItem,
-                token = record.baseToken,
+                token = record.token,
                 isIncoming = true
             ) ?: createViewItemFromEvmIncomingTransactionRecord(
                 uid = record.uid,
@@ -394,7 +394,7 @@ class TransactionViewItemFactory(
 
             is TronTransactionRecord -> createViewItemFromTronTransactionRecord(
                 transactionItem = transactionItem,
-                baseToken = record.baseToken,
+                baseToken = record.token,
                 uid = record.uid,
                 value = record.value,
                 sentToSelf = record.sentToSelf,
@@ -722,7 +722,7 @@ class TransactionViewItemFactory(
             TransactionRecordType.SOLANA_INCOMING -> {
                 tryConvertToChangeNowViewItemSwap(
                     transactionItem = transactionItem,
-                    token = record.baseToken,
+                    token = record.token,
                     isIncoming = true
                 ) ?: createViewItemFromSolanaIncomingTransactionRecord(
                     record = record,
@@ -736,7 +736,7 @@ class TransactionViewItemFactory(
             TransactionRecordType.SOLANA_OUTGOING -> {
                 tryConvertToChangeNowViewItemSwap(
                     transactionItem = transactionItem,
-                    token = record.baseToken,
+                    token = record.token,
                     isIncoming = false
                 ) ?: createViewItemFromSolanaOutgoingTransactionRecord(
                     record = record,

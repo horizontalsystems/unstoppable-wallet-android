@@ -99,7 +99,7 @@ class SolanaTransactionConverter(
                 val transfer = incomingSolanaTransfers.first()
                 SolanaTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     from = transfer.address,
                     mainValue = transfer.value,
@@ -117,7 +117,7 @@ class SolanaTransactionConverter(
                 val transfer = outgoingSolanaTransfers.first()
                 SolanaTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     to = transfer.address,
                     mainValue = transfer.value,
@@ -128,7 +128,7 @@ class SolanaTransactionConverter(
 
             else -> SolanaTransactionRecord(
                 transaction = transaction,
-                baseToken = baseToken,
+                token = baseToken,
                 source = source,
                 incomingSolanaTransfers = incomingSolanaTransfers,
                 outgoingSolanaTransfers = outgoingSolanaTransfers,

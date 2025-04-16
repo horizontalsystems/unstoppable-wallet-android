@@ -49,7 +49,7 @@ class TronTransactionConverter(
                         if (contract.ownerAddress != tronKit.address) {
                             TronTransactionRecord(
                                 transaction = transaction,
-                                baseToken = baseToken,
+                                token = baseToken,
                                 source = source,
                                 from = contract.ownerAddress.base58,
                                 value = baseCoinValue(contract.amount, false),
@@ -59,7 +59,7 @@ class TronTransactionConverter(
                         } else {
                             TronTransactionRecord(
                                 transaction = transaction,
-                                baseToken = baseToken,
+                                token = baseToken,
                                 source = source,
                                 to = contract.toAddress.base58,
                                 value = baseCoinValue(contract.amount, true),
@@ -76,7 +76,7 @@ class TronTransactionConverter(
             is OutgoingTrc20Decoration -> {
                 TronTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     to = decoration.to.base58,
                     value = getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo),
@@ -88,7 +88,7 @@ class TronTransactionConverter(
             is ApproveTrc20Decoration -> {
                 TronTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     spender = decoration.spender.base58,
                     value = getEip20Value(decoration.contractAddress, decoration.value, false),
@@ -110,7 +110,7 @@ class TronTransactionConverter(
                 when {
                     decoration.fromAddress == address && contractAddress != null -> {
                         TronTransactionRecord(
-                            transaction = transaction, baseToken = baseToken, source = source,
+                            transaction = transaction, token = baseToken, source = source,
                             contractAddress = contractAddress.base58,
                             method = decoration.data?.hexStringToByteArrayOrNull()?.let { evmLabelManager.methodLabel(it) },
                             incomingEvents = getInternalEvents(internalTransactions) +
@@ -124,7 +124,7 @@ class TronTransactionConverter(
                     decoration.fromAddress != address && decoration.toAddress != address -> {
                         TronTransactionRecord(
                             transaction = transaction,
-                            baseToken = baseToken,
+                            token = baseToken,
                             source = source,
                             spamManager = App.spamManager,
                             incomingEvents = getInternalEvents(internalTransactions) +
@@ -143,7 +143,7 @@ class TronTransactionConverter(
 
         return transactionRecord ?: TronTransactionRecord(
             transaction = transaction,
-            baseToken = baseToken,
+            token = baseToken,
             source = source,
             transactionRecordType = TransactionRecordType.TRON
         )

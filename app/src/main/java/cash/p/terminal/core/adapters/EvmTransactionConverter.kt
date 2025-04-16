@@ -57,7 +57,7 @@ class EvmTransactionConverter(
             is ContractCreationDecoration -> {
                 EvmTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     transactionRecordType = TransactionRecordType.EVM_CONTRACT_CREATION
                 )
@@ -66,7 +66,7 @@ class EvmTransactionConverter(
             is IncomingDecoration -> {
                 EvmTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     spamManager = spamManager,
                     from = decoration.from.eip55,
@@ -78,7 +78,7 @@ class EvmTransactionConverter(
             is OutgoingDecoration -> {
                 EvmTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     to = decoration.to.eip55,
                     value = baseCoinValue(decoration.value, true),
@@ -90,7 +90,7 @@ class EvmTransactionConverter(
             is OutgoingEip20Decoration -> {
                 EvmTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     to = decoration.to.eip55,
                     value = getEip20Value(
@@ -107,7 +107,7 @@ class EvmTransactionConverter(
             is ApproveEip20Decoration -> {
                 EvmTransactionRecord(
                     transaction = transaction,
-                    baseToken = baseToken,
+                    token = baseToken,
                     source = source,
                     spender = decoration.spender.eip55,
                     value = getEip20Value(decoration.contractAddress, decoration.value, false),
@@ -117,7 +117,7 @@ class EvmTransactionConverter(
 
             is SwapDecoration -> {
                 EvmTransactionRecord(
-                    transaction = transaction, baseToken = baseToken, source = source,
+                    transaction = transaction, token = baseToken, source = source,
                     exchangeAddress = decoration.contractAddress.eip55,
                     amountIn = convertToAmount(decoration.tokenIn, decoration.amountIn, true),
                     amountOut = convertToAmount(decoration.tokenOut, decoration.amountOut, false),
@@ -128,7 +128,7 @@ class EvmTransactionConverter(
 
             is OneInchSwapDecoration -> {
                 EvmTransactionRecord(
-                    transaction = transaction, baseToken = baseToken, source = source,
+                    transaction = transaction, token = baseToken, source = source,
                     exchangeAddress = decoration.contractAddress.eip55,
                     amountIn = EvmTransactionRecord.Amount.Exact(
                         convertToTransactionValue(
@@ -145,7 +145,7 @@ class EvmTransactionConverter(
 
             is OneInchUnoswapDecoration -> {
                 EvmTransactionRecord(
-                    transaction = transaction, baseToken = baseToken, source = source,
+                    transaction = transaction, token = baseToken, source = source,
                     exchangeAddress = decoration.contractAddress.eip55,
                     amountIn = EvmTransactionRecord.Amount.Exact(
                         convertToTransactionValue(
@@ -168,7 +168,7 @@ class EvmTransactionConverter(
 
             is OneInchUnknownDecoration -> {
                 EvmTransactionRecord(
-                    transaction = transaction, baseToken = baseToken, source = source,
+                    transaction = transaction, token = baseToken, source = source,
                     exchangeAddress = decoration.contractAddress.eip55,
                     valueIn = decoration.tokenAmountIn?.let {
                         convertToTransactionValue(
@@ -190,7 +190,7 @@ class EvmTransactionConverter(
 
             is OutgoingEip721Decoration -> {
                 EvmTransactionRecord(
-                    transaction = transaction, baseToken = baseToken, source = source,
+                    transaction = transaction, token = baseToken, source = source,
                     to = decoration.to.eip55,
                     value = TransactionValue.NftValue(
                         nftUid = NftUid.Evm(
@@ -209,7 +209,7 @@ class EvmTransactionConverter(
 
             is OutgoingEip1155Decoration -> {
                 EvmTransactionRecord(
-                    transaction = transaction, baseToken = baseToken, source = source,
+                    transaction = transaction, token = baseToken, source = source,
                     to = decoration.to.eip55,
                     value = TransactionValue.NftValue(
                         nftUid = NftUid.Evm(
@@ -256,7 +256,7 @@ class EvmTransactionConverter(
                 when {
                     transaction.from == address && contractAddress != null && value != null -> {
                         EvmTransactionRecord(
-                            transaction = transaction, baseToken = baseToken, source = source,
+                            transaction = transaction, token = baseToken, source = source,
                             contractAddress = contractAddress.eip55,
                             method = transaction.input?.let { evmLabelManager.methodLabel(it) },
                             incomingEvents = getInternalEvents(internalTransactions) +
@@ -274,7 +274,7 @@ class EvmTransactionConverter(
                     transaction.from != address && transaction.to != address -> {
                         EvmTransactionRecord(
                             transaction = transaction,
-                            baseToken = baseToken,
+                            token = baseToken,
                             source = source,
                             spamManager = spamManager,
                             incomingEvents = getInternalEvents(internalTransactions) +
@@ -297,7 +297,7 @@ class EvmTransactionConverter(
 
         return transactionRecord ?: EvmTransactionRecord(
             transaction = transaction,
-            baseToken = baseToken,
+            token = baseToken,
             source = source,
             foreignTransaction = transaction.from != evmKit.receiveAddress,
             transactionRecordType = TransactionRecordType.EVM

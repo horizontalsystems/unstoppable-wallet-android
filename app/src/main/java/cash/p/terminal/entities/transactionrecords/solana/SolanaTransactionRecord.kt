@@ -16,7 +16,7 @@ class SolanaTransactionRecord(
     override val mainValue: TransactionValue? = null,
     val to: String? = null,
     val from: String? = null,
-    val baseToken: Token,
+    val token: Token,
     source: TransactionSource,
     transactionRecordType: TransactionRecordType,
     spam: Boolean = false,
@@ -35,5 +35,5 @@ class SolanaTransactionRecord(
 
     data class SolanaTransfer(val address: String?, val value: TransactionValue)
 
-    val fee: TransactionValue? = transaction.fee?.let { TransactionValue.CoinValue(baseToken, it) }
+    val fee: TransactionValue? = transaction.fee?.let { TransactionValue.CoinValue(token, it) }
 }

@@ -28,7 +28,7 @@ class EvmTransactionRecord(
     val valueOut: TransactionValue? = amountOut?.value,
     val recipient: String? = null,
     transaction: Transaction,
-    val baseToken: Token,
+    val token: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
     spam: Boolean = false,
@@ -77,9 +77,9 @@ class EvmTransactionRecord(
         fee = if (feeAmount != null && gasPrice != null) {
             val feeDecimal = feeAmount.toBigDecimal()
                 .multiply(gasPrice.toBigDecimal())
-                .movePointLeft(baseToken.decimals).stripTrailingZeros()
+                .movePointLeft(token.decimals).stripTrailingZeros()
 
-            TransactionValue.CoinValue(baseToken, feeDecimal)
+            TransactionValue.CoinValue(token, feeDecimal)
         } else {
             null
         }
