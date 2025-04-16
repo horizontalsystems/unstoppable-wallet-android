@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.core.App
 import java.math.BigDecimal
 
 @Composable
-fun coinAmountString(value: BigDecimal?, coinCode: String, sign: String): String {
+fun coinAmountString(value: BigDecimal?, coinCode: String, coinDecimals: Int?, sign: String): String {
 //    if (hideAmount) return "*****"
     if (value == null) return "---"
 
-    return sign + App.numberFormatter.formatCoinFull(value, coinCode, 8)
+    return sign + App.numberFormatter.formatCoinFull(value, coinCode, coinDecimals  ?: 8)
 }
 
 @Composable
