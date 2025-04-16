@@ -101,6 +101,7 @@ fun AmountCellTV(
         coinAmount = coinAmountString(
             value = transactionValue.decimalValue?.abs(),
             coinCode = transactionValue.coinCode,
+            coinDecimals = transactionValue.decimals,
             sign = coinAmountSign.sign()
         ),
         coinAmountColor = coinAmountColor.color(),
