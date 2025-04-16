@@ -5,7 +5,7 @@ import cash.p.terminal.R
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Status

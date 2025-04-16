@@ -2,6 +2,7 @@ package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType

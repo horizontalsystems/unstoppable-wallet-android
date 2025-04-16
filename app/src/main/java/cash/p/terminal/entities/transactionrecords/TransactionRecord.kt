@@ -1,6 +1,6 @@
 package cash.p.terminal.entities.transactionrecords
 
-import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
@@ -148,7 +148,7 @@ fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransact
             if (actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Send) {
                 ShortOutgoingTransactionRecord(
                     amountOut = this.mainValue?.decimalValue?.abs(),
-                    token = baseToken,
+                    token = token,
                     timestamp = timestamp * 1000
                 )
             } else {

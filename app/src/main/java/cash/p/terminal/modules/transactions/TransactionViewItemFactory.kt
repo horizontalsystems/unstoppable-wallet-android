@@ -2,7 +2,7 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
@@ -519,7 +519,7 @@ class TransactionViewItemFactory(
             is TonTransactionRecord -> {
                 tryConvertToChangeNowViewItemSwap(
                     transactionItem = transactionItem,
-                    token = record.baseToken,
+                    token = record.token,
                     isIncoming = record.actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Receive
                 ) ?: createViewItemFromTonTransactionRecord(
                     icon = icon,

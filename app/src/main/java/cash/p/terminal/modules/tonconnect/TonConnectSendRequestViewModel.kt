@@ -2,7 +2,7 @@ package cash.p.terminal.modules.tonconnect
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.core.managers.TonConnectManager
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toTonWalletFullAccess

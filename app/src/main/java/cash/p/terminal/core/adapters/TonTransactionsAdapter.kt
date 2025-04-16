@@ -7,6 +7,7 @@ import cash.p.terminal.core.managers.toAdapterState
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.FilterTransactionType.All
 import cash.p.terminal.modules.transactions.FilterTransactionType.Approve

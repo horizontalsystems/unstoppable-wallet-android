@@ -2,7 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
