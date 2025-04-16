@@ -16,11 +16,6 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRec
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
@@ -38,6 +33,7 @@ import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.models.Transaction
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
@@ -389,17 +385,6 @@ class TransactionViewItemFactory(
                     icon
                 )
 
-            /* is EvmTransactionRecord -> {
-                 createViewItemFromEvmTransactionRecord(
-                     uid = record.uid,
-                     timestamp = record.timestamp,
-                     blockchainType = record.blockchainType,
-                     progress = progress,
-                     spam = record.spam,
-                     icon = icon
-                 )
-             }*/
-
             is SolanaTransactionRecord -> createViewItemFromSolanaTransactionRecord(
                 record = record,
                 transactionItem = transactionItem,
@@ -407,7 +392,27 @@ class TransactionViewItemFactory(
                 icon = icon,
             )
 
-            is TronApproveTransactionRecord -> {
+            is TronTransactionRecord -> createViewItemFromTronTransactionRecord(
+                transactionItem = transactionItem,
+                baseToken = record.baseToken,
+                uid = record.uid,
+                value = record.value,
+                sentToSelf = record.sentToSelf,
+                to = record.to,
+                from = record.from,
+                spender = record.spender,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                transaction = record.transaction,
+                progress = progress,
+                spam = record.spam,
+                method = record.method,
+                contractAddress = record.contractAddress,
+                incomingEvents = record.incomingEvents,
+                outgoingEvents = record.outgoingEvents,
+                icon = icon
+            )
+            /*is TronApproveTransactionRecord ->
                 createViewItemFromApproveTransactionRecord(
                     uid = record.uid,
                     value = record.value,
@@ -509,7 +514,7 @@ class TransactionViewItemFactory(
                     spam = record.spam,
                     icon = icon
                 )
-            }
+            }*/
 
             is TonTransactionRecord -> {
                 tryConvertToChangeNowViewItemSwap(
@@ -840,7 +845,7 @@ class TransactionViewItemFactory(
         )
     }
 
-    private fun createViewItemFromTronTransactionRecord(
+    private fun createViewItemFromSimpleTronTransactionRecord(
         uid: String,
         timestamp: Long,
         contract: Contract?,
@@ -1404,6 +1409,133 @@ class TransactionViewItemFactory(
             spam = record.spam,
             icon = icon ?: singleValueIconType(record.mainValue)
         )
+    }
+
+    private fun createViewItemFromTronTransactionRecord(
+        transactionItem: TransactionItem,
+        baseToken: Token?,
+        uid: String,
+        value: TransactionValue?,
+        sentToSelf: Boolean,
+        from: String?,
+        to: String?,
+        spender: String?,
+        blockchainType: BlockchainType,
+        transaction: Transaction,
+        timestamp: Long,
+        progress: Float?,
+        spam: Boolean,
+        method: String?,
+        contractAddress: String?,
+        incomingEvents: List<TransferEvent>?,
+        outgoingEvents: List<TransferEvent>?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem = when (transactionItem.record.transactionRecordType) {
+        TransactionRecordType.TRON_APPROVE ->
+            createViewItemFromApproveTransactionRecord(
+                uid = uid,
+                value = value!!,
+                spender = spender!!,
+                blockchainType = blockchainType,
+                timestamp = timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                spam = spam,
+                icon = icon
+            )
+
+
+        TransactionRecordType.TRON_CONTRACT_CALL -> {
+            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                incomingEvents!!,
+                outgoingEvents!!
+            )
+            createViewItemFromContractCallTransactionRecord(
+                uid = uid,
+                incomingValues = incomingValues,
+                outgoingValues = outgoingValues,
+                method = method,
+                contractAddress = contractAddress!!,
+                blockchainType = blockchainType,
+                timestamp = timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                icon = icon,
+                spam = spam,
+                nftMetadata = transactionItem.nftMetadata
+            )
+        }
+
+        TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL -> {
+            val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                incomingEvents!!,
+                outgoingEvents!!
+            )
+            createViewItemFromExternalContractCallTransactionRecord(
+                uid = uid,
+                incomingValues = incomingValues,
+                outgoingValues = outgoingValues,
+                incomingEvents = incomingEvents,
+                blockchainType = blockchainType,
+                timestamp = timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                icon = icon,
+                spam = spam,
+                nftMetadata = transactionItem.nftMetadata
+            )
+        }
+
+        TransactionRecordType.TRON_INCOMING -> {
+            tryConvertToChangeNowViewItemSwap(
+                transactionItem = transactionItem,
+                token = baseToken,
+                isIncoming = true
+            ) ?: createViewItemFromEvmIncomingTransactionRecord(
+                uid = uid,
+                value = value!!,
+                from = from!!,
+                blockchainType = blockchainType,
+                timestamp = timestamp,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                spam = spam,
+                icon = icon
+            )
+        }
+
+        TransactionRecordType.TRON_OUTGOING -> {
+            tryConvertToChangeNowViewItemSwap(
+                transactionItem = transactionItem,
+                token = baseToken,
+                isIncoming = false
+            ) ?: createViewItemFromEvmOutgoingTransactionRecord(
+                uid = uid,
+                value = value!!,
+                to = to!!,
+                blockchainType = blockchainType,
+                timestamp = timestamp,
+                sentToSelf = sentToSelf,
+                currencyValue = transactionItem.currencyValue,
+                progress = progress,
+                icon = icon,
+                spam = spam,
+                nftMetadata = transactionItem.nftMetadata
+            )
+        }
+
+        TransactionRecordType.TRON -> {
+            createViewItemFromSimpleTronTransactionRecord(
+                uid = uid,
+                timestamp = timestamp,
+                contract = transaction.contract,
+                progress = progress,
+                spam = spam,
+                icon = icon
+            )
+        }
+
+        else -> throw IllegalArgumentException("Undefined record type")
     }
 
     private fun createViewItemFromApproveTransactionRecord(

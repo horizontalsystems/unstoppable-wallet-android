@@ -8,11 +8,6 @@ import cash.p.terminal.core.tokenIconPlaceholder
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
-import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
@@ -52,22 +47,24 @@ class TronTransactionConverter(
                 when (val contract = decoration.contract) {
                     is TransferContract -> {
                         if (contract.ownerAddress != tronKit.address) {
-                            TronIncomingTransactionRecord(
+                            TronTransactionRecord(
                                 transaction = transaction,
                                 baseToken = baseToken,
                                 source = source,
                                 from = contract.ownerAddress.base58,
                                 value = baseCoinValue(contract.amount, false),
-                                spam = contract.amount < BigInteger.TEN
+                                spam = contract.amount < BigInteger.TEN,
+                                transactionRecordType = TransactionRecordType.TRON_INCOMING
                             )
                         } else {
-                            TronOutgoingTransactionRecord(
+                            TronTransactionRecord(
                                 transaction = transaction,
                                 baseToken = baseToken,
                                 source = source,
                                 to = contract.toAddress.base58,
                                 value = baseCoinValue(contract.amount, true),
-                                sentToSelf = contract.toAddress == tronKit.address
+                                sentToSelf = contract.toAddress == tronKit.address,
+                                transactionRecordType = TransactionRecordType.TRON_OUTGOING
                             )
                         }
                     }
@@ -77,23 +74,25 @@ class TronTransactionConverter(
             }
 
             is OutgoingTrc20Decoration -> {
-                TronOutgoingTransactionRecord(
+                TronTransactionRecord(
                     transaction = transaction,
                     baseToken = baseToken,
                     source = source,
                     to = decoration.to.base58,
                     value = getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo),
-                    sentToSelf = decoration.sentToSelf
+                    sentToSelf = decoration.sentToSelf,
+                    transactionRecordType = TransactionRecordType.TRON_OUTGOING
                 )
             }
 
             is ApproveTrc20Decoration -> {
-                TronApproveTransactionRecord(
-                    transaction,
-                    baseToken,
-                    source,
-                    decoration.spender.base58,
-                    getEip20Value(decoration.contractAddress, decoration.value, false)
+                TronTransactionRecord(
+                    transaction = transaction,
+                    baseToken = baseToken,
+                    source = source,
+                    spender = decoration.spender.base58,
+                    value = getEip20Value(decoration.contractAddress, decoration.value, false),
+                    transactionRecordType = TransactionRecordType.TRON_APPROVE
                 )
             }
 
@@ -110,23 +109,28 @@ class TronTransactionConverter(
 
                 when {
                     decoration.fromAddress == address && contractAddress != null -> {
-                        TronContractCallTransactionRecord(
-                            transaction, baseToken, source,
-                            contractAddress.base58,
-                            decoration.data?.hexStringToByteArrayOrNull()?.let { evmLabelManager.methodLabel(it) },
-                            getInternalEvents(internalTransactions) +
+                        TronTransactionRecord(
+                            transaction = transaction, baseToken = baseToken, source = source,
+                            contractAddress = contractAddress.base58,
+                            method = decoration.data?.hexStringToByteArrayOrNull()?.let { evmLabelManager.methodLabel(it) },
+                            incomingEvents = getInternalEvents(internalTransactions) +
                                     getIncomingEip20Events(incomingEip20Transfers),
-                            getTransactionValueEvents(decoration) +
-                                    getOutgoingEip20Events(outgoingEip20Transfers)
+                            outgoingEvents = getTransactionValueEvents(decoration) +
+                                    getOutgoingEip20Events(outgoingEip20Transfers),
+                            transactionRecordType = TransactionRecordType.TRON_CONTRACT_CALL
                         )
                     }
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
-                        TronExternalContractCallTransactionRecord(
-                            transaction, baseToken, source, App.spamManager,
-                            getInternalEvents(internalTransactions) +
+                        TronTransactionRecord(
+                            transaction = transaction,
+                            baseToken = baseToken,
+                            source = source,
+                            spamManager = App.spamManager,
+                            incomingEvents = getInternalEvents(internalTransactions) +
                                     getIncomingEip20Events(incomingEip20Transfers),
-                            getOutgoingEip20Events(outgoingEip20Transfers)
+                            outgoingEvents = getOutgoingEip20Events(outgoingEip20Transfers),
+                            transactionRecordType = TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL
                         )
                     }
 

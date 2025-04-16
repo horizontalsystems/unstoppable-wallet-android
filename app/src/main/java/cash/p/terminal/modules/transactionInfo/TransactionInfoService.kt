@@ -12,20 +12,15 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRec
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.toUniversalStatus
-import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.MarketKitWrapper
-import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.core.entities.CurrencyValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -115,7 +110,7 @@ class TransactionInfoService(
                 }
 
                 is EvmTransactionRecord -> {
-                    when(transactionRecord.transactionRecordType) {
+                    when (transactionRecord.transactionRecordType) {
                         TransactionRecordType.EVM_INCOMING -> {
                             listOf(tx.value!!.coinUid)
                         }
@@ -135,7 +130,7 @@ class TransactionInfoService(
                         }
 
                         TransactionRecordType.EVM_CONTRACT_CALL,
-                        TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL-> {
+                        TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL -> {
                             val tempCoinUidList = mutableListOf<String>()
                             tempCoinUidList.addAll(tx.incomingEvents!!.map { it.value.coinUid })
                             tempCoinUidList.addAll(tx.outgoingEvents!!.map { it.value.coinUid })
@@ -146,8 +141,8 @@ class TransactionInfoService(
                     }
                 }
 
-                is BitcoinTransactionRecord ->{
-                    when(transactionRecord.transactionRecordType) {
+                is BitcoinTransactionRecord -> {
+                    when (transactionRecord.transactionRecordType) {
                         TransactionRecordType.BITCOIN_INCOMING -> {
                             listOf(tx.mainValue.coinUid)
                         }
@@ -164,7 +159,7 @@ class TransactionInfoService(
                 }
 
                 is BinanceChainTransactionRecord -> {
-                    when(transactionRecord.transactionRecordType) {
+                    when (transactionRecord.transactionRecordType) {
                         TransactionRecordType.BINANCE_INCOMING -> {
                             listOf(tx.mainValue.coinUid)
                         }
@@ -181,7 +176,7 @@ class TransactionInfoService(
                 }
 
                 is SolanaTransactionRecord -> {
-                    when(transactionRecord.transactionRecordType) {
+                    when (transactionRecord.transactionRecordType) {
                         TransactionRecordType.SOLANA_INCOMING -> {
                             listOf(tx.mainValue?.coinUid)
                         }
@@ -189,10 +184,13 @@ class TransactionInfoService(
                         TransactionRecordType.SOLANA_OUTGOING -> {
                             listOf(tx.fee?.coinUid, tx.mainValue?.coinUid)
                         }
+
                         TransactionRecordType.SOLANA_UNKNOWN -> {
                             val tempCoinUidList = mutableListOf<String>()
-                            tx.incomingSolanaTransfers?.map { it.value.coinUid }?.let { tempCoinUidList.addAll(it) }
-                            tx.outgoingSolanaTransfers?.map { it.value.coinUid }?.let { tempCoinUidList.addAll(it) }
+                            tx.incomingSolanaTransfers?.map { it.value.coinUid }
+                                ?.let { tempCoinUidList.addAll(it) }
+                            tx.outgoingSolanaTransfers?.map { it.value.coinUid }
+                                ?.let { tempCoinUidList.addAll(it) }
                             tempCoinUidList
                         }
 
@@ -200,30 +198,25 @@ class TransactionInfoService(
                     }
                 }
 
-                is TronOutgoingTransactionRecord -> {
-                    listOf(tx.value.coinUid, tx.fee?.coinUid)
-                }
+                is TronTransactionRecord -> {
+                    when (transactionRecord.transactionRecordType) {
+                        TransactionRecordType.TRON_APPROVE,
+                        TransactionRecordType.TRON_OUTGOING ->
+                            listOf(tx.value?.coinUid, tx.fee?.coinUid)
 
-                is TronIncomingTransactionRecord -> {
-                    listOf(tx.value.coinUid)
-                }
+                        TransactionRecordType.TRON_INCOMING ->
+                            listOf(tx.value?.coinUid)
 
-                is TronApproveTransactionRecord -> {
-                    listOf(tx.value.coinUid, tx.fee?.coinUid)
-                }
+                        TransactionRecordType.TRON_CONTRACT_CALL,
+                        TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL -> {
+                            val tempCoinUidList = mutableListOf<String>()
+                            tempCoinUidList.addAll(tx.incomingEvents!!.map { it.value.coinUid })
+                            tempCoinUidList.addAll(tx.outgoingEvents!!.map { it.value.coinUid })
+                            tempCoinUidList
+                        }
 
-                is TronContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
-                }
-
-                is TronExternalContractCallTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
-                    tempCoinUidList
+                        else -> emptyList()
+                    }
                 }
 
                 else -> emptyList()

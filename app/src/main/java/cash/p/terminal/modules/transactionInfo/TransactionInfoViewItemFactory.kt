@@ -8,11 +8,6 @@ import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTran
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
@@ -227,118 +222,123 @@ class TransactionInfoViewItemFactory(
 //            feeViewItem = record.fee.map { .fee(title: "tx_info.fee".localized, value: feeString(transactionValue: $0, rate: _rate($0))) }
             }
 
-            is TronIncomingTransactionRecord ->
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                        value = transaction.value,
-                        fromAddress = transaction.from,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        blockchainType = blockchainType,
-                    )
-                )
-
-            is TronOutgoingTransactionRecord -> {
-                sentToSelf = transaction.sentToSelf
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getSendSectionItems(
-                        value = transaction.value,
-                        toAddress = transaction.to,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        sentToSelf = transaction.sentToSelf,
-                        nftMetadata = nftMetadata,
-                        blockchainType = blockchainType,
-                    )
-                )
-            }
-
-            is TronApproveTransactionRecord ->
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getApproveSectionItems(
-                        value = transaction.value,
-                        coinPrice = rates[transaction.value.coinUid],
-                        spenderAddress = transaction.spender,
-                        hideAmount = transactionItem.hideAmount,
-                        blockchainType = blockchainType,
-                    )
-                )
-
-            is TronContractCallTransactionRecord -> {
-                itemSections.add(
-                    TransactionViewItemFactoryHelper.getContractMethodSectionItems(
-                        transaction.method,
-                        transaction.contractAddress,
-                        transaction.blockchainType
-                    )
-                )
-
-                for (event in transaction.outgoingEvents) {
-                    itemSections.add(
-                        TransactionViewItemFactoryHelper.getSendSectionItems(
-                            value = event.value,
-                            toAddress = event.address,
-                            coinPrice = rates[event.value.coinUid],
-                            hideAmount = transactionItem.hideAmount,
-                            nftMetadata = nftMetadata,
-                            blockchainType = blockchainType,
-                        )
-                    )
-                }
-
-                for (event in transaction.incomingEvents) {
-                    itemSections.add(
-                        TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                            value = event.value,
-                            fromAddress = event.address,
-                            coinPrice = rates[event.value.coinUid],
-                            hideAmount = transactionItem.hideAmount,
-                            nftMetadata = nftMetadata,
-                            blockchainType = blockchainType,
-                        )
-                    )
-                }
-            }
-
-            is TronExternalContractCallTransactionRecord -> {
-                for (event in transaction.outgoingEvents) {
-                    itemSections.add(
-                        TransactionViewItemFactoryHelper.getSendSectionItems(
-                            value = event.value,
-                            toAddress = event.address,
-                            coinPrice = rates[event.value.coinUid],
-                            hideAmount = transactionItem.hideAmount,
-                            nftMetadata = nftMetadata,
-                            blockchainType = blockchainType,
-                        )
-                    )
-                }
-
-                for (event in transaction.incomingEvents) {
-                    itemSections.add(
-                        TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                            value = event.value,
-                            fromAddress = event.address,
-                            coinPrice = rates[event.value.coinUid],
-                            hideAmount = transactionItem.hideAmount,
-                            nftMetadata = nftMetadata,
-                            blockchainType = blockchainType,
-                        )
-                    )
-                }
-            }
-
             is TronTransactionRecord -> {
-                itemSections.add(
-                    listOf(
-                        Transaction(
-                            transaction.transaction.contract?.label
-                                ?: Translator.getString(R.string.Transactions_ContractCall),
-                            "",
-                            TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
+                when (transaction.transactionRecordType) {
+                    TransactionRecordType.TRON_INCOMING ->
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transaction.value!!,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
                         )
-                    )
-                )
+
+                    TransactionRecordType.TRON_OUTGOING -> {
+                        sentToSelf = transaction.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transaction.value!!,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transaction.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+
+                    TransactionRecordType.TRON_APPROVE ->
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getApproveSectionItems(
+                                value = transaction.value!!,
+                                coinPrice = rates[transaction.value.coinUid],
+                                spenderAddress = transaction.spender!!,
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+
+                    TransactionRecordType.TRON_CONTRACT_CALL -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getContractMethodSectionItems(
+                                transaction.method,
+                                transaction.contractAddress!!,
+                                transaction.blockchainType
+                            )
+                        )
+
+                        for (event in transaction.outgoingEvents!!) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getSendSectionItems(
+                                    value = event.value,
+                                    toAddress = event.address,
+                                    coinPrice = rates[event.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+
+                        for (event in transaction.incomingEvents!!) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                    value = event.value,
+                                    fromAddress = event.address,
+                                    coinPrice = rates[event.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+                    }
+
+                    TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL -> {
+                        for (event in transaction.outgoingEvents!!) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getSendSectionItems(
+                                    value = event.value,
+                                    toAddress = event.address,
+                                    coinPrice = rates[event.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+
+                        for (event in transaction.incomingEvents!!) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                    value = event.value,
+                                    fromAddress = event.address,
+                                    coinPrice = rates[event.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+                    }
+
+                    TransactionRecordType.TRON ->
+                        itemSections.add(
+                            listOf(
+                                Transaction(
+                                    transaction.transaction.contract?.label
+                                        ?: Translator.getString(R.string.Transactions_ContractCall),
+                                    "",
+                                    TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
+                                )
+                            )
+                        )
+
+                    else -> {}
+                }
             }
 
             is BitcoinTransactionRecord -> {
