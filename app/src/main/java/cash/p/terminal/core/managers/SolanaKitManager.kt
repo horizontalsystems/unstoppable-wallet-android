@@ -57,6 +57,7 @@ class SolanaKitManager(
     fun getSolanaKitWrapper(account: Account): SolanaKitWrapper {
         if (this.solanaKitWrapper != null && currentAccount != account) {
             stopKit()
+            solanaKitWrapper = null
         }
 
         if (this.solanaKitWrapper == null) {

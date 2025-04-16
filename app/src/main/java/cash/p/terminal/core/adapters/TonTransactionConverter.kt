@@ -37,7 +37,12 @@ class TonTransactionConverter(
             )
         }
 
-        return TonTransactionRecord(source, event, baseToken, actions)
+        return TonTransactionRecord(
+            source = source,
+            event = event,
+            token = baseToken,
+            actions = actions
+        )
     }
 
     private fun convertAmount(amount: BigInteger, decimal: Int, negative: Boolean): BigDecimal {
