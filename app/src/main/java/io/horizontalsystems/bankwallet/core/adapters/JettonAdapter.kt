@@ -89,6 +89,6 @@ class JettonAdapter(
             memo
         )
 
-        return estimateFee.toBigDecimal(decimals).stripTrailingZeros()
+        return estimateFee.toBigDecimal(9).stripTrailingZeros()
     }
 }
