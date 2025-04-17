@@ -60,12 +60,17 @@ class TonConnectSendRequestViewModel(
             return
         }
 
-        val connectionAccountId = signTransaction?.dApp?.accountId
-        val requestAccountId = sendRequestEntity.fromAccountId
+        if (isInvalidNetwork(sendRequestEntity.network)) {
+            error = TonConnectSendRequestError.InvalidData("Invalid network")
+            responseBadRequest(sendRequestEntity)
+            return
+        }
 
-        if (requestAccountId != null && connectionAccountId != null && !requestAccountId.equalsAddress(connectionAccountId)) {
-            error = TonConnectSendRequestError.InvalidData("Invalid \"from\" address. Specified wallet address not connected to this app.")
-
+        validateFromAddress(
+            sendRequestEntity,
+            signTransaction?.dApp?.accountId
+        )?.let { validationError ->
+            error = validationError
             responseBadRequest(sendRequestEntity)
             return
         }
@@ -91,7 +96,7 @@ class TonConnectSendRequestViewModel(
                 responseBadRequest(sendRequestEntity)
                 return
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             error = TonConnectSendRequestError.InvalidData("Failed to parse messages")
             responseBadRequest(sendRequestEntity)
             return
@@ -115,7 +120,7 @@ class TonConnectSendRequestViewModel(
         if (account == null) {
             error = TonConnectSendRequestError.AccountNotFound()
             return
-        } else if (account != accountManager.activeAccount){
+        } else if (account != accountManager.activeAccount) {
             error = TonConnectSendRequestError.DifferentAccount("Incorrect account selected")
             responseBadRequest(sendRequestEntity)
             return
@@ -129,7 +134,7 @@ class TonConnectSendRequestViewModel(
         }
 
         val accountBalance = tonKitWrapper.tonKit.account?.balance
-        if (accountBalance != null){
+        if (accountBalance != null) {
             val totalSentAmount = sendRequestEntity.messages.sumOf { it.amount }
             if (totalSentAmount > accountBalance){
                 error = TonConnectSendRequestError.InvalidData("Transaction amount exceeds available balance")
@@ -164,8 +169,38 @@ class TonConnectSendRequestViewModel(
         tonTransactionRecord = tonTransactionConverter?.createTransactionRecord(tonEvent)
     }
 
+    /**
+     * Validates that the 'from' address in the request matches the connected account address.
+     * @return null if valid, or an error if invalid
+     */
+    private fun validateFromAddress(
+        sendRequestEntity: SendRequestEntity,
+        connectionAccountId: String?
+    ): TonConnectSendRequestError? {
+        val requestAccountId = try {
+            sendRequestEntity.fromAccountId
+        } catch (e: Exception) {
+            return TonConnectSendRequestError.InvalidData("Invalid \"from\" address")
+        }
+
+        if (requestAccountId != null && connectionAccountId != null
+            && !requestAccountId.equalsAddress(connectionAccountId)
+        ) {
+            return TonConnectSendRequestError.InvalidData(
+                "Invalid \"from\" address. Specified wallet address not connected to this app."
+            )
+        }
+
+        return null
+    }
+
+    private fun isInvalidNetwork(networkId: Int): Boolean {
+        return !(networkId == TonNetwork.MAINNET.value ||
+                networkId == TonNetwork.TESTNET.value)
+    }
+
     private fun isTestnet(sendRequestEntity: SendRequestEntity): Boolean {
-        return sendRequestEntity.network == TonNetwork.TESTNET
+        return sendRequestEntity.network == TonNetwork.TESTNET.value
     }
 
     private fun addressIsRaw(messages: List<RawMessageEntity>): Boolean {
