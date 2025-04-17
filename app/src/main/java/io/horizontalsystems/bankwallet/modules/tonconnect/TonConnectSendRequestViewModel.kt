@@ -77,6 +77,13 @@ class TonConnectSendRequestViewModel(
             return
         }
 
+        if (requestExpired(sendRequestEntity)) {
+            error = TonConnectSendRequestError.InvalidData("Field validUntil has expired")
+
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
         try {
             val messages = sendRequestEntity.messages
             if (addressIsRaw(messages)) {
@@ -185,9 +192,20 @@ class TonConnectSendRequestViewModel(
         }
     }
 
+    private fun requestExpired(sendRequestEntity: SendRequestEntity): Boolean {
+        return sendRequestEntity.validUntil < System.currentTimeMillis() / 1000
+    }
+
     fun confirm() {
         val sendRequestEntity = sendRequestEntity ?: return
         val tonWallet = tonWallet ?: return
+
+        if (requestExpired(sendRequestEntity)) {
+            viewModelScope.launch(Dispatchers.Default) {
+                responseBadRequest(sendRequestEntity)
+            }
+            throw IllegalArgumentException("Field validUntil has expired")
+        }
 
         viewModelScope.launch(Dispatchers.Default) {
             val boc = transactionSigner.sign(sendRequestEntity, tonWallet)
