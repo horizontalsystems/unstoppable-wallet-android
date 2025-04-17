@@ -108,7 +108,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                     delay(1200)
                                 } catch (t: Throwable) {
                                     logger.warning("failed", t)
-                                    HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                    HudHelper.showErrorMessage(view, t.message ?: t.javaClass.simpleName)
                                 }
 
                                 buttonEnabled = true
