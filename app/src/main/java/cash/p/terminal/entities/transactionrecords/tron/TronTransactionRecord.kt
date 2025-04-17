@@ -13,22 +13,22 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.tronkit.models.Transaction
 
 class TronTransactionRecord(
+    spamManager: SpamManager? = null,
+    from: String? = null,
+    to: String? = null,
+    sentToSelf: Boolean = false,
+    token: Token,
+    source: TransactionSource,
+    spam: Boolean = false,
+    transactionRecordType: TransactionRecordType,
     val spender: String? = null,
     val value: TransactionValue? = null,
     val contractAddress: String? = null,
     val method: String? = null,
     val incomingEvents: List<TransferEvent>? = null,
     val outgoingEvents: List<TransferEvent>? = null,
-    spamManager: SpamManager? = null,
-    val from: String? = null,
-    val to: String? = null,
-    val sentToSelf: Boolean = false,
     val transaction: Transaction,
-    val token: Token,
-    source: TransactionSource,
     val foreignTransaction: Boolean = false,
-    spam: Boolean = false,
-    transactionRecordType: TransactionRecordType
 ) : TransactionRecord(
     uid = transaction.hashString,
     transactionHash = transaction.hashString,
@@ -39,7 +39,11 @@ class TronTransactionRecord(
     failed = transaction.isFailed,
     spam = spam,
     source = source,
-    transactionRecordType = transactionRecordType
+    transactionRecordType = transactionRecordType,
+    token = token,
+    to = to,
+    from = from,
+    sentToSelf = sentToSelf,
 ) {
 
     val fee: TransactionValue?

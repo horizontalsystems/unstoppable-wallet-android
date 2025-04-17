@@ -10,6 +10,7 @@ import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactions.TransactionStatus
+import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.BlockchainType
 
@@ -23,7 +24,12 @@ abstract class TransactionRecord(
     val failed: Boolean = false,
     val spam: Boolean = false,
     val source: TransactionSource,
-    val transactionRecordType: TransactionRecordType
+    val transactionRecordType: TransactionRecordType,
+    open val token: Token,
+    open val to: String? = null,
+    open val from: String? = null,
+    open val sentToSelf: Boolean = false,
+    open val memo: String? = null,
 ) : Comparable<TransactionRecord> {
 
     open val mainValue: TransactionValue? = null

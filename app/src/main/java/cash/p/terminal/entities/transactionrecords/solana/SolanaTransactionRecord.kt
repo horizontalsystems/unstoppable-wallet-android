@@ -9,17 +9,17 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.solanakit.models.Transaction
 
 class SolanaTransactionRecord(
-    val sentToSelf: Boolean = false,
-    val incomingSolanaTransfers: List<SolanaTransfer>? = null,
-    val outgoingSolanaTransfers: List<SolanaTransfer>? = null,
-    transaction: Transaction,
-    override val mainValue: TransactionValue? = null,
-    val to: String? = null,
-    val from: String? = null,
-    val token: Token,
+    sentToSelf: Boolean = false,
+    to: String? = null,
+    from: String? = null,
+    token: Token,
     source: TransactionSource,
     transactionRecordType: TransactionRecordType,
     spam: Boolean = false,
+    transaction: Transaction,
+    val incomingSolanaTransfers: List<SolanaTransfer>? = null,
+    val outgoingSolanaTransfers: List<SolanaTransfer>? = null,
+    override val mainValue: TransactionValue? = null,
 ) : TransactionRecord(
     uid = transaction.hash,
     transactionHash = transaction.hash,
@@ -30,7 +30,11 @@ class SolanaTransactionRecord(
     failed = transaction.error != null,
     spam = spam,
     source = source,
-    transactionRecordType = transactionRecordType
+    transactionRecordType = transactionRecordType,
+    token = token,
+    to = to,
+    from = from,
+    sentToSelf = sentToSelf,
 ) {
 
     data class SolanaTransfer(val address: String?, val value: TransactionValue)

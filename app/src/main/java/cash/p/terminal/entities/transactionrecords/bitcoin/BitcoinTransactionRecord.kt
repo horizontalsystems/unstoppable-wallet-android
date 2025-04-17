@@ -11,27 +11,27 @@ import java.math.BigDecimal
 import java.util.*
 
 class BitcoinTransactionRecord(
-    val token: Token,
+    token: Token,
     amount: BigDecimal,
-    val to: String?,
-    val from: String?,
+    to: String?,
+    from: String?,
     uid: String,
     transactionHash: String,
     transactionIndex: Int,
     blockHeight: Int?,
     confirmationsThreshold: Int?,
     timestamp: Long,
-    val fee: TransactionValue?,
     failed: Boolean,
+    memo: String?,
+    source: TransactionSource,
+    sentToSelf: Boolean = false,
+    transactionRecordType: TransactionRecordType,
+    val fee: TransactionValue?,
     val lockInfo: TransactionLockInfo?,
     val conflictingHash: String?,
     val showRawTransaction: Boolean,
-    val memo: String?,
-    source: TransactionSource,
-    val sentToSelf: Boolean = false,
     val replaceable: Boolean = false,
     override val mainValue: TransactionValue = TransactionValue.CoinValue(token, amount),
-    transactionRecordType: TransactionRecordType
 ) : TransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -41,7 +41,12 @@ class BitcoinTransactionRecord(
     timestamp = timestamp,
     failed = failed,
     source = source,
-    transactionRecordType = transactionRecordType
+    transactionRecordType = transactionRecordType,
+    token = token,
+    to = to,
+    from = from,
+    memo = memo,
+    sentToSelf = sentToSelf
 ) {
 
     override fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean {

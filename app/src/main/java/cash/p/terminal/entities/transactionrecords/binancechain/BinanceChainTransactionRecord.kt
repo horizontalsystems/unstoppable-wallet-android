@@ -10,14 +10,12 @@ import io.horizontalsystems.binancechainkit.models.TransactionInfo
 
 class BinanceChainTransactionRecord(
     transaction: TransactionInfo,
-    val token: Token,
+    token: Token,
     feeToken: Token,
     source: TransactionSource,
-    val sentToSelf: Boolean = false,
-    override val mainValue: TransactionValue.CoinValue,
+    sentToSelf: Boolean = false,
     transactionRecordType: TransactionRecordType,
-    val to: String? =  if(transactionRecordType == TransactionRecordType.BINANCE_OUTGOING) transaction.to else null,
-    val from: String? = if(transactionRecordType == TransactionRecordType.BINANCE_INCOMING) transaction.from else null
+    override val mainValue: TransactionValue.CoinValue,
 ) : TransactionRecord(
     uid = transaction.hash,
     transactionHash = transaction.hash,
@@ -27,12 +25,14 @@ class BinanceChainTransactionRecord(
     timestamp = transaction.date.time / 1000,
     failed = false,
     source = source,
-    transactionRecordType = transactionRecordType
+    transactionRecordType = transactionRecordType,
+    token = token,
+    to = if (transactionRecordType == TransactionRecordType.BINANCE_OUTGOING) transaction.to else null,
+    from = if (transactionRecordType == TransactionRecordType.BINANCE_INCOMING) transaction.from else null,
+    memo = transaction.memo,
+    sentToSelf = sentToSelf,
 ) {
-
     val fee = TransactionValue.CoinValue(feeToken, BinanceAdapter.transferFee)
-    val memo = transaction.memo
-
 }
 
 

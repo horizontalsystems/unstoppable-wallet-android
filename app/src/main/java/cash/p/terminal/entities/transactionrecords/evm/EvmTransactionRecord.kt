@@ -11,28 +11,28 @@ import io.horizontalsystems.ethereumkit.models.Transaction
 import java.math.BigDecimal
 
 class EvmTransactionRecord(
+    spamManager: SpamManager? = null,
+    from: String? = null,
+    to: String? = null,
+    sentToSelf: Boolean = false,
+    transaction: Transaction,
+    token: Token,
+    source: TransactionSource,
+    spam: Boolean = false,
+    transactionRecordType: TransactionRecordType,
     val spender: String? = null,
     val value: TransactionValue? = null,
     val contractAddress: String? = null,
     val method: String? = null,
     val incomingEvents: List<TransferEvent>? = null,
     val outgoingEvents: List<TransferEvent>? = null,
-    spamManager: SpamManager? = null,
-    val from: String? = null,
-    val to: String? = null,
-    val sentToSelf: Boolean = false,
     val exchangeAddress: String? = null,
     val amountIn: Amount? = null,
     val amountOut: Amount? = null,
     val valueIn: TransactionValue? = amountIn?.value,
     val valueOut: TransactionValue? = amountOut?.value,
     val recipient: String? = null,
-    transaction: Transaction,
-    val token: Token,
-    source: TransactionSource,
     val foreignTransaction: Boolean = false,
-    spam: Boolean = false,
-    transactionRecordType: TransactionRecordType
 ) : TransactionRecord(
     uid = transaction.hashString,
     transactionHash = transaction.hashString,
@@ -43,7 +43,11 @@ class EvmTransactionRecord(
     failed = transaction.isFailed,
     spam = spam,
     source = source,
-    transactionRecordType = transactionRecordType
+    transactionRecordType = transactionRecordType,
+    token = token,
+    to = to,
+    from = from,
+    sentToSelf = sentToSelf
 ) {
 
     sealed class Amount(val value: TransactionValue) {

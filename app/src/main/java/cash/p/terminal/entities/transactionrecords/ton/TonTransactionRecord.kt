@@ -13,7 +13,7 @@ import kotlin.math.absoluteValue
 class TonTransactionRecord(
     source: TransactionSource,
     event: Event,
-    val token: Token,
+    token: Token,
     val actions: List<Action>
 ) : TransactionRecord(
     uid = event.id,
@@ -25,8 +25,27 @@ class TonTransactionRecord(
     failed = false,
     spam = event.scam,
     source = source,
-    transactionRecordType = TransactionRecordType.TON
+    transactionRecordType = TransactionRecordType.TON,
+    token = token,
 ) {
+
+    override val to: String?
+        get() = actions.firstOrNull { it.type is Action.Type.Send }?.let { (it.type as Action.Type.Send).to }
+
+    override val from: String?
+        get() = actions.firstOrNull { it.type is Action.Type.Receive }?.let { (it.type as Action.Type.Receive).from }
+
+    override val sentToSelf: Boolean
+        get() = actions.firstOrNull { it.type is Action.Type.Send }?.let { (it.type as Action.Type.Send).sentToSelf } ?: false
+
+    override val memo: String?
+        get() = actions.firstNotNullOfOrNull {
+            when (val type = it.type) {
+                is Action.Type.Send -> type.comment
+                is Action.Type.Receive -> type.comment
+                else -> null
+            }
+        }
     val lt = event.lt
     val inProgress = event.inProgress
     val fee = TransactionValue.CoinValue(token, TonAdapter.Companion.getAmount(event.extra.absoluteValue))
