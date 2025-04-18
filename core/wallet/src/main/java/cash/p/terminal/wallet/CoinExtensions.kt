@@ -3,13 +3,7 @@ package cash.p.terminal.wallet
 import cash.p.terminal.wallet.entities.Coin
 
 val Coin.imageUrl: String
-    get() {
-        val coinURL = when (uid) {
-            "wdash" -> "https://wdash.org/logo.png"
-            else -> "https://p.cash/storage/coins/$uid/image.png"
-        }
-        return coinURL
-    }
+    get() = "https://p.cash/storage/coins/$uid/image.png"
 
 val Coin.alternativeImageUrl: String?
     get() = image

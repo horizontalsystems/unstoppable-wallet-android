@@ -238,11 +238,17 @@ class HsProvider(baseUrl: String, apiKey: String) {
             }
         } else {
             fetchedPrices
-        }.mapNotNull { coinPriceResponse ->
-            coinPriceResponse.coinPrice(
-                currencyCode = currencyCode,
-                alternativeUid = if (coinPriceResponse.uid == "wdash") "dash" else null
-            )
+        }.flatMap { coinPriceResponse ->
+            if (coinPriceResponse.uid == "dash") {
+                listOfNotNull(
+                    coinPriceResponse.coinPrice(currencyCode = currencyCode),
+                    coinPriceResponse.coinPrice(currencyCode = currencyCode, alternativeUid = "wdash")
+                )
+            } else {
+                listOfNotNull(
+                    coinPriceResponse.coinPrice(currencyCode = currencyCode)
+                )
+            }
         }
     }
 
