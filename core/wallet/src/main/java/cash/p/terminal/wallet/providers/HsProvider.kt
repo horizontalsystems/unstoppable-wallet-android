@@ -219,11 +219,7 @@ class HsProvider(baseUrl: String, apiKey: String) {
                 coinUids.toMutableSet().apply {
                     removeAll(fetchedPrices.map { it.uid }.toSet())
                 }
-            // Similar coins with different uids
-            if (pricesNotFound.remove("wdash")) {
-                pricesNotFound.add("dash")
-            }
-            Log.d("HsProvider", "Prices not found: $pricesNotFound, requesting on PiratePlace")
+            Log.d("HsProvider", "Prices not found: $pricesNotFound, requesting on p.cash")
             fetchedPrices + fetchPlaceCoinPrices(
                 requestUid = pricesNotFound,
                 currencyCode = currencyCode
@@ -233,23 +229,12 @@ class HsProvider(baseUrl: String, apiKey: String) {
                         pricesNotFound.toMutableSet().apply {
                             removeAll(coinPrices.map { it.uid }.toSet())
                         }
-                    Log.d("HsProvider", "Prices NOT FOUND on PiratePlace: $pricesNotFound2")
+                    Log.d("HsProvider", "Prices NOT FOUND on p.cash: $pricesNotFound2")
                 }
             }
         } else {
             fetchedPrices
-        }.flatMap { coinPriceResponse ->
-            if (coinPriceResponse.uid == "dash") {
-                listOfNotNull(
-                    coinPriceResponse.coinPrice(currencyCode = currencyCode),
-                    coinPriceResponse.coinPrice(currencyCode = currencyCode, alternativeUid = "wdash")
-                )
-            } else {
-                listOfNotNull(
-                    coinPriceResponse.coinPrice(currencyCode = currencyCode)
-                )
-            }
-        }
+        }.mapNotNull { coinPriceResponse -> coinPriceResponse.coinPrice(currencyCode = currencyCode)}
     }
 
     private suspend fun fetchPiratePlaceCoinInfo(

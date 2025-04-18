@@ -9,14 +9,14 @@ class PiratePlaceCoinRaw(
     val name: String,
     val symbol: String,
     @SerializedName("circulating_supply")
-    val circulatingSupply: BigDecimal,
+    val circulatingSupply: BigDecimal?,
     @SerializedName("total_supply")
     val totalSupply: Double,
     @SerializedName("max_supply")
     val maxSupply: Long?,
     val changes: Changes,
     @SerializedName("market_cap")
-    val marketCap: MarketCap,
+    val marketCap: MarketCap?,
     val image: String,
     val price: Price,
     val categories: List<Category>,
