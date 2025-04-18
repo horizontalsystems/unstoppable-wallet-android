@@ -149,7 +149,6 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     }
                 } else {
                     AddressCheck(
-                        uiState.addressValidationInProgress,
                         uiState.addressValidationError,
                         uiState.checkResults,
                     ) { checkType ->
@@ -212,7 +211,6 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
 
 @Composable
 fun AddressCheck(
-    addressValidationInProgress: Boolean,
     addressValidationError: Throwable?,
     checkResults: Map<AddressCheckType, AddressCheckData>,
     onClick: (type: AddressCheckType) -> Unit
