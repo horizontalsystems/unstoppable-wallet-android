@@ -46,7 +46,7 @@ class TronTransactionsAdapter(
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = tronKit.syncStateFlow.asFlowable().map {}
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -60,7 +60,7 @@ class TronTransactionsAdapter(
         transactionConverter.transactionRecord(it)
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,

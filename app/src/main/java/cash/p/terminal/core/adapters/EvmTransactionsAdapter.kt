@@ -56,7 +56,7 @@ class EvmTransactionsAdapter(
             TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
         }
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -72,7 +72,7 @@ class EvmTransactionsAdapter(
         }.await()
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,

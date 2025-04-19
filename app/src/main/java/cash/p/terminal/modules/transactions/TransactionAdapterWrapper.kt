@@ -79,7 +79,7 @@ class TransactionAdapterWrapper(
 
         updatesJob = coroutineScope.launch {
             transactionsAdapter
-                .getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
+                .getTransactionRecordsFlow(transactionWallet.token, transactionType, address)
                 .collect {
                     _transactionRecords.update { emptyList() }
                     _allLoaded.value = false
@@ -97,7 +97,7 @@ class TransactionAdapterWrapper(
         else -> {
             val currentRecords = _transactionRecords.value
             val numberOfRecordsToRequest = limit - currentRecords.size
-            val receivedRecords = transactionsAdapter.getTransactionsAsync(
+            val receivedRecords = transactionsAdapter.getTransactions(
                 from = currentRecords.lastOrNull(),
                 token = transactionWallet.token,
                 limit = numberOfRecordsToRequest,

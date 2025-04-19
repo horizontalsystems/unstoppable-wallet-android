@@ -411,7 +411,7 @@ class ZcashAdapter(
         return balanceState is AdapterState.Synced || balanceState is AdapterState.Syncing
     }
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -432,7 +432,7 @@ class ZcashAdapter(
         }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,

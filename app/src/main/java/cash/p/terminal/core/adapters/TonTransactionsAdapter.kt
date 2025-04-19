@@ -42,7 +42,7 @@ class TonTransactionsAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = Flowable.empty()
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -93,7 +93,7 @@ class TonTransactionsAdapter(
         )
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,

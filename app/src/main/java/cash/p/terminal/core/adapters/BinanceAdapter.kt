@@ -98,7 +98,7 @@ class BinanceAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
@@ -116,7 +116,7 @@ class BinanceAdapter(
         }
     }
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,

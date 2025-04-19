@@ -123,7 +123,7 @@ interface ITransactionsAdapter {
     val lastBlockUpdatedFlowable: Flowable<Unit>
     val additionalTokenQueries: List<TokenQuery> get() = listOf()
 
-    suspend fun getTransactionsAsync(
+    suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -133,7 +133,7 @@ interface ITransactionsAdapter {
 
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(
+    fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?

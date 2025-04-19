@@ -45,7 +45,7 @@ class SolanaTransactionsAdapter(
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = kit.transactionsSyncStateFlow.map {}.asFlowable()
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -83,7 +83,7 @@ class SolanaTransactionsAdapter(
         }.await()
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,

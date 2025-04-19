@@ -110,7 +110,7 @@ abstract class BitcoinBaseAdapter(
     override val balanceStateUpdatedFlow: Flow<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
@@ -187,7 +187,7 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    override suspend fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
