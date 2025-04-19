@@ -24,9 +24,3 @@ jobs:
         run: ./gradlew :app:testDebugUnitTest
       - name: Build with Gradle
         run: ./gradlew assembleDebug
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
