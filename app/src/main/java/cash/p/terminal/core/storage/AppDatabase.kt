@@ -41,6 +41,7 @@ import cash.p.terminal.core.storage.migrations.Migration_62_63
 import cash.p.terminal.core.storage.migrations.Migration_63_64
 import cash.p.terminal.core.storage.migrations.Migration_64_65
 import cash.p.terminal.core.storage.migrations.Migration_65_66
+import cash.p.terminal.core.storage.typeconverter.DatabaseConverters
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
 import cash.p.terminal.entities.ChangeNowTransaction
