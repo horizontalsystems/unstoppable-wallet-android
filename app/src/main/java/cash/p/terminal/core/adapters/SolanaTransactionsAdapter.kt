@@ -11,11 +11,13 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Flowable
-import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.asFlowable
+import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.rx2.rxSingle
 
 class SolanaTransactionsAdapter(
@@ -43,7 +45,7 @@ class SolanaTransactionsAdapter(
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = kit.transactionsSyncStateFlow.map {}.asFlowable()
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -51,20 +53,20 @@ class SolanaTransactionsAdapter(
         address: String?,
     ) = when (address) {
         null -> getTransactionsAsync(from, token, limit, transactionType)
-        else -> Single.just(listOf())
+        else -> emptyList<TransactionRecord>()
     }
 
-    private fun getTransactionsAsync(
+    private suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         val incoming = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> true
             FilterTransactionType.Outgoing -> false
-            else -> return Single.just(listOf())
+            else -> return emptyList()
         }
 
         val transactions = rxSingle(Dispatchers.IO) {
@@ -78,16 +80,16 @@ class SolanaTransactionsAdapter(
 
         return transactions.map { txList ->
             txList.map { solanaTransactionConverter.transactionRecord(it) }
-        }
+        }.await()
     }
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
-        else -> Flowable.empty()
+    ): Flow<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(token, transactionType).asFlow()
+        else -> emptyFlow()
     }
 
     private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {

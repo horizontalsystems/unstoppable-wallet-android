@@ -45,8 +45,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -112,9 +114,9 @@ abstract class BitcoinBaseAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(transactionType)
-        else -> Flowable.empty()
+    ): Flow<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(transactionType).asFlow()
+        else -> emptyFlow()
     }
 
     private fun getTransactionRecordsFlowable(transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
@@ -185,7 +187,7 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -193,19 +195,19 @@ abstract class BitcoinBaseAdapter(
         address: String?,
     ) = when (address) {
         null -> getTransactionsAsync(from, limit, transactionType)
-        else -> Single.just(listOf())
+        else -> emptyList<TransactionRecord>()
     }
 
-    private fun getTransactionsAsync(
+    private suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         limit: Int,
         transactionType: FilterTransactionType
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return try {
             kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit)
-                .map { it.map { tx -> transactionRecord(tx) } }
+                .map { it.map { tx -> transactionRecord(tx) } }.await()
         } catch (e: UnsupportedFilterException) {
-            Single.just(listOf())
+            emptyList<TransactionRecord>()
         }
     }
 

@@ -11,23 +11,24 @@ import cash.p.terminal.wallet.entities.Coin
 import java.math.BigDecimal
 import java.math.BigInteger
 
-sealed class TransactionValue {
-    abstract val fullName: String
-    abstract val coinUid: String
-    abstract val coinCode: String
-    abstract val coin: Coin?
-    abstract val badge: String?
-    abstract val coinIconUrl: String?
-    abstract val alternativeCoinIconUrl: String?
-    abstract val coinIconPlaceholder: Int?
-    abstract val decimalValue: BigDecimal?
-    abstract val decimals: Int?
-    abstract val zeroValue: Boolean
-    abstract val isMaxValue: Boolean
-    abstract val abs: TransactionValue
-    abstract val formattedString: String
+sealed interface TransactionValue {
+    val fullName: String
+    val coinUid: String
+    val coinCode: String
+    val coin: Coin?
+    val badge: String?
+    val coinIconUrl: String?
+    val alternativeCoinIconUrl: String?
+    val coinIconPlaceholder: Int?
+    val decimalValue: BigDecimal?
+    val decimals: Int?
+    val zeroValue: Boolean
+    val isMaxValue: Boolean
+    val abs: TransactionValue
+    val formattedString: String
 
-    open val nftUid: NftUid? = null
+    val nftUid: NftUid?
+        get() = null
 
     data class JettonValue(
         val name: String,
@@ -35,7 +36,7 @@ sealed class TransactionValue {
         override val decimals: Int,
         val value: BigDecimal,
         val image: String?
-    ) : TransactionValue() {
+    ) : TransactionValue {
         override val fullName = name
         override val coinUid = symbol
         override val coinCode = symbol
@@ -56,7 +57,7 @@ sealed class TransactionValue {
 
     }
 
-    data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue() {
+    data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue {
         override val coin: Coin = token.coin
         override val badge: String? = token.badge
         override val coinIconUrl = token.coin.imageUrl
@@ -78,7 +79,7 @@ sealed class TransactionValue {
 
     }
 
-    data class RawValue(val value: BigInteger) : TransactionValue() {
+    data class RawValue(val value: BigInteger) : TransactionValue {
         override val coinUid: String = ""
         override val coin: Coin? = null
         override val badge: String? = null
@@ -105,7 +106,7 @@ sealed class TransactionValue {
         val tokenDecimals: Int,
         val value: BigDecimal,
         override val coinIconPlaceholder: Int? = null
-    ) : TransactionValue() {
+    ) : TransactionValue {
         override val coinUid: String = ""
         override val coin: Coin? = null
         override val badge: String? = null
@@ -133,7 +134,7 @@ sealed class TransactionValue {
         val value: BigDecimal,
         val tokenName: String?,
         val tokenSymbol: String?
-    ) : TransactionValue() {
+    ) : TransactionValue {
         override val coinUid: String = ""
         override val coin: Coin? = null
         override val badge: String? = null

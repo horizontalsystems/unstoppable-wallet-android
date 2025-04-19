@@ -1,14 +1,14 @@
-package cash.p.terminal.core.storage
+package cash.p.terminal.core.storage.typeconverter
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.CexDepositNetworkRaw
 import cash.p.terminal.core.providers.CexWithdrawNetworkRaw
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.wallet.entities.SecretList
 import cash.p.terminal.wallet.entities.SecretString
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 import java.util.Date
@@ -38,7 +38,7 @@ class DatabaseConverters {
         if (value == null) return null
 
         return try {
-            SecretString(App.encryptionManager.decrypt(value))
+            SecretString(App.Companion.encryptionManager.decrypt(value))
         } catch (e: Exception) {
             null
         }
@@ -46,7 +46,7 @@ class DatabaseConverters {
 
     @TypeConverter
     fun encryptSecretString(secretString: SecretString?): String? {
-        return secretString?.value?.let { App.encryptionManager.encrypt(it) }
+        return secretString?.value?.let { App.Companion.encryptionManager.encrypt(it) }
     }
 
     // SecretList
@@ -56,7 +56,7 @@ class DatabaseConverters {
         if (value == null) return null
 
         return try {
-            SecretList(App.encryptionManager.decrypt(value).split(","))
+            SecretList(App.Companion.encryptionManager.decrypt(value).split(","))
         } catch (e: Exception) {
             null
         }
@@ -65,7 +65,7 @@ class DatabaseConverters {
     @TypeConverter
     fun encryptSecretList(secretList: SecretList?): String? {
         return secretList?.list?.joinToString(separator = ",")?.let {
-            App.encryptionManager.encrypt(it)
+            App.Companion.encryptionManager.encrypt(it)
         }
     }
 
@@ -86,7 +86,7 @@ class DatabaseConverters {
 
     @TypeConverter
     fun toBlockchainType(string: String): BlockchainType {
-        return BlockchainType.fromUid(string)
+        return BlockchainType.Companion.fromUid(string)
     }
 
     @TypeConverter
@@ -96,7 +96,7 @@ class DatabaseConverters {
 
     @TypeConverter
     fun toNftUid(string: String): NftUid {
-        return NftUid.fromUid(string)
+        return NftUid.Companion.fromUid(string)
     }
 
     @TypeConverter

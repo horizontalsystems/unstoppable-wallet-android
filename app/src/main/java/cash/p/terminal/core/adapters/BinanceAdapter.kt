@@ -27,7 +27,9 @@ import io.horizontalsystems.core.logger.AppLogger
 import io.reactivex.Flowable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class BinanceAdapter(
@@ -100,9 +102,9 @@ class BinanceAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(transactionType)
-        else -> Flowable.empty()
+    ): Flow<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(transactionType).asFlow()
+        else -> emptyFlow()
     }
 
     private fun getTransactionRecordsFlowable(transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
@@ -114,7 +116,7 @@ class BinanceAdapter(
         }
     }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
@@ -122,21 +124,21 @@ class BinanceAdapter(
         address: String?,
     ) = when (address) {
         null -> getTransactionsAsync(from, limit, transactionType)
-        else -> Single.just(listOf())
+        else -> emptyList<TransactionRecord>()
     }
 
-    private fun getTransactionsAsync(
+    private suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         limit: Int,
         transactionType: FilterTransactionType
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)
             binanceKit
                 .transactions(asset, filter, from?.transactionHash, limit)
-                .map { it.map { transactionRecord(it) } }
+                .map { it.map { transactionRecord(it) } }.await()
         } catch (e: UnsupportedFilterException) {
-            Single.just(listOf())
+            emptyList<TransactionRecord>()
         }
     }
 

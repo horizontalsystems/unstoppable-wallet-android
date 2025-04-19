@@ -1,10 +1,7 @@
 package cash.p.terminal.core.adapters.zcash
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ITransactionsAdapter
@@ -54,9 +51,9 @@ import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.logger.AppLogger
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -414,13 +411,13 @@ class ZcashAdapter(
         return balanceState is AdapterState.Synced || balanceState is AdapterState.Syncing
     }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         val fromParams = from?.let {
             val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
@@ -430,23 +427,20 @@ class ZcashAdapter(
             transactionType,
             address,
             limit
-        )
-            .map { transactions ->
-                transactions.map {
-                    getTransactionRecord(it)
-                }
-            }
+        ).map {
+            getTransactionRecord(it)
+        }
     }
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
+    ): Flow<List<TransactionRecord>> {
         return transactionsProvider.getNewTransactionsFlowable(transactionType, address)
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
-            }
+            }.asFlow()
     }
 
     override fun getTransactionUrl(transactionHash: String): String =
@@ -474,27 +468,27 @@ class ZcashAdapter(
         balance: Zatoshi = walletBalance.available + walletBalance.pending,
         tryCounter: Int = 4
     ): Unit = withContext(Dispatchers.IO) {
-            try {
-                if (balance == Zatoshi(0)) {
-                    _fee.value = MINERS_FEE
-                    return@withContext
-                }
-                val calculatedFee = synchronizer.proposeTransfer(
-                    account = zcashAccount!!,
-                    recipient = App.appConfigProvider.donateAddresses[BlockchainType.Zcash]
-                        .orEmpty(),
-                    amount = balance
-                ).totalFeeRequired()
-                _fee.value = calculatedFee.convertZatoshiToZec(DECIMAL_COUNT)
-            } catch (ex: Exception) {
-                if (ex is TransactionEncoderException.ProposalFromParametersException && tryCounter > 0) {
-                    // Not enough money to send with commission
-                    runCatching { // Prevent problems with negative Zatoshi
-                        calculateFee(balance - MINERS_FEE.convertZecToZatoshi(), tryCounter - 1)
-                    }
+        try {
+            if (balance == Zatoshi(0)) {
+                _fee.value = MINERS_FEE
+                return@withContext
+            }
+            val calculatedFee = synchronizer.proposeTransfer(
+                account = zcashAccount!!,
+                recipient = App.appConfigProvider.donateAddresses[BlockchainType.Zcash]
+                    .orEmpty(),
+                amount = balance
+            ).totalFeeRequired()
+            _fee.value = calculatedFee.convertZatoshiToZec(DECIMAL_COUNT)
+        } catch (ex: Exception) {
+            if (ex is TransactionEncoderException.ProposalFromParametersException && tryCounter > 0) {
+                // Not enough money to send with commission
+                runCatching { // Prevent problems with negative Zatoshi
+                    calculateFee(balance - MINERS_FEE.convertZecToZatoshi(), tryCounter - 1)
                 }
             }
         }
+    }
 
     override suspend fun validate(address: String): ZCashAddressType {
         if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed
@@ -615,7 +609,8 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.convertZatoshiToZec(DECIMAL_COUNT)?.let { TransactionValue.CoinValue(wallet.token, it) },
+                fee = transaction.feePaid?.convertZatoshiToZec(DECIMAL_COUNT)
+                    ?.let { TransactionValue.CoinValue(wallet.token, it) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
@@ -636,7 +631,8 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) }?.let { TransactionValue.CoinValue(wallet.token, it) },
+                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) }
+                    ?.let { TransactionValue.CoinValue(wallet.token, it) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,

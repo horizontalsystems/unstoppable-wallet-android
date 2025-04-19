@@ -257,7 +257,7 @@ class TransactionRecordRepository(
     private fun subscribeForUpdates() {
         updatesJob = coroutineScope.launch {
             activeAdapters
-                .map { it.updatedObservable.asFlow() }
+                .map { it.updatedFlow }
                 .merge()
                 .collect {
                     handleUpdates()
@@ -281,7 +281,7 @@ class TransactionRecordRepository(
         coroutineScope.launch {
             try {
                 val records = activeAdapters
-                    .map { async { it.get(itemsCount).await() } }
+                    .map { async { it.get(itemsCount) } }
                     .awaitAll()
                     .flatten()
 
@@ -289,7 +289,7 @@ class TransactionRecordRepository(
                 val extraRecords =
                     if (selectedFilterTransactionType == FilterTransactionType.Swap) {
                         activeSwapExtraAdapters
-                            .map { async { it.get(itemsCount).await() } }
+                            .map { async { it.get(itemsCount) } }
                             .awaitAll()
                             .map { transactionRecords ->
                                 extraRecordsCount += transactionRecords.size

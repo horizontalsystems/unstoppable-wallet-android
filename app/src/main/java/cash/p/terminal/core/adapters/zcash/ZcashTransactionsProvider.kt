@@ -1,12 +1,11 @@
 package cash.p.terminal.core.adapters.zcash
 
+import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionRecipient
-import cash.p.terminal.modules.transactions.FilterTransactionType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.firstOrNull
@@ -50,7 +49,10 @@ class ZcashTransactionsProvider(
         }
     }
 
-    fun getNewTransactionsFlowable(transactionType: FilterTransactionType, address: String?): Flowable<List<ZcashTransaction>> {
+    fun getNewTransactionsFlowable(
+        transactionType: FilterTransactionType,
+        address: String?
+    ): Flowable<List<ZcashTransaction>> {
         val filters = getFilters(transactionType, address)
 
         val observable = if (filters.isEmpty()) {
@@ -78,7 +80,7 @@ class ZcashTransactionsProvider(
             FilterTransactionType.Outgoing -> add { !it.isIncoming }
             FilterTransactionType.Swap,
             FilterTransactionType.Approve,
-            -> add { false }
+                -> add { false }
         }
 
         if (address != null) {
@@ -88,27 +90,24 @@ class ZcashTransactionsProvider(
         }
     }
 
-    @Synchronized
     fun getTransactions(
         from: Triple<ByteArray, Long, Int>?,
         transactionType: FilterTransactionType,
         address: String?,
         limit: Int,
-    ) = Single.create { emitter ->
-            try {
-                val filters = getFilters(transactionType, address)
-                val filtered = when {
-                    filters.isEmpty() -> transactions
-                    else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
-                }
-
-                val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
-                    filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
-                } ?: 0
-
-                emitter.onSuccess(filtered.subList(fromIndex, min(filtered.size, fromIndex + limit)))
-            } catch (error: Throwable) {
-                emitter.onError(error)
-            }
+    ) = try {
+        val filters = getFilters(transactionType, address)
+        val filtered = when {
+            filters.isEmpty() -> transactions
+            else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
         }
+
+        val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
+            filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
+        } ?: 0
+
+        filtered.subList(fromIndex, min(filtered.size, fromIndex + limit))
+    } catch (error: Throwable) {
+        emptyList<ZcashTransaction>()
+    }
 }

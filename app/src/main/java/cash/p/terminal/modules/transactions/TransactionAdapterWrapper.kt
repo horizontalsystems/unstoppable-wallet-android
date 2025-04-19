@@ -1,19 +1,20 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
+import cash.p.terminal.wallet.Clearable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
-import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionAdapterWrapper(
     private val transactionsAdapter: ITransactionsAdapter,
@@ -21,12 +22,18 @@ class TransactionAdapterWrapper(
     private var transactionType: FilterTransactionType,
     private var contact: Contact?
 ) : Clearable {
-    private val updatedSubject = PublishSubject.create<Unit>()
-    val updatedObservable: Observable<Unit> get() = updatedSubject
+    // Use MutableSharedFlow for updates
+    private val _updatedFlow = MutableSharedFlow<Unit>(replay = 0)
+    val updatedFlow: SharedFlow<Unit> get() = _updatedFlow.asSharedFlow()
 
-    private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
-    private var allLoaded = false
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    // Use StateFlow for transaction records
+    private val _transactionRecords = MutableStateFlow<List<TransactionRecord>>(emptyList())
+
+    // Use StateFlow for allLoaded flag - this is more consistent than MutableSharedFlow
+    private val _allLoaded = MutableStateFlow(false)
+
+    // Use SupervisorJob to prevent child failures from cancelling the entire scope
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private var updatesJob: Job? = null
 
     val address: String?
@@ -40,23 +47,29 @@ class TransactionAdapterWrapper(
     }
 
     fun reload() {
-        transactionRecords.clear()
-        allLoaded = false
-        subscribeForUpdates()
+        coroutineScope.launch {
+            _transactionRecords.update { emptyList() }
+            _allLoaded.value = false
+            subscribeForUpdates()
+        }
     }
 
     fun setTransactionType(transactionType: FilterTransactionType) {
         this.transactionType = transactionType
-        transactionRecords.clear()
-        allLoaded = false
-        subscribeForUpdates()
+        coroutineScope.launch {
+            _transactionRecords.update { emptyList() }
+            _allLoaded.value = false
+            subscribeForUpdates()
+        }
     }
 
     fun setContact(contact: Contact?) {
         this.contact = contact
-        transactionRecords.clear()
-        allLoaded = false
-        subscribeForUpdates()
+        coroutineScope.launch {
+            _transactionRecords.update { emptyList() }
+            _allLoaded.value = false
+            subscribeForUpdates()
+        }
     }
 
     private fun subscribeForUpdates() {
@@ -67,34 +80,39 @@ class TransactionAdapterWrapper(
         updatesJob = coroutineScope.launch {
             transactionsAdapter
                 .getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
-                .asFlow()
                 .collect {
-                    transactionRecords.clear()
-                    allLoaded = false
-                    updatedSubject.onNext(Unit)
+                    _transactionRecords.update { emptyList() }
+                    _allLoaded.value = false
+                    _updatedFlow.emit(Unit)
                 }
         }
     }
 
-    fun get(limit: Int): Single<List<TransactionRecord>> = when {
-        transactionRecords.size >= limit || allLoaded -> Single.just(transactionRecords.take(limit))
-        contact != null && address == null -> Single.just(listOf())
-        else -> {
-            val numberOfRecordsToRequest = limit - transactionRecords.size
-            transactionsAdapter
-                .getTransactionsAsync(
-                    from = transactionRecords.lastOrNull(),
-                    token = transactionWallet.token,
-                    limit = numberOfRecordsToRequest,
-                    transactionType = transactionType,
-                    address = address
-                )
-                .map {
-                    allLoaded = it.size < numberOfRecordsToRequest
-                    transactionRecords.addAll(it)
+    suspend fun get(limit: Int): List<TransactionRecord> = when {
+        _transactionRecords.value.size >= limit || _allLoaded.value -> _transactionRecords.value.take(
+            limit
+        )
 
-                    transactionRecords
-                }
+        contact != null && address == null -> emptyList()
+        else -> {
+            val currentRecords = _transactionRecords.value
+            val numberOfRecordsToRequest = limit - currentRecords.size
+            val receivedRecords = transactionsAdapter.getTransactionsAsync(
+                from = currentRecords.lastOrNull(),
+                token = transactionWallet.token,
+                limit = numberOfRecordsToRequest,
+                transactionType = transactionType,
+                address = address
+            )
+
+            // Use StateFlow's value setter for atomic update
+            _allLoaded.value = receivedRecords.size < numberOfRecordsToRequest
+
+            // Update the StateFlow with new records
+            val updatedRecords = currentRecords + receivedRecords
+            _transactionRecords.value = updatedRecords // More efficient for single atomic updates
+
+            updatedRecords
         }
     }
 

@@ -1,6 +1,8 @@
 package cash.p.terminal.entities.transactionrecords
 
 enum class TransactionRecordType {
+    UNKNOWN,
+
     TON,
 
     SOLANA_INCOMING,

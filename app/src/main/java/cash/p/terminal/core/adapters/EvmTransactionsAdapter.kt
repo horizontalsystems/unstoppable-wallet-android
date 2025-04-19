@@ -17,7 +17,9 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 
 class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
@@ -54,30 +56,30 @@ class EvmTransactionsAdapter(
             TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
         }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return evmKit.getFullTransactionsAsync(
             getFilters(token, transactionType, address?.lowercase()),
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
+        }.await()
     }
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
+    ): Flow<List<TransactionRecord>> {
         return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
+        }.asFlow()
     }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =

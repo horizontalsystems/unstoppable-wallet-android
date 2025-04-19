@@ -1,6 +1,5 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
@@ -14,16 +13,17 @@ import cash.p.terminal.modules.transactions.FilterTransactionType.Approve
 import cash.p.terminal.modules.transactions.FilterTransactionType.Incoming
 import cash.p.terminal.modules.transactions.FilterTransactionType.Outgoing
 import cash.p.terminal.modules.transactions.FilterTransactionType.Swap
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.Tag
 import io.horizontalsystems.tonkit.models.TagQuery
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
-import kotlinx.coroutines.rx2.rxSingle
 
 class TonTransactionsAdapter(
     tonKitWrapper: TonKitWrapper,
@@ -42,27 +42,29 @@ class TonTransactionsAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = Flowable.empty()
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> = try {
+    ): List<TransactionRecord> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
         val beforeLt = (from as TonTransactionRecord?)?.lt
 
-        rxSingle {
-            tonKit.events(tagQuery, beforeLt, limit = limit)
-                .map {
-                    tonTransactionConverter.createTransactionRecord(it)
-                }
-        }
+        tonKit.events(tagQuery, beforeLt, limit = limit)
+            .map {
+                tonTransactionConverter.createTransactionRecord(it)
+            }
     } catch (e: NotSupportedException) {
-        Single.just(listOf())
+        emptyList<TransactionRecord>()
     }
 
-    private fun getTagQuery(token: Token?, transactionType: FilterTransactionType, address: String?): TagQuery {
+    private fun getTagQuery(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?
+    ): TagQuery {
         var platform: Tag.Platform? = null
         var jettonAddress: Address? = null
 
@@ -95,7 +97,7 @@ class TonTransactionsAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = try {
+    ): Flow<List<TransactionRecord>> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
 
         tonKit
@@ -105,10 +107,9 @@ class TonTransactionsAdapter(
                     tonTransactionConverter.createTransactionRecord(it)
                 }
             }
-            .asFlowable()
 
     } catch (e: NotSupportedException) {
-        Flowable.empty()
+        emptyFlow<List<TransactionRecord>>()
     }
 
     override fun getTransactionUrl(transactionHash: String): String {

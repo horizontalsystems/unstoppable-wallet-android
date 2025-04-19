@@ -123,13 +123,13 @@ interface ITransactionsAdapter {
     val lastBlockUpdatedFlowable: Flowable<Unit>
     val additionalTokenQueries: List<TokenQuery> get() = listOf()
 
-    fun getTransactionsAsync(
+    suspend fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>>
+    ): List<TransactionRecord>
 
     fun getRawTransaction(transactionHash: String): String? = null
 
@@ -137,7 +137,7 @@ interface ITransactionsAdapter {
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<TransactionRecord>>
+    ): Flow<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
 }

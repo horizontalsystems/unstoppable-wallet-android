@@ -13,6 +13,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.compose' version('2.0.21')
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
@@ -221,6 +222,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // use -ktx for Kotlin
