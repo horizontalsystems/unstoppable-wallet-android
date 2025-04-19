@@ -41,23 +41,22 @@ class LockoutManagerTest {
 
     @Test
     fun currentStateUnlocked() {
-        val hasFailedAttempts = 0
         whenever(localStorage.failedAttempts).thenReturn(null)
 
-        val state = LockoutState.Unlocked(hasFailedAttempts)
+        val state = LockoutState.Unlocked(null)
 
-        Assert.assertEquals(lockoutManager.currentState, state)
+        Assert.assertEquals(state, lockoutManager.currentState)
     }
 
     @Test
     fun currentStateUnlocked_WithTwoAttempts() {
-        val hasFailedAttempts = 1
+        val hasFailedAttempts = 3
         val failedAttempts = 2
         whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
 
         val state = LockoutState.Unlocked(hasFailedAttempts)
 
-        Assert.assertEquals(lockoutManager.currentState, state)
+        Assert.assertEquals(state, lockoutManager.currentState)
     }
 
     @Test
