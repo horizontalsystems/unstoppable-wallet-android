@@ -37,7 +37,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.navigation.slideFromRight
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.ui_compose.CoinFragmentInput

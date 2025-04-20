@@ -46,7 +46,7 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePopup
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 
 import cash.p.terminal.entities.EvmSyncSource
 import cash.p.terminal.modules.btcblockchainsettings.BlockchainSettingCell

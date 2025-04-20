@@ -32,7 +32,7 @@ import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.caption_jacob
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import kotlinx.parcelize.Parcelize
 
 class ReleaseNotesFragment : BaseComposeFragment() {

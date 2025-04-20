@@ -21,7 +21,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromRight
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel

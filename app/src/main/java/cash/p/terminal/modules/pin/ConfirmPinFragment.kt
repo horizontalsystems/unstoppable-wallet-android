@@ -8,7 +8,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.pin.ui.PinConfirm
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import kotlinx.parcelize.Parcelize
 
 class ConfirmPinFragment : BaseComposeFragment(screenshotEnabled = false) {

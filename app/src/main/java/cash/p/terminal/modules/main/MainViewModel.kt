@@ -3,6 +3,7 @@ package cash.p.terminal.modules.main
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
@@ -388,6 +389,18 @@ class MainViewModel(
     }
 
     fun handleDeepLink(uri: Uri) {
+        val deeplinkString = uri.toString()
+        if (deeplinkString.startsWith("pcash.money:") || deeplinkString.startsWith("tc:")) {
+            val returnParam = uri.getQueryParameter("ret")
+            // when app is opened from camera app, it returns "none" as ret param
+            // so we don't need closing app in this case
+            val closeApp = returnParam != "none"
+            viewModelScope.launch {
+                App.tonConnectManager.handle(uri.toString(), closeApp)
+            }
+            return
+        }
+
         val (tab, deeplinkPageData) = getNavigationDataForDeeplink(uri)
         deeplinkPage = deeplinkPageData
         currentMainTab = tab

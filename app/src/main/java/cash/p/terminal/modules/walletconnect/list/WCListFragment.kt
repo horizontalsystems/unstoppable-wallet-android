@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.modules.walletconnect.list.ui.WCSessionsScreen
 import kotlinx.parcelize.Parcelize
 

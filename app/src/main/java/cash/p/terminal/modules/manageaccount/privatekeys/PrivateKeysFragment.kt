@@ -18,7 +18,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.authorizedAction
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.navigation.slideFromRight
 
 import cash.p.terminal.wallet.Account

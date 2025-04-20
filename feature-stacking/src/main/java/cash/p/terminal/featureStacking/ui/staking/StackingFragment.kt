@@ -8,7 +8,7 @@ import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.CoinFragmentInput
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.math.BigDecimal
 

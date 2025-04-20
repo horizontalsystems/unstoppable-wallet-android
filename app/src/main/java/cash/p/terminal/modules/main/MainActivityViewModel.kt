@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.main
 
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,15 +8,20 @@ import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.core.App
+import cash.p.terminal.core.App.Companion.tonConnectManager
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.managers.DAppRequestEntityWrapper
+import cash.p.terminal.core.managers.TonConnectManager
 import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.modules.lockscreen.LockScreenActivity
 import cash.p.terminal.modules.walletconnect.WCDelegate
+import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
+import io.horizontalsystems.tonkit.models.SignTransaction
 import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.launch
 
@@ -26,12 +32,14 @@ class MainActivityViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
     private val localStorage: ILocalStorage,
-    private val tonConnectKit: TonConnectKit
+    private val tonConnectManager: TonConnectManager
 ) : ViewModel() {
 
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
-    val tcSendRequest = MutableLiveData<SendRequestEntity?>()
+    val tcSendRequest = MutableLiveData<SignTransaction?>()
+    val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
+    val intentLiveData = MutableLiveData<Intent?>()
 
     init {
         viewModelScope.launch {
@@ -45,8 +53,13 @@ class MainActivityViewModel(
             }
         }
         viewModelScope.launch {
-            tonConnectKit.sendRequestFlow.collect {
+            tonConnectManager.sendRequestFlow.collect {
                 tcSendRequest.postValue(it)
+            }
+        }
+        viewModelScope.launch {
+            tonConnectManager.dappRequestFlow.collect {
+                tcDappRequest.postValue(it)
             }
         }
 
@@ -59,6 +72,18 @@ class MainActivityViewModel(
                 }
             }
         }
+    }
+
+    fun setIntent(intent: Intent) {
+        intentLiveData.postValue(intent)
+    }
+
+    fun intentHandled() {
+        intentLiveData.postValue(null)
+    }
+
+    fun onTcDappRequestHandled() {
+        tcDappRequest.postValue(null)
     }
 
     fun onWcEventHandled() {
@@ -103,7 +128,7 @@ class MainActivityViewModel(
                 App.systemInfoManager,
                 App.keyStoreManager,
                 App.localStorage,
-                App.tonConnectManager.kit,
+                App.tonConnectManager,
             ) as T
         }
     }

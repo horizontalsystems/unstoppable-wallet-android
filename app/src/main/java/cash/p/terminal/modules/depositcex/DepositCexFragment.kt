@@ -12,7 +12,7 @@ import androidx.navigation.navigation
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.depositcex.ReceiveRoutes.ASSET_SELECT_SCREEN
 import cash.p.terminal.modules.depositcex.ReceiveRoutes.DEPOSIT_SCREEN

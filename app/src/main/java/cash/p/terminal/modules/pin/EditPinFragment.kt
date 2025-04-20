@@ -7,7 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.pin.SetPinFragment.Input
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.modules.pin.ui.PinSet
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 
 class EditPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 

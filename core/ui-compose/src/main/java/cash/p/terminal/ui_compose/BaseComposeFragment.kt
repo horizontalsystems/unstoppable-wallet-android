@@ -1,6 +1,7 @@
 package cash.p.terminal.ui_compose
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,20 @@ abstract class BaseComposeFragment(
                 }
             }
         }
+    }
+
+    @Composable
+    protected inline fun <reified T : Parcelable> withInput(
+        navController: NavController,
+        content: @Composable (T) -> Unit
+    ) {
+        val input = try {
+            navController.requireInput<T>()
+        } catch (e: NullPointerException) {
+            navController.popBackStack()
+            return
+        }
+        content(input)
     }
 
     @Composable

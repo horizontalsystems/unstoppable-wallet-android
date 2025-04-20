@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromRight
 
 

@@ -104,13 +104,13 @@ import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
-import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLog
+import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -219,7 +219,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.w("RxJava ErrorHandler", e)
             e?.let {
-                if(localStorage.shareCrashDataEnabled) {
+                if (localStorage.shareCrashDataEnabled) {
                     FirebaseCrashlytics.getInstance().recordException(e)
                 }
             }
@@ -368,12 +368,18 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         spamManager = SpamManager(localStorage)
 
-        tonConnectManager = TonConnectManager(this, adapterFactory)
+        tonConnectManager = TonConnectManager(
+            context = this,
+            adapterFactory = adapterFactory,
+            appName = "P.cash Wallet",
+            appVersion = appConfigProvider.appVersion
+        )
         tonConnectManager.start()
 
         startTasks()
 
-        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = localStorage.shareCrashDataEnabled
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled =
+            localStorage.shareCrashDataEnabled
     }
 
     override fun newImageLoader(): ImageLoader {
@@ -505,10 +511,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     /*** Check if we don't have new zcash coins in the market kit */
     private fun needForceUpdateCoins() = marketKit.token(
-            TokenQuery(
-                BlockchainType.Zcash, TokenType.AddressSpecTyped(
-                    AddressSpecType.Shielded
-                )
+        TokenQuery(
+            BlockchainType.Zcash, TokenType.AddressSpecTyped(
+                AddressSpecType.Shielded
             )
-        ) == null
+        )
+    ) == null
 }

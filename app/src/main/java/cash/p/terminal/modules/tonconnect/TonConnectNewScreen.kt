@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import cash.p.terminal.R
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.walletconnect.session.ui.DropDownCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
@@ -47,7 +48,11 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
-fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequestEntity) {
+fun TonConnectNewScreen(
+    navController: NavController,
+    requestEntity: DAppRequestEntity,
+    onResult: (Boolean) -> Unit,
+) {
     val viewModel = viewModel<TonConnectNewViewModel>(initializer = {
         TonConnectNewViewModel(requestEntity)
     })
@@ -88,14 +93,22 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
-                        onClick = viewModel::connect,
+                        onClick = {
+                            navController.authorizedAction {
+                                viewModel.connect()
+                                onResult.invoke(true)
+                            }
+                        },
                         enabled = uiState.connectEnabled
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Cancel),
-                        onClick = viewModel::reject
+                        onClick = {
+                            viewModel.reject()
+                            onResult.invoke(false)
+                        }
                     )
                 }
             }

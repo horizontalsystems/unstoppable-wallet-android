@@ -20,7 +20,8 @@ import cash.p.terminal.modules.contacts.screen.ContactsScreen
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
+import cash.p.terminal.ui_compose.parcelable
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult

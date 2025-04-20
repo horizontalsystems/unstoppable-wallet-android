@@ -26,7 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import cash.p.terminal.modules.coin.overview.ui.Loading

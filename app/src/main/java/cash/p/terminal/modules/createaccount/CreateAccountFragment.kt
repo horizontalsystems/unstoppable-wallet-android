@@ -27,7 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.strings.helpers.TranslatableString

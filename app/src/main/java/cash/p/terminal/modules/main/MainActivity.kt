@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -9,21 +10,29 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.modules.intro.IntroActivity
 import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.lockscreen.LockScreenActivity
+import cash.p.terminal.modules.tonconnect.TonConnectNewFragment
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.core.hideKeyboard
 
 class MainActivity : BaseActivity() {
 
-    private val viewModel by viewModels<MainActivityViewModel> {
+    val viewModel by viewModels<MainActivityViewModel> {
         MainActivityViewModel.Factory()
     }
 
     override fun onResume() {
         super.onResume()
         validate()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        viewModel.setIntent(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +80,32 @@ class MainActivity : BaseActivity() {
                 navController.slideFromBottom(R.id.tcSendRequestFragment)
             }
         }
+
+        viewModel.tcDappRequest.observe(this) { request ->
+            if (request != null) {
+                navController.slideFromBottomForResult<TonConnectNewFragment.Result>(
+                    R.id.tcNewFragment,
+                    request.dAppRequest
+                ) { result ->
+                    if (request.closeAppOnResult) {
+                        if (result.approved) {
+                            //Need delay to get connected before closing activity
+                            closeAfterDelay()
+                        } else {
+                            finish()
+                        }
+                    }
+                }
+                viewModel.onTcDappRequestHandled()
+            }
+        }
+    }
+
+    private fun closeAfterDelay() {
+        val handler = android.os.Handler()
+        handler.postDelayed({
+            finish()
+        }, 1000)
     }
 
     private fun validate() = try {

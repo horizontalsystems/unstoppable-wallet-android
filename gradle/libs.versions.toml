@@ -34,7 +34,7 @@ room = "2.6.1"
 javax-inject = "1"
 appcompat = "1.7.0"
 
-horizontalsystems-ton = "763a5c3"
+horizontalsystems-ton = "58321df"
 piratecash-bitcoin = "e115cd2"
 horizontalsystems-ethereum = "aae7f27"
 horizontalsystems-blockchain-fee = "1d3bd49"

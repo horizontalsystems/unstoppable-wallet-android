@@ -17,10 +17,11 @@ import androidx.compose.material.BadgedBox
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +37,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
-import cash.p.terminal.core.findActivity
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.slideFromBottom
-
-
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -77,6 +75,7 @@ class MainFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
+        val intent = (requireActivity() as MainActivity).viewModel.intentLiveData.observeAsState()
 
         backStackEntry?.let {
             val viewModel = ViewModelProvider(
@@ -87,6 +86,10 @@ class MainFragment : BaseComposeFragment() {
             MainScreenWithRootedDeviceCheck(
                 transactionsViewModel = viewModel,
                 navController = navController,
+                intent = intent.value,
+                intentHandled = {
+                    (requireActivity() as MainActivity).viewModel.intentHandled()
+                }
             )
         } ?: run {
             // Back stack entry doesn't exist, restart activity
@@ -118,12 +121,19 @@ class MainFragment : BaseComposeFragment() {
 private fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
     navController: NavController,
+    intent: Intent?,
+    intentHandled: () -> Unit,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory())
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(transactionsViewModel, navController)
+        MainScreen(
+            transactionsViewModel = transactionsViewModel,
+            fragmentNavController = navController,
+            intentLiveData = intent,
+            intentHandled = intentHandled
+        )
     }
 }
 
@@ -131,24 +141,23 @@ private fun MainScreenWithRootedDeviceCheck(
 private fun MainScreen(
     transactionsViewModel: TransactionsViewModel,
     fragmentNavController: NavController,
+    intentLiveData: Intent?,
+    intentHandled: () -> Unit,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     val uiState = viewModel.uiState
-    val context = LocalContext.current
     val selectedPage = uiState.selectedTabIndex
     val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-
-    LaunchedEffect(Unit) {
-        context.findActivity()?.let { activity ->
-            activity.intent?.data?.let { uri ->
-                viewModel.handleDeepLink(uri)
-                activity.intent?.data = null //clear intent data
-            }
+    LaunchedEffect(intentLiveData) {
+        intentLiveData?.data?.let {
+            intentHandled()
+            viewModel.handleDeepLink(it)
         }
     }
+
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
@@ -233,7 +242,11 @@ private fun MainScreen(
                 ) { page ->
                     when (uiState.mainNavItems[page].mainNavItem) {
                         MainNavigation.Market -> MarketScreen(fragmentNavController, paddingValues)
-                        MainNavigation.Balance -> BalanceScreen(fragmentNavController, paddingValues)
+                        MainNavigation.Balance -> BalanceScreen(
+                            fragmentNavController,
+                            paddingValues
+                        )
+
                         MainNavigation.Transactions -> TransactionsScreen(
                             navController = fragmentNavController,
                             paddingValues = paddingValues,
@@ -250,7 +263,10 @@ private fun MainScreen(
                             }
                         )
 
-                        MainNavigation.Settings -> SettingsScreen(fragmentNavController, paddingValues)
+                        MainNavigation.Settings -> SettingsScreen(
+                            fragmentNavController,
+                            paddingValues
+                        )
                     }
                 }
             }

@@ -14,7 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import io.horizontalsystems.core.getInputX
+import cash.p.terminal.ui_compose.getInputX
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.ui_compose.components.VSpacer

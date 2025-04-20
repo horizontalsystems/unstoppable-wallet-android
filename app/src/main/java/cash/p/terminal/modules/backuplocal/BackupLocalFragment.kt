@@ -13,7 +13,7 @@ import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsScreen
 import cash.p.terminal.modules.backuplocal.password.BackupType
 import cash.p.terminal.modules.backuplocal.password.LocalBackupPasswordScreen
 import cash.p.terminal.modules.backuplocal.terms.LocalBackupTermsScreen
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 
 class BackupLocalFragment : BaseComposeFragment() {
 

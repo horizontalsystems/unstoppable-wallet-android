@@ -17,7 +17,7 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.isPirateCash
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TokenBalanceFragment : BaseComposeFragment() {

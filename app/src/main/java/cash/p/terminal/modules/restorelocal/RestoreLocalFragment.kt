@@ -42,7 +42,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 
 import cash.p.terminal.modules.backuplocal.fullbackup.OtherBackupItems
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet

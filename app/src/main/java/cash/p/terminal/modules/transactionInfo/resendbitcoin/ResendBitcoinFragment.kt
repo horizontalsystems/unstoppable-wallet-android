@@ -25,7 +25,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
-import io.horizontalsystems.core.getInputX
+import cash.p.terminal.ui_compose.getInputX
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
 import cash.p.terminal.modules.fee.HSFeeRaw

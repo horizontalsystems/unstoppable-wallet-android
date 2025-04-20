@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader

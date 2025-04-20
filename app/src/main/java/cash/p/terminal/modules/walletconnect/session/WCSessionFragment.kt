@@ -33,7 +33,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.getInputX
+import cash.p.terminal.ui_compose.getInputX
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.session.ui.StatusCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell

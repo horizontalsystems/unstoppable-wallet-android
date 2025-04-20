@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
 

@@ -39,7 +39,7 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.requireInput
+import cash.p.terminal.ui_compose.requireInput
 import kotlinx.coroutines.launch
 
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {

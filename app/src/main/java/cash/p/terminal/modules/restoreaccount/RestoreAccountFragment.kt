@@ -10,7 +10,7 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
-import io.horizontalsystems.core.getInput
+import cash.p.terminal.ui_compose.getInput
 
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen

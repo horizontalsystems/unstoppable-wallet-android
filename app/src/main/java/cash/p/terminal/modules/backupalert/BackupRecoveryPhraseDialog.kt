@@ -35,8 +35,8 @@ import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.requireInput
 
 class BackupRecoveryPhraseDialog : BaseComposableBottomSheetFragment() {
 
