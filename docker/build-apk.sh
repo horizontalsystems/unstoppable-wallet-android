@@ -20,8 +20,8 @@ else
 fi
 
 ####################################
-DOCKER_IMAGE="horizontalsystems/android-release-build"
-GIT_REPO="https://github.com/horizontalsystems/unstoppable-wallet-android"
+DOCKER_IMAGE="piratecash/android-release-build"
+GIT_REPO="https://github.com/piratecash/pcash-wallet-android"
 WORK_DIR="$PWD/app"
 TAG=$1
 
