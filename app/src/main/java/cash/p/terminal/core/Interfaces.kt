@@ -4,9 +4,9 @@ import com.google.gson.JsonObject
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.Bep2TokenInfoService
-import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.providers.FeeRates
 import cash.p.terminal.core.utils.AddressUriResult
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.RestoreSettingRecord
 import cash.p.terminal.entities.TransactionDataSortMode
@@ -180,8 +180,8 @@ interface ISendBitcoinAdapter {
     ): Single<String>
 }
 
-interface ISendEthereumAdapter {
-    val evmKitWrapper: EvmKitWrapper
+internal interface ISendEthereumAdapter {
+    val evmTransactionRepository: EvmTransactionRepository
     val balanceData: BalanceData
 
     fun getTransactionData(amount: BigDecimal, address: Address): TransactionData

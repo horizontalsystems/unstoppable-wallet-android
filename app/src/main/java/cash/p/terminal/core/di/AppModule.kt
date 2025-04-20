@@ -1,6 +1,7 @@
 package cash.p.terminal.core.di
 
 import cash.p.terminal.di.managerModule
+import cash.p.terminal.di.repositoryModule
 import cash.p.terminal.di.storageModule
 import cash.p.terminal.di.swapProvidersModule
 import cash.p.terminal.di.viewModelModule
@@ -13,6 +14,7 @@ val appModule = module {
     includes(
         storageModule,
         managerModule,
+        repositoryModule,
         viewModelModule,
         walletFeatureModule,
         featureStackingModule,

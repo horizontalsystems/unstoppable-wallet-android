@@ -5,23 +5,22 @@ import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.ISendEthereumAdapter
-import cash.p.terminal.core.managers.EvmKitWrapper
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import java.math.BigDecimal
 import java.math.BigInteger
 
-abstract class BaseEvmAdapter(
-    final override val evmKitWrapper: EvmKitWrapper,
+internal abstract class BaseEvmAdapter(
+    final override val evmTransactionRepository: EvmTransactionRepository,
     val decimal: Int,
     val coinManager: ICoinManager
 ) : IAdapter, ISendEthereumAdapter, IBalanceAdapter, IReceiveAdapter {
 
-    val evmKit = evmKitWrapper.evmKit
 
     override val debugInfo: String
-        get() = evmKit.debugInfo()
+        get() = evmTransactionRepository.debugInfo()
 
     val statusInfo: Map<String, Any>
-        get() = evmKit.statusInfo()
+        get() = evmTransactionRepository.statusInfo()
 
     // ISendEthereumAdapter
 
@@ -36,10 +35,10 @@ abstract class BaseEvmAdapter(
     // IReceiveAdapter
 
     override val receiveAddress: String
-        get() = evmKit.receiveAddress.eip55
+        get() = evmTransactionRepository.receiveAddress.eip55
 
     override val isMainNet: Boolean
-        get() = evmKit.chain.isMainNet
+        get() = evmTransactionRepository.chain.isMainNet
 
     protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
         balance?.toBigDecimal()?.let {

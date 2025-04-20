@@ -41,6 +41,7 @@ import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import cash.p.terminal.network.pirate.domain.repository.MasterNodesRepository
 import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.Wallet
@@ -50,6 +51,7 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.tonkit.Address
+import org.koin.java.KoinJavaComponent.inject
 
 class AdapterFactory(
     private val context: Context,
@@ -70,24 +72,34 @@ class AdapterFactory(
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(
-            wallet.account,
-            blockchainType
+
+        val evmTransactionRepository: EvmTransactionRepository by inject(
+            EvmTransactionRepository::class.java
+        )
+        evmTransactionRepository.setup(
+            account = wallet.account,
+            blockchainType = blockchainType
         )
 
-        return EvmAdapter(evmKitWrapper, coinManager)
+        return EvmAdapter(evmTransactionRepository, coinManager)
     }
 
     private fun getEip20Adapter(wallet: Wallet, address: String): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType)
-            .getEvmKitWrapper(wallet.account, blockchainType)
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
         val stackingManager = getKoinInstance<StackingManager>()
 
+        val evmTransactionRepository: EvmTransactionRepository by inject(
+            EvmTransactionRepository::class.java
+        )
+        evmTransactionRepository.setup(
+            account = wallet.account,
+            blockchainType = blockchainType
+        )
+
         return Eip20Adapter(
             context = context,
-            evmKitWrapper = evmKitWrapper,
+            evmTransactionRepository = evmTransactionRepository,
             contractAddress = address,
             baseToken = baseToken,
             coinManager = coinManager,
@@ -186,6 +198,7 @@ class AdapterFactory(
                             backgroundManager = backgroundManager
                         )
                     }
+
                     else -> null
                 }
             }
@@ -306,18 +319,23 @@ class AdapterFactory(
         source: TransactionSource,
         blockchainType: BlockchainType
     ): ITransactionsAdapter? {
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType)
-            .getEvmKitWrapper(source.account, blockchainType)
+        val evmTransactionRepository: EvmTransactionRepository by inject(
+            EvmTransactionRepository::class.java
+        )
+        evmTransactionRepository.setup(
+            account = source.account,
+            blockchainType = blockchainType
+        )
         val baseCoin = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
         val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
 
         return EvmTransactionsAdapter(
-            evmKitWrapper,
-            baseCoin,
-            coinManager,
-            source,
-            syncSource.transactionSource,
-            evmLabelManager
+            evmTransactionRepository = evmTransactionRepository,
+            baseToken = baseCoin,
+            coinManager = coinManager,
+            source = source,
+            evmTransactionSource = syncSource.transactionSource,
+            evmLabelManager = evmLabelManager
         )
     }
 

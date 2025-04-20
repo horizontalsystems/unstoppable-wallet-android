@@ -19,6 +19,7 @@ import cash.p.terminal.modules.sendevmtransaction.ValueType
 import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.request.WCChainData
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.core.entities.BlockchainType
@@ -26,13 +27,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class WCSendEthereumTransactionRequestViewModel(
+internal class WCSendEthereumTransactionRequestViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     private val dAppName: String,
     transaction: WalletConnectTransaction,
     blockchainType: BlockchainType
 ) : ViewModelUiState<WCSendEthereumTransactionRequestUiState>() {
-    val sendTransactionService: SendTransactionServiceEvm
+    val sendTransactionService: SendTransactionServiceEvm = SendTransactionServiceEvm(
+        token = App.evmBlockchainManager.getBaseToken(blockchainType)!!,
+        initialGasPrice = transaction.getGasPriceObj(),
+        initialNonce = transaction.nonce
+    )
 
     private val transactionData = TransactionData(
         transaction.to,
@@ -42,11 +47,6 @@ class WCSendEthereumTransactionRequestViewModel(
 
     private var sendTransactionState: SendTransactionServiceState
     init {
-        sendTransactionService = SendTransactionServiceEvm(
-            token = App.evmBlockchainManager.getBaseToken(blockchainType)!!,
-            initialGasPrice = transaction.getGasPriceObj(),
-            initialNonce = transaction.nonce
-        )
         sendTransactionState = sendTransactionService.stateFlow.value
 
         viewModelScope.launch {
@@ -78,7 +78,7 @@ class WCSendEthereumTransactionRequestViewModel(
             buildList {
                 add(
                     ViewItem.Value(
-                        cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
+                        Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
                         dAppName,
                         ValueType.Regular
                     )

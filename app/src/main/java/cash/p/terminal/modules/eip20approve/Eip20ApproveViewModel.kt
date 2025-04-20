@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class Eip20ApproveViewModel(
+internal class Eip20ApproveViewModel(
     private val token: Token,
     private val requiredAllowance: BigDecimal,
     private val spenderAddress: String,

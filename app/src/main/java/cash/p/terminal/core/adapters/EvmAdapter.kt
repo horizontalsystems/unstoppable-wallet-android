@@ -4,18 +4,17 @@ import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.core.managers.EvmKitWrapper
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
-class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
-    BaseEvmAdapter(evmKitWrapper, decimal, coinManager) {
+internal class EvmAdapter(evmTransactionRepository: EvmTransactionRepository, coinManager: ICoinManager) :
+    BaseEvmAdapter(evmTransactionRepository, decimal, coinManager) {
 
     // IAdapter
 
@@ -34,16 +33,16 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
     // IBalanceAdapter
 
     override val balanceState: AdapterState
-        get() = convertToAdapterState(evmKit.syncState)
+        get() = convertToAdapterState(evmTransactionRepository.syncState)
 
     override val balanceStateUpdatedFlow: Flow<Unit>
-        get() = evmKit.syncStateFlowable.map {}.asFlow()
+        get() = evmTransactionRepository.syncStateFlowable.map {}.asFlow()
 
     override val balanceData: BalanceData
-        get() = BalanceData(balanceInBigDecimal(evmKit.accountState?.balance, decimal))
+        get() = BalanceData(balanceInBigDecimal(evmTransactionRepository.accountState?.balance, decimal))
 
     override val balanceUpdatedFlow: Flow<Unit>
-        get() = evmKit.accountStateFlowable.map { }.asFlow()
+        get() = evmTransactionRepository.accountStateFlowable.map { }.asFlow()
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
         when (syncState) {

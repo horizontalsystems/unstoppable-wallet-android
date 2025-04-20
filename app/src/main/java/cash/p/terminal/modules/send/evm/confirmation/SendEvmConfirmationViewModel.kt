@@ -20,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SendEvmConfirmationViewModel(
+internal class SendEvmConfirmationViewModel(
     sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     val sendTransactionService: SendTransactionServiceEvm,
     transactionData: TransactionData,

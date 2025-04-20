@@ -17,7 +17,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import java.math.BigDecimal
 
-class SendEvmViewModel(
+internal class SendEvmViewModel(
     val wallet: Wallet,
     sendToken: Token,
     val adapter: ISendEthereumAdapter,

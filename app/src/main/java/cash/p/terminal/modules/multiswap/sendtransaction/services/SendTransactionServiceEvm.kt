@@ -71,7 +71,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-class SendTransactionServiceEvm(
+internal class SendTransactionServiceEvm(
     token: Token,
     initialGasPrice: GasPrice? = null,
     initialNonce: Long? = null

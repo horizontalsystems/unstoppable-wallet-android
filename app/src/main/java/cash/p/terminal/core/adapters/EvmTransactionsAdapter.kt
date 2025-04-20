@@ -1,28 +1,27 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ITransactionsAdapter
-import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.EvmLabelManager
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.Token
-import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.ethereumkit.models.TransactionTag
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.flow.map
 
-class EvmTransactionsAdapter(
-    val evmKitWrapper: EvmKitWrapper,
+internal class EvmTransactionsAdapter(
+    private val evmTransactionRepository: EvmTransactionRepository,
     baseToken: Token,
     coinManager: ICoinManager,
     source: TransactionSource,
@@ -30,8 +29,14 @@ class EvmTransactionsAdapter(
     evmLabelManager: EvmLabelManager
 ) : ITransactionsAdapter {
 
-    private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, App.spamManager, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(
+        coinManager,
+        evmTransactionRepository,
+        source,
+        App.spamManager,
+        baseToken,
+        evmLabelManager
+    )
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
@@ -40,20 +45,20 @@ class EvmTransactionsAdapter(
         evmTransactionSource.transactionUrl(transactionHash)
 
     override val lastBlockInfo: LastBlockInfo?
-        get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
+        get() = evmTransactionRepository.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.lastBlockHeightFlowable.map { }
+        get() = evmTransactionRepository.lastBlockHeightFlowable.map { }
 
     override val transactionsState: AdapterState
-        get() = convertToAdapterState(evmKit.transactionsSyncState)
+        get() = convertToAdapterState(evmTransactionRepository.transactionsSyncState)
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.transactionsSyncStateFlowable.map {}
+        get() = evmTransactionRepository.transactionsSyncStateFlowable.map {}
 
     override val additionalTokenQueries: List<TokenQuery>
-        get() = evmKit.getTagTokenContractAddresses().map { address ->
-            TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
+        get() = evmTransactionRepository.getTagTokenContractAddresses().map { address ->
+            TokenQuery(evmTransactionRepository.getBlockchainType(), TokenType.Eip20(address))
         }
 
     override suspend fun getTransactions(
@@ -63,13 +68,13 @@ class EvmTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): List<TransactionRecord> {
-        return evmKit.getFullTransactionsAsync(
+        return evmTransactionRepository.getFullTransactionsAsync(
             getFilters(token, transactionType, address?.lowercase()),
             from?.transactionHash?.hexStringToByteArray(),
             limit
-        ).map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }.await()
+        ).map { tx ->
+            transactionConverter.transactionRecord(tx)
+        }
     }
 
     override fun getTransactionRecordsFlow(
@@ -77,9 +82,15 @@ class EvmTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): Flow<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
+        return evmTransactionRepository.getFullTransactionsFlowable(
+            getFilters(
+                token,
+                transactionType,
+                address
+            )
+        ).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }.asFlow()
+        }
     }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
@@ -110,10 +121,12 @@ class EvmTransactionsAdapter(
                 token != null -> TransactionTag.tokenIncoming(coinTagName(token))
                 else -> TransactionTag.INCOMING
             }
+
             FilterTransactionType.Outgoing -> when {
                 token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
                 else -> TransactionTag.OUTGOING
             }
+
             FilterTransactionType.Swap -> TransactionTag.SWAP
             FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
         }

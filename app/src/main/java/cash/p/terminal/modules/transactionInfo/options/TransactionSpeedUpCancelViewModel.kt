@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 
-class TransactionSpeedUpCancelViewModel(
+internal class TransactionSpeedUpCancelViewModel(
     val sendTransactionService: SendTransactionServiceEvm,
     private val transactionHash: String,
     private val evmKitWrapper: EvmKitWrapper,

@@ -3,9 +3,9 @@ package cash.p.terminal.core.adapters
 import android.content.Context
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.StackingManager
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.Token
@@ -26,29 +26,28 @@ import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class Eip20Adapter(
+internal class Eip20Adapter(
     context: Context,
-    evmKitWrapper: EvmKitWrapper,
+    evmTransactionRepository: EvmTransactionRepository,
     contractAddress: String,
     baseToken: Token,
     coinManager: ICoinManager,
     private val wallet: Wallet,
     evmLabelManager: EvmLabelManager,
     private val stackingManager: StackingManager
-) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
+) : BaseEvmAdapter(evmTransactionRepository, wallet.decimal, coinManager) {
 
     private val transactionConverter = EvmTransactionConverter(
-        coinManager,
-        evmKitWrapper,
-        wallet.transactionSource,
-        App.spamManager,
-        baseToken,
-        evmLabelManager
+        coinManager = coinManager,
+        evmTransactionRepository = evmTransactionRepository,
+        source = wallet.transactionSource,
+        spamManager = App.spamManager,
+        baseToken = baseToken,
+        evmLabelManager = evmLabelManager
     )
 
     private val contractAddress: Address = Address(contractAddress)
-    private val eip20Kit: Erc20Kit =
-        Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
+    private val eip20Kit: Erc20Kit = evmTransactionRepository.buildErc20Kit(context, this.contractAddress)
 
     val pendingTransactions: List<TransactionRecord>
         get() = eip20Kit.getPendingTransactions().map { transactionConverter.transactionRecord(it) }

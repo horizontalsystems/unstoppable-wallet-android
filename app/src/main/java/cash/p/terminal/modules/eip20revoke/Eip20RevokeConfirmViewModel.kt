@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.util.UUID
 
-class Eip20RevokeConfirmViewModel(
+internal class Eip20RevokeConfirmViewModel(
     private val token: Token,
     private val allowance: BigDecimal,
     private val spenderAddress: String,

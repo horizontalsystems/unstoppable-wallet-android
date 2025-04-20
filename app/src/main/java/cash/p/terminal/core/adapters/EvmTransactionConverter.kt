@@ -1,10 +1,10 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.tokenIconPlaceholder
+import cash.p.terminal.data.repository.EvmTransactionRepository
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
@@ -18,7 +18,6 @@ import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
 import io.horizontalsystems.erc20kit.events.TokenInfo
 import io.horizontalsystems.erc20kit.events.TransferEventInstance
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.ContractCreationDecoration
 import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
 import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
@@ -39,16 +38,14 @@ import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class EvmTransactionConverter(
+internal class EvmTransactionConverter(
     private val coinManager: ICoinManager,
-    private val evmKitWrapper: EvmKitWrapper,
+    private val evmTransactionRepository: EvmTransactionRepository,
     private val source: TransactionSource,
     private val spamManager: SpamManager,
     private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {
-    private val evmKit: EthereumKit
-        get() = evmKitWrapper.evmKit
 
     fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
         val transaction = fullTransaction.transaction
@@ -227,7 +224,7 @@ class EvmTransactionConverter(
             }
 
             is UnknownTransactionDecoration -> {
-                val address = evmKit.receiveAddress
+                val address = evmTransactionRepository.receiveAddress
 
                 val internalTransactions =
                     decoration.internalTransactions.filter { it.to == address }
@@ -299,7 +296,7 @@ class EvmTransactionConverter(
             transaction = transaction,
             token = baseToken,
             source = source,
-            foreignTransaction = transaction.from != evmKit.receiveAddress,
+            foreignTransaction = transaction.from != evmTransactionRepository.receiveAddress,
             transactionRecordType = TransactionRecordType.EVM
         )
     }
@@ -324,7 +321,7 @@ class EvmTransactionConverter(
         negative: Boolean,
         tokenInfo: TokenInfo? = null
     ): TransactionValue {
-        val query = TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(tokenAddress.hex))
+        val query = TokenQuery(evmTransactionRepository.getBlockchainType(), TokenType.Eip20(tokenAddress.hex))
         val token = coinManager.getToken(query)
 
         return when {
@@ -338,7 +335,7 @@ class EvmTransactionConverter(
                     tokenCode = tokenInfo.tokenSymbol,
                     tokenDecimals = tokenInfo.tokenDecimal,
                     value = convertAmount(amount, tokenInfo.tokenDecimal, negative),
-                    coinIconPlaceholder = evmKitWrapper.blockchainType.tokenIconPlaceholder
+                    coinIconPlaceholder = evmTransactionRepository.getBlockchainType().tokenIconPlaceholder
                 )
             }
 
