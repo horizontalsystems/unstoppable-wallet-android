@@ -40,7 +40,6 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     Ape(R.drawable.launcher_ape_preview, "#1874"),
     Ball8(R.drawable.launcher_8ball_preview, "8ball"),
     Pepe(R.drawable.launcher_pepe_preview, "Pepe"),
-    Ivfun(R.drawable.launcher_ivfun_preview, "Ivfun"),
     Doge(R.drawable.launcher_doge_preview, "Doge"),
     Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad"),
     Plflag(R.drawable.launcher_plflag_preview, "Plflag"),
