@@ -20,13 +20,15 @@ class StellarKit(
         Network.TestNet -> "https://horizon-testnet.stellar.org"
     }
     private val server = Server(serverUrl)
+//    private val accountId = keyPair.accountId
+    private val accountId = "GBXQUJBEDX5TYLJ6D5BGJZFLYF5GZVGXLWA2ZORS5OIA7H6B5O3MHMTP"
     private val balancesManager = BalancesManager(
         server,
         db.balanceDao(),
-//            keyPair.accountId
-        "GBXQUJBEDX5TYLJ6D5BGJZFLYF5GZVGXLWA2ZORS5OIA7H6B5O3MHMTP"
+        accountId
     )
 
+    private val operationManager = OperationManager(server, accountId)
 
     val receiveAddress: String = this.keyPair.accountId
 
@@ -54,9 +56,9 @@ class StellarKit(
 //            async {
 //                jettonManager.sync()
 //            },
-//            async {
-//                eventManager.sync()
-//            },
+            async {
+                operationManager.sync()
+            },
         ).awaitAll()
     }
 
