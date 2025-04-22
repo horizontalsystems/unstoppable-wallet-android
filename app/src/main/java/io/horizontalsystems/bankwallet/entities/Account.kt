@@ -139,6 +139,9 @@ sealed class AccountType : Parcelable {
     data class TonAddress(val address: String) : AccountType()
 
     @Parcelize
+    data class StellarAddress(val address: String) : AccountType()
+
+    @Parcelize
     data class BitcoinAddress(val address: String, val blockchainType: BlockchainType, val tokenType: TokenType) : AccountType() {
 
         val serialized: String
@@ -266,6 +269,7 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> "Solana Address"
             is TronAddress -> "Tron Address"
             is TonAddress -> "Ton Address"
+            is StellarAddress -> "Stellar Address"
             is EvmPrivateKey -> "EVM Private Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {

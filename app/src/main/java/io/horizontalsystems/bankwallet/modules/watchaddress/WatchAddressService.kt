@@ -60,6 +60,12 @@ class WatchAddressService(
                     }
                 }
 
+                is AccountType.StellarAddress -> {
+                    if (BlockchainType.Stellar.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Stellar, TokenType.Native))
+                    }
+                }
+
                 is AccountType.HdExtendedKey -> {
                     if (BlockchainType.Bitcoin.supports(accountType)) {
                         accountType.hdExtendedKey.purposes.forEach { purpose ->

@@ -729,6 +729,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.Fantom,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Stellar,
         is BlockchainType.Unsupported -> Unit
     }
 

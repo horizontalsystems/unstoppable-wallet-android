@@ -75,6 +75,10 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerTon())
             }
 
+            BlockchainType.Stellar -> {
+                TODO()
+            }
+
             is BlockchainType.Unsupported -> {
             }
         }

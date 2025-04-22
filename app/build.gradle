@@ -311,7 +311,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:4d423b7'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:aae7f27'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
-    implementation 'com.github.horizontalsystems:market-kit-android:17c37ea'
+    implementation 'com.github.horizontalsystems:market-kit-android:103f4d6'
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:bdd7602'
     // Zcash SDK
@@ -319,6 +319,14 @@ dependencies {
     implementation "cash.z.ecc.android:zcash-android-sdk:2.2.6"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+    }
+
+    implementation project(':stellarkit')
+
+    // Exclude old version from wherever it's coming
+    configurations.configureEach {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+        exclude group: "org.bouncycastle", module: "bcutil-jdk18on"
     }
 
     // WalletConnect V2

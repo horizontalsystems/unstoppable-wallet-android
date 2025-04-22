@@ -60,6 +60,7 @@ object AddressValidatorFactory {
                 TonAddressValidator()
             }
 
+            is BlockchainType.Stellar,
             is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${wallet.token.blockchainType}")
         }
     }

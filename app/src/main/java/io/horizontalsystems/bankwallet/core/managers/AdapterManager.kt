@@ -25,7 +25,8 @@ class AdapterManager(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
-    private val tonKitManager: TonKitManager
+    private val tonKitManager: TonKitManager,
+    private val stellarKitManager: StellarKitManager
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -101,6 +102,7 @@ class AdapterManager(
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
         tonKitManager.tonKitWrapper?.tonKit?.refresh()
+        stellarKitManager.stellarKitWrapper?.stellarKit?.refresh()
     }
 
     @Synchronized

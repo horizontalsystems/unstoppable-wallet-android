@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
@@ -166,6 +167,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var tonKitManager: TonKitManager
+        lateinit var stellarKitManager: StellarKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
@@ -276,6 +278,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
+        stellarKitManager = StellarKitManager(backgroundManager)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -351,6 +354,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaKitManager = solanaKitManager,
             tronKitManager = tronKitManager,
             tonKitManager = tonKitManager,
+            stellarKitManager = stellarKitManager,
             backgroundManager = backgroundManager,
             restoreSettingsManager = restoreSettingsManager,
             coinManager = coinManager,
@@ -365,6 +369,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaKitManager,
             tronKitManager,
             tonKitManager,
+            stellarKitManager,
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
