@@ -276,7 +276,8 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         watchAccount: Boolean,
         balanceViewType: BalanceViewType,
-        networkAvailable: Boolean
+        networkAvailable: Boolean,
+        amountRoundingEnabled: Boolean
     ): BalanceViewItem2 {
         val wallet = item.wallet
         val state = item.state
@@ -287,7 +288,7 @@ class BalanceViewItemFactory {
         val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
             balance = item.balanceData.total,
             visible = balanceTotalVisibility,
-            fullFormat = false,
+            fullFormat = !amountRoundingEnabled,
             coinDecimals = wallet.decimal,
             dimmed = state !is AdapterState.Synced,
             coinPrice = latestRate,

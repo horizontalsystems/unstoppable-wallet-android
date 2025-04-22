@@ -27,6 +27,7 @@ class AppearanceViewModel(
     private var themeOptions = themeService.optionsFlow.value
     private var marketsTabHidden = !localStorage.marketsTabEnabled
     private var balanceTabButtonsHidden = !localStorage.balanceTabButtonsEnabled
+    private var amountRoundingEnabled = localStorage.amountRoundingEnabled
     private var balanceViewTypeOptions = buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
     private var priceChangeInterval = localStorage.priceChangeInterval
     private var priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
@@ -69,7 +70,8 @@ class AppearanceViewModel(
         selectedLaunchScreen = launchScreenService.selectedLaunchScreen,
         selectedBalanceViewType = balanceViewTypeManager.balanceViewType,
         priceChangeInterval = priceChangeInterval,
-        priceChangeIntervalOptions = priceChangeIntervalOptions
+        priceChangeIntervalOptions = priceChangeIntervalOptions,
+        amountRoundingEnabled = amountRoundingEnabled
     )
 
     private fun buildBalanceViewTypeSelect(value: BalanceViewType): Select<BalanceViewType> {
@@ -145,6 +147,12 @@ class AppearanceViewModel(
         stat(page = StatPage.Appearance, event = StatEvent.HideBalanceButtons(shown = !hidden))
     }
 
+    fun onAmountRoundingToggle(enabled: Boolean) {
+        localStorage.amountRoundingEnabled = enabled
+        amountRoundingEnabled = enabled
+        emitState()
+    }
+
     fun onSetPriceChangeInterval(priceChangeInterval: PriceChangeInterval) {
         localStorage.priceChangeInterval = priceChangeInterval
 
@@ -168,5 +176,6 @@ data class AppearanceUIState(
     val selectedLaunchScreen: LaunchPage,
     val selectedBalanceViewType: BalanceViewType,
     val priceChangeInterval: PriceChangeInterval,
-    val priceChangeIntervalOptions: Select<PriceChangeInterval>
+    val priceChangeIntervalOptions: Select<PriceChangeInterval>,
+    val amountRoundingEnabled: Boolean
 )

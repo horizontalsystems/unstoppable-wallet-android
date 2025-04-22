@@ -42,7 +42,7 @@ class TokenBalanceModule {
                 balanceService,
                 BalanceViewItemFactory(),
                 tokenTransactionsService,
-                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager),
+                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager, App.localStorage),
                 App.balanceHiddenManager,
                 App.connectivityManager,
                 App.accountManager,

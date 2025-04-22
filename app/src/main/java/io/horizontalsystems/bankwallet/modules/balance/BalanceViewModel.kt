@@ -108,6 +108,12 @@ class BalanceViewModel(
             }
         }
 
+        viewModelScope.launch(Dispatchers.Default) {
+            localStorage.amountRoundingEnabledFlow.collect{
+                refreshViewItems(service.balanceItemsFlow.value)
+            }
+        }
+
         service.start()
 
         totalBalance.start(viewModelScope)
@@ -154,7 +160,8 @@ class BalanceViewModel(
                         balanceHidden,
                         service.isWatchAccount,
                         balanceViewType,
-                        service.networkAvailable
+                        service.networkAvailable,
+                        localStorage.amountRoundingEnabled
                     )
                 }
             } else {
