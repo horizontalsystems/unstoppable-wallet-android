@@ -13,7 +13,7 @@ import java.math.BigDecimal
 class BalancesManager(
     private val server: Server,
     private val balanceDao: BalanceDao,
-    private val address: String
+    private val accountId: String
 ) {
     private val _syncStateFlow = MutableStateFlow<SyncState>(SyncState.NotSynced(StellarKit.SyncError.NotStarted))
     val syncStateFlow = _syncStateFlow.asStateFlow()
@@ -35,7 +35,7 @@ class BalancesManager(
 
         try {
             val accounts = server.accounts()
-            val account = accounts.account(address)
+            val account = accounts.account(accountId)
 
             account.balances.forEach { balance ->
                 val balanceBigDecimal = balance.balance.toBigDecimal()
