@@ -103,6 +103,7 @@ class BalanceViewItemFactory {
         BlockchainType.ArbitrumOne,
         BlockchainType.Solana,
         BlockchainType.Tron,
+        BlockchainType.Stellar,
         BlockchainType.Ton -> 50
         is BlockchainType.Unsupported -> 0
     }

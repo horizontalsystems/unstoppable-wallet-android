@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -36,6 +37,7 @@ class AppStatusViewModel(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
+    private val stellarKitManager: StellarKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
@@ -201,6 +203,10 @@ class AppStatusViewModel(
 
         tonKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Ton"] = statusInfo
+        }
+
+        stellarKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Stellar"] = statusInfo
         }
 
         solanaKitManager.statusInfo?.let { statusInfo ->

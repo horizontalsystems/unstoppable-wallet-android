@@ -25,6 +25,7 @@ object SendTransactionServiceFactory {
         BlockchainType.Solana,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Stellar,
         is BlockchainType.Unsupported -> throw UnsupportedException("")
     }
 }

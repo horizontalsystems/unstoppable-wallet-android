@@ -156,6 +156,7 @@ class WatchAddressViewModel(
         BlockchainType.Solana -> Type.SolanaAddress
         BlockchainType.Tron -> Type.TronAddress
         BlockchainType.Ton -> Type.TonAddress
+        BlockchainType.Stellar -> TODO()
 
         BlockchainType.Zcash,
         is BlockchainType.Unsupported,

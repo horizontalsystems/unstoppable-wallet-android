@@ -161,6 +161,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Ton -> {
             tokenType is TokenType.Native || tokenType is TokenType.Jetton
         }
+        BlockchainType.Stellar -> {
+            tokenType is TokenType.Native
+        }
         is BlockchainType.Unsupported -> false
     }
 
@@ -270,6 +273,7 @@ val BlockchainType.title: String
     BlockchainType.Fantom -> "Fantom"
     BlockchainType.Tron -> "Tron"
     BlockchainType.Ton -> "Ton"
+    BlockchainType.Stellar -> "Stellar"
     is BlockchainType.Unsupported -> this.uid
 }
 
@@ -352,6 +356,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.TonAddress ->
             this == BlockchainType.Ton
+
+        is AccountType.StellarAddress ->
+            this == BlockchainType.Stellar
 
         is AccountType.Cex -> false
     }
