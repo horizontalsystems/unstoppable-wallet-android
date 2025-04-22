@@ -181,8 +181,7 @@ class TransactionsService(
         itemsSubject.onNext(transactionItems)
     }
 
-    @Synchronized
-    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
+    private suspend fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
         val tmpList = mutableListOf<TransactionItem>()
 
         val nftUids = transactionRecords.nftUids

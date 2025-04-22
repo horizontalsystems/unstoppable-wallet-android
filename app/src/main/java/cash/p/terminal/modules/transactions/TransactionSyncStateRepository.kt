@@ -10,15 +10,20 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class TransactionSyncStateRepository(
     private val adapterManager: TransactionAdapterManager
 ) : Clearable {
     private val adapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
+    private val adaptersMutex = Mutex()
 
     private val syncingSubject = PublishSubject.create<Boolean>()
     val syncingObservable: Observable<Boolean> get() = syncingSubject.distinctUntilChanged()
@@ -26,48 +31,65 @@ class TransactionSyncStateRepository(
     private val lastBlockInfoSubject = PublishSubject.create<Pair<TransactionSource, LastBlockInfo>>()
     val lastBlockInfoObservable: Observable<Pair<TransactionSource, LastBlockInfo>> get() = lastBlockInfoSubject
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private var monitoringJob: Job? = null
 
-    fun getLastBlockInfo(source: TransactionSource): LastBlockInfo? = adapters[source]?.lastBlockInfo
+    suspend fun getLastBlockInfo(source: TransactionSource): LastBlockInfo? =
+        adaptersMutex.withLock { adapters[source]?.lastBlockInfo }
 
     fun setTransactionWallets(transactionWallets: List<TransactionWallet>) {
-        coroutineScope.coroutineContext.cancelChildren()
-        adapters.clear()
+        monitoringJob?.cancel()
 
-        transactionWallets.distinctBy { it.source }.forEach {
-            val source = it.source
-            adapterManager.getAdapter(source)?.let { adapter ->
-                adapters[source] = adapter
-            }
-        }
-
-        emitSyncing()
-
-        adapters.forEach { (source, adapter) ->
-            coroutineScope.launch {
-                adapter.lastBlockUpdatedFlowable.asFlow().collect {
-                    adapter.lastBlockInfo?.let { lastBlockInfo ->
-                        lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
-                    }
+        coroutineScope.launch {
+            val newAdapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
+            transactionWallets.distinctBy { it.source }.forEach { wallet ->
+                val source = wallet.source
+                adapterManager.getAdapter(source)?.let { adapter ->
+                    newAdapters[source] = adapter
                 }
             }
 
-            coroutineScope.launch {
-                adapter.transactionsStateUpdatedFlowable.asFlow().collect {
-                    emitSyncing()
+            adaptersMutex.withLock {
+                adapters.clear()
+                adapters.putAll(newAdapters)
+            }
+
+            emitSyncing()
+            startMonitoring(newAdapters)
+        }
+    }
+
+    private fun startMonitoring(adapterMap: Map<TransactionSource, ITransactionsAdapter>) {
+        monitoringJob = coroutineScope.launch {
+            supervisorScope {
+                adapterMap.forEach { (source, adapter) ->
+                    launch {
+                        adapter.lastBlockUpdatedFlowable.asFlow().collect {
+                            adapter.lastBlockInfo?.let { lastBlockInfo ->
+                                lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
+                            }
+                        }
+                    }
+
+                    launch {
+                        adapter.transactionsStateUpdatedFlowable.asFlow().collect {
+                            emitSyncing()
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun emitSyncing() {
-        val syncing = adapters.any {
-            it.value.transactionsState is AdapterState.Syncing
+    private suspend fun emitSyncing() {
+        val syncing = adaptersMutex.withLock {
+            adapters.any { it.value.transactionsState is AdapterState.Syncing }
         }
         syncingSubject.onNext(syncing)
     }
 
     override fun clear() {
+        monitoringJob?.cancel()
         coroutineScope.cancel()
     }
 }

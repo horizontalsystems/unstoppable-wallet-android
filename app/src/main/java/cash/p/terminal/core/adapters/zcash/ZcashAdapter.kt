@@ -1,6 +1,7 @@
 package cash.p.terminal.core.adapters.zcash
 
 import android.content.Context
+import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendZcashAdapter
@@ -244,7 +245,7 @@ class ZcashAdapter(
             }
         }
 
-    private fun createNewSynchronizer() {
+    private suspend fun createNewSynchronizer() {
         val walletInitMode = if (existingWallet) {
             WalletInitMode.ExistingWallet
         } else when (wallet.account.origin) {
@@ -269,30 +270,36 @@ class ZcashAdapter(
         birthday?.value?.let {
             accountBirthday = it
         }
-
-        synchronizer = Synchronizer.newBlocking(
-            context = App.instance,
-            zcashNetwork = network,
-            alias = getValidAliasFromAccountId(wallet.account.id, addressSpecTyped),
-            lightWalletEndpoint = lightWalletEndpoint,
-            birthday = birthday,
-            walletInitMode = walletInitMode,
-            setup = AccountCreateSetup(
-                seed = FirstClassByteArray(seed),
-                accountName = wallet.account.name,
-                keySource = null
+        try {
+            synchronizer = Synchronizer.new(
+                context = App.instance,
+                zcashNetwork = network,
+                alias = getValidAliasFromAccountId(wallet.account.id, addressSpecTyped),
+                lightWalletEndpoint = lightWalletEndpoint,
+                birthday = birthday,
+                walletInitMode = walletInitMode,
+                setup = AccountCreateSetup(
+                    seed = FirstClassByteArray(seed),
+                    accountName = wallet.account.name,
+                    keySource = null
+                )
             )
-        )
+        } catch (ex: IllegalStateException) {
+            // To prevent crash with synchronizer creation in some situations
+            // when java.lang.IllegalStateException: Another synchronizer with SynchronizerKey
+            Log.d("ZcashAdapter", "Failed to create synchronizer: ${ex.message}")
+            delay(1000)
+            createNewSynchronizer()
+            return
+        }
 
-        zcashAccount = runBlocking { getFirstAccount() }
-        receiveAddress = runBlocking {
-            when (addressSpecTyped) {
+        zcashAccount = getFirstAccount()
+        receiveAddress = when (addressSpecTyped) {
                 AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
                 AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
                 AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
                 null -> synchronizer.getSaplingAddress(getFirstAccount())
             }
-        }
         transactionsProvider =
             ZcashTransactionsProvider(
                 receiveAddress = receiveAddress,
@@ -330,7 +337,14 @@ class ZcashAdapter(
         synchronizer.close()
     }
 
-    override fun refresh() = Unit
+    override fun refresh() {
+        scope.launch {
+            with(synchronizer as SdkSynchronizer) {
+                refreshAllBalances()
+                refreshTransactions()
+            }
+        }
+    }
 
     override val debugInfo: String
         get() = ""

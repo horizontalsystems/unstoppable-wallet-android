@@ -16,6 +16,8 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
@@ -35,6 +37,9 @@ class AdapterManager(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
+
+    private val _initializationInProgressFlow = MutableStateFlow<Boolean>(true)
+    override val initializationInProgressFlow = _initializationInProgressFlow.asStateFlow()
 
     override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
         adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -119,6 +124,7 @@ class AdapterManager(
     private fun initAdapters(wallets: List<Wallet>) {
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
+        _initializationInProgressFlow.value = true
 
         wallets.forEach { wallet ->
             var adapter = currentAdapters.remove(wallet)
@@ -141,6 +147,7 @@ class AdapterManager(
             adapter.stop()
             adapterFactory.unlinkAdapter(wallet)
         }
+        _initializationInProgressFlow.value = false
     }
 
     /**

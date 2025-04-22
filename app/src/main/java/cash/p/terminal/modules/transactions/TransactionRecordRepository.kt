@@ -17,8 +17,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import java.util.concurrent.atomic.AtomicBoolean
 
 class TransactionRecordRepository(
@@ -35,6 +33,7 @@ class TransactionRecordRepository(
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
+    @Volatile
     private var loadedPageNumber = 0
     private val loading = AtomicBoolean(false)
 
@@ -54,7 +53,6 @@ class TransactionRecordRepository(
         get() {
             val tmpSelectedWallet = selectedWallet
             val tmpSelectedBlockchain = selectedBlockchain
-
             val activeWallets = when {
                 tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
                 tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
@@ -284,7 +282,6 @@ class TransactionRecordRepository(
                     .map { async { it.get(itemsCount) } }
                     .awaitAll()
                     .flatten()
-
                 var extraRecordsCount = 0
                 val extraRecords =
                     if (selectedFilterTransactionType == FilterTransactionType.Swap) {
@@ -313,7 +310,6 @@ class TransactionRecordRepository(
                     } else {
                         emptyList()
                     }
-
                 if (extraRecordsCount < page * itemsPerPage) {
                     allExtraLoaded.set(true)
                 }
@@ -336,7 +332,6 @@ class TransactionRecordRepository(
         coroutineScope.cancel()
     }
 
-    @Synchronized
     private fun handleRecords(
         records: List<TransactionRecord>,
         extraRecords: List<TransactionRecord>,

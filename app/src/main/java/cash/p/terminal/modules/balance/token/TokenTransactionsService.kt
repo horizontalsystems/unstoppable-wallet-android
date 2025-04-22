@@ -1,8 +1,7 @@
 package cash.p.terminal.modules.balance.token
 
-import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.managers.SpamManager
-import io.horizontalsystems.core.entities.CurrencyValue
+import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
@@ -17,14 +16,19 @@ import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionWallet
 import cash.p.terminal.modules.transactions.TransactionsRateRepository
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.entities.CurrencyValue
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import org.koin.java.KoinJavaComponent.inject
@@ -35,11 +39,14 @@ class TokenTransactionsService(
     private val wallet: Wallet,
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
+    private val transactionAdapterManager: TransactionAdapterManager,
     private val contactsRepository: ContactsRepository,
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
-    private val transactionRecordRepository: ITransactionRecordRepository by inject(ITransactionRecordRepository::class.java)
+    private val transactionRecordRepository: ITransactionRecordRepository by inject(
+        ITransactionRecordRepository::class.java
+    )
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -48,7 +55,9 @@ class TokenTransactionsService(
 
     fun start() {
         coroutineScope.launch {
+            println("TokenTransactionsService start")
             transactionRecordRepository.itemsObservable.asFlow().collect {
+                println("TokenTransactionsService handleUpdatedRecords ${it.size}")
                 handleUpdatedRecords(it)
             }
         }
@@ -79,7 +88,19 @@ class TokenTransactionsService(
             }
         }
 
-        val transactionWallet = TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
+        coroutineScope.launch {
+            transactionAdapterManager.initializationFlow
+                .filter { it }
+                .onEach {
+                    handleInitialization()
+                }
+                .first()
+        }
+    }
+
+    private fun handleInitialization() {
+        val transactionWallet =
+            TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
 
         transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
         transactionRecordRepository.set(
@@ -127,7 +148,11 @@ class TokenTransactionsService(
     private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
         var updated = false
         transactionItems.forEachIndexed { index, item ->
-            if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
+            if (item.record.source == source && item.record.changedBy(
+                    item.lastBlockInfo,
+                    lastBlockInfo
+                )
+            ) {
                 transactionItems[index] = item.copy(lastBlockInfo = lastBlockInfo)
                 updated = true
             }
@@ -173,8 +198,7 @@ class TokenTransactionsService(
         itemsSubject.onNext(transactionItems)
     }
 
-    @Synchronized
-    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
+    private suspend fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
         val tmpList = mutableListOf<TransactionItem>()
 
         val nftUids = transactionRecords.nftUids
@@ -228,7 +252,7 @@ class TokenTransactionsService(
     private val executorService = Executors.newCachedThreadPool()
 
     fun refreshList(forceLoadData: Boolean = false) {
-        if(forceLoadData) {
+        if (forceLoadData) {
             val tmpList = mutableListOf<TransactionItem>()
             transactionItems.forEach {
                 tmpList.add(it.copy())
@@ -252,7 +276,12 @@ class TokenTransactionsService(
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
                 if (transactionItem.currencyValue == null) {
                     transactionItem.record.mainValue?.coin?.uid?.let { coinUid ->
-                        rateRepository.fetchHistoricalRate(HistoricalRateKey(coinUid, transactionItem.record.timestamp))
+                        rateRepository.fetchHistoricalRate(
+                            HistoricalRateKey(
+                                coinUid,
+                                transactionItem.record.timestamp
+                            )
+                        )
                     }
                 }
             }

@@ -66,7 +66,7 @@ class TransactionFilterService(
             FilterToken(it.token, it.transactionSource)
         }
 
-        val additionalFilterTokens = transactionAdapterManager.adaptersMap.map { map ->
+        val additionalFilterTokens = transactionAdapterManager.adaptersReadyFlow.value.map { map ->
             marketKitWrapper.tokens(map.value.additionalTokenQueries).map {
                 FilterToken(it, map.key)
             }
