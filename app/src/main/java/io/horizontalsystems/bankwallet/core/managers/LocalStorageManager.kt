@@ -482,7 +482,15 @@ class LocalStorageManager(
             balanceTabButtonsEnabledFlow.update { value }
         }
 
+    override var amountRoundingEnabled: Boolean
+        get() = preferences.getBoolean("amountRoundingEnabled", true)
+        set(value) {
+            preferences.edit().putBoolean("amountRoundingEnabled", value).apply()
+            amountRoundingEnabledFlow.update { value }
+        }
+
     override val balanceTabButtonsEnabledFlow = MutableStateFlow(balanceTabButtonsEnabled)
+    override val amountRoundingEnabledFlow = MutableStateFlow(amountRoundingEnabled)
 
     override var personalSupportEnabled: Boolean
         get() = preferences.getBoolean(PERSONAL_SUPPORT_ENABLED, false)

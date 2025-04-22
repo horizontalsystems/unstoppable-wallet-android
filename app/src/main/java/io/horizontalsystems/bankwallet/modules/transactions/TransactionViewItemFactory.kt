@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
@@ -45,10 +46,12 @@ class TransactionViewItemFactory(
     private val evmLabelManager: EvmLabelManager,
     private val contactsRepository: ContactsRepository,
     private val balanceHiddenManager: BalanceHiddenManager,
+    private val localStorage: ILocalStorage,
 ) {
 
     private var showAmount = !balanceHiddenManager.balanceHidden
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
+    private val roundCoinAmount get() = localStorage.amountRoundingEnabled
 
     fun updateCache() {
         showAmount = !balanceHiddenManager.balanceHidden
@@ -1103,11 +1106,20 @@ class TransactionViewItemFactory(
                 decimalValue > BigDecimal.ZERO -> "+"
                 else -> ""
             }
-            sign + App.numberFormatter.formatCoinShort(
-                decimalValue.abs(),
-                transactionValue.coinCode,
-                transactionValue.decimals ?: 8,
-            )
+            val coinAmount = if (roundCoinAmount) {
+                App.numberFormatter.formatCoinShort(
+                    decimalValue.abs(),
+                    transactionValue.coinCode,
+                    transactionValue.decimals ?: 8,
+                )
+            } else {
+                App.numberFormatter.formatCoinFull(
+                    decimalValue.abs(),
+                    transactionValue.coinCode,
+                    transactionValue.decimals ?: 8,
+                )
+            }
+            sign + coinAmount
         } ?: ""
     }
 

@@ -179,6 +179,30 @@ fun AppearanceScreen(navController: NavController) {
                 }
 
                 VSpacer(24.dp)
+                CellUniversalLawrenceSection(
+                    listOf(
+                        {
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                body_leah(
+                                    text = stringResource(id = R.string.Appearance_AmountRounding),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(end = 16.dp)
+                                )
+                                HsSwitch(
+                                    checked = uiState.amountRoundingEnabled,
+                                    onCheckedChange = {
+                                        viewModel.onAmountRoundingToggle(it)
+                                    }
+                                )
+                            }
+                        },
+                    )
+                )
+
+                VSpacer(24.dp)
                 HeaderText(text = stringResource(id = R.string.Appearance_BalanceTab))
                 CellUniversalLawrenceSection(
                     listOf(

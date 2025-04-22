@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
-import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceService
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -30,7 +30,8 @@ class TokenSelectViewModel(
     private val balanceSorter: BalanceSorter,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val blockchainTypes: List<BlockchainType>?,
-    private val tokenTypes: List<TokenType>?
+    private val tokenTypes: List<TokenType>?,
+    private val localStorage: ILocalStorage,
 ) : ViewModel() {
 
     private var noItems = false
@@ -89,7 +90,8 @@ class TokenSelectViewModel(
                         hideBalance = balanceHiddenManager.balanceHidden,
                         watchAccount = service.isWatchAccount,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
-                        networkAvailable = service.networkAvailable
+                        networkAvailable = service.networkAvailable,
+                        amountRoundingEnabled = localStorage.amountRoundingEnabled
                     )
                 }
             } else {
@@ -135,24 +137,7 @@ class TokenSelectViewModel(
                 balanceHiddenManager = App.balanceHiddenManager,
                 blockchainTypes = blockchainTypes,
                 tokenTypes = tokenTypes,
-            ) as T
-        }
-    }
-
-    class FactoryForSwap : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TokenSelectViewModel(
-                service = BalanceService.getInstance("wallet"),
-                balanceViewItemFactory = BalanceViewItemFactory(),
-                balanceViewTypeManager = App.balanceViewTypeManager,
-                itemsFilter = {
-                    it.wallet.token.swappable
-                },
-                balanceSorter = BalanceSorter(),
-                balanceHiddenManager = App.balanceHiddenManager,
-                blockchainTypes = null,
-                tokenTypes = null,
+                localStorage = App.localStorage
             ) as T
         }
     }
