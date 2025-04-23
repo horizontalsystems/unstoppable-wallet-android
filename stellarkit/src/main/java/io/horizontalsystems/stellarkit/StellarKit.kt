@@ -2,18 +2,26 @@ package io.horizontalsystems.stellarkit
 
 import android.content.Context
 import io.horizontalsystems.stellarkit.room.KitDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.Server
-import java.math.BigDecimal
 
 class StellarKit(
+//    private val address: Address,
+//    private val apiListener: TonApiListener,
+//    private val accountManager: AccountManager,
+//    private val jettonManager: JettonManager,
+//    private val eventManager: EventManager,
+//    private val transactionSender: TransactionSender?,
     val network: Network,
     private val keyPair: KeyPair,
     private val db: KitDatabase,
+//    private val transactionSigner: TransactionSigner,
 ) {
     private val serverUrl = when (network) {
         Network.MainNet -> "https://horizon.stellar.lobstr.co"
@@ -28,25 +36,115 @@ class StellarKit(
         accountId
     )
 
-    private val operationManager = OperationManager(server, accountId)
+    private val eventManager = EventManager(server, db.operationDao(), accountId)
 
-    val receiveAddress: String = this.keyPair.accountId
+    val receiveAddress get() = accountId
 
     val syncStateFlow by balancesManager::syncStateFlow
-    val balanceFlow: StateFlow<BigDecimal> by balancesManager::xlmBalanceFlow
-    val balance: BigDecimal get() = balanceFlow.value
+    val balanceFlow by balancesManager::xlmBalanceFlow
+//    val jettonSyncStateFlow by jettonManager::syncStateFlow
+//    val jettonBalanceMapFlow by jettonManager::jettonBalanceMapFlow
+//    val eventSyncStateFlow by eventManager::syncStateFlow
+
+    val balance get() = balanceFlow.value
+//    val jettonBalanceMap get() = jettonBalanceMapFlow.value
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
+    init {
+        coroutineScope.launch {
+//            apiListener.transactionFlow.collect {
+//                handleEvent(it)
+//            }
+        }
+    }
+
+    suspend fun refresh() {
+        sync()
+    }
 
     suspend fun start() = coroutineScope {
         listOf(
             async {
                 sync()
             },
-//            async {
+            async {
 //                startListener()
-//            }
+            }
         ).awaitAll()
     }
 
+    fun stop() {
+//        this.stopListener()
+    }
+
+//    private suspend fun handleEvent(eventId: String) {
+//        repeat(3) {
+//            delay(5000)
+//            if (eventManager.isEventCompleted(eventId)) {
+//                return
+//            }
+//
+//            sync()
+//        }
+//    }
+
+//    fun events(tagQuery: TagQuery, beforeLt: Long? = null, limit: Int? = null): List<Event> {
+//        return eventManager.events(tagQuery, beforeLt, limit)
+//    }
+
+//    fun eventFlow(tagQuery: TagQuery): Flow<EventInfo> {
+//        return eventManager.eventFlow(tagQuery)
+//    }
+
+//    fun tagTokens(): List<TagToken> {
+//        return eventManager.tagTokens()
+//    }
+
+//    suspend fun estimateFee(
+//        recipient: FriendlyAddress,
+//        amount: SendAmount,
+//        comment: String?,
+//    ): BigInteger {
+//        return transactionSender?.estimateFee(recipient, amount, comment)
+//            ?: throw WalletError.WatchOnly
+//    }
+
+//    suspend fun estimateFee(
+//        jettonWallet: Address,
+//        recipient: FriendlyAddress,
+//        amount: BigInteger,
+//        comment: String?,
+//    ): BigInteger {
+//        return transactionSender?.estimateFee(jettonWallet, recipient, amount, comment)
+//            ?: throw WalletError.WatchOnly
+//    }
+
+//    suspend fun send(recipient: FriendlyAddress, amount: SendAmount, comment: String?) {
+//        transactionSender?.send(recipient, amount, comment) ?: throw WalletError.WatchOnly
+//    }
+
+//    suspend fun send(
+//        jettonWallet: Address,
+//        recipient: FriendlyAddress,
+//        amount: BigInteger,
+//        comment: String?,
+//    ) {
+//        transactionSender?.send(jettonWallet, recipient, amount, comment)
+//            ?: throw WalletError.WatchOnly
+//    }
+
+//    suspend fun send(boc: String) {
+//        transactionSender?.send(boc) ?: throw WalletError.WatchOnly
+//    }
+
+//    fun startListener() {
+//        apiListener.start(address = address)
+//    }
+
+//    fun stopListener() {
+//        apiListener.stop()
+//    }
 
     suspend fun sync() = coroutineScope {
         listOf(
@@ -57,20 +155,43 @@ class StellarKit(
 //                jettonManager.sync()
 //            },
             async {
-                operationManager.sync()
+                eventManager.sync()
             },
         ).awaitAll()
     }
 
+//    suspend fun sign(request: SendRequestEntity, tonWallet: TonWallet): String {
+//        check(tonWallet is TonWallet.FullAccess)
+//
+//        return transactionSigner.sign(request, tonWallet)
+//    }
 
-    fun stop() {
-//                this.stopListener()
-//        TODO("Not yet implemented")
+//    suspend fun getDetails(request: SendRequestEntity, tonWallet: TonWallet): Event {
+//        check(tonWallet is TonWallet.FullAccess)
+//
+//        return transactionSigner.getDetails(request, tonWallet)
+//    }
+
+//    enum WalletVersion {
+//        case v3
+//        case v4
+//        case v5
+//    }
+
+    sealed class SyncError : Error() {
+        data object NotStarted : SyncError() {
+            override val message = "Not Started"
+        }
     }
 
-    suspend fun refresh() {
-        sync()
+    sealed class WalletError : Error() {
+        data object WatchOnly : WalletError()
     }
+
+//    enum SendAmount {
+//        case amount(value: BigUInt)
+//        case max
+//    }
 
     companion object {
         fun getInstance(
@@ -92,20 +213,22 @@ class StellarKit(
             val db = KitDatabase.getInstance(context, "stellar-${walletId}-${network.name}")
             return StellarKit(network, keyPair, db)
         }
+
+//        fun getTonApi(network: Network) = TonApi(network, okHttpClient)
+//        fun getTransactionSigner(api: TonApi) = TransactionSigner(api)
+
+//        suspend fun getJetton(network: Network, address: Address): Jetton {
+//            return getTonApi(network).getJettonInfo(address)
+//        }
+
+//        fun validateAddress(address: String) {
+//            Address.parse(address)
+//        }
     }
 
-    sealed class SyncError : Error() {
-        data object NotStarted : SyncError() {
-            override val message = "Not Started"
-        }
-    }
-}
+//    sealed class SendAmount {
+//        data class Amount(val value: BigInteger) : SendAmount()
+//        data object Max : SendAmount()
+//    }
 
-sealed interface StellarWallet {
-    data class WatchOnly(val addressStr: String) : StellarWallet
-    data class Seed(val seed: ByteArray) : StellarWallet
-}
-
-enum class Network {
-    MainNet, TestNet;
 }
