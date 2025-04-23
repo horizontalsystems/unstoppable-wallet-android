@@ -66,6 +66,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
@@ -201,7 +202,6 @@ class ZcashAdapter(
         }
         transactionsProvider =
             ZcashTransactionsProvider(
-                receiveAddress = receiveAddress,
                 synchronizer = synchronizer as SdkSynchronizer
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
@@ -295,14 +295,13 @@ class ZcashAdapter(
 
         zcashAccount = getFirstAccount()
         receiveAddress = when (addressSpecTyped) {
-                AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
-                AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
-                AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
-                null -> synchronizer.getSaplingAddress(getFirstAccount())
-            }
+            AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
+            AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
+            AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
+            null -> synchronizer.getSaplingAddress(getFirstAccount())
+        }
         transactionsProvider =
             ZcashTransactionsProvider(
-                receiveAddress = receiveAddress,
                 synchronizer = synchronizer as SdkSynchronizer
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
@@ -454,7 +453,7 @@ class ZcashAdapter(
         return transactionsProvider.getNewTransactionsFlowable(transactionType, address)
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
-            }.asFlow()
+            }
     }
 
     override fun getTransactionUrl(transactionHash: String): String =

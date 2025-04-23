@@ -4,21 +4,24 @@ import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionRecipient
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
-class ZcashTransactionsProvider(
-    private val receiveAddress: String,
-    private val synchronizer: SdkSynchronizer
-) {
+class ZcashTransactionsProvider(private val synchronizer: SdkSynchronizer) {
 
     private var transactions = listOf<ZcashTransaction>()
-    private val newTransactionsSubject = PublishSubject.create<List<ZcashTransaction>>()
+    private val newTransactionsFlow = MutableSharedFlow<List<ZcashTransaction>>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     @Synchronized
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
@@ -43,8 +46,8 @@ class ZcashTransactionsProvider(
 
                     ZcashTransaction(it, recipient, null)
                 }
-                newTransactionsSubject.onNext(newZcashTransactions)
                 transactions = (transactions + newZcashTransactions).sortedDescending()
+                newTransactionsFlow.emit(newZcashTransactions)
             }
         }
     }
@@ -52,13 +55,13 @@ class ZcashTransactionsProvider(
     fun getNewTransactionsFlowable(
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<ZcashTransaction>> {
+    ): Flow<List<ZcashTransaction>> {
         val filters = getFilters(transactionType, address)
 
-        val observable = if (filters.isEmpty()) {
-            newTransactionsSubject
+        return if (filters.isEmpty()) {
+            newTransactionsFlow
         } else {
-            newTransactionsSubject.map { txs ->
+            newTransactionsFlow.map { txs ->
                 txs.filter { tx ->
                     filters.all { filter -> filter.invoke(tx) }
                 }
@@ -66,8 +69,6 @@ class ZcashTransactionsProvider(
                 it.isNotEmpty()
             }
         }
-
-        return observable.toFlowable(BackpressureStrategy.LATEST)
     }
 
     private fun getFilters(
