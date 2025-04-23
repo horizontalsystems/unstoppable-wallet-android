@@ -101,6 +101,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
@@ -320,16 +321,15 @@ fun RestorePhrase(
                     Spacer(modifier = Modifier.height(4.dp))
                 }
 
-                Spacer(Modifier.height(8.dp))
-
                 uiState.error?.let { errorText ->
+                    VSpacer(8.dp)
                     caption_lucian(
                         modifier = Modifier.padding(horizontal = 32.dp),
                         text = errorText
                     )
                 }
 
-                Spacer(Modifier.height(32.dp))
+                VSpacer(32.dp)
 
                 if (advanced) {
                     BottomSection(
@@ -339,6 +339,26 @@ fun RestorePhrase(
                         coroutineScope
                     )
                 } else {
+                    CellUniversalLawrenceSection(
+                        listOf(
+                            {
+                                PassphraseCell(
+                                    enabled = uiState.passphraseEnabled,
+                                    onCheckedChange = viewModel::onTogglePassphrase
+                                )
+                            }
+                        )
+                    )
+                    if (uiState.passphraseEnabled) {
+                        VSpacer(16.dp)
+                        PassPhraseBlock(
+                            error = uiState.passphraseError,
+                            onEnterPassphrase = {
+                                viewModel.onEnterPassphrase(it)
+                            }
+                        )
+                    }
+                    VSpacer(32.dp)
                     CellSingleLineLawrenceSection {
                         Row(
                             modifier = Modifier
@@ -430,7 +450,6 @@ private fun BottomSection(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var showLanguageSelectorDialog by remember { mutableStateOf(false) }
-    var hidePassphrase by remember { mutableStateOf(true) }
 
     if (showLanguageSelectorDialog) {
         SelectorDialogCompose(
@@ -476,22 +495,12 @@ private fun BottomSection(
     )
 
     if (uiState.passphraseEnabled) {
-        Spacer(modifier = Modifier.height(24.dp))
-        FormsInputPassword(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            hint = stringResource(R.string.Passphrase),
-            state = uiState.passphraseError?.let { DataState.Error(Exception(it)) },
-            onValueChange = viewModel::onEnterPassphrase,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            hide = hidePassphrase,
-            onToggleHide = {
-                hidePassphrase = !hidePassphrase
+        VSpacer(24.dp)
+        PassPhraseBlock(
+            error = uiState.passphraseError,
+            onEnterPassphrase = {
+                viewModel.onEnterPassphrase(it)
             }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextImportantWarning(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Restore_PassphraseDescription)
         )
     }
 
@@ -517,6 +526,30 @@ private fun BottomSection(
         }
     }
     Spacer(Modifier.height(62.dp))
+}
+
+@Composable
+private fun PassPhraseBlock(
+    error: String? = null,
+    onEnterPassphrase: (String) -> Unit = {}
+) {
+    var hidePassphrase by remember { mutableStateOf(true) }
+    FormsInputPassword(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        hint = stringResource(R.string.Passphrase),
+        state = error?.let { DataState.Error(Exception(it)) },
+        onValueChange = onEnterPassphrase,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        hide = hidePassphrase,
+        onToggleHide = {
+            hidePassphrase = !hidePassphrase
+        }
+    )
+    Spacer(modifier = Modifier.height(16.dp))
+    TextImportantWarning(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        text = stringResource(R.string.Restore_PassphraseDescription)
+    )
 }
 
 @Composable
