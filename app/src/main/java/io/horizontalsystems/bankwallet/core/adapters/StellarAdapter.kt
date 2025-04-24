@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.stellarkit.Network
@@ -14,11 +15,12 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 
 class StellarAdapter(
     private val stellarKitWrapper: StellarKitWrapper,
-) : IAdapter, IReceiveAdapter, IBalanceAdapter {
+) : IAdapter, IReceiveAdapter, IBalanceAdapter, ISendStellarAdapter {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val stellarKit = stellarKitWrapper.stellarKit
@@ -41,11 +43,6 @@ class StellarAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    init {
-
-
-    }
-
     override fun start() {
         coroutineScope.launch {
             stellarKit.balanceFlow.collect { balance ->
@@ -62,11 +59,23 @@ class StellarAdapter(
     }
 
     override fun stop() {
+        stellarKit.stop()
     }
 
     override fun refresh() {
+        coroutineScope.launch {
+            stellarKit.refresh()
+        }
     }
 
     override val debugInfo = "debugInfo"
 
+    override val availableBalance: BigDecimal
+        get() = balance
+    override val fee: BigDecimal
+        get() = stellarKit.sendFee
+
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
+        stellarKit.send(address, amount, memo)
+    }
 }

@@ -397,6 +397,12 @@ interface ISendTonAdapter {
     suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?) : BigDecimal
 }
 
+interface ISendStellarAdapter {
+    val availableBalance: BigDecimal
+    val fee: BigDecimal
+    suspend fun send(amount: BigDecimal, address: String, memo: String?)
+}
+
 interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData
