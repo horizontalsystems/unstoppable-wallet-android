@@ -35,6 +35,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
@@ -59,21 +60,21 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
     }
 
     @Parcelize
-    data class Input(val wallet: cash.p.terminal.wallet.Wallet, val errorMessage: String?) : Parcelable
+    data class Input(val wallet: Wallet, val errorMessage: String?) : Parcelable
 }
 
 @Composable
-private fun SyncErrorScreen(navController: NavController, wallet: cash.p.terminal.wallet.Wallet, error: String) {
+private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error: String) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
 
     val context = LocalContext.current
     val view = LocalView.current
     val clipboardManager = LocalClipboardManager.current
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_red_24),
-            title = stringResource(R.string.BalanceSyncError_Title),
+            title = stringResource(R.string.BalanceSyncError_Title) + " - ${wallet.coin.code}",
             onCloseClick = { navController.popBackStack() }
         ) {
 
