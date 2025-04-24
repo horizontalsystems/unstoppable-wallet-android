@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.manageaccount.evmaddress
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
