@@ -1,6 +1,7 @@
 package io.horizontalsystems.stellarkit
 
 import android.content.Context
+import android.util.Log
 import io.horizontalsystems.stellarkit.room.KitDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -8,8 +9,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import org.stellar.sdk.AssetTypeNative
 import org.stellar.sdk.KeyPair
+import org.stellar.sdk.Memo
 import org.stellar.sdk.Server
+import org.stellar.sdk.Transaction
+import org.stellar.sdk.TransactionBuilder
+import org.stellar.sdk.operations.PaymentOperation
+import java.math.BigDecimal
 
 class StellarKit(
 //    private val address: Address,
@@ -23,13 +30,15 @@ class StellarKit(
     private val db: KitDatabase,
 //    private val transactionSigner: TransactionSigner,
 ) {
+    val sendFee: BigDecimal = BigDecimal(Transaction.MIN_BASE_FEE.toBigInteger(), 7)
+
     private val serverUrl = when (network) {
         Network.MainNet -> "https://horizon.stellar.lobstr.co"
         Network.TestNet -> "https://horizon-testnet.stellar.org"
     }
     private val server = Server(serverUrl)
-//    private val accountId = keyPair.accountId
-    private val accountId = "GBXQUJBEDX5TYLJ6D5BGJZFLYF5GZVGXLWA2ZORS5OIA7H6B5O3MHMTP"
+    private val accountId = keyPair.accountId
+//    private val accountId = "GBXQUJBEDX5TYLJ6D5BGJZFLYF5GZVGXLWA2ZORS5OIA7H6B5O3MHMTP"
     private val balancesManager = BalancesManager(
         server,
         db.balanceDao(),
@@ -120,24 +129,6 @@ class StellarKit(
 //            ?: throw WalletError.WatchOnly
 //    }
 
-//    suspend fun send(recipient: FriendlyAddress, amount: SendAmount, comment: String?) {
-//        transactionSender?.send(recipient, amount, comment) ?: throw WalletError.WatchOnly
-//    }
-
-//    suspend fun send(
-//        jettonWallet: Address,
-//        recipient: FriendlyAddress,
-//        amount: BigInteger,
-//        comment: String?,
-//    ) {
-//        transactionSender?.send(jettonWallet, recipient, amount, comment)
-//            ?: throw WalletError.WatchOnly
-//    }
-
-//    suspend fun send(boc: String) {
-//        transactionSender?.send(boc) ?: throw WalletError.WatchOnly
-//    }
-
 //    fun startListener() {
 //        apiListener.start(address = address)
 //    }
@@ -160,6 +151,63 @@ class StellarKit(
         ).awaitAll()
     }
 
+//    suspend fun send(recipient: FriendlyAddress, amount: SendAmount, comment: String?) {
+//        transactionSender?.send(recipient, amount, comment) ?: throw WalletError.WatchOnly
+//    }
+
+//    suspend fun send(
+//        jettonWallet: Address,
+//        recipient: FriendlyAddress,
+//        amount: BigInteger,
+//        comment: String?,
+//    ) {
+//        transactionSender?.send(jettonWallet, recipient, amount, comment)
+//            ?: throw WalletError.WatchOnly
+//    }
+
+//    suspend fun send(boc: String) {
+//        transactionSender?.send(boc) ?: throw WalletError.WatchOnly
+//    }
+
+    fun send(recipient: String, amount: BigDecimal, memo: String?) {
+        val destination = KeyPair.fromAccountId(recipient)
+
+        // First, check to make sure that the destination account exists.
+        // You could skip this, but if the account does not exist, you will be charged
+        // the transaction fee when the transaction fails.
+        // It will throw HttpResponseException if account does not exist or there was another error.
+        server.accounts().account(destination.accountId)
+
+        val sourceAccount = server.accounts().account(accountId)
+
+        val paymentOperation = PaymentOperation.builder()
+            .destination(destination.accountId)
+            .asset(AssetTypeNative())
+            .amount(amount)
+            .build()
+
+        val transactionBuilder =
+            TransactionBuilder(sourceAccount, Network.MainNet.toStellarNetwork())
+                .addOperation(paymentOperation)
+                .setTimeout(180)
+                .setBaseFee(Transaction.MIN_BASE_FEE)
+
+        memo?.let {
+            transactionBuilder.addMemo(Memo.text(memo))
+        }
+
+        val transaction = transactionBuilder.build()
+        transaction.sign(keyPair)
+
+        try {
+            val response = server.submitTransaction(transaction)
+            Log.e("AAA", "Success! $response")
+        } catch (e: Exception) {
+            Log.e("AAA", "Something went wrong!", e)
+            throw e
+        }
+    }
+
 //    suspend fun sign(request: SendRequestEntity, tonWallet: TonWallet): String {
 //        check(tonWallet is TonWallet.FullAccess)
 //
@@ -170,12 +218,6 @@ class StellarKit(
 //        check(tonWallet is TonWallet.FullAccess)
 //
 //        return transactionSigner.getDetails(request, tonWallet)
-//    }
-
-//    enum WalletVersion {
-//        case v3
-//        case v4
-//        case v5
 //    }
 
     sealed class SyncError : Error() {
@@ -221,9 +263,9 @@ class StellarKit(
 //            return getTonApi(network).getJettonInfo(address)
 //        }
 
-//        fun validateAddress(address: String) {
-//            Address.parse(address)
-//        }
+        fun validateAddress(address: String) {
+            KeyPair.fromAccountId(address)
+        }
     }
 
 //    sealed class SendAmount {

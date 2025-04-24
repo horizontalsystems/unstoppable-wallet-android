@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.tonkit.FriendlyAddress
 
 interface EnterAddressValidator {
@@ -41,6 +42,12 @@ class SolanaAddressValidator : EnterAddressValidator {
 class TonAddressValidator : EnterAddressValidator {
     override suspend fun validate(address: Address) {
         FriendlyAddress.parse(address.hex)
+    }
+}
+
+class StellarAddressValidator : EnterAddressValidator {
+    override suspend fun validate(address: Address) {
+        StellarKit.validateAddress(address.hex)
     }
 }
 

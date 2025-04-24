@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.send.address.BitcoinAddressValida
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.EvmAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.SolanaAddressValidator
+import io.horizontalsystems.bankwallet.modules.send.address.StellarAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.TonAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.TronAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.ZcashAddressValidator
@@ -60,7 +61,9 @@ object AddressValidatorFactory {
                 TonAddressValidator()
             }
 
-            is BlockchainType.Stellar,
+            is BlockchainType.Stellar -> {
+                StellarAddressValidator()
+            }
             is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${wallet.token.blockchainType}")
         }
     }
