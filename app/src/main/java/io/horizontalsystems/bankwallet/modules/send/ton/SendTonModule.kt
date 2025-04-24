@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
+import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -28,7 +29,7 @@ object SendTonModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendTonAmountService(
+                    val amountService = SendAmountService(
                         amountValidator = amountValidator,
                         coinCode = wallet.coin.code,
                         availableBalance = adapter.availableBalance,
