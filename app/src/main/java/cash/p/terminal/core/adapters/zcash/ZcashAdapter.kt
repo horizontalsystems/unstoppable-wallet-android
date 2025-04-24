@@ -233,7 +233,7 @@ class ZcashAdapter(
     }
 
 
-    private suspend fun getFirstAccount(): Account {
+    suspend fun getFirstAccount(): Account {
         return synchronizer.getAccounts().firstOrNull() ?: throw Exception("No account found")
     }
 
