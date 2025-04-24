@@ -103,11 +103,11 @@ class ManageAccountViewModel(
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
             )
-
-            is AccountType.EvmAddress -> listOf()
-            is AccountType.SolanaAddress -> listOf()
-            is AccountType.TronAddress -> listOf()
-            is AccountType.TonAddress -> listOf()
+            is AccountType.ZCashUfvKey,
+            is AccountType.EvmAddress,
+            is AccountType.SolanaAddress,
+            is AccountType.TronAddress,
+            is AccountType.TonAddress,
             is AccountType.BitcoinAddress -> listOf()
             is AccountType.HdExtendedKey -> {
                 if ((account.type as AccountType.HdExtendedKey).hdExtendedKey.isPublic) {

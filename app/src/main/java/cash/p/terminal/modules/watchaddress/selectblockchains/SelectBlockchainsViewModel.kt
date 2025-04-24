@@ -8,6 +8,7 @@ import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.watchaddress.WatchAddressService
 import cash.p.terminal.ui_compose.components.ImageSource
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.badge
@@ -20,29 +21,30 @@ class SelectBlockchainsViewModel(
 ) : ViewModelUiState<SelectBlockchainsUiState>() {
 
     private var title: Int = R.string.Watch_Select_Blockchains
-    private var coinViewItems = listOf<CoinViewItem<cash.p.terminal.wallet.Token>>()
-    private var selectedCoins = setOf<cash.p.terminal.wallet.Token>()
+    private var coinViewItems = listOf<CoinViewItem<Token>>()
+    private var selectedCoins = setOf<Token>()
     private var accountCreated = false
 
     init {
         val tokens = service.tokens(accountType)
 
         when (accountType) {
-            is cash.p.terminal.wallet.AccountType.SolanaAddress,
-            is cash.p.terminal.wallet.AccountType.TronAddress,
-            is cash.p.terminal.wallet.AccountType.BitcoinAddress,
-            is cash.p.terminal.wallet.AccountType.TonAddress,
-            is cash.p.terminal.wallet.AccountType.Cex,
-            is cash.p.terminal.wallet.AccountType.Mnemonic,
-            is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> Unit // N/A
-            is cash.p.terminal.wallet.AccountType.EvmAddress -> {
+            is AccountType.ZCashUfvKey,
+            is AccountType.SolanaAddress,
+            is AccountType.TronAddress,
+            is AccountType.BitcoinAddress,
+            is AccountType.TonAddress,
+            is AccountType.Cex,
+            is AccountType.Mnemonic,
+            is AccountType.EvmPrivateKey -> Unit // N/A
+            is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
                 coinViewItems = tokens.map {
                     coinViewItemForBlockchain(it)
                 }
             }
 
-            is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+            is AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
                 coinViewItems = tokens.map {
                     coinViewItemForToken(it, label = it.badge)

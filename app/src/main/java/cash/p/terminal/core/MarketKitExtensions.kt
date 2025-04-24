@@ -230,6 +230,9 @@ val BlockchainType.feePriceScale: FeePriceScale
 
 fun BlockchainType.supports(accountType: AccountType): Boolean {
     return when (accountType) {
+        is AccountType.ZCashUfvKey ->
+            this == BlockchainType.Zcash
+
         is AccountType.Mnemonic -> true
         is AccountType.HdExtendedKey -> {
             val coinTypes = accountType.hdExtendedKey.coinTypes

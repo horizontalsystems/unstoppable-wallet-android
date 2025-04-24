@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountsViewModel(
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
     private val mode: ManageAccountsModule.Mode
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class ManageAccountsViewModel(
         viewModelScope.launch {
             accountManager.activeAccountStateFlow
                 .collect { activeAccountState ->
-                    if (activeAccountState is cash.p.terminal.wallet.ActiveAccountState.ActiveAccount) {
+                    if (activeAccountState is ActiveAccountState.ActiveAccount) {
                         updateViewItems(activeAccountState.account, accountManager.accounts)
                     }
                 }
@@ -40,14 +40,14 @@ class ManageAccountsViewModel(
         updateViewItems(accountManager.activeAccount, accountManager.accounts)
     }
 
-    private fun updateViewItems(activeAccount: cash.p.terminal.wallet.Account?, accounts: List<cash.p.terminal.wallet.Account>) {
+    private fun updateViewItems(activeAccount: Account?, accounts: List<Account>) {
         viewItems = accounts
             .sortedBy { it.name.lowercase() }
             .map { getViewItem(it, activeAccount) }
             .partition { !it.isWatchAccount }
     }
 
-    private fun getViewItem(account: cash.p.terminal.wallet.Account, activeAccount: cash.p.terminal.wallet.Account?) =
+    private fun getViewItem(account: Account, activeAccount: Account?) =
         AccountViewItem(
             accountId = account.id,
             title = account.name,

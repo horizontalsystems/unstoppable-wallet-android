@@ -12,6 +12,7 @@ import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.p.terminal.wallet.tokenTypeDerivation
 
 class WatchAddressService(
@@ -33,6 +34,14 @@ class WatchAddressService(
                 is AccountType.SolanaAddress -> {
                     if (BlockchainType.Solana.supports(accountType)) {
                         add(TokenQuery(BlockchainType.Solana, TokenType.Native))
+                    }
+                }
+
+                is AccountType.ZCashUfvKey -> {
+                    if (BlockchainType.Zcash.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Zcash, TokenType.AddressSpecTyped(AddressSpecType.Shielded)))
+                        add(TokenQuery(BlockchainType.Zcash, TokenType.AddressSpecTyped(AddressSpecType.Transparent)))
+                        add(TokenQuery(BlockchainType.Zcash, TokenType.AddressSpecTyped(AddressSpecType.Unified)))
                     }
                 }
 
