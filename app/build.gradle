@@ -23,8 +23,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 143
-        versionName "0.41.13"
+        versionCode 144
+        versionName "0.41.14"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ksp {
