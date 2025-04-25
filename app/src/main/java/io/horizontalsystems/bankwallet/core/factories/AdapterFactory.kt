@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
 import io.horizontalsystems.bankwallet.core.adapters.StellarAdapter
+import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionsAdapter
@@ -95,6 +96,12 @@ class AdapterFactory(
         val tonKitWrapper = tonKitManager.getTonKitWrapper(wallet.account)
 
         return JettonAdapter(tonKitWrapper, address, wallet)
+    }
+
+    private fun getStellarAssetAdapter(wallet: Wallet, canonicalForm: String): IAdapter {
+        val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(wallet.account)
+
+        return StellarAssetAdapter(stellarKitWrapper, canonicalForm)
     }
 
     fun getAdapterOrNull(wallet: Wallet) = try {
@@ -175,6 +182,7 @@ class AdapterFactory(
         }
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
+        is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.canonicalForm)
         is TokenType.Unsupported -> null
     }
 

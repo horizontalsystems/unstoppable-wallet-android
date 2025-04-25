@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
@@ -14,30 +15,38 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class StellarAdapter(
-    stellarKitWrapper: StellarKitWrapper
-) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
-
-    private var balance = stellarKit.balance
-
-    override var balanceState: AdapterState = AdapterState.Syncing()
-    override val balanceData: BalanceData
-        get() = BalanceData(balance)
-
+class StellarAssetAdapter(
+    stellarKitWrapper: StellarKitWrapper,
+    canonicalForm: String
+) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter
+{
+//    private val address = Address.parse(addressStr)
+    private val canonicalForm = canonicalForm.replace("-", ":")
+    private var assetBalance = stellarKit.assetBalanceMap[this.canonicalForm]
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private val balance: BigDecimal
+        get() = assetBalance ?: BigDecimal.ZERO
+
+    override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceData: BalanceData
+        get() = BalanceData(balance)
+    override val balanceUpdatedFlowable: Flowable<Unit>
+        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     override fun start() {
         coroutineScope.launch {
-            stellarKit.balanceFlow.collect { balance ->
-                this@StellarAdapter.balance = balance
+            stellarKit.assetBalanceMapFlow.collect { assetBalanceMap ->
+                Log.e("AAA", "canonicalForm: ${canonicalForm}")
+                Log.e("AAA", "assetBalanceMap: ${assetBalanceMap}")
+
+                assetBalance = assetBalanceMap[canonicalForm]
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
@@ -56,14 +65,12 @@ class StellarAdapter(
     override fun refresh() {
     }
 
-    override val debugInfo = "debugInfo"
-
     override val availableBalance: BigDecimal
         get() = balance
     override val fee: BigDecimal
         get() = stellarKit.sendFee
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        stellarKit.sendNative(address, amount, memo)
+        stellarKit.sendAsset(canonicalForm, address, amount, memo)
     }
 }
