@@ -3,7 +3,6 @@ package cash.p.terminal.core.providers
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.order
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.entities.BlockchainType

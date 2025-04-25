@@ -38,10 +38,13 @@ import cash.z.ecc.android.sdk.ext.fromHex
 import cash.z.ecc.android.sdk.model.Account
 import cash.z.ecc.android.sdk.model.AccountBalance
 import cash.z.ecc.android.sdk.model.AccountCreateSetup
+import cash.z.ecc.android.sdk.model.AccountImportSetup
+import cash.z.ecc.android.sdk.model.AccountPurpose
 import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.BlockHeight
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
+import cash.z.ecc.android.sdk.model.UnifiedFullViewingKey
 import cash.z.ecc.android.sdk.model.WalletBalance
 import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.ZcashNetwork
@@ -66,6 +69,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
@@ -97,8 +101,11 @@ class ZcashAdapter(
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
     private val accountType =
-        (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-    private val seed = accountType.seed
+        (wallet.account.type as? AccountType.Mnemonic)
+            ?: (wallet.account.type as? AccountType.ZCashUfvKey)
+            ?: throw UnsupportedAccountException()
+
+    private val seed = (accountType as? AccountType.Mnemonic)?.seed ?: ByteArray(0)
 
     private var zcashAccount: Account? = null
 
@@ -151,7 +158,7 @@ class ZcashAdapter(
     }
 
     init {
-        val walletInitMode = if (existingWallet) {
+        val walletInitMode = if (existingWallet || isWatchOnlyAccount()) {
             WalletInitMode.ExistingWallet
         } else when (wallet.account.origin) {
             AccountOrigin.Created -> WalletInitMode.NewWallet
@@ -176,6 +183,16 @@ class ZcashAdapter(
             accountBirthday = it
         }
 
+        val setup = if (!isWatchOnlyAccount()) {
+            AccountCreateSetup(
+                seed = FirstClassByteArray(seed),
+                accountName = wallet.account.name,
+                keySource = null
+            )
+        } else {
+            null
+        }
+
         synchronizer = Synchronizer.newBlocking(
             context = context,
             zcashNetwork = network,
@@ -183,12 +200,14 @@ class ZcashAdapter(
             lightWalletEndpoint = lightWalletEndpoint,
             birthday = birthday,
             walletInitMode = walletInitMode,
-            setup = AccountCreateSetup(
-                seed = FirstClassByteArray(seed),
-                accountName = wallet.account.name,
-                keySource = null
-            )
+            setup = setup
         )
+
+        if (isWatchOnlyAccount()) {
+            runBlocking {
+                importWatchAccount()
+            }
+        }
 
         zcashAccount = runBlocking { getFirstAccount() }
         receiveAddress = runBlocking {
@@ -201,13 +220,33 @@ class ZcashAdapter(
         }
         transactionsProvider =
             ZcashTransactionsProvider(
-                receiveAddress = receiveAddress,
                 synchronizer = synchronizer as SdkSynchronizer
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
 
         subscribeToEvents()
+    }
+
+    private fun isWatchOnlyAccount(): Boolean {
+        return wallet.account.type is AccountType.ZCashUfvKey
+    }
+
+    private suspend fun importWatchAccount() {
+        try {
+            val key = (wallet.account.type as? AccountType.ZCashUfvKey)?.key
+                ?: return
+            (synchronizer as Synchronizer).importAccountByUfvk(
+                AccountImportSetup(
+                    accountName = wallet.account.name,
+                    keySource = null,
+                    purpose = AccountPurpose.ViewOnly,
+                    ufvk = UnifiedFullViewingKey(key)
+                )
+            )
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 
     private fun subscribeToEvents() {
@@ -233,7 +272,7 @@ class ZcashAdapter(
     }
 
 
-    private suspend fun getFirstAccount(): Account {
+    suspend fun getFirstAccount(): Account {
         return synchronizer.getAccounts().firstOrNull() ?: throw Exception("No account found")
     }
 
@@ -271,6 +310,15 @@ class ZcashAdapter(
             accountBirthday = it
         }
         try {
+            val setup = if (!isWatchOnlyAccount()) {
+                AccountCreateSetup(
+                    seed = FirstClassByteArray(seed),
+                    accountName = wallet.account.name,
+                    keySource = null
+                )
+            } else {
+                null
+            }
             synchronizer = Synchronizer.new(
                 context = App.instance,
                 zcashNetwork = network,
@@ -278,12 +326,13 @@ class ZcashAdapter(
                 lightWalletEndpoint = lightWalletEndpoint,
                 birthday = birthday,
                 walletInitMode = walletInitMode,
-                setup = AccountCreateSetup(
-                    seed = FirstClassByteArray(seed),
-                    accountName = wallet.account.name,
-                    keySource = null
-                )
+                setup = setup
             )
+
+            if (isWatchOnlyAccount()) {
+                importWatchAccount()
+            }
+
         } catch (ex: IllegalStateException) {
             // To prevent crash with synchronizer creation in some situations
             // when java.lang.IllegalStateException: Another synchronizer with SynchronizerKey
@@ -295,14 +344,13 @@ class ZcashAdapter(
 
         zcashAccount = getFirstAccount()
         receiveAddress = when (addressSpecTyped) {
-                AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
-                AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
-                AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
-                null -> synchronizer.getSaplingAddress(getFirstAccount())
-            }
+            AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
+            AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
+            AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
+            null -> synchronizer.getSaplingAddress(getFirstAccount())
+        }
         transactionsProvider =
             ZcashTransactionsProvider(
-                receiveAddress = receiveAddress,
                 synchronizer = synchronizer as SdkSynchronizer
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
@@ -454,7 +502,7 @@ class ZcashAdapter(
         return transactionsProvider.getNewTransactionsFlowable(transactionType, address)
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
-            }.asFlow()
+            }
     }
 
     override fun getTransactionUrl(transactionHash: String): String =

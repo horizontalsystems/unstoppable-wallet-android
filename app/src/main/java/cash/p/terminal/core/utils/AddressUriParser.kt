@@ -7,18 +7,25 @@ import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.AddressUri
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
 import java.net.URI
 
 
-class AddressUriParser(private val blockchainType: BlockchainType?, private val tokenType: TokenType?) : IAddressParser {
+class AddressUriParser(
+    private val blockchainType: BlockchainType?,
+    private val tokenType: TokenType?
+) : IAddressParser {
     private fun pair(type: BlockchainType, s2: String?): String {
         val prefix = if (type.removeScheme) null else type.uriScheme
         return listOfNotNull(prefix, s2).joinToString(separator = ":")
     }
 
-    private fun fullAddress(scheme: String, address: String, uriBlockchainUid: String? = null): String {
+    private fun fullAddress(
+        scheme: String,
+        address: String,
+        uriBlockchainUid: String? = null
+    ): String {
         // there is no explicit indication of the blockchain in the uri. We use the rules of the blockchain parser
         uriBlockchainUid ?: run {
             // if has blockchainType check if needed prefix
@@ -47,10 +54,11 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
 
         val schemeSpecificPart = uri.schemeSpecificPart
 
-        val pathEndIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it else schemeSpecificPart.length }
+        val pathEndIndex =
+            schemeSpecificPart.indexOf('?').let { if (it != -1) it else schemeSpecificPart.length }
         val path = schemeSpecificPart.substring(0, pathEndIndex)
 
-        val scheme = uri.scheme ?: return AddressUriResult.NoUri
+        val scheme = uri.scheme ?: blockchainType?.uriScheme ?: return AddressUriResult.NoUri
 
         blockchainType?.uriScheme?.let { blockchainTypeScheme ->
             if (scheme != blockchainTypeScheme) {
@@ -60,7 +68,8 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
 
         val parsedUri = AddressUri(scheme = scheme)
 
-        val queryStartIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it + 1 else schemeSpecificPart.length }
+        val queryStartIndex = schemeSpecificPart.indexOf('?')
+            .let { if (it != -1) it + 1 else schemeSpecificPart.length }
         val query = schemeSpecificPart.substring(queryStartIndex)
 
         val parameters = tryOrNull { parseQueryParameters(query) }.orEmpty()
@@ -88,7 +97,8 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
             }
         }
 
-        parsedUri.address = fullAddress(scheme, path, parsedUri.value(AddressUri.Field.BlockchainUid))
+        parsedUri.address =
+            fullAddress(scheme, path, parsedUri.value(AddressUri.Field.BlockchainUid))
         return AddressUriResult.Uri(parsedUri)
     }
 
@@ -109,7 +119,9 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     fun uri(addressUri: AddressUri): String {
         val uriBuilder = Uri.Builder()
             .scheme(blockchainType?.uriScheme)
-            .path(addressUri.address.removePrefix(blockchainType?.uriScheme ?: "").removePrefix(":"))
+            .path(
+                addressUri.address.removePrefix(blockchainType?.uriScheme ?: "").removePrefix(":")
+            )
 
         for ((key, value) in addressUri.parameters) {
             uriBuilder.appendQueryParameter(key.value, value)

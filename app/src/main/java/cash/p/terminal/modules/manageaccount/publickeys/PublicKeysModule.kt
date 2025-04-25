@@ -9,7 +9,7 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 object PublicKeysModule {
 
-    class Factory(private val account: cash.p.terminal.wallet.Account) : ViewModelProvider.Factory {
+    class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return PublicKeysViewModel(account, App.evmBlockchainManager) as T
@@ -18,7 +18,8 @@ object PublicKeysModule {
 
     data class ViewState(
         val evmAddress: String? = null,
-        val extendedPublicKey: ExtendedPublicKey? = null
+        val extendedPublicKey: ExtendedPublicKey? = null,
+        val zcashUfvk: String? = null
     )
 
     data class ExtendedPublicKey(

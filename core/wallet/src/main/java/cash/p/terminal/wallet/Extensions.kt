@@ -117,6 +117,7 @@ val TokenType.meta: String?
         is TokenType.Derived -> this.derivation.name
         is TokenType.AddressTyped -> this.type.name
         is TokenType.Bep2 -> this.symbol
+        is TokenType.AddressSpecTyped -> this.type.name
         else -> null
     }
 

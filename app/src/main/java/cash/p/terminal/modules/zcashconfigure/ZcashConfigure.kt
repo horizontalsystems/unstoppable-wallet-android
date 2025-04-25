@@ -81,7 +81,6 @@ import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.imageUrl

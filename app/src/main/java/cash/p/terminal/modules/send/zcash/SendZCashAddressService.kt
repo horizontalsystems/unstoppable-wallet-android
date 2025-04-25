@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendZCashAddressService(private val adapter: ISendZcashAdapter, prefilledAddress: String?) {
+class SendZCashAddressService(
+    private val adapter: ISendZcashAdapter,
+    prefilledAddress: String?
+) {
     var address: Address? = prefilledAddress?.let { Address(it) }
         private set
     private var addressType: ZcashAdapter.ZCashAddressType? = null
@@ -24,6 +27,7 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter, prefilledA
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
+
 
     suspend fun setAddress(address: Address?) {
         this.address = address

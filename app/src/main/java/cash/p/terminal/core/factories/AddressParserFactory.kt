@@ -34,6 +34,7 @@ val BlockchainType.removeScheme: Boolean
         return when (this) {
             BlockchainType.Bitcoin,
             BlockchainType.Litecoin,
+            BlockchainType.Dogecoin,
             BlockchainType.Dash,
             BlockchainType.Zcash,
             BlockchainType.Ethereum,

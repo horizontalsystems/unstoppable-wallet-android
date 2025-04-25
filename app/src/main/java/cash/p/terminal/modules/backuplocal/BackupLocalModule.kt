@@ -16,7 +16,8 @@ object BackupLocalModule {
     private const val TRON_ADDRESS = "tron_address"
     private const val TON_ADDRESS = "ton_address"
     private const val BITCOIN_ADDRESS = "bitcoin_address"
-    private const val HD_EXTENDED_LEY = "hd_extended_key"
+    private const val HD_EXTENDED_KEY = "hd_extended_key"
+    private const val UFVK = "ufvk"
     private const val CEX = "cex"
 
     //Backup Json file data structure
@@ -67,20 +68,21 @@ object BackupLocalModule {
         val salt: String
     )
 
-    fun getAccountTypeString(accountType: cash.p.terminal.wallet.AccountType): String = when (accountType) {
-        is cash.p.terminal.wallet.AccountType.Mnemonic -> MNEMONIC
-        is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> PRIVATE_KEY
-        is cash.p.terminal.wallet.AccountType.EvmAddress -> ADDRESS
-        is cash.p.terminal.wallet.AccountType.SolanaAddress -> SOLANA_ADDRESS
-        is cash.p.terminal.wallet.AccountType.TronAddress -> TRON_ADDRESS
-        is cash.p.terminal.wallet.AccountType.TonAddress -> TON_ADDRESS
-        is cash.p.terminal.wallet.AccountType.BitcoinAddress -> BITCOIN_ADDRESS
-        is cash.p.terminal.wallet.AccountType.HdExtendedKey -> HD_EXTENDED_LEY
-        is cash.p.terminal.wallet.AccountType.Cex -> CEX
+    fun getAccountTypeString(accountType: AccountType): String = when (accountType) {
+        is AccountType.Mnemonic -> MNEMONIC
+        is AccountType.EvmPrivateKey -> PRIVATE_KEY
+        is AccountType.EvmAddress -> ADDRESS
+        is AccountType.SolanaAddress -> SOLANA_ADDRESS
+        is AccountType.TronAddress -> TRON_ADDRESS
+        is AccountType.TonAddress -> TON_ADDRESS
+        is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
+        is AccountType.HdExtendedKey -> HD_EXTENDED_KEY
+        is AccountType.ZCashUfvKey -> UFVK
+        is AccountType.Cex -> CEX
     }
 
     @Throws(IllegalStateException::class)
-    fun getAccountTypeFromData(accountType: String, data: ByteArray): cash.p.terminal.wallet.AccountType {
+    fun getAccountTypeFromData(accountType: String, data: ByteArray): AccountType {
         return when (accountType) {
             MNEMONIC -> {
                 val parts = String(data, Charsets.UTF_8).split("@", limit = 2)
@@ -89,20 +91,21 @@ object BackupLocalModule {
                     throw IllegalStateException("Non standard mnemonic")
                 val words = parts[0].split(" ")
                 val passphrase = if (parts.size > 1) parts[1] else ""
-                cash.p.terminal.wallet.AccountType.Mnemonic(words, passphrase)
+                AccountType.Mnemonic(words, passphrase)
             }
 
-            PRIVATE_KEY -> cash.p.terminal.wallet.AccountType.EvmPrivateKey(data.toBigInteger())
-            ADDRESS -> cash.p.terminal.wallet.AccountType.EvmAddress(String(data, Charsets.UTF_8))
-            SOLANA_ADDRESS -> cash.p.terminal.wallet.AccountType.SolanaAddress(String(data, Charsets.UTF_8))
-            TRON_ADDRESS -> cash.p.terminal.wallet.AccountType.TronAddress(String(data, Charsets.UTF_8))
-            TON_ADDRESS -> cash.p.terminal.wallet.AccountType.TonAddress(String(data, Charsets.UTF_8))
-            BITCOIN_ADDRESS -> cash.p.terminal.wallet.AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
-            HD_EXTENDED_LEY -> cash.p.terminal.wallet.AccountType.HdExtendedKey(Base58.encode(data))
+            PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
+            ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
+            SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
+            TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
+            TON_ADDRESS -> AccountType.TonAddress(String(data, Charsets.UTF_8))
+            BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
+            HD_EXTENDED_KEY -> AccountType.HdExtendedKey(Base58.encode(data))
+            UFVK -> AccountType.ZCashUfvKey(String(data, Charsets.UTF_8))
             CEX -> {
-                val cexType = cash.p.terminal.wallet.CexType.deserialize(String(data, Charsets.UTF_8))
+                val cexType = CexType.deserialize(String(data, Charsets.UTF_8))
                 if (cexType != null) {
-                    cash.p.terminal.wallet.AccountType.Cex(cexType)
+                    AccountType.Cex(cexType)
                 } else {
                     throw IllegalStateException("Unknown Cex account type")
                 }
@@ -112,8 +115,8 @@ object BackupLocalModule {
         }
     }
 
-    fun getDataForEncryption(accountType: cash.p.terminal.wallet.AccountType): ByteArray = when (accountType) {
-        is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+    fun getDataForEncryption(accountType: AccountType): ByteArray = when (accountType) {
+        is AccountType.Mnemonic -> {
             val passphrasePart = if (accountType.passphrase.isNotBlank()) {
                 "@" + accountType.passphrase
             } else {
@@ -123,14 +126,15 @@ object BackupLocalModule {
             combined.toByteArray(Charsets.UTF_8)
         }
 
-        is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> accountType.key.toByteArray()
-        is cash.p.terminal.wallet.AccountType.EvmAddress -> accountType.address.toByteArray(Charsets.UTF_8)
-        is cash.p.terminal.wallet.AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
-        is cash.p.terminal.wallet.AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)
-        is cash.p.terminal.wallet.AccountType.TonAddress -> accountType.address.toByteArray(Charsets.UTF_8)
-        is cash.p.terminal.wallet.AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
-        is cash.p.terminal.wallet.AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
-        is cash.p.terminal.wallet.AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)
+        is AccountType.EvmPrivateKey -> accountType.key.toByteArray()
+        is AccountType.EvmAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.TonAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
+        is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
+        is AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)
+        is AccountType.ZCashUfvKey -> accountType.key.toByteArray(Charsets.UTF_8)
     }
 
     val kdfDefault = KdfParams(

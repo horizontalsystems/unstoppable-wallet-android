@@ -26,7 +26,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val TRON_ADDRESS = "tron_address"
         private const val TON_ADDRESS = "ton_address"
         private const val BITCOIN_ADDRESS = "bitcoin_address"
-        private const val HD_EXTENDED_LEY = "hd_extended_key"
+        private const val HD_EXTENDED_KEY = "hd_extended_key"
+        private const val UFVK = "ufvk"
         private const val CEX = "cex"
     }
 
@@ -57,7 +58,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
                             TON_ADDRESS -> AccountType.TonAddress(record.key!!.value)
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
-                            HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
+                            HD_EXTENDED_KEY -> AccountType.HdExtendedKey(record.key!!.value)
+                            UFVK -> AccountType.ZCashUfvKey(record.key!!.value)
                             CEX -> {
                                 CexType.deserialize(record.key!!.value)?.let {
                                     AccountType.Cex(it)
@@ -154,11 +156,15 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             }
             is AccountType.HdExtendedKey -> {
                 key = SecretString((account.type as AccountType.HdExtendedKey).keySerialized)
-                accountType = HD_EXTENDED_LEY
+                accountType = HD_EXTENDED_KEY
             }
             is AccountType.Cex -> {
                 key = SecretString((account.type as AccountType.Cex).cexType.serialized())
                 accountType = CEX
+            }
+            is AccountType.ZCashUfvKey -> {
+                key = SecretString((account.type as AccountType.ZCashUfvKey).key)
+                accountType = UFVK
             }
         }
 

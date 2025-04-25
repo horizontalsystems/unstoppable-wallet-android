@@ -2,15 +2,25 @@ package cash.p.terminal.modules.watchaddress
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import io.horizontalsystems.core.ViewModelUiState
-
+import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.tokenType
 import cash.p.terminal.modules.address.AddressParserChain
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
+import cash.p.terminal.modules.address.ZCashUfvkParser
+import cash.p.terminal.wallet.AccountType
+import cash.z.ecc.android.sdk.CloseableSynchronizer
+import cash.z.ecc.android.sdk.Synchronizer
+import cash.z.ecc.android.sdk.WalletInitMode
+import cash.z.ecc.android.sdk.model.AccountImportSetup
+import cash.z.ecc.android.sdk.model.AccountPurpose
+import cash.z.ecc.android.sdk.model.UnifiedFullViewingKey
+import cash.z.ecc.android.sdk.model.ZcashNetwork
+import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
+import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -27,7 +37,8 @@ class WatchAddressViewModel(
     private var type = Type.Unsupported
     private var address: Address? = null
     private var xPubKey: String? = null
-    private var accountType: cash.p.terminal.wallet.AccountType? = null
+    private var ufvkKey: String? = null
+    private var accountType: AccountType? = null
     private var accountNameEdited = false
     private var inputState: DataState<String>? = null
     private var parseAddressJob: Job? = null
@@ -54,6 +65,7 @@ class WatchAddressViewModel(
         parseAddressJob?.cancel()
         address = null
         xPubKey = null
+        ufvkKey = null
 
         if (v.isBlank()) {
             inputState = null
@@ -71,6 +83,9 @@ class WatchAddressViewModel(
 
                 if (handler == null) {
                     ensureActive()
+                    if (ZCashUfvkParser.isUfvk(vTrimmed) && isValidUfvkKey(vTrimmed)) {
+                        return@launch
+                    }
                     withContext(Dispatchers.Main) {
                         setXPubKey(vTrimmed)
                     }
@@ -106,6 +121,60 @@ class WatchAddressViewModel(
 
         syncSubmitButtonType()
         emitState()
+    }
+
+    private suspend fun isValidUfvkKey(input: String): Boolean {
+        var synchronizer: CloseableSynchronizer? = null
+        try {
+            // Clear previous synchronizer
+            Synchronizer.erase(
+                appContext = App.instance,
+                network = ZcashNetwork.Mainnet
+            )
+
+            synchronizer = Synchronizer.new(
+                context = App.instance,
+                zcashNetwork = ZcashNetwork.Mainnet,
+                lightWalletEndpoint = LightWalletEndpoint(
+                    host = "zec.rocks",
+                    port = 443,
+                    isSecure = true
+                ),
+                birthday = null,
+                walletInitMode = WalletInitMode.ExistingWallet,
+                setup = null
+            )
+            (synchronizer as Synchronizer).getAccounts().forEach {
+                println("Account: ${it.ufvk}")
+            }
+            // Check first existing accounts
+            if ((synchronizer as Synchronizer).getAccounts().find { it.ufvk == input } == null) {
+                // Try to import account
+                (synchronizer as Synchronizer).importAccountByUfvk(
+                    AccountImportSetup(
+                        accountName = "check_address",
+                        keySource = "user input",
+                        purpose = AccountPurpose.ViewOnly,
+                        ufvk = UnifiedFullViewingKey(input)
+                    )
+                )
+            }
+            ufvkKey = input
+            type = Type.ZcashUfvk
+            inputState = DataState.Success(input)
+            withContext(Dispatchers.Main) {
+                syncSubmitButtonType()
+                emitState()
+            }
+            return true
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            inputState = DataState.Error(UnsupportedAddress)
+            type = Type.Unsupported
+        } finally {
+            synchronizer?.close()
+        }
+        return false
     }
 
     private fun setXPubKey(input: String) {
@@ -193,24 +262,31 @@ class WatchAddressViewModel(
             Type.TronAddress -> SubmitButtonType.Watch(address != null)
             Type.BitcoinAddress -> SubmitButtonType.Watch(address != null)
             Type.TonAddress -> SubmitButtonType.Watch(address != null)
+            Type.ZcashUfvk -> SubmitButtonType.Watch(ufvkKey != null)
             Type.Unsupported -> SubmitButtonType.Watch(false)
         }
     }
 
     private fun getAccountType() = when (type) {
-        Type.EvmAddress -> address?.let { cash.p.terminal.wallet.AccountType.EvmAddress(it.hex) }
-        Type.SolanaAddress -> address?.let { cash.p.terminal.wallet.AccountType.SolanaAddress(it.hex) }
-        Type.TronAddress -> address?.let { cash.p.terminal.wallet.AccountType.TronAddress(it.hex) }
-        Type.XPubKey -> xPubKey?.let { cash.p.terminal.wallet.AccountType.HdExtendedKey(it) }
+        Type.EvmAddress -> address?.let { AccountType.EvmAddress(it.hex) }
+        Type.SolanaAddress -> address?.let { AccountType.SolanaAddress(it.hex) }
+        Type.TronAddress -> address?.let { AccountType.TronAddress(it.hex) }
+        Type.XPubKey -> xPubKey?.let { AccountType.HdExtendedKey(it) }
+        Type.ZcashUfvk -> ufvkKey?.let { AccountType.ZCashUfvKey(it) }
         Type.BitcoinAddress -> address?.let {
             if (it is BitcoinAddress) {
-                cash.p.terminal.wallet.AccountType.BitcoinAddress(address = it.hex, blockchainType = it.blockchainType!!, tokenType = it.tokenType)
+                AccountType.BitcoinAddress(
+                    address = it.hex,
+                    blockchainType = it.blockchainType!!,
+                    tokenType = it.tokenType
+                )
             } else {
                 throw IllegalStateException("Unsupported address type")
             }
         }
+
         Type.TonAddress -> address?.let {
-            cash.p.terminal.wallet.AccountType.TonAddress(it.hex)
+            AccountType.TonAddress(it.hex)
         }
 
         Type.Unsupported -> throw IllegalStateException("Unsupported address type")
@@ -223,14 +299,15 @@ class WatchAddressViewModel(
         XPubKey,
         BitcoinAddress,
         TonAddress,
-        Unsupported
+        Unsupported,
+        ZcashUfvk
     }
 }
 
 data class WatchAddressUiState(
     val accountCreated: Boolean,
     val submitButtonType: SubmitButtonType,
-    val accountType: cash.p.terminal.wallet.AccountType?,
+    val accountType: AccountType?,
     val accountName: String?,
     val inputState: DataState<String>?
 )
@@ -240,4 +317,5 @@ sealed class SubmitButtonType {
     data class Next(val enabled: Boolean) : SubmitButtonType()
 }
 
-object UnsupportedAddress : Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.Watch_Error_InvalidAddressFormat))
+object UnsupportedAddress :
+    Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.Watch_Error_InvalidAddressFormat))

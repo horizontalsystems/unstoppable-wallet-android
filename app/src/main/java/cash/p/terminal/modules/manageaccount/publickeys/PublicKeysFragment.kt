@@ -16,17 +16,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.getInput
-import cash.p.terminal.navigation.slideFromRight
-
-import cash.p.terminal.wallet.Account
-import cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment
+import cash.p.terminal.modules.manageaccount.evmaddress.PublicViewKeyFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import cash.p.terminal.modules.manageaccount.ui.KeyActionItem
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.Account
 
 class PublicKeysFragment : BaseComposeFragment() {
 
@@ -71,8 +70,12 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     description = stringResource(R.string.PublicKeys_EvmAddress_Description)
                 ) {
                     navController.slideFromRight(
-                        R.id.evmAddressFragment,
-                        EvmAddressFragment.Input(evmAddress)
+                        R.id.publicViewKeyFragment,
+                        PublicViewKeyFragment.Input(
+                            titleResId = R.string.PublicKeys_EvmAddress,
+                            viewKey = evmAddress,
+                            showInfo = true
+                        )
                     )
                 }
             }
@@ -86,6 +89,21 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         ShowExtendedKeyFragment.Input(
                             publicKey.hdKey,
                             publicKey.accountPublicKey
+                        )
+                    )
+                }
+            }
+            viewModel.viewState.zcashUfvk?.let { publicKey ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.publicKeys_zec_ufvk),
+                    description = stringResource(id = R.string.publicKeys_zec_ufvk_descritpion),
+                ) {
+                    navController.slideFromRight(
+                        R.id.publicViewKeyFragment,
+                        PublicViewKeyFragment.Input(
+                            titleResId = R.string.publicKeys_zec_ufvk,
+                            viewKey = publicKey,
+                            showInfo = false
                         )
                     )
                 }

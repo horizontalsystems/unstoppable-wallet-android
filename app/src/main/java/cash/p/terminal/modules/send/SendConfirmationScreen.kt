@@ -27,9 +27,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-
-
-
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType

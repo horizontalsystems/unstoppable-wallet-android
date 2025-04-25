@@ -53,8 +53,8 @@
         android:id="@+id/publicKeysFragment"
         android:name="cash.p.terminal.modules.manageaccount.publickeys.PublicKeysFragment"/>
     <fragment
-        android:id="@+id/evmAddressFragment"
-        android:name="cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment"/>
+        android:id="@+id/publicViewKeyFragment"
+        android:name="cash.p.terminal.modules.manageaccount.evmaddress.PublicViewKeyFragment"/>
     <fragment
         android:id="@+id/recoveryPhraseFragment"
         android:name="cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseFragment"/>
