@@ -15,7 +15,7 @@ data class Tag(
     val id: Int = 0
 ) {
     enum class Platform {
-        Native, Jetton;
+        Native, Asset;
     }
 
     enum class Type {

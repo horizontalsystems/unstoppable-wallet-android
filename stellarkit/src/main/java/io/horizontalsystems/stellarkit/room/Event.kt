@@ -2,13 +2,14 @@ package io.horizontalsystems.stellarkit.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.datetime.Instant
 import org.stellar.sdk.responses.operations.OperationResponse
 
 @Entity
 data class Event(
     @PrimaryKey
     val id: Long,
-    val createdAt: String,
+    val timestamp: Long,
     val pagingToken: String,
     val sourceAccount: String,
     val transactionHash: String,
@@ -45,7 +46,7 @@ data class Event(
     companion object {
         fun fromApi(operationResponse: OperationResponse) = Event(
             id = operationResponse.id,
-            createdAt = operationResponse.createdAt,
+            timestamp = Instant.parse(operationResponse.createdAt).epochSeconds,
             pagingToken = operationResponse.pagingToken,
             sourceAccount = operationResponse.sourceAccount,
             transactionHash = operationResponse.transactionHash,
@@ -57,14 +58,14 @@ data class Event(
 
 data class EventInfo(
     val events: List<Event>,
-    val initial: Boolean
+    val initial: Boolean,
 )
 
 @Entity
 data class EventSyncState(
     @PrimaryKey
     val id: String,
-    val allSynced: Boolean
+    val allSynced: Boolean,
 ) {
     constructor(allSynced: Boolean) : this("unique_id", allSynced)
 }
