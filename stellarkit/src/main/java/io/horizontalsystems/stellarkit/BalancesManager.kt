@@ -21,6 +21,17 @@ class BalancesManager(
     private val _xlmBalanceFlow = MutableStateFlow(balanceDao.getNativeBalance()?.balance ?: BigDecimal.ZERO)
     val xlmBalanceFlow = _xlmBalanceFlow.asStateFlow()
 
+    private val _assetBalanceMapFlow = MutableStateFlow(getInitialAssetBalanceMap())
+    val assetBalanceMapFlow = _assetBalanceMapFlow.asStateFlow()
+
+    fun getInitialAssetBalanceMap(): Map<String, BigDecimal> {
+        val assetBalances = balanceDao.getAssetBalances()
+
+        return assetBalances.map {
+            "${it.code}:${it.issuer}" to it.balance
+        }.toMap()
+    }
+
     fun sync() {
         Log.d("AAA", "Syncing balances...")
 
@@ -37,12 +48,14 @@ class BalancesManager(
             val accounts = server.accounts()
             val account = accounts.account(accountId)
 
+            val assetBalances = mutableListOf<AssetBalance>()
+
             account.balances.forEach { balance ->
                 val balanceBigDecimal = balance.balance.toBigDecimal()
                 if (balance.assetType == "native") {
                     updateXlmBalance(balanceBigDecimal)
                 } else {
-                    balanceDao.insert(
+                    assetBalances.add(
                         AssetBalance(
                             type = balance.assetType,
                             code = balance.assetCode,
@@ -50,6 +63,16 @@ class BalancesManager(
                             balance = balanceBigDecimal,
                         )
                     )
+                }
+            }
+
+            if (assetBalances.isNotEmpty()) {
+                balanceDao.insertAll(assetBalances)
+
+                _assetBalanceMapFlow.update {
+                    assetBalances.map {
+                        "${it.code}:${it.issuer}" to it.balance
+                    }.toMap()
                 }
             }
 

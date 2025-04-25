@@ -9,6 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import org.stellar.sdk.Asset
 import org.stellar.sdk.AssetTypeNative
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.Memo
@@ -51,12 +52,13 @@ class StellarKit(
 
     val syncStateFlow by balancesManager::syncStateFlow
     val balanceFlow by balancesManager::xlmBalanceFlow
+    val assetBalanceMapFlow by balancesManager::assetBalanceMapFlow
 //    val jettonSyncStateFlow by jettonManager::syncStateFlow
 //    val jettonBalanceMapFlow by jettonManager::jettonBalanceMapFlow
 //    val eventSyncStateFlow by eventManager::syncStateFlow
 
     val balance get() = balanceFlow.value
-//    val jettonBalanceMap get() = jettonBalanceMapFlow.value
+    val assetBalanceMap get() = assetBalanceMapFlow.value
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -169,7 +171,15 @@ class StellarKit(
 //        transactionSender?.send(boc) ?: throw WalletError.WatchOnly
 //    }
 
-    fun send(recipient: String, amount: BigDecimal, memo: String?) {
+    fun sendNative(recipient: String, amount: BigDecimal, memo: String?) {
+        send(AssetTypeNative(), recipient, amount, memo)
+    }
+
+    fun sendAsset(assetId: String, recipient: String, amount: BigDecimal, memo: String?) {
+        send(Asset.create(assetId), recipient, amount, memo)
+    }
+
+    private fun send(asset: Asset, recipient: String, amount: BigDecimal, memo: String?) {
         val destination = KeyPair.fromAccountId(recipient)
 
         // First, check to make sure that the destination account exists.
@@ -182,7 +192,7 @@ class StellarKit(
 
         val paymentOperation = PaymentOperation.builder()
             .destination(destination.accountId)
-            .asset(AssetTypeNative())
+            .asset(asset)
             .amount(amount)
             .build()
 

@@ -15,6 +15,7 @@ class FeeTokenProvider(
             is TokenType.Eip20,
             is TokenType.Spl,
             is TokenType.Jetton,
+            is TokenType.Asset,
             -> {
                 TokenQuery(token.blockchainType, TokenType.Native)
             }

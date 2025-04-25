@@ -82,6 +82,7 @@ val Token.typeInfo: String
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Spl -> type.address.shorten()
         is TokenType.Jetton -> type.address.shorten()
+        is TokenType.Asset -> type.canonicalForm.shorten()
         is TokenType.Unsupported -> ""
     }
 
@@ -162,7 +163,7 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.Native || tokenType is TokenType.Jetton
         }
         BlockchainType.Stellar -> {
-            tokenType is TokenType.Native
+            tokenType is TokenType.Native || tokenType is TokenType.Asset
         }
         is BlockchainType.Unsupported -> false
     }
@@ -194,6 +195,7 @@ val Blockchain.description: String
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
 fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
+fun Blockchain.assetUrl(canonicalForm: String) = "https://stellarchain.io/assets/${canonicalForm}"
 
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
@@ -593,6 +595,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ECash,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Stellar,
     )
 
 val CoinPrice.diff: BigDecimal?
