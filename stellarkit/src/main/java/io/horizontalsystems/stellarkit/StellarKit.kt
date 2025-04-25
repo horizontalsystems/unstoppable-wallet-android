@@ -2,6 +2,7 @@ package io.horizontalsystems.stellarkit
 
 import android.content.Context
 import android.util.Log
+import io.horizontalsystems.stellarkit.room.Event
 import io.horizontalsystems.stellarkit.room.KitDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +51,7 @@ class StellarKit(
 
     val receiveAddress get() = accountId
 
+    val operationsSyncStateFlow by eventManager::syncStateFlow
     val syncStateFlow by balancesManager::syncStateFlow
     val balanceFlow by balancesManager::xlmBalanceFlow
     val assetBalanceMapFlow by balancesManager::assetBalanceMapFlow
@@ -100,9 +102,9 @@ class StellarKit(
 //        }
 //    }
 
-//    fun events(tagQuery: TagQuery, beforeLt: Long? = null, limit: Int? = null): List<Event> {
-//        return eventManager.events(tagQuery, beforeLt, limit)
-//    }
+    fun operations(tagQuery: TagQuery, beforeId: Long? = null, limit: Int? = null): List<Event> {
+        return eventManager.operations(tagQuery, beforeId, limit)
+    }
 
 //    fun eventFlow(tagQuery: TagQuery): Flow<EventInfo> {
 //        return eventManager.eventFlow(tagQuery)

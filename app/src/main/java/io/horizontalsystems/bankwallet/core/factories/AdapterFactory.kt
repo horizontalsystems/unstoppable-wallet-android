@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
 import io.horizontalsystems.bankwallet.core.adapters.StellarAdapter
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionsAdapter
@@ -217,6 +218,15 @@ class AdapterFactory(
         val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
 
         return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
+    }
+
+    fun stellarTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(source.account)
+//        val address = tonKitWrapper.stellarKit.receiveAddress
+
+//        val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
+
+        return StellarTransactionsAdapter(stellarKitWrapper, source)
     }
 
     fun tonTransactionConverter(

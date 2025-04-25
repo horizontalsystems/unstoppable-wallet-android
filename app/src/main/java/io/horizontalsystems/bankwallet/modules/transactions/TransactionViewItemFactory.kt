@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
@@ -429,8 +430,50 @@ class TransactionViewItemFactory(
                 )
             }
 
+            is StellarTransactionRecord -> {
+                createViewItemFromStellarTransactionRecord(
+                    icon = icon,
+                    record = record,
+                    currencyValue = transactionItem.currencyValue
+                )
+            }
+
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
+    }
+
+    private fun createViewItemFromStellarTransactionRecord(
+        icon: TransactionViewItem.Icon.Failed?,
+        record: StellarTransactionRecord,
+        currencyValue: CurrencyValue?,
+    ): TransactionViewItem {
+
+        val iconX: TransactionViewItem.Icon
+        val title: String
+        val subtitle: String
+        val primaryValue: Nothing?
+        val secondaryValue: Nothing?
+        val sentToSelf: Boolean
+
+        iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+        title = "title"
+        subtitle = "title"
+        primaryValue = null
+        secondaryValue = null
+        sentToSelf = false
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = null,
+            title = title,
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            sentToSelf = sentToSelf,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: iconX
+        )
     }
 
     private fun createViewItemFromTonTransactionRecord(

@@ -7,6 +7,10 @@ import androidx.room.Query
 
 @Dao
 interface OperationDao {
+
+    @Query("SELECT * FROM Event WHERE id < :beforeId ORDER BY id DESC LIMIT 0, :limit")
+    fun operations(beforeId: Long, limit: Int): List<Event>
+
     @Query("SELECT * FROM Event ORDER BY id DESC LIMIT 0, 1")
     fun latestEvent(): Event?
 

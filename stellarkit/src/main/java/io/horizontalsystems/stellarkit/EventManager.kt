@@ -23,9 +23,9 @@ class EventManager(
         MutableStateFlow<SyncState>(SyncState.NotSynced(StellarKit.SyncError.NotStarted))
     val syncStateFlow = _syncStateFlow.asStateFlow()
 
-//    fun events(tagQuery: TagQuery, beforeLt: Long?, limit: Int?): List<Event> {
-//        return dao.events(tagQuery, beforeLt, limit ?: 100)
-//    }
+    fun operations(tagQuery: TagQuery, beforeId: Long?, limit: Int?): List<Event> {
+        return dao.operations(beforeId ?: Long.MAX_VALUE, limit ?: 100)
+    }
 
 //    fun eventFlow(tagQuery: TagQuery): Flow<EventInfo> {
 //        var filteredEventFlow: Flow<EventInfoWithTags> = eventFlow.asSharedFlow()
