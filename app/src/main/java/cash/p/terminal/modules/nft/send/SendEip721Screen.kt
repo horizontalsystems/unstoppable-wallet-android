@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
@@ -82,6 +83,9 @@ fun SendEip721Screen(
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     viewModel = addressViewModel,
+                    inputState = addressViewModel.inputState.collectAsStateWithLifecycle().value,
+                    address = addressViewModel.address.collectAsStateWithLifecycle().value,
+                    value = addressViewModel.value.collectAsStateWithLifecycle().value,
                     error = viewModel.uiState.addressError,
                     textPreprocessor = addressParserViewModel,
                     navController = navController,

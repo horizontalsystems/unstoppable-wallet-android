@@ -55,11 +55,11 @@ object AddressInputModule {
 
             val addressUriParser = AddressUriParser(tokenQuery.blockchainType, tokenQuery.tokenType)
             val addressViewModel = AddressViewModel(
-                tokenQuery.blockchainType,
-                App.contactsRepository,
-                addressUriParser,
-                addressParserChain,
-                initial
+                blockchainType = tokenQuery.blockchainType,
+                contactsRepository = App.contactsRepository,
+                addressUriParser = addressUriParser,
+                addressParserChain = addressParserChain,
+                initial = initial
             )
 
             return addressViewModel as T

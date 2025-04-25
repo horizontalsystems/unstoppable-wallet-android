@@ -4,10 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.entities.Address
+import cash.p.terminal.entities.DataState
 import cash.p.terminal.ui.compose.components.FormsInputAddress
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
@@ -33,6 +35,9 @@ fun HSAddressInput(
     HSAddressInput(
         modifier = modifier,
         viewModel = viewModel,
+        inputState = viewModel.inputState.collectAsStateWithLifecycle().value,
+        address = viewModel.address.collectAsStateWithLifecycle().value,
+        value = viewModel.value.collectAsStateWithLifecycle().value,
         error = error,
         textPreprocessor = textPreprocessor,
         navController = navController,
@@ -45,6 +50,9 @@ fun HSAddressInput(
 fun HSAddressInput(
     modifier: Modifier = Modifier,
     viewModel: AddressViewModel,
+    inputState: DataState<Address>?,
+    address: Address?,
+    value: String,
     error: Throwable? = null,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     navController: NavController,
@@ -55,19 +63,19 @@ fun HSAddressInput(
         viewModel.onAddressError(error)
     }
 
-    LaunchedEffect(viewModel.address) {
-        onValueChange?.invoke(viewModel.address)
+    LaunchedEffect(address) {
+        onValueChange?.invoke(address)
     }
 
-    LaunchedEffect(viewModel.inputState) {
-        onError?.invoke(viewModel.inputState?.errorOrNull)
+    LaunchedEffect(inputState) {
+        onError?.invoke(inputState?.errorOrNull)
     }
 
     FormsInputAddress(
         modifier = modifier,
-        value = viewModel.value,
+        value = value,
         hint = stringResource(id = R.string.Send_Hint_Address),
-        state = viewModel.inputState,
+        state = inputState,
         textPreprocessor = textPreprocessor,
         navController = navController,
         chooseContactEnable = viewModel.hasContacts(),

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
@@ -111,6 +112,9 @@ fun SendEip1155Screen(
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     viewModel = addressViewModel,
+                    inputState = addressViewModel.inputState.collectAsStateWithLifecycle().value,
+                    address = addressViewModel.address.collectAsStateWithLifecycle().value,
+                    value = addressViewModel.value.collectAsStateWithLifecycle().value,
                     error = viewModel.uiState.addressError,
                     textPreprocessor = addressParserViewModel,
                     navController = navController,
