@@ -1,0 +1,46 @@
+name: F-Droid Branch Sync and Build
+on:
+  push:
+    branches:
+      - master
+jobs:
+  sync-and-build-fdroid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions-bot@users.noreply.github.com"
+
+      - name: Update f-droid branch locally
+        run: |
+          git checkout f-droid 2>/dev/null || git checkout -b f-droid
+          
+          git fetch origin master
+          
+          git rebase origin/master
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Unit tests
+        run: ./gradlew :app:testDebugUnitTest
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+
+      - name: Push changes to f-droid branch
+        run: |
+          git push --force-with-lease origin f-droid
