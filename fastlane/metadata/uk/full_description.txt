@@ -1,38 +1,5 @@
-Unstoppable wallet engineered to serve the needs of certain people. If you're looking for a plain way to store Bitcoin or some crypto this app might not be for you.
+Потужний некастодіальний мультигаманець для Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH і zCash (ZEC), підтримує NFT та широкий спектр інших активів.
 
-This wallet app is purposely built as a decentralized asset management tool for cryptocurrencies that are immune to inflation, confiscation, or censorship. It packs features designed to onboard investment-oriented individuals into a crypto ecosystem without headaches.
+Включає вбудований DEX onchain, аналітику інституційного рівня для ринків криптовалюти та NFT, розширені інструменти конфіденційності та орієнтований на людину інтерфейс.
 
-Unstoppable built with following in mind:
-
-- Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
-
-- Capital Should Be Borderless >> It works outside traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
-
-- Capital Should Be Private >> It doesn’t leak private data, has no means to track users and takes extra measures to ensure privacy on multiple layers.
-
-If the above rhymes well with you then Unstoppable is for you! And we are here to focus on your unique needs and serve you in the best possible manner.
-
-WALLET FEATURES:
-
-- Non-Custodial Multi-wallet >> Manage any number of cryptocurrencies across multiple portfolio style wallets in a non-custodial manner. This wallet is like your own bank where you are the only client and the only one in charge. It’s designed to keep assets secure and easy to restore even if the phone is stolen and tampered with.
-
-- Investment Oriented Wallet >> Unstoppable brings unmatched cryptocurrency market analytics to your device: advanced sorting, curated categorization, extensive filtering, and event-based alerting features.
-
-- A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
-
-- A DeFi Wallet >> Full support for decentralized token exchanges (Uniswap / PancakeSwap / 1inch) capable of executing high volume token exchanges in minutes at competitive market rates. Plus, the ability to interact with any DeFi service over the WalletConnect protocol.
-
-- Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20), and many services such as ENS and Uniswap decentralized exchange.
-- Binance Wallet >> Full support for original Binance Chain (incl. BEP2) and Binance Smart Chain along with the capability to swap tokens in a decentralized manner via PancakeSwap DEX.
-
-- Crypto Academy >> The app includes two courses that are meant to onboard newcomer into the world of cryptocurrencies and DeFi ecosystem in an easy-to-digest manner covering essential aspects of cryptocurrency security, storage, privacy, transacting, exchanging and more.
-
-- Wallet for Privacy Coins >> Fully supports major privacy coins (ZCash, DASH) in an SPV manner. One of the very few wallets capable of supporting fully shielded Zcash transactions.
-
-- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn\'t depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
-
-- Privacy Focused >>  Designed to allow for privacy even in the most privacy breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layer. The app is partially TOR enabled and VPN support coming soon.
-
-- Fully Open Source >> Perhaps the most transparent wallet application built to date. The entire 3-year production process of the app is openly accessible online along with 100% of its code for anyone to evaluate or reuse in other projects. Verified and audited by third parties.
-
-Be Unstoppable!  😎
+Також підтримує такі нові блокчейни, як PirateCash (PIRAT) і Cosanta (COSA).

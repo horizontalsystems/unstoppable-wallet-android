@@ -1,49 +1,5 @@
-P.CASH cüzdan, kripto para birimleri için merkezi olmayan bir yönetim aracı olarak tasarlanmıştır.
+Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH ve zCash (ZEC) için NFT'leri ve çok çeşitli diğer varlıkları destekleyen, saklama gerektirmeyen güçlü bir çoklu cüzdan.
 
-Kripto para birimlerini egemen ve profesyonel bir şekilde yönetmek ve yatırım yapmak isteyen gizlilik bilincine sahip bireylere hizmet etmek için tasarlanmıştır.
+Yerleşik zincir içi DEX, kripto ve NFT pazarları için kurumsal düzeyde analizler, gelişmiş gizlilik araçları ve insan merkezli bir arayüz içerir.
 
-P.CASH, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
-
-- Sermaye Özgür Olmalı >> Kullanıcılara sermayeleri üzerinde gerçekten bağımsız kontrol sağlamak için inşa edilmiştir.
-
-- Sermaye Sınırsız Olmalı >> Geleneksel finans katmanının dışında çalışır ve merkezi olmayan finans (DeFi) dünyası için bir İsviçre bıçağı görevi görür.
-
-- Capital Özel Olmalı >> Özel verileri sızdırmaz, kullanıcıları izlemek için hiçbir aracı yoktur ve birden fazla katmanda gizliliği sağlamak için ekstra önlemler alır.
-
-If the above rhymes well with you then Unstoppable is for you! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
-
-Eğer sadece Bitcoin veya Ethereum saklamak için sade bir yol arıyorsanız bu uygulama size göre olmayabilir.
-
-CÜZDAN ÖZELLIKLERI:
-
-- Gözetimsiz Çoklu Cüzdan >> Birden fazla portföy tarzı cüzdanda istediğiniz sayıda kripto parayı gözetimsiz bir şekilde yönetin. Bu cüzdan, tek müşterinin ve tek yetkilinin siz olduğu kendi bankanız gibidir. Telefon çalınsa ve kurcalansa bile varlıkları güvende tutmak ve geri yüklemeyi kolaylaştırmak için tasarlanmıştır.
-
-- Yatırım Odaklı Cüzdan >> P.CASH, cihazınıza benzersiz kripto para piyasası analizleri getiriyor: gelişmiş sıralama, seçilmiş kategorizasyon, kapsamlı arama filtreleme ve olay tabanlı uyarı özellikleri.
-
-- Evrensel Cüzdan >> Tüm ana akım blok zincirlerini destekler ve kullanıcıların tüm kriptolar için tek bir cüzdan uygulaması kullanmasını sağlayan standartlara uygun bir şekilde oluşturulmuştur.
-
-- Bir Bitcoin Cüzdanı >> Cüzdan, mevcut en gelişmiş Bitcoin özelliklerinden bazılarını barındırır: SPV etkin, BIP 44/49/84/69 uyumlu, Bitcoin zaman kilitleri, özel işlem ücretleri ve daha fazlası.
-
-- Bir DeFi Cüzdanı >> Ethereum, Binance Smart Chain, Avalanche, Solana ve daha fazlasında merkezi olmayan token takasları için tam destek. Ayrıca, WalletConnect protokolü aracılığıyla blok zincirindeki herhangi bir akıllı sözleşme destekli hizmetle etkileşim kurma yeteneği.
-
-- Ethereum Cüzdan >> Ethereum blok zinciri, büyüyen token ekosistemi (ERC20, NFT tokenleri vb.) ve ENS (Ethereum Name Service) gibi diğer merkezi olmayan hizmetler için tam destek.
-
-- Ethereum L2 Cüzdan >> Artbitrum, Optimism, Polygon desteği.
-
-- Avalanche Cüzdan >> Avalanche C-Chain blok zinciri için tam destek.
-
-- Binance Cüzdan >> Orijinal Binance Zinciri (BEP2 dahil) ve Binance Akıllı Zincir için tam destek.
-
-- NFT Cüzdanı >> Non Fungible tokenler (NFT'ler) için tam destek.
-
-- Crypto Academy >> Uygulama, yeni gelenleri kripto para dünyasına ve DeFi ekosistemine, kripto para güvenliği, depolama, gizlilik, işlem yapma ve takas etmenin temel yönlerini kapsayan, sindirmesi kolay bir şekilde dahil etmeyi amaçlayan iki kurs içerir.
-
-- Gizlilik Paraları için Cüzdan >> SPV tarzında büyük gizlilik paralarını (ZCash, DASH) tamamen destekler. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
-
-- Merkezi Olmayan Cüzdan >> Bir uygulamanın işlem göndermek/almak için bir cüzdan sağlayıcısının sunucusuna bağlı olmadığı, ancak doğrudan blok zinciri ağlarıyla etkileşime girdiği merkezi olmayan bir şekilde en büyük blok zincirleriyle çalışmak üzere tasarlanmıştır.
-
-- Gizlilik Odaklı >> Gizliliği en çok ihlal eden senaryolarda bile gizliliğe izin verecek şekilde tasarlanmıştır. Kayıtlarınızı tutan kullanıcı hesapları, finansal bilgilerinizi dünyaya ifşa etme riski taşıyan kimlik kontrolleri ve geleneksel finans katmanlarıyla etkileşim yoktur. Uygulama kısmen TOR özellikli ve VPN desteği yakında geliyor.
-
-- Tamamen Açık Kaynak >> Bugüne kadar oluşturulmuş en şeffaf cüzdan uygulaması. Uygulamanın 4 yıllık üretim sürecinin tamamı, herkesin değerlendirebilmesi veya başka projelerde yeniden kullanabilmesi için kodunun %100'ü ile birlikte çevrimiçi olarak açık bir şekilde erişilebilir durumdadır. Üçüncü taraflarca doğrulanmış ve denetlenmiştir.
-
-Durdurulamaz Ol!  😎
+Ayrıca PirateCash (PIRATE) ve Cosanta (COSA) gibi yeni ortaya çıkan blok zincirlerini de destekler.

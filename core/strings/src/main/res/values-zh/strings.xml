@@ -823,7 +823,7 @@
     <string name="Settings_Contact_ViaTelegram">通过 Telegram</string>
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
-    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_JoinUs">Be Unstoppable</string>
     <string name="Settings_PersonalSupport">个人支持</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>

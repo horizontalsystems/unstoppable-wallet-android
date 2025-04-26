@@ -1015,8 +1015,8 @@
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="telegram_link">https://t.me/PirateCash_ENG</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
-    <string name="Settings_JoinUnstoppables">Follow us</string>
-    <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
+    <string name="Settings_JoinUs">Follow us</string>
+    <string name="Settings_JoinUs_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>

@@ -29,7 +29,7 @@ platform :android do
     appcenter_upload(
         api_token: options[:api_token],
         app_name: options[:app_name],
-        owner_name: "Horizontal-Systems",
+        owner_name: "PirateCash and Cosanta foundation",
         owner_type: "organization",
         release_notes: options[:notes],
         notify_testers: true

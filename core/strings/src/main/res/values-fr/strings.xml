@@ -820,7 +820,7 @@
     <string name="Settings_Contact_ViaTelegram">par Telegram</string>
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
     <string name="Settings_AutoLock">Verrouillage automatique</string>
-    <string name="Settings_JoinUnstoppables">Soyez Unstoppable</string>
+    <string name="Settings_JoinUs">Soyez Unstoppable</string>
     <string name="Settings_PersonalSupport">Assistance Personnelle</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Entrez le nom de votre compte Telegram pour commencer une conversation de soutien personnelle avec notre équipe. Nous reviendrons vers vous et commencerons à travailler sur votre problème dès que nous le verrons.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Vous avez déjà demandé une conversation privée, la trouver sur Telegram</string>
