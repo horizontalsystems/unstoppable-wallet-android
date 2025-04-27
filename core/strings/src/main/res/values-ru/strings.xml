@@ -838,8 +838,8 @@
     <string name="telegram_link">https://t.me/PirateCash_RUS</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
-    <string name="Settings_JoinUnstoppables">Следите за нами</string>
-    <string name="Settings_JoinUnstoppables_Description">Учитесь и осваивайте крипто через эксклюзивные видео. Узнайте нас ближе в неформальной обстановке. Будьте первыми, кто увидит, над чем мы работаем.</string>
+    <string name="Settings_JoinUs">Следите за нами</string>
+    <string name="Settings_JoinUs_Description">Учитесь и осваивайте крипто через эксклюзивные видео. Узнайте нас ближе в неформальной обстановке. Будьте первыми, кто увидит, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>

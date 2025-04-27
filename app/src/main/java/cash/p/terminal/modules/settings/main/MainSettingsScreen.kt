@@ -284,7 +284,7 @@ private fun SettingSections(
             .height(32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        subhead1_jacob(text = stringResource(id = R.string.Settings_JoinUnstoppables).uppercase())
+        subhead1_jacob(text = stringResource(id = R.string.Settings_JoinUs).uppercase())
     }
     CellUniversalLawrenceSection(
         listOf({
@@ -308,7 +308,7 @@ private fun SettingSections(
         })
     )
     InfoText(
-        text = stringResource(R.string.Settings_JoinUnstoppables_Description),
+        text = stringResource(R.string.Settings_JoinUs_Description),
     )
 
     VSpacer(32.dp)
