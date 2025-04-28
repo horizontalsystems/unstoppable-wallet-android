@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.TagQuery
+import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.stellarkit.room.Tag
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -64,16 +65,14 @@ class StellarTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): TagQuery {
-        var platform: Tag.Platform? = null
-//        var jettonAddress: Address? = null
+        var assetId: String? = null
 
         val tokenType = token?.type
 
         if (tokenType == TokenType.Native) {
-            platform = Tag.Platform.Native
+            assetId = StellarAsset.Native.id
         } else if (tokenType is TokenType.Asset) {
-            platform = Tag.Platform.Asset
-//            jettonAddress = Address.parse(tokenType.address)
+            assetId = StellarAsset.Asset(tokenType.code, tokenType.issuer).id
         }
 
         val tagType = when (transactionType) {
@@ -86,9 +85,8 @@ class StellarTransactionsAdapter(
 
         return TagQuery(
             tagType,
-            platform,
-//            jettonAddress,
-//            address?.let { Address.parse(it) }
+            assetId,
+            address
         )
     }
 
