@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionsAdapter.NotSupportedException
+import io.horizontalsystems.bankwallet.core.factories.StellarTransactionConverter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -13,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType.Incoming
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType.Outgoing
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType.Swap
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.TagQuery
@@ -25,7 +25,7 @@ import kotlinx.coroutines.rx2.rxSingle
 
 class StellarTransactionsAdapter(
     stellarKitWrapper: StellarKitWrapper,
-    private val source: TransactionSource,
+    private val transactionConverter: StellarTransactionConverter,
 ) : ITransactionsAdapter {
     private val stellarKit = stellarKitWrapper.stellarKit
 
@@ -52,7 +52,7 @@ class StellarTransactionsAdapter(
         rxSingle {
             stellarKit.operations(tagQuery, beforeId = beforeId, limit = limit)
                 .map {
-                    StellarTransactionRecord(source, it)
+                    transactionConverter.convert(it)
                 }
         }
     } catch (e: NotSupportedException) {

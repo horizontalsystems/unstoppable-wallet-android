@@ -451,16 +451,53 @@ class TransactionViewItemFactory(
         val iconX: TransactionViewItem.Icon
         val title: String
         val subtitle: String
-        val primaryValue: Nothing?
-        val secondaryValue: Nothing?
-        val sentToSelf: Boolean
+        val primaryValue: ColoredValue?
+        var secondaryValue = currencyValue?.let {
+            getColoredValue(it, ColorName.Grey)
+        }
+        var sentToSelf = false
 
-        iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-        title = "title"
-        subtitle = "title"
-        primaryValue = null
-        secondaryValue = null
-        sentToSelf = false
+        when (val recordType = record.type) {
+            is StellarTransactionRecord.Type.Send -> {
+                title = Translator.getString(R.string.Transactions_Send)
+                subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
+
+                primaryValue = getColoredValue(recordType.value, ColorName.Lucian)
+
+                sentToSelf = recordType.sentToSelf
+
+                iconX = singleValueIconType(recordType.value)
+
+            }
+            is StellarTransactionRecord.Type.Receive -> {
+                title = Translator.getString(R.string.Transactions_Receive)
+                subtitle = Translator.getString(
+                    R.string.Transactions_From,
+                    mapped(recordType.from, record.blockchainType)
+                )
+
+                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
+                iconX = singleValueIconType(recordType.value)
+            }
+            is StellarTransactionRecord.Type.AccountCreated -> {
+                title = Translator.getString(R.string.Transactions_AccountCreated)
+                subtitle = Translator.getString(
+                    R.string.Transactions_From,
+                    mapped(recordType.funder, record.blockchainType)
+                )
+
+                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
+                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+            }
+            StellarTransactionRecord.Type.Unsupported -> {
+                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                title = Translator.getString(R.string.Transactions_Unknown)
+                subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
+                primaryValue = null
+                secondaryValue = null
+            }
+        }
+
 
         return TransactionViewItem(
             uid = record.uid,

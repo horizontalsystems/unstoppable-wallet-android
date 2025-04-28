@@ -74,18 +74,6 @@ val Token.protocolInfo: String
         else -> ""
     }
 
-val Token.typeInfo: String
-    get() = when (val type = type) {
-        is TokenType.Derived,
-        is TokenType.AddressTyped,
-        TokenType.Native -> Translator.getString(R.string.CoinPlatforms_Native)
-        is TokenType.Eip20 -> type.address.shorten()
-        is TokenType.Spl -> type.address.shorten()
-        is TokenType.Jetton -> type.address.shorten()
-        is TokenType.Asset -> type.canonicalForm.shorten()
-        is TokenType.Unsupported -> ""
-    }
-
 val Token.copyableTypeInfo: String?
     get() = when (val type = type) {
         is TokenType.Eip20 -> type.address
@@ -195,7 +183,7 @@ val Blockchain.description: String
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
 fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
-fun Blockchain.assetUrl(canonicalForm: String) = "https://stellarchain.io/assets/${canonicalForm}"
+fun Blockchain.assetUrl(code: String, issuer: String) = "https://stellarchain.io/assets/$code-$issuer"
 
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
