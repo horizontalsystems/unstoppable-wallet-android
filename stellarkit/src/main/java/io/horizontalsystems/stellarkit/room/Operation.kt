@@ -11,7 +11,7 @@ import org.stellar.sdk.responses.operations.OperationResponse
 import org.stellar.sdk.responses.operations.PaymentOperationResponse
 
 @Entity
-data class Event(
+data class Operation(
     @PrimaryKey
     val id: Long,
     val timestamp: Long,
@@ -56,7 +56,7 @@ data class Event(
     }
 
     companion object {
-        fun fromApi(operationResponse: OperationResponse): Event {
+        fun fromApi(operationResponse: OperationResponse): Operation {
             var payment: Payment? = null
             var accountCreated: AccountCreated? = null
 
@@ -78,7 +78,7 @@ data class Event(
                 }
             }
 
-            return Event(
+            return Operation(
                 id = operationResponse.id,
                 timestamp = Instant.parse(operationResponse.createdAt).epochSeconds,
                 pagingToken = operationResponse.pagingToken,
@@ -94,13 +94,13 @@ data class Event(
     }
 }
 
-data class EventInfo(
-    val events: List<Event>,
+data class OperationInfo(
+    val operations: List<Operation>,
     val initial: Boolean,
 )
 
 @Entity
-data class EventSyncState(
+data class OperationSyncState(
     @PrimaryKey
     val id: String,
     val allSynced: Boolean,

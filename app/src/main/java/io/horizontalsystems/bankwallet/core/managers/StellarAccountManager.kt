@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.stellarkit.TagQuery
-import io.horizontalsystems.stellarkit.room.Event
+import io.horizontalsystems.stellarkit.room.Operation
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +68,7 @@ class StellarAccountManager(
     }
 
     private fun handle(
-        operations: List<Event>,
+        operations: List<Operation>,
         account: Account,
         stellarKitWrapper: StellarKitWrapper,
         initial: Boolean,

@@ -100,8 +100,8 @@ class StellarTransactionsAdapter(
 
         return stellarKit
             .operationFlow(tagQuery)
-            .map { eventInfo ->
-                eventInfo.events.map {
+            .map { operationInfo ->
+                operationInfo.operations.map {
                     transactionConverter.convert(it)
                 }
             }

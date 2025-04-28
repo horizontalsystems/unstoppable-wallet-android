@@ -10,8 +10,8 @@ import androidx.room.TypeConverters
     entities = [
         AssetBalance::class,
         AssetNativeBalance::class,
-        Event::class,
-        EventSyncState::class,
+        Operation::class,
+        OperationSyncState::class,
         Tag::class,
     ],
     version = 1

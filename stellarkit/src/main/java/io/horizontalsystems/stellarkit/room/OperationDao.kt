@@ -12,7 +12,7 @@ import io.horizontalsystems.stellarkit.TagQuery
 @Dao
 interface OperationDao {
 
-    fun operations(tagQuery: TagQuery, beforeId: Long?, limit: Int): List<Event> {
+    fun operations(tagQuery: TagQuery, beforeId: Long?, limit: Int): List<Operation> {
         val arguments = mutableListOf<String>()
         val whereConditions = mutableListOf<String>()
         var joinClause = ""
@@ -31,16 +31,16 @@ interface OperationDao {
                 arguments.add("%${accountId}%")
             }
 
-            joinClause = "INNER JOIN tag ON event.id = tag.eventId"
+            joinClause = "INNER JOIN tag ON operation.id = tag.operationId"
         }
 
         beforeId?.let {
-            whereConditions.add("event.id < ?")
+            whereConditions.add("operation.id < ?")
             arguments.add(it.toString())
         }
 
         val limitClause = "LIMIT $limit"
-        val orderClause = "ORDER BY event.id DESC"
+        val orderClause = "ORDER BY operation.id DESC"
         val whereClause = if (whereConditions.size > 0) {
             "WHERE ${whereConditions.joinToString(" AND ")}"
         } else {
@@ -48,8 +48,8 @@ interface OperationDao {
         }
 
         val sql = """
-            SELECT DISTINCT Event.*
-            FROM Event
+            SELECT DISTINCT Operation.*
+            FROM Operation
             $joinClause
             $whereClause
             $orderClause
@@ -58,34 +58,34 @@ interface OperationDao {
 
         val query = SimpleSQLiteQuery(sql, arguments.toTypedArray())
 
-        return events(query)
+        return operations(query)
     }
 
     @RawQuery
-    fun events(query: SupportSQLiteQuery): List<Event>
+    fun operations(query: SupportSQLiteQuery): List<Operation>
 
-    @Query("SELECT * FROM Event ORDER BY id DESC LIMIT 0, 1")
-    fun latestEvent(): Event?
+    @Query("SELECT * FROM Operation ORDER BY id DESC LIMIT 0, 1")
+    fun latestOperation(): Operation?
 
-    @Query("SELECT * FROM EventSyncState LIMIT 0, 1")
-    fun eventSyncState(): EventSyncState?
+    @Query("SELECT * FROM OperationSyncState LIMIT 0, 1")
+    fun operationSyncState(): OperationSyncState?
 
-    @Query("SELECT * FROM Event ORDER BY id ASC LIMIT 0, 1")
-    fun oldestEvent(): Event?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(eventSyncState: EventSyncState)
+    @Query("SELECT * FROM Operation ORDER BY id ASC LIMIT 0, 1")
+    fun oldestOperation(): Operation?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(events: List<Event>)
+    fun save(operationSyncState: OperationSyncState)
 
-    fun resave(tags: List<Tag>, eventIds: List<Long>) {
-        deleteTags(eventIds)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun save(operations: List<Operation>)
+
+    fun resave(tags: List<Tag>, operationIds: List<Long>) {
+        deleteTags(operationIds)
         insertTags(tags)
     }
 
-    @Query("DELETE FROM Tag WHERE eventId IN (:eventIds)")
-    fun deleteTags(eventIds: List<Long>)
+    @Query("DELETE FROM Tag WHERE operationId IN (:operationIds)")
+    fun deleteTags(operationIds: List<Long>)
 
     @Insert
     fun insertTags(tags: List<Tag>)
