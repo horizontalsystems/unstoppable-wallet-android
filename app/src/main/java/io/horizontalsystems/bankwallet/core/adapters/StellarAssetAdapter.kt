@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
+import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -17,11 +18,13 @@ import java.math.BigDecimal
 
 class StellarAssetAdapter(
     stellarKitWrapper: StellarKitWrapper,
-    canonicalForm: String
+    code: String,
+    issuer: String
 ) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter
 {
-//    private val address = Address.parse(addressStr)
-    private val canonicalForm = canonicalForm.replace("-", ":")
+    private val stellarAsset = StellarAsset.Asset(code, issuer)
+    private val canonicalForm = stellarAsset.id
+
     private var assetBalance = stellarKit.assetBalanceMap[this.canonicalForm]
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()

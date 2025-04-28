@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.stellarkit.room.Event
@@ -7,6 +8,7 @@ import io.horizontalsystems.stellarkit.room.Event
 class StellarTransactionRecord(
     source: TransactionSource,
     val operation: Event,
+    val type: Type,
 ) : TransactionRecord(
     uid = operation.id.toString(),
     transactionHash = operation.transactionHash,
@@ -17,4 +19,28 @@ class StellarTransactionRecord(
     failed = !operation.transactionSuccessful,
     spam = false,
     source = source,
-)
+) {
+
+    sealed class Type {
+        data class Send(
+            val value: TransactionValue,
+            val to: String,
+            val sentToSelf: Boolean,
+            val comment: String?,
+        ) : Type()
+
+        data class Receive(
+            val value: TransactionValue,
+            val from: String,
+            val comment: String?,
+        ) : Type()
+
+        data class AccountCreated(
+            val funder: String,
+            val account: String,
+            val value: TransactionValue.CoinValue
+        ) : Type()
+
+        object Unsupported: Type()
+    }
+}

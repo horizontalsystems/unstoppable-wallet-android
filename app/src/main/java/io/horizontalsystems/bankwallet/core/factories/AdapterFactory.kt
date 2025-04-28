@@ -99,10 +99,10 @@ class AdapterFactory(
         return JettonAdapter(tonKitWrapper, address, wallet)
     }
 
-    private fun getStellarAssetAdapter(wallet: Wallet, canonicalForm: String): IAdapter {
+    private fun getStellarAssetAdapter(wallet: Wallet, code: String, issuer: String): IAdapter {
         val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(wallet.account)
 
-        return StellarAssetAdapter(stellarKitWrapper, canonicalForm)
+        return StellarAssetAdapter(stellarKitWrapper, code, issuer)
     }
 
     fun getAdapterOrNull(wallet: Wallet) = try {
@@ -183,7 +183,7 @@ class AdapterFactory(
         }
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
-        is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.canonicalForm)
+        is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
         is TokenType.Unsupported -> null
     }
 
@@ -222,11 +222,18 @@ class AdapterFactory(
 
     fun stellarTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(source.account)
-//        val address = tonKitWrapper.stellarKit.receiveAddress
 
-//        val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
+        val tokenQuery = TokenQuery(BlockchainType.Stellar, TokenType.Native)
+        val baseToken = coinManager.getToken(tokenQuery) ?: return null
 
-        return StellarTransactionsAdapter(stellarKitWrapper, source)
+        val transactionConverter = StellarTransactionConverter(
+            source,
+            stellarKitWrapper.stellarKit.receiveAddress,
+            coinManager,
+            baseToken
+        )
+
+        return StellarTransactionsAdapter(stellarKitWrapper, transactionConverter)
     }
 
     fun tonTransactionConverter(
