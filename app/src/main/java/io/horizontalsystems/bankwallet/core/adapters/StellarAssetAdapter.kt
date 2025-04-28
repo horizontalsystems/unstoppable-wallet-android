@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
@@ -20,12 +19,10 @@ class StellarAssetAdapter(
     stellarKitWrapper: StellarKitWrapper,
     code: String,
     issuer: String
-) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter
-{
-    private val stellarAsset = StellarAsset.Asset(code, issuer)
-    private val canonicalForm = stellarAsset.id
+) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
 
-    private var assetBalance = stellarKit.assetBalanceMap[this.canonicalForm]
+    private val stellarAsset = StellarAsset.Asset(code, issuer)
+    private var assetBalance = stellarKit.assetBalanceMap[stellarAsset.id]
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -46,10 +43,7 @@ class StellarAssetAdapter(
     override fun start() {
         coroutineScope.launch {
             stellarKit.assetBalanceMapFlow.collect { assetBalanceMap ->
-                Log.e("AAA", "canonicalForm: ${canonicalForm}")
-                Log.e("AAA", "assetBalanceMap: ${assetBalanceMap}")
-
-                assetBalance = assetBalanceMap[canonicalForm]
+                assetBalance = assetBalanceMap[stellarAsset.id]
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
@@ -74,6 +68,6 @@ class StellarAssetAdapter(
         get() = stellarKit.sendFee
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        stellarKit.sendAsset(canonicalForm, address, amount, memo)
+        stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
     }
 }
