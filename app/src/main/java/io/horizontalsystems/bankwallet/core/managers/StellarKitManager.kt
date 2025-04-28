@@ -7,10 +7,12 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.Network
 import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.StellarWallet
 import io.horizontalsystems.stellarkit.SyncState
+import io.horizontalsystems.stellarkit.room.StellarAsset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -265,8 +267,8 @@ fun StellarKit.statusInfo(): Map<String, Any> = TODO()
 //    put("Jetton Sync State", jettonSyncStateFlow.value.toAdapterState())
 //}
 
-//val Jetton.tokenType
-//    get() = TokenType.Jetton(address.toUserFriendly(true))
+val StellarAsset.Asset.tokenType
+    get() = TokenType.Asset(code, issuer)
 
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> AdapterState.NotSynced(error)
