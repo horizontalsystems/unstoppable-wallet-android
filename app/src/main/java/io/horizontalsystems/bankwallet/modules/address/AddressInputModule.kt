@@ -48,7 +48,7 @@ object AddressInputModule {
                     addressParserChain.addHandler(AddressHandlerTon())
                 }
                 BlockchainType.Stellar -> {
-                    TODO()
+                    addressParserChain.addHandler(AddressHandlerStellar())
                 }
                 is BlockchainType.Unsupported -> Unit
             }

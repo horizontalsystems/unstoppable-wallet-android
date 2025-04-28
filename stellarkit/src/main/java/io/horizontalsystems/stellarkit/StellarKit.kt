@@ -36,7 +36,6 @@ class StellarKit(
     }
     private val server = Server(serverUrl)
     private val accountId = keyPair.accountId
-//    private val accountId = "GBXQUJBEDX5TYLJ6D5BGJZFLYF5GZVGXLWA2ZORS5OIA7H6B5O3MHMTP"
     private val balancesManager = BalancesManager(
         server,
         db.balanceDao(),
