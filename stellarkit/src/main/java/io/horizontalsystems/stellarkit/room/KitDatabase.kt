@@ -16,7 +16,7 @@ import androidx.room.TypeConverters
     ],
     version = 1
 )
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class, StellarAssetConverter::class)
 abstract class KitDatabase : RoomDatabase() {
     abstract fun balanceDao(): BalanceDao
     abstract fun operationDao(): OperationDao
