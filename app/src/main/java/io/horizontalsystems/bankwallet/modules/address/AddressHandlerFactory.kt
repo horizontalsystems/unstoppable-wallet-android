@@ -76,7 +76,7 @@ class AddressHandlerFactory(
             }
 
             BlockchainType.Stellar -> {
-                TODO()
+                addressHandlers.add(AddressHandlerStellar())
             }
 
             is BlockchainType.Unsupported -> {

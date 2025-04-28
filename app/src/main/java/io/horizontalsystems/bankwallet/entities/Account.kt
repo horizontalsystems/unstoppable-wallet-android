@@ -307,6 +307,7 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> this.address.shorten()
             is TronAddress -> this.address.shorten()
             is TonAddress -> this.address.shorten()
+            is StellarAddress -> this.address.shorten()
             is BitcoinAddress -> this.address.shorten()
             else -> this.description
         }
@@ -329,6 +330,7 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> true
             is TronAddress -> true
             is TonAddress -> true
+            is StellarAddress -> true
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             else -> false
