@@ -6,7 +6,7 @@ import io.horizontalsystems.stellarkit.TagQuery
 
 @Entity
 data class Tag(
-    val eventId: Long,
+    val operationId: Long,
     val type: Type?,
     val assetId: String,
     val accountIds: List<String>,

@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.stellarkit.room.Event
+import io.horizontalsystems.stellarkit.room.Operation
 
 class StellarTransactionRecord(
     source: TransactionSource,
-    val operation: Event,
+    val operation: Operation,
     val type: Type,
 ) : TransactionRecord(
     uid = operation.id.toString(),

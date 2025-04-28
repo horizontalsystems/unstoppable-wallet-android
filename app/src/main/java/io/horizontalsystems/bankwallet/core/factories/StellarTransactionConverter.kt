@@ -9,7 +9,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.stellarkit.room.Event
+import io.horizontalsystems.stellarkit.room.Operation
 import io.horizontalsystems.stellarkit.room.StellarAsset
 
 class StellarTransactionConverter(
@@ -18,7 +18,7 @@ class StellarTransactionConverter(
     private val coinManager: ICoinManager,
     private val baseToken: Token,
 ) {
-    fun convert(operation: Event): StellarTransactionRecord {
+    fun convert(operation: Operation): StellarTransactionRecord {
         var type: Type = Type.Unsupported
 
         operation.payment?.let { payment ->

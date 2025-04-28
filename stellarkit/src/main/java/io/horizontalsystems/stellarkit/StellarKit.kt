@@ -2,9 +2,9 @@ package io.horizontalsystems.stellarkit
 
 import android.content.Context
 import android.util.Log
-import io.horizontalsystems.stellarkit.room.Event
-import io.horizontalsystems.stellarkit.room.EventInfo
 import io.horizontalsystems.stellarkit.room.KitDatabase
+import io.horizontalsystems.stellarkit.room.Operation
+import io.horizontalsystems.stellarkit.room.OperationInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -42,11 +42,11 @@ class StellarKit(
         accountId
     )
 
-    private val eventManager = EventManager(server, db.operationDao(), accountId)
+    private val operationManager = OperationManager(server, db.operationDao(), accountId)
 
     val receiveAddress get() = accountId
 
-    val operationsSyncStateFlow by eventManager::syncStateFlow
+    val operationsSyncStateFlow by operationManager::syncStateFlow
     val syncStateFlow by balancesManager::syncStateFlow
     val balanceFlow by balancesManager::xlmBalanceFlow
     val assetBalanceMapFlow by balancesManager::assetBalanceMapFlow
@@ -59,7 +59,7 @@ class StellarKit(
     init {
         coroutineScope.launch {
 //            apiListener.transactionFlow.collect {
-//                handleEvent(it)
+//                handleOperation(it)
 //            }
         }
     }
@@ -83,10 +83,10 @@ class StellarKit(
 //        this.stopListener()
     }
 
-//    private suspend fun handleEvent(eventId: String) {
+//    private suspend fun handleOperation(operationId: String) {
 //        repeat(3) {
 //            delay(5000)
-//            if (eventManager.isEventCompleted(eventId)) {
+//            if (operationManager.isOperationCompleted(operationId)) {
 //                return
 //            }
 //
@@ -94,12 +94,12 @@ class StellarKit(
 //        }
 //    }
 
-    fun operations(tagQuery: TagQuery, beforeId: Long? = null, limit: Int? = null): List<Event> {
-        return eventManager.operations(tagQuery, beforeId, limit)
+    fun operations(tagQuery: TagQuery, beforeId: Long? = null, limit: Int? = null): List<Operation> {
+        return operationManager.operations(tagQuery, beforeId, limit)
     }
 
-    fun operationFlow(tagQuery: TagQuery): Flow<EventInfo> {
-        return eventManager.operationFlow(tagQuery)
+    fun operationFlow(tagQuery: TagQuery): Flow<OperationInfo> {
+        return operationManager.operationFlow(tagQuery)
     }
 
 //    fun startListener() {
@@ -116,7 +116,7 @@ class StellarKit(
                 balancesManager.sync()
             },
             async {
-                eventManager.sync()
+                operationManager.sync()
             },
         ).awaitAll()
     }
