@@ -18,3 +18,16 @@ class Converters {
         return bigDecimal?.toPlainString()
     }
 }
+
+class StellarAssetConverter {
+    @TypeConverter
+    fun fromString(value: String?): StellarAsset? = try {
+        value?.let { StellarAsset.fromId(it) }
+    } catch (e: Exception) {
+        null
+    }
+
+    @TypeConverter
+    fun toString(v: StellarAsset?) = v?.id
+
+}
