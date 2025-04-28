@@ -2,12 +2,17 @@ package io.horizontalsystems.stellarkit
 
 import android.util.Log
 import io.horizontalsystems.stellarkit.room.Event
+import io.horizontalsystems.stellarkit.room.EventInfo
 import io.horizontalsystems.stellarkit.room.EventSyncState
 import io.horizontalsystems.stellarkit.room.OperationDao
 import io.horizontalsystems.stellarkit.room.Tag
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import org.stellar.sdk.Server
 import org.stellar.sdk.requests.RequestBuilder
@@ -27,28 +32,24 @@ class EventManager(
         return dao.operations(tagQuery, beforeId ?: Long.MAX_VALUE, limit ?: 100)
     }
 
-//    fun eventFlow(tagQuery: TagQuery): Flow<EventInfo> {
-//        var filteredEventFlow: Flow<EventInfoWithTags> = eventFlow.asSharedFlow()
-//
-//        if (!tagQuery.isEmpty) {
-//            filteredEventFlow = filteredEventFlow.filter { info: EventInfoWithTags ->
-//                info.events.any { eventWithTags ->
-//                    eventWithTags.tags.any { it.conforms(tagQuery) }
-//                }
-//            }
-//        }
-//
-//        return filteredEventFlow.map { info ->
-//            EventInfo(
-//                info.events.map { it.event },
-//                info.initial
-//            )
-//        }
-//    }
+    fun operationFlow(tagQuery: TagQuery): Flow<EventInfo> {
+        var filteredEventFlow: Flow<EventInfoWithTags> = eventFlow.asSharedFlow()
 
-//    fun tagTokens(): List<TagToken> {
-//        return dao.tagTokens()
-//    }
+        if (!tagQuery.isEmpty) {
+            filteredEventFlow = filteredEventFlow.filter { info: EventInfoWithTags ->
+                info.events.any { eventWithTags ->
+                    eventWithTags.tags.any { it.conforms(tagQuery) }
+                }
+            }
+        }
+
+        return filteredEventFlow.map { info ->
+            EventInfo(
+                info.events.map { it.event },
+                info.initial
+            )
+        }
+    }
 
     suspend fun sync() {
         Log.d("AAA", "Syncing events...")

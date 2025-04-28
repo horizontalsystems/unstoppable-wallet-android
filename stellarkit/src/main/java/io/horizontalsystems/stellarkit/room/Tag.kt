@@ -25,17 +25,13 @@ data class Tag(
             return false
         }
 
-//        if (tagQuery.platform != platform) {
-//            return false
-//        }
+        if (tagQuery.assetId != assetId) {
+            return false
+        }
 
-//        if (tagQuery.jettonAddress != jettonAddress) {
-//            return false
-//        }
-
-//        if (!addresses.contains(tagQuery.address)) {
-//            return false
-//        }
+        if (!accountIds.contains(tagQuery.accountId)) {
+            return false
+        }
 
         return true
     }

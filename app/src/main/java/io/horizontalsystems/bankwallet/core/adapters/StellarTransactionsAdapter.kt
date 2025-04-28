@@ -21,6 +21,7 @@ import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.stellarkit.room.Tag
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.rx2.rxSingle
 
@@ -95,7 +96,16 @@ class StellarTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): Flowable<List<TransactionRecord>> {
-        return Flowable.empty()
+        val tagQuery = getTagQuery(token, transactionType, address)
+
+        return stellarKit
+            .operationFlow(tagQuery)
+            .map { eventInfo ->
+                eventInfo.events.map {
+                    transactionConverter.convert(it)
+                }
+            }
+            .asFlowable()
     }
 
     override fun getTransactionUrl(transactionHash: String): String {

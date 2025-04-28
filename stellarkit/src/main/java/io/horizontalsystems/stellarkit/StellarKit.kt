@@ -3,12 +3,14 @@ package io.horizontalsystems.stellarkit
 import android.content.Context
 import android.util.Log
 import io.horizontalsystems.stellarkit.room.Event
+import io.horizontalsystems.stellarkit.room.EventInfo
 import io.horizontalsystems.stellarkit.room.KitDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.stellar.sdk.Asset
 import org.stellar.sdk.AssetTypeNative
@@ -106,13 +108,9 @@ class StellarKit(
         return eventManager.operations(tagQuery, beforeId, limit)
     }
 
-//    fun eventFlow(tagQuery: TagQuery): Flow<EventInfo> {
-//        return eventManager.eventFlow(tagQuery)
-//    }
-
-//    fun tagTokens(): List<TagToken> {
-//        return eventManager.tagTokens()
-//    }
+    fun operationFlow(tagQuery: TagQuery): Flow<EventInfo> {
+        return eventManager.operationFlow(tagQuery)
+    }
 
 //    suspend fun estimateFee(
 //        recipient: FriendlyAddress,
