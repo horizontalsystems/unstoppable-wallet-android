@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.statusInfo
-import io.horizontalsystems.stellarkit.Network
 
 abstract class BaseStellarAdapter(
     stellarKitWrapper: StellarKitWrapper
@@ -21,5 +20,5 @@ abstract class BaseStellarAdapter(
 
     // IReceiveAdapter
 
-    override val isMainNet = stellarKit.network == Network.MainNet
+    override val isMainNet = stellarKit.isMainNet
 }

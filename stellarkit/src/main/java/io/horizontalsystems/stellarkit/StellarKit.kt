@@ -23,17 +23,11 @@ import org.stellar.sdk.operations.PaymentOperation
 import java.math.BigDecimal
 
 class StellarKit(
-//    private val address: Address,
-//    private val apiListener: TonApiListener,
-//    private val accountManager: AccountManager,
-//    private val jettonManager: JettonManager,
-//    private val eventManager: EventManager,
-//    private val transactionSender: TransactionSender?,
-    val network: Network,
     private val keyPair: KeyPair,
-    private val db: KitDatabase,
-//    private val transactionSigner: TransactionSigner,
+    network: Network,
+    db: KitDatabase,
 ) {
+    val isMainNet = network == Network.MainNet
     val sendFee: BigDecimal = BigDecimal(Transaction.MIN_BASE_FEE.toBigInteger(), 7)
 
     private val serverUrl = when (network) {
@@ -57,9 +51,6 @@ class StellarKit(
     val syncStateFlow by balancesManager::syncStateFlow
     val balanceFlow by balancesManager::xlmBalanceFlow
     val assetBalanceMapFlow by balancesManager::assetBalanceMapFlow
-//    val jettonSyncStateFlow by jettonManager::syncStateFlow
-//    val jettonBalanceMapFlow by jettonManager::jettonBalanceMapFlow
-//    val eventSyncStateFlow by eventManager::syncStateFlow
 
     val balance get() = balanceFlow.value
     val assetBalanceMap get() = assetBalanceMapFlow.value
@@ -112,25 +103,6 @@ class StellarKit(
         return eventManager.operationFlow(tagQuery)
     }
 
-//    suspend fun estimateFee(
-//        recipient: FriendlyAddress,
-//        amount: SendAmount,
-//        comment: String?,
-//    ): BigInteger {
-//        return transactionSender?.estimateFee(recipient, amount, comment)
-//            ?: throw WalletError.WatchOnly
-//    }
-
-//    suspend fun estimateFee(
-//        jettonWallet: Address,
-//        recipient: FriendlyAddress,
-//        amount: BigInteger,
-//        comment: String?,
-//    ): BigInteger {
-//        return transactionSender?.estimateFee(jettonWallet, recipient, amount, comment)
-//            ?: throw WalletError.WatchOnly
-//    }
-
 //    fun startListener() {
 //        apiListener.start(address = address)
 //    }
@@ -144,32 +116,11 @@ class StellarKit(
             async {
                 balancesManager.sync()
             },
-//            async {
-//                jettonManager.sync()
-//            },
             async {
                 eventManager.sync()
             },
         ).awaitAll()
     }
-
-//    suspend fun send(recipient: FriendlyAddress, amount: SendAmount, comment: String?) {
-//        transactionSender?.send(recipient, amount, comment) ?: throw WalletError.WatchOnly
-//    }
-
-//    suspend fun send(
-//        jettonWallet: Address,
-//        recipient: FriendlyAddress,
-//        amount: BigInteger,
-//        comment: String?,
-//    ) {
-//        transactionSender?.send(jettonWallet, recipient, amount, comment)
-//            ?: throw WalletError.WatchOnly
-//    }
-
-//    suspend fun send(boc: String) {
-//        transactionSender?.send(boc) ?: throw WalletError.WatchOnly
-//    }
 
     fun sendNative(recipient: String, amount: BigDecimal, memo: String?) {
         send(AssetTypeNative(), recipient, amount, memo)
@@ -180,6 +131,8 @@ class StellarKit(
     }
 
     private fun send(asset: Asset, recipient: String, amount: BigDecimal, memo: String?) {
+        if (!keyPair.canSign()) throw WalletError.WatchOnly
+
         val destination = KeyPair.fromAccountId(recipient)
 
         // First, check to make sure that the destination account exists.
@@ -218,18 +171,6 @@ class StellarKit(
         }
     }
 
-//    suspend fun sign(request: SendRequestEntity, tonWallet: TonWallet): String {
-//        check(tonWallet is TonWallet.FullAccess)
-//
-//        return transactionSigner.sign(request, tonWallet)
-//    }
-
-//    suspend fun getDetails(request: SendRequestEntity, tonWallet: TonWallet): Event {
-//        check(tonWallet is TonWallet.FullAccess)
-//
-//        return transactionSigner.getDetails(request, tonWallet)
-//    }
-
     sealed class SyncError : Error() {
         data object NotStarted : SyncError() {
             override val message = "Not Started"
@@ -239,11 +180,6 @@ class StellarKit(
     sealed class WalletError : Error() {
         data object WatchOnly : WalletError()
     }
-
-//    enum SendAmount {
-//        case amount(value: BigUInt)
-//        case max
-//    }
 
     companion object {
         fun getInstance(
@@ -263,24 +199,11 @@ class StellarKit(
             }
 
             val db = KitDatabase.getInstance(context, "stellar-${walletId}-${network.name}")
-            return StellarKit(network, keyPair, db)
+            return StellarKit(keyPair, network, db)
         }
-
-//        fun getTonApi(network: Network) = TonApi(network, okHttpClient)
-//        fun getTransactionSigner(api: TonApi) = TransactionSigner(api)
-
-//        suspend fun getJetton(network: Network, address: Address): Jetton {
-//            return getTonApi(network).getJettonInfo(address)
-//        }
 
         fun validateAddress(address: String) {
             KeyPair.fromAccountId(address)
         }
     }
-
-//    sealed class SendAmount {
-//        data class Amount(val value: BigInteger) : SendAmount()
-//        data object Max : SendAmount()
-//    }
-
 }
