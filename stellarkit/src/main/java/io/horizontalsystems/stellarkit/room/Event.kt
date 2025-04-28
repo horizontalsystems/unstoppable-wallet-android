@@ -3,6 +3,7 @@ package io.horizontalsystems.stellarkit.room
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.horizontalsystems.stellarkit.room.Tag.Type
 import kotlinx.datetime.Instant
 import org.stellar.sdk.MemoText
 import org.stellar.sdk.responses.operations.CreateAccountOperationResponse
@@ -28,28 +29,27 @@ data class Event(
     data class Payment(val amount: String, val asset: StellarAsset, val from: String, val to: String)
     data class AccountCreated(val startingBalance: String, val funder: String, val account: String)
 
-    fun tags(address: String): List<Tag> {
+    fun tags(accountId: String): List<Tag> {
         val tags = mutableListOf<Tag>()
 
-        if (sourceAccount == address) {
-            tags.add(
-                Tag(
-                    id,
-                    Tag.Type.Outgoing,
-                    Tag.Platform.Native,
-//                    addresses = listOf(tonTransfer.recipient.address)
-                )
-            )
-        } else {
-            tags.add(
-                Tag(
-                    id,
-                    Tag.Type.Incoming,
-                    Tag.Platform.Native,
-//                    addresses = listOf(tonTransfer.recipient.address)
-                )
-            )
+        accountCreated?.let { accountCreated ->
+            if (accountCreated.funder == accountId) {
+                tags.add(Tag(id, Type.Outgoing, StellarAsset.Native.id, listOf(accountCreated.account)))
+            }
 
+            if (accountCreated.account == accountId) {
+                tags.add(Tag(id, Type.Incoming, StellarAsset.Native.id, listOf(accountCreated.funder)))
+            }
+        }
+
+        payment?.let { data ->
+            if (data.from == accountId) {
+                tags.add(Tag(id, Type.Outgoing, data.asset.id, listOf(data.to)))
+            }
+
+            if (data.to == accountId) {
+                tags.add(Tag(id, Type.Incoming, data.asset.id, listOf(data.from)))
+            }
         }
 
         return tags

@@ -7,17 +7,12 @@ import io.horizontalsystems.stellarkit.TagQuery
 @Entity
 data class Tag(
     val eventId: Long,
-    val type: Type? = null,
-    val platform: Platform? = null,
-//    val jettonAddress: Address? = null,
-//    val addresses: List<Address> = listOf(),
+    val type: Type?,
+    val assetId: String,
+    val accountIds: List<String>,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 ) {
-    enum class Platform {
-        Native, Asset;
-    }
-
     enum class Type {
         Incoming,
         Outgoing,
@@ -30,9 +25,9 @@ data class Tag(
             return false
         }
 
-        if (tagQuery.platform != platform) {
-            return false
-        }
+//        if (tagQuery.platform != platform) {
+//            return false
+//        }
 
 //        if (tagQuery.jettonAddress != jettonAddress) {
 //            return false

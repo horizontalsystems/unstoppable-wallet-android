@@ -24,7 +24,7 @@ class EventManager(
     val syncStateFlow = _syncStateFlow.asStateFlow()
 
     fun operations(tagQuery: TagQuery, beforeId: Long?, limit: Int?): List<Event> {
-        return dao.operations(beforeId ?: Long.MAX_VALUE, limit ?: 100)
+        return dao.operations(tagQuery, beforeId ?: Long.MAX_VALUE, limit ?: 100)
     }
 
 //    fun eventFlow(tagQuery: TagQuery): Flow<EventInfo> {
