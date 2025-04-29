@@ -124,7 +124,7 @@ class AddressHandlerUdn(
             BlockchainType.Solana -> "SOL"
             BlockchainType.Tron -> "TRX"
             BlockchainType.Ton -> "TON"
-            BlockchainType.Stellar -> TODO()
+            BlockchainType.Stellar -> "XLM"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
