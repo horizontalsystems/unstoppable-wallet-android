@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.TonHelper
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -52,6 +53,38 @@ class TransactionInfoViewItemFactory(
         }
 
         when (transaction) {
+            is StellarTransactionRecord -> {
+                when (val transactionType = transaction.type) {
+                    is StellarTransactionRecord.Type.Receive -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transactionType.value,
+                                fromAddress = transactionType.from,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+                    is StellarTransactionRecord.Type.Send -> {
+                        sentToSelf = transactionType.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transactionType.value,
+                                toAddress = transactionType.to,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transactionType.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+                    is StellarTransactionRecord.Type.AccountCreated -> TODO()
+                    StellarTransactionRecord.Type.Unsupported -> TODO()
+                }
+            }
+
             is ContractCreationTransactionRecord -> {
                 itemSections.add(TransactionViewItemFactoryHelper.getContractCreationItems(transaction))
             }
