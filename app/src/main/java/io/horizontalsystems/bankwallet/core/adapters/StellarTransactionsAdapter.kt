@@ -95,10 +95,10 @@ class StellarTransactionsAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
+    ): Flowable<List<TransactionRecord>> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
 
-        return stellarKit
+        stellarKit
             .operationFlow(tagQuery)
             .map { operationInfo ->
                 operationInfo.operations.map {
@@ -106,6 +106,8 @@ class StellarTransactionsAdapter(
                 }
             }
             .asFlowable()
+    } catch (e: NotSupportedException) {
+        Flowable.empty()
     }
 
     override fun getTransactionUrl(transactionHash: String): String {
