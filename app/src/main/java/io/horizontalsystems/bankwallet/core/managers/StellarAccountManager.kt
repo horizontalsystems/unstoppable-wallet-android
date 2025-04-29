@@ -24,8 +24,8 @@ class StellarAccountManager(
     private val stellarKitManager: StellarKitManager,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
 ) {
-    private val blockchainType: BlockchainType = BlockchainType.Ton
-    private val logger = AppLogger("evm-account-manager")
+    private val blockchainType: BlockchainType = BlockchainType.Stellar
+    private val logger = AppLogger("stellar-account-manager")
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val singleDispatcherCoroutineScope = CoroutineScope(singleDispatcher)
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
