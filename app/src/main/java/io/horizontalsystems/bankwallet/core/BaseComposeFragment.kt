@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,6 +58,7 @@ abstract class BaseComposeFragment(
 
     override fun onResume() {
         super.onResume()
+        Log.i("AAA", "Fragment: ${this.javaClass.simpleName}")
         if (screenshotEnabled) {
             allowScreenshot()
         } else {
