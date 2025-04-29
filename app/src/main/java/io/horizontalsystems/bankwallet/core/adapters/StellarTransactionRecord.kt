@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.stellarkit.room.Operation
 
 class StellarTransactionRecord(
@@ -20,6 +21,7 @@ class StellarTransactionRecord(
     spam = false,
     source = source,
 ) {
+    override val mainValue = type.mainValue
 
     sealed class Type {
         data class Send(
@@ -42,5 +44,15 @@ class StellarTransactionRecord(
         ) : Type()
 
         object Unsupported: Type()
+
+        val mainValue: TransactionValue?
+            get() = when (this) {
+                is AccountCreated -> value
+                is Receive -> value
+                is Send -> value
+                Unsupported -> null
+            }
     }
+
+    override fun status(lastBlockHeight: Int?) = TransactionStatus.Completed
 }
