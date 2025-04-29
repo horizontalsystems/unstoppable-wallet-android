@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.statusInfo
 
 abstract class BaseStellarAdapter(
     stellarKitWrapper: StellarKitWrapper
@@ -14,9 +13,6 @@ abstract class BaseStellarAdapter(
 
     override val debugInfo: String
         get() = ""
-
-    val statusInfo: Map<String, Any>
-        get() = stellarKit.statusInfo()
 
     // IReceiveAdapter
 
