@@ -23,7 +23,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 144
+        versionCode 145
         versionName "0.41.14"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -58,6 +58,12 @@ android {
         compose true
         viewBinding true
         buildConfig true
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 
     signingConfigs {
