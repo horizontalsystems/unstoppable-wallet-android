@@ -5,6 +5,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -482,12 +485,28 @@ class TransactionViewItemFactory(
             is StellarTransactionRecord.Type.AccountCreated -> {
                 title = Translator.getString(R.string.Transactions_AccountCreated)
                 subtitle = Translator.getString(
-                    R.string.Transactions_From,
+                    R.string.Transactions_By,
                     mapped(recordType.funder, record.blockchainType)
                 )
 
                 primaryValue = getColoredValue(recordType.value, ColorName.Remus)
                 iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+            }
+            is StellarTransactionRecord.Type.ChangeTrust -> {
+                title = Translator.getString(R.string.Transactions_TrustlineCreated)
+                subtitle = Translator.getString(
+                    R.string.Transactions_By,
+                    mapped(recordType.trustee, record.blockchainType)
+                )
+
+                primaryValue = ColoredValue(recordType.token.coin.code, ColorName.Grey)
+                secondaryValue = ColoredValue(recordType.token.coin.name, ColorName.Grey)
+
+                iconX = TransactionViewItem.Icon.Regular(
+                    recordType.token.coin.imageUrl,
+                    recordType.token.coin.alternativeImageUrl,
+                    recordType.token.fullCoin.iconPlaceholder
+                )
             }
             StellarTransactionRecord.Type.Unsupported -> {
                 iconX = TransactionViewItem.Icon.Platform(record.blockchainType)

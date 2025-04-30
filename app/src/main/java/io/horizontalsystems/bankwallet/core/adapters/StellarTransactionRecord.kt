@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.stellarkit.room.Operation
 
 class StellarTransactionRecord(
@@ -43,6 +44,13 @@ class StellarTransactionRecord(
             val value: TransactionValue.CoinValue
         ) : Type()
 
+        data class ChangeTrust(
+            val outgoing: Boolean,
+            val sentToSelf: Boolean,
+            val token: Token,
+            val trustee: String,
+        ) : Type()
+
         object Unsupported: Type()
 
         val mainValue: TransactionValue?
@@ -50,6 +58,7 @@ class StellarTransactionRecord(
                 is AccountCreated -> value
                 is Receive -> value
                 is Send -> value
+                is ChangeTrust -> null
                 Unsupported -> null
             }
     }

@@ -26,7 +26,7 @@ class StellarTransactionConverter(
             val incoming = payment.to == selfAddress
 
             val token = getToken(payment.asset)
-            var amount = payment.amount.toBigDecimal()
+            var amount = payment.amount
             if (outgoing) {
                 amount = amount.negate()
             }
@@ -58,15 +58,30 @@ class StellarTransactionConverter(
 
         operation.accountCreated?.let { accountCreated ->
             val transactionValue =
-                TransactionValue.CoinValue(baseToken, accountCreated.startingBalance.toBigDecimal())
+                TransactionValue.CoinValue(baseToken, accountCreated.startingBalance)
 
             type = Type.AccountCreated(
-                accountCreated.funder,
-                accountCreated.account,
-                transactionValue,
+                funder = accountCreated.funder,
+                account = accountCreated.account,
+                value = transactionValue,
             )
         }
 
+        operation.changeTrust?.let { changeTrust ->
+            val token = getToken(changeTrust.asset)
+
+            if (token != null) {
+                val outgoing = changeTrust.trustee == selfAddress
+                val sentToSelf = outgoing && changeTrust.trustor == selfAddress
+
+                type = Type.ChangeTrust(
+                    outgoing,
+                    sentToSelf,
+                    token,
+                    changeTrust.trustee,
+                )
+            }
+        }
 
         return StellarTransactionRecord(source, operation, type)
     }
