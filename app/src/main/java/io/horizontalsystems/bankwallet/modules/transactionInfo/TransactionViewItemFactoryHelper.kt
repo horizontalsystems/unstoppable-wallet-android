@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -639,6 +640,12 @@ object TransactionViewItemFactoryHelper {
 
             is TonTransactionRecord -> {
                 items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+            }
+
+            is StellarTransactionRecord -> {
+                transaction.fee?.let { fee ->
+                    items.add(getFeeItem(fee, rates[fee.coinUid], status))
+                }
             }
 
             is BitcoinOutgoingTransactionRecord ->

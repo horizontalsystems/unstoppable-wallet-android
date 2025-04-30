@@ -75,7 +75,7 @@ class TransactionInfoService(
             val coinUids = mutableListOf<String?>()
 
             val txCoinTypes = when (val tx = transactionRecord) {
-                is StellarTransactionRecord -> listOf(tx.mainValue?.coinUid)
+                is StellarTransactionRecord -> listOf(tx.mainValue?.coinUid, tx.fee?.coinUid)
                 is TonTransactionRecord -> buildList {
                     add(tx.mainValue?.coinUid)
                     add(tx.fee.coinUid)
