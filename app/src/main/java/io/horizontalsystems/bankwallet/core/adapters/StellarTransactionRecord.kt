@@ -25,6 +25,7 @@ class StellarTransactionRecord(
 ) {
     override val mainValue = type.mainValue
     val fee = operation.fee?.let { TransactionValue.CoinValue(baseToken, it) }
+    val memo = operation.memo
 
     sealed class Type {
         data class Send(
