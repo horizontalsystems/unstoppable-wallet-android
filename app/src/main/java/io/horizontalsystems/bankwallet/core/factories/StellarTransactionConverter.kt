@@ -83,7 +83,7 @@ class StellarTransactionConverter(
             }
         }
 
-        return StellarTransactionRecord(source, operation, type)
+        return StellarTransactionRecord(baseToken, source, operation, type)
     }
 
     private fun getToken(asset: StellarAsset): Token? {

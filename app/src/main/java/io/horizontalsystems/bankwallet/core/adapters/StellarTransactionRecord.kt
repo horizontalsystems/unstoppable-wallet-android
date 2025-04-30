@@ -8,6 +8,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.stellarkit.room.Operation
 
 class StellarTransactionRecord(
+    baseToken: Token,
     source: TransactionSource,
     val operation: Operation,
     val type: Type,
@@ -23,6 +24,7 @@ class StellarTransactionRecord(
     source = source,
 ) {
     override val mainValue = type.mainValue
+    val fee = operation.fee?.let { TransactionValue.CoinValue(baseToken, it) }
 
     sealed class Type {
         data class Send(
@@ -63,5 +65,9 @@ class StellarTransactionRecord(
             }
     }
 
-    override fun status(lastBlockHeight: Int?) = TransactionStatus.Completed
+    override fun status(lastBlockHeight: Int?) = if (failed) {
+        TransactionStatus.Failed
+    } else {
+        TransactionStatus.Completed
+    }
 }
