@@ -81,6 +81,7 @@ class TransactionInfoViewItemFactory(
                         )
                     }
                     is StellarTransactionRecord.Type.AccountCreated -> TODO()
+                    is StellarTransactionRecord.Type.ChangeTrust -> TODO()
                     StellarTransactionRecord.Type.Unsupported -> TODO()
                 }
             }

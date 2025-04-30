@@ -727,6 +727,7 @@
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
     <string name="Transactions_AccountCreated">Account Created</string>
+    <string name="Transactions_TrustlineCreated">     Trustline Created</string>
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Sent</string>
@@ -740,6 +741,7 @@
     <string name="Transactions_ContractCreation">Contract Creation</string>
     <string name="Transactions_ContractDeploy">Contract Deploy</string>
     <string name="Transactions_To">to %s</string>
+    <string name="Transactions_By">by %s</string>
     <string name="Transactions_From">from %s</string>
     <string name="Transaction_Unlimited_CoinCode">unlimited %s</string>
     <string name="Transaction_Unlimited">unlimited</string>
