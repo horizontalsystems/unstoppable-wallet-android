@@ -1,0 +1,5 @@
+A powerful non-custodial multi-wallet for Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, and zCash (ZEC), supporting NFTs and a wide range of other assets.
+
+Includes built-in onchain DEX, institutional-grade analytics for crypto and NFT markets, advanced privacy tools, and a human-centered interface.
+
+Also supports emerging blockchains like PirateCash (PIRATE) and Cosanta (COSA).
