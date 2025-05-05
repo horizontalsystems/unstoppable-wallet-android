@@ -60,7 +60,9 @@ class TonConnectSendRequestViewModel(
             return
         }
 
-        if (isInvalidNetwork(sendRequestEntity.network)) {
+        try{
+            sendRequestEntity.network
+        } catch (e: Exception) {
             error = TonConnectSendRequestError.InvalidData("Invalid network")
             responseBadRequest(sendRequestEntity)
             return
@@ -194,13 +196,8 @@ class TonConnectSendRequestViewModel(
         return null
     }
 
-    private fun isInvalidNetwork(networkId: Int): Boolean {
-        return !(networkId == TonNetwork.MAINNET.value ||
-                networkId == TonNetwork.TESTNET.value)
-    }
-
     private fun isTestnet(sendRequestEntity: SendRequestEntity): Boolean {
-        return sendRequestEntity.network == TonNetwork.TESTNET.value
+        return sendRequestEntity.network == TonNetwork.TESTNET
     }
 
     private fun addressIsRaw(messages: List<RawMessageEntity>): Boolean {
