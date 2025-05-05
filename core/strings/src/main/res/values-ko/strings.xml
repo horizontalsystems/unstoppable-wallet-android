@@ -60,6 +60,9 @@
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
     <string name="Button_SetAmount">금액 설정</string>
+    <string name="not_enough_ton_for_fee">Not enough TON for fee</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
+    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">어떤</string>
@@ -201,6 +204,7 @@
     <string name="Market_Signal_StrongSell_Description">가격 하락의 높은 확률.</string>
     <string name="Market_Signal_Risky_Description">고위험 수준, 주의가 필요합니다.</string>
     <string name="Market_Signal_Warning">언제나 위험 관리를 적용하는 것을 기억하세요. 이것은 금융 조언이 아님을 유의하세요.</string>
+    <string name="Market_Signal_TurnOn">Turn on</string>
     <string name="Market_Top_100">상위 100</string>
     <string name="Market_Top_200">상위 200</string>
     <string name="Market_Top_300">상위 300</string>
@@ -330,6 +334,7 @@
     <string name="Balance_Withdraw">빼다</string>
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Send">전송</string>
+    <string name="shield_funds">Shield and consolidate funds</string>
     <string name="Balance_Swap">스왑</string>
     <string name="Balance_Deposit">수신</string>
     <string name="Balance_Receive">수신</string>
@@ -368,6 +373,7 @@
     <string name="Balance_Receive_SetAmount">금액 설정</string>
     <string name="Balance_Receive_AddressType">주소 유형</string>
     <string name="Balance_LockedAmount_Title">잠김</string>
+    <string name="Balance_ProcessingBalance_Title">Processing</string>
     <string name="Balance_NotRelayedAmount_Title">방송</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
@@ -399,6 +405,9 @@
     <string name="Send_Rbf_Description">이 옵션을 통해 거래가 멈춘 상태에서 수수료를 증가시켜 거래를 다시 보낼 수 있습니다.</string>
     <string name="Send_RbfEnabled">활성화</string>
     <string name="Send_RbfDisabled">비활성화됨</string>
+    <string name="Send_Utxo_AvailableBalance">Available Balance</string>
+    <string name="Send_Utxo_UnselectAll">Unsellect All</string>
+    <string name="Send_Utxo_SelectAll">Sellect All</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_Domain">도메인</string>
     <string name="Send_Confirmation_YouSend">보냅니다</string>
@@ -409,6 +418,7 @@
     <string name="Send_Confirmation_Receiver">받는 사람</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
+    <string name="Send_Confirmation_Action">Action</string>
     <string name="Send_Success">\u2713 보냄</string>
     <string name="ScanQr_CameraPermission_Title">카메라 접근 권한</string>
     <string name="ScanQr_PleaseGrantCameraPermission">카메라 권한을 허용하십시오</string>
@@ -490,6 +500,7 @@
     <string name="FeeInfo_TronFee_Title">수수료</string>
     <string name="FeeInfo_TronFee_Description">네트워크에서 거래하는 데 드는 예상 비용입니다. (energy, bandwidth 및 활성화 수수료 제외)</string>
     <string name="FeeInfo_TronActivationFee_Title">활성화 수수료</string>
+    <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">소모된 자원</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 은 블록체인 데이터베이스에 저장된 트랜잭션 바이트 크기를 측정하는 단위입니다. 거래가 클수록 대역폭 자원이 더 많이 사용됩니다.\n\nEnergy 는 TRON 가상 머신이 TRON 네트워크에서 특정 작업을 수행하기 위해 필요한 계산 양을 측정하는 단위입니다. \n\n스마트 계약 트랜잭션은 실행에 계산 자원이 필요하기 때문에 각 스마트 계약 트랜잭션에는 energy 수수료를 지불해야합니다.</string>
     <!--Tron-->
@@ -501,6 +512,12 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">0 %s을(를) 전송할 수 없습니다.</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">계정이 활성화되지 않음</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">새로운 TRON 지갑은 활성화되기 위해 최소 1 TRX의 입금이 필요합니다. 비활성 지갑은 토큰을 보유하고 받을 수는 있지만, 활성화될 때까지 잔액이 정확히 표시되지 않습니다.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">New Connection</string>
+    <string name="TonConnect_Error_InvalidUrl">Invalid URL Address</string>
+    <string name="TonConnect_Unnamed">Unnamed</string>
+    <string name="TonConnect_Wallet">Wallet</string>
+    <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">요청</string>
     <string name="WalletConnect_SendRequest_Title">전송</string>
@@ -533,6 +550,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
     <string name="WalletConnect_Error_DataParsingError">데이터 파싱 오류</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Unsupported chains: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Unsupported methods: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">요청을 찾을 수 없음 오류</string>
     <string name="WalletConnect_NoConnection">연결된 dapp이 없습니다.</string>
     <string name="WalletConnect_PendingRequests">보류 중인 요청</string>
@@ -596,6 +616,7 @@
     <string name="Swap_ErrorNoProviders">제공자 없음</string>
     <string name="Swap_ErrorNoQuote">제안이 없습니다</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
+    <string name="swap_out_of_min_amount">Out of min amount %s</string>
     <string name="Swap_ErrorBalanceNotAvailable">균형 N/A</string>
     <string name="Swap_ErrorNoLiquidity">이 토큰을 스왑할 수 없습니다</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">이 서비스는 래핑/언래핑을 허용하지 않습니다. 대신 1inch 를 사용하십시오.</string>
@@ -611,6 +632,10 @@
     <string name="Swap_Unlocking">잠금 해제...</string>
     <string name="Swap_Revoke">취소</string>
     <string name="Swap_Revoking">철회...</string>
+    <string name="swap_create_wallets">Create wallets</string>
+    <string name="swap_creating_wallets">Creating wallets..</string>
+    <string name="swap_create_wallet_description">You don\'t have all chosen wallets, need to create first</string>
+    <string name="swap_create_wallet_description_with_zcash">You don\'t have all chosen wallets, need to create first,\nto exchange ZEC you need to create transparent address first</string>
     <string name="Swap_Approve">승인</string>
     <string name="Swap_Approving">승인 중</string>
     <string name="Swap_Swapping">스와핑</string>
@@ -631,6 +656,10 @@
     <string name="Swap_Confirm_Title">확인</string>
     <string name="SwapConfirm_QuoteExpired">견적이 만료되었습니다</string>
     <string name="SwapConfirm_FetchingFinalQuote">최종 견적을 가져오는 중</string>
+    <string name="unsupported_refund_address">Unsupported refund address</string>
+    <string name="unsupported_address">Unsupported address</string>
+    <string name="unexpected_error">Unexpected error</string>
+    <string name="unsupported_token">Unsupported token</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_Service">서비스</string>
@@ -688,6 +717,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
+    <string name="Transactions_Hide">Transactions Hide</string>
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
@@ -699,10 +729,19 @@
     <string name="Transactions_Mint">민트</string>
     <string name="Transactions_Approve">승인됨</string>
     <string name="Transactions_Swap">스왑됨</string>
+    <string name="transaction_swap_status_new">New</string>
+    <string name="transaction_swap_status_waiting">Waiting</string>
+    <string name="transaction_swap_status_confirming">Confirming</string>
+    <string name="transaction_swap_status_exchanging">Exchanging</string>
+    <string name="transaction_swap_status_sending">Sending</string>
+    <string name="transaction_swap_status_refunded">Refunded</string>
+    <string name="transaction_swap_status_verifying">Verifying</string>
+    <string name="transaction_swap_status_unknown">Unknown</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_ContractCall">계약 콜</string>
     <string name="Transactions_ExternalContractCall">외부 콜</string>
     <string name="Transactions_ContractCreation">계약 생성</string>
+    <string name="Transactions_ContractDeploy">Contract Deploy</string>
     <string name="Transactions_To">%s에게</string>
     <string name="Transactions_From">%s부터</string>
     <string name="Transaction_Unlimited_CoinCode">무제한 %s</string>
@@ -721,6 +760,7 @@
     <string name="Transactions_Swaps">스왑</string>
     <string name="Transactions_Approvals">승인</string>
     <string name="Transactions_Unknown">알 수 없는 트랜잭션</string>
+    <string name="Transactions_TonTransaction">Ton Transaction</string>
     <string name="Transactions_Unknown_Description">트랜잭션을 구문 분석할 수 없습니다</string>
     <string name="Transactions_Multiple">다수</string>
     <string name="Transactions_Filter">필터</string>
@@ -791,6 +831,8 @@
     <string name="Info_LockTime_Description_Static">발송자는 이러한 자금들을 표시된 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다.\n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
     <string name="Info_NotRelayed_Title">방송</string>
     <string name="Info_NotRelayed_Description">이 금액을 보유한 거래는 방송되었지만 아직 네트워크에서 수락되지 않았습니다.</string>
+    <string name="Info_ProcessingBalance_Title">Processing amount</string>
+    <string name="Info_ProcessingBalance_Description">Transactions with this amount still syncing. And when they are confirmed, these tokens will be available for spending</string>
     <string name="Info_DoubleSpend_Title">이중 지출</string>
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
@@ -812,17 +854,20 @@
     <string name="Settings_ExperimentalFeatures">실험적인</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
+    <string name="settings_display_transactions">Display Transactions</string>
     <string name="Settings_Theme">테마</string>
     <string name="Settings_Terms">약관</string>
     <string name="Settings_Privacy">개인정보</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_RateUs">앱 평가</string>
+    <string name="update_app">앱 업데이트</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
     <string name="Settings_Appearance">모양</string>
     <string name="Settings_Contact_ViaTelegram">텔레그램을 통해</string>
     <string name="Settings_Contact_ViaEmail">이메일로</string>
     <string name="Settings_AutoLock">자동 잠금</string>
+    <string name="telegram_link">https://t.me/PirateCash_ENG</string>
     <string name="Settings_JoinUs">Be Unstoppable</string>
     <string name="Settings_JoinUs_Description">독점 비디오로 암호화폐를 배우고 정복하세요. 비공식적으로 우리를 알아가세요. 우리가 작업하는 것들을 가장 먼저 보실 수 있습니다.</string>
     <string name="Settings_PersonalSupport">개인 지원</string>
@@ -837,6 +882,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
     <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
+    <string name="Settings_GetYourTokens">Earn PIRATE by playing!</string>
     <string name="Settings_DonateToken">기부하기 %s</string>
     <string name="Settings_DonateWith">기부하기</string>
     <string name="Settings_Donate_GetAddress">기부 주소</string>
@@ -853,6 +899,8 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1시간</string>
     <string name="Appearance_Theme">주제</string>
     <string name="Appearance_Tab">탭 설정</string>
+    <string name="Appearance_MarketsTab">MARKETS TAB</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>
     <string name="Appearance_AppIcon">앱 아이콘</string>
     <string name="Appearance_BalanceConversion">잔액 변환</string>
@@ -860,8 +908,19 @@
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
     <string name="Appearance_HideMarketsTab">마켓 숨기기</string>
     <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">This configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
+    <string name="show_all_transactions">Show All Transactions</string>
+    <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
+    <string name="appearance_transfer_passcode">Passcode for transfer</string>
+    <string name="display">Display</string>
+    <string name="display_nothing">Nothing</string>
+    <string name="display_last_4_transactions">Last 4 transactions</string>
+    <string name="display_last_2_transactions">Last 2 transactions</string>
+    <string name="display_last_1_transaction">Last transaction</string>
     <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
+    <string name="Appearance_TransactionAutoHide_Description">Security Mode: hides transactions and allows you to set a separate passcode for unlocking them.</string>
+    <string name="appearance_transfer_passcode_description">This setting requires entering a passcode before sending assets, providing additional protection for your assets in case your device with an unlocked app falls into the wrong hands.</string>
     <string name="Appearance_PriceChangeInterval">가격 변경 %</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
@@ -891,6 +950,7 @@
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">P.CASH 는 코인 잔액이나 주소와 같은 개인 정보를 노출하는 개인 데이터를 수집하지 않습니다. UI 사용 통계를 수집하긴 하지만, 이는 사용자 기반 및 앱 사용 트렌드를 이해하기 위한 것입니다. 원하신다면 비활성화할 수 있습니다.</string>
+    <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
     <string name="Privacy_BulletedText2">사용자 계정이나 사용자 데이터를 저장하는 데이터베이스가 없습니다.</string>
     <string name="Privacy_BulletedText3">허용된 경우, 지갑은 앱 사용 습관을 P.CASH 팀과 공유할 것입니다. 이는 사용자가 어떤 기능을 사용하고 있는지 (또는 사용하지 않는지) 이해하기 위한 것입니다. 개인 정보 보호를 중시하는 앱이지만, 우리의 노력을 평가할 방법이 필요합니다. 이를 통해 만든 기능이 사용되고 있는지 여부를 알 수 없기 때문입니다.</string>
     <string name="ShareCrashData">충돌 데이터 공유</string>
@@ -908,6 +968,7 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
     <!--Btc Blockchain Settings -->
+    <string name="custom_peers">Custom peers (e.g., 188.40.241.115, dnsseed.custom.io)</string>
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">소스를 변경한 후에는 지갑이 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">입력/출력</string>
@@ -925,8 +986,10 @@
     <string name="SettingsSecurity_Privacy">개인정보</string>
     <string name="SettingsSecurity_Biometric_Authentication">생체정보 인증</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">생체정보 인증은 PIN 잠금 코드에 비해 장치의 보안을 약화시킬 가능성이 더 큽니다.</string>
+    <string name="set_separate_passcode">Set a Separate Passcode</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_DisablePin">비밀번호 비활성화</string>
+    <string name="SettingsSecurity_DeleteSeparatePasscode">Delete a Separate Passcode</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_SetDuressPin">긴급 상황 모드 설정</string>
     <string name="SettingsSecurity_EditDuressPin">긴급 상황 비밀번호 편집</string>
@@ -941,7 +1004,6 @@
     <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
-    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르고 비공개, 중앙집중화</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 필터링</string>
@@ -1006,6 +1068,7 @@
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
     <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
+    <string name="transaction_error_need_to_check">The transaction may not have been completed due to unexpected issues. We recommend checking the status before attempting to resend to avoid double payment</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
@@ -1146,6 +1209,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
+    <string name="ExtendedKey_AccountInfo">To do</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">개인 암호</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
@@ -1159,6 +1223,7 @@
     <string name="PublicKeys_EvmAddress">EVM 주소</string>
     <string name="PublicKeys_EvmAddress_Description">Ethereum, Binance Smart Chain 및 기타 EVM 기반 블록체인에 자산을 보유하고 있는 지갑의 읽기 전용 모니터링을 허용합니다.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Bitcoin 및 기타 UTXO 기반 암호화폐(예: Litecoin, Bitcoin Cash, Dash 등)를 보유한 지갑의 읽기 전용 모니터링을 허용합니다.</string>
+    <string name="publicKeys_zec_ufvk_descritpion">Allows read-only monitoring of ZCash, transparent and shielded transactions for the wallet.</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">확인하기</string>
     <string name="RecoveryPhraseVerify_Description">지갑 복구 문구에서 요청한 단어 2개 선택</string>
@@ -1200,7 +1265,6 @@
     <string name="AddToken_Symbol">심볼</string>
     <string name="AddToken_CoinCode">코인 코드</string>
     <string name="AddToken_Decimals">소수점</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
     <string name="AddToken_AlreadyAdded">이미 추가됨</string>
     <string name="AddToken_AddressOrSymbol">계약 주소</string>
@@ -1224,6 +1288,9 @@
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018년 이전 공통</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
+    <string name="zcash_transparent_description">Fully traceable transactions</string>
+    <string name="zcash_shielded_description">Private protected transactions</string>
+    <string name="zcash_unified_description">Combined transparent and private transactions</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">연결로</string>
     <string name="Tor_Connection_Enable">토르 활성화</string>
@@ -1243,7 +1310,9 @@
     <string name="Coin_Tab_Market">시장</string>
     <string name="Coin_Tab_Details">분석</string>
     <string name="Coin_Tab_Tweets">트윗</string>
+    <string name="typical_fee"><![CDATA[Typical fee < 0.001 ZEC]]></string>
     <string name="CoinPage_TimeDuration_Today">오늘</string>
+    <string name="CoinPage_TimeDuration_Hour">1H</string>
     <string name="CoinPage_TimeDuration_Day">1하루</string>
     <string name="CoinPage_TimeDuration_Week">7일</string>
     <string name="CoinPage_TimeDuration_Month">1개월</string>
@@ -1452,6 +1521,7 @@
     <string name="Coin_Analytics_Period_1d">1일</string>
     <string name="Coin_Analytics_Period_1w">1주일</string>
     <string name="Coin_Analytics_Period_1m">1 개월</string>
+    <string name="Coin_Analytics_Period_1y">1 year</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">강한 매수</string>
     <string name="Coin_Analytics_Indicators_StrongSell">강한 매도</string>
     <string name="Coin_Analytics_Indicators_Sell">매도</string>
@@ -1631,6 +1701,8 @@
     <string name="Unlock_Title">잠금 해제</string>
     <string name="Unlock_Passcode">비밀번호</string>
     <string name="Unlock_EnterPasscode">비밀번호 입력</string>
+    <string name="Unlock_EnterPasscode_Transactions_Hide">Enter Passcode for \"Transactions Auto Hide\"</string>
+    <string name="Unlock_EnterPasscode_Transfer">Enter a passcode to enable \"Passcode for transfer\"</string>
     <string name="Unlock_Incorrect">틀림</string>
     <string name="Unlock_BiometricScanner">생체정보 스캐너</string>
     <string name="Unlock_BiometricScannerDisabled_Description">비밀번호를 입력하거나 나중에 다시 시도하십시오</string>
@@ -1642,6 +1714,7 @@
     <!--Set Pin-->
     <string name="PinSet_Title">암호 설정</string>
     <string name="PinSet_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
+    <string name="PinSet_Transactions_Hide">Set Passcode for \“Transactions Auto Hide\” mode</string>
     <string name="PinSet_ConfirmInfo">확인</string>
     <string name="PinSet_ErrorPinsDontMatch">비밀번호가 일치하지 않습니다. 다시 시도하세요.</string>
     <string name="PinSet_ErrorFailedToSavePin">당신의 비밀번호를 저장하는 동안 오류가 발생했습니다. 다시 시도하세요.</string>
@@ -1715,5 +1788,36 @@
     <string name="CexWithdraw_Error_MinimumAmount">최소 인출 금액은 %s입니다.</string>
     <string name="CexWithdraw_Error_MaximumAmount">최대 인출 가능액은 %s입니다.</string>
     <string name="CexWithdraw_Error_WithdrawTitle">출금 실패</string>
-    <string name="update_app">앱 업데이트</string>
+    <!-- Stacking screen -->
+    <string name="stacking">Stacking</string>
+    <string name="no_active_stacking">There are no active staking transactions.</string>
+    <string name="no_active_stacking_pirate_description">PIRATE Staking: Go ahead with 100 tokens and earn 13% annual returns!</string>
+    <string name="no_active_stacking_cosanta_description">COSANTA Staking: Go ahead with 1 token and start earning in 24 hours.</string>
+    <string name="no_active_stacking_pirate_buy_more_descritpion">To activate staking you need %1$s token(s) more and you will receive 13%% per annum!</string>
+    <string name="no_active_stacking_cosanta_buy_more_descrition">Deposit %1$s token(s) and start earning in 24 hours.</string>
+    <string name="tokens">tokens</string>
+    <string name="buy_pirate">Buy PirateCash</string>
+    <string name="staking_details">Staking Details</string>
+    <string name="buy_cosanta">Buy Cosanta</string>
+    <string name="waiting_for_stacking">Staking of coins will begin no later than in %1$d hours</string>
+    <string name="stacking_calculator">stacking calculator</string>
+    <string name="total_balance">Total balance</string>
+    <string name="total_income">Total income</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="stacking_unpaid">Stacking unpaid:</string>
+    <string name="estimated_annual_interest">Estimated Annual Interest</string>
+    <string name="accruals">Accruals</string>
+    <string name="payouts">Payouts</string>
+    <string name="investment_chart">Investment chart</string>
+    <string name="payouts_history">Payouts History</string>
+    <string name="pos_calculator">POS Calculator</string>
+    <string name="pos_calculator_pirate_description">Calculation of profitability mining PirateCash staking in the pool.</string>
+    <string name="pos_calculator_cosanta_description">Calculation of profitability mining Cosanta in the pool.</string>
+    <string name="enter_coin_amount">Enter Coin Amount</string>
+    <string name="period">Period</string>
+    <string name="done">Done</string>
+    <string name="day_period">Day</string>
+    <string name="week_period">Week</string>
+    <string name="month_period">Month</string>
+    <string name="year_period">Year</string>
 </resources>

@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Error_ParameterNotSet">لم يتم تحديد الإعدادات</string>
+    <string name="Error_ParameterNotSet">Parameter is not set</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
-    <string name="Alert_Cancel">إلغاء</string>
-    <string name="Alert_Copy">نسخ</string>
-    <string name="Alert_Close">إغلاق</string>
-    <string name="Alert_Loading">جاري التحميل...</string>
-    <string name="Alert_Restart">إعادة التشغيل</string>
-    <string name="Suspended">معلق</string>
-    <string name="Action_Undo">تراجع</string>
+    <string name="Alert_Cancel">Cancel</string>
+    <string name="Alert_Copy">Copy</string>
+    <string name="Alert_Close">Close</string>
+    <string name="Alert_Loading">Loading...</string>
+    <string name="Alert_Restart">Restart</string>
+    <string name="Suspended">SUSPENDED</string>
+    <string name="Action_Undo">UNDO</string>
     <string name="Button_Show">Show</string>
     <string name="Button_Hide">Hide</string>
-    <string name="Button_Cancel">إلغاء</string>
-    <string name="Button_Next">التالي</string>
-    <string name="Button_Enable">تمكين</string>
-    <string name="Button_Disable">تعطيل</string>
-    <string name="Button_ScanQr">فحص رمز QR</string>
-    <string name="Button_Close">إغلاق</string>
-    <string name="Button_Ok">حسنًا</string>
-    <string name="Button_Done">تم</string>
-    <string name="Button_Retry">إعادة المحاولة</string>
-    <string name="Button_Change">تغيير</string>
-    <string name="Button_Add">إضافة</string>
-    <string name="Button_Approve">قبول</string>
-    <string name="Button_Confirm">تأكيد</string>
+    <string name="Button_Cancel">Cancel</string>
+    <string name="Button_Next">Next</string>
+    <string name="Button_Enable">Enable</string>
+    <string name="Button_Disable">Disable</string>
+    <string name="Button_ScanQr">Scan QR Code</string>
+    <string name="Button_Close">Close</string>
+    <string name="Button_Ok">OK</string>
+    <string name="Button_Done">Done</string>
+    <string name="Button_Retry">Retry</string>
+    <string name="Button_Change">Change</string>
+    <string name="Button_Add">Add</string>
+    <string name="Button_Approve">Approve</string>
+    <string name="Button_Confirm">Confirm</string>
     <string name="Button_Refresh">Refresh</string>
-    <string name="Button_Connect">اتصال</string>
-    <string name="Button_Reject">رفض</string>
-    <string name="Button_Disconnect">قطع الاتصال</string>
-    <string name="Button_Start">البداية</string>
-    <string name="Button_Create">إنشاء</string>
-    <string name="Button_Advanced">إعدادات متقدمة</string>
-    <string name="Button_Restore">استيراد</string>
-    <string name="Button_WatchAddress">تابع عنوانًا</string>
-    <string name="Button_Reset">إعادة تعيين</string>
-    <string name="Button_Reconnect">إعادة الاتصال</string>
-    <string name="Button_Understand">فهمت</string>
-    <string name="Button_Switch">تبديل</string>
-    <string name="Button_Remove">إزالة</string>
-    <string name="Button_Save">حفظ</string>
-    <string name="Button_IAgree">أنا أوافق</string>
-    <string name="Button_Continue">متابعة</string>
-    <string name="Button_Send">إرسال</string>
-    <string name="Button_Search">بحث</string>
-    <string name="Button_Back">رجوع</string>
-    <string name="Button_Copy">نسخ</string>
-    <string name="Button_Browser">المتصفح</string>
-    <string name="Button_Delete">حذف</string>
-    <string name="Button_LearnMore">اعرف المزيد</string>
-    <string name="Button_Activate">تفعيل</string>
-    <string name="Button_Sign">توقيع</string>
-    <string name="Button_Activating">تفعيل</string>
+    <string name="Button_Connect">Connect</string>
+    <string name="Button_Reject">Reject</string>
+    <string name="Button_Disconnect">Disconnect</string>
+    <string name="Button_Start">Start</string>
+    <string name="Button_Create">Create</string>
+    <string name="Button_Advanced">Advanced</string>
+    <string name="Button_Restore">Import</string>
+    <string name="Button_WatchAddress">Watch Address</string>
+    <string name="Button_Reset">Reset</string>
+    <string name="Button_Reconnect">Reconnect</string>
+    <string name="Button_Understand">I Understand</string>
+    <string name="Button_Switch">Switch</string>
+    <string name="Button_Remove">Remove</string>
+    <string name="Button_Save">Save</string>
+    <string name="Button_IAgree">I Agree</string>
+    <string name="Button_Continue">Continue</string>
+    <string name="Button_Send">Send</string>
+    <string name="Button_Search">Search</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">Copy</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Delete</string>
+    <string name="Button_LearnMore">Learn More</string>
+    <string name="Button_Activate">Activate</string>
+    <string name="Button_Sign">Sign</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">Get API Keys</string>
-    <string name="Button_Login">تسجيل دخول</string>
-    <string name="Button_SignUp">إنشاء حساب</string>
-    <string name="Button_Submit">قدِّم</string>
-    <string name="Button_TryAgain">حاول مرة أخرى</string>
+    <string name="Button_Login">Log In</string>
+    <string name="Button_SignUp">Sign Up</string>
+    <string name="Button_Submit">Submit</string>
+    <string name="Button_TryAgain">Try Again</string>
     <string name="Button_Share">Share</string>
     <string name="Button_Apply">Apply</string>
     <string name="Button_SetAmount">Set Amount</string>
     <string name="not_enough_ton_for_fee">Not enough TON for fee</string>
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
-    <string name="Error">خطأ</string>
+    <string name="Error">Error</string>
     <string name="NotAvailable">n/a</string>
-    <string name="Any">أي واحد</string>
-    <string name="SyncError">خطأ في المزامنة. حاول مرة أخرى</string>
-    <string name="PercentTitle">نسبة مئوية</string>
-    <string name="Keyboard">لوحة المفاتيح</string>
-    <string name="AccountRecovery_Note">ملاحظة</string>
-    <string name="AccountRecovery_MigrationRecommended">يبدو أن هذه المحفظة تستخدم حرف غير قياسي في عبارة الاسترداد و/أو عبارة المرور. إذا كنت لا ترا رصيد أو معاملات يرجى قراءة أدناه للحصول على التفاصيل.\n\nضع علامة للحصول على المزيد من المعلومات</string>
-    <string name="AccountRecovery_MigrationRequired">هذه محفظة غير قياسية. \n\nاضغط للحصول على المزيد من المعلومات</string>
+    <string name="Any">Any</string>
+    <string name="SyncError">Sync error. Try Again</string>
+    <string name="PercentTitle">Percent</string>
+    <string name="Keyboard">Keyboard</string>
+    <string name="AccountRecovery_Note">Note</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRequired">This is a non-standard wallet. \n\nCLICK TO GET MORE INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
     <string name="Intro_Wallet_Screen2Title">DEX Messenger</string>
@@ -81,22 +81,22 @@
     <string name="Intro_Wallet_Screen4Title">Stay Private</string>
     <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">فهمت</string>
+    <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
-    <string name="Welcome_PrivacySettings">اعدادات الخصوصية</string>
+    <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Advanced_Title">إعدادات متقدمة</string>
-    <string name="CreateWallet_Mnemonic">كلمات الاسترجاع</string>
-    <string name="CreateWallet_Wordlist">قائمة الكلمات</string>
-    <string name="Passphrase">عبارة المرور</string>
-    <string name="Password">كلمة المرور</string>
-    <string name="ConfirmPassphrase">تأكيد</string>
-    <string name="CreateWallet_N_WordsRecommended">%s الكلمات (موصى بها)</string>
-    <string name="CreateWallet_N_Words">%s الكلمات</string>
-    <string name="CreateWallet_PassphraseConfirm">تأكيد</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">لا يمكن أن تكون كلمة المرور فارغة</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">الرجاء استخدام الرموز المدعومة فقط: <![CDATA[A-Z a-z 0-9 \' ` & ? :; . , ~ * $ = + - [ ](){} <> \ # @ <unk> % ]]></string>
-    <string name="CreateWallet_Error_InvalidConfirmation">تأكيد عبارة المرور غير مطابق</string>
+    <string name="CreateWallet_Advanced_Title">Advanced</string>
+    <string name="CreateWallet_Mnemonic">Recovery Phrase</string>
+    <string name="CreateWallet_Wordlist">Word List</string>
+    <string name="Passphrase">Passphrase</string>
+    <string name="Password">Password</string>
+    <string name="ConfirmPassphrase">Confirm</string>
+    <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
+    <string name="CreateWallet_N_Words">%s words</string>
+    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">English</string>
@@ -115,21 +115,21 @@
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
     <!--Restore-->
-    <string name="Restore_Advanced_Title">إعدادات متقدمة</string>
+    <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
-    <string name="Restore_Error_EmptyPassphrase">لا يمكن أن تكون كلمة المرور فارغة</string>
+    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
-    <string name="Restore_Key">المفتاح</string>
-    <string name="Restore_By">استيراد بواسطة</string>
-    <string name="Restore_RestoreBy">استيراد بواسطة</string>
-    <string name="Restore_RecoveryPhrase">كلمات الاسترجاع</string>
-    <string name="Restore_PrivateKey">المفتاح الخاص</string>
-    <string name="Restore_PrivateKeyHint">أدخل مفتاح EVM الخاص، أو مفتاح روت BIP32 أو المفتاح الخاص الموسع للحساب</string>
-    <string name="Restore_PhraseHint">أدخل كلمات الاسترجاع الخاصة بك</string>
+    <string name="Restore_Key">Key</string>
+    <string name="Restore_By">Import By</string>
+    <string name="Restore_RestoreBy">Import By</string>
+    <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
+    <string name="Restore_PrivateKey">Private Key</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">Enter Recovery Phrase</string>
     <string name="Restore_NonStandardRestore">Non-Standard Import</string>
     <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to P.CASH users who have a non-standard wallet. Such wallets might have been created in P.CASH version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_Bip_Recommended">(recommended)</string>
@@ -159,7 +159,7 @@
     <string name="Market_Field_Volume">Vol</string>
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
-    <string name="Market_Search">بحث</string>
+    <string name="Market_Search">Search</string>
     <string name="Market_Search_Sections_RecentTitle">RECENT</string>
     <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
@@ -253,7 +253,7 @@
     <string name="EmptyResults">No results found</string>
     <string name="Market_Filters">Filters</string>
     <string name="Market_AdvancedSearch_Results">Results</string>
-    <string name="Market_Search_Hint">بحث</string>
+    <string name="Market_Search_Hint">Search</string>
     <string name="Market_Search_BrowseCategories">Browse categories</string>
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
@@ -333,7 +333,7 @@
     <!--Balance-->
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
-    <string name="Balance_Send">إرسال</string>
+    <string name="Balance_Send">Send</string>
     <string name="shield_funds">Shield and consolidate funds</string>
     <string name="Balance_Swap">Swap</string>
     <string name="Balance_Deposit">Deposit</string>
@@ -384,9 +384,9 @@
     <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
-    <string name="Balance_ReceiveHint_Search">بحث</string>
+    <string name="Balance_ReceiveHint_Search">Search</string>
     <!--Send NFT-->
-    <string name="SendNft_Title">إرسال</string>
+    <string name="SendNft_Title">Send</string>
     <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">Send %s</string>
@@ -395,12 +395,12 @@
     <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_Max">Max</string>
-    <string name="Send_Advanced">إعدادات متقدمة</string>
+    <string name="Send_Advanced">Advanced</string>
     <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
     <string name="Send_UtxoExpertMode">UTxO Expert Mode</string>
     <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
     <string name="Send_Utxo_SendTo">Send To</string>
-    <string name="Send_Utxo_Change">تغيير</string>
+    <string name="Send_Utxo_Change">Change</string>
     <string name="Send_Rbf">Replace by Fee</string>
     <string name="Send_Rbf_Description">This option allows you to resend a stuck transaction by increasing the amount of the fee.</string>
     <string name="Send_RbfEnabled">Enabled</string>
@@ -408,7 +408,7 @@
     <string name="Send_Utxo_AvailableBalance">Available Balance</string>
     <string name="Send_Utxo_UnselectAll">Unsellect All</string>
     <string name="Send_Utxo_SelectAll">Sellect All</string>
-    <string name="Send_Confirmation_Title">تأكيد</string>
+    <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">You Send</string>
     <string name="Send_Confirmation_Amount">Amount</string>
@@ -417,7 +417,7 @@
     <string name="Send_Confirmation_Method">Method</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
-    <string name="Send_Confirmation_Send_Button">إرسال</string>
+    <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_Confirmation_Action">Action</string>
     <string name="Send_Success">\u2713 Sent</string>
     <string name="ScanQr_CameraPermission_Title">Camera permission</string>
@@ -436,7 +436,7 @@
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_DialogFee">Fee</string>
-    <string name="Send_DialogProceed">التالي</string>
+    <string name="Send_DialogProceed">Next</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
     <string name="Send_LockTime_Month">1 month</string>
@@ -452,14 +452,14 @@
     <string name="Send_Error_FetchFeeRateFailed">Fee Error</string>
     <string name="Send_Error_FetchFeeRateFailed_Description">The connection to the server has been lost. To proceed, set up the fees manually using the data on the site.</string>
     <!-- Send Evm Settings -->
-    <string name="SendEvmSettings_Title">إعدادات متقدمة</string>
+    <string name="SendEvmSettings_Title">Advanced</string>
     <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Fee Settings</string>
-    <string name="FeeSettings_Reset">إعادة تعيين</string>
+    <string name="FeeSettings_Reset">Reset</string>
     <string name="FeeSettings_FeeLegacy">Max Fee</string>
     <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
     <string name="FeeSettings_Fee">Max Fee</string>
@@ -480,7 +480,7 @@
     <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
     <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
-    <string name="FeeSettings_Info_IUnderstand">فهمت</string>
+    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
     <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
@@ -520,8 +520,8 @@
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Request</string>
-    <string name="WalletConnect_SendRequest_Title">إرسال</string>
-    <string name="WalletConnect_ApproveRequest_Title">قبول</string>
+    <string name="WalletConnect_SendRequest_Title">Send</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
     <string name="WalletConnect_SwapRequest_Title">Swap</string>
     <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Status">Status</string>
@@ -542,7 +542,7 @@
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">توقيع</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
     <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
@@ -563,7 +563,7 @@
     <string name="WalletConnect_Version1">Version 1.0</string>
     <string name="WalletConnect_Version2">Version 2.0</string>
     <string name="WalletConnect_I_Trust">I trust</string>
-    <string name="WalletConnect_Note">ملاحظة</string>
+    <string name="WalletConnect_Note">Note</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <string name="WalletConnect_Unnamed">Unnamed</string>
@@ -572,14 +572,14 @@
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">حذف</string>
+    <string name="WalletConnect_Pairings_Delete">Delete</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
     <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
     <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
     <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
-    <string name="EthereumTransaction_Error_Title">خطأ</string>
+    <string name="EthereumTransaction_Error_Title">Error</string>
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
@@ -624,7 +624,7 @@
     <string name="Swap_ErrorTokenNotEnabled">Token Not Enabled</string>
     <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
     <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
-    <string name="Swap_Proceed">التالي</string>
+    <string name="Swap_Proceed">Next</string>
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
     <string name="Swap_EnterAmount">Enter Amount</string>
@@ -636,7 +636,7 @@
     <string name="swap_creating_wallets">Creating wallets..</string>
     <string name="swap_create_wallet_description">You don\'t have all chosen wallets, need to create first</string>
     <string name="swap_create_wallet_description_with_zcash">You don\'t have all chosen wallets, need to create first,\nto exchange ZEC you need to create transparent address first</string>
-    <string name="Swap_Approve">قبول</string>
+    <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Quoting</string>
@@ -653,7 +653,7 @@
     <string name="Swap_SwapRouteNotFound">Route not found</string>
     <string name="Swap_YouPay">You Pay</string>
     <string name="Swap_YouGet">You Get</string>
-    <string name="Swap_Confirm_Title">تأكيد</string>
+    <string name="Swap_Confirm_Title">Confirm</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="unsupported_refund_address">Unsupported refund address</string>
@@ -691,7 +691,7 @@
     <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
     <string name="Approve_ButtonRevoke">Revoke</string>
     <string name="Approve_ButtonRevoking">Revoking</string>
-    <string name="Approve_ButtonApprove">قبول</string>
+    <string name="Approve_ButtonApprove">Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
     <string name="Approve_Spender">Spender</string>
@@ -804,7 +804,7 @@
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="TransactionInfo_Options">Options</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>
-    <string name="TransactionInfo_Cancel">إلغاء</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
     <string name="TransactionInfo_SpeedUpDescription">This action will attempt to invalidate the previous transaction by resending it with a higher fee.</string>
     <string name="StatusInfo_Pending">Pending</string>
@@ -818,7 +818,7 @@
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
-    <string name="TransactionInfoOptions_Cancel_Title">إلغاء</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
     <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Replaced Transactions</string>
@@ -846,7 +846,7 @@
     <string name="SettingsCurrency_Other">OTHER</string>
     <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
     <string name="SettingsCurrency_DisclaimerText">The exchange rate data is provided by a third party service - Coingecko.com.\n\nThe P.CASH wallet app doesn\'t guarantee these values are always correct and matches market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
-    <string name="SettingsCurrency_Understand">فهمت</string>
+    <string name="SettingsCurrency_Understand">I Understand</string>
     <!--Settings-->
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security</string>
@@ -861,7 +861,7 @@
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_RateUs">Rate Us</string>
-    <string name="update_app">تحديث التطبيق</string>
+    <string name="update_app">Update App</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
@@ -953,7 +953,7 @@
     <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
     <string name="Privacy_BulletedText2">There are no user accounts or databases storing user data.</string>
     <string name="Privacy_BulletedText3">If allowed the wallet will share app usage habits with P.CASH team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
-    <string name="ShareCrashData">مشاركة بيانات التعطل</string>
+    <string name="ShareCrashData">Share crash data</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
@@ -1036,7 +1036,7 @@
     <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">كن غير قابل للإيقاف؛ P.CASH</string>
+    <string name="SettingsShare_Text">Be Free</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contact Us</string>
     <!--Setting_Notifications-->
@@ -1077,7 +1077,7 @@
     <string name="Hud_Text_Created">Created</string>
     <string name="Hud_Text_Restored">Imported</string>
     <string name="Hud_Text_AddressAdded">Address Added</string>
-    <string name="Hud_Text_Done">تم</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Verified">Verified</string>
     <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
@@ -1126,7 +1126,7 @@
     <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
     <string name="ImportWallet_ExchangeWallet">from Exchange Wallet</string>
     <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange.</string>
-    <string name="ImportWallet_WatchAddress">تابع عنوانًا</string>
+    <string name="ImportWallet_WatchAddress">Watch Address</string>
     <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
@@ -1143,7 +1143,7 @@
     <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
-    <string name="ManageAccount_Save">حفظ</string>
+    <string name="ManageAccount_Save">Save</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Manual Backup</string>
     <string name="ManageAccount_LocalBackup">Local Backup</string>
     <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
@@ -1155,7 +1155,7 @@
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
-    <string name="ManageAccount_NWords">%s الكلمات</string>
+    <string name="ManageAccount_NWords">%s words</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
     <string name="ManageAccount_Wallets">Wallets</string>
@@ -1169,13 +1169,13 @@
     <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
-    <string name="ShowKey_Title">المفتاح</string>
+    <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
-    <string name="ShowKey_Passphrase">عبارة المرور</string>
-    <string name="ShowKey_ButtonClose">إغلاق</string>
-    <string name="ShowKey_TabMnemonicPhrase">كلمات الاسترجاع</string>
-    <string name="ShowKey_TabPrivateKey">المفتاح الخاص</string>
+    <string name="ShowKey_Passphrase">Passphrase</string>
+    <string name="ShowKey_ButtonClose">Close</string>
+    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
+    <string name="ShowKey_TabPrivateKey">Private Key</string>
     <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
@@ -1203,7 +1203,7 @@
     <string name="LocalBackup_TermsWarningText">Storage devices i.e. hard drives, USB drives , storage on smartphone etc. are all vulnerable to loss due to physical damage, theft or other unforeseen circumstances.</string>
     <string name="LocalBackup_Term1">I understand that theft or damage of a backup device will result in loss of a backup to a respective wallet.</string>
     <!-- Recovery Phrase -->
-    <string name="RecoveryPhrase_Title">كلمات الاسترجاع</string>
+    <string name="RecoveryPhrase_Title">Recovery Phrase</string>
     <string name="RecoveryPhrase_Description">Write these words down in the correct order and keep them in a safe place</string>
     <string name="RecoveryPhrase_ShowPhrase">Tap to show recovery phrase</string>
     <string name="RecoveryPhrase_Verify">Verify</string>
@@ -1251,7 +1251,7 @@
     <string name="ManageKeys_StopWatching">Stop Watching</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or the Restore button to import an existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
-    <string name="AddCoin_CreateKey">إنشاء</string>
+    <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Choose Blockchain</string>
@@ -1265,7 +1265,7 @@
     <string name="EnalbeToken_Enabling">Enabling</string>
     <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
     <string name="EnalbeToken_NoCoins">Did not find any new tokens with balance</string>
-    <string name="EnalbeToken_EnableKey">تمكين</string>
+    <string name="EnalbeToken_EnableKey">Enable</string>
     <!-- Add Token -->
     <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">Coin Name</string>
@@ -1583,7 +1583,7 @@
     <string name="Detectors_TokenDetectors">Token Detectors</string>
     <string name="Detectors_GeneralDetectors">General Detectors</string>
     <string name="Detectors_IssuesCount">Issues %d</string>
-    <string name="ActivateSubscription_Title">تفعيل</string>
+    <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Address</string>
     <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
@@ -1609,7 +1609,7 @@
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_Action_Share">Share</string>
-    <string name="NftAsset_Action_Save">حفظ</string>
+    <string name="NftAsset_Action_Save">Save</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
     <string name="NftAsset_Price_Average7d">7D Average</string>
@@ -1648,12 +1648,12 @@
     <string name="NftCollection_EventType_All">All</string>
     <string name="NftCollection_EventType_List">List</string>
     <string name="NftCollection_EventType_Sale">Sale</string>
-    <string name="NftCollection_EventType_Cancelled">إلغاء</string>
+    <string name="NftCollection_EventType_Cancelled">Cancel</string>
     <string name="NftCollection_EventType_BidEntered">Bid Entered</string>
     <string name="NftCollection_EventType_BidWithdrawn">Bid Withdrawn</string>
     <string name="NftCollection_EventType_Transfer">Transfer</string>
     <string name="NftCollection_EventType_OfferEntered">Offer Entered</string>
-    <string name="NftCollection_EventType_Approve">قبول</string>
+    <string name="NftCollection_EventType_Approve">Approve</string>
     <string name="NftCollection_EventType_Custom">Custom</string>
     <string name="NftCollection_EventType_Payout">Payout</string>
     <string name="NftCollection_EventType_BulkCancel">Bulk Cancel</string>
@@ -1668,7 +1668,7 @@
     <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync Error</string>
-    <string name="BalanceSyncError_ButtonRetry">إعادة المحاولة</string>
+    <string name="BalanceSyncError_ButtonRetry">Retry</string>
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
     <string name="BalanceSyncError_ReportButtonExplanation">The error text will be copied to your clipboard should you decide to report it.</string>
@@ -1686,7 +1686,7 @@
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
     <string name="Hud_Text_LearnMore">Coming Soon</string>
-    <string name="Hud_Text_Activate">تفعيل</string>
+    <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
     <!--Widget-->
@@ -1721,7 +1721,7 @@
     <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Your passcode will be used to unlock your wallet</string>
     <string name="PinSet_Transactions_Hide">Set Passcode for \“Transactions Auto Hide\” mode</string>
-    <string name="PinSet_ConfirmInfo">تأكيد</string>
+    <string name="PinSet_ConfirmInfo">Confirm</string>
     <string name="PinSet_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>

@@ -3,8 +3,26 @@
 "preserve_hierarchy": true
 
 files:
-  - source: /**/src/main/res/values/strings.xml
-    translation: /**/src/main/res/values-%locale%/%original_file_name%
+  - source: core/core/src/main/res/values/strings.xml
+    translation: core/core/src/main/res/values-%locale%/strings.xml
+    languages_mapping:
+      locale:
+        pt-BR: pt-rBR
+        zh-CN: zh
+        es-ES: es
+        pt-PT: pt
+        fr: fr
+        fa: fa
+        ar: ar
+        de: de
+        ko: ko
+        ru: ru
+        tr: tr
+        nl: nl
+        uk: uk
+
+  - source: core/strings/src/main/res/values/strings.xml
+    translation: core/strings/src/main/res/values-%locale%/strings.xml
     languages_mapping:
       locale:
         pt-BR: pt-rBR
