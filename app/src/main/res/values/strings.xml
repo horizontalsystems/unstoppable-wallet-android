@@ -734,7 +734,7 @@
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
     <string name="Transactions_AccountCreated">Account Created</string>
-    <string name="Transactions_TrustlineCreated">     Trustline Created</string>
+    <string name="Transactions_ChangeTrust">Change Trust</string>
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Sent</string>

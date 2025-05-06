@@ -48,10 +48,9 @@ class StellarTransactionRecord(
         ) : Type()
 
         data class ChangeTrust(
-            val outgoing: Boolean,
-            val sentToSelf: Boolean,
             val token: Token,
             val trustee: String,
+            val value: TransactionValue.CoinValue
         ) : Type()
 
         object Unsupported: Type()
@@ -61,7 +60,7 @@ class StellarTransactionRecord(
                 is AccountCreated -> value
                 is Receive -> value
                 is Send -> value
-                is ChangeTrust -> null
+                is ChangeTrust -> value
                 Unsupported -> null
             }
     }

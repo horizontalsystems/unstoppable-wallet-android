@@ -71,14 +71,13 @@ class StellarTransactionConverter(
             val token = getToken(changeTrust.asset)
 
             if (token != null) {
-                val outgoing = changeTrust.trustee == selfAddress
-                val sentToSelf = outgoing && changeTrust.trustor == selfAddress
+                val transactionValue =
+                    TransactionValue.CoinValue(token, changeTrust.limit)
 
                 type = Type.ChangeTrust(
-                    outgoing,
-                    sentToSelf,
                     token,
                     changeTrust.trustee,
+                    transactionValue
                 )
             }
         }
