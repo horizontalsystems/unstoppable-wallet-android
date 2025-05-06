@@ -19,10 +19,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveRoutes.BCH_ADDRESS_FORMAT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveRoutes.COIN_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveRoutes.DERIVATION_SELECT_SCREEN
@@ -104,7 +106,12 @@ fun ReceiveScreen(
                         navController.navigate(USED_ADDRESSES_SCREEN)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),
-                    closeModule = { fragmentNavController.popBackStack() }
+                    closeModule = { fragmentNavController.popBackStack() },
+                    onClickActivate = {
+                        fragmentNavController.slideFromBottomForResult<ActivateTokenFragment.Result>(R.id.activateTokenFragment, wallet) {
+                            addressViewModel.onActivatedResult(it.activated)
+                        }
+                    }
                 )
             }
             composablePage(USED_ADDRESSES_SCREEN) { entry ->

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
+import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -19,12 +20,11 @@ class StellarAdapter(
 ) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private var balance = stellarKit.balance
+    private var balance: BigDecimal? = null
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceData: BalanceData
-        get() = BalanceData(balance)
-
+        get() = BalanceData(balance ?: BigDecimal.ZERO)
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -36,7 +36,7 @@ class StellarAdapter(
 
     override fun start() {
         coroutineScope.launch {
-            stellarKit.balanceFlow.collect { balance ->
+            stellarKit.getBalanceFlow(StellarAsset.Native).collect { balance ->
                 this@StellarAdapter.balance = balance
                 balanceUpdatedSubject.onNext(Unit)
             }
@@ -59,7 +59,7 @@ class StellarAdapter(
     override val debugInfo = "debugInfo"
 
     override val availableBalance: BigDecimal
-        get() = balance
+        get() = balance ?: BigDecimal.ZERO
     override val fee: BigDecimal
         get() = stellarKit.sendFee
 

@@ -23,6 +23,7 @@
     <string name="Button_ScanQr">Scan QR Code</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
+    <string name="Button_Activate">Activate</string>
     <string name="Button_Done">Done</string>
     <string name="Button_Retry">Retry</string>
     <string name="Button_Change">Change</string>
@@ -692,6 +693,9 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
     <!-- Swap Confirmation -->
+
+    <string name="Activate_YouActivate">You Activate</string>
+    <string name="Activate_Activating">Activating</string>
 
     <!--Approve-->
 

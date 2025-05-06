@@ -26,6 +26,7 @@ class ReceiveAddressViewModel(
     private val adapterManager: IAdapterManager
 ) : ViewModelUiState<ReceiveModule.UiState>() {
 
+    private var activationRequired = false
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
     private var usedAddresses: List<UsedAddress> = listOf()
@@ -62,6 +63,7 @@ class ReceiveAddressViewModel(
         additionalItems = getAdditionalData(),
         amount = amount,
         alertText = alertText,
+        activationRequired = activationRequired
     )
 
     private fun setNetworkName() {
@@ -95,20 +97,26 @@ class ReceiveAddressViewModel(
     }
 
     private suspend fun setData() {
+        activationRequired = false
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
-            address = adapter.receiveAddress
-            usedAddresses = adapter.usedAddresses(false)
-            usedChangeAddresses = adapter.usedAddresses(true)
-            uri = getUri()
-            mainNet = adapter.isMainNet
-            viewState = ViewState.Success
+            if (adapter.isActivationRequired()) {
+                activationRequired = true
+                viewState = ViewState.Error(Exception())
+            } else {
+                address = adapter.receiveAddress
+                usedAddresses = adapter.usedAddresses(false)
+                usedChangeAddresses = adapter.usedAddresses(true)
+                uri = getUri()
+                mainNet = adapter.isMainNet
+                viewState = ViewState.Success
 
-            accountActive = try {
-                adapter.isAddressActive(adapter.receiveAddress)
-            } catch (e: Exception) {
-                viewState = ViewState.Error(e)
-                false
+                accountActive = try {
+                    adapter.isAddressActive(adapter.receiveAddress)
+                } catch (e: Exception) {
+                    viewState = ViewState.Error(e)
+                    false
+                }
             }
         } else {
             viewState = ViewState.Error(NullPointerException())
@@ -154,6 +162,14 @@ class ReceiveAddressViewModel(
     fun onErrorClick() {
         viewModelScope.launch(Dispatchers.IO) {
             setData()
+        }
+    }
+
+    fun onActivatedResult(activated: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (activated) {
+                setData()
+            }
         }
     }
 

@@ -302,6 +302,8 @@ interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
+    suspend fun isActivationRequired() = false
+
     suspend fun isAddressActive(address: String): Boolean {
         return true
     }
@@ -309,6 +311,8 @@ interface IReceiveAdapter {
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
     }
+
+    fun activate() { throw UnsupportedOperationException() }
 }
 
 @Parcelize
