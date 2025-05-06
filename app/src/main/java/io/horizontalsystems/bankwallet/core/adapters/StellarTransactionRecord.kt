@@ -48,12 +48,11 @@ class StellarTransactionRecord(
         ) : Type()
 
         data class ChangeTrust(
-            val token: Token,
             val trustee: String,
-            val value: TransactionValue.CoinValue
+            val value: TransactionValue
         ) : Type()
 
-        object Unsupported: Type()
+        class Unsupported(val type: String) : Type()
 
         val mainValue: TransactionValue?
             get() = when (this) {
@@ -61,7 +60,7 @@ class StellarTransactionRecord(
                 is Receive -> value
                 is Send -> value
                 is ChangeTrust -> value
-                Unsupported -> null
+                is Unsupported -> null
             }
     }
 

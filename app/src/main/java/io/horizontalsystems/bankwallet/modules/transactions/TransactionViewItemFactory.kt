@@ -495,10 +495,10 @@ class TransactionViewItemFactory(
                 primaryValue = getColoredValue(recordType.value, ColorName.Leah, true)
                 iconX = singleValueIconType(recordType.value)
             }
-            StellarTransactionRecord.Type.Unsupported -> {
+            is StellarTransactionRecord.Type.Unsupported -> {
                 iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-                title = Translator.getString(R.string.Transactions_Unknown)
-                subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
+                title = Translator.getString(R.string.Transactions_StellarTransaction)
+                subtitle = recordType.type
                 primaryValue = null
                 secondaryValue = null
             }

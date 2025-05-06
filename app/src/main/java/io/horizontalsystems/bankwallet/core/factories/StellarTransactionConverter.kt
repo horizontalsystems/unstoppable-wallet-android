@@ -19,7 +19,7 @@ class StellarTransactionConverter(
     private val baseToken: Token,
 ) {
     fun convert(operation: Operation): StellarTransactionRecord {
-        var type: Type = Type.Unsupported
+        var type: Type = Type.Unsupported(operation.type)
 
         operation.payment?.let { payment ->
             val outgoing = payment.from == selfAddress
@@ -70,16 +70,17 @@ class StellarTransactionConverter(
         operation.changeTrust?.let { changeTrust ->
             val token = getToken(changeTrust.asset)
 
-            if (token != null) {
-                val transactionValue =
-                    TransactionValue.CoinValue(token, changeTrust.limit)
-
-                type = Type.ChangeTrust(
-                    token,
-                    changeTrust.trustee,
-                    transactionValue
-                )
+            val transactionValue = if (token != null) {
+                TransactionValue.CoinValue(token, changeTrust.limit)
+            } else {
+                val assetCode = changeTrust.asset.code
+                TransactionValue.TokenValue(assetCode, assetCode, 7, changeTrust.limit)
             }
+
+            type = Type.ChangeTrust(
+                changeTrust.trustee,
+                transactionValue
+            )
         }
 
         return StellarTransactionRecord(baseToken, source, operation, type)
