@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAc
 @Composable
 fun ReceiveTokenActivationRequired(onClickActivate: () -> Unit) {
     ScreenMessageWithAction(
-        text = "errorText",
+        text = stringResource(R.string.Balance_Receive_ActivationRequired),
         icon = R.drawable.ic_sync_error,
     ) {
         ButtonPrimaryYellow(
