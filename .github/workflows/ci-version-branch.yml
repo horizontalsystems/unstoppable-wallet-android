@@ -33,8 +33,8 @@ jobs:
       - name: Fastlane Build
         uses: maierj/fastlane-action@v3.0.0
         with:
-          lane: 'app_build'
-          options: '{ "app_name": "Unstoppable-Dev", "api_token": "${{secrets.API_TOKEN_DEV}}" }'
+          lane: 'app_build_dev'
+          options: '{ "app_name": "Unstoppable-Dev", "service_account_key": "${{secrets.FIREBASE_SERVICE_ACCOUNT_KEY}}" }'
         env:
           BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
 
