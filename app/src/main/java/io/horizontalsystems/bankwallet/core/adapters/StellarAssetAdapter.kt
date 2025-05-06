@@ -45,7 +45,7 @@ class StellarAssetAdapter(
     override fun start() {
         coroutineScope.launch {
             stellarKit.getBalanceFlow(stellarAsset).collect { balance ->
-                assetBalance = balance
+                assetBalance = balance?.balance
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
