@@ -82,7 +82,7 @@ class TransactionInfoViewItemFactory(
                     }
                     is StellarTransactionRecord.Type.AccountCreated -> TODO()
                     is StellarTransactionRecord.Type.ChangeTrust -> TODO()
-                    StellarTransactionRecord.Type.Unsupported -> TODO()
+                    is StellarTransactionRecord.Type.Unsupported -> TODO()
                 }
 
                 addMemoItem(transaction.memo, miscItemsSection)
