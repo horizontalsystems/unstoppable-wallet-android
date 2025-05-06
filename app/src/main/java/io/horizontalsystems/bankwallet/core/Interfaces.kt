@@ -302,6 +302,8 @@ interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
+    val activationFee: BigDecimal? get() = null
+
     suspend fun isActivationRequired() = false
 
     suspend fun isAddressActive(address: String): Boolean {
