@@ -44,6 +44,7 @@ class StellarTransactionConverter(
                         to = payment.to,
                         sentToSelf = incoming,
                         comment = operation.memo,
+                        accountCreated = false,
                     )
                 }
                 incoming -> {
@@ -51,20 +52,42 @@ class StellarTransactionConverter(
                         value = transactionValue,
                         from = payment.from,
                         comment = operation.memo,
+                        accountCreated = false,
                     )
                 }
             }
         }
 
         operation.accountCreated?.let { accountCreated ->
-            val transactionValue =
-                TransactionValue.CoinValue(baseToken, accountCreated.startingBalance)
+            val outgoing = accountCreated.funder == selfAddress
+            val incoming = accountCreated.account == selfAddress
 
-            type = Type.AccountCreated(
-                funder = accountCreated.funder,
-                account = accountCreated.account,
-                value = transactionValue,
-            )
+            var amount = accountCreated.startingBalance
+            if (outgoing) {
+                amount = amount.negate()
+            }
+
+            val transactionValue = TransactionValue.CoinValue(baseToken, amount)
+
+            when {
+                outgoing -> {
+                    type = Type.Send(
+                        value = transactionValue,
+                        to = accountCreated.account,
+                        sentToSelf = incoming,
+                        comment = operation.memo,
+                        accountCreated = true
+                    )
+                }
+                incoming -> {
+                    type = Type.Receive(
+                        value = transactionValue,
+                        from = accountCreated.funder,
+                        comment = operation.memo,
+                        accountCreated = true
+                    )
+                }
+            }
         }
 
         operation.changeTrust?.let { changeTrust ->

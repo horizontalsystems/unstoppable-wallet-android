@@ -33,18 +33,14 @@ class StellarTransactionRecord(
             val to: String,
             val sentToSelf: Boolean,
             val comment: String?,
+            val accountCreated: Boolean,
         ) : Type()
 
         data class Receive(
             val value: TransactionValue,
             val from: String,
             val comment: String?,
-        ) : Type()
-
-        data class AccountCreated(
-            val funder: String,
-            val account: String,
-            val value: TransactionValue.CoinValue
+            val accountCreated: Boolean,
         ) : Type()
 
         data class ChangeTrust(
@@ -56,7 +52,6 @@ class StellarTransactionRecord(
 
         val mainValue: TransactionValue?
             get() = when (this) {
-                is AccountCreated -> value
                 is Receive -> value
                 is Send -> value
                 is ChangeTrust -> value

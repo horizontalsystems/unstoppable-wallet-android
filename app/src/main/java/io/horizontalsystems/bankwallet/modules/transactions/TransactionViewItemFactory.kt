@@ -479,16 +479,6 @@ class TransactionViewItemFactory(
                 primaryValue = getColoredValue(recordType.value, ColorName.Remus)
                 iconX = singleValueIconType(recordType.value)
             }
-            is StellarTransactionRecord.Type.AccountCreated -> {
-                title = Translator.getString(R.string.Transactions_AccountCreated)
-                subtitle = Translator.getString(
-                    R.string.Transactions_By,
-                    mapped(recordType.funder, record.blockchainType)
-                )
-
-                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
-                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-            }
             is StellarTransactionRecord.Type.ChangeTrust -> {
                 title = Translator.getString(R.string.Transactions_ChangeTrust)
                 subtitle = recordType.trustee.shorten()
