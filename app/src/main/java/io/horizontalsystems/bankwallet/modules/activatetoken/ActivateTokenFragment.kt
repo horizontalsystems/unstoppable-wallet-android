@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.activatetoken
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,12 +28,14 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -138,13 +141,25 @@ fun ActivateTokenScreen(
         SectionUniversalLawrence {
             DataFieldFee(
                 navController,
-                null ?: "---",
-                null ?: "---"
+                uiState.feeCoinValue?.getFormattedFull() ?: "---",
+                uiState.feeFiatValue?.getFormattedFull() ?: "---"
             )
         }
 
-//        if (uiState.cautions.isNotEmpty()) {
-//            Cautions(cautions = uiState.cautions)
-//        }
+        uiState.error?.let { error ->
+            VSpacer(16.dp)
+            val modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+
+            when (error) {
+                is ActivateTokenError.AlreadyActive -> {
+                    TextImportantError(
+                        modifier = modifier,
+                        text = stringResource(R.string.Activate_AlreadyActive_Description),
+                        title = stringResource(R.string.Activate_AlreadyActive_Title),
+                        icon = R.drawable.ic_attention_20
+                    )
+                }
+            }
+        }
     }
 }

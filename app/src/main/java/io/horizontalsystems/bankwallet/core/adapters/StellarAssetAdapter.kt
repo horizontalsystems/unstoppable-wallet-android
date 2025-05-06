@@ -40,6 +40,8 @@ class StellarAssetAdapter(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
+    override val activationFee = stellarKit.sendFee
+
     override fun start() {
         coroutineScope.launch {
             stellarKit.getBalanceFlow(stellarAsset).collect { balance ->
@@ -72,6 +74,10 @@ class StellarAssetAdapter(
     }
 
     override suspend fun isActivationRequired() : Boolean {
+        if (assetBalance != null) {
+            return false
+        }
+
         return !stellarKit.isAssetEnabled(stellarAsset)
     }
 
