@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTran
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Transaction
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Value
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -65,6 +66,15 @@ class TransactionInfoViewItemFactory(
                                 blockchainType = blockchainType,
                             )
                         )
+
+                        if (transactionType.accountCreated) {
+                            itemSections.add(
+                                listOf(Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                ))
+                            )
+                        }
                     }
                     is StellarTransactionRecord.Type.Send -> {
                         sentToSelf = transactionType.sentToSelf
@@ -79,10 +89,32 @@ class TransactionInfoViewItemFactory(
                                 blockchainType = blockchainType,
                             )
                         )
+
+                        if (transactionType.accountCreated) {
+                            itemSections.add(
+                                listOf(Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                ))
+                            )
+                        }
                     }
-                    is StellarTransactionRecord.Type.AccountCreated -> TODO()
-                    is StellarTransactionRecord.Type.ChangeTrust -> TODO()
-                    is StellarTransactionRecord.Type.Unsupported -> TODO()
+                    is StellarTransactionRecord.Type.ChangeTrust -> {
+                        itemSections.add(
+                            listOf(Value(
+                                Translator.getString(R.string.Transactions_OperationType),
+                                Translator.getString(R.string.Transactions_OperationType_ChangeTrust)
+                            ))
+                        )
+                    }
+                    is StellarTransactionRecord.Type.Unsupported -> {
+                        itemSections.add(
+                            listOf(Value(
+                                Translator.getString(R.string.Transactions_OperationType),
+                                transactionType.type
+                            ))
+                        )
+                    }
                 }
 
                 addMemoItem(transaction.memo, miscItemsSection)
