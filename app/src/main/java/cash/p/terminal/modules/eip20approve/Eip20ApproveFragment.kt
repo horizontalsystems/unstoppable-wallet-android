@@ -2,10 +2,10 @@ package cash.p.terminal.modules.eip20approve
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -15,26 +15,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.HsCheckbox
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsCheckbox
-import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.VSpacer
-import io.horizontalsystems.chartview.cell.CellUniversal
-import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.headline1_leah
 import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
+import io.horizontalsystems.chartview.cell.CellUniversal
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -84,29 +83,12 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                 )
             )
         },
-        bottomBar = {
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Button_Next),
-                    onClick = {
-                        viewModel.freeze()
-                        navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(R.id.eip20ApproveConfirmFragment) {
-                            navController.setNavigationResultX(it)
-                            navController.popBackStack()
-                        }
-                    },
-                )
-            }
-        },
         containerColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
             modifier = Modifier
                 .padding(it)
-                .verticalScroll(rememberScrollState())
+                .fillMaxHeight()
         ) {
             VSpacer(height = 12.dp)
             headline1_leah(
@@ -146,7 +128,21 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                 }
             }
             InfoText(text = stringResource(R.string.Swap_Unlock_Info))
-            VSpacer(height = 32.dp)
+            Spacer(Modifier.weight(1f))
+
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                title = stringResource(R.string.Button_Next),
+                onClick = {
+                    viewModel.freeze()
+                    navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(R.id.eip20ApproveConfirmFragment) {
+                        navController.setNavigationResultX(it)
+                        navController.popBackStack()
+                    }
+                },
+            )
         }
     }
 }
