@@ -20,11 +20,12 @@ class StellarAdapter(
 ) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private var balance: BigDecimal? = null
+    private var totalBalance: BigDecimal? = null
+    private var minimumBalance: BigDecimal = BigDecimal.ZERO
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceData: BalanceData
-        get() = BalanceData(balance ?: BigDecimal.ZERO)
+        get() = BalanceData(availableBalance, minimumBalance)
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -37,7 +38,8 @@ class StellarAdapter(
     override fun start() {
         coroutineScope.launch {
             stellarKit.getBalanceFlow(StellarAsset.Native).collect { balance ->
-                this@StellarAdapter.balance = balance
+                totalBalance = balance?.balance
+                minimumBalance = balance?.minBalance ?: BigDecimal.ZERO
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
@@ -59,7 +61,12 @@ class StellarAdapter(
     override val debugInfo = "debugInfo"
 
     override val availableBalance: BigDecimal
-        get() = balance ?: BigDecimal.ZERO
+        get() {
+            totalBalance?.let {
+                return it - minimumBalance
+            }
+            return BigDecimal.ZERO
+        }
     override val fee: BigDecimal
         get() = stellarKit.sendFee
 
