@@ -32,12 +32,13 @@ jobs:
 
       - name: Create service account key file
         run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json  
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > fastlane/service-account.json  
 
       - name: Fastlane Build
         uses: maierj/fastlane-action@v3.0.0
         with:
           lane: 'app_build_release'
           options: '{ "app_name": "Unstoppable-Release" }'
+          subdirectory: 'fastlane'
         env:
           BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
