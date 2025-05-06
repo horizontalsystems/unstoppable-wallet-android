@@ -34,21 +34,24 @@ class ActivateTokenViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            feeAmount?.let { feeAmount ->
-                feeCoinValue = CoinValue(feeToken, feeAmount)
-                feeFiatValue = xRateService.getRate(feeToken.coin.uid)?.let { rate ->
-                    rate.copy(value = rate.value * feeAmount)
-                }
-            }
+            val tmpAdapter = adapter
 
-            val isActivationRequired = adapter?.isActivationRequired() ?: false
-
-            if (!isActivationRequired) {
+            if (tmpAdapter == null) {
+                activateEnabled = false
+                error = ActivateTokenError.NullAdapter()
+            } else if (!tmpAdapter.isActivationRequired()) {
                 activateEnabled = false
                 error = ActivateTokenError.AlreadyActive()
             } else {
                 activateEnabled = true
                 error = null
+            }
+
+            feeAmount?.let { feeAmount ->
+                feeCoinValue = CoinValue(feeToken, feeAmount)
+                feeFiatValue = xRateService.getRate(feeToken.coin.uid)?.let { rate ->
+                    rate.copy(value = rate.value * feeAmount)
+                }
             }
 
             emitState()
@@ -87,6 +90,7 @@ class ActivateTokenViewModel(
 }
 
 sealed class ActivateTokenError : Throwable() {
+    class NullAdapter : ActivateTokenError()
     class AlreadyActive : ActivateTokenError()
 }
 
