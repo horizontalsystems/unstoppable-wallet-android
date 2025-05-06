@@ -159,6 +159,15 @@ fun ActivateTokenScreen(
                         icon = R.drawable.ic_attention_20
                     )
                 }
+
+                is ActivateTokenError.NullAdapter -> {
+                    TextImportantError(
+                        modifier = modifier,
+                        text = stringResource(R.string.Error_ParameterNotSet),
+                        title = null,
+                        icon = null
+                    )
+                }
             }
         }
     }
