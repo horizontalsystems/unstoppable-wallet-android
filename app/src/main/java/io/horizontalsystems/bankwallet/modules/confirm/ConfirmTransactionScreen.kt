@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 @Composable
 fun ConfirmTransactionScreen(
     title: String = stringResource(R.string.Swap_Confirm_Title),
-    onClickBack: () -> Unit,
+    onClickBack: (() -> Unit)?,
     onClickSettings: (() -> Unit)?,
     onClickClose: (() -> Unit)?,
     buttonsSlot: @Composable() (ColumnScope.() -> Unit),
@@ -31,11 +31,17 @@ fun ConfirmTransactionScreen(
 ) {
     Scaffold(
         topBar = {
+            val navigationIcon: @Composable (() -> Unit)? = if (onClickBack != null) {
+                {
+                    HsBackButton(onClick = onClickBack)
+                }
+            } else {
+                null
+            }
+
             AppBar(
                 title = title,
-                navigationIcon = {
-                    HsBackButton(onClick = onClickBack)
-                },
+                navigationIcon = navigationIcon,
                 menuItems = buildList<MenuItem> {
                     onClickSettings?.let {
                         add(

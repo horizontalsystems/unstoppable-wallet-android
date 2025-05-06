@@ -22,7 +22,7 @@ class StellarAssetAdapter(
 ) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
 
     private val stellarAsset = StellarAsset.Asset(code, issuer)
-    private var assetBalance = stellarKit.assetBalanceMap[stellarAsset.id]
+    private var assetBalance: BigDecimal? = null
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -42,8 +42,8 @@ class StellarAssetAdapter(
 
     override fun start() {
         coroutineScope.launch {
-            stellarKit.assetBalanceMapFlow.collect { assetBalanceMap ->
-                assetBalance = assetBalanceMap[stellarAsset.id]
+            stellarKit.getBalanceFlow(stellarAsset).collect { balance ->
+                assetBalance = balance
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
@@ -69,5 +69,13 @@ class StellarAssetAdapter(
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
         stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
+    }
+
+    override suspend fun isActivationRequired() : Boolean {
+        return !stellarKit.isAssetEnabled(stellarAsset)
+    }
+
+    override fun activate() {
+        stellarKit.enableAsset(stellarAsset.id, null)
     }
 }

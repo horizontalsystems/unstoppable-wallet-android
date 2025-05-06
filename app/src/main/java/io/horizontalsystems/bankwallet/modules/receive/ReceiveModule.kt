@@ -35,6 +35,7 @@ object ReceiveModule {
         val additionalItems: List<AdditionalData>,
         val amount: BigDecimal?,
         val alertText: AlertText?,
+        val activationRequired: Boolean,
     )
 
     sealed class AlertText {

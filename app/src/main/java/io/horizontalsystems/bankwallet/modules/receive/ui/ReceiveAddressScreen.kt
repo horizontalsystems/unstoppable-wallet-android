@@ -115,6 +115,7 @@ fun ReceiveAddressScreen(
     showUsedAddresses: (List<UsedAddress>, List<UsedAddress>) -> Unit,
     onBackPress: () -> Unit,
     closeModule: () -> Unit,
+    onClickActivate: () -> Unit = {},
 ) {
     val localView = LocalView.current
     val openAmountDialog = remember { mutableStateOf(false) }
@@ -161,7 +162,11 @@ fun ReceiveAddressScreen(
                     Column {
                         when (viewState) {
                             is ViewState.Error -> {
-                                ListErrorView(stringResource(R.string.SyncError), onErrorClick)
+                                if (uiState.activationRequired) {
+                                    ReceiveTokenActivationRequired(onClickActivate)
+                                } else {
+                                    ListErrorView(stringResource(R.string.SyncError), onErrorClick)
+                                }
                             }
 
                             ViewState.Loading -> {
