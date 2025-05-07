@@ -240,6 +240,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Fantom -> R.drawable.fantom_erc20
         BlockchainType.Tron -> R.drawable.tron_trc20
         BlockchainType.Ton -> R.drawable.the_open_network_jetton
+        BlockchainType.Stellar -> R.drawable.stellar_asset
         else -> R.drawable.coin_placeholder
     }
 
