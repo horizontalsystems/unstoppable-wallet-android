@@ -315,6 +315,7 @@ interface IReceiveAdapter {
     }
 
     fun activate() { throw UnsupportedOperationException() }
+    fun validateActivation() { throw UnsupportedOperationException() }
 }
 
 @Parcelize
