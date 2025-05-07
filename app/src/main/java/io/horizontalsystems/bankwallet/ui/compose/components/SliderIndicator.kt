@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun SliderIndicator(total: Int, current: Int) {
     Row(
-        modifier = Modifier.height(30.dp),
+        modifier = Modifier.height(32.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

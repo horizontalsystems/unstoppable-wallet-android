@@ -918,6 +918,10 @@
     <string name="SettingsBanner_PremiumBannerDescription">Upgrade your experience with Premium features!</string>
     <string name="SettingsBanner_PremiumTryFee">Try for FREE</string>
 
+    <!--Game Banner-->
+    <string name="SettingsBanner_Title" translatable="false">MiniApp</string>
+    <string name="SettingsBanner_GameDescription">Pass tests, complete tasks, and earn tokens!</string>
+
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Active</string>
     <string name="SettingsSubscription_GetPremium">Get Premium</string>
