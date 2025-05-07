@@ -177,6 +177,7 @@ val Blockchain.description: String
         BlockchainType.Fantom -> "FTM, ERC20 tokens"
         BlockchainType.Tron -> "TRX, TRC20 tokens"
         BlockchainType.Ton -> "TON"
+        BlockchainType.Stellar -> "XLM, Stellar assets"
         else -> ""
     }
 
