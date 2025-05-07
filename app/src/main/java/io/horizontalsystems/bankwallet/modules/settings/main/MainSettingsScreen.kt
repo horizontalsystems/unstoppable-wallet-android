@@ -50,6 +50,8 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.gamebanner.GameBanner
+import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.bankwallet.modules.settings.premiumbanner.PremiumBanner
 import io.horizontalsystems.bankwallet.modules.settings.vipsupport.VipSupportBottomSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
@@ -109,14 +111,26 @@ private fun SettingSections(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    if (uiState.showPremiumBanner) {
-        PremiumBanner(
-            onClick = {
-                navController.slideFromBottom(R.id.buySubscriptionFragment)
+    val banners = buildList<@Composable () -> Unit> {
+        if (uiState.showPremiumBanner) {
+            add {
+                PremiumBanner(
+                    onClick = {
+                        navController.slideFromBottom(R.id.buySubscriptionFragment)
+                    }
+                )
             }
-        )
-        VSpacer(20.dp)
+        }
+        add {
+            GameBanner(
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot/app")
+                }
+            )
+        }
     }
+
+    BannerCarousel(banners = banners)
 
     VSpacer(12.dp)
 
