@@ -699,6 +699,8 @@
     <string name="Activate_Activating">Activating</string>
     <string name="Activate_AlreadyActive_Title">Already Active</string>
     <string name="Activate_AlreadyActive_Description">The token is already active.</string>
+    <string name="Activate_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="Activate_InsufficientBalance_Description">You don\’t have enough XLM balance to activate this token.</string>
 
     <!--Approve-->
 

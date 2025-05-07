@@ -168,6 +168,15 @@ fun ActivateTokenScreen(
                         icon = null
                     )
                 }
+
+                is ActivateTokenError.InsufficientBalance -> {
+                    TextImportantError(
+                        modifier = modifier,
+                        title = stringResource(R.string.Activate_InsufficientBalance_Title),
+                        text = stringResource(R.string.Activate_InsufficientBalance_Description),
+                        icon = R.drawable.ic_attention_20
+                    )
+                }
             }
         }
     }

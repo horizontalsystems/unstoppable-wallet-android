@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.stellarkit.EnablingAssetError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,9 +43,14 @@ class ActivateTokenViewModel(
             } else if (!tmpAdapter.isActivationRequired()) {
                 activateEnabled = false
                 error = ActivateTokenError.AlreadyActive()
-            } else {
+            } else try {
+                tmpAdapter.validateActivation()
+
                 activateEnabled = true
                 error = null
+            } catch (e: EnablingAssetError.InsufficientBalance) {
+                activateEnabled = false
+                error = ActivateTokenError.InsufficientBalance()
             }
 
             feeAmount?.let { feeAmount ->
@@ -92,6 +98,7 @@ class ActivateTokenViewModel(
 sealed class ActivateTokenError : Throwable() {
     class NullAdapter : ActivateTokenError()
     class AlreadyActive : ActivateTokenError()
+    class InsufficientBalance : ActivateTokenError()
 }
 
 data class ActivateTokenUiState(

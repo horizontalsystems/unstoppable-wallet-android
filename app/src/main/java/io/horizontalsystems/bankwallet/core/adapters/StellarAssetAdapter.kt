@@ -84,4 +84,8 @@ class StellarAssetAdapter(
     override fun activate() {
         stellarKit.enableAsset(stellarAsset.id, null)
     }
+
+    override fun validateActivation() {
+        stellarKit.validateEnablingAsset()
+    }
 }
