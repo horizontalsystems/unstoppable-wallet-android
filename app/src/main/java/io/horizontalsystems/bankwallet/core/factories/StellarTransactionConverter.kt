@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.factories
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord.Type
+import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -97,7 +98,13 @@ class StellarTransactionConverter(
                 TransactionValue.CoinValue(token, changeTrust.limit)
             } else {
                 val assetCode = changeTrust.asset.code
-                TransactionValue.TokenValue(assetCode, assetCode, 7, changeTrust.limit)
+                TransactionValue.TokenValue(
+                    tokenName = assetCode,
+                    tokenCode = assetCode,
+                    tokenDecimals = 7,
+                    value = changeTrust.limit,
+                    coinIconPlaceholder = BlockchainType.Stellar.tokenIconPlaceholder
+                )
             }
 
             type = Type.ChangeTrust(
