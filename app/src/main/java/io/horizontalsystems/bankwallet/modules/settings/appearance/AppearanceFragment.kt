@@ -42,6 +42,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -104,7 +109,7 @@ fun AppearanceScreen(navController: NavController) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = stringResource(R.string.Settings_Appearance),
+                    title = stringResource(R.string.Settings_AppSettings),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },
@@ -127,6 +132,43 @@ fun AppearanceScreen(navController: NavController) {
                             value = uiState.selectedTheme.title.getString(),
                             onClick = { openThemeSelector = true }
                         )
+                    }
+                )
+
+                VSpacer(32.dp)
+
+                CellUniversalLawrenceSection(
+                    buildList {
+                        add {
+                            HsSettingCell(
+                                R.string.Settings_Language,
+                                R.drawable.ic_language,
+                                value = uiState.currentLanguage,
+                                onClick = {
+                                    navController.slideFromRight(R.id.languageSettingsFragment)
+
+                                    stat(
+                                        page = StatPage.Settings,
+                                        event = StatEvent.Open(StatPage.Language)
+                                    )
+                                }
+                            )
+                        }
+                        add {
+                            HsSettingCell(
+                                R.string.Settings_BaseCurrency,
+                                R.drawable.ic_currency,
+                                value = uiState.baseCurrencyCode,
+                                onClick = {
+                                    navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+
+                                    stat(
+                                        page = StatPage.Settings,
+                                        event = StatEvent.Open(StatPage.BaseCurrency)
+                                    )
+                                }
+                            )
+                        }
                     }
                 )
 

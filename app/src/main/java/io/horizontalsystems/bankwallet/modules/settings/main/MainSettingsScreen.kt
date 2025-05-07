@@ -121,21 +121,6 @@ private fun SettingSections(
     VSpacer(12.dp)
 
     CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_GetYourTokens,
-                R.drawable.ic_uwt2_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot")
-                }
-            )
-        }
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
@@ -161,6 +146,27 @@ private fun SettingSections(
                         page = StatPage.Settings,
                         event = StatEvent.Open(StatPage.BlockchainSettings)
                     )
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_SecurityCenter,
+                R.drawable.ic_security,
+                showAlert = uiState.securityCenterShowAlert,
+                onClick = {
+                    navController.slideFromRight(R.id.securitySettingsFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Privacy,
+                R.drawable.ic_eye_20,
+                onClick = {
+                    navController.slideFromRight(R.id.privacySettingsFragment)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
             )
         }, {
@@ -221,16 +227,6 @@ private fun SettingSections(
                     )
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.BackupManager_Title,
-                R.drawable.ic_file_24,
-                onClick = {
-                    navController.slideFromRight(R.id.backupManagerFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BackupManager))
-                }
-            )
         }
         )
     )
@@ -241,45 +237,8 @@ private fun SettingSections(
         buildList {
             add {
                 HsSettingCell(
-                    R.string.Settings_SecurityCenter,
-                    R.drawable.ic_security,
-                    showAlert = uiState.securityCenterShowAlert,
-                    onClick = {
-                        navController.slideFromRight(R.id.securitySettingsFragment)
-
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
-                    }
-                )
-            }
-            add {
-                HsSettingCell(
-                    R.string.Settings_Privacy,
-                    R.drawable.ic_eye_20,
-                    onClick = {
-                        navController.slideFromRight(R.id.privacySettingsFragment)
-
-                        stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
-                    }
-                )
-            }
-            add {
-                HsSettingCell(
-                    R.string.Contacts,
-                    R.drawable.ic_user_20,
-                    onClick = {
-                        navController.slideFromRight(
-                            R.id.contactsFragment,
-                            ContactsFragment.Input(Mode.Full)
-                        )
-
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
-                    }
-                )
-            }
-            add {
-                HsSettingCell(
-                    R.string.Settings_Appearance,
-                    R.drawable.ic_brush_20,
+                    R.string.Settings_AppSettings,
+                    R.drawable.ic_unstoppable_icon_20,
                     onClick = {
                         navController.slideFromRight(R.id.appearanceFragment)
 
@@ -301,25 +260,29 @@ private fun SettingSections(
             }
             add {
                 HsSettingCell(
-                    R.string.Settings_BaseCurrency,
-                    R.drawable.ic_currency,
-                    value = uiState.baseCurrencyCode,
+                    R.string.Contacts,
+                    R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+                        navController.slideFromRight(
+                            R.id.contactsFragment,
+                            ContactsFragment.Input(Mode.Full)
+                        )
 
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BaseCurrency))
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
                     }
                 )
             }
             add {
                 HsSettingCell(
-                    R.string.Settings_Language,
-                    R.drawable.ic_language,
-                    value = uiState.currentLanguage,
+                    R.string.BackupManager_Title,
+                    R.drawable.ic_file_24,
                     onClick = {
-                        navController.slideFromRight(R.id.languageSettingsFragment)
+                        navController.slideFromRight(R.id.backupManagerFragment)
 
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Language))
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.Open(StatPage.BackupManager)
+                        )
                     }
                 )
             }
@@ -351,7 +314,7 @@ private fun SettingSections(
         listOf({
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
-                R.drawable.ic_about_app_20,
+                R.drawable.ic_info_20,
                 showAlert = uiState.aboutAppShowAlert,
                 onClick = {
                     navController.slideFromRight(R.id.aboutAppFragment)
@@ -377,6 +340,22 @@ private fun SettingSections(
                     shareAppLink(uiState.appWebPageLink, context)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Faq,
+                R.drawable.ic_faq_20,
+                onClick = {
+                    navController.slideFromRight(R.id.faqListFragment)
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Guides_Title,
+                R.drawable.ic_academy_20,
+                onClick = {
+                    navController.slideFromRight(R.id.academyFragment)
                 }
             )
         })
@@ -418,52 +397,6 @@ private fun SettingSections(
                 }
             )
         })
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.Settings_Faq,
-                R.drawable.ic_faq_20,
-                onClick = {
-                    navController.slideFromRight(R.id.faqListFragment)
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Guides_Title,
-                R.drawable.ic_academy_20,
-                onClick = {
-                    navController.slideFromRight(R.id.academyFragment)
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_CryptoQuiz,
-                R.drawable.ic_question_24,
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot/app")
-                }
-            )
-        })
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_Donate,
-                R.drawable.ic_heart_24,
-                onClick = {
-                    navController.slideFromRight(R.id.donateTokenSelectFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
-                }
-            )
-        }
     )
 
     VSpacer(32.dp)

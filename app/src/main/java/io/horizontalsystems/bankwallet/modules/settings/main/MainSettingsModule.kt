@@ -18,8 +18,6 @@ object MainSettingsModule {
                 App.wcManager,
                 App.accountManager,
                 App.appConfigProvider,
-                App.languageManager,
-                App.currencyManager,
             )
 
             return viewModel as T

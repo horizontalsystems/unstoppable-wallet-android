@@ -23,6 +23,8 @@ object AppearanceModule {
                 themeService,
                 App.balanceViewTypeManager,
                 App.localStorage,
+                App.languageManager,
+                App.currencyManager,
             ) as T
         }
     }

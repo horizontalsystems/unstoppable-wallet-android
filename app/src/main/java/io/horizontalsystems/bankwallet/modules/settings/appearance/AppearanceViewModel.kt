@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings.appearance
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -14,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
@@ -21,6 +24,8 @@ class AppearanceViewModel(
     private val themeService: ThemeService,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val localStorage: ILocalStorage,
+    private val languageManager: LanguageManager,
+    private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<AppearanceUIState>() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var appIconOptions = appIconService.optionsFlow.value
@@ -31,6 +36,11 @@ class AppearanceViewModel(
     private var balanceViewTypeOptions = buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
     private var priceChangeInterval = localStorage.priceChangeInterval
     private var priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
+    private val currentLanguageDisplayName: String
+        get() = languageManager.currentLanguageName
+
+    private val baseCurrencyCode: String
+        get() = currencyManager.baseCurrency.code
 
     init {
         viewModelScope.launch {
@@ -57,9 +67,16 @@ class AppearanceViewModel(
                     handleUpdatedBalanceViewType(buildBalanceViewTypeSelect(it))
                 }
         }
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                emitState()
+            }
+        }
     }
 
     override fun createState() = AppearanceUIState(
+        currentLanguage = currentLanguageDisplayName,
+        baseCurrencyCode = baseCurrencyCode,
         launchScreenOptions = launchScreenOptions,
         appIconOptions = appIconOptions,
         themeOptions = themeOptions,
@@ -166,6 +183,8 @@ class AppearanceViewModel(
 }
 
 data class AppearanceUIState(
+    val currentLanguage: String,
+    val baseCurrencyCode: String,
     val launchScreenOptions: Select<LaunchPage>,
     val appIconOptions: Select<AppIcon>,
     val themeOptions: Select<ThemeType>,
