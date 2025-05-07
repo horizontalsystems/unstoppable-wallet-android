@@ -368,15 +368,6 @@ interface ISendEthereumAdapter {
     fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
 }
 
-interface ISendBinanceAdapter {
-    val availableBalance: BigDecimal
-    val availableBinanceBalance: BigDecimal
-    val fee: BigDecimal
-
-    fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
-}
-
 interface ISendZcashAdapter {
     val availableBalance: BigDecimal
     val fee: BigDecimal
