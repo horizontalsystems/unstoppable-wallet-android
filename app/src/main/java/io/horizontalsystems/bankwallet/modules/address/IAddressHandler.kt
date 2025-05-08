@@ -30,6 +30,8 @@ class AddressHandlerEns(
     private val cache = mutableMapOf<String, Address>()
 
     override fun isSupported(value: String): Boolean {
+        if (!value.contains(".")) return false
+
         if (!EnsResolver.isValidEnsName(value)) return false
 
         try {
