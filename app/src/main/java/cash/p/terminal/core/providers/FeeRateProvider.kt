@@ -41,6 +41,10 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
         return feeRateKit.dash()
     }
 
+    fun pirateCashFeeRate(): Single<BigInteger> {
+        return Single.just(BigInteger("7000"))
+    }
+
 }
 
 class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
@@ -83,6 +87,13 @@ class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRa
 class CosantaFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override suspend fun getFeeRates(): FeeRates {
         val feeRate = feeRateProvider.dashFeeRate().await()
+        return FeeRates(feeRate.toInt())
+    }
+}
+
+class PirateCashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRates(): FeeRates {
+        val feeRate = feeRateProvider.pirateCashFeeRate().await()
         return FeeRates(feeRate.toInt())
     }
 }

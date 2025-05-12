@@ -18,6 +18,7 @@ import cash.p.terminal.core.adapters.EvmAdapter
 import cash.p.terminal.core.adapters.EvmTransactionsAdapter
 import cash.p.terminal.core.adapters.JettonAdapter
 import cash.p.terminal.core.adapters.LitecoinAdapter
+import cash.p.terminal.core.adapters.PirateCashAdapter
 import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.SolanaTransactionConverter
 import cash.p.terminal.core.adapters.SolanaTransactionsAdapter
@@ -226,6 +227,16 @@ class AdapterFactory(
                     val syncMode =
                         btcBlockchainManager.syncMode(BlockchainType.Cosanta, wallet.account.origin)
                     CosantaAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager
+                    )
+                }
+
+                BlockchainType.PirateCash -> {
+                    val syncMode =
+                        btcBlockchainManager.syncMode(BlockchainType.PirateCash, wallet.account.origin)
+                    PirateCashAdapter(
                         wallet = wallet,
                         syncMode = syncMode,
                         backgroundManager = backgroundManager

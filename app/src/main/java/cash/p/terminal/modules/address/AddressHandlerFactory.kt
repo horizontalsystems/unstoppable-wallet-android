@@ -11,6 +11,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.cosantakit.MainNetCosanta
+import io.horizontalsystems.piratecashkit.MainNetPirateCash
 
 class AddressHandlerFactory(
     private val udnApiKey: String,
@@ -50,6 +51,11 @@ class AddressHandlerFactory(
 
             BlockchainType.Cosanta -> {
                 val network = MainNetCosanta()
+                addressHandlers.add(AddressHandlerBase58(network, blockchainType))
+            }
+
+            BlockchainType.PirateCash -> {
+                val network = MainNetPirateCash()
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
             }
 

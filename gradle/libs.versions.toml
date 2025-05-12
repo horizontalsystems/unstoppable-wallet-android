@@ -23,7 +23,6 @@ coil-compose = "2.5.0"
 annotation = "1.9.1"
 lifecycle-viewmodel-compose = "2.8.7"
 roomRxjava2 = "2.6.1"
-sol4k = "0.5.8"
 uiTooling = "1.7.6"
 androidx-fragment-ktx = "1.8.5"
 navigationRuntimeKtx = "2.8.5"
@@ -35,7 +34,7 @@ javax-inject = "1"
 appcompat = "1.7.0"
 
 horizontalsystems-ton = "58321df"
-piratecash-bitcoin = "e115cd2"
+piratecash-bitcoin = "f165e0c"
 horizontalsystems-ethereum = "aae7f27"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
@@ -103,7 +102,6 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
-sol4k = { module = "org.sol4k:sol4k", version.ref = "sol4k" }
 ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
 solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", version.ref = "piratecash-solana" }
