@@ -388,19 +388,7 @@ private fun ActionButtonsRow(
                 },
             )
         }
-        ReceiveActionButton(
-            modifier = itemModifier,
-            icon = R.drawable.ic_share_24px,
-            buttonText = stringResource(R.string.Button_Share),
-            onClick = {
-                onShareClick.invoke(uri)
 
-                stat(page = StatPage.Receive, event = StatEvent.Share(StatEntity.ReceiveAddress))
-            },
-        )
-        if (watchAccount) {
-            HSpacer(64.dp)
-        }
         ReceiveActionButton(
             modifier = itemModifier,
             icon = R.drawable.ic_copy_24px,
@@ -410,6 +398,21 @@ private fun ActionButtonsRow(
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
 
                 stat(page = StatPage.Receive, event = StatEvent.Copy(StatEntity.ReceiveAddress))
+            },
+        )
+
+        if (watchAccount) {
+            HSpacer(64.dp)
+        }
+
+        ReceiveActionButton(
+            modifier = itemModifier,
+            icon = R.drawable.ic_share_24px,
+            buttonText = stringResource(R.string.Button_Share),
+            onClick = {
+                onShareClick.invoke(uri)
+
+                stat(page = StatPage.Receive, event = StatEvent.Share(StatEntity.ReceiveAddress))
             },
         )
     }
