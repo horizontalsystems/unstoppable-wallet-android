@@ -462,9 +462,13 @@ class TransactionViewItemFactory(
                 title = Translator.getString(R.string.Transactions_Send)
                 subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
 
-                primaryValue = getColoredValue(recordType.value, ColorName.Lucian)
-
                 sentToSelf = recordType.sentToSelf
+
+                primaryValue = if (sentToSelf) {
+                    ColoredValue(getCoinString(recordType.value, true), ColorName.Leah)
+                } else {
+                    getColoredValue(recordType.value, ColorName.Lucian)
+                }
 
                 iconX = singleValueIconType(recordType.value)
 
