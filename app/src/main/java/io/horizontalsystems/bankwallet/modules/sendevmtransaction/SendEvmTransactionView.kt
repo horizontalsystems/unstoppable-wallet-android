@@ -113,7 +113,7 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
                 Text(
                     text = nonce.toString(),
                     maxLines = 1,
-                    style = ComposeAppTheme.typography.subhead1,
+                    style = ComposeAppTheme.typography.subhead,
                     color = setColorByType(ValueType.Regular)
                 )
             }
@@ -193,7 +193,7 @@ fun TitleValue(item: ViewItem.Value) {
         Text(
             text = item.value,
             maxLines = 1,
-            style = ComposeAppTheme.typography.subhead1,
+            style = ComposeAppTheme.typography.subhead,
             color = setColorByType(item.type)
         )
     }
@@ -212,7 +212,7 @@ private fun TitleValueMulti(item: ViewItem.ValueMulti) {
             Text(
                 text = item.primaryValue,
                 maxLines = 1,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = setColorByType(item.type)
             )
             Text(
@@ -245,7 +245,7 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
                 Text(
                     text = item.amounts[0].coinAmount,
                     maxLines = 1,
-                    style = ComposeAppTheme.typography.subhead1,
+                    style = ComposeAppTheme.typography.subhead,
                     color = setColorByType(item.type)
                 )
                 Spacer(Modifier.weight(1f))
@@ -283,7 +283,7 @@ private fun Amount(item: ViewItem.Amount) {
         Text(
             text = item.coinAmount,
             maxLines = 1,
-            style = ComposeAppTheme.typography.subhead1,
+            style = ComposeAppTheme.typography.subhead,
             color = setColorByType(item.type)
         )
         Spacer(Modifier.weight(1f))
@@ -313,7 +313,7 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
             Text(
                 text = item.coinAmount,
                 maxLines = 1,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = setColorByType(item.type)
             )
             item.fiatAmount?.let {
@@ -336,7 +336,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
         Text(
             text = item.amount,
             maxLines = 1,
-            style = ComposeAppTheme.typography.subhead2,
+            style = ComposeAppTheme.typography.subheadR,
             color = setColorByType(item.type)
         )
     }
@@ -383,7 +383,7 @@ private fun TitleValueHex(
 @Composable
 private fun setColorByType(type: ValueType) =
     when (type) {
-        ValueType.Regular -> ComposeAppTheme.colors.bran
+        ValueType.Regular -> ComposeAppTheme.colors.leah
         ValueType.Disabled -> ComposeAppTheme.colors.grey
         ValueType.Outgoing -> ComposeAppTheme.colors.leah
         ValueType.Incoming -> ComposeAppTheme.colors.remus

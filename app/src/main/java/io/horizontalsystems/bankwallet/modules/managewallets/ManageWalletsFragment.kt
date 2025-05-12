@@ -199,7 +199,7 @@ private fun CoinCell(
                             modifier = Modifier
                                 .padding(start = 6.dp)
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.jeremy)
+                                .background(ComposeAppTheme.colors.claude)
                         ) {
                             Text(
                                 modifier = Modifier.padding(
@@ -208,7 +208,7 @@ private fun CoinCell(
                                     bottom = 1.dp
                                 ),
                                 text = labelText,
-                                color = ComposeAppTheme.colors.bran,
+                                color = ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.microSB,
                                 maxLines = 1,
                             )

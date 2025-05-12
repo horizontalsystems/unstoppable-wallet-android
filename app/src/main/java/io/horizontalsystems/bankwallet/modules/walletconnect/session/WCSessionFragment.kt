@@ -258,7 +258,7 @@ fun RequestCell(
             )
             Text(
                 text = viewItem.subtitle,
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 color = ComposeAppTheme.colors.grey,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

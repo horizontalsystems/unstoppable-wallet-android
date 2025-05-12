@@ -395,7 +395,7 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                     item.secondaryValue?.let { coloredValue ->
                         Text(
                             text = if (item.showAmount) coloredValue.value else "*****",
-                            style = ComposeAppTheme.typography.subhead2,
+                            style = ComposeAppTheme.typography.subheadR,
                             color = coloredValue.color.compose(),
                             maxLines = 1,
                         )

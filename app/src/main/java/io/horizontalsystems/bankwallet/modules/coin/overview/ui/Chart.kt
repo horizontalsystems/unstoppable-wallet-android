@@ -126,7 +126,7 @@ fun HsChartLineHeader(
                     Text(
                         modifier = Modifier.alignByBaseline(),
                         text = formatValueAsDiff(diff),
-                        style = ComposeAppTheme.typography.subhead1,
+                        style = ComposeAppTheme.typography.subhead,
                         color = diffColor(diff.raw())
                     )
                 }
@@ -174,7 +174,7 @@ fun HsChartLineHeader(
                                 HSpacer(width = 4.dp)
                                 Text(
                                     text = formatValueAsDiff(diff),
-                                    style = ComposeAppTheme.typography.subhead2,
+                                    style = ComposeAppTheme.typography.subheadR,
                                     color = diffColor(diff.raw())
                                 )
                             }
@@ -183,7 +183,7 @@ fun HsChartLineHeader(
                 }
 
                 is ChartModule.ChartHeaderExtraData.Indicators -> {
-                    val styleSubhead = ComposeAppTheme.typography.subhead2
+                    val styleSubhead = ComposeAppTheme.typography.subheadR
                     Column(
                         modifier = Modifier.width(IntrinsicSize.Max),
                         horizontalAlignment = Alignment.End

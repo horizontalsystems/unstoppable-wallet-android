@@ -96,13 +96,13 @@ private fun InfoScreen(
                                 HSpacer(8.dp)
                                 Text(
                                     text = stringResource(score.title).uppercase(),
-                                    style = ComposeAppTheme.typography.subhead1,
+                                    style = ComposeAppTheme.typography.subhead,
                                     color = color,
                                 )
                                 Spacer(Modifier.weight(1f))
                                 Text(
                                     text = value,
-                                    style = ComposeAppTheme.typography.subhead1,
+                                    style = ComposeAppTheme.typography.subhead,
                                     color = color,
                                 )
                             }

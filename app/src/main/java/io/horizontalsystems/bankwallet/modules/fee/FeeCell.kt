@@ -84,7 +84,7 @@ fun FeeCell(
                     modifier = Modifier.alpha(if (viewState == ViewState.Loading) 0f else 1f),
                     text = value?.primary ?: stringResource(id = R.string.NotAvailable),
                     maxLines = 1,
-                    style = ComposeAppTheme.typography.subhead1,
+                    style = ComposeAppTheme.typography.subhead,
                     color = color
                 )
                 Text(

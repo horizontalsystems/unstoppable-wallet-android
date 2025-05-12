@@ -73,7 +73,7 @@ fun StatusCell(connectionStatus: Status?) {
             Text(
                 text = stringResource(status.value),
                 color = color,
-                style = ComposeAppTheme.typography.subhead1
+                style = ComposeAppTheme.typography.subhead
             )
         }
     }

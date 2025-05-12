@@ -66,7 +66,7 @@ fun AmountCell(
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = coinAmount,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = coinAmountColor,
             )
 

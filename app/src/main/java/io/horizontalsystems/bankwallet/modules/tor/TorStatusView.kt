@@ -84,7 +84,7 @@ fun TorStatusView(
                     text = stringResource(viewModel.torViewState.stateText),
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
-                    style = ComposeAppTheme.typography.subhead2,
+                    style = ComposeAppTheme.typography.subheadR,
                     color = if (viewModel.torViewState.showRetryButton) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
                 )
                 if (viewModel.torViewState.showRetryButton) {

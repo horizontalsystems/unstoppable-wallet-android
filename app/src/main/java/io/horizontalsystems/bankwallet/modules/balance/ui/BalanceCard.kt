@@ -158,7 +158,7 @@ fun BalanceCardInner(
                                 modifier = Modifier
                                     .padding(start = 8.dp)
                                     .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.jeremy)
+                                    .background(ComposeAppTheme.colors.claude)
                             ) {
                                 Text(
                                     modifier = Modifier.padding(
@@ -167,7 +167,7 @@ fun BalanceCardInner(
                                         bottom = 1.dp
                                     ),
                                     text = viewItem.badge,
-                                    color = ComposeAppTheme.colors.bran,
+                                    color = ComposeAppTheme.colors.leah,
                                     style = ComposeAppTheme.typography.microSB,
                                     maxLines = 1,
                                 )
@@ -204,14 +204,14 @@ fun BalanceCardInner(
                                             Text(
                                                 text = viewItem.exchangeValue.value,
                                                 color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                                                style = ComposeAppTheme.typography.subhead2,
+                                                style = ComposeAppTheme.typography.subheadR,
                                                 maxLines = 1,
                                             )
                                             Text(
                                                 modifier = Modifier.padding(start = 4.dp),
                                                 text = diffText(viewItem.diff),
                                                 color = diffColor(viewItem.diff),
-                                                style = ComposeAppTheme.typography.subhead2,
+                                                style = ComposeAppTheme.typography.subheadR,
                                                 maxLines = 1,
                                             )
                                         }
@@ -236,7 +236,7 @@ fun BalanceCardInner(
                             Text(
                                 text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "*****",
                                 color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                                style = ComposeAppTheme.typography.subhead2,
+                                style = ComposeAppTheme.typography.subheadR,
                                 maxLines = 1,
                             )
                         }

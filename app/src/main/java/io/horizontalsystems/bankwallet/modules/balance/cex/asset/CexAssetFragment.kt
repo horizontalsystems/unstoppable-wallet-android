@@ -168,7 +168,7 @@ private fun LockedBalanceCell(balanceViewItem: BalanceCexViewItem) {
                 modifier = Modifier.padding(start = 6.dp),
                 text = if (balanceViewItem.coinValueLocked.visible) balanceViewItem.coinValueLocked.value else "*****",
                 color = if (balanceViewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 maxLines = 1,
             )
         }

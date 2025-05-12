@@ -94,7 +94,7 @@ fun PremiumBannerView(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(ComposeAppTheme.colors.jeremy)
+            .background(ComposeAppTheme.colors.claude)
             .height(IntrinsicSize.Max)
             .clickable(onClick = onClick)
     ) {

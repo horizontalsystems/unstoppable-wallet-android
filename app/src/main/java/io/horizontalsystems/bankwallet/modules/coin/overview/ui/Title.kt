@@ -31,7 +31,7 @@ fun Title(rate: String?, rateDiff: BigDecimal?) {
 
             Text(
                 text = text,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = color
             )
         }
