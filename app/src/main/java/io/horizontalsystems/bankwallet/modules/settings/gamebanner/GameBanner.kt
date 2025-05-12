@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.Bright
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_jacob
 
@@ -65,8 +65,8 @@ fun GameBanner(onClick: () -> Unit) {
                 ) {
                     Text(
                         text = stringResource(R.string.SettingsBanner_GameDescription),
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = SteelLight,
+                        style = ComposeAppTheme.typography.subhead,
+                        color = Bright,
                     )
                     VSpacer(4.dp)
                 }

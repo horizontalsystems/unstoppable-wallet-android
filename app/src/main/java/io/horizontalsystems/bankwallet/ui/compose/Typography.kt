@@ -4,42 +4,46 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import io.horizontalsystems.bankwallet.R
 
 @Immutable
 class Typography internal constructor(
     val title1: TextStyle,
-    val title2: TextStyle,
+    val title2М: TextStyle,
     val title2R: TextStyle,
     val title3: TextStyle,
     val headline1: TextStyle,
     val headline2: TextStyle,
     val body: TextStyle,
+    val bodyR: TextStyle,
     val bodyItalic: TextStyle,
-    val subhead1: TextStyle,
-    val subhead2: TextStyle,
-    val subheadItalic: TextStyle,
-    val subhead1Italic: TextStyle,
+    val subhead: TextStyle,
+    val subheadR: TextStyle,
+    val subheadB: TextStyle,
+    val subheadSB: TextStyle,
     val caption: TextStyle,
     val captionSB: TextStyle,
     val micro: TextStyle,
     val microSB: TextStyle,
 ) {
 
+
     constructor(
-        defaultFontFamily: FontFamily = FontFamily.Default,
+        defaultFontFamily: FontFamily = manropeFont,
         title1: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 38.sp,
             letterSpacing = 0.sp,
         ),
-        title2: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 32.sp,
+        title2М: TextStyle = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 36.sp,
             letterSpacing = 0.sp,
         ),
         title2R: TextStyle = TextStyle(
@@ -48,7 +52,7 @@ class Typography internal constructor(
             letterSpacing = 0.sp,
         ),
         title3: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 24.sp,
             letterSpacing = 0.sp,
         ),
@@ -63,6 +67,11 @@ class Typography internal constructor(
             letterSpacing = 0.sp,
         ),
         body: TextStyle = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            letterSpacing = 0.sp,
+        ),
+        bodyR: TextStyle = TextStyle(
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             letterSpacing = 0.sp,
@@ -73,26 +82,24 @@ class Typography internal constructor(
             fontStyle = FontStyle.Italic,
             letterSpacing = 0.sp,
         ),
-        subhead1: TextStyle = TextStyle(
+        subhead: TextStyle = TextStyle(
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             letterSpacing = 0.sp,
         ),
-        subhead2: TextStyle = TextStyle(
+        subheadR: TextStyle = TextStyle(
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             letterSpacing = 0.sp,
         ),
-        subheadItalic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Normal,
+        subheadB: TextStyle = TextStyle(
+            fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
             letterSpacing = 0.sp,
         ),
-        subhead1Italic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Medium,
+        subheadSB: TextStyle = TextStyle(
+            fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
             letterSpacing = 0.sp,
         ),
         caption: TextStyle = TextStyle(
@@ -117,17 +124,18 @@ class Typography internal constructor(
         ),
     ) : this(
         title1 = title1.withFontFamily(defaultFontFamily),
-        title2 = title2.withFontFamily(defaultFontFamily),
+        title2М = title2М.withFontFamily(defaultFontFamily),
         title2R = title2R.withFontFamily(defaultFontFamily),
         title3 = title3.withFontFamily(defaultFontFamily),
         headline1 = headline1.withFontFamily(defaultFontFamily),
         headline2 = headline2.withFontFamily(defaultFontFamily),
         body = body.withFontFamily(defaultFontFamily),
+        bodyR = body.withFontFamily(defaultFontFamily),
         bodyItalic = bodyItalic.withFontFamily(defaultFontFamily),
-        subhead1 = subhead1.withFontFamily(defaultFontFamily),
-        subhead2 = subhead2.withFontFamily(defaultFontFamily).copy(lineHeight = 20.sp),
-        subheadItalic = subheadItalic.withFontFamily(defaultFontFamily),
-        subhead1Italic = subhead1Italic.withFontFamily(defaultFontFamily),
+        subhead = subhead.withFontFamily(defaultFontFamily),
+        subheadR = subhead.withFontFamily(defaultFontFamily).copy(lineHeight = 20.sp),
+        subheadB = subhead.withFontFamily(defaultFontFamily),
+        subheadSB = subhead.withFontFamily(defaultFontFamily),
         caption = caption.withFontFamily(defaultFontFamily),
         captionSB = captionSB.withFontFamily(defaultFontFamily),
         micro = micro.withFontFamily(defaultFontFamily),
@@ -151,3 +159,10 @@ private fun TextStyle.withFontFamily(default: FontFamily): TextStyle {
 }
 
 internal val LocalTypography = staticCompositionLocalOf { Typography() }
+
+val manropeFont = FontFamily(
+    Font(R.font.manrope_regular),
+    Font(R.font.manrope_medium, FontWeight.Medium),
+    Font(R.font.manrope_semibold, FontWeight.SemiBold),
+    Font(R.font.manrope_bold, FontWeight.Bold),
+)

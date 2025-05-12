@@ -180,7 +180,7 @@ fun SelectSubscriptionBottomSheet(
             Text(
                 text = bottomText,
                 color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
             )

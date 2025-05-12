@@ -458,7 +458,7 @@ fun PriceImpactField(
         value = {
             Text(
                 text = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString()),
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 color = getPriceImpactColor(priceImpactLevel),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

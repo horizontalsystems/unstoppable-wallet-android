@@ -94,7 +94,7 @@ fun TextImportant(
                     Text(
                         text = it,
                         color = textColor,
-                        style = ComposeAppTheme.typography.subhead1
+                        style = ComposeAppTheme.typography.subhead
                     )
                 }
             }

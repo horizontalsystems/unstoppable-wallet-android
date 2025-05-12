@@ -279,7 +279,7 @@ class MarketWidget : GlanceAppWidget() {
                 .background(ImageProvider(R.drawable.widget_list_item_badge_background))
                 .padding(horizontal = 4.dp, vertical = 2.dp),
             text = text,
-            style = TextStyle(color = AppWidgetTheme.colors.bran, fontSize = 10.sp, fontWeight = FontWeight.Medium),
+            style = TextStyle(color = AppWidgetTheme.colors.leah, fontSize = 10.sp, fontWeight = FontWeight.Medium),
         )
     }
 

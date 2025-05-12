@@ -270,7 +270,7 @@ private fun LockedBalanceCell(
             modifier = Modifier.padding(start = 6.dp),
             text = if (lockedAmount.visible) lockedAmount.value else "*****",
             color = if (lockedAmount.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead2,
+            style = ComposeAppTheme.typography.subheadR,
             maxLines = 1,
         )
     }

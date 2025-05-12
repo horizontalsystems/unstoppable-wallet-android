@@ -46,7 +46,7 @@ fun Roi(roi: List<RoiViewItem>) {
                             text = period.periodNameStringResId?.let { stringResource(id = it) }
                                 ?: "",
                             style = ComposeAppTheme.typography.caption,
-                            color = ComposeAppTheme.colors.bran,
+                            color = ComposeAppTheme.colors.leah,
                             textAlign = TextAlign.Center
                         )
                     }

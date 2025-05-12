@@ -154,7 +154,7 @@ fun Note(
                 modifier = Modifier.weight(1f),
                 text = title,
                 color = textColor,
-                style = ComposeAppTheme.typography.subhead1
+                style = ComposeAppTheme.typography.subhead
             )
             onClose?.let {
                 HsIconButton(

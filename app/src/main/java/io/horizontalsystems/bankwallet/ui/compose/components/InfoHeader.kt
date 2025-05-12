@@ -26,7 +26,7 @@ fun InfoH1(text: String) {
     ){
         Text(
             text = text,
-            style = ComposeAppTheme.typography.title2,
+            style = ComposeAppTheme.typography.title2М,
             color = ComposeAppTheme.colors.leah
         )
         Spacer(Modifier.height(8.dp))

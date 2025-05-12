@@ -137,7 +137,7 @@ fun MarketCoinFirstRow(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(ComposeAppTheme.colors.jeremy)
+                        .background(ComposeAppTheme.colors.claude)
                 ) {
                     Text(
                         modifier = Modifier.padding(
@@ -146,7 +146,7 @@ fun MarketCoinFirstRow(
                             bottom = 1.dp
                         ),
                         text = badge,
-                        color = ComposeAppTheme.colors.bran,
+                        color = ComposeAppTheme.colors.leah,
                         style = ComposeAppTheme.typography.microSB,
                         maxLines = 1,
                     )
@@ -171,7 +171,7 @@ fun SignalBadge(advice: Advice) {
         Advice.Sell -> ComposeAppTheme.colors.lucian
         Advice.StrongBuy -> ComposeAppTheme.colors.tyler
         Advice.StrongSell -> ComposeAppTheme.colors.tyler
-        Advice.Neutral -> ComposeAppTheme.colors.bran
+        Advice.Neutral -> ComposeAppTheme.colors.leah
         else -> ComposeAppTheme.colors.jacob
     }
 
@@ -180,7 +180,7 @@ fun SignalBadge(advice: Advice) {
         Advice.Sell -> ComposeAppTheme.colors.red20
         Advice.StrongBuy -> ComposeAppTheme.colors.remus
         Advice.StrongSell -> ComposeAppTheme.colors.lucian
-        Advice.Neutral -> ComposeAppTheme.colors.jeremy
+        Advice.Neutral -> ComposeAppTheme.colors.claude
         else -> ComposeAppTheme.colors.yellow20
     }
 
@@ -249,7 +249,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
             Text(
                 text = diffText(marketDataValue.value),
                 color = diffColor(marketDataValue.value),
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 maxLines = 1,
             )
         }
@@ -257,7 +257,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
             Text(
                 text = formatValueAsDiff(marketDataValue.value),
                 color = diffColor(marketDataValue.value.raw()),
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 maxLines = 1,
             )
         }

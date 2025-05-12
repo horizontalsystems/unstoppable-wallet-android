@@ -228,7 +228,7 @@ fun HSAmountInput(
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = hint ?: stringResource(R.string.NotAvailable),
-                    style = ComposeAppTheme.typography.subhead2,
+                    style = ComposeAppTheme.typography.subheadR,
                     color = if (hint == null) ComposeAppTheme.colors.grey50 else hintTextColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

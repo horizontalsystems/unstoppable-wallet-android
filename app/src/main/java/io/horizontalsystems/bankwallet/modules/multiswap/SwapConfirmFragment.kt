@@ -290,7 +290,7 @@ fun TokenRowPure(
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = amountFormatted ?: "---",
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = amountColor,
             )
             fiatAmount?.let {
@@ -323,7 +323,7 @@ fun TokenRowUnlimited(
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = "∞ ${token.coin.code}",
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = amountColor,
             )
             VSpacer(height = 1.dp)
