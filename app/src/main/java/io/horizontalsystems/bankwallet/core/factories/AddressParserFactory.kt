@@ -19,6 +19,7 @@ val BlockchainType.uriScheme: String?
             BlockchainType.Ethereum -> "ethereum"
             BlockchainType.Ton -> "toncoin"
             BlockchainType.Tron -> "tron"
+            BlockchainType.Stellar -> "stellar"
             else -> null
         }
     }
@@ -36,7 +37,8 @@ val BlockchainType.removeScheme: Boolean
             BlockchainType.Zcash,
             BlockchainType.Ethereum,
             BlockchainType.Ton,
-            BlockchainType.Tron -> true
+            BlockchainType.Tron,
+            BlockchainType.Stellar -> true
 
             else -> false
         }

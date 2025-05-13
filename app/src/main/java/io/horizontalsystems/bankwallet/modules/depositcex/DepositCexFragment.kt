@@ -1,15 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.depositcex
 
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.getInput
@@ -21,9 +18,7 @@ import io.horizontalsystems.bankwallet.modules.depositcex.ReceiveRoutes.USED_ADD
 import io.horizontalsystems.bankwallet.modules.receive.CloseWithMessage
 import io.horizontalsystems.bankwallet.modules.receive.navigateBack
 import io.horizontalsystems.bankwallet.modules.receive.sharedViewModel
-import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressScreen
-import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 
 class DepositCexFragment : BaseComposeFragment() {
 
@@ -76,25 +71,25 @@ fun CexDepositScreen(
                     viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, viewModel.network))
                 val context = LocalContext.current
 
-                ReceiveAddressScreen(
-                    title = stringResource(R.string.CexDeposit_Title, cexAsset.id),
-                    uiState = addressViewModel.uiState,
-                    onErrorClick = { addressViewModel.onErrorClick() },
-                    setAmount = { amount -> addressViewModel.setAmount(amount) },
-                    onShareClick = { address ->
-                        context.startActivity(Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, address)
-                            type = "text/plain"
-                        })
-                    },
-                    showUsedAddresses = { usedAddresses, usedChangeAddresses ->
-                        viewModel.usedAddressesParams = UsedAddressesParams(cexAsset.name, usedAddresses, usedChangeAddresses)
-                        navController.navigate(USED_ADDRESS_SCREEN)
-                    },
-                    onBackPress = navigateBack(fragmentNavController, navController),
-                    closeModule = { fragmentNavController.popBackStack() },
-                )
+//                ReceiveAddressScreen(
+//                    title = stringResource(R.string.CexDeposit_Title, cexAsset.id),
+//                    uiState = addressViewModel.uiState,
+//                    onErrorClick = { addressViewModel.onErrorClick() },
+//                    setAmount = { amount -> addressViewModel.setAmount(amount) },
+//                    onShareClick = { address ->
+//                        context.startActivity(Intent().apply {
+//                            action = Intent.ACTION_SEND
+//                            putExtra(Intent.EXTRA_TEXT, address)
+//                            type = "text/plain"
+//                        })
+//                    },
+//                    showUsedAddresses = { usedAddresses, usedChangeAddresses ->
+//                        viewModel.usedAddressesParams = UsedAddressesParams(cexAsset.name, usedAddresses, usedChangeAddresses)
+//                        navController.navigate(USED_ADDRESS_SCREEN)
+//                    },
+//                    onBackPress = navigateBack(fragmentNavController, navController),
+//                    closeModule = { fragmentNavController.popBackStack() },
+//                )
             }
             composablePage(USED_ADDRESS_SCREEN) { entry ->
                 val viewModel = entry.sharedViewModel<CexDepositSharedViewModel>(navController)

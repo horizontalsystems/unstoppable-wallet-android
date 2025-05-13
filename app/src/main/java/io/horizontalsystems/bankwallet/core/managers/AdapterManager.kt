@@ -162,4 +162,8 @@ class AdapterManager(
         return adaptersMap[wallet]?.let { it as? IReceiveAdapter }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : IReceiveAdapter> getReceiveAdapterForWalletT(wallet: Wallet): T? {
+        return adaptersMap[wallet] as? T
+    }
 }

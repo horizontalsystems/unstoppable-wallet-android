@@ -24,19 +24,30 @@ object ReceiveModule {
         object AccountNotActive : AdditionalData()
     }
 
+    abstract class AbstractUiState {
+        abstract val viewState: ViewState
+        abstract val alertText: AlertText?
+        abstract val uri: String
+        abstract val address: String
+        abstract val networkName: String
+        abstract val additionalItems: List<AdditionalData>
+        abstract val watchAccount: Boolean
+        abstract val amount: BigDecimal?
+    }
+
     data class UiState(
-        val viewState: ViewState,
-        val address: String,
+        override val viewState: ViewState,
+        override val address: String,
         val usedAddresses: List<UsedAddress>,
         val usedChangeAddresses: List<UsedAddress>,
-        val uri: String,
-        val networkName: String,
-        val watchAccount: Boolean,
-        val additionalItems: List<AdditionalData>,
-        val amount: BigDecimal?,
-        val alertText: AlertText?,
+        override val uri: String,
+        override val networkName: String,
+        override val watchAccount: Boolean,
+        override val additionalItems: List<AdditionalData>,
+        override val amount: BigDecimal?,
+        override val alertText: AlertText?,
         val activationRequired: Boolean,
-    )
+    ) : AbstractUiState()
 
     sealed class AlertText {
         class Normal(val content: String) : AlertText()
