@@ -1,9 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
@@ -26,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveTokenSelectScre
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.BchAddressTypeSelectViewModel
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.DerivationSelectViewModel
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
+import io.horizontalsystems.core.helpers.HudHelper
 
 class ReceiveChooseCoinFragment : BaseComposeFragment() {
     @Composable
@@ -142,7 +148,32 @@ fun ReceiveChooseCoinScreen(
 }
 
 private fun onSelectWallet(wallet: Wallet, fragmentNavController: NavController) {
-    fragmentNavController.slideFromRight(R.id.receiveFragment, wallet)
+    fragmentNavController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet, R.id.receiveChooseCoinFragment))
 
     stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))
+}
+
+fun navigateBack(fragmentNavController: NavController, navController: NavHostController): () -> Unit = {
+    val result = navController.popBackStack()
+    if (!result) {
+        fragmentNavController.popBackStack()
+    }
+}
+
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
+    navController: NavHostController,
+): T {
+    val navGraphRoute = destination.parent?.route ?: return viewModel()
+    val parentEntry = remember(this) {
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return viewModel(parentEntry)
+}
+
+@Composable
+fun CloseWithMessage(navController: NavController) {
+    val view = LocalView.current
+    HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
+    navController.popBackStack()
 }
