@@ -1,0 +1,5 @@
+Потужний некастодіальний мультигаманець для Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH і zCash (ZEC), підтримує NFT та широкий спектр інших активів.
+
+Включає вбудований onchain DEX, інституціонально-орієнтовну аналітику для крипто та NFT ринків, просунутих інструментів конфіденційності та інтерфейсу, що знаходиться під центром людини.
+
+Також підтримує нові блокчеїни, такі як PirateCash (PIRATE) і Cosanta (COSA).
