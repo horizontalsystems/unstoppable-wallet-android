@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -349,7 +350,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     val onClickReceive = {
         try {
             val wallet = viewModel.getWalletForReceive()
-            navController.slideFromRight(R.id.receiveFragment, wallet)
+            navController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet))
 
             stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         } catch (e: BackupRequiredError) {

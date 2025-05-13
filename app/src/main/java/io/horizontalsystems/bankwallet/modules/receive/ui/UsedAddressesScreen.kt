@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive.ui
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,19 +41,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UsedAddressesParams(
     val coinName: String,
     val usedAddresses: List<UsedAddress>,
     val usedChangeAddresses: List<UsedAddress>
-)
+) : Parcelable
 
 enum class UsedAddressTab(@StringRes val titleResId: Int) {
     ReceiveAddress(R.string.Balance_Receive_ReceiveAddresses),
     ChangeAddress(R.string.Balance_Receive_ChangeAddresses);
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UsedAddressScreen(
     params: UsedAddressesParams,
