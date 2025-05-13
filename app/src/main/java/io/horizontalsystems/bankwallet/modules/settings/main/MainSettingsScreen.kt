@@ -125,7 +125,7 @@ private fun SettingSections(
         add {
             DonateBanner(
                 onClick = {
-                    //todo
+                    navController.slideFromBottom(R.id.whyDonateFragment)
                 }
             )
         }
