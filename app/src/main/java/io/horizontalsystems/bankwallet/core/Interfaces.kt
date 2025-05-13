@@ -68,6 +68,7 @@ interface IAdapterManager {
     fun getAdapterForToken(token: Token): IAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
+    fun <T: IReceiveAdapter> getReceiveAdapterForWalletT(wallet: Wallet): T?
     fun refreshByWallet(wallet: Wallet)
 }
 
@@ -317,6 +318,8 @@ interface IReceiveAdapter {
     fun activate() { throw UnsupportedOperationException() }
     fun validateActivation() { throw UnsupportedOperationException() }
 }
+
+interface IReceiveStellarAdapter : IReceiveAdapter
 
 @Parcelize
 data class UsedAddress(

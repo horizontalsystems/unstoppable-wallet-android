@@ -22,7 +22,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
@@ -65,7 +64,6 @@ import io.github.alexzhirkevich.qrose.options.QrPixelShape
 import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -108,14 +106,13 @@ import java.math.BigDecimal
 @Composable
 fun ReceiveAddressScreen(
     title: String,
-    uiState: ReceiveModule.UiState,
+    uiState: ReceiveModule.AbstractUiState,
     setAmount: (BigDecimal?) -> Unit,
     onErrorClick: () -> Unit = {},
     onShareClick: (String) -> Unit,
-    showUsedAddresses: (List<UsedAddress>, List<UsedAddress>) -> Unit,
+    slot1: @Composable () -> Unit = {},
     onBackPress: () -> Unit,
     closeModule: () -> Unit,
-    onClickActivate: () -> Unit = {},
 ) {
     val localView = LocalView.current
     val openAmountDialog = remember { mutableStateOf(false) }
@@ -162,11 +159,7 @@ fun ReceiveAddressScreen(
                     Column {
                         when (viewState) {
                             is ViewState.Error -> {
-                                if (uiState.activationRequired) {
-                                    ReceiveTokenActivationRequired(onClickActivate)
-                                } else {
-                                    ListErrorView(stringResource(R.string.SyncError), onErrorClick)
-                                }
+                                ListErrorView(stringResource(R.string.SyncError), onErrorClick)
                             }
 
                             ViewState.Loading -> {
@@ -248,33 +241,7 @@ fun ReceiveAddressScreen(
                                             )
                                         }
 
-                                        if (uiState.usedAddresses.isNotEmpty()) {
-                                            Divider(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                thickness = 1.dp,
-                                                color = ComposeAppTheme.colors.steel10
-                                            )
-                                            RowUniversal(
-                                                modifier = Modifier.height(48.dp),
-                                                onClick = {
-                                                    showUsedAddresses.invoke(uiState.usedAddresses, uiState.usedChangeAddresses)
-                                                }
-                                            ) {
-                                                subhead2_grey(
-                                                    modifier = Modifier
-                                                        .padding(start = 16.dp)
-                                                        .weight(1f),
-                                                    text = stringResource(R.string.Balance_Receive_UsedAddresses),
-                                                )
-
-                                                Icon(
-                                                    modifier = Modifier.padding(end = 16.dp),
-                                                    painter = painterResource(id = R.drawable.ic_arrow_right),
-                                                    contentDescription = null,
-                                                    tint = ComposeAppTheme.colors.grey
-                                                )
-                                            }
-                                        }
+                                        slot1.invoke()
                                     }
 
                                     VSpacer(52.dp)
