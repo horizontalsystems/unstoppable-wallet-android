@@ -48,7 +48,8 @@ class SendBitcoinViewModel(
     private companion object {
         val BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS  = listOf(
             BlockchainType.Dogecoin,
-            BlockchainType.Cosanta
+            BlockchainType.Cosanta,
+            BlockchainType.PirateCash
         )
     }
 

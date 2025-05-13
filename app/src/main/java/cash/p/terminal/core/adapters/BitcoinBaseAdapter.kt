@@ -425,7 +425,12 @@ abstract class BitcoinBaseAdapter(
                     blockHeight = transaction.blockHeight,
                     confirmationsThreshold = confirmationsThreshold,
                     timestamp = transaction.timestamp,
-                    fee = satoshiToBTC(transaction.fee)?.let { TransactionValue.CoinValue(wallet.token, it) },
+                    fee = satoshiToBTC(transaction.fee)?.let {
+                        TransactionValue.CoinValue(
+                            wallet.token,
+                            it
+                        )
+                    },
                     failed = transaction.status == TransactionStatus.INVALID,
                     lockInfo = transactionLockInfo,
                     conflictingHash = transaction.conflictingTxHash,
@@ -450,7 +455,12 @@ abstract class BitcoinBaseAdapter(
                     blockHeight = transaction.blockHeight,
                     confirmationsThreshold = confirmationsThreshold,
                     timestamp = transaction.timestamp,
-                    fee = satoshiToBTC(transaction.fee)?.let { TransactionValue.CoinValue(wallet.token, it) },
+                    fee = satoshiToBTC(transaction.fee)?.let {
+                        TransactionValue.CoinValue(
+                            wallet.token,
+                            it
+                        )
+                    },
                     failed = transaction.status == TransactionStatus.INVALID,
                     lockInfo = transactionLockInfo,
                     conflictingHash = transaction.conflictingTxHash,
@@ -477,7 +487,12 @@ abstract class BitcoinBaseAdapter(
                     blockHeight = transaction.blockHeight,
                     confirmationsThreshold = confirmationsThreshold,
                     timestamp = transaction.timestamp,
-                    fee = satoshiToBTC(transaction.fee)?.let { TransactionValue.CoinValue(wallet.token, it) },
+                    fee = satoshiToBTC(transaction.fee)?.let {
+                        TransactionValue.CoinValue(
+                            wallet.token,
+                            it
+                        )
+                    },
                     failed = transaction.status == TransactionStatus.INVALID,
                     lockInfo = transactionLockInfo,
                     conflictingHash = transaction.conflictingTxHash,

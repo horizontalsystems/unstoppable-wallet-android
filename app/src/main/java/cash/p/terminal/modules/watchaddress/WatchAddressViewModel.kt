@@ -206,6 +206,7 @@ class WatchAddressViewModel(
         BlockchainType.Litecoin,
         BlockchainType.Dogecoin,
         BlockchainType.Cosanta,
+        BlockchainType.PirateCash,
         BlockchainType.Dash -> Type.BitcoinAddress
 
         BlockchainType.Ethereum,

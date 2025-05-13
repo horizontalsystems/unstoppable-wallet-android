@@ -106,6 +106,7 @@ class BalanceViewItemFactory {
         BlockchainType.Litecoin,
         BlockchainType.Dogecoin,
         BlockchainType.Dash,
+        BlockchainType.PirateCash,
         BlockchainType.Cosanta,
         BlockchainType.Zcash -> 10
 

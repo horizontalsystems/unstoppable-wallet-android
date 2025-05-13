@@ -27,6 +27,7 @@ class BtcBlockchainManager(
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
             BlockchainType.Dogecoin,
+            BlockchainType.PirateCash,
             BlockchainType.Cosanta,
             BlockchainType.Litecoin
         )
@@ -38,6 +39,7 @@ class BtcBlockchainManager(
             BlockchainType.Litecoin,
             BlockchainType.Dash,
             BlockchainType.Dogecoin,
+            BlockchainType.PirateCash,
             BlockchainType.Cosanta,
             BlockchainType.ECash,
         )

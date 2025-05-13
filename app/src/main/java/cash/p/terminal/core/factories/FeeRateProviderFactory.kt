@@ -9,6 +9,7 @@ import cash.p.terminal.core.providers.DashFeeRateProvider
 import cash.p.terminal.core.providers.DogecoinFeeRateProvider
 import cash.p.terminal.core.providers.ECashFeeRateProvider
 import cash.p.terminal.core.providers.LitecoinFeeRateProvider
+import cash.p.terminal.core.providers.PirateCashFeeRateProvider
 import io.horizontalsystems.core.entities.BlockchainType
 
 object FeeRateProviderFactory {
@@ -18,6 +19,7 @@ object FeeRateProviderFactory {
         return when (blockchainType) {
             is BlockchainType.Bitcoin -> BitcoinFeeRateProvider(feeRateProvider)
             is BlockchainType.Litecoin -> LitecoinFeeRateProvider(feeRateProvider)
+            is BlockchainType.PirateCash -> PirateCashFeeRateProvider(feeRateProvider)
             is BlockchainType.Cosanta -> CosantaFeeRateProvider(feeRateProvider)
             is BlockchainType.Dogecoin -> DogecoinFeeRateProvider(feeRateProvider)
             is BlockchainType.BitcoinCash -> BitcoinCashFeeRateProvider(feeRateProvider)

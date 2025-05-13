@@ -17,7 +17,6 @@ open class Address(
     val title: String
         get() = domain ?: hex
 }
-
 class BitcoinAddress(
     hex: String,
     domain: String?,
@@ -41,6 +40,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Dogecoin -> TokenType.Derived(this.scriptType.derivation)
 
         BlockchainType.Cosanta,
+        BlockchainType.PirateCash,
         BlockchainType.ECash,
         BlockchainType.Dash -> TokenType.Native
 

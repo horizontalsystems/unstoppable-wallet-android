@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `BlockchainEntity` (`uid` TEXT NOT NULL, `name` TEXT 
 CREATE TABLE IF NOT EXISTS `Coin` (`uid` TEXT NOT NULL, `name` TEXT NOT NULL, `code` TEXT NOT NULL, `marketCapRank` INTEGER, `coinGeckoId` TEXT, PRIMARY KEY(`uid`));
 CREATE TABLE IF NOT EXISTS `TokenEntity` (`coinUid` TEXT NOT NULL, `blockchainUid` TEXT NOT NULL, `type` TEXT NOT NULL, `decimals` INTEGER, `reference` TEXT NOT NULL, PRIMARY KEY(`coinUid`, `blockchainUid`, `type`, `reference`), FOREIGN KEY(`coinUid`) REFERENCES `Coin`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`blockchainUid`) REFERENCES `BlockchainEntity`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )
 INSERT INTO BlockchainEntity VALUES('cosanta','Cosanta',null);
+INSERT INTO BlockchainEntity VALUES('piratecash','PirateCash',null);
 INSERT INTO BlockchainEntity VALUES('swagbucks','SwagBucks',null);
 INSERT INTO BlockchainEntity VALUES('tuxcoin','Tuxcoin',null);
 INSERT INTO BlockchainEntity VALUES('moneta','Moneta',null);
@@ -1221,6 +1222,7 @@ INSERT INTO BlockchainEntity VALUES('astar','astar','https://astar.subscan.io/')
 INSERT INTO BlockchainEntity VALUES('ethereum-classic','Ethereum Classic',null);
 INSERT INTO BlockchainEntity VALUES('chiliz','Chiliz',null);
 INSERT INTO Coin VALUES('cosanta','Cosanta','COSA',null,'cosanta',1);
+INSERT INTO Coin VALUES('piratecash','PirateCash','PIRATECASH',null,'piratecash',1);
 INSERT INTO Coin VALUES('aave','Aave','AAVE',46,'aave',100);
 INSERT INTO Coin VALUES('0x','0x','ZRX',702,'0x',100);
 INSERT INTO Coin VALUES('1inch','1inch','1INCH',124,'1inch',100);
@@ -7351,6 +7353,7 @@ INSERT INTO Coin VALUES('eusd-27a558b0-8b5b-4225-a614-63539da936f4','eUSD','EUSD
 INSERT INTO Coin VALUES('paypal-usd','PayPal USD','PYUSD',408,'paypal-usd',100);
 INSERT INTO Coin VALUES('first-digital-usd','First Digital USD ','FDUSD',86,'first-digital-usd',100);
 INSERT INTO TokenEntity VALUES('cosanta','cosanta','native',null,'');
+INSERT INTO TokenEntity VALUES('piratecash','piratecash','native',null,'');
 INSERT INTO TokenEntity VALUES('cosanta','binance-smart-chain','eip20',8,'0x499954f9c977b74a48d4bb14ba9904bea6cb7b01');
 INSERT INTO TokenEntity VALUES('aave','fantom','eip20',18,'0x6a07a792ab2965c72a5b8088d3a069a7ac3a993b');
 INSERT INTO TokenEntity VALUES('aave','sora','sora',null,'0x0091bd8d8295b25cab5a7b8b0e44498e678cfc15d872ede3215f7d4c7635ba36');

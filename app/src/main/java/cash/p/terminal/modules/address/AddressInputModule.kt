@@ -24,6 +24,7 @@ object AddressInputModule {
                 BlockchainType.Litecoin,
                 BlockchainType.Dogecoin,
                 BlockchainType.Cosanta,
+                BlockchainType.PirateCash,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
                 BlockchainType.BinanceChain -> {
@@ -79,6 +80,7 @@ object AddressInputModule {
                 BlockchainType.Litecoin,
                 BlockchainType.Dogecoin,
                 BlockchainType.Cosanta,
+                BlockchainType.PirateCash,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
                 BlockchainType.BinanceChain -> {

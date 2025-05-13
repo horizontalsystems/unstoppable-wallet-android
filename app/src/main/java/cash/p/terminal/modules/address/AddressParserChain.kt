@@ -35,6 +35,7 @@ class AddressParserChain(
                 BlockchainType.Litecoin,
                 BlockchainType.Dogecoin,
                 BlockchainType.Cosanta,
+                BlockchainType.PirateCash,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
                 BlockchainType.BinanceChain -> {

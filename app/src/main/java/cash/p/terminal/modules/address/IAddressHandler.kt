@@ -127,6 +127,7 @@ class AddressHandlerUdn(
             BlockchainType.Tron -> "TRX"
             BlockchainType.Ton -> "TON"
             BlockchainType.Cosanta -> "COSA"
+            BlockchainType.PirateCash -> "PIRATECASH"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 

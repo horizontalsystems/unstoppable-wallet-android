@@ -71,6 +71,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dogecoin,
+                    BlockchainType.PirateCash,
                     BlockchainType.Cosanta,
                     BlockchainType.Dash -> {
                         val factory = SendBitcoinModule.Factory(wallet, predefinedAddress)

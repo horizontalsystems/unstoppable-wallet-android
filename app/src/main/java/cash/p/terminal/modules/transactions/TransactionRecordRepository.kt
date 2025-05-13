@@ -90,6 +90,7 @@ class TransactionRecordRepository(
                 BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dogecoin,
+                BlockchainType.PirateCash,
                 BlockchainType.Cosanta,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
