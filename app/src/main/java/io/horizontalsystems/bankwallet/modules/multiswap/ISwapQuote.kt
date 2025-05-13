@@ -55,3 +55,14 @@ class SwapQuoteOneInch(
     override val amountIn: BigDecimal,
     override val actionRequired: ISwapProviderAction?
 ) : ISwapQuote
+
+class SwapQuoteThorChain(
+    override val amountOut: BigDecimal,
+    override val priceImpact: BigDecimal?,
+    override val fields: List<DataField>,
+    override val settings: List<ISwapSetting>,
+    override val tokenIn: Token,
+    override val tokenOut: Token,
+    override val amountIn: BigDecimal,
+    override val actionRequired: ISwapProviderAction?
+) : ISwapQuote
