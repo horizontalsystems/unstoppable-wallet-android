@@ -268,6 +268,9 @@
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment" />
     <fragment
+        android:id="@+id/receiveChooseCoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinFragment" />
+    <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
         android:label="EvmNetworkFragment" />
