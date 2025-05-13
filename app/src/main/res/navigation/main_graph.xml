@@ -412,4 +412,7 @@
     <fragment
         android:id="@+id/activateTokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenFragment"/>
+    <fragment
+        android:id="@+id/whyDonateFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateFragment"/>
 </navigation>
