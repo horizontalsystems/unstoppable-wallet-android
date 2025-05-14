@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IReceiveStellarAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -26,7 +27,7 @@ class ActivateTokenViewModel(
     xRateService: XRateService,
 ) : ViewModelUiState<ActivateTokenUiState>() {
     private val token = wallet.token
-    private val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
+    private val adapter = adapterManager.getReceiveAdapterForWalletT<IReceiveStellarAdapter>(wallet)
     private var activateEnabled = false
     private var error: ActivateTokenError? = null
     private val feeAmount = adapter?.activationFee
@@ -40,7 +41,7 @@ class ActivateTokenViewModel(
             if (tmpAdapter == null) {
                 activateEnabled = false
                 error = ActivateTokenError.NullAdapter()
-            } else if (!tmpAdapter.isActivationRequired()) {
+            } else if (tmpAdapter.isTrustlineEstablished() == true) {
                 activateEnabled = false
                 error = ActivateTokenError.AlreadyActive()
             } else try {

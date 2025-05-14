@@ -24,6 +24,7 @@
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Activate">Activate</string>
+    <string name="Button_Later">Later</string>
     <string name="Button_Done">Done</string>
     <string name="Button_Retry">Retry</string>
     <string name="Button_Change">Change</string>
@@ -401,6 +402,7 @@
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
     <string name="Balance_Receive_ActivationRequired">To receive an address you need to activate the token. This is required by the Stellar network.</string>
+    <string name="Balance_Receive_Trustline">Trustline</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
@@ -694,6 +696,9 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
     <!-- Swap Confirmation -->
+
+    <string name="ActivationRequired_DialogTitle">Activate Token</string>
+    <string name="ActivationRequired_DialogDescription">To receive %s, you need to activate the token. The Stellar network requires a trustline to be established for each token. Without it, your wallet cannot receive %s — the transaction will be rejected and the funds will not be delivered.</string>
 
     <string name="Activate_YouActivate">You Activate</string>
     <string name="Activate_Activating">Activating</string>

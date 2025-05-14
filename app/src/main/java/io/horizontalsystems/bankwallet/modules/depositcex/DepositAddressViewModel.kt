@@ -46,7 +46,6 @@ class DepositAddressViewModel(
         additionalItems = getAdditionalData(),
         amount = amount,
         alertText = getAlertText(memo != null),
-        activationRequired = false
     )
 
     private fun setInitialData() {
