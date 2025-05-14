@@ -143,15 +143,9 @@ class AdapterManager(
         }
     }
 
-    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
-        return adaptersMap[wallet]
-    }
-
-    override fun getAdapterForToken(token: Token): IAdapter? {
+    override fun <T> getAdapterForTokenT(token: Token): T? {
         return walletManager.activeWallets.firstOrNull { it.token == token }
-            ?.let { wallet ->
-                adaptersMap[wallet]
-            }
+            ?.let { getAdapterForWalletT(it) }
     }
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
@@ -163,7 +157,7 @@ class AdapterManager(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : IAdapter> getAdapterForWalletT(wallet: Wallet): T? {
+    override fun <T> getAdapterForWalletT(wallet: Wallet): T? {
         return adaptersMap[wallet] as? T
     }
 }

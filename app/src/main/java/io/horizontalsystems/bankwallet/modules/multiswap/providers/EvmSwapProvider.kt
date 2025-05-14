@@ -18,9 +18,7 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
     protected suspend fun getAllowance(token: Token, spenderAddress: Address): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
 
-        val eip20Adapter = App.adapterManager.getAdapterForToken(token)
-
-        if (eip20Adapter !is Eip20Adapter) return null
+        val eip20Adapter = App.adapterManager.getAdapterForTokenT<Eip20Adapter>(token) ?: return null
 
         return eip20Adapter.allowance(spenderAddress, DefaultBlockParameter.Latest).await()
     }
@@ -32,8 +30,7 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
         token: Token,
     ): ISwapProviderAction? {
         if (allowance == null || allowance >= amountIn) return null
-        val eip20Adapter = App.adapterManager.getAdapterForToken(token)
-        if (eip20Adapter !is Eip20Adapter) return null
+        val eip20Adapter = App.adapterManager.getAdapterForTokenT<Eip20Adapter>(token) ?: return null
 
         val approveTransaction = eip20Adapter.pendingTransactions
             .filterIsInstance<ApproveTransactionRecord>()
