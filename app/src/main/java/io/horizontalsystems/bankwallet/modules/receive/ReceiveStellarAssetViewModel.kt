@@ -22,6 +22,7 @@ class ReceiveStellarAssetViewModel(
     private val watchAccount = wallet.account.isWatchAccount
     private val blockchainName = wallet.token.blockchain.name
     private var address: String = ""
+    private var mainNet = true
     private var amount: BigDecimal? = null
     private var viewState: ViewState = ViewState.Loading
 
@@ -47,6 +48,7 @@ class ReceiveStellarAssetViewModel(
     private suspend fun fetchAddress() {
         try {
             val adapter = adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet) ?: throw ReceiveStellarAssetError.NoAdapter
+            mainNet = adapter.isMainNet
             trustlineEstablished = adapter.isTrustlineEstablished()
 
             viewState = ViewState.Success
@@ -66,6 +68,7 @@ class ReceiveStellarAssetViewModel(
         viewState = viewState,
         uri = addressUriState.uri,
         address = address,
+        mainNet = mainNet,
         blockchainName = blockchainName,
         watchAccount = watchAccount,
         amount = amount,
@@ -123,6 +126,7 @@ data class ReceiveStellarAssetUiState(
     override val viewState: ViewState,
     override val uri: String,
     override val address: String,
+    override val mainNet: Boolean,
     override val blockchainName: String,
     override val watchAccount: Boolean,
     override val amount: BigDecimal?,

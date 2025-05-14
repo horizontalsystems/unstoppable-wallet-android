@@ -64,6 +64,7 @@ class ReceiveAddressViewModel(
     override fun createState() = ReceiveModule.UiState(
         viewState = viewState,
         address = address,
+        mainNet = mainNet,
         usedAddresses = usedAddresses,
         usedChangeAddresses = usedChangeAddresses,
         uri = addressUriState.uri,
@@ -79,23 +80,14 @@ class ReceiveAddressViewModel(
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
                 addressFormat = "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
-                if (!mainNet) {
-                    addressFormat += " (TestNet)"
-                }
             }
 
             is TokenType.AddressTyped -> {
                 addressFormat = tokenType.type.bitcoinCashCoinType.title
-                if (!mainNet) {
-                    addressFormat += " (TestNet)"
-                }
             }
 
             else -> {
                 blockchainName = wallet.token.blockchain.name
-                if (!mainNet) {
-                    blockchainName += " (TestNet)"
-                }
             }
         }
         emitState()

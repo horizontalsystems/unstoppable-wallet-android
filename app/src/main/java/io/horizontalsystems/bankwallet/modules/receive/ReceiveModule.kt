@@ -29,6 +29,7 @@ object ReceiveModule {
         abstract val alertText: AlertText?
         abstract val uri: String
         abstract val address: String
+        abstract val mainNet: Boolean
         abstract val blockchainName: String?
         abstract val addressFormat: String?
         abstract val additionalItems: List<AdditionalData>
@@ -39,6 +40,7 @@ object ReceiveModule {
     data class UiState(
         override val viewState: ViewState,
         override val address: String,
+        override val mainNet: Boolean,
         val usedAddresses: List<UsedAddress>,
         val usedChangeAddresses: List<UsedAddress>,
         override val uri: String,
