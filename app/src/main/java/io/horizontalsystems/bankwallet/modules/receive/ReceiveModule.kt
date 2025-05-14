@@ -29,7 +29,8 @@ object ReceiveModule {
         abstract val alertText: AlertText?
         abstract val uri: String
         abstract val address: String
-        abstract val networkName: String
+        abstract val blockchainName: String?
+        abstract val addressFormat: String?
         abstract val additionalItems: List<AdditionalData>
         abstract val watchAccount: Boolean
         abstract val amount: BigDecimal?
@@ -41,7 +42,8 @@ object ReceiveModule {
         val usedAddresses: List<UsedAddress>,
         val usedChangeAddresses: List<UsedAddress>,
         override val uri: String,
-        override val networkName: String,
+        override val blockchainName: String?,
+        override val addressFormat: String?,
         override val watchAccount: Boolean,
         override val additionalItems: List<AdditionalData>,
         override val amount: BigDecimal?,

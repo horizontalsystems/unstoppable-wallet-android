@@ -28,7 +28,6 @@ class DepositAddressViewModel(
     private var uri = ""
     private var amount: BigDecimal? = null
     private var memo: String? = null
-    private val networkName = network?.name ?: cexAsset.depositNetworks.firstOrNull()?.name ?: ""
     private val watchAccount = false
 
     init {
@@ -41,7 +40,8 @@ class DepositAddressViewModel(
         usedAddresses = listOf(),
         usedChangeAddresses = listOf(),
         uri = uri,
-        networkName = networkName,
+        blockchainName = null,
+        addressFormat = null,
         watchAccount = watchAccount,
         additionalItems = getAdditionalData(),
         amount = amount,
