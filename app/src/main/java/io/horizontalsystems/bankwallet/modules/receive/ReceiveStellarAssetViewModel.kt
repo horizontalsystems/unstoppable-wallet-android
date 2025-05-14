@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IReceiveStellarAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
@@ -14,7 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<ReceiveStellarUiState>() {
+class ReceiveStellarAssetViewModel(
+    private val wallet: Wallet,
+    val adapterManager: IAdapterManager,
+) : ViewModelUiState<ReceiveStellarAssetUiState>() {
     private val watchAccount = wallet.account.isWatchAccount
     private val blockchainName = wallet.token.blockchain.name
     private var address: String = ""
@@ -42,7 +46,7 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
 
     private suspend fun fetchAddress() {
         try {
-            val adapter = App.adapterManager.getReceiveAdapterForWalletT<IReceiveStellarAdapter>(wallet) ?: throw ReceiveStellarError.NoAdapter
+            val adapter = adapterManager.getAdapterForWalletT<StellarAssetAdapter>(wallet) ?: throw ReceiveStellarAssetError.NoAdapter
             trustlineEstablished = adapter.isTrustlineEstablished()
 
             viewState = ViewState.Success
@@ -58,7 +62,7 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
         emitState()
     }
 
-    override fun createState() = ReceiveStellarUiState(
+    override fun createState() = ReceiveStellarAssetUiState(
         viewState = viewState,
         uri = addressUriState.uri,
         address = address,
@@ -89,7 +93,7 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveStellarViewModel(wallet) as T
+            return ReceiveStellarAssetViewModel(wallet, App.adapterManager) as T
         }
     }
 
@@ -111,11 +115,11 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
     }
 }
 
-sealed class ReceiveStellarError : Throwable() {
-    object NoAdapter : ReceiveStellarError()
+sealed class ReceiveStellarAssetError : Throwable() {
+    object NoAdapter : ReceiveStellarAssetError()
 }
 
-data class ReceiveStellarUiState(
+data class ReceiveStellarAssetUiState(
     override val viewState: ViewState,
     override val uri: String,
     override val address: String,

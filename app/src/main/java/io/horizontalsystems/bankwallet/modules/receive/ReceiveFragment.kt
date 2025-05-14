@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 
 class ReceiveFragment : BaseComposeFragment() {
@@ -32,9 +33,14 @@ class ReceiveFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) {
             val wallet = it.wallet
-            when (wallet.token.blockchainType) {
+            val token = wallet.token
+            when (token.blockchainType) {
                 BlockchainType.Stellar -> {
-                    ReceiveStellarScreen(navController, wallet, it.receiveEntryPointDestId)
+                    if (token.type is TokenType.Asset) {
+                        ReceiveStellarAssetScreen(navController, wallet, it.receiveEntryPointDestId)
+                    } else if (token.type == TokenType.Native) {
+                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId)
+                    }
                 }
 //        BlockchainType.ArbitrumOne -> TODO()
 //        BlockchainType.Avalanche -> TODO()

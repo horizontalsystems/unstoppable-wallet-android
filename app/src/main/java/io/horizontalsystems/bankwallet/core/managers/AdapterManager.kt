@@ -163,7 +163,7 @@ class AdapterManager(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : IReceiveAdapter> getReceiveAdapterForWalletT(wallet: Wallet): T? {
+    override fun <T : IAdapter> getAdapterForWalletT(wallet: Wallet): T? {
         return adaptersMap[wallet] as? T
     }
 }
