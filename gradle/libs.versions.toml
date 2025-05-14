@@ -35,7 +35,7 @@ appcompat = "1.7.0"
 
 horizontalsystems-ton = "58321df"
 piratecash-bitcoin = "f165e0c"
-horizontalsystems-ethereum = "aae7f27"
+horizontalsystems-ethereum = "f17004c"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
 piratecash-solana = "a009bcf"
