@@ -18,10 +18,9 @@ import java.math.BigDecimal
 
 class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<ReceiveStellarUiState>() {
     private val watchAccount = wallet.account.isWatchAccount
-    private val additionalItems = listOf<AdditionalData>()
     private val networkName = Translator.getString(R.string.Balance_Network) + ": " + wallet.token.blockchain.name
     private var address: String = ""
-    private val amount: BigDecimal? = null
+    private var amount: BigDecimal? = null
     private var viewState: ViewState = ViewState.Loading
     private val alertText: AlertText? = null
 
@@ -29,7 +28,6 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
 
     private var addressUriState = addressUriService.stateFlow.value
 
-    
     init {
         val adapter = App.adapterManager.getReceiveAdapterForWalletT<IReceiveStellarAdapter>(wallet)
 
@@ -63,13 +61,17 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
         uri = addressUriState.uri,
         address = address,
         networkName = networkName,
-        additionalItems = additionalItems,
+        additionalItems = listOf(),
         watchAccount = watchAccount,
         amount = amount,
     )
 
     fun setAmount(amount: BigDecimal?) {
+        this.amount = amount
+
         addressUriService.setAmount(amount)
+
+        emitState()
     }
 
     fun onErrorClick() {

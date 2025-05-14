@@ -227,9 +227,16 @@ fun ReceiveAddressScreen(
                                             )
                                             VSpacer(24.dp)
                                         }
-                                        if (uiState.additionalItems.isNotEmpty()) {
+                                        val additionalItems = buildList {
+                                            addAll(uiState.additionalItems)
+                                            uiState.amount?.let {
+                                                add(ReceiveModule.AdditionalData.Amount(it.toString()))
+                                            }
+                                        }
+
+                                        if (additionalItems.isNotEmpty()) {
                                             AdditionalDataSection(
-                                                items = uiState.additionalItems,
+                                                items = additionalItems,
                                                 onClearAmount = {
                                                     setAmount(null)
 
