@@ -64,10 +64,10 @@ interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
     fun startAdapterManager()
     suspend fun refresh()
-    fun <T> getAdapterForTokenT(token: Token): T?
+    fun <T> getAdapterForWallet(wallet: Wallet): T?
+    fun <T> getAdapterForToken(token: Token): T?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
-    fun <T> getAdapterForWalletT(wallet: Wallet): T?
     fun refreshByWallet(wallet: Wallet)
 }
 
