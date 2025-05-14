@@ -73,12 +73,8 @@ class StellarAssetAdapter(
         stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
     }
 
-    override suspend fun isActivationRequired() : Boolean {
-        if (assetBalance != null) {
-            return false
-        }
-
-        return !stellarKit.isAssetEnabled(stellarAsset)
+    override suspend fun isTrustlineEstablished(): Boolean {
+        return assetBalance != null || stellarKit.isAssetEnabled(stellarAsset)
     }
 
     override fun activate() {

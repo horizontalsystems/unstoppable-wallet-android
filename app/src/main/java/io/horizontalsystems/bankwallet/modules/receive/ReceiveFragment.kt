@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -9,7 +8,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -73,7 +71,6 @@ class ReceiveFragment : BaseComposeFragment() {
 @Composable
 fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
     val addressViewModel = viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet))
-    val context = LocalContext.current
 
     val uiState = addressViewModel.uiState
     ReceiveAddressScreen(
@@ -81,13 +78,6 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
         uiState = uiState,
         setAmount = { amount -> addressViewModel.setAmount(amount) },
         onErrorClick = { addressViewModel.onErrorClick() },
-        onShareClick = { address ->
-            context.startActivity(Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, address)
-                type = "text/plain"
-            })
-        },
         slot1 = {
             if (uiState.usedAddresses.isNotEmpty()) {
                 Divider(

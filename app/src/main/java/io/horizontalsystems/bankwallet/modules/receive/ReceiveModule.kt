@@ -48,7 +48,6 @@ object ReceiveModule {
         override val additionalItems: List<AdditionalData>,
         override val amount: BigDecimal?,
         override val alertText: AlertText?,
-        val activationRequired: Boolean,
     ) : AbstractUiState()
 
     sealed class AlertText {

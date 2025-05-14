@@ -303,10 +303,6 @@ interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
-    val activationFee: BigDecimal? get() = null
-
-    suspend fun isActivationRequired() = false
-
     suspend fun isAddressActive(address: String): Boolean {
         return true
     }
@@ -314,12 +310,15 @@ interface IReceiveAdapter {
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
     }
+}
+
+interface IReceiveStellarAdapter : IReceiveAdapter {
+    val activationFee: BigDecimal? get() = null
 
     fun activate() { throw UnsupportedOperationException() }
     fun validateActivation() { throw UnsupportedOperationException() }
+    suspend fun isTrustlineEstablished(): Boolean? = null
 }
-
-interface IReceiveStellarAdapter : IReceiveAdapter
 
 @Parcelize
 data class UsedAddress(

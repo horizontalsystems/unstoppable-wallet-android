@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AlertText
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.AddressUriService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -20,31 +20,36 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
     private var address: String = ""
     private var amount: BigDecimal? = null
     private var viewState: ViewState = ViewState.Loading
-    private val alertText: AlertText? = null
 
     private val addressUriService = AddressUriService(wallet.token)
+    private var trustlineEstablished: Boolean? = null
 
     private var addressUriState = addressUriService.stateFlow.value
 
     init {
-        val adapter = App.adapterManager.getReceiveAdapterForWalletT<IReceiveStellarAdapter>(wallet)
-
-        if (adapter == null) {
-            viewState = ViewState.Error(ReceiveStellarError.NoAdapter)
-        } else {
-            viewState = ViewState.Success
-            address = adapter.receiveAddress
-        }
-
         viewModelScope.launch {
             addressUriService.stateFlow.collect {
                 handleUpdatedAddressUriState(it)
             }
         }
 
-        addressUriService.setAddress(address)
+        viewModelScope.launch(Dispatchers.Default) {
+            fetchAddress()
 
-        emitState()
+            emitState()
+        }
+    }
+
+    private suspend fun fetchAddress() {
+        try {
+            val adapter = App.adapterManager.getReceiveAdapterForWalletT<IReceiveStellarAdapter>(wallet) ?: throw ReceiveStellarError.NoAdapter
+            trustlineEstablished = adapter.isTrustlineEstablished()
+
+            viewState = ViewState.Success
+            setAddress(adapter.receiveAddress)
+        } catch (e: Throwable) {
+            viewState = ViewState.Error(e)
+        }
     }
 
     private fun handleUpdatedAddressUriState(state: AddressUriService.State) {
@@ -55,13 +60,14 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
 
     override fun createState() = ReceiveStellarUiState(
         viewState = viewState,
-        alertText = alertText,
         uri = addressUriState.uri,
         address = address,
         blockchainName = blockchainName,
-        additionalItems = listOf(),
         watchAccount = watchAccount,
         amount = amount,
+        activationRequired = trustlineEstablished == false,
+        coinCode = wallet.coin.code,
+        trustlineEstablished = trustlineEstablished,
     )
 
     fun setAmount(amount: BigDecimal?) {
@@ -73,7 +79,11 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
     }
 
     fun onErrorClick() {
-        TODO("Not yet implemented")
+        viewModelScope.launch(Dispatchers.Default) {
+            fetchAddress()
+
+            emitState()
+        }
     }
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
@@ -81,6 +91,23 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ReceiveStellarViewModel(wallet) as T
         }
+    }
+
+    private fun setAddress(receiveAddress: String) {
+        address = receiveAddress
+
+        addressUriService.setAddress(address)
+    }
+
+    fun onActivationResult(activated: Boolean) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (activated) {
+                fetchAddress()
+
+                emitState()
+            }
+        }
+
     }
 }
 
@@ -90,13 +117,16 @@ sealed class ReceiveStellarError : Throwable() {
 
 data class ReceiveStellarUiState(
     override val viewState: ViewState,
-    override val alertText: AlertText?,
     override val uri: String,
     override val address: String,
     override val blockchainName: String,
-    override val additionalItems: List<AdditionalData>,
     override val watchAccount: Boolean,
     override val amount: BigDecimal?,
+    val activationRequired: Boolean,
+    val coinCode: String,
+    val trustlineEstablished: Boolean?,
 ) : ReceiveModule.AbstractUiState() {
+    override val additionalItems = listOf<AdditionalData>()
     override val addressFormat = null
+    override val alertText = null
 }

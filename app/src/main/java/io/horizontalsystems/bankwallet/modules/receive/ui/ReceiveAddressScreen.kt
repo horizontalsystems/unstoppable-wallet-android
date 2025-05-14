@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.receive.ui
 
+import android.content.Intent
 import android.graphics.drawable.AdaptiveIconDrawable
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
@@ -109,13 +110,10 @@ fun ReceiveAddressScreen(
     uiState: ReceiveModule.AbstractUiState,
     setAmount: (BigDecimal?) -> Unit,
     onErrorClick: () -> Unit = {},
-    onShareClick: (String) -> Unit,
     slot1: @Composable () -> Unit = {},
     onBackPress: () -> Unit,
     closeModule: () -> Unit,
 ) {
-    val localView = LocalView.current
-    val openAmountDialog = remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
@@ -133,169 +131,197 @@ fun ReceiveAddressScreen(
             )
         }
     ) {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = title,
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackPress)
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Done),
-                            onClick = closeModule
-                        )
+        ReceiveAddressScreenX(
+            title = title,
+            uiState = uiState,
+            setAmount = setAmount,
+            onErrorClick = onErrorClick,
+            slot1 = slot1,
+            onBackPress = onBackPress,
+            closeModule = closeModule,
+            showAccountNotActiveWarningDialog = {
+                scope.launch { sheetState.show() }
+            }
+        )
+    }
+}
+
+@Composable
+fun ReceiveAddressScreenX(
+    title: String,
+    uiState: ReceiveModule.AbstractUiState,
+    setAmount: (BigDecimal?) -> Unit,
+    onErrorClick: () -> Unit,
+    slot1: @Composable () -> Unit = {},
+    onBackPress: () -> Unit,
+    closeModule: () -> Unit,
+    showAccountNotActiveWarningDialog: () -> Unit = {},
+) {
+    val localView = LocalView.current
+    val openAmountDialog = remember { mutableStateOf(false) }
+
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = title,
+                navigationIcon = {
+                    HsBackButton(onClick = onBackPress)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Done),
+                        onClick = closeModule
                     )
                 )
-            }
+            )
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                Crossfade(uiState.viewState, label = "") { viewState ->
-                    Column {
-                        when (viewState) {
-                            is ViewState.Error -> {
-                                ListErrorView(stringResource(R.string.SyncError), onErrorClick)
-                            }
+            Crossfade(uiState.viewState, label = "") { viewState ->
+                Column {
+                    when (viewState) {
+                        is ViewState.Error -> {
+                            ListErrorView(stringResource(R.string.SyncError), onErrorClick)
+                        }
 
-                            ViewState.Loading -> {
-                                Loading()
-                            }
+                        ViewState.Loading -> {
+                            Loading()
+                        }
 
-                            ViewState.Success -> {
+                        ViewState.Success -> {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxWidth()
+                                    .verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                VSpacer(12.dp)
+                                uiState.alertText?.let {
+                                    WarningTextView(it)
+                                }
+
+                                if (uiState.watchAccount) {
+                                    TextImportantWarning(
+                                        modifier = Modifier.padding(horizontal = 16.dp),
+                                        text = stringResource(R.string.Balance_Receive_WatchAddressAlert),
+                                    )
+                                }
+
+                                VSpacer(12.dp)
                                 Column(
                                     modifier = Modifier
-                                        .weight(1f)
                                         .fillMaxWidth()
-                                        .verticalScroll(rememberScrollState()),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                        .padding(horizontal = 16.dp)
+                                        .clip(RoundedCornerShape(24.dp))
+                                        .background(ComposeAppTheme.colors.lawrence),
                                 ) {
-                                    VSpacer(12.dp)
-                                    uiState.alertText?.let {
-                                        WarningTextView(it)
-                                    }
-
-                                    if (uiState.watchAccount) {
-                                        TextImportantWarning(
-                                            modifier = Modifier.padding(horizontal = 16.dp),
-                                            text = stringResource(R.string.Balance_Receive_WatchAddressAlert),
-                                        )
-                                    }
-
-                                    VSpacer(12.dp)
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(horizontal = 16.dp)
-                                            .clip(RoundedCornerShape(24.dp))
-                                            .background(ComposeAppTheme.colors.lawrence),
-                                    ) {
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clickable {
-                                                    TextHelper.copyText(uiState.uri)
-                                                    HudHelper.showSuccessMessage(
-                                                        localView,
-                                                        R.string.Hud_Text_Copied
-                                                    )
+                                            .clickable {
+                                                TextHelper.copyText(uiState.uri)
+                                                HudHelper.showSuccessMessage(
+                                                    localView,
+                                                    R.string.Hud_Text_Copied
+                                                )
 
-                                                    stat(
-                                                        page = StatPage.Receive,
-                                                        event = StatEvent.Copy(StatEntity.ReceiveAddress)
-                                                    )
-                                                },
-                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                                stat(
+                                                    page = StatPage.Receive,
+                                                    event = StatEvent.Copy(StatEntity.ReceiveAddress)
+                                                )
+                                            },
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    ) {
+                                        VSpacer(32.dp)
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(8.dp))
+                                                .background(ComposeAppTheme.colors.white)
+                                                .size(224.dp),
+                                            contentAlignment = Alignment.Center
                                         ) {
-                                            VSpacer(32.dp)
-                                            Box(
-                                                modifier = Modifier
-                                                    .clip(RoundedCornerShape(8.dp))
-                                                    .background(ComposeAppTheme.colors.white)
-                                                    .size(224.dp),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                QrCodeImage(uiState.uri)
-                                            }
+                                            QrCodeImage(uiState.uri)
+                                        }
+                                        VSpacer(12.dp)
+                                        subhead2_leah(
+                                            modifier = Modifier.padding(horizontal = 32.dp),
+                                            text = uiState.address,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                        uiState.blockchainName?.let { blockchainName ->
                                             VSpacer(12.dp)
-                                            subhead2_leah(
+                                            subhead2_grey(
                                                 modifier = Modifier.padding(horizontal = 32.dp),
-                                                text = uiState.address,
+                                                text = stringResource(R.string.Balance_Network) + ": " + blockchainName,
                                                 textAlign = TextAlign.Center,
                                             )
-                                            uiState.blockchainName?.let { blockchainName ->
-                                                VSpacer(12.dp)
-                                                subhead2_grey(
-                                                    modifier = Modifier.padding(horizontal = 32.dp),
-                                                    text = stringResource(R.string.Balance_Network) + ": " + blockchainName,
-                                                    textAlign = TextAlign.Center,
-                                                )
-                                            }
-                                            uiState.addressFormat?.let { addressFormat ->
-                                                VSpacer(12.dp)
-                                                subhead2_grey(
-                                                    modifier = Modifier.padding(horizontal = 32.dp),
-                                                    text = stringResource(R.string.Balance_Format) + ": " + addressFormat,
-                                                    textAlign = TextAlign.Center,
-                                                )
-                                            }
-                                            VSpacer(24.dp)
                                         }
-                                        val additionalItems = buildList {
-                                            addAll(uiState.additionalItems)
-                                            uiState.amount?.let {
-                                                add(ReceiveModule.AdditionalData.Amount(it.toString()))
-                                            }
-                                        }
-
-                                        if (additionalItems.isNotEmpty()) {
-                                            AdditionalDataSection(
-                                                items = additionalItems,
-                                                onClearAmount = {
-                                                    setAmount(null)
-
-                                                    stat(page = StatPage.Receive, event = StatEvent.RemoveAmount)
-                                                },
-                                                showAccountNotActiveWarningDialog = {
-                                                    scope.launch { sheetState.show() }
-                                                }
+                                        uiState.addressFormat?.let { addressFormat ->
+                                            VSpacer(12.dp)
+                                            subhead2_grey(
+                                                modifier = Modifier.padding(horizontal = 32.dp),
+                                                text = stringResource(R.string.Balance_Format) + ": " + addressFormat,
+                                                textAlign = TextAlign.Center,
                                             )
                                         }
-
-                                        slot1.invoke()
+                                        VSpacer(24.dp)
+                                    }
+                                    val additionalItems = buildList {
+                                        addAll(uiState.additionalItems)
+                                        uiState.amount?.let {
+                                            add(ReceiveModule.AdditionalData.Amount(it.toString()))
+                                        }
                                     }
 
-                                    VSpacer(52.dp)
+                                    if (additionalItems.isNotEmpty()) {
+                                        AdditionalDataSection(
+                                            items = additionalItems,
+                                            onClearAmount = {
+                                                setAmount(null)
 
-                                    ActionButtonsRow(
-                                        uri = uiState.uri,
-                                        watchAccount = uiState.watchAccount,
-                                        openAmountDialog = openAmountDialog,
-                                        onShareClick = onShareClick,
-                                    )
+                                                stat(
+                                                    page = StatPage.Receive,
+                                                    event = StatEvent.RemoveAmount
+                                                )
+                                            },
+                                            showAccountNotActiveWarningDialog = showAccountNotActiveWarningDialog
+                                        )
+                                    }
 
-                                    VSpacer(32.dp)
+                                    slot1.invoke()
                                 }
+
+                                VSpacer(52.dp)
+
+                                ActionButtonsRow(
+                                    uri = uiState.uri,
+                                    watchAccount = uiState.watchAccount,
+                                    openAmountDialog = openAmountDialog,
+                                )
+
+                                VSpacer(32.dp)
                             }
                         }
                     }
                 }
-                if (openAmountDialog.value) {
-                    AmountInputDialog(
-                        initialAmount = uiState.amount,
-                        onDismissRequest = { openAmountDialog.value = false },
-                        onAmountConfirm = { amount ->
-                            setAmount(amount)
-                            openAmountDialog.value = false
+            }
+            if (openAmountDialog.value) {
+                AmountInputDialog(
+                    initialAmount = uiState.amount,
+                    onDismissRequest = { openAmountDialog.value = false },
+                    onAmountConfirm = { amount ->
+                        setAmount(amount)
+                        openAmountDialog.value = false
 
-                            stat(page = StatPage.Receive, event = StatEvent.SetAmount)
-                        }
-                    )
-                }
+                        stat(page = StatPage.Receive, event = StatEvent.SetAmount)
+                    }
+                )
             }
         }
     }
@@ -353,9 +379,9 @@ private fun ActionButtonsRow(
     uri: String,
     watchAccount: Boolean,
     openAmountDialog: MutableState<Boolean>,
-    onShareClick: (String) -> Unit,
 ) {
     val localView = LocalView.current
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -395,7 +421,11 @@ private fun ActionButtonsRow(
             icon = R.drawable.ic_share_24px,
             buttonText = stringResource(R.string.Button_Share),
             onClick = {
-                onShareClick.invoke(uri)
+                context.startActivity(Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, uri)
+                    type = "text/plain"
+                })
 
                 stat(page = StatPage.Receive, event = StatEvent.Share(StatEntity.ReceiveAddress))
             },

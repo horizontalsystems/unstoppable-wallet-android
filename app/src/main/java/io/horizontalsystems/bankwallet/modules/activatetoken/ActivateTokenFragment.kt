@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -92,7 +91,6 @@ fun ActivateTokenScreen(
                             viewModel.activate()
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                            delay(1200)
                             ActivateTokenFragment.Result(true)
                         } catch (t: Throwable) {
                             HudHelper.showErrorMessage(view, t.javaClass.simpleName)
