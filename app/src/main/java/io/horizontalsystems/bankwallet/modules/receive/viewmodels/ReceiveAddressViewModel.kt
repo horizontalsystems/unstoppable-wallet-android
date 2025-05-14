@@ -30,7 +30,8 @@ class ReceiveAddressViewModel(
     private var usedChangeAddresses: List<UsedAddress> = listOf()
     private var amount: BigDecimal? = null
     private var accountActive = true
-    private var networkName = ""
+    private var blockchainName: String? = null
+    private var addressFormat: String? = null
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
     private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
@@ -70,7 +71,8 @@ class ReceiveAddressViewModel(
         usedAddresses = usedAddresses,
         usedChangeAddresses = usedChangeAddresses,
         uri = addressUriState.uri,
-        networkName = networkName,
+        blockchainName = blockchainName,
+        addressFormat = addressFormat,
         watchAccount = watchAccount,
         additionalItems = getAdditionalData(),
         amount = amount,
@@ -81,22 +83,25 @@ class ReceiveAddressViewModel(
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
-                networkName = Translator.getString(R.string.Balance_Format) + ": "
-                networkName += "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
+                addressFormat = "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
+                if (!mainNet) {
+                    addressFormat += " (TestNet)"
+                }
             }
 
             is TokenType.AddressTyped -> {
-                networkName = Translator.getString(R.string.Balance_Format) + ": "
-                networkName += tokenType.type.bitcoinCashCoinType.title
+                addressFormat = tokenType.type.bitcoinCashCoinType.title
+                if (!mainNet) {
+                    addressFormat += " (TestNet)"
+                }
             }
 
             else -> {
-                networkName = Translator.getString(R.string.Balance_Network) + ": "
-                networkName += wallet.token.blockchain.name
+                blockchainName = wallet.token.blockchain.name
+                if (!mainNet) {
+                    blockchainName += " (TestNet)"
+                }
             }
-        }
-        if (!mainNet) {
-            networkName += " (TestNet)"
         }
         emitState()
     }

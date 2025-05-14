@@ -219,12 +219,22 @@ fun ReceiveAddressScreen(
                                                 text = uiState.address,
                                                 textAlign = TextAlign.Center,
                                             )
-                                            VSpacer(12.dp)
-                                            subhead2_grey(
-                                                modifier = Modifier.padding(horizontal = 32.dp),
-                                                text = uiState.networkName,
-                                                textAlign = TextAlign.Center,
-                                            )
+                                            uiState.blockchainName?.let { blockchainName ->
+                                                VSpacer(12.dp)
+                                                subhead2_grey(
+                                                    modifier = Modifier.padding(horizontal = 32.dp),
+                                                    text = stringResource(R.string.Balance_Network) + ": " + blockchainName,
+                                                    textAlign = TextAlign.Center,
+                                                )
+                                            }
+                                            uiState.addressFormat?.let { addressFormat ->
+                                                VSpacer(12.dp)
+                                                subhead2_grey(
+                                                    modifier = Modifier.padding(horizontal = 32.dp),
+                                                    text = stringResource(R.string.Balance_Format) + ": " + addressFormat,
+                                                    textAlign = TextAlign.Center,
+                                                )
+                                            }
                                             VSpacer(24.dp)
                                         }
                                         val additionalItems = buildList {

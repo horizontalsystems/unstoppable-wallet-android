@@ -3,11 +3,9 @@ package io.horizontalsystems.bankwallet.modules.receive
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IReceiveStellarAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
@@ -18,7 +16,7 @@ import java.math.BigDecimal
 
 class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<ReceiveStellarUiState>() {
     private val watchAccount = wallet.account.isWatchAccount
-    private val networkName = Translator.getString(R.string.Balance_Network) + ": " + wallet.token.blockchain.name
+    private val blockchainName = wallet.token.blockchain.name
     private var address: String = ""
     private var amount: BigDecimal? = null
     private var viewState: ViewState = ViewState.Loading
@@ -60,7 +58,7 @@ class ReceiveStellarViewModel(private val wallet: Wallet) : ViewModelUiState<Rec
         alertText = alertText,
         uri = addressUriState.uri,
         address = address,
-        networkName = networkName,
+        blockchainName = blockchainName,
         additionalItems = listOf(),
         watchAccount = watchAccount,
         amount = amount,
@@ -95,8 +93,10 @@ data class ReceiveStellarUiState(
     override val alertText: AlertText?,
     override val uri: String,
     override val address: String,
-    override val networkName: String,
+    override val blockchainName: String,
     override val additionalItems: List<AdditionalData>,
     override val watchAccount: Boolean,
     override val amount: BigDecimal?,
-) : ReceiveModule.AbstractUiState()
+) : ReceiveModule.AbstractUiState() {
+    override val addressFormat = null
+}
