@@ -178,6 +178,14 @@ fun ReceiveAddressScreen(
                                     uiState.alertText?.let {
                                         WarningTextView(it)
                                     }
+
+                                    if (uiState.watchAccount) {
+                                        TextImportantWarning(
+                                            modifier = Modifier.padding(horizontal = 16.dp),
+                                            text = stringResource(R.string.Balance_Receive_WatchAddressAlert),
+                                        )
+                                    }
+
                                     VSpacer(12.dp)
                                     Column(
                                         modifier = Modifier
@@ -333,13 +341,6 @@ private fun WarningTextView(
     when (alertText) {
         is ReceiveModule.AlertText.Critical -> {
             TextImportantError(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = alertText.content,
-            )
-        }
-
-        is ReceiveModule.AlertText.Normal -> {
-            TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = alertText.content,
             )

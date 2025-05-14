@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
@@ -34,7 +32,6 @@ class ReceiveAddressViewModel(
     private var addressFormat: String? = null
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
-    private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
     private val addressUriService = AddressUriService(wallet.token)
 
     private var addressUriState = addressUriService.stateFlow.value
@@ -76,7 +73,7 @@ class ReceiveAddressViewModel(
         watchAccount = watchAccount,
         additionalItems = getAdditionalData(),
         amount = amount,
-        alertText = alertText,
+        alertText = null,
         activationRequired = activationRequired
     )
 
@@ -104,13 +101,6 @@ class ReceiveAddressViewModel(
             }
         }
         emitState()
-    }
-
-    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
-        return if (watchAccount) ReceiveModule.AlertText.Normal(
-            Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
-        )
-        else null
     }
 
     private suspend fun setData() {
