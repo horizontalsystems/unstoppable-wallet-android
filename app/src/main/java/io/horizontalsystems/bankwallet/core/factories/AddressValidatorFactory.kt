@@ -18,20 +18,22 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 object AddressValidatorFactory {
 
     fun get(wallet: Wallet): EnterAddressValidator {
-        val adapter = App.adapterManager.getAdapterForWallet(wallet)
-
         return when (wallet.token.blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
             BlockchainType.ECash,
             BlockchainType.Litecoin,
             BlockchainType.Dash -> {
-                val sendAdapter = (adapter as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendAdapter is null")
+                val sendAdapter =
+                    App.adapterManager.getAdapterForWalletT<ISendBitcoinAdapter>(wallet)
+                        ?: throw IllegalStateException("SendAdapter is null")
                 BitcoinAddressValidator(sendAdapter)
             }
 
             BlockchainType.Zcash -> {
-                val sendAdapter = (adapter as? ISendZcashAdapter) ?: throw IllegalStateException("SendAdapter is null")
+                val sendAdapter =
+                    App.adapterManager.getAdapterForWalletT<ISendZcashAdapter>(wallet)
+                        ?: throw IllegalStateException("SendAdapter is null")
                 ZcashAddressValidator(sendAdapter)
             }
 
@@ -53,7 +55,9 @@ object AddressValidatorFactory {
             }
 
             BlockchainType.Tron -> {
-                val sendAdapter = (adapter as? ISendTronAdapter) ?: throw IllegalStateException("SendAdapter is null")
+                val sendAdapter =
+                    App.adapterManager.getAdapterForWalletT<ISendTronAdapter>(wallet)
+                        ?: throw IllegalStateException("SendAdapter is null")
                 TronAddressValidator(sendAdapter, wallet.token)
             }
 

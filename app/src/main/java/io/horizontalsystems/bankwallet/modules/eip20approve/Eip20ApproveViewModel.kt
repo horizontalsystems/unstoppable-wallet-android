@@ -91,7 +91,7 @@ class Eip20ApproveViewModel(
     fun freeze() {
         val eip20Adapter =
             walletManager.activeWallets.firstOrNull { it.token == token }?.let { wallet ->
-                adapterManager.getAdapterForWallet(wallet) as? Eip20Adapter
+                adapterManager.getAdapterForWalletT<Eip20Adapter>(wallet)
             }
 
         checkNotNull(eip20Adapter)
