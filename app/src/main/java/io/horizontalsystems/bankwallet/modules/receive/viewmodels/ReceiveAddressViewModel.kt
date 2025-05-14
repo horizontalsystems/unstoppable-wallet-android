@@ -143,14 +143,6 @@ class ReceiveAddressViewModel(
             items.add(AdditionalData.AccountNotActive)
         }
 
-        amount?.let {
-            items.add(
-                AdditionalData.Amount(
-                    value = it.toString()
-                )
-            )
-        }
-
         return items
     }
 
@@ -169,7 +161,11 @@ class ReceiveAddressViewModel(
     }
 
     fun setAmount(amount: BigDecimal?) {
+        this.amount = amount
+
         addressUriService.setAmount(amount)
+
+        emitState()
     }
 
 }
