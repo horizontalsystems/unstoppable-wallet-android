@@ -37,6 +37,7 @@ class DepositAddressViewModel(
     override fun createState() = ReceiveModule.UiState(
         viewState = viewState,
         address = address,
+        mainNet = true,
         usedAddresses = listOf(),
         usedChangeAddresses = listOf(),
         uri = uri,
