@@ -20,7 +20,7 @@ object SendTonModule {
         private val address: Address,
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = App.adapterManager.getAdapterForWalletT<ISendTonAdapter>(wallet) ?: throw IllegalStateException("ISendTonAdapter is null")
+        val adapter = App.adapterManager.getAdapterForWallet<ISendTonAdapter>(wallet) ?: throw IllegalStateException("ISendTonAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

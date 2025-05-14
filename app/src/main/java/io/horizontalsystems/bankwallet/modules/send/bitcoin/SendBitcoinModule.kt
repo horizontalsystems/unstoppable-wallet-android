@@ -18,7 +18,7 @@ object SendBitcoinModule {
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
-            App.adapterManager.getAdapterForWalletT<ISendBitcoinAdapter>(wallet) ?: throw IllegalStateException("SendBitcoinAdapter is null")
+            App.adapterManager.getAdapterForWallet<ISendBitcoinAdapter>(wallet) ?: throw IllegalStateException("SendBitcoinAdapter is null")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!

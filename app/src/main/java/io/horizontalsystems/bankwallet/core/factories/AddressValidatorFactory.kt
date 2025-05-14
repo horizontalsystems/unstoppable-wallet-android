@@ -25,14 +25,14 @@ object AddressValidatorFactory {
             BlockchainType.Litecoin,
             BlockchainType.Dash -> {
                 val sendAdapter =
-                    App.adapterManager.getAdapterForWalletT<ISendBitcoinAdapter>(wallet)
+                    App.adapterManager.getAdapterForWallet<ISendBitcoinAdapter>(wallet)
                         ?: throw IllegalStateException("SendAdapter is null")
                 BitcoinAddressValidator(sendAdapter)
             }
 
             BlockchainType.Zcash -> {
                 val sendAdapter =
-                    App.adapterManager.getAdapterForWalletT<ISendZcashAdapter>(wallet)
+                    App.adapterManager.getAdapterForWallet<ISendZcashAdapter>(wallet)
                         ?: throw IllegalStateException("SendAdapter is null")
                 ZcashAddressValidator(sendAdapter)
             }
@@ -56,7 +56,7 @@ object AddressValidatorFactory {
 
             BlockchainType.Tron -> {
                 val sendAdapter =
-                    App.adapterManager.getAdapterForWalletT<ISendTronAdapter>(wallet)
+                    App.adapterManager.getAdapterForWallet<ISendTronAdapter>(wallet)
                         ?: throw IllegalStateException("SendAdapter is null")
                 TronAddressValidator(sendAdapter, wallet.token)
             }

@@ -27,7 +27,7 @@ class ActivateTokenViewModel(
     xRateService: XRateService,
 ) : ViewModelUiState<ActivateTokenUiState>() {
     private val token = wallet.token
-    private val adapter = adapterManager.getAdapterForWalletT<StellarAssetAdapter>(wallet)
+    private val adapter = adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet)
     private var activateEnabled = false
     private var error: ActivateTokenError? = null
     private val feeAmount = adapter?.activationFee

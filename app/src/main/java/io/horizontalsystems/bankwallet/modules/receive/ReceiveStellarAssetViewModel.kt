@@ -46,7 +46,7 @@ class ReceiveStellarAssetViewModel(
 
     private suspend fun fetchAddress() {
         try {
-            val adapter = adapterManager.getAdapterForWalletT<StellarAssetAdapter>(wallet) ?: throw ReceiveStellarAssetError.NoAdapter
+            val adapter = adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet) ?: throw ReceiveStellarAssetError.NoAdapter
             trustlineEstablished = adapter.isTrustlineEstablished()
 
             viewState = ViewState.Success

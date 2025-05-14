@@ -109,7 +109,7 @@ class BalanceAdapterRepository(
     suspend fun warning(wallet: Wallet): BalanceWarning? {
         try {
             if (wallet.token.blockchainType is BlockchainType.Tron) {
-                adapterManager.getAdapterForWalletT<BaseTronAdapter>(wallet)?.let { adapter ->
+                adapterManager.getAdapterForWallet<BaseTronAdapter>(wallet)?.let { adapter ->
                     if (!adapter.isAddressActive(adapter.receiveAddress))
                         return BalanceWarning.TronInactiveAccountWarning
                 }
