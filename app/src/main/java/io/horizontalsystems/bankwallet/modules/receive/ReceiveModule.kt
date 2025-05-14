@@ -52,7 +52,6 @@ object ReceiveModule {
     ) : AbstractUiState()
 
     sealed class AlertText {
-        class Normal(val content: String) : AlertText()
         class Critical(val content: String) : AlertText()
     }
 
