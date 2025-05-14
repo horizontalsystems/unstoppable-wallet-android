@@ -40,8 +40,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
 @Composable
-fun ReceiveStellarScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
-    val viewModel = viewModel<ReceiveStellarViewModel>(factory = ReceiveStellarViewModel.Factory(wallet))
+fun ReceiveStellarAssetScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
+    val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
     val uiState = viewModel.uiState
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)

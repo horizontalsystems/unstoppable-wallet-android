@@ -68,7 +68,7 @@ interface IAdapterManager {
     fun getAdapterForToken(token: Token): IAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
-    fun <T: IReceiveAdapter> getReceiveAdapterForWalletT(wallet: Wallet): T?
+    fun <T: IAdapter> getAdapterForWalletT(wallet: Wallet): T?
     fun refreshByWallet(wallet: Wallet)
 }
 
@@ -310,14 +310,6 @@ interface IReceiveAdapter {
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
     }
-}
-
-interface IReceiveStellarAdapter : IReceiveAdapter {
-    val activationFee: BigDecimal? get() = null
-
-    fun activate() { throw UnsupportedOperationException() }
-    fun validateActivation() { throw UnsupportedOperationException() }
-    suspend fun isTrustlineEstablished(): Boolean? = null
 }
 
 @Parcelize

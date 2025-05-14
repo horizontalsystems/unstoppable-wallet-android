@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class StellarAssetAdapter(
@@ -40,7 +41,7 @@ class StellarAssetAdapter(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    override val activationFee = stellarKit.sendFee
+    val activationFee = stellarKit.sendFee
 
     override fun start() {
         coroutineScope.launch {
@@ -73,15 +74,15 @@ class StellarAssetAdapter(
         stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
     }
 
-    override suspend fun isTrustlineEstablished(): Boolean {
-        return assetBalance != null || stellarKit.isAssetEnabled(stellarAsset)
+    suspend fun isTrustlineEstablished() = withContext(Dispatchers.Default) {
+        assetBalance != null || stellarKit.isAssetEnabled(stellarAsset)
     }
 
-    override fun activate() {
+    fun activate() {
         stellarKit.enableAsset(stellarAsset.id, null)
     }
 
-    override fun validateActivation() {
+    fun validateActivation() {
         stellarKit.validateEnablingAsset()
     }
 }
