@@ -60,6 +60,7 @@
 
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
+    <string name="Error_AssetNotEnabled">The recipient hasn\'t enabled %s, therefore they are unable to receive it.</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">n/a</string>
     <string name="Any">Any</string>

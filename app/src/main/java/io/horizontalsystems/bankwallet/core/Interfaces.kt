@@ -392,6 +392,7 @@ interface ISendStellarAdapter {
     val availableBalance: BigDecimal
     val fee: BigDecimal
     suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    fun validate(address: String)
 }
 
 interface ISendTronAdapter {

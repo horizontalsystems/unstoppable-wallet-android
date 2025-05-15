@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
+import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -72,5 +73,9 @@ class StellarAdapter(
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
         stellarKit.sendNative(address, amount, memo)
+    }
+
+    override fun validate(address: String) {
+        StellarKit.validateAddress(address)
     }
 }

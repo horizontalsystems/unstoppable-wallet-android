@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
+import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -74,6 +75,14 @@ class StellarAssetAdapter(
         stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
     }
 
+    override fun validate(address: String) {
+        StellarKit.validateAddress(address)
+
+        if (!stellarKit.isAssetEnabled(stellarAsset, address)) {
+            throw NoTrustlineError(stellarAsset.code)
+        }
+    }
+
     suspend fun isTrustlineEstablished() = withContext(Dispatchers.Default) {
         assetBalance != null || stellarKit.isAssetEnabled(stellarAsset)
     }
@@ -85,4 +94,6 @@ class StellarAssetAdapter(
     fun validateActivation() {
         stellarKit.validateEnablingAsset()
     }
+
+    data class NoTrustlineError(val code: String) : Error()
 }

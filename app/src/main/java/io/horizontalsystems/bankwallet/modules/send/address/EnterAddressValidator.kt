@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.address
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter.ZcashError
@@ -10,7 +11,6 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.tonkit.FriendlyAddress
 
 interface EnterAddressValidator {
@@ -45,9 +45,9 @@ class TonAddressValidator : EnterAddressValidator {
     }
 }
 
-class StellarAddressValidator : EnterAddressValidator {
+class StellarAddressValidator(private val adapter: ISendStellarAdapter) : EnterAddressValidator {
     override suspend fun validate(address: Address) {
-        StellarKit.validateAddress(address.hex)
+        adapter.validate(address.hex)
     }
 }
 
