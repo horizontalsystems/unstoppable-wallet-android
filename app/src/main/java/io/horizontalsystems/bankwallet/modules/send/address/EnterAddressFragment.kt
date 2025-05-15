@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.paidAction
@@ -256,8 +257,7 @@ private fun Errors(
             modifier = Modifier.padding(horizontal = 16.dp),
             icon = R.drawable.ic_attention_20,
             title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-            text = addressValidationError.message
-                ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
+            text = addressValidationError.getErrorMessage() ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
         )
         VSpacer(32.dp)
     } else {
@@ -277,6 +277,14 @@ private fun Errors(
             VSpacer(32.dp)
         }
     }
+}
+
+@Composable
+private fun Throwable.getErrorMessage() = when (this) {
+    is StellarAssetAdapter.NoTrustlineError -> {
+        stringResource(R.string.Error_AssetNotEnabled, code)
+    }
+    else -> this.message
 }
 
 @Composable

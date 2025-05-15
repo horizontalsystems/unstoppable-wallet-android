@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -66,7 +67,11 @@ object AddressValidatorFactory {
             }
 
             is BlockchainType.Stellar -> {
-                StellarAddressValidator()
+                val sendAdapter =
+                    App.adapterManager.getAdapterForWallet<ISendStellarAdapter>(wallet)
+                        ?: throw IllegalStateException("SendAdapter is null")
+
+                StellarAddressValidator(sendAdapter)
             }
             is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${wallet.token.blockchainType}")
         }
