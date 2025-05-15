@@ -71,8 +71,17 @@ class StellarAdapter(
     override val fee: BigDecimal
         get() = stellarKit.sendFee
 
+    override suspend fun getMinimumSendAmount(address: String) = when {
+        !stellarKit.doesAccountExist(address) -> BigDecimal.ONE
+        else -> null
+    }
+
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        stellarKit.sendNative(address, amount, memo)
+        if (stellarKit.doesAccountExist(address)) {
+            stellarKit.sendNative(address, amount, memo)
+        } else {
+            stellarKit.createAccount(address, amount, memo)
+        }
     }
 
     override fun validate(address: String) {

@@ -49,7 +49,8 @@ object SendStellarModule {
                 amountService,
                 addressService,
                 App.contactsRepository,
-                App.recentAddressManager
+                App.recentAddressManager,
+                SendStellarMinimumAmountService(adapter)
             ) as T
         }
     }

@@ -71,6 +71,8 @@ class StellarAssetAdapter(
     override val fee: BigDecimal
         get() = stellarKit.sendFee
 
+    override suspend fun getMinimumSendAmount(address: String) = null
+
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
         stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
     }
