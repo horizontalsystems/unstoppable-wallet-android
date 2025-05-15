@@ -97,7 +97,11 @@ fun ReceiveStellarAssetScreen(navController: NavController, wallet: Wallet, rece
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
                     title = stringResource(R.string.Button_Later),
-                    onClick = {  }
+                    onClick = {
+                        scope.launch {
+                            sheetState.hide()
+                        }
+                    }
                 )
                 VSpacer(32.dp)
             }
@@ -125,7 +129,11 @@ fun ReceiveStellarAssetScreen(navController: NavController, wallet: Wallet, rece
                         HSpacer(8.dp)
                         HsIconButton(
                             modifier = Modifier.size(20.dp),
-                            onClick = {  }
+                            onClick = {
+                                scope.launch {
+                                    sheetState.show()
+                                }
+                            }
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.ic_info_20),
