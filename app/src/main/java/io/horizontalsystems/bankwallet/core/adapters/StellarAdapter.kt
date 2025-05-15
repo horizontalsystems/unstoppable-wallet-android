@@ -26,7 +26,7 @@ class StellarAdapter(
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceData: BalanceData
-        get() = BalanceData(availableBalance, minimumBalance)
+        get() = BalanceData(availableBalance, minimumBalance = minimumBalance)
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -62,12 +62,8 @@ class StellarAdapter(
     override val debugInfo = "debugInfo"
 
     override val availableBalance: BigDecimal
-        get() {
-            totalBalance?.let {
-                return it - minimumBalance
-            }
-            return BigDecimal.ZERO
-        }
+        get() = totalBalance?.let { it - minimumBalance } ?: BigDecimal.ZERO
+
     override val fee: BigDecimal
         get() = stellarKit.sendFee
 

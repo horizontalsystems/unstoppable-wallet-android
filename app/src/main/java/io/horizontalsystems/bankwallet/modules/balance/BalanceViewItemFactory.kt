@@ -248,6 +248,23 @@ class BalanceViewItemFactory {
                     )
                 )
             }
+
+            lockedCoinValue(
+                state,
+                item.balanceData.minimumBalance,
+                hideBalance,
+                wallet.decimal,
+                wallet.token
+            )?.let {
+                add(
+                    LockedValue(
+                        title = TranslatableString.ResString(R.string.Balance_Reserved_Title),
+                        infoTitle = TranslatableString.ResString(R.string.Info_Reserved_Title),
+                        info = TranslatableString.ResString(R.string.Info_Reserved_Description),
+                        coinValue = it
+                    )
+                )
+            }
         }
 
         return BalanceViewItem(
