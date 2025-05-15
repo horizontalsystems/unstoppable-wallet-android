@@ -40,7 +40,8 @@ class SendStellarViewModel(
     private val amountService: SendAmountService,
     private val addressService: SendStellarAddressService,
     private val contactsRepo: ContactsRepository,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
+    private val minimumAmountService: SendStellarMinimumAmountService
 ) : ViewModelUiState<SendStellarUiState>() {
     private val fee = adapter.fee
 
@@ -50,6 +51,7 @@ class SendStellarViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
+    private var minimumAmountState = minimumAmountService.stateFlow.value
     private var memo: String? = null
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
@@ -75,6 +77,11 @@ class SendStellarViewModel(
             }
         }
         viewModelScope.launch(Dispatchers.Default) {
+            minimumAmountService.stateFlow.collect {
+                handleUpdatedMinimumAmountState(it)
+            }
+        }
+        viewModelScope.launch(Dispatchers.Default) {
             xRateService.getRateFlow(sendToken.coin.uid).collect {
                 coinRate = it
             }
@@ -88,11 +95,20 @@ class SendStellarViewModel(
         addressService.setAddress(address)
     }
 
+    private fun handleUpdatedMinimumAmountState(state: SendStellarMinimumAmountService.State) {
+        minimumAmountState = state
+
+        amountService.setMinimumSendAmount(minimumAmountState.minimumAmount)
+
+        emitState()
+    }
+
     override fun createState() = SendStellarUiState(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
         addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        minimumAmountError = minimumAmountState.error,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && minimumAmountState.canBeSend,
         showAddressInput = showAddressInput,
         fee = fee,
         address = address
@@ -112,8 +128,10 @@ class SendStellarViewModel(
         emitState()
     }
 
-    private fun handleUpdatedAddressState(addressState: SendStellarAddressService.State) {
+    private suspend fun handleUpdatedAddressState(addressState: SendStellarAddressService.State) {
         this.addressState = addressState
+
+        minimumAmountService.setValidAddress(addressState.validAddress)
 
         emitState()
     }
@@ -171,6 +189,7 @@ data class SendStellarUiState(
     val availableBalance: BigDecimal?,
     val amountCaution: HSCaution?,
     val addressError: Throwable?,
+    val minimumAmountError: Throwable?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
     val fee: BigDecimal?,

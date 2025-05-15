@@ -54,5 +54,8 @@ class SendStellarAddressService {
         val address: Address?,
         val addressError: Throwable?,
         val canBeSend: Boolean
-    )
+    ) {
+        val validAddress: Address?
+            get() = if (addressError == null) address else null
+    }
 }
