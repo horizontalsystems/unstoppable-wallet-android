@@ -78,8 +78,9 @@ object BalanceModule {
         val coinPrice: CoinPrice?,
         val warning: BalanceWarning? = null
     ) {
-        val fiatValue get() = coinPrice?.value?.let { balanceData.available.times(it) }
-        val balanceFiatTotal get() = coinPrice?.value?.let { balanceData.total.times(it) }
+        val balanceFiatTotal by lazy {
+            coinPrice?.value?.let { balanceData.total.times(it) }
+        }
     }
 
     sealed class BalanceWarning : Warning() {
