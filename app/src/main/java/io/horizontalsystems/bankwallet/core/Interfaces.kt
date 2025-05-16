@@ -391,7 +391,7 @@ interface ISendTonAdapter {
 }
 
 interface ISendStellarAdapter {
-    val availableBalance: BigDecimal
+    val maxSendableBalance: BigDecimal
     val fee: BigDecimal
     fun validate(address: String)
     suspend fun getMinimumSendAmount(address: String) : BigDecimal?

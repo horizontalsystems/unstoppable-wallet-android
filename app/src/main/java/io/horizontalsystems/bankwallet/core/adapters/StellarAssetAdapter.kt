@@ -66,10 +66,11 @@ class StellarAssetAdapter(
     override fun refresh() {
     }
 
-    override val availableBalance: BigDecimal
-        get() = balance
     override val fee: BigDecimal
         get() = stellarKit.sendFee
+
+    override val maxSendableBalance: BigDecimal
+        get() = balance
 
     override suspend fun getMinimumSendAmount(address: String) = null
 
