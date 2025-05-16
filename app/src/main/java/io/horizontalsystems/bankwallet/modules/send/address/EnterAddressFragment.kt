@@ -89,14 +89,15 @@ class EnterAddressFragment : BaseComposeFragment() {
 fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment.Input) {
     val viewModel = viewModel<EnterAddressViewModel>(
         factory = EnterAddressViewModel.Factory(
-            wallet = input.wallet,
+            token = input.wallet.token,
             address = input.address,
-            amount = input.amount
+            addressCheckerSkippable = true
         )
     )
     val wallet = input.wallet
+    val amount = input.amount
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, input.amount)
+        factory = AddressParserModule.Factory(wallet.token, amount)
     )
 
     val coroutineScope = rememberCoroutineScope()
@@ -148,13 +149,13 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     ) {
                         viewModel.onEnterAddress(it)
                     }
-                } else {
+                } else if (uiState.addressCheckEnabled || uiState.addressValidationError != null) {
                     AddressCheck(
                         uiState.addressValidationInProgress,
                         uiState.addressValidationError,
                         uiState.checkResults,
                     ) { checkType ->
-                        if(uiState.checkResults.any { it.value.checkResult == AddressCheckResult.NotAllowed }) {
+                        if (uiState.checkResults.any { it.value.checkResult == AddressCheckResult.NotAllowed }) {
                             navController.paidAction(AddressBlacklist) {
                                 viewModel.onEnterAddress(uiState.value)
                             }
@@ -182,11 +183,12 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                                 R.id.sendXFragment,
                                 SendFragment.Input(
                                     wallet = wallet,
-                                    sendEntryPointDestId = input.sendEntryPointDestId ?: R.id.enterAddressFragment,
+                                    sendEntryPointDestId = input.sendEntryPointDestId
+                                        ?: R.id.enterAddressFragment,
                                     title = input.title,
                                     address = it,
                                     riskyAddress = uiState.checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected },
-                                    amount = uiState.amount
+                                    amount = amount
                                 )
                             )
                         }
@@ -257,7 +259,8 @@ private fun Errors(
             modifier = Modifier.padding(horizontal = 16.dp),
             icon = R.drawable.ic_attention_20,
             title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-            text = addressValidationError.getErrorMessage() ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
+            text = addressValidationError.getErrorMessage()
+                ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
         )
         VSpacer(32.dp)
     } else {
@@ -284,6 +287,7 @@ private fun Throwable.getErrorMessage() = when (this) {
     is StellarAssetAdapter.NoTrustlineError -> {
         stringResource(R.string.Error_AssetNotEnabled, code)
     }
+
     else -> this.message
 }
 

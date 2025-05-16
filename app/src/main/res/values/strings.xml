@@ -937,6 +937,14 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
 
+    <!--Address Checker-->
+    <string name="SettingsAddressChecker_Title">Address Checker</string>
+    <string name="SettingsAddressChecker_RecipientCheck">Recipient Check</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Checks the recipient address for risks before sending.</string>
+    <string name="SettingsAddressChecker_CheckAddress">Check Address</string>
+    <string name="SettingsAddressChecker_SelectBlockchain">Select Blockchain</string>
+    <string name="SettingsAddressChecker_SelectCoin">Select Coin</string>
+
     <!--Banners-->
     <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsBanner_PremiumBannerDescription">Upgrade your experience with Premium features!</string>

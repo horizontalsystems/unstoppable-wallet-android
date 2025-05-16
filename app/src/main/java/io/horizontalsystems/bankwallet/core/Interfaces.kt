@@ -128,6 +128,7 @@ interface ILocalStorage {
     var rbfEnabled: Boolean
     var statsLastSyncTime: Long
     var uiStatsEnabled: Boolean?
+    var recipientAddressCheckEnabled: Boolean
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
     val marketSignalsStateChangedFlow: SharedFlow<Boolean>
