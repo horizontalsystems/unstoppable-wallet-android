@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
+package io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -13,43 +13,43 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import kotlinx.parcelize.Parcelize
 
-class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
+class StellarSecretKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
-            EvmPrivateKeyScreen(navController, input.evmPrivateKey)
+            StellarSecretKeyScreen(navController, input.stellarSecretKey)
         }
     }
 
     @Parcelize
-    data class Input(val evmPrivateKey: String) : Parcelable
+    data class Input(val stellarSecretKey: String) : Parcelable
 }
 
 @Composable
-fun EvmPrivateKeyScreen(
+fun StellarSecretKeyScreen(
     navController: NavController,
-    evmPrivateKey: String,
+    stellarSecretKey: String,
 ) {
     SecretKeyScreen(
         navController = navController,
-        secretKey = evmPrivateKey,
-        title = stringResource(R.string.EvmPrivateKey_Title),
-        hideScreenText = stringResource(R.string.EvmPrivateKey_ShowPrivateKey),
+        secretKey = stellarSecretKey,
+        title = stringResource(R.string.StellarSecretKey_Title),
+        hideScreenText = stringResource(R.string.StellarSecretKey_ShowSecretKey),
         onCopyKey = {
             stat(
-                page = StatPage.EvmPrivateKey,
-                event = StatEvent.Copy(StatEntity.EvmPrivateKey)
+                page = StatPage.StellarSecretKey,
+                event = StatEvent.Copy(StatEntity.StellarSecretKey)
             )
         },
         onOpenFaq = {
             stat(
-                page = StatPage.EvmPrivateKey,
+                page = StatPage.StellarSecretKey,
                 event = StatEvent.Open(StatPage.Info)
             )
         },
         onToggleHidden = {
-            stat(page = StatPage.EvmPrivateKey, event = StatEvent.ToggleHidden)
+            stat(page = StatPage.StellarSecretKey, event = StatEvent.ToggleHidden)
         }
     )
 }

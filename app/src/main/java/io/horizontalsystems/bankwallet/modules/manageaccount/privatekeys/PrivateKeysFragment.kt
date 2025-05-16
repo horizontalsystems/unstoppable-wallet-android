@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -72,6 +73,21 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         )
 
                         stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.EvmPrivateKey))
+                    }
+                }
+            }
+            viewModel.viewState.stellarSecretKey?.let { key ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
+                    description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription)
+                ) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.stellarSecretKeyFragment,
+                            StellarSecretKeyFragment.Input(key)
+                        )
+
+                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.StellarSecretKey))
                     }
                 }
             }
