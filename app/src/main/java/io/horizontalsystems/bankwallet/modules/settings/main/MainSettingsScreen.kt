@@ -70,6 +70,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.subscriptions.core.AddressBlacklist
 import io.horizontalsystems.subscriptions.core.VIPSupport
 
 @Composable
@@ -328,6 +329,20 @@ private fun SettingSections(
                 onClick = {
                     navController.paidAction(VIPSupport) {
                         openVipSupport.invoke()
+                    }
+                }
+            )
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+            )
+            HsSettingCell(
+                title = R.string.SettingsAddressChecker_Title,
+                icon = R.drawable.ic_radar_24,
+                iconTint = ComposeAppTheme.colors.jacob,
+                onClick = {
+                    navController.paidAction(AddressBlacklist) {
+                        navController.slideFromRight(R.id.addressCheckerFragment)
                     }
                 }
             )

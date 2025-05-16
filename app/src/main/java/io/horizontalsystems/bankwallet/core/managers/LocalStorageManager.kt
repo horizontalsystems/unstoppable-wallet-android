@@ -527,6 +527,12 @@ class LocalStorageManager(
             preferences.edit().putString(APP_AUTO_LOCK_INTERVAL, value.raw).apply()
         }
 
+    override var recipientAddressCheckEnabled: Boolean
+        get() = preferences.getBoolean("recipientAddressCheckEnabled", true)
+        set(value) {
+            preferences.edit().putBoolean("recipientAddressCheckEnabled", value).apply()
+        }
+
     override var utxoExpertModeEnabled: Boolean
         get() = preferences.getBoolean(UTXO_EXPERT_MODE, false)
         set(value) {
