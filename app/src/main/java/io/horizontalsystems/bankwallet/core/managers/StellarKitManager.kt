@@ -54,7 +54,8 @@ class StellarKitManager(
             val accountType = account.type
             this.stellarKitWrapper = when (accountType) {
                 is AccountType.Mnemonic,
-                is AccountType.StellarAddress -> {
+                is AccountType.StellarAddress,
+                is AccountType.StellarSecretKey -> {
                     createKitInstance(accountType, account)
                 }
 
@@ -130,5 +131,6 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
 fun AccountType.toStellarWallet() = when (this) {
     is AccountType.Mnemonic -> StellarWallet.Seed(seed)
     is AccountType.StellarAddress -> StellarWallet.WatchOnly(address)
+    is AccountType.StellarSecretKey -> StellarWallet.SecretKey(key)
     else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to StellarWallet.Wallet")
 }

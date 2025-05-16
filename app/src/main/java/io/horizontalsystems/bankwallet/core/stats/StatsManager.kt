@@ -247,6 +247,10 @@ val AccountType.statAccountType: String
             "evm_private_key"
         }
 
+        is AccountType.StellarSecretKey -> {
+            "stellar_secret_key"
+        }
+
         is AccountType.HdExtendedKey -> {
             if (hdExtendedKey.isPublic) {
                 "account_x_pub_key"

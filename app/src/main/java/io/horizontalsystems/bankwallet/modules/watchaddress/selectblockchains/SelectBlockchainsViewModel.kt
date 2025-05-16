@@ -38,7 +38,8 @@ class SelectBlockchainsViewModel(
             is AccountType.StellarAddress,
             is AccountType.Cex,
             is AccountType.Mnemonic,
-            is AccountType.EvmPrivateKey -> Unit // N/A
+            is AccountType.EvmPrivateKey,
+            is AccountType.StellarSecretKey -> Unit // N/A
             is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
                 coinViewItems = tokens.map {
