@@ -61,8 +61,11 @@ class StellarAdapter(
 
     override val debugInfo = "debugInfo"
 
-    override val availableBalance: BigDecimal
+    private val availableBalance: BigDecimal
         get() = totalBalance?.let { it - minimumBalance } ?: BigDecimal.ZERO
+
+    override val maxSendableBalance: BigDecimal
+        get() = availableBalance - fee
 
     override val fee: BigDecimal
         get() = stellarKit.sendFee

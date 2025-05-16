@@ -30,7 +30,7 @@ object SendStellarModule {
             val amountService = SendAmountService(
                 amountValidator = amountValidator,
                 coinCode = wallet.coin.code,
-                availableBalance = adapter.availableBalance,
+                availableBalance = adapter.maxSendableBalance,
                 leaveSomeBalanceForFee = wallet.token.type.isNative
             )
             val addressService = SendStellarAddressService()
