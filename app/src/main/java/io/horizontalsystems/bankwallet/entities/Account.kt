@@ -176,6 +176,17 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    data class StellarSecretKey(val key: String) : AccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is StellarSecretKey && key == other.key
+        }
+
+        override fun hashCode(): Int {
+            return key.hashCode()
+        }
+    }
+
+    @Parcelize
     data class EvmPrivateKey(val key: BigInteger) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is EvmPrivateKey && key == other.key
@@ -271,6 +282,7 @@ sealed class AccountType : Parcelable {
             is TonAddress -> "Ton Address"
             is StellarAddress -> "Stellar Address"
             is EvmPrivateKey -> "EVM Private Key"
+            is StellarSecretKey -> "Stellar Secret Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master -> "BIP32 Root Key"

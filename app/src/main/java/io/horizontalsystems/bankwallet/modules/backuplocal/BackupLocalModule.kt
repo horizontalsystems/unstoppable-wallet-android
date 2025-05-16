@@ -11,6 +11,7 @@ import io.horizontalsystems.tronkit.toBigInteger
 object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
     private const val PRIVATE_KEY = "private_key"
+    private const val SECRET_KEY = "secret_key"
     private const val ADDRESS = "evm_address"
     private const val SOLANA_ADDRESS = "solana_address"
     private const val TRON_ADDRESS = "tron_address"
@@ -71,6 +72,7 @@ object BackupLocalModule {
     fun getAccountTypeString(accountType: AccountType): String = when (accountType) {
         is AccountType.Mnemonic -> MNEMONIC
         is AccountType.EvmPrivateKey -> PRIVATE_KEY
+        is AccountType.StellarSecretKey -> SECRET_KEY
         is AccountType.EvmAddress -> ADDRESS
         is AccountType.SolanaAddress -> SOLANA_ADDRESS
         is AccountType.TronAddress -> TRON_ADDRESS
@@ -95,6 +97,7 @@ object BackupLocalModule {
             }
 
             PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
+            SECRET_KEY -> AccountType.StellarSecretKey(String(data, Charsets.UTF_8))
             ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
@@ -127,6 +130,7 @@ object BackupLocalModule {
         }
 
         is AccountType.EvmPrivateKey -> accountType.key.toByteArray()
+        is AccountType.StellarSecretKey -> accountType.key.toByteArray(Charsets.UTF_8)
         is AccountType.EvmAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)

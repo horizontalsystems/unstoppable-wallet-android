@@ -69,6 +69,7 @@ class ManageAccountViewModel(
         }
         if (account.type is AccountType.HdExtendedKey
             || account.type is AccountType.EvmPrivateKey
+            || account.type is AccountType.StellarSecretKey
             || account.type is AccountType.Cex
         ) {
             return listOf(BackupItem.LocalBackup(false))
@@ -102,6 +103,10 @@ class ManageAccountViewModel(
             is AccountType.EvmPrivateKey -> listOf(
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
+            )
+
+            is AccountType.StellarSecretKey -> listOf(
+                KeyAction.PrivateKeys
             )
 
             is AccountType.EvmAddress -> listOf()
