@@ -19,8 +19,11 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
@@ -28,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
 import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -88,6 +92,7 @@ class MainViewModel(
     private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
+    private var openSendTokenSelect: OpenSendTokenSelect? = null
 
     val wallets: List<Account>
         get() = accountManager.accounts.filter { !it.isWatchAccount }
@@ -159,7 +164,8 @@ class MainViewModel(
         showWhatsNew = showWhatsNew,
         activeWallet = activeWallet,
         wcSupportState = wcSupportState,
-        torEnabled = torEnabled
+        torEnabled = torEnabled,
+        openSend = openSendTokenSelect,
     )
 
     private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
@@ -386,11 +392,41 @@ class MainViewModel(
             return
         }
 
+        if (
+            deeplinkString.startsWith("bitcoin:")
+            || deeplinkString.startsWith("ethereum:")
+            || deeplinkString.startsWith("toncoin:")
+        ) {
+            AddressUriParser.addressUri(deeplinkString)?.let { addressUri ->
+                val allowedBlockchainTypes = addressUri.allowedBlockchainTypes
+                var allowedTokenTypes: List<TokenType>? = null
+                addressUri.value<String>(AddressUri.Field.TokenUid)?.let { uid ->
+                    TokenType.fromId(uid)?.let { tokenType ->
+                        allowedTokenTypes = listOf(tokenType)
+                    }
+                }
+
+                openSendTokenSelect = OpenSendTokenSelect(
+                    blockchainTypes = allowedBlockchainTypes,
+                    tokenTypes = allowedTokenTypes,
+                    address = addressUri.address,
+                    amount = addressUri.amount
+                )
+                emitState()
+                return
+            }
+        }
+
         val (tab, deeplinkPageData) = getNavigationDataForDeeplink(uri)
         deeplinkPage = deeplinkPageData
         currentMainTab = tab
         selectedTabIndex = items.indexOf(tab)
         syncNavigation()
+    }
+
+    fun onSendOpened() {
+        openSendTokenSelect = null
+        emitState()
     }
 
 }
