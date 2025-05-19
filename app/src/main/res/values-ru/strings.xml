@@ -127,11 +127,7 @@
     <string name="Restore_ZCash_OldWallet">Существующий кошелек</string>
     <string name="Restore_ZCash_OldWallet_Description">Есть транзакции</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Первоначальная синхронизация с блокчейном может потреблять много интернет-трафика.</string>
-    <string name="ImportCexAccount_SelectCex">Выберите CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">Выберите централизованный обмен, к которому вы хотите подключиться.</string>
-    <string name="ImportCexAccountBinance_Description">Пожалуйста, предоставьте ключ API и секрет API, чтобы связать вашу биржу.</string>
-    <string name="ImportCexAccountBinance_ApiKey">API ключ</string>
-    <string name="ImportCexAccountBinance_SecretKey">Секретный ключ</string>
+
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">Рын. кап.</string>
@@ -1429,12 +1425,4 @@
     <string name="Contacts_Error_DefinedAddress">Этот адрес уже используется для %s</string>
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
     <string name="Hud_Text_Connected">Подключен</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">Выберите токен</string>
-    <string name="Cex_ChooseNetwork">Выберите сеть</string>
-    <string name="Cex_ChooseNetwork_Description">Выберите сеть и получите адрес для пополнения.</string>
-    <string name="Cex_SelectCoin_Search">Имя или код</string>
-    <string name="CexDeposit_Title">Депозит %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">Не удалось подключиться к твоему API ключу</string>
-    <!--Cex Withdraw Module-->
 </resources>

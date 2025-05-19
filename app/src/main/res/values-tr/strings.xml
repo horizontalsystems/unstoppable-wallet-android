@@ -125,11 +125,7 @@
     <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
     <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
-    <string name="ImportCexAccount_SelectCex">CEX\'i seçin</string>
-    <string name="ImportCexAccount_SelectCexDescription">Bağlanmak istediğiniz merkezi santrali seçin.</string>
-    <string name="ImportCexAccountBinance_Description">Lütfen değiş tokuşunuzu bağlamak için API Anahtarlarını ve API Sırrını sağlayın.</string>
-    <string name="ImportCexAccountBinance_ApiKey">API Anahtarı</string>
-    <string name="ImportCexAccountBinance_SecretKey">Gizli Anahtar</string>
+
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">P. Değeri</string>
@@ -1435,12 +1431,4 @@
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
     <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
     <string name="Hud_Text_Connected">Bağlandı</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">Kripto Parayı Seç</string>
-    <string name="Cex_ChooseNetwork">Ağ Seç</string>
-    <string name="Cex_ChooseNetwork_Description">Bir ağ seçin ve para yatırmak için bir adres alın.</string>
-    <string name="Cex_SelectCoin_Search">Ad veya Kod</string>
-    <string name="CexDeposit_Title">Depozito %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">API Anahtarınız bağlanamadı</string>
-    <!--Cex Withdraw Module-->
 </resources>

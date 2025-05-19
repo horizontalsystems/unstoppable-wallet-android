@@ -125,11 +125,7 @@
     <string name="Restore_ZCash_OldWallet">现有钱包</string>
     <string name="Restore_ZCash_OldWallet_Description">有交易</string>
     <string name="Restore_ZCash_SlowSyncWarningText">初始化与区块链的同步可以消耗大量的网络流量。</string>
-    <string name="ImportCexAccount_SelectCex">选择CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">选择您想要连接的中央交易所。</string>
-    <string name="ImportCexAccountBinance_Description">请提供 API 密钥和 API 密钥链接您的交换。</string>
-    <string name="ImportCexAccountBinance_ApiKey">API 密钥</string>
-    <string name="ImportCexAccountBinance_SecretKey">密钥</string>
+
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">市值</string>
@@ -1427,12 +1423,4 @@
     <string name="Contacts_Error_DefinedAddress">此地址已用于 %s</string>
     <string name="Contacts_Error_DefinedName">该名称已存在</string>
     <string name="Hud_Text_Connected">已连接</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">选择代币</string>
-    <string name="Cex_ChooseNetwork">选择网络</string>
-    <string name="Cex_ChooseNetwork_Description">选择一个网络并获得一个地址存取。</string>
-    <string name="Cex_SelectCoin_Search">名称或代码</string>
-    <string name="CexDeposit_Title">存款 %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">连接您的 API 密钥失败</string>
-    <!--Cex Withdraw Module-->
 </resources>

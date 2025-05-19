@@ -36,7 +36,6 @@ class SelectBlockchainsViewModel(
             is AccountType.BitcoinAddress,
             is AccountType.TonAddress,
             is AccountType.StellarAddress,
-            is AccountType.Cex,
             is AccountType.Mnemonic,
             is AccountType.EvmPrivateKey,
             is AccountType.StellarSecretKey -> Unit // N/A

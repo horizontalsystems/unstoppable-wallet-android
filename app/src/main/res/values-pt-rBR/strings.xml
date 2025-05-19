@@ -125,11 +125,7 @@
     <string name="Restore_ZCash_OldWallet">Carteira existente</string>
     <string name="Restore_ZCash_OldWallet_Description">Tem transações</string>
     <string name="Restore_ZCash_SlowSyncWarningText">A sincronização inicial com o blockchain pode consumir muito tráfego na internet.</string>
-    <string name="ImportCexAccount_SelectCex">Selecione o CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">Selecione a troca centralizada à qual você deseja se conectar.</string>
-    <string name="ImportCexAccountBinance_Description">Por favor, forneça as Chaves da API e Segredo da API para vincular o seu troco.</string>
-    <string name="ImportCexAccountBinance_ApiKey">Chave de API</string>
-    <string name="ImportCexAccountBinance_SecretKey">Chave secreta</string>
+
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. de mercado</string>
@@ -1436,12 +1432,4 @@
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
     <string name="Contacts_Error_DefinedName">O nome já existe</string>
     <string name="Hud_Text_Connected">Conectado</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">Escolher Moedas</string>
-    <string name="Cex_ChooseNetwork">Escolha a Rede</string>
-    <string name="Cex_ChooseNetwork_Description">Escolha uma rede e receba um endereço para depositar.</string>
-    <string name="Cex_SelectCoin_Search">Nome ou código</string>
-    <string name="CexDeposit_Title">Depósito %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">Falha ao conectar sua chave de API</string>
-    <!--Cex Withdraw Module-->
 </resources>
