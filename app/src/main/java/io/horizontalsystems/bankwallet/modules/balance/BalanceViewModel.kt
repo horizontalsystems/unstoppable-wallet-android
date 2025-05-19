@@ -11,15 +11,12 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.factories.uriScheme
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
-import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
 import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AddressUri
@@ -266,24 +263,6 @@ class BalanceViewModel(
         }
     }
 
-    private fun uri(text: String): AddressUri? {
-        if (AddressUriParser.hasUriPrefix(text)) {
-            val abstractUriParse = AddressUriParser(null, null)
-            return when (val result = abstractUriParse.parse(text)) {
-                is AddressUriResult.Uri -> {
-                    if (BlockchainType.supported.map { it.uriScheme }
-                            .contains(result.addressUri.scheme))
-                        result.addressUri
-                    else
-                        null
-                }
-
-                else -> null
-            }
-        }
-        return null
-    }
-
     private fun handleAddressData(text: String) {
         if (text.contains("//")) {
             //handle this type of uri ton://transfer/<address>
@@ -298,7 +277,7 @@ class BalanceViewModel(
             return
         }
 
-        val uri = uri(text)
+        val uri = AddressUriParser.addressUri(text)
         if (uri != null) {
             val allowedBlockchainTypes = uri.allowedBlockchainTypes
             var allowedTokenTypes: List<TokenType>? = null

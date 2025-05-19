@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
@@ -307,6 +308,19 @@ private fun MainScreen(
             )
             viewModel.deeplinkPageHandled()
         }
+    }
+
+    uiState.openSend?.let { openSend ->
+        fragmentNavController.slideFromRight(
+            R.id.sendTokenSelectFragment,
+            SendTokenSelectFragment.Input(
+                openSend.blockchainTypes,
+                openSend.tokenTypes,
+                openSend.address,
+                openSend.amount
+            )
+        )
+        viewModel.onSendOpened()
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
