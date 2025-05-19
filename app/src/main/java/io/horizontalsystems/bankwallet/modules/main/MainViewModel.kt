@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
@@ -163,8 +162,7 @@ class MainViewModel(
         torEnabled = torEnabled
     )
 
-    private fun isTransactionsTabEnabled(): Boolean =
-        !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
+    private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
 
 
     fun whatsNewShown() {

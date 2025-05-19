@@ -130,11 +130,6 @@ class BackupProvider(
         return BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
     }
 
-    fun restoreCexAccount(accountType: AccountType, accountName: String) {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, true)
-        accountManager.save(account)
-    }
-
     fun restoreSingleWalletBackup(
         type: AccountType,
         accountName: String,
@@ -347,8 +342,6 @@ class BackupProvider(
 
             val account = if (type.isWatchAccountType) {
                 accountFactory.watchAccount(name, type)
-            } else if (type is AccountType.Cex) {
-                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
             } else {
                 accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
             }

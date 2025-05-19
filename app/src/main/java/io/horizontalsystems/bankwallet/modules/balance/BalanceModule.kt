@@ -9,9 +9,6 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
-import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexRepositoryWrapper
-import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexSorter
-import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.CoinPrice
 
@@ -42,30 +39,6 @@ object BalanceModule {
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 App.priceManager,
                 App.instance.isSwapEnabled
-            ) as T
-        }
-    }
-
-    class FactoryCex : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val totalService = TotalService(
-                App.currencyManager,
-                App.marketKit,
-                App.baseTokenManager,
-                App.balanceHiddenManager
-            )
-
-            return BalanceCexViewModel(
-                TotalBalance(totalService, App.balanceHiddenManager),
-                App.localStorage,
-                App.balanceViewTypeManager,
-                BalanceViewItemFactory(),
-                BalanceCexRepositoryWrapper(App.cexAssetManager, App.connectivityManager),
-                BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
-                BalanceCexSorter(),
-                App.cexProviderManager,
             ) as T
         }
     }

@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
-import io.horizontalsystems.bankwallet.entities.CexType
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -26,7 +25,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val STELLAR_ADDRESS = "stellar_address"
         private const val BITCOIN_ADDRESS = "bitcoin_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
-        private const val CEX = "cex"
     }
 
     override fun getActiveAccountId(level: Int): String? {
@@ -59,11 +57,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             STELLAR_ADDRESS -> AccountType.StellarAddress(record.key!!.value)
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
-                            CEX -> {
-                                CexType.deserialize(record.key!!.value)?.let {
-                                    AccountType.Cex(it)
-                                }
-                            }
                             else -> null
                         }
                         Account(
@@ -164,10 +157,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)
                 accountType = HD_EXTENDED_LEY
-            }
-            is AccountType.Cex -> {
-                key = SecretString(account.type.cexType.serialized())
-                accountType = CEX
             }
         }
 

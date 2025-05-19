@@ -125,11 +125,7 @@
     <string name="Restore_ZCash_OldWallet">기존 지갑</string>
     <string name="Restore_ZCash_OldWallet_Description">거래 있음</string>
     <string name="Restore_ZCash_SlowSyncWarningText">블록체인과의 초기 동기화는 많은 인터넷 트래픽을 소비할 수 있습니다.</string>
-    <string name="ImportCexAccount_SelectCex">CEX를 선택하세요</string>
-    <string name="ImportCexAccount_SelectCexDescription">연결하고자 하는 중앙 집중식 거래소를 선택하십시오.</string>
-    <string name="ImportCexAccountBinance_Description">거래소를 연결하려면 API 키 및 API 비밀 키를 제공해주세요.</string>
-    <string name="ImportCexAccountBinance_ApiKey">API 키</string>
-    <string name="ImportCexAccountBinance_SecretKey">비밀 키</string>
+
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">시가총액</string>
@@ -1436,12 +1432,4 @@
     <string name="Contacts_Error_DefinedAddress">이 주소는 이미 %s에 사용되었습니다</string>
     <string name="Contacts_Error_DefinedName">해당 이름은 이미 존재합니다</string>
     <string name="Hud_Text_Connected">연결됨</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">코인 선택</string>
-    <string name="Cex_ChooseNetwork">네트워크 선택하기</string>
-    <string name="Cex_ChooseNetwork_Description">네트워크를 선택하고 입금할 주소를 받으세요.</string>
-    <string name="Cex_SelectCoin_Search">이름 또는 코드</string>
-    <string name="CexDeposit_Title">침전 %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">API 키 연결 실패</string>
-    <!--Cex Withdraw Module-->
 </resources>

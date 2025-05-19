@@ -235,10 +235,6 @@ val AccountType.statAccountType: String
             "btc_address"
         }
 
-        is AccountType.Cex -> {
-            "cex"
-        }
-
         is AccountType.EvmAddress -> {
             "evm_address"
         }
