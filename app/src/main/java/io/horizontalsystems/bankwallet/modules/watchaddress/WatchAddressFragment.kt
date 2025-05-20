@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -152,6 +153,9 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 onPaste = {
                     stat(page = StatPage.WatchWallet, event = StatEvent.Paste(StatEntity.Key))
                 }
+            )
+            InfoText(
+                text = stringResource(R.string.Watch_InfoText),
             )
             Spacer(Modifier.height(32.dp))
         }

@@ -1255,7 +1255,7 @@
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
-    <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
+    <string name="ManageAccounts_WatchAddress">Watch Address</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
@@ -1278,6 +1278,7 @@
     <string name="Watch_Address_Watch">Watch</string>
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>
     <string name="Watch_Select_Coins">Choose Coins</string>
+    <string name="Watch_InfoText">We support addresses from Bitcoin, Ethereum, TON, and many other blockchains.</string>
     <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
 
     <!--Manage Account-->
