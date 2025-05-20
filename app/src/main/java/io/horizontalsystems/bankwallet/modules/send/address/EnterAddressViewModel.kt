@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.address.AddressHandlerUdn
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
 import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.ui.InputState
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.CancellationException
@@ -202,6 +203,56 @@ class EnterAddressViewModel(
         }
     }
 }
+
+object EnterAddressInputProvider {
+    fun provider(input: EnterAddressFragment.Input, addressCheckerSkippable: Boolean): InputState<Xxx> {
+        val token = input.wallet.token
+        val address = input.address
+
+        return try {
+            val blockchainType = token.blockchainType
+            val coinCode = token.coin.code
+            val tokenQuery = TokenQuery(blockchainType, token.type)
+            val ensHandler = AddressHandlerEns(blockchainType, EnsResolverHolder.resolver)
+            val udnHandler = AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
+            val addressParserChain = AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
+            val addressUriParser = AddressUriParser(token.blockchainType, token.type)
+            val recentAddressManager = RecentAddressManager(App.accountManager, App.appDatabase.recentAddressDao())
+            val addressValidator = AddressValidatorFactory.get(token)
+            val addressCheckManager = AddressCheckManager(App.spamManager, App.appConfigProvider, App.evmBlockchainManager, App.evmSyncSourceManager)
+
+            val xxx = Xxx(
+                token,
+                addressUriParser,
+                address,
+                App.contactsRepository,
+                recentAddressManager,
+                App.localStorage,
+                addressCheckerSkippable,
+                addressParserChain,
+                addressValidator,
+                addressCheckManager
+            )
+            InputState.Success(xxx)
+        } catch (e: Throwable) {
+            InputState.Error(e)
+        }
+
+    }
+}
+
+data class Xxx(
+    val token: Token,
+    val addressUriParser: AddressUriParser,
+    val address: String?,
+    val contactsRepository: ContactsRepository,
+    val recentAddressManager: RecentAddressManager,
+    val localStorage: ILocalStorage,
+    val addressCheckerSkippable: Boolean,
+    val addressParserChain: AddressParserChain,
+    val addressValidator: EnterAddressValidator,
+    val addressCheckManager: AddressCheckManager
+)
 
 data class EnterAddressUiState(
     val canBeSendToAddress: Boolean,

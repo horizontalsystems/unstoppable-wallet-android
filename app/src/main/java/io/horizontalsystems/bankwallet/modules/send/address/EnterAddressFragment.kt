@@ -50,6 +50,7 @@ import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
+import io.horizontalsystems.bankwallet.ui.ScreenWrapper
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -70,7 +71,13 @@ import java.math.BigDecimal
 class EnterAddressFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        EnterAddressScreen(navController, navController.requireInput())
+        val input = navController.requireInput<Input>()
+
+        ScreenWrapper(
+            provider = { EnterAddressInputProvider.provider(input, true) }
+        ) {
+            EnterAddressScreen(navController, input)
+        }
     }
 
     @Parcelize
