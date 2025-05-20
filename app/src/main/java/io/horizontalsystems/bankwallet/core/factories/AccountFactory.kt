@@ -48,7 +48,7 @@ class AccountFactory(
     override fun getNextWatchAccountName(): String {
         val watchAccountsCount = accountManager.accounts.count { it.isWatchAccount }
 
-        return "Watch Wallet ${watchAccountsCount + 1}"
+        return "Watch Address ${watchAccountsCount + 1}"
     }
 
     override fun getNextAccountName(): String {
