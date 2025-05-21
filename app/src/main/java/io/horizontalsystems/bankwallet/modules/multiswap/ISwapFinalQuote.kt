@@ -26,3 +26,14 @@ data class SwapFinalQuoteEvm(
     override val priceImpact: BigDecimal?,
     override val fields: List<DataField>
 ) : ISwapFinalQuote
+
+data class SwapFinalQuoteThorChain(
+    override val tokenIn: Token,
+    override val tokenOut: Token,
+    override val amountIn: BigDecimal,
+    override val amountOut: BigDecimal,
+    override val amountOutMin: BigDecimal,
+    override val sendTransactionData: SendTransactionData,
+    override val priceImpact: BigDecimal?,
+    override val fields: List<DataField>
+) : ISwapFinalQuote
