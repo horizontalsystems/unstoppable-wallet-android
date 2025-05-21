@@ -367,7 +367,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_RateUs,
-                R.drawable.ic_star_20,
+                R.drawable.ic_rateus_24,
                 onClick = {
                     RateAppManager.openPlayMarket(context)
 
@@ -377,7 +377,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_ShareThisWallet,
-                R.drawable.ic_share_20,
+                R.drawable.ic_share_24,
                 onClick = {
                     shareAppLink(uiState.appWebPageLink, context)
 
