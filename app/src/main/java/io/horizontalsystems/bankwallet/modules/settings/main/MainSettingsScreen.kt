@@ -239,22 +239,23 @@ private fun SettingSections(
                     }
                 }
             )
-        }, {
-            HsSettingCell(
-                title = R.string.Settings_TonConnect,
-                icon = R.drawable.ic_ton_connect_24,
-                value = null,
-                counterBadge = null,
-                onClick = {
-                    navController.slideFromRight(R.id.tcListFragment)
-
-                    stat(
-                        page = StatPage.Settings,
-                        event = StatEvent.Open(StatPage.TonConnect)
-                    )
-                }
-            )
-        }
+        },
+//            {
+//            HsSettingCell(
+//                title = R.string.Settings_TonConnect,
+//                icon = R.drawable.ic_ton_connect_24,
+//                value = null,
+//                counterBadge = null,
+//                onClick = {
+//                    navController.slideFromRight(R.id.tcListFragment)
+//
+//                    stat(
+//                        page = StatPage.Settings,
+//                        event = StatEvent.Open(StatPage.TonConnect)
+//                    )
+//                }
+//            )
+//        }
         )
     )
 
@@ -438,6 +439,22 @@ private fun SettingSections(
                 }
             )
         })
+    )
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.Settings_Donate,
+                R.drawable.ic_heart_24,
+                onClick = {
+                    navController.slideFromRight(R.id.donateTokenSelectFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
+                }
+            )
+        }
     )
 
     VSpacer(32.dp)
