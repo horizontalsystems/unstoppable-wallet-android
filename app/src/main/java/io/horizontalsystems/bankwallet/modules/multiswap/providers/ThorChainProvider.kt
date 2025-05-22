@@ -184,14 +184,13 @@ object ThorChainProvider : IMultiSwapProvider {
         sendTransactionSettings: SendTransactionSettings?,
     ): ISwapFinalQuote {
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
-        val amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8)
 
         return SwapFinalQuoteThorChain(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            amountOut = amountOut,
-            amountOutMin = amountOut,
+            amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8),
+            amountOutMin = null,
             sendTransactionData = getSendTransactionData(
                 tokenIn,
                 amountIn,
