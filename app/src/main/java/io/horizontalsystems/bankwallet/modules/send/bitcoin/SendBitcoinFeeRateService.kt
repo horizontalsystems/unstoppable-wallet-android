@@ -25,7 +25,8 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         State(
             feeRate = feeRate,
             feeRateCaution = feeRateCaution,
-            canBeSend = canBeSend
+            canBeSend = canBeSend,
+            isRecommended = feeRate == recommendedFeeRate
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -63,7 +64,8 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
             State(
                 feeRate = feeRate,
                 feeRateCaution = feeRateCaution,
-                canBeSend = canBeSend
+                canBeSend = canBeSend,
+                isRecommended = feeRate == recommendedFeeRate
             )
         }
     }
@@ -96,5 +98,6 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         val feeRate: Int?,
         val feeRateCaution: HSCaution?,
         val canBeSend: Boolean,
+        val isRecommended: Boolean,
     )
 }

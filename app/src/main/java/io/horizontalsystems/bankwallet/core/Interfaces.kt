@@ -349,8 +349,7 @@ interface ISendBitcoinAdapter {
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
-        rbfEnabled: Boolean,
-        logger: AppLogger
+        rbfEnabled: Boolean
     ): BitcoinTransactionRecord?
 }
 

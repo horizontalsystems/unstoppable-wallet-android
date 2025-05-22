@@ -261,7 +261,7 @@ class SendBitcoinViewModel(
 
         try {
             sendResult = SendResult.Sending
-
+            logger.info("sending tx")
             val transactionRecord = adapter.send(
                 amountState.amount!!,
                 addressState.validAddress!!.hex,
@@ -270,8 +270,7 @@ class SendBitcoinViewModel(
                 customUnspentOutputs,
                 pluginState.pluginData,
                 btcBlockchainManager.transactionSortMode(adapter.blockchainType),
-                localStorage.rbfEnabled,
-                logger
+                localStorage.rbfEnabled
             )
 
             logger.info("success")

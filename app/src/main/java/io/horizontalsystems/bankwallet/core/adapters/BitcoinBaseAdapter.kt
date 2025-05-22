@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -284,12 +283,10 @@ abstract class BitcoinBaseAdapter(
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
-        rbfEnabled: Boolean,
-        logger: AppLogger
+        rbfEnabled: Boolean
     ): BitcoinTransactionRecord? {
         val sortingType = getTransactionSortingType(transactionSorting)
 
-        logger.info("call btc-kit.send")
         val fullTransaction = kit.send(
             address = address,
             memo = memo,
@@ -475,7 +472,8 @@ abstract class BitcoinBaseAdapter(
     companion object {
         fun getTransactionSortingType(sortType: TransactionDataSortMode?): TransactionDataSortType = when (sortType) {
             TransactionDataSortMode.Bip69 -> TransactionDataSortType.Bip69
-            else -> TransactionDataSortType.Shuffle
+            TransactionDataSortMode.Shuffle -> TransactionDataSortType.Shuffle
+            null -> TransactionDataSortType.None
         }
     }
 
