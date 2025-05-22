@@ -186,63 +186,76 @@ object ThorChainProvider : IMultiSwapProvider {
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
         val amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8)
 
-        val sendTransactionData = when (tokenIn.blockchainType) {
-            BlockchainType.Avalanche,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Ethereum
-                -> {
-                val transactionData = when (val tokenType = tokenIn.type) {
-                    TokenType.Native -> {
-                        TransactionData(
-                            Address(quoteSwap.inbound_address),
-                            amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
-                            quoteSwap.memo.toByteArray()
-                        )
-                    }
-
-                    is TokenType.Eip20 -> {
-                        val method = DepositWithExpiryMethod(
-                            Address(quoteSwap.inbound_address),
-                            Address(tokenType.address),
-                            amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
-                            quoteSwap.memo,
-                            BigInteger.valueOf(Date().time / 1000 + 1 * 60 * 60)
-                        )
-
-                        val router = quoteSwap.router ?: throw IllegalStateException()
-
-                        TransactionData(
-                            Address(router),
-                            BigInteger.ZERO,
-                            method.encodedABI()
-                        )
-                    }
-
-                    else -> throw IllegalArgumentException()
-                }
-
-                SendTransactionData.Evm(transactionData, null)
-            }
-
-            BlockchainType.BitcoinCash,
-            BlockchainType.Bitcoin,
-            BlockchainType.Litecoin -> {
-                SendTransactionData.Btc(quoteSwap.inbound_address, quoteSwap.memo, amountIn)
-            }
-
-            else -> throw IllegalArgumentException()
-        }
-
         return SwapFinalQuoteThorChain(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             amountOut = amountOut,
             amountOutMin = amountOut,
-            sendTransactionData = sendTransactionData,
+            sendTransactionData = getSendTransactionData(
+                tokenIn,
+                amountIn,
+                quoteSwap.inbound_address,
+                quoteSwap.memo,
+                quoteSwap.router
+            ),
             priceImpact = null,
             fields = listOf(),
         )
+    }
+
+    private fun getSendTransactionData(
+        tokenIn: Token,
+        amountIn: BigDecimal,
+        inboundAddress: String,
+        memo: String,
+        router: String?,
+    ) = when (tokenIn.blockchainType) {
+        BlockchainType.Avalanche,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Ethereum,
+            -> {
+            val transactionData = when (val tokenType = tokenIn.type) {
+                TokenType.Native -> {
+                    TransactionData(
+                        Address(inboundAddress),
+                        amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
+                        memo.toByteArray()
+                    )
+                }
+
+                is TokenType.Eip20 -> {
+                    val method = DepositWithExpiryMethod(
+                        Address(inboundAddress),
+                        Address(tokenType.address),
+                        amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
+                        memo,
+                        BigInteger.valueOf(Date().time / 1000 + 1 * 60 * 60)
+                    )
+
+                    checkNotNull(router)
+
+                    TransactionData(
+                        Address(router),
+                        BigInteger.ZERO,
+                        method.encodedABI()
+                    )
+                }
+
+                else -> throw IllegalArgumentException()
+            }
+
+            SendTransactionData.Evm(transactionData, null)
+        }
+
+        BlockchainType.BitcoinCash,
+        BlockchainType.Bitcoin,
+        BlockchainType.Litecoin,
+            -> {
+            SendTransactionData.Btc(inboundAddress, memo, amountIn)
+        }
+
+        else -> throw IllegalArgumentException()
     }
 
     data class Asset(val asset: String, val token: Token)
