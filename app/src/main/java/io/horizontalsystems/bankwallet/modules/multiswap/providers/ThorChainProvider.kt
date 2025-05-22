@@ -222,7 +222,12 @@ object ThorChainProvider : IMultiSwapProvider {
                 }
 
                 SendTransactionData.Evm(transactionData, null)
+            }
 
+            BlockchainType.BitcoinCash,
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin -> {
+                SendTransactionData.Btc(quoteSwap.inbound_address, quoteSwap.memo, amountIn)
             }
 
             else -> throw IllegalArgumentException()
