@@ -20,7 +20,7 @@ sealed class TranslatableString {
     override fun toString(): String {
         return when (this) {
             is PlainString -> text
-            is ResString -> Translator.getString(id, formatArgs)
+            is ResString -> Translator.getString(id, *formatArgs)
         }
     }
 }
