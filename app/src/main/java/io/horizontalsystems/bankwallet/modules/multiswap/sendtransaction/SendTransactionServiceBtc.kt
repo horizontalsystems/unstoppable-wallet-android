@@ -18,18 +18,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAddressService
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAmountService
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinFeeRateService
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinFeeService
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
@@ -54,16 +57,15 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
     private val provider = FeeRateProviderFactory.provider(token.blockchainType)!!
     private val feeService = SendBitcoinFeeService(adapter)
     private val feeRateService = SendBitcoinFeeRateService(provider)
+    private val amountService = SendBitcoinAmountService(adapter, token.coin.code, AmountValidator())
+    private val addressService = SendBitcoinAddressService(adapter)
 
     private var feeRateState = feeRateService.stateFlow.value
     private var bitcoinFeeInfo = feeService.bitcoinFeeInfoFlow.value
+    private var amountState = amountService.stateFlow.value
+    private var addressState = addressService.stateFlow.value
 
     private var memo: String? = null
-    private var address: String? = null
-    private var amount: BigDecimal? = null
-
-    private var cautions: List<CautionViewItem> = listOf()
-    private var sendable = false
     private var fields = listOf<DataField>()
 
     private val baseCurrency = App.currencyManager.baseCurrency
@@ -77,10 +79,19 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
                 handleFeeRateState(it)
             }
         }
-
         coroutineScope.launch {
             feeService.bitcoinFeeInfoFlow.collect {
                 handleBitcoinFeeInfo(it)
+            }
+        }
+        coroutineScope.launch {
+            amountService.stateFlow.collect {
+                handleAmountState(it)
+            }
+        }
+        coroutineScope.launch {
+            addressService.stateFlow.collect {
+                handleAddressState(it)
             }
         }
 
@@ -89,6 +100,23 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
         }
 
         feeService.setFeeRate(feeRateState.feeRate)
+    }
+
+    private fun handleAddressState(state: SendBitcoinAddressService.State) {
+        addressState = state
+
+        amountService.setValidAddress(addressState.validAddress)
+        feeService.setValidAddress(addressState.validAddress)
+
+        emitState()
+    }
+
+    private fun handleAmountState(state: SendBitcoinAmountService.State) {
+        amountState = state
+
+        feeService.setAmount(amountState.amount)
+
+        emitState()
     }
 
     private fun handleBitcoinFeeInfo(info: BitcoinFeeInfo?) {
@@ -101,14 +129,15 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
         feeRateState = state
 
         feeService.setFeeRate(feeRateState.feeRate)
+        amountService.setFeeRate(feeRateState.feeRate)
 
         emitState()
     }
 
     override fun createState() = SendTransactionServiceState(
         networkFee = getFeeAmountData(),
-        cautions = cautions,
-        sendable = sendable,
+        cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
+        sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend,
         loading = false,
         fields = fields
     )
@@ -127,20 +156,14 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
         check(data is SendTransactionData.Btc)
 
         memo = data.memo
-        amount = data.amount
-        address = data.address
+        amountService.setMemo(memo)
+        feeService.setMemo(memo)
 
-        feeService.setAmount(data.amount)
-        feeService.setValidAddress(Address(data.address))
-        feeService.setMemo(data.memo)
+        amountService.setAmount(data.amount)
 
-        refreshState()
+        addressService.setAddress(Address(data.address))
 
         emitState()
-    }
-
-    private fun refreshState() {
-        sendable = amount != null && address != null && feeRateState.canBeSend
     }
 
     @Composable
@@ -154,8 +177,8 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
 
     override suspend fun sendTransaction(): SendTransactionResult.Btc {
         val transactionRecord = adapter.send(
-            amount = amount!!,
-            address = address!!,
+            amount = amountState.amount!!,
+            address = addressState.validAddress?.hex!!,
             memo = memo,
             feeRate = feeRateState.feeRate!!,
             unspentOutputs = null,
