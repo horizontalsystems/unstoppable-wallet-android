@@ -10,7 +10,7 @@ interface ISwapFinalQuote {
     val tokenOut: Token
     val amountIn: BigDecimal
     val amountOut: BigDecimal
-    val amountOutMin: BigDecimal
+    val amountOutMin: BigDecimal?
     val sendTransactionData: SendTransactionData
     val priceImpact: BigDecimal?
     val fields: List<DataField>
@@ -21,7 +21,7 @@ data class SwapFinalQuoteEvm(
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
     override val amountOut: BigDecimal,
-    override val amountOutMin: BigDecimal,
+    override val amountOutMin: BigDecimal?,
     override val sendTransactionData: SendTransactionData.Evm,
     override val priceImpact: BigDecimal?,
     override val fields: List<DataField>
@@ -32,7 +32,7 @@ data class SwapFinalQuoteThorChain(
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
     override val amountOut: BigDecimal,
-    override val amountOutMin: BigDecimal,
+    override val amountOutMin: BigDecimal?,
     override val sendTransactionData: SendTransactionData,
     override val priceImpact: BigDecimal?,
     override val fields: List<DataField>
