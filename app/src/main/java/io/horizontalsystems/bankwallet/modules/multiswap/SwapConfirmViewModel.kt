@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -140,16 +139,7 @@ class SwapConfirmViewModel(
 
         if (cautions.isEmpty()) {
             priceImpactState.priceImpactCaution?.let { hsCaution ->
-                cautions = listOf(
-                    CautionViewItem(
-                        hsCaution.s.toString(),
-                        hsCaution.description.toString(),
-                        when (hsCaution.type) {
-                            HSCaution.Type.Error -> CautionViewItem.Type.Error
-                            HSCaution.Type.Warning -> CautionViewItem.Type.Warning
-                        }
-                    )
-                )
+                cautions = listOf(hsCaution.toCautionViewItem())
             }
         }
 
