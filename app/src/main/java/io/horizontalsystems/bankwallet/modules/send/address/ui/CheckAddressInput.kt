@@ -34,21 +34,36 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
 
 @Composable
 fun CheckAddressInput(
     modifier: Modifier = Modifier,
     value: String,
     hint: String,
+    state: DataState<Address>? = null,
     onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
+
+    val borderColor = when (state) {
+        is DataState.Error -> {
+            if (state.error is FormsInputStateWarning) {
+                ComposeAppTheme.colors.yellow50
+            } else {
+                ComposeAppTheme.colors.red50
+            }
+        }
+        else -> ComposeAppTheme.colors.steel20
+    }
 
     Column(modifier) {
         Row(
@@ -56,7 +71,7 @@ fun CheckAddressInput(
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 44.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {

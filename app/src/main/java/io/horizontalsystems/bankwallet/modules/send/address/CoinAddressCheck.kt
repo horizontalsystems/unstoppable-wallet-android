@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.modules.send.address.ui.CheckAddressInput
@@ -30,6 +31,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 
@@ -93,6 +96,7 @@ fun CoinAddressCheckScreen(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     value = uiState.value,
                     hint = stringResource(id = R.string.Send_Hint_Address),
+                    state = uiState.inputState,
                 ) {
                     viewModel.onEnterAddress(it)
                 }
@@ -120,6 +124,9 @@ fun CoinAddressCheckScreen(
                             }
                         }
                     }
+                    uiState.addressValidationError?.let {
+                        ValidationError(it)
+                    }
                 }
             }
         }
@@ -137,4 +144,25 @@ fun CoinAddressCheckScreen(
             }
         )
     }
+}
+
+@Composable
+private fun ValidationError(addressValidationError: Throwable) {
+    TextImportantError(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        icon = R.drawable.ic_attention_20,
+        title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+        text = addressValidationError.getErrorMessage()
+            ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
+    )
+    VSpacer(32.dp)
+}
+
+@Composable
+private fun Throwable.getErrorMessage() = when (this) {
+    is StellarAssetAdapter.NoTrustlineError -> {
+        stringResource(R.string.Error_AssetNotEnabled, code)
+    }
+
+    else -> this.message
 }

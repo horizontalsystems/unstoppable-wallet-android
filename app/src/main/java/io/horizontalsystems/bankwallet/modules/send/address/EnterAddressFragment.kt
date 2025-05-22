@@ -39,7 +39,6 @@ import androidx.navigation.NavController
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.paidAction
@@ -221,7 +220,9 @@ fun AddressCheck(
     onClick: (type: AddressCheckType) -> Unit
 ) {
     VSpacer(16.dp)
-    if (addressValidationError == null) {
+    if (addressValidationInProgress) {
+        //show nothing
+    } else if (addressValidationError == null) {
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -246,49 +247,21 @@ fun AddressCheck(
         }
     }
 
-    Errors(addressValidationError, checkResults)
-}
+    checkResults.forEach { (addressCheckType, addressCheckData) ->
+        if (addressCheckData.checkResult == AddressCheckResult.Detected) {
+            TextImportantError(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = R.drawable.ic_attention_20,
+                title = stringResource(addressCheckType.detectedErrorTitle),
+                text = stringResource(addressCheckType.detectedErrorDescription)
+            )
+            VSpacer(16.dp)
+        }
+    }
 
-@Composable
-private fun Errors(
-    addressValidationError: Throwable?,
-    checkResults: Map<AddressCheckType, AddressCheckData>,
-) {
-    if (addressValidationError != null) {
-        TextImportantError(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            icon = R.drawable.ic_attention_20,
-            title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-            text = addressValidationError.getErrorMessage()
-                ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
-        )
+    if (checkResults.any { it.value.checkResult == AddressCheckResult.Detected }) {
         VSpacer(32.dp)
-    } else {
-        checkResults.forEach { (addressCheckType, addressCheckData) ->
-            if (addressCheckData.checkResult == AddressCheckResult.Detected) {
-                TextImportantError(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    icon = R.drawable.ic_attention_20,
-                    title = stringResource(addressCheckType.detectedErrorTitle),
-                    text = stringResource(addressCheckType.detectedErrorDescription)
-                )
-                VSpacer(16.dp)
-            }
-        }
-
-        if (checkResults.any { it.value.checkResult == AddressCheckResult.Detected }) {
-            VSpacer(32.dp)
-        }
     }
-}
-
-@Composable
-private fun Throwable.getErrorMessage() = when (this) {
-    is StellarAssetAdapter.NoTrustlineError -> {
-        stringResource(R.string.Error_AssetNotEnabled, code)
-    }
-
-    else -> this.message
 }
 
 @Composable
