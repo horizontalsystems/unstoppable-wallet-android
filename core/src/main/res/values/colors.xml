@@ -22,9 +22,11 @@
     <color name="white_pressed">#e3e4e8</color>
     <color name="darkest">#0f1014</color>
 
+    <color name="steel">#B3B3B3</color>
+    <color name="carbon">#232323</color>
     <color name="dark">#13151a</color>
     <color name="dark_80">#CC13151A</color>
-    <color name="light">#f0f0f0</color>
+    <color name="light">#dfdfdf</color>
     <color name="white_20">#33FFFFFF</color>
     <color name="black_50">#80000000</color>
     <color name="white_50">#80ffffff</color>
@@ -44,7 +46,7 @@
     <color name="lucian">@color/red_l</color>
     <color name="tyler">@color/light</color>
 
-    <color name="claude">@color/white</color>
+    <color name="blade">@color/light</color>
     <color name="leah">@color/steel_dark</color>
     <color name="lawrence">@color/white</color>
     <color name="lawrence_pressed">@color/steel_light</color>

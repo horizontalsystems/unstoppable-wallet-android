@@ -89,7 +89,7 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10
+                    color = ComposeAppTheme.colors.blade
                 )
                 RowUniversal(
                     modifier = Modifier.height(48.dp),

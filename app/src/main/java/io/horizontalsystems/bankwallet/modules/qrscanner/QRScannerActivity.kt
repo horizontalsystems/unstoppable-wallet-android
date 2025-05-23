@@ -185,8 +185,8 @@ private fun QRScannerScreen(
                     buttonColors = ButtonPrimaryDefaults.textButtonColors(
                         backgroundColor = Bright,
                         contentColor = ComposeAppTheme.colors.dark,
-                        disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-                        disabledContentColor = ComposeAppTheme.colors.grey50,
+                        disabledBackgroundColor = ComposeAppTheme.colors.blade,
+                        disabledContentColor = ComposeAppTheme.colors.andy,
                     ),
                     onClick = onCloseClick
                 )

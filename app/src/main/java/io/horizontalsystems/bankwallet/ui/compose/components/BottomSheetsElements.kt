@@ -29,7 +29,7 @@ fun BottomSheetsElementsButtons(
     ) {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
         Spacer(modifier = Modifier.height(15.dp))
         ButtonPrimaryYellow(
@@ -75,7 +75,7 @@ fun BottomSheetsElementsText(text: String) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
 
         subhead2_grey(
@@ -128,7 +128,7 @@ fun BottomSheetsElementsCheckbox(
     Column(modifier = Modifier.fillMaxWidth()) {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
         Row(
             modifier = Modifier

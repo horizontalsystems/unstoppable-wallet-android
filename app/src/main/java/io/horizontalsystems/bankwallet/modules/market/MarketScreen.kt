@@ -113,7 +113,7 @@ fun MarketScreen(navController: NavController) {
                 MetricsBoard(navController, it, uiState.currency)
             }
             Divider(
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 thickness = 1.dp
             )
             TabsSection(navController, tabs, uiState.selectedTab) { tab ->
@@ -237,7 +237,7 @@ private fun VDivider() {
         Modifier
             .fillMaxHeight()
             .width(1.dp)
-            .background(color = ComposeAppTheme.colors.steel10)
+            .background(color = ComposeAppTheme.colors.blade)
     )
 }
 

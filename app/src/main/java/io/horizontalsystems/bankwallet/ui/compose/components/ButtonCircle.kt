@@ -27,14 +27,14 @@ fun ButtonPrimaryCircle(
         modifier = Modifier
             .size(50.dp)
             .clip(shape)
-            .background(if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20),
+            .background(if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.blade),
         enabled = enabled,
-        rippleColor = ComposeAppTheme.colors.claude
+        rippleColor = ComposeAppTheme.colors.blade
     ) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = contentDescription,
-            tint = if (enabled) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.grey50
+            tint = if (enabled) ComposeAppTheme.colors.blade else ComposeAppTheme.colors.andy
         )
     }
 }
@@ -46,7 +46,7 @@ fun ButtonSecondaryCircle(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_20,
     contentDescription: String? = null,
     tint: Color = ComposeAppTheme.colors.leah,
-    background: Color = ComposeAppTheme.colors.steel20,
+    background: Color = ComposeAppTheme.colors.blade,
     onClick: () -> Unit,
 ) {
     HsIconButton(

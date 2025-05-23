@@ -114,7 +114,7 @@ fun PinTopBlock(
 
 @Composable
 private fun IndicatorCircle(active: Boolean) {
-    val color = if (active) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20
+    val color = if (active) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.blade
     Box(
         modifier = Modifier
             .size(12.dp)

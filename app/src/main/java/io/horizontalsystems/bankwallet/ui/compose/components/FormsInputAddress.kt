@@ -70,7 +70,7 @@ fun FormsInputAddress(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {

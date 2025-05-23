@@ -207,8 +207,8 @@ fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
         ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         )
     } else {
         SecondaryButtonDefaults.buttonColors()

@@ -24,8 +24,6 @@ import io.horizontalsystems.bankwallet.ui.compose.Red20
 import io.horizontalsystems.bankwallet.ui.compose.Red50
 import io.horizontalsystems.bankwallet.ui.compose.RedD
 import io.horizontalsystems.bankwallet.ui.compose.RedL
-import io.horizontalsystems.bankwallet.ui.compose.Steel10
-import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.Yellow20
 import io.horizontalsystems.bankwallet.ui.compose.Yellow50
 import io.horizontalsystems.bankwallet.ui.compose.YellowD
@@ -94,7 +92,6 @@ internal val LocalColorProviders = staticCompositionLocalOf {
         lucian = ColorProvider(lightPalette.lucian, darkPalette.lucian),
         tyler = ColorProvider(lightPalette.tyler, darkPalette.tyler),
         leah = ColorProvider(lightPalette.leah, darkPalette.leah),
-        claude = ColorProvider(lightPalette.claude, darkPalette.claude),
         lawrence = ColorProvider(lightPalette.lawrence, darkPalette.lawrence),
         laguna = ColorProvider(lightPalette.laguna, darkPalette.laguna),
         raina = ColorProvider(lightPalette.raina, darkPalette.raina),
@@ -107,7 +104,6 @@ data class ColorProviders(
     val lucian: ColorProvider,
     val tyler: ColorProvider,
     val leah: ColorProvider,
-    val claude: ColorProvider,
     val lawrence: ColorProvider,
     val laguna: ColorProvider,
     val raina: ColorProvider,
@@ -124,8 +120,6 @@ val white = Color.White
 val black50 = Black50
 val issykBlue = Color(0xFF3372FF)
 val lightGrey = LightGrey
-val steel10 = Steel10
-val steel20 = Steel20
 val grey = Grey
 val grey50 = Grey50
 val yellow50 = Yellow50

@@ -102,7 +102,7 @@ private fun SwapSelectProviderScreenInner(
                 val borderColor = if (viewItem.quote == currentQuote) {
                     ComposeAppTheme.colors.yellow50
                 } else {
-                    ComposeAppTheme.colors.steel20
+                    ComposeAppTheme.colors.blade
                 }
 
                 RowUniversal(

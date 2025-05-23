@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +43,7 @@ fun Roi(roi: List<RoiViewItem>) {
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .width(1.dp)
-                                .background(ComposeAppTheme.colors.steel10)
+                                .background(ComposeAppTheme.colors.blade)
                         )
                         Text(
                             modifier = Modifier.weight(1f),
@@ -62,7 +66,7 @@ fun Roi(roi: List<RoiViewItem>) {
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .width(1.dp)
-                                .background(ComposeAppTheme.colors.steel10)
+                                .background(ComposeAppTheme.colors.blade)
                         )
                         val text: String
                         val color: Color

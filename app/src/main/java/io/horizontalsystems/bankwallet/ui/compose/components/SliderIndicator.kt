@@ -25,7 +25,7 @@ fun SliderIndicator(total: Int, current: Int) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(2.dp))
-                    .background(if (index == current) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20)
+                    .background(if (index == current) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.blade)
                     .size(width = 20.dp, height = 4.dp),
             )
         }

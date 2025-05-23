@@ -24,7 +24,7 @@ fun HsSwitch(
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = ComposeAppTheme.colors.white,
-                uncheckedThumbColor = ComposeAppTheme.colors.lightGrey,
+                uncheckedThumbColor = ComposeAppTheme.colors.blade,
                 checkedTrackColor = ComposeAppTheme.colors.yellowD,
                 uncheckedTrackColor = ComposeAppTheme.colors.elenaD,
                 checkedTrackAlpha = 1f,

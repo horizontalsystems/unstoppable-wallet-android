@@ -17,7 +17,7 @@ fun CardsSwapInfo(content: @Composable() (ColumnScope.() -> Unit)) {
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
             .padding(vertical = 2.dp),
         content = content
     )

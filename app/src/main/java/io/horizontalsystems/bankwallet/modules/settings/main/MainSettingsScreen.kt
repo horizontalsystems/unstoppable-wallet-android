@@ -335,7 +335,7 @@ private fun SettingSections(
             )
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
             )
             HsSettingCell(
                 title = R.string.SettingsAddressChecker_Title,
@@ -534,7 +534,7 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
                 .width(100.dp)
                 .padding(top = 8.dp, bottom = 4.5.dp),
             thickness = 0.5.dp,
-            color = ComposeAppTheme.colors.steel20
+            color = ComposeAppTheme.colors.blade
         )
         Text(
             text = stringResource(R.string.Settings_InfoSubtitle),

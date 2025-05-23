@@ -139,7 +139,7 @@ fun AnalyticsFooterCell(
     if (showTopDivider) {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -282,7 +282,7 @@ fun AnalyticsContainer(
     sectionTitle?.let {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
             modifier = Modifier.fillMaxWidth()
         )
         RowUniversal(content = it)
@@ -295,7 +295,7 @@ fun AnalyticsContainer(
         if (showFooterDivider) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.fillMaxWidth()
             )
         }

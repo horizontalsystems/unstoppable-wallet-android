@@ -91,7 +91,7 @@ fun Contracts(
                                     modifier = Modifier
                                         .padding(start = 8.dp)
                                         .clip(RoundedCornerShape(4.dp))
-                                        .background(ComposeAppTheme.colors.claude)
+                                        .background(ComposeAppTheme.colors.blade)
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),

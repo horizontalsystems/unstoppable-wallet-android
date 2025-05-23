@@ -48,7 +48,7 @@ fun CellUniversal(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -75,7 +75,7 @@ fun CellUniversalFixedHeight(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }

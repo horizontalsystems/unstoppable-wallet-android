@@ -137,7 +137,7 @@ fun MarketCoinFirstRow(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(ComposeAppTheme.colors.claude)
+                        .background(ComposeAppTheme.colors.blade)
                 ) {
                     Text(
                         modifier = Modifier.padding(
@@ -180,7 +180,7 @@ fun SignalBadge(advice: Advice) {
         Advice.Sell -> ComposeAppTheme.colors.red20
         Advice.StrongBuy -> ComposeAppTheme.colors.remus
         Advice.StrongSell -> ComposeAppTheme.colors.lucian
-        Advice.Neutral -> ComposeAppTheme.colors.claude
+        Advice.Neutral -> ComposeAppTheme.colors.blade
         else -> ComposeAppTheme.colors.yellow20
     }
 

@@ -76,7 +76,7 @@ fun AddressCheckBlockchainSelectorScreen(
             if (uiState.blockchains.isNotEmpty()) {
                 Divider(
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+                    color = ComposeAppTheme.colors.blade,
                 )
             }
             VSpacer(32.dp)

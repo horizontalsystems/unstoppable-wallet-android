@@ -63,7 +63,7 @@ fun <T> SelectorDialogCompose(
                             }
                         )
                 ) {
-                    Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
+                    Divider(thickness = 1.dp, color = ComposeAppTheme.colors.blade)
                     val color = if (item.selected) {
                         ComposeAppTheme.colors.jacob
                     } else {

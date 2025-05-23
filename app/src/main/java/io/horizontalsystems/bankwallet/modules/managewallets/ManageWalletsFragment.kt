@@ -131,7 +131,7 @@ private fun ManageWalletsScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                         Divider(
                             thickness = 1.dp,
-                            color = ComposeAppTheme.colors.steel10,
+                            color = ComposeAppTheme.colors.blade,
                         )
                     }
                     items(it) { viewItem ->
@@ -199,7 +199,7 @@ private fun CoinCell(
                             modifier = Modifier
                                 .padding(start = 6.dp)
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.claude)
+                                .background(ComposeAppTheme.colors.blade)
                         ) {
                             Text(
                                 modifier = Modifier.padding(
@@ -239,7 +239,7 @@ private fun CoinCell(
         }
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
     }
 }

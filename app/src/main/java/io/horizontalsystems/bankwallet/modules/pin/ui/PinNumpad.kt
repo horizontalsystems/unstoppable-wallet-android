@@ -137,7 +137,7 @@ private fun NumberKey(
         modifier = Modifier
             .size(72.dp)
             .clip(CircleShape)
-            .border(1.dp, ComposeAppTheme.colors.steel20, CircleShape)
+            .border(1.dp, ComposeAppTheme.colors.blade, CircleShape)
             .clickable(
                 enabled = enabled,
                 onClick = {
@@ -150,7 +150,7 @@ private fun NumberKey(
         Text(
             text = number.toString(),
             style = ComposeAppTheme.typography.title2R,
-            color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20,
+            color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy,
         )
     }
 }
@@ -181,7 +181,7 @@ private fun ImageKey(
             Icon(
                 modifier = Modifier.align(Alignment.Center),
                 painter = painterResource(image),
-                tint = if (enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.steel20,
+                tint = if (enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.andy,
                 contentDescription = contentDescription,
             )
         }

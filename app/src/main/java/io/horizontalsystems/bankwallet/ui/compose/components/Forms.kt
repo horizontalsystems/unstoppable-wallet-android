@@ -88,7 +88,7 @@ fun FormsInput(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -275,7 +275,7 @@ fun FormsInputPassword(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -407,7 +407,7 @@ fun FormsInputMultiline(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
