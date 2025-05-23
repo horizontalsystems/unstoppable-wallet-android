@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -72,7 +71,7 @@ fun BalanceCardSwipable(
             content = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                    tint = Color.Gray,
+                    tint = ComposeAppTheme.colors.grey,
                     contentDescription = "delete",
                 )
             }
@@ -203,7 +202,7 @@ fun BalanceCardInner(
                                         Row {
                                             Text(
                                                 text = viewItem.exchangeValue.value,
-                                                color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                                color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
                                                 style = ComposeAppTheme.typography.subheadR,
                                                 maxLines = 1,
                                             )
@@ -235,7 +234,7 @@ fun BalanceCardInner(
                         } else {
                             Text(
                                 text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "*****",
-                                color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
                                 style = ComposeAppTheme.typography.subheadR,
                                 maxLines = 1,
                             )

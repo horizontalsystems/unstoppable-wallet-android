@@ -179,7 +179,6 @@ fun ContactsScreen(
                                 MenuItem(
                                     title = TranslatableString.ResString(R.string.Contacts_NewContact),
                                     icon = R.drawable.icon_user_plus,
-                                    tint = ComposeAppTheme.colors.jacob,
                                     onClick = onNavigateToCreateContact
                                 )
                             )
@@ -189,7 +188,6 @@ fun ContactsScreen(
                                 MenuItem(
                                     title = TranslatableString.ResString(R.string.Contacts_ActionMore),
                                     icon = R.drawable.ic_more2_20,
-                                    tint = ComposeAppTheme.colors.jacob,
                                     enabled = true,
                                     onClick = {
                                         showMoreSelectorDialog = true

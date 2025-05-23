@@ -139,7 +139,7 @@ fun ButtonSecondaryTransparent(
             backgroundColor = ComposeAppTheme.colors.transparent,
             contentColor = ComposeAppTheme.colors.leah,
             disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             if (iconRight != null) {

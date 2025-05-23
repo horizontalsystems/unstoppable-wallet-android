@@ -53,7 +53,7 @@ fun HsBackButton(onClick: () -> Unit) {
         Icon(
             painter = painterResource(id = R.drawable.ic_back),
             contentDescription = stringResource(R.string.Button_Back),
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.grey
         )
     }
 }

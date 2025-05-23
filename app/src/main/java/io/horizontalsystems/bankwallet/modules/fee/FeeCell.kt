@@ -76,7 +76,7 @@ fun FeeCell(
                 val color = if (viewState is ViewState.Error) {
                     ComposeAppTheme.colors.lucian
                 } else if (value == null) {
-                    ComposeAppTheme.colors.grey50
+                    ComposeAppTheme.colors.andy
                 } else {
                     ComposeAppTheme.colors.leah
                 }

@@ -413,7 +413,7 @@ fun TitleCenteredTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.ic_close),
                 contentDescription = "close button",
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.grey,
             )
         }
     }
@@ -433,7 +433,7 @@ fun ColoredTextSecondaryButton(
             backgroundColor = ComposeAppTheme.colors.transparent,
             contentColor = color,
             disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             Text(

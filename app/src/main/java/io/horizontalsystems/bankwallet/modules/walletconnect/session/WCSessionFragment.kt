@@ -102,7 +102,7 @@ fun WCSessionPage(
                     icon = R.drawable.ic_close,
                     onClick = { navController.popBackStack() },
                     enabled = uiState.closeEnabled,
-                    tint = if (uiState.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
+                    tint = if (uiState.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.andy
                 )
             )
         )

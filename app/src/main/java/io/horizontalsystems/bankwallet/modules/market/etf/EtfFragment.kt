@@ -341,12 +341,12 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                             .padding(horizontal = 8.dp)
                     ) {
                         val color = if (isSelected) {
-                            ComposeAppTheme.colors.grey50
+                            ComposeAppTheme.colors.andy
                         } else {
                             ComposeAppTheme.colors.remus
                         }
                         val colorNegative = if (isSelected) {
-                            ComposeAppTheme.colors.grey50
+                            ComposeAppTheme.colors.andy
                         } else {
                             ComposeAppTheme.colors.lucian
                         }
@@ -360,7 +360,7 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                         GraphicLine(
                             modifier = Modifier.matchParentSize(),
                             data = dataTotalInflow,
-                            color = ComposeAppTheme.colors.grey50,
+                            color = ComposeAppTheme.colors.andy,
                             selectedItemKey = selectedKey
                         )
                         GraphicPointer(

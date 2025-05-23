@@ -108,7 +108,7 @@ fun ButtonPrimaryTransparent(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val contentColor = when {
-        !enabled -> ComposeAppTheme.colors.grey50
+        !enabled -> ComposeAppTheme.colors.andy
         isPressed -> ComposeAppTheme.colors.grey
         else -> ComposeAppTheme.colors.leah
     }

@@ -174,11 +174,11 @@ fun AppBar(
 private fun MenuItemSimple(menuItem: MenuItem) {
     val color = if (menuItem.enabled) {
         if (menuItem.tint == Color.Unspecified)
-            ComposeAppTheme.colors.jacob
+            ComposeAppTheme.colors.grey
         else
             menuItem.tint
     } else {
-        ComposeAppTheme.colors.grey50
+        ComposeAppTheme.colors.andy
     }
 
     val icon = menuItem.icon

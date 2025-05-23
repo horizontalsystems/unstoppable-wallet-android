@@ -458,7 +458,7 @@ object TabDefaults {
         contentColor: Color = ComposeAppTheme.colors.leah,
         selectedBackgroundColor: Color = ComposeAppTheme.colors.yellowD,
         selectedContentColor: Color = ComposeAppTheme.colors.dark,
-        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
+        disabledContentColor: Color = ComposeAppTheme.colors.andy,
     ): DefaultTabColors = DefaultTabColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,

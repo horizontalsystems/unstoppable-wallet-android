@@ -194,7 +194,7 @@ private fun TokenBalanceHeader(
         } else {
             Text(
                 text = if (balanceViewItem.secondaryValue.visible) balanceViewItem.secondaryValue.value else "*****",
-                color = if (balanceViewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                color = if (balanceViewItem.secondaryValue.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.body,
                 maxLines = 1,
             )
@@ -270,7 +270,7 @@ private fun LockedBalanceCell(
         Text(
             modifier = Modifier.padding(start = 6.dp),
             text = if (lockedAmount.visible) lockedAmount.value else "*****",
-            color = if (lockedAmount.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+            color = if (lockedAmount.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.subheadR,
             maxLines = 1,
         )
