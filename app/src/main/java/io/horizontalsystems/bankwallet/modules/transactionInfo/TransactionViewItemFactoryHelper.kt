@@ -111,7 +111,6 @@ object TransactionViewItemFactoryHelper {
     private fun getAmountColor(incoming: Boolean?): ColorName {
         return when (incoming) {
             true -> ColorName.Remus
-            false -> ColorName.Lucian
             else -> ColorName.Leah
         }
     }
@@ -191,7 +190,7 @@ object TransactionViewItemFactoryHelper {
             } ?: "---"
 
         val color = if (hasRecipient && incoming == true) {
-            ColorName.Lucian
+            ColorName.Leah
         } else {
             getAmountColor(incoming)
         }
