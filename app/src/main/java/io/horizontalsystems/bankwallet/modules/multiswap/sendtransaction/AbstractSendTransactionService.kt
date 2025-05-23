@@ -8,17 +8,25 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import java.util.UUID
 
-abstract class ISendTransactionService: ServiceState<SendTransactionServiceState>() {
+abstract class AbstractSendTransactionService: ServiceState<SendTransactionServiceState>() {
+    abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
+    protected var uuid = UUID.randomUUID().toString()
+
     abstract fun start(coroutineScope: CoroutineScope)
     abstract fun setSendTransactionData(data: SendTransactionData)
     @Composable
     abstract fun GetSettingsContent(navController: NavController)
     abstract suspend fun sendTransaction() : SendTransactionResult
-    abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
+
+    fun refreshUuid() {
+        uuid = UUID.randomUUID().toString()
+    }
 }
 
 data class SendTransactionServiceState(
+    val uuid: String,
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
     val sendable: Boolean,
