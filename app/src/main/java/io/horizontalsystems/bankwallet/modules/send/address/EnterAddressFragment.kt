@@ -330,7 +330,7 @@ fun CheckLocked() {
     Icon(
         painter = painterResource(R.drawable.ic_lock_20),
         contentDescription = null,
-        tint = ComposeAppTheme.colors.grey50,
+        tint = ComposeAppTheme.colors.andy,
     )
 }
 

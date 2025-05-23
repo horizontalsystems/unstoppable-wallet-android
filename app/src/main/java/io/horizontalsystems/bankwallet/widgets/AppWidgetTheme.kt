@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.ui.compose.Green50
 import io.horizontalsystems.bankwallet.ui.compose.GreenD
 import io.horizontalsystems.bankwallet.ui.compose.GreenL
 import io.horizontalsystems.bankwallet.ui.compose.Grey
-import io.horizontalsystems.bankwallet.ui.compose.Grey50
 import io.horizontalsystems.bankwallet.ui.compose.Light
 import io.horizontalsystems.bankwallet.ui.compose.LightGrey
 import io.horizontalsystems.bankwallet.ui.compose.Red20
@@ -121,7 +120,6 @@ val black50 = Black50
 val issykBlue = Color(0xFF3372FF)
 val lightGrey = LightGrey
 val grey = Grey
-val grey50 = Grey50
 val yellow50 = Yellow50
 val yellow20 = Yellow20
 

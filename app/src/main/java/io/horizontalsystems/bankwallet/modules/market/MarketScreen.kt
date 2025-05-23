@@ -78,7 +78,6 @@ fun MarketScreen(navController: NavController) {
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Market_Search),
                         icon = R.drawable.icon_search,
-                        tint = ComposeAppTheme.colors.jacob,
                         onClick = {
                             navController.slideFromRight(R.id.marketSearchFragment)
 

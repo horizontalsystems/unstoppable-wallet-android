@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -132,7 +133,7 @@ private fun LazyListScope.WCSection(
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                                tint = Color.Gray,
+                                tint = ComposeAppTheme.colors.grey,
                                 contentDescription = "delete",
                             )
                         }

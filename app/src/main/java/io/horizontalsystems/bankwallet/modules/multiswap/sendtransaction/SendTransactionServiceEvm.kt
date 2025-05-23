@@ -280,7 +280,7 @@ fun SendEvmFeeSettingsScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.grey
                     )
                 }
             },

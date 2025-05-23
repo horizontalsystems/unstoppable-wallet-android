@@ -32,7 +32,7 @@ fun InfoH1(text: String) {
         Spacer(Modifier.height(8.dp))
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.grey50
+            color = ComposeAppTheme.colors.blade
         )
     }
 }

@@ -31,7 +31,6 @@ val Red20 = Color(0x33FF1539)
 //old colors
 val LightGrey = Color(0xFFC8C7CC)
 val Grey = Color(0xFF808085)
-val Grey50 = Color(0x80808085)
 
 val Black50 = Color(0x80000000)
 val White50 = Color(0x80FFFFFF)

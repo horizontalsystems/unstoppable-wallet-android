@@ -113,7 +113,7 @@ fun FormsInputAddress(
                             hint,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            color = ComposeAppTheme.colors.grey50,
+                            color = ComposeAppTheme.colors.andy,
                             style = ComposeAppTheme.typography.body
                         )
                     }

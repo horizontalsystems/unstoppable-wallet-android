@@ -81,7 +81,7 @@ fun SearchBar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = stringResource(R.string.Button_Back),
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.grey
                 )
             }
         },
@@ -133,7 +133,7 @@ fun SearchBar(
                                 Icon(
                                     painter = painterResource(R.drawable.ic_close),
                                     contentDescription = stringResource(R.string.Button_Cancel),
-                                    tint = ComposeAppTheme.colors.jacob
+                                    tint = ComposeAppTheme.colors.grey
                                 )
                             }
 
