@@ -98,8 +98,6 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
         coroutineScope.launch {
             feeRateService.start()
         }
-
-        feeService.setFeeRate(feeRateState.feeRate)
     }
 
     private fun handleAddressState(state: SendBitcoinAddressService.State) {

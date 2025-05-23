@@ -41,8 +41,8 @@ class SendBitcoinAmountService(
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution
 
-        val canBeSend = tmpAmount != null
-            && tmpAmount > BigDecimal.ZERO
+        val canBeSend = availableBalance != null
+            && tmpAmount != null && tmpAmount > BigDecimal.ZERO
             && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
 
         _stateFlow.update {
@@ -64,12 +64,14 @@ class SendBitcoinAmountService(
     }
 
     private fun validateAmount() {
-        amountCaution = amountValidator.validate(
-            amount,
-            coinCode,
-            availableBalance ?: BigDecimal.ZERO,
-            minimumSendAmount,
-        )
+        availableBalance?.let {
+            amountCaution = amountValidator.validate(
+                amount,
+                coinCode,
+                it,
+                minimumSendAmount,
+            )
+        }
     }
 
     fun setAmount(amount: BigDecimal?) {
