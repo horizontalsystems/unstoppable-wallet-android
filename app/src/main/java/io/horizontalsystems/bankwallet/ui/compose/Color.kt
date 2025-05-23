@@ -27,8 +27,6 @@ val Green50 = Color(0x800AC18E)
 val Green20 = Color(0x330AC18E)
 val Red50 = Color(0x80FF1539)
 val Red20 = Color(0x33FF1539)
-val Steel10 = Color(0x1a6E7899)
-val Steel20 = Color(0x336E7899)
 
 //old colors
 val LightGrey = Color(0xFFC8C7CC)

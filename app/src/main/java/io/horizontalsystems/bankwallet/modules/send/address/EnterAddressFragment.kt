@@ -231,7 +231,7 @@ fun AddressCheck(
                 .clip(RoundedCornerShape(12.dp))
                 .border(
                     0.5.dp,
-                    ComposeAppTheme.colors.steel20,
+                    ComposeAppTheme.colors.blade,
                     RoundedCornerShape(12.dp)
                 )
         ) {
@@ -349,7 +349,7 @@ fun AddressSuggestions(
                 .clip(RoundedCornerShape(12.dp))
                 .border(
                     0.5.dp,
-                    ComposeAppTheme.colors.steel20,
+                    ComposeAppTheme.colors.blade,
                     RoundedCornerShape(12.dp)
                 )
                 .clickable {
@@ -369,7 +369,7 @@ fun AddressSuggestions(
                 .clip(RoundedCornerShape(12.dp))
                 .border(
                     0.5.dp,
-                    ComposeAppTheme.colors.steel20,
+                    ComposeAppTheme.colors.blade,
                     RoundedCornerShape(12.dp)
                 )
                 .clickable {
@@ -390,7 +390,7 @@ fun AddressSuggestions(
                 .clip(RoundedCornerShape(12.dp))
                 .border(
                     0.5.dp,
-                    ComposeAppTheme.colors.steel20,
+                    ComposeAppTheme.colors.blade,
                     RoundedCornerShape(12.dp)
                 )
         ) {
@@ -398,7 +398,7 @@ fun AddressSuggestions(
                 if (index != 0) {
                     Divider(
                         modifier = Modifier.fillMaxWidth(),
-                        color = ComposeAppTheme.colors.steel20,
+                        color = ComposeAppTheme.colors.blade,
                         thickness = 0.5.dp
                     )
                 }

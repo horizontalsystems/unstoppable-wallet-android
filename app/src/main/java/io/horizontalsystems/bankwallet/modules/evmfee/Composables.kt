@@ -168,7 +168,7 @@ fun EvmSettingsInput(
     val borderColor = when {
         errors.isNotEmpty() -> ComposeAppTheme.colors.red50
         warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     EvmSettingsInput(
@@ -199,7 +199,7 @@ fun EvmSettingsInput(
     val borderColor = when (caution?.type) {
         HSCaution.Type.Error -> ComposeAppTheme.colors.red50
         HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     EvmSettingsInput(

@@ -598,7 +598,7 @@ private fun SwapInput(
         Divider(
             modifier = Modifier.align(Alignment.Center),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
+            color = ComposeAppTheme.colors.blade
         )
         ButtonSecondaryCircle(
             modifier = Modifier.align(Alignment.Center),

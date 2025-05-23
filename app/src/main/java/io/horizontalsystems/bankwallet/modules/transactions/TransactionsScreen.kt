@@ -253,9 +253,9 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
         }
 
         val borderModifier = if (position != SectionItemPosition.Single) {
-            Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)
+            Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.blade, 12.dp, position)
         } else {
-            Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+            Modifier.border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
         }
 
         RowUniversal(

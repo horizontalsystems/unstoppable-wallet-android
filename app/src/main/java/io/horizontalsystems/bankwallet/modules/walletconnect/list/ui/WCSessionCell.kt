@@ -57,7 +57,7 @@ fun WCSessionCell(
         if (showDivider) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }

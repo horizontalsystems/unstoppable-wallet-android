@@ -30,7 +30,7 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
     ) {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
 
@@ -88,7 +88,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
         Divider(
             modifier = Modifier.align(Alignment.BottomCenter),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
 
         ScrollableTabRow(

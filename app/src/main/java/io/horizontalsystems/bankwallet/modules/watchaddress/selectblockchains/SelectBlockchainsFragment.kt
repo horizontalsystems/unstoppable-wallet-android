@@ -125,7 +125,7 @@ private fun SelectBlockchainsScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+                    color = ComposeAppTheme.colors.blade,
                 )
             }
             items(blockchainViewItems) { viewItem ->
@@ -157,7 +157,7 @@ private fun SelectBlockchainsScreen(
                                         modifier = Modifier
                                             .padding(start = 6.dp)
                                             .clip(RoundedCornerShape(4.dp))
-                                            .background(ComposeAppTheme.colors.claude)
+                                            .background(ComposeAppTheme.colors.blade)
                                     ) {
                                         Text(
                                             modifier = Modifier.padding(

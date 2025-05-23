@@ -146,7 +146,7 @@ fun RestorePhrase(
     val borderColor = if (uiState.error != null) {
         ComposeAppTheme.colors.red50
     } else {
-        ComposeAppTheme.colors.steel20
+        ComposeAppTheme.colors.blade
     }
 
     val coroutineScope = rememberCoroutineScope()

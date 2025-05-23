@@ -62,7 +62,7 @@ fun CheckAddressInput(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     Column(modifier) {

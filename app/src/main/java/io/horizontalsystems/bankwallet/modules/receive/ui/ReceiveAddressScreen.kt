@@ -447,7 +447,7 @@ private fun AdditionalDataSection(
         Divider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel20
+            color = ComposeAppTheme.colors.blade
         )
         RowUniversal(
             modifier = Modifier.height(48.dp),

@@ -141,7 +141,7 @@ private fun SendEvmProcessingScreen(
                         )
                         Divider(
                             thickness = 1.dp,
-                            color = ComposeAppTheme.colors.steel10,
+                            color = ComposeAppTheme.colors.blade,
                         )
                         TransactionInfoCancelCell(
                             transactionHash = "txhash",
@@ -184,7 +184,7 @@ fun TransactionDataView(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.tyler)
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,

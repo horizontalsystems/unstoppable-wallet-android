@@ -425,7 +425,7 @@ fun PriceVolChart(
                 .drawBehind {
                     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                     drawLine(
-                        color = colors.steel10,
+                        color = colors.blade,
                         start = Offset(0f, size.height),
                         end = Offset(size.width, size.height),
                         pathEffect = pathEffect
@@ -522,7 +522,7 @@ fun PriceVolChart(
                         .drawBehind {
                             val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                             drawLine(
-                                color = colors.steel10,
+                                color = colors.blade,
                                 start = Offset(0f, 0f),
                                 end = Offset(size.width, 0f),
                                 pathEffect = pathEffect
@@ -551,7 +551,7 @@ fun PriceVolChart(
                                         val pathEffect =
                                             PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                                         drawLine(
-                                            color = colors.steel10,
+                                            color = colors.blade,
                                             start = Offset(0f, size.height),
                                             end = Offset(size.width, size.height),
                                             pathEffect = pathEffect
@@ -586,7 +586,7 @@ fun PriceVolChart(
                                         val pathEffect =
                                             PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                                         drawLine(
-                                            color = colors.steel10,
+                                            color = colors.blade,
                                             start = Offset(0f, 0f),
                                             end = Offset(size.width, 0f),
                                             pathEffect = pathEffect
@@ -644,7 +644,7 @@ fun PriceVolChart(
                                 maxKey = volumeBarsState.endTimestamp,
                                 minValue = volumeBarsState.minValue,
                                 maxValue = volumeBarsState.maxValue,
-                                color = ComposeAppTheme.colors.steel20,
+                                color = ComposeAppTheme.colors.blade,
                                 selectedItemKey = null
                             )
                         }

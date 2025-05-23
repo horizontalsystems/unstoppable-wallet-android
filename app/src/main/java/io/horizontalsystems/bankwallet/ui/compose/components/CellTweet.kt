@@ -110,7 +110,7 @@ private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
     Column(Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(8.dp))
-        .background(ComposeAppTheme.colors.steel10)
+        .background(ComposeAppTheme.colors.blade)
         .padding(12.dp)
     ) {
         Text(
@@ -215,10 +215,10 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
             val color = if (option.votes == maxVotes) {
                 ComposeAppTheme.colors.laguna
             } else {
-                ComposeAppTheme.colors.steel20
+                ComposeAppTheme.colors.blade
             }
             val textColor = if (option.votes == maxVotes) {
-                ComposeAppTheme.colors.claude
+                ComposeAppTheme.colors.blade
             } else {
                 ComposeAppTheme.colors.leah
             }
@@ -227,7 +227,7 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
                     .height(28.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(ComposeAppTheme.colors.steel10)
+                    .background(ComposeAppTheme.colors.blade)
             ) {
                 Spacer(
                     modifier = Modifier

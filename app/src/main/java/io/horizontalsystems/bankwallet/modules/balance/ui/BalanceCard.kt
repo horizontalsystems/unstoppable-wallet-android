@@ -158,7 +158,7 @@ fun BalanceCardInner(
                                 modifier = Modifier
                                     .padding(start = 8.dp)
                                     .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.claude)
+                                    .background(ComposeAppTheme.colors.blade)
                             ) {
                                 Text(
                                     modifier = Modifier.padding(

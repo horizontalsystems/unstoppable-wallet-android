@@ -167,7 +167,7 @@ private fun LazyListScope.coinRankList(
     item {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
     }
     items(items) { item ->
@@ -243,7 +243,7 @@ private fun CoinRankCell(
         }
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
     }
 }

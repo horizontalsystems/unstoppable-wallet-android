@@ -149,7 +149,7 @@ fun AppBar(
                                 CircularProgressIndicator(
                                     progress = 1f,
                                     modifier = Modifier.size(16.dp),
-                                    color = ComposeAppTheme.colors.steel20,
+                                    color = ComposeAppTheme.colors.blade,
                                     strokeWidth = 1.5.dp
                                 )
                                 CircularProgressIndicator(

@@ -179,7 +179,7 @@ fun ManageWalletsScreen(
                     Spacer(modifier = Modifier.height(12.dp))
                     Divider(
                         thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10,
+                        color = ComposeAppTheme.colors.blade,
                     )
                 }
                 coinItems?.let {

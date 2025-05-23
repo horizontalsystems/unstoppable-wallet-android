@@ -24,7 +24,7 @@ fun Badge(modifier: Modifier = Modifier, text: String) {
     BadgeText(
         modifier = modifier,
         text = text,
-        background = ComposeAppTheme.colors.claude,
+        background = ComposeAppTheme.colors.blade,
         textColor = ComposeAppTheme.colors.leah,
     )
 }
@@ -37,7 +37,7 @@ fun BadgeWithDiff(
 ) {
     BadgeBase(
         modifier = modifier,
-        background = ComposeAppTheme.colors.claude
+        background = ComposeAppTheme.colors.blade
     ) {
         Text(
             text = text,

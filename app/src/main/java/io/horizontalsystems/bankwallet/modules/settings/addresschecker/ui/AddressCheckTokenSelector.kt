@@ -89,7 +89,7 @@ fun AddressCheckTokenSelectorScreen(
             if (uiState.tokens.isNotEmpty()) {
                 Divider(
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+                    color = ComposeAppTheme.colors.blade,
                 )
             }
             VSpacer(32.dp)
@@ -107,7 +107,7 @@ private fun TokenCell(
     Column {
         Divider(
             thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
+            color = ComposeAppTheme.colors.blade,
         )
         RowUniversal(
             onClick = { onItemClick.invoke(token) },
@@ -137,7 +137,7 @@ private fun TokenCell(
                             modifier = Modifier
                                 .padding(start = 6.dp)
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.claude)
+                                .background(ComposeAppTheme.colors.blade)
                         ) {
                             Text(
                                 modifier = Modifier.padding(

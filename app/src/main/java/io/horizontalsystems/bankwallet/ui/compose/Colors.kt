@@ -13,11 +13,11 @@ class Colors(
     lucian: Color,
     tyler: Color,
     leah: Color,
-    claude: Color,
     lawrence: Color,
     laguna: Color,
     raina: Color,
     andy: Color,
+    blade: Color,
 ) {
 
     //base colors
@@ -28,8 +28,6 @@ class Colors(
     val black50 = Black50
     val issykBlue = Color(0xFF3372FF)
     val lightGrey = LightGrey
-    val steel10 = Steel10
-    val steel20 = Steel20
     val grey = Grey
     val grey50 = Grey50
     val yellow50 = Yellow50
@@ -58,8 +56,6 @@ class Colors(
         private set
     var leah by mutableStateOf(leah)
         private set
-    var claude by mutableStateOf(claude)
-        private set
     var lawrence by mutableStateOf(lawrence)
         private set
     var laguna by mutableStateOf(laguna)
@@ -68,6 +64,8 @@ class Colors(
         private set
     var andy by mutableStateOf(andy)
         private set
+    var blade by mutableStateOf(blade)
+        private set
 
     fun update(other: Colors) {
         jacob = other.jacob
@@ -75,11 +73,11 @@ class Colors(
         lucian = other.lucian
         tyler = other.tyler
         leah = other.leah
-        claude = other.claude
         lawrence = other.lawrence
         laguna = other.laguna
         raina = other.raina
         andy = other.andy
+        blade = other.blade
     }
 
     fun copy(): Colors = Colors(
@@ -88,10 +86,10 @@ class Colors(
         lucian = lucian,
         tyler = tyler,
         leah = leah,
-        claude = claude,
         lawrence = lawrence,
         laguna = laguna,
         raina = raina,
         andy = andy,
+        blade = blade,
     )
 }

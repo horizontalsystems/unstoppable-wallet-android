@@ -61,7 +61,6 @@ import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionM
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.title
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
@@ -89,7 +88,7 @@ val yellowGradient = Brush.horizontalGradient(
 )
 
 val steelBrush = Brush.horizontalGradient(
-    colors = listOf(Steel20, Steel20)
+    colors = listOf(Color(0x336E7899), Color(0x336E7899))
 )
 
 @Composable
@@ -219,7 +218,7 @@ fun SubscriptionOption(
     onClick: () -> Unit
 ) {
     val borderColor =
-        if (isSelected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20
+        if (isSelected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.blade
 
     Box(
         modifier = Modifier
@@ -244,7 +243,7 @@ fun SubscriptionOption(
                     ) {
                         Text(
                             text = badgeText,
-                            color = ComposeAppTheme.colors.claude,
+                            color = ComposeAppTheme.colors.blade,
                             style = ComposeAppTheme.typography.microSB,
                         )
                     }
@@ -275,7 +274,7 @@ fun ColumnScope.PlanItems(
             click = { onItemClick(item) }
         )
         if (index < items.size - 1) {
-            Divider(color = ComposeAppTheme.colors.steel20)
+            Divider(color = ComposeAppTheme.colors.blade)
         }
     }
 }
@@ -292,7 +291,7 @@ fun PremiumFeatureItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { click() }
-            .background(ComposeAppTheme.colors.steel10)
+            .background(ComposeAppTheme.colors.blade)
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
         Icon(

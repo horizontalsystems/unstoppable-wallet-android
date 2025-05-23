@@ -113,7 +113,7 @@ fun CoinListSlidable(
                 ) {
                     Icon(
                         painter = painterResource(id = if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
-                        tint = ComposeAppTheme.colors.claude,
+                        tint = ComposeAppTheme.colors.blade,
                         contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                     )
                 }
@@ -146,7 +146,7 @@ fun CoinListSlidable(
                 )
                 Divider(
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+                    color = ComposeAppTheme.colors.blade,
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
@@ -235,7 +235,7 @@ fun CoinList(
             }
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
             )
         }
         item {

@@ -109,7 +109,7 @@ private fun AdviceMeter(
     val textBackground = when (advice) {
         Advice.StrongSell -> Color(0xFFF43A4F)
         Advice.Sell -> Color(0x80F43A4F)
-        Advice.Neutral -> ComposeAppTheme.colors.steel20
+        Advice.Neutral -> ComposeAppTheme.colors.blade
         Advice.Buy -> Color(0x8013D670)
         Advice.StrongBuy -> Color(0xFF13D670)
         else -> ComposeAppTheme.colors.yellow20

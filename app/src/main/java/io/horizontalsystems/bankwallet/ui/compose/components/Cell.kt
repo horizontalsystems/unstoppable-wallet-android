@@ -90,7 +90,7 @@ fun CellMultilineLawrence(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -98,7 +98,7 @@ fun CellMultilineLawrence(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -205,7 +205,7 @@ fun CellSingleLine(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -213,7 +213,7 @@ fun CellSingleLine(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -236,7 +236,7 @@ fun CellHeaderSorting(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -244,7 +244,7 @@ fun CellHeaderSorting(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -289,7 +289,7 @@ fun CellMultilineClear(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -297,7 +297,7 @@ fun CellMultilineClear(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -321,7 +321,7 @@ fun CellSingleLineClear(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -329,7 +329,7 @@ fun CellSingleLineClear(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -352,7 +352,7 @@ fun CellFooter(text: String) {
             .height(58.dp)
             .fillMaxWidth(),
     ) {
-        Divider(color = ComposeAppTheme.colors.steel10)
+        Divider(color = ComposeAppTheme.colors.blade)
         caption_grey(
             text = text,
             modifier = Modifier
@@ -432,7 +432,7 @@ fun <T> CellUniversalLawrenceSection(
     itemContent: @Composable (T) -> Unit
 ) {
     val frameModifier = if (showFrame) {
-        Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+        Modifier.border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
     } else {
         Modifier
     }
@@ -460,7 +460,7 @@ fun CellUniversalLawrenceSection(
     content: @Composable () -> Unit
 ) {
     val frameModifier = if (showFrame) {
-        Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+        Modifier.border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
     } else {
         Modifier
     }
@@ -486,7 +486,7 @@ fun <T> CellUniversalLawrenceSection(
     itemContent: @Composable (T) -> Unit
 ) {
     val frameModifier = if (showFrame) {
-        Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+        Modifier.border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
     } else {
         Modifier
     }
@@ -561,7 +561,7 @@ fun SectionUniversalItem(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -569,7 +569,7 @@ fun SectionUniversalItem(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
@@ -590,7 +590,7 @@ fun SectionItemBorderedRowUniversalClear(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
             )
         }
         RowUniversal(
@@ -601,7 +601,7 @@ fun SectionItemBorderedRowUniversalClear(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
             )
         }
     }
@@ -623,7 +623,7 @@ fun CellBorderedRowUniversal(
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
@@ -631,7 +631,7 @@ fun CellBorderedRowUniversal(
         if (borderBottom) {
             Divider(
                 thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
+                color = ComposeAppTheme.colors.blade,
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
         }

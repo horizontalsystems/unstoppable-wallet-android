@@ -141,7 +141,7 @@ fun IssueList(
             if (index > 0) {
                 Divider(
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+                    color = ComposeAppTheme.colors.blade,
                 )
             }
             DetectorCell(
@@ -263,7 +263,7 @@ fun DetectorCell(
                     if (index > 0) {
                         Divider(
                             thickness = 1.dp,
-                            color = ComposeAppTheme.colors.steel10,
+                            color = ComposeAppTheme.colors.blade,
                         )
                     }
                     InfoText(

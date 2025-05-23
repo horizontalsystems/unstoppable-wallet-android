@@ -111,7 +111,7 @@ private fun CoinAuditsScreen(
 fun CoinAuditHeader(name: String, logoUrl: String) {
     Divider(
         thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
+        color = ComposeAppTheme.colors.blade,
     )
     VSpacer(height = 14.dp)
     Row(

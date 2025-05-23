@@ -193,7 +193,7 @@ fun MarketSearchResults(
             item {
                 Divider(
                     thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+                    color = ComposeAppTheme.colors.blade,
                 )
             }
             item {
