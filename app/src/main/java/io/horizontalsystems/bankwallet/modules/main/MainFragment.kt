@@ -176,7 +176,7 @@ private fun MainScreen(
                         TorStatusView()
                     }
                     HsBottomNavigation(
-                        backgroundColor = ComposeAppTheme.colors.tyler,
+                        backgroundColor = ComposeAppTheme.colors.blade,
                         elevation = 10.dp
                     ) {
                         uiState.mainNavItems.forEach { item ->
