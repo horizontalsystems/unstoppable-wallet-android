@@ -750,10 +750,6 @@ private fun SubHead2ColoredValue(value: ColoredValue) {
             subhead2_remus(text = value.value)
         }
 
-        ColorName.Lucian -> {
-            subhead2_lucian(text = value.value)
-        }
-
         ColorName.Grey -> {
             subhead2_grey(text = value.value)
         }
@@ -770,10 +766,6 @@ private fun SubHead1ColoredValue(value: ColoredValue) {
     when (value.color) {
         ColorName.Remus -> {
             subhead1_remus(text = value.value)
-        }
-
-        ColorName.Lucian -> {
-            subhead1_lucian(text = value.value)
         }
 
         ColorName.Grey -> {
