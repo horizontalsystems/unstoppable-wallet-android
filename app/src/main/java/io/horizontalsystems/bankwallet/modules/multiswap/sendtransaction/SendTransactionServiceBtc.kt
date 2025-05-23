@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendTransactionServiceBtc(private val token: Token) : ISendTransactionService() {
+class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService() {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!
     private val provider = FeeRateProviderFactory.provider(token.blockchainType)!!
     private val feeService = SendBitcoinFeeService(adapter)
@@ -133,6 +133,7 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
     }
 
     override fun createState() = SendTransactionServiceState(
+        uuid = uuid,
         networkFee = getFeeAmountData(),
         cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
         sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend,
@@ -160,8 +161,6 @@ class SendTransactionServiceBtc(private val token: Token) : ISendTransactionServ
         amountService.setAmount(data.amount)
 
         addressService.setAddress(Address(data.address))
-
-        emitState()
     }
 
     @Composable

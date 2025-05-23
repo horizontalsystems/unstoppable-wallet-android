@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.ISendTransactionService
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -30,7 +30,7 @@ class SwapConfirmViewModel(
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val fiatServiceOutMin: FiatService,
-    val sendTransactionService: ISendTransactionService,
+    val sendTransactionService: AbstractSendTransactionService,
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService
 ) : ViewModelUiState<SwapConfirmUiState>() {
@@ -174,6 +174,7 @@ class SwapConfirmViewModel(
         loading = true
         emitState()
 
+        sendTransactionService.refreshUuid()
         fetchFinalQuote()
 
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Refresh)
