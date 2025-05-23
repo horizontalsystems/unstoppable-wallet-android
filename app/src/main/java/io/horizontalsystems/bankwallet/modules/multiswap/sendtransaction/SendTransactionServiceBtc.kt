@@ -48,7 +48,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -72,6 +71,8 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     private val rate = App.marketKit.coinPrice(token.coin.uid, baseCurrency.code)?.let {
         CurrencyValue(baseCurrency, it.value)
     }
+
+    override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Btc())
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -186,10 +187,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
         return SendTransactionResult.Btc(transactionRecord)
     }
-
-    override val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
-        get() = MutableStateFlow(SendTransactionSettings.Btc())
-
 }
 
 @Composable
