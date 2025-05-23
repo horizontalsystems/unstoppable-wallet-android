@@ -14,8 +14,8 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-abstract class EvmSwapProvider : IMultiSwapProvider {
-    protected suspend fun getAllowance(token: Token, spenderAddress: Address): BigDecimal? {
+object EvmSwapHelper {
+    suspend fun getAllowance(token: Token, spenderAddress: Address): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
 
         val eip20Adapter = App.adapterManager.getAdapterForToken<Eip20Adapter>(token) ?: return null
@@ -23,7 +23,7 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
         return eip20Adapter.allowance(spenderAddress, DefaultBlockParameter.Latest).await()
     }
 
-    protected fun actionApprove(
+    fun actionApprove(
         allowance: BigDecimal?,
         amountIn: BigDecimal,
         routerAddress: Address,

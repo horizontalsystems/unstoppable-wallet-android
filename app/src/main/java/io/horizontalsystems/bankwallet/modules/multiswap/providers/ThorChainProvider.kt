@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteThorChain
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -44,6 +45,7 @@ object ThorChainProvider : IMultiSwapProvider {
         "BTC" to BlockchainType.Bitcoin,
         "ETH" to BlockchainType.Ethereum,
         "LTC" to BlockchainType.Litecoin,
+        "BASE" to BlockchainType.Base,
     )
 
     private var assets = listOf<Asset>()
@@ -106,15 +108,34 @@ object ThorChainProvider : IMultiSwapProvider {
     ): ISwapQuote {
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
 
+        val routerAddress = quoteSwap.router?.let { router ->
+            try {
+                Address(router)
+            } catch (_: Throwable) {
+                null
+            }
+        }
+
+        val allowance = routerAddress?.let { EvmSwapHelper.getAllowance(tokenIn, it) }
+        val actionApprove = routerAddress?.let {
+            EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
+        }
+
+        val fields = buildList {
+            if (allowance != null && allowance < amountIn) {
+                add(DataFieldAllowance(allowance, tokenIn))
+            }
+        }
+
         return SwapQuoteThorChain(
             amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8),
             priceImpact = null,
-            fields = listOf(),
+            fields = fields,
             settings = listOf(),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = null
+            actionRequired = actionApprove
         )
     }
 
