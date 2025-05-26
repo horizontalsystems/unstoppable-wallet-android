@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.UsedAddress
+import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.purpose
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -144,6 +145,38 @@ class LitecoinAdapter(
 
         fun clear(walletId: String) {
             LitecoinKit.clear(App.instance, NetworkType.MainNet, walletId)
+        }
+
+        fun firstAddress(accountType: AccountType, tokenType: TokenType) : String {
+            when (accountType) {
+                is AccountType.Mnemonic -> {
+                    val seed = accountType.seed
+                    val derivation = tokenType.derivation ?: throw IllegalArgumentException()
+
+                    val address = LitecoinKit.firstAddress(
+                        seed,
+                        derivation.purpose,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.HdExtendedKey -> {
+                    val key = accountType.hdExtendedKey
+                    val derivation = tokenType.derivation ?: throw IllegalArgumentException()
+                    val address = LitecoinKit.firstAddress(
+                        key,
+                        derivation.purpose,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.BitcoinAddress -> {
+                    return accountType.address
+                }
+                else -> throw UnsupportedAccountException()
+            }
         }
     }
 }

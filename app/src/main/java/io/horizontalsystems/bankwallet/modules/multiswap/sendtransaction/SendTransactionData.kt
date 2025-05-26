@@ -5,5 +5,10 @@ import java.math.BigDecimal
 
 sealed class SendTransactionData {
     data class Evm(val transactionData: TransactionData, val gasLimit: Long?): SendTransactionData()
-    data class Btc(val address: String, val memo: String, val amount: BigDecimal) : SendTransactionData()
+    data class Btc(
+        val address: String,
+        val memo: String,
+        val amount: BigDecimal,
+        val recommendedGasRate: Int
+    ) : SendTransactionData()
 }
