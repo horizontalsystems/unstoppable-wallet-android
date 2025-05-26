@@ -465,9 +465,9 @@ class TransactionViewItemFactory(
                 sentToSelf = recordType.sentToSelf
 
                 primaryValue = if (sentToSelf) {
-                    ColoredValue(getCoinString(recordType.value, true), ColorName.Leah)
+                    ColoredValue(getCoinString(recordType.value, true), ColorName.Grey)
                 } else {
-                    getColoredValue(recordType.value, ColorName.Leah)
+                    getColoredValue(recordType.value, getAmountColorForSend(icon))
                 }
 
                 iconX = singleValueIconType(recordType.value)
@@ -513,6 +513,13 @@ class TransactionViewItemFactory(
         )
     }
 
+    private fun getAmountColorForSend(icon: TransactionViewItem.Icon?): ColorName {
+        return when (icon) {
+            is TransactionViewItem.Icon.Failed -> ColorName.Grey
+            else -> ColorName.Leah
+        }
+    }
+
     private fun createViewItemFromTonTransactionRecord(
         icon: TransactionViewItem.Icon?,
         record: TonTransactionRecord,
@@ -536,7 +543,13 @@ class TransactionViewItemFactory(
                     title = Translator.getString(R.string.Transactions_Send)
                     subtitle = Translator.getString(R.string.Transactions_To, mapped(actionType.to, record.blockchainType))
 
-                    primaryValue = getColoredValue(actionType.value, ColorName.Leah)
+                    val amountColor = if (actionType.sentToSelf) {
+                        ColorName.Grey
+                    } else {
+                        getAmountColorForSend(icon)
+                    }
+
+                    primaryValue = getColoredValue(actionType.value, amountColor)
 
                     sentToSelf = actionType.sentToSelf
 
@@ -646,9 +659,9 @@ class TransactionViewItemFactory(
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
         } else {
-            getColoredValue(record.value, ColorName.Leah)
+            getColoredValue(record.value, getAmountColorForSend(icon))
         }
         val secondaryValue = singleValueSecondaryValue(record.value, currencyValue, nftMetadata)
 
@@ -801,9 +814,9 @@ class TransactionViewItemFactory(
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val primaryValue = if (sentToSelf) {
-            ColoredValue(getCoinString(value, true), ColorName.Leah)
+            ColoredValue(getCoinString(value, true), ColorName.Grey)
         } else {
-            getColoredValue(value, ColorName.Leah)
+            getColoredValue(value, getAmountColorForSend(icon))
         }
 
         val secondaryValue = singleValueSecondaryValue(value, currencyValue, nftMetadata)
@@ -980,9 +993,9 @@ class TransactionViewItemFactory(
         } ?: "---"
 
         val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
         } else {
-            getColoredValue(record.value, ColorName.Leah)
+            getColoredValue(record.value, getAmountColorForSend(icon))
         }
 
         val secondaryValue = currencyValue?.let {
