@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.core.managers.CexAssetManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
@@ -179,6 +180,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var marketKit: MarketKitWrapper
         lateinit var priceManager: PriceManager
         lateinit var releaseNotesManager: ReleaseNotesManager
+        lateinit var donationShowManager: DonationShowManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
@@ -398,6 +400,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
+        donationShowManager = DonationShowManager(systemInfoManager, localStorage)
 
         setAppTheme()
 

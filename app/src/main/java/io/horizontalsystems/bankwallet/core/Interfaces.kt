@@ -105,6 +105,7 @@ interface ILocalStorage {
     var currentTheme: ThemeType
     var balanceViewType: BalanceViewType?
     var changelogShownForAppVersion: String?
+    var donateAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var appIcon: AppIcon?

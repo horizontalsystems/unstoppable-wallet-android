@@ -259,6 +259,13 @@ private fun MainScreen(
         }
     }
 
+    if (uiState.showDonationPage) {
+        LaunchedEffect(Unit) {
+            fragmentNavController.slideFromBottom(R.id.whyDonateFragment)
+            viewModel.donationShown()
+        }
+    }
+
     if (uiState.showRateAppDialog) {
         val context = LocalContext.current
         RateApp(

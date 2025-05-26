@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
+import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -40,6 +41,7 @@ class MainViewModel(
     private val termsManager: ITermsManager,
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
+    private val donationShowManager: DonationShowManager,
     private val localStorage: ILocalStorage,
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
@@ -86,6 +88,7 @@ class MainViewModel(
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
     private var showWhatsNew = false
+    private var showDonationPage = false
     private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
@@ -158,6 +161,7 @@ class MainViewModel(
         mainNavItems = mainNavItems,
         showRateAppDialog = showRateAppDialog,
         showWhatsNew = showWhatsNew,
+        showDonationPage = showDonationPage,
         activeWallet = activeWallet,
         wcSupportState = wcSupportState,
         torEnabled = torEnabled
@@ -169,6 +173,12 @@ class MainViewModel(
 
     fun whatsNewShown() {
         showWhatsNew = false
+        emitState()
+    }
+
+    fun donationShown() {
+        donationShowManager.updateDonateAppVersion()
+        showDonationPage = false
         emitState()
     }
 
@@ -187,6 +197,11 @@ class MainViewModel(
         viewModelScope.launch {
             if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
                 showWhatsNew()
+            }
+        }
+        viewModelScope.launch {
+            if (!pinComponent.isLocked && donationShowManager.shouldShow()) {
+                showDonationPage()
             }
         }
     }
@@ -362,6 +377,12 @@ class MainViewModel(
     private suspend fun showWhatsNew() {
         delay(2000)
         showWhatsNew = true
+        emitState()
+    }
+
+    private suspend fun showDonationPage() {
+        delay(2000)
+        showDonationPage = true
         emitState()
     }
 
