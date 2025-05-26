@@ -155,6 +155,8 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Btc)
 
+        feeRateService.setRecommendedAndMin(data.recommendedGasRate, data.recommendedGasRate)
+
         memo = data.memo
         amountService.setMemo(memo)
         feeService.setMemo(memo)

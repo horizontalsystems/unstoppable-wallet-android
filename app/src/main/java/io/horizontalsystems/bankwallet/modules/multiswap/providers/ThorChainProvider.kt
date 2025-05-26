@@ -3,6 +3,9 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
@@ -10,9 +13,12 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteThorChain
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -106,7 +112,10 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
     ): ISwapQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
+        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
+        val slippage = settingSlippage.valueOrDefault()
+
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage)
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -122,6 +131,9 @@ object ThorChainProvider : IMultiSwapProvider {
         }
 
         val fields = buildList {
+            settingSlippage.value?.let {
+                add(DataFieldSlippage(it))
+            }
             if (allowance != null && allowance < amountIn) {
                 add(DataFieldAllowance(allowance, tokenIn))
             }
@@ -131,7 +143,7 @@ object ThorChainProvider : IMultiSwapProvider {
             amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8),
             priceImpact = null,
             fields = fields,
-            settings = listOf(),
+            settings = listOf(settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
@@ -143,16 +155,20 @@ object ThorChainProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-    ): ThornodeAPI.Response.QuoteSwap {
+        slippage: BigDecimal,
+    ): Response.QuoteSwap {
         val assetIn = assets.first { it.token == tokenIn }
         val assetOut = assets.first { it.token == tokenOut }
         val destination = resolveDestination(tokenOut)
+
+        val toleranceBps = (slippage * BigDecimal.valueOf(100)).toLong()
 
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn.asset,
             toAsset = assetOut.asset,
             amount = amountIn.movePointRight(8).toLong(),
-            destination = destination
+            destination = destination,
+//            toleranceBps = toleranceBps
         )
     }
 
@@ -180,22 +196,18 @@ object ThorChainProvider : IMultiSwapProvider {
                 val evmAddress = account.type.evmAddress(chain) ?: throw SwapError.NoDestinationAddress()
                 return evmAddress.eip55
             }
-            BlockchainType.Bitcoin ->{
-                TODO()
-//            return try BitcoinAdapter.firstAddress(accountType: account.type, tokenType: token.type)
+            BlockchainType.Bitcoin -> {
+                return BitcoinAdapter.firstAddress(account.type, token.type)
             }
             BlockchainType.BitcoinCash ->{
-                TODO()
-//            return try BitcoinCashAdapter.firstAddress(accountType: account.type, tokenType: token.type)
+                return BitcoinCashAdapter.firstAddress(account.type, token.type)
             }
             BlockchainType.Litecoin -> {
-                TODO()
-//            return try LitecoinAdapter.firstAddress(accountType: account.type, tokenType: token.type)
+                return LitecoinAdapter.firstAddress(account.type, token.type)
             }
             else -> throw SwapError.NoDestinationAddress()
         }
     }
-
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -204,23 +216,36 @@ object ThorChainProvider : IMultiSwapProvider {
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
     ): ISwapFinalQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
+        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
+        val slippage = settingSlippage.valueOrDefault()
+
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage)
+
+        val amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8)
+        val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
+
+        val fields = buildList {
+            settingSlippage.value?.let {
+                add(DataFieldSlippage(it))
+            }
+        }
 
         return SwapFinalQuoteThorChain(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8),
-            amountOutMin = null,
+            amountOut = amountOut,
+            amountOutMin = amountOutMin,
             sendTransactionData = getSendTransactionData(
                 tokenIn,
                 amountIn,
                 quoteSwap.inbound_address,
                 quoteSwap.memo,
-                quoteSwap.router
+                quoteSwap.router,
+                quoteSwap.recommended_gas_rate.toInt()
             ),
             priceImpact = null,
-            fields = listOf(),
+            fields = fields,
         )
     }
 
@@ -230,6 +255,7 @@ object ThorChainProvider : IMultiSwapProvider {
         inboundAddress: String,
         memo: String,
         router: String?,
+        recommendedGasRate: Int,
     ) = when (tokenIn.blockchainType) {
         BlockchainType.Avalanche,
         BlockchainType.BinanceSmartChain,
@@ -272,7 +298,7 @@ object ThorChainProvider : IMultiSwapProvider {
         BlockchainType.Bitcoin,
         BlockchainType.Litecoin,
             -> {
-            SendTransactionData.Btc(inboundAddress, memo, amountIn)
+            SendTransactionData.Btc(inboundAddress, memo, amountIn, recommendedGasRate)
         }
 
         else -> throw IllegalArgumentException()
@@ -294,6 +320,8 @@ interface ThornodeAPI {
         @Query("destination") destination: String,
 //        @Query("streaming_interval") streamingInterval: Long,
 //        @Query("streaming_quantity") streamingQuantity: Long,
+//        @Query("tolerance_bps") toleranceBps: Long,
+
     ): Response.QuoteSwap
 
     object Response {
@@ -320,7 +348,7 @@ interface ThornodeAPI {
 //  "notes": "First output should be to inbound_address, second output should be change back to self, third output should be OP_RETURN, limited to 80 bytes. Do not send below the dust threshold. Do not use exotic spend scripts, locks or address formats (P2WSH with Bech32 address format preferred).",
 //  "dust_threshold": "10000",
 //  "recommended_min_amount_in": "10760",
-//  "recommended_gas_rate": "4",
+            val recommended_gas_rate: String,
 //  "gas_rate_units": "satsperbyte",
             val memo: String,
             val expected_amount_out: String,
