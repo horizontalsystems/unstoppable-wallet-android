@@ -399,6 +399,12 @@ class LocalStorageManager(
             preferences.edit().putString(CHANGELOG_SHOWN_FOR_APP_VERSION, value).apply()
         }
 
+    override var donateAppVersion: String?
+        get() = preferences.getString("donate_app_version", null)
+        set(value) {
+            preferences.edit().putString("donate_app_version", value).apply()
+        }
+
     override var ignoreRootedDeviceWarning: Boolean
         get() = preferences.getBoolean(IGNORE_ROOTED_DEVICE_WARNING, false)
         set(value) {

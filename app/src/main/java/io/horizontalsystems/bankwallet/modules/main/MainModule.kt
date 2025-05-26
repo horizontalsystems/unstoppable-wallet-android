@@ -25,6 +25,7 @@ object MainModule {
                 App.termsManager,
                 App.accountManager,
                 App.releaseNotesManager,
+                App.donationShowManager,
                 App.localStorage,
                 App.wcSessionManager,
                 App.wcManager,
@@ -85,6 +86,7 @@ object MainModule {
         val mainNavItems: List<NavigationViewItem>,
         val showRateAppDialog: Boolean,
         val showWhatsNew: Boolean,
+        val showDonationPage: Boolean,
         val activeWallet: Account?,
         val torEnabled: Boolean,
         val wcSupportState: WCManager.SupportState?
