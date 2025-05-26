@@ -134,27 +134,51 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     )
 
     val donateAddresses: Map<BlockchainType, String> by lazy {
-        mapOf(
-            BlockchainType.Bitcoin to "bc1qy0dy3ufpup9eyeprnd8a6fe2scg2m4rr4peasy",
-            BlockchainType.BitcoinCash to "bitcoincash:qqlwaf0vrvq722pta5jfc83m6cv7569nzya0ry6prk",
-            BlockchainType.ECash to "ecash:qp9cqsjfttdv2x9y0el3ghk7xy4dy07p6saz7w2xvq",
-            BlockchainType.Litecoin to "ltc1qtnyd4vq4yvu4g00jd3nl25w8qftj32dvfanyfx",
-            BlockchainType.Dash to "XqCrPRKwBeW4pNPbNUTQTsnKQ626RNz4no",
-            BlockchainType.Zcash to "zs1r9gf53xg3206g7wlhwwq7lcdrtzalepnvk7kwpm8yxr0z3ng0y898scd505rsekj8c4xgwddz4m",
-            BlockchainType.Ethereum to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.BinanceSmartChain to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Polygon to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Avalanche to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Optimism to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Base to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.ZkSync to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.ArbitrumOne to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Solana to "ELFQmFXqdS6C1zVqZifs7WAmLKovdEPbWSnqomhZoK3B",
-            BlockchainType.Gnosis to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Fantom to "0x731352dcF66014156B1560B832B56069e7b38ab1",
-            BlockchainType.Ton to "UQDgkDkU_3Mtujk2FukZEsiXV9pOhVzkdvvYH8es0tZylTZY",
-            BlockchainType.Tron to "TXKA3SxjLsUL4n6j3v2h85fzb4V7Th6yh6",
-        ).toList().sortedBy { (key, _) -> key.order }.toMap()
+        if (BuildConfig.FDROID_BUILD) {
+            mapOf(
+                BlockchainType.Bitcoin to "bc1qy3ekl877sll3pzw9ramknx0wgyxfhzlccv940y",
+                BlockchainType.BitcoinCash to "bitcoincash:qq0uv2s4nd8g7htpnsp77pwjpfdyrvgncu3tfk252s",
+                BlockchainType.ECash to "ecash:qznldf5phm5dgq6rd2dpxd4qcypm32dyqsgux0v94h",
+                BlockchainType.Litecoin to "ltc1q8x0zcezuz82mhhmclpa2hv2jf8vry66ap08d2w",
+                BlockchainType.Dash to "XcHq4AuSC2CMQuf8wLojDJ9QEFQJShzgvf",
+                BlockchainType.Zcash to "zs1rqg09d8t6utx3znyrzw4jz0y3tdh633yqychhumsm4z69y4dcye9z9aghpvpygzgktnexwnzagl",
+                BlockchainType.Ethereum to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.BinanceSmartChain to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Polygon to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Avalanche to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Optimism to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Base to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.ZkSync to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.ArbitrumOne to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Solana to "EKQVqxaXVJf1QaVUeNynKkJC7rT4abMnWtg5TtqY2S5F",
+                BlockchainType.Gnosis to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Fantom to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
+                BlockchainType.Ton to "UQA94iEyQI0iVD0ssowbHGizBEY5uMm9tMz72IecYjA_nnZG",
+                BlockchainType.Tron to "TXkwDeqz77793xYJqxCHuEPiqqj8B8Cf2Z",
+            ).toList().sortedBy { (key, _) -> key.order }.toMap()
+        } else {
+            mapOf(
+                BlockchainType.Bitcoin to "bc1qy0dy3ufpup9eyeprnd8a6fe2scg2m4rr4peasy",
+                BlockchainType.BitcoinCash to "bitcoincash:qqlwaf0vrvq722pta5jfc83m6cv7569nzya0ry6prk",
+                BlockchainType.ECash to "ecash:qp9cqsjfttdv2x9y0el3ghk7xy4dy07p6saz7w2xvq",
+                BlockchainType.Litecoin to "ltc1qtnyd4vq4yvu4g00jd3nl25w8qftj32dvfanyfx",
+                BlockchainType.Dash to "XqCrPRKwBeW4pNPbNUTQTsnKQ626RNz4no",
+                BlockchainType.Zcash to "zs1r9gf53xg3206g7wlhwwq7lcdrtzalepnvk7kwpm8yxr0z3ng0y898scd505rsekj8c4xgwddz4m",
+                BlockchainType.Ethereum to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.BinanceSmartChain to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Polygon to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Avalanche to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Optimism to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Base to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.ZkSync to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.ArbitrumOne to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Solana to "ELFQmFXqdS6C1zVqZifs7WAmLKovdEPbWSnqomhZoK3B",
+                BlockchainType.Gnosis to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Fantom to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+                BlockchainType.Ton to "UQDgkDkU_3Mtujk2FukZEsiXV9pOhVzkdvvYH8es0tZylTZY",
+                BlockchainType.Tron to "TXKA3SxjLsUL4n6j3v2h85fzb4V7Th6yh6",
+            ).toList().sortedBy { (key, _) -> key.order }.toMap()
+        }
     }
 
     val spamCoinValueLimits: Map<String, Double> = mapOf(
