@@ -57,6 +57,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -275,8 +276,11 @@ fun AppearanceScreen(navController: NavController) {
                         }
                     )
                 )
+                InfoText(
+                    text = stringResource(R.string.Appearance_HideButtonsInfo),
+                    paddingBottom = 24.dp
+                )
 
-                VSpacer(24.dp)
                 HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
                 AppIconSection(uiState.appIconOptions) {
                     scope.launch {
