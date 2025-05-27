@@ -215,6 +215,10 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
     TimePeriod.TimePeriod_3M -> priceChange90d
     TimePeriod.TimePeriod_6M -> priceChange200d
     TimePeriod.TimePeriod_1Y -> priceChange1y
+    TimePeriod.TimePeriod_2Y -> priceChange2y
+    TimePeriod.TimePeriod_3Y -> priceChange3y
+    TimePeriod.TimePeriod_4Y -> priceChange4y
+    TimePeriod.TimePeriod_5Y -> priceChange5y
 }
 
 @Parcelize

@@ -166,7 +166,11 @@ enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
     TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M),
     TimePeriod_3M(R.string.Market_Filter_TimePeriod_3M),
     TimePeriod_6M(R.string.Market_Filter_TimePeriod_6M),
-    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y);
+    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y),
+    TimePeriod_2Y(R.string.Market_Filter_TimePeriod_2Y),
+    TimePeriod_3Y(R.string.Market_Filter_TimePeriod_3Y),
+    TimePeriod_4Y(R.string.Market_Filter_TimePeriod_4Y),
+    TimePeriod_5Y(R.string.Market_Filter_TimePeriod_5Y);
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)

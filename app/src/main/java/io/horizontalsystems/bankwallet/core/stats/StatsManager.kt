@@ -341,6 +341,10 @@ val TimePeriod.statPeriod: StatPeriod
         TimePeriod.TimePeriod_3M -> TODO()
         TimePeriod.TimePeriod_6M -> TODO()
         TimePeriod.TimePeriod_1Y -> TODO()
+        TimePeriod.TimePeriod_2Y -> TODO()
+        TimePeriod.TimePeriod_3Y -> TODO()
+        TimePeriod.TimePeriod_4Y -> TODO()
+        TimePeriod.TimePeriod_5Y -> TODO()
     }
 
 val FilterTransactionType.statTab: StatTab
