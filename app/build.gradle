@@ -312,7 +312,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:c6fbc9e'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:f17004c'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
-    implementation 'com.github.horizontalsystems:market-kit-android:320abe6'
+    implementation 'com.github.horizontalsystems:market-kit-android:49376d9'
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:bdd7602'
     // Zcash SDK
