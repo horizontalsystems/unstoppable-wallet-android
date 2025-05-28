@@ -67,6 +67,7 @@ class ReceiveAddressViewModel(
         mainNet = mainNet,
         usedAddresses = usedAddresses,
         usedChangeAddresses = usedChangeAddresses,
+        showTronAlert = !accountActive,
         uri = addressUriState.uri,
         blockchainName = blockchainName,
         addressFormat = addressFormat,
