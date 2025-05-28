@@ -32,6 +32,7 @@ import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.bitcoincore.storage.FullTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutput
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hodler.HodlerOutputData
@@ -105,6 +106,9 @@ abstract class BitcoinBaseAdapter(
 
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    final override val unspentOutputs: List<UnspentOutputInfo>
+        get() = kit.getUnspentOutputs(UtxoFilters())
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
@@ -283,7 +287,10 @@ abstract class BitcoinBaseAdapter(
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
-        rbfEnabled: Boolean
+        rbfEnabled: Boolean,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters
     ): BitcoinTransactionRecord? {
         val sortingType = getTransactionSortingType(transactionSorting)
 
@@ -296,7 +303,10 @@ abstract class BitcoinBaseAdapter(
             sortType = sortingType,
             unspentOutputs = unspentOutputs,
             pluginData = pluginData ?: mapOf(),
-            rbfEnabled = rbfEnabled
+            rbfEnabled = rbfEnabled,
+            dustThreshold = dustThreshold,
+            changeToFirstInput = changeToFirstInput,
+            filters = utxoFilters,
         )
 
         val transaction = kit.getTransaction(fullTransaction.header.hash.toReversedHex())
@@ -312,20 +322,31 @@ abstract class BitcoinBaseAdapter(
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters
     ): BigDecimal {
         return try {
-            val maximumSpendableValue = kit.maximumSpendableValue(address, memo, feeRate, unspentOutputs, pluginData
-                    ?: mapOf())
+            val maximumSpendableValue = kit.maximumSpendableValue(
+                address = address,
+                memo = memo,
+                feeRate = feeRate,
+                unspentOutputInfos = unspentOutputs,
+                pluginData = pluginData ?: mapOf(),
+                dustThreshold = dustThreshold,
+                changeToFirstInput = changeToFirstInput,
+                filters = utxoFilters,
+            )
             satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO
         }
     }
 
-    override fun minimumSendAmount(address: String?): BigDecimal? {
+    override fun minimumSendAmount(address: String?, dustThreshold: Int?): BigDecimal? {
         return try {
-            satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
+            satoshiToBTC(kit.minimumSpendableValue(address, dustThreshold).toLong(), RoundingMode.CEILING)
         } catch (e: Exception) {
             null
         }
@@ -337,7 +358,10 @@ abstract class BitcoinBaseAdapter(
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        filters: UtxoFilters
     ): BitcoinFeeInfo? {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
@@ -348,7 +372,10 @@ abstract class BitcoinBaseAdapter(
                 senderPay = true,
                 feeRate = feeRate,
                 unspentOutputs = unspentOutputs,
-                pluginData = pluginData ?: mapOf()
+                pluginData = pluginData ?: mapOf(),
+                dustThreshold = dustThreshold,
+                changeToFirstInput = changeToFirstInput,
+                filters = filters
             ).let {
                 BitcoinFeeInfo(
                     unspentOutputs = it.unspentOutputs,

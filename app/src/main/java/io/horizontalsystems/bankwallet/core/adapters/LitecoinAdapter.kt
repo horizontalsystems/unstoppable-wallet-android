@@ -13,7 +13,6 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.litecoinkit.LitecoinKit
 import io.horizontalsystems.litecoinkit.LitecoinKit.NetworkType
@@ -85,9 +84,6 @@ class LitecoinAdapter(
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
     }
-
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
 
     override val blockchainType = BlockchainType.Litecoin
 

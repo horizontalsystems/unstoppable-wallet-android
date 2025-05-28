@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -26,6 +27,10 @@ class SendBitcoinAmountService(
     private var memo: String? = null
     private var feeRate: Int? = null
     private var pluginData: Map<Byte, IPluginData>? = null
+
+    private var dustThreshold: Int? = null
+    private var changeToFirstInput = false
+    private var utxoFilters = UtxoFilters()
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -56,11 +61,22 @@ class SendBitcoinAmountService(
     }
 
     private fun refreshAvailableBalance() {
-        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, memo, customUnspentOutputs, pluginData) }
+        availableBalance = feeRate?.let {
+            adapter.availableBalance(
+                it,
+                validAddress?.hex,
+                memo,
+                customUnspentOutputs,
+                pluginData,
+                dustThreshold,
+                changeToFirstInput,
+                utxoFilters
+            )
+        }
     }
 
     private fun refreshMinimumSendAmount() {
-        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex)
+        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex, dustThreshold)
     }
 
     private fun validateAmount() {
@@ -103,6 +119,34 @@ class SendBitcoinAmountService(
 
     fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
         this.pluginData = pluginData
+
+        refreshAvailableBalance()
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setDustThreshold(dustThreshold: Int?) {
+        this.dustThreshold = dustThreshold
+
+        refreshAvailableBalance()
+        refreshMinimumSendAmount()
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setChangeToFirstInput(changeToFirstInput: Boolean) {
+        this.changeToFirstInput = changeToFirstInput
+
+        refreshAvailableBalance()
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setUtxoFilters(utxoFilters: UtxoFilters) {
+        this.utxoFilters = utxoFilters
 
         refreshAvailableBalance()
         validateAmount()
