@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenFragment
-import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreenX
+import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -107,7 +107,7 @@ fun ReceiveStellarAssetScreen(navController: NavController, wallet: Wallet, rece
             }
         }
     ) {
-        ReceiveAddressScreenX(
+        ReceiveAddressScreen(
             title = stringResource(R.string.Deposit_Title, wallet.coin.code),
             uiState = uiState,
             setAmount = viewModel::setAmount,
