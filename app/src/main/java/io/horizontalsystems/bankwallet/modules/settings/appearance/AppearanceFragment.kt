@@ -46,7 +46,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -141,9 +140,8 @@ fun AppearanceScreen(navController: NavController) {
                 CellUniversalLawrenceSection(
                     buildList {
                         add {
-                            HsSettingCell(
+                            MenuItem(
                                 R.string.Settings_Language,
-                                R.drawable.ic_language,
                                 value = uiState.currentLanguage,
                                 onClick = {
                                     navController.slideFromRight(R.id.languageSettingsFragment)
@@ -156,9 +154,8 @@ fun AppearanceScreen(navController: NavController) {
                             )
                         }
                         add {
-                            HsSettingCell(
+                            MenuItem(
                                 R.string.Settings_BaseCurrency,
-                                R.drawable.ic_currency,
                                 value = uiState.baseCurrencyCode,
                                 onClick = {
                                     navController.slideFromRight(R.id.baseCurrencySettingsFragment)
@@ -481,6 +478,37 @@ fun MenuItemWithDialog(
         Image(
             modifier = Modifier.size(20.dp),
             painter = painterResource(id = R.drawable.ic_down_arrow_20),
+            contentDescription = null,
+        )
+    }
+}
+
+@Composable
+private fun MenuItem(
+    @StringRes title: Int,
+    value: String? = null,
+    onClick: () -> Unit
+) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
+    ) {
+        body_leah(
+            text = stringResource(title),
+            maxLines = 1,
+            modifier = Modifier.weight(1f)
+        )
+        value?.let {
+            subhead1_grey(
+                text = value,
+                maxLines = 1,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+
+        Image(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = null,
         )
     }
