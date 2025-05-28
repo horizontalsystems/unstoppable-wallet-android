@@ -21,6 +21,22 @@ platform :android do
       )
   end
 
+  desc "Debug Build (F-Droid)"
+    lane :app_build_fdroid do |options|
+      commit = last_git_commit
+
+      gradle(task: "clean")
+      gradle(task: "assembleFdroidDebug", flags: "--stacktrace --no-daemon")
+
+      firebase_app_distribution(
+        app: "1:308085819273:android:99855eb14f0a33f5a00358",
+        service_credentials_file: "service-account.json",
+        release_notes: "F-Droid Build - Author: #{commit[:author]}, changes: #{commit[:message]}",
+        groups: "horsysteam",
+        apk_path: "app/build/outputs/apk/fdroid/debug/app-fdroid-debug-unsigned.apk"
+      )
+    end
+
   desc "Release Build"
     lane :app_build_release do |options|
       commit = last_git_commit

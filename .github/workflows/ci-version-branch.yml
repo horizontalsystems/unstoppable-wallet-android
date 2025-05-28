@@ -48,3 +48,11 @@ jobs:
         env:
           BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
 
+      - name: Build F-Droid APK (F-Droid Debug)
+        uses: maierj/fastlane-action@v3.0.0
+        with:
+          lane: 'app_build_fdroid'
+          options: '{ "app_name": "Unstoppable-FDroid" }'
+          subdirectory: 'fastlane'
+        env:
+          BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
