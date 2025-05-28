@@ -129,7 +129,6 @@ fun SendBitcoinScreen(
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend

@@ -104,7 +104,7 @@ fun TopPairsScreen() {
                                         HSpacer(width = 16.dp)
                                     }
                                 }
-                                itemsIndexed(uiState.items) { i, item ->
+                                itemsIndexed(uiState.items) { _, item ->
                                     TopPairItem(item, borderBottom = true) {
                                         it.tradeUrl?.let {
                                             LinkHelper.openLinkInAppBrowser(context, it)

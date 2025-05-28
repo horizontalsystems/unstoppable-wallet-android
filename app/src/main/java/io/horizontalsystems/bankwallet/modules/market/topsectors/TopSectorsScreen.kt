@@ -108,7 +108,7 @@ fun TopSectorsScreen(
                                     HSpacer(width = 16.dp)
                                 }
                             }
-                            itemsIndexed(uiState.items) { i, item ->
+                            itemsIndexed(uiState.items) { _, item ->
                                 TopSectorItem(
                                     item,
                                     borderBottom = true

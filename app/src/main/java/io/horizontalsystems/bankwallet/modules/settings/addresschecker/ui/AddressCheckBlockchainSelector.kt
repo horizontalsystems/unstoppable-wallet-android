@@ -65,7 +65,7 @@ fun AddressCheckBlockchainSelectorScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-            uiState.blockchains.forEachIndexed { index, item ->
+            uiState.blockchains.forEachIndexed { _, item ->
                 BlockchainCell(
                     blockchain = item,
                     checked = false,
