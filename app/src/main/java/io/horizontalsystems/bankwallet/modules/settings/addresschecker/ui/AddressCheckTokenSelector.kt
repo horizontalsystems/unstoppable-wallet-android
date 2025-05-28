@@ -78,7 +78,7 @@ fun AddressCheckTokenSelectorScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-            uiState.tokens.forEachIndexed { index, item ->
+            uiState.tokens.forEachIndexed { _, item ->
                 TokenCell(
                     token = item,
                     onItemClick = {

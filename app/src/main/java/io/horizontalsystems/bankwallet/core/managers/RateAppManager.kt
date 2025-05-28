@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateAppManager
@@ -100,7 +99,7 @@ class RateAppManager(
 
         fun openPlayMarket(context: Context) {
             try {
-                ContextCompat.startActivity(context, getPlayMarketAppIntent(), null)
+                context.startActivity(getPlayMarketAppIntent())
             } catch (e: ActivityNotFoundException) {
                 val appPlayStoreLink =
                     "http://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet"

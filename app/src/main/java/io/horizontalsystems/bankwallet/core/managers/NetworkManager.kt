@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import com.google.gson.Strictness
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -177,7 +178,8 @@ object APIClient {
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(
-                GsonConverterFactory.create(GsonBuilder().setLenient().create())
+                GsonConverterFactory
+                    .create(GsonBuilder().setStrictness(Strictness.LENIENT).create())
             )
             .build()
     }
@@ -197,7 +199,7 @@ object APIClient {
         if (!isSafeCall) // if host name cannot be verified, has no or self signed certificate, do unsafe request
             setUnsafeSocketFactory(httpClient)
 
-        val gsonBuilder = GsonBuilder().setLenient()
+        val gsonBuilder = GsonBuilder().setStrictness(Strictness.LENIENT)
 
         return Retrofit.Builder()
             .baseUrl(apiURL)

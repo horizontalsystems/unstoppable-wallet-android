@@ -50,8 +50,14 @@ object MainModule {
     fun startAsNewTask(context: Activity) {
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        context.startActivity(intent)
-        context.overridePendingTransition(0, 0)
+
+        val options = androidx.core.app.ActivityOptionsCompat.makeCustomAnimation(
+            context,
+            0,  // No enter animation
+            0   // No exit animation
+        )
+
+        context.startActivity(intent, options.toBundle())
     }
 
     sealed class BadgeType {

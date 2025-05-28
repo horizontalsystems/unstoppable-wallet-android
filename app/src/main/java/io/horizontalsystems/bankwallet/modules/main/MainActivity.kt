@@ -111,7 +111,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun closeAfterDelay() {
-        val handler = android.os.Handler()
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
         handler.postDelayed({
             finish()
         }, 1000)

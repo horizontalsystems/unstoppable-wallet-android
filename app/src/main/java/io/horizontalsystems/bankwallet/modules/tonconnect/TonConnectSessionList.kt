@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,7 +68,6 @@ fun TonConnectSessionList(
 
             TCSection(
                 list,
-                navController,
                 revealedCardId,
                 onReveal = { id ->
                     if (revealedCardId != id) {
@@ -92,7 +90,6 @@ fun TonConnectSessionList(
 
 private fun LazyListScope.TCSection(
     dapps: List<DAppEntity>,
-    navController: NavController,
     revealedCardId: String?,
     onReveal: (String) -> Unit,
     onConceal: () -> Unit,
@@ -133,7 +130,6 @@ private fun LazyListScope.TCSection(
                         shape = shape,
                         showDivider = showDivider,
                         dapp = dapp,
-                        navController = navController
                     )
                 }
             )
@@ -147,7 +143,6 @@ fun TCSessionCell(
     shape: Shape,
     showDivider: Boolean = false,
     dapp: DAppEntity,
-    navController: NavController,
 ) {
     Box(
         modifier = Modifier
