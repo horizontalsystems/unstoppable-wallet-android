@@ -19,6 +19,8 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -242,7 +244,8 @@ object ThorChainProvider : IMultiSwapProvider {
                 quoteSwap.inbound_address,
                 quoteSwap.memo,
                 quoteSwap.router,
-                quoteSwap.recommended_gas_rate.toInt()
+                quoteSwap.recommended_gas_rate.toInt(),
+                quoteSwap.dust_threshold?.toInt()
             ),
             priceImpact = null,
             fields = fields,
@@ -256,6 +259,7 @@ object ThorChainProvider : IMultiSwapProvider {
         memo: String,
         router: String?,
         recommendedGasRate: Int,
+        dustThreshold: Int?,
     ) = when (tokenIn.blockchainType) {
         BlockchainType.Avalanche,
         BlockchainType.BinanceSmartChain,
@@ -298,7 +302,18 @@ object ThorChainProvider : IMultiSwapProvider {
         BlockchainType.Bitcoin,
         BlockchainType.Litecoin,
             -> {
-            SendTransactionData.Btc(inboundAddress, memo, amountIn, recommendedGasRate)
+            SendTransactionData.Btc(
+                address = inboundAddress,
+                memo = memo,
+                amount = amountIn,
+                recommendedGasRate = recommendedGasRate,
+                dustThreshold = dustThreshold,
+                changeToFirstInput = true,
+                utxoFilters = UtxoFilters(
+                    scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),
+                    maxOutputsCountForInputs = 10
+                )
+            )
         }
 
         else -> throw IllegalArgumentException()
@@ -346,7 +361,7 @@ interface ThornodeAPI {
             val expiry: Long,
 //  "warning": "Do not cache this response. Do not send funds after the expiry.",
 //  "notes": "First output should be to inbound_address, second output should be change back to self, third output should be OP_RETURN, limited to 80 bytes. Do not send below the dust threshold. Do not use exotic spend scripts, locks or address formats (P2WSH with Bech32 address format preferred).",
-//  "dust_threshold": "10000",
+            val dust_threshold: String?,
 //  "recommended_min_amount_in": "10760",
             val recommended_gas_rate: String,
 //  "gas_rate_units": "satsperbyte",

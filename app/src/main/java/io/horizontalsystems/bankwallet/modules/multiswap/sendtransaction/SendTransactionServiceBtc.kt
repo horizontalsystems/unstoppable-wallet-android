@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +66,10 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     private var addressState = addressService.stateFlow.value
 
     private var memo: String? = null
+    private var dustThreshold: Int? = null
+    private var changeToFirstInput: Boolean = false
+    private var utxoFilters: UtxoFilters = UtxoFilters()
+
     private var fields = listOf<DataField>()
 
     private val baseCurrency = App.currencyManager.baseCurrency
@@ -155,12 +160,22 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Btc)
 
+        memo = data.memo
+        dustThreshold = data.dustThreshold
+        changeToFirstInput = data.changeToFirstInput
+        utxoFilters = data.utxoFilters
+
         feeRateService.setRecommendedAndMin(data.recommendedGasRate, data.recommendedGasRate)
 
-        memo = data.memo
-        amountService.setMemo(memo)
         feeService.setMemo(memo)
+        feeService.setDustThreshold(dustThreshold)
+        feeService.setChangeToFirstInput(changeToFirstInput)
+        feeService.setUtxoFilters(utxoFilters)
 
+        amountService.setMemo(memo)
+        amountService.setDustThreshold(dustThreshold)
+        amountService.setChangeToFirstInput(changeToFirstInput)
+        amountService.setUtxoFilters(utxoFilters)
         amountService.setAmount(data.amount)
 
         addressService.setAddress(Address(data.address))
@@ -184,7 +199,10 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
             unspentOutputs = null,
             pluginData = null,
             transactionSorting = null,
-            rbfEnabled = false
+            rbfEnabled = false,
+            dustThreshold = dustThreshold,
+            changeToFirstInput = changeToFirstInput,
+            utxoFilters = utxoFilters
         )
 
         return SendTransactionResult.Btc(transactionRecord)
