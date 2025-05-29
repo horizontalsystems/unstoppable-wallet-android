@@ -1528,7 +1528,10 @@
     <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
     <string name="CoinPage_MarketsLabel_Verified">VERIFIED</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Verified</string>
+    <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">Exchange Type</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">All</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Cex" translatable="false">CEX</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Dex" translatable="false">DEX</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>

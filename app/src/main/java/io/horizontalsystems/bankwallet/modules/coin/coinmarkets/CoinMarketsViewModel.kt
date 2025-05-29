@@ -1,62 +1,108 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.MarketTicker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 
-class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel() {
-    val verifiedMenu by service::verifiedMenu
-    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
-    val viewItemsLiveData = MutableLiveData<List<MarketTickerViewItem>>()
+class CoinMarketsViewModel(
+    private val fullCoin: FullCoin,
+    private val baseCurrency: Currency,
+    private val marketKit: MarketKitWrapper,
+) : ViewModelUiState<CoinMarketsModule.CoinMarketUiState>() {
+
+    private var marketTickers = listOf<MarketTicker>()
+    private var filteredMarketTickers = listOf<MarketTicker>()
+    private var viewState: ViewState = ViewState.Loading
+    private var cexDexMenu: Select<CoinMarketsModule.ExchangeType> =
+        Select(
+            CoinMarketsModule.ExchangeType.ALL,
+            CoinMarketsModule.ExchangeType.entries,
+        )
+
+    var verified: Boolean = false
+        private set
+
 
     init {
-        viewModelScope.launch {
-            service.stateObservable.asFlow().collect {
-                syncState(it)
+        syncMarketTickers()
+    }
+
+    override fun createState() = CoinMarketsModule.CoinMarketUiState(
+        verified = verified,
+        viewState = viewState,
+        exchangeTypeMenu = cexDexMenu,
+        items = filteredMarketTickers.map { createViewItem(it) }
+    )
+
+    private fun syncMarketTickers() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val tickers =
+                    marketKit.marketTickersSingle(fullCoin.coin.uid, baseCurrency.code).await()
+                marketTickers = tickers.sortedByDescending { it.volume }
+                filterMarketTickers()
+                viewState = ViewState.Success
+            } catch (e: Throwable) {
+                viewState = ViewState.Error(e)
             }
-        }
-
-        service.start()
-    }
-
-    private fun syncState(state: DataState<List<MarketTickerItem>>) {
-        viewStateLiveData.postValue(state.viewState)
-
-        state.dataOrNull?.let { data ->
-            viewItemsLiveData.postValue(data.map { createViewItem(it) })
+            emitState()
         }
     }
 
-    private fun createViewItem(item: MarketTickerItem): MarketTickerViewItem {
+    private fun filterMarketTickers() {
+        filteredMarketTickers = marketTickers.filter {
+            when (cexDexMenu.selected) {
+                CoinMarketsModule.ExchangeType.CEX -> it.centralized
+                CoinMarketsModule.ExchangeType.DEX -> !it.centralized
+                CoinMarketsModule.ExchangeType.ALL -> true
+            }
+        }.filter { it.verified == verified }
+
+        emitState()
+    }
+
+    private fun createViewItem(item: MarketTicker): MarketTickerViewItem {
         return MarketTickerViewItem(
-            item.market,
+            item.marketName,
             item.marketImageUrl,
-            "${item.baseCoinCode}/${item.targetCoinCode}",
-            App.numberFormatter.formatFiatShort(item.volumeFiat, service.currency.symbol, service.currency.decimal),
-            App.numberFormatter.formatCoinShort(item.volumeToken, item.baseCoinCode, 8),
+            "${item.base}/${item.target}",
+            App.numberFormatter.formatFiatShort(
+                item.fiatVolume,
+                baseCurrency.symbol,
+                baseCurrency.decimal
+            ),
+            App.numberFormatter.formatCoinShort(item.volume, item.base, 8),
             item.tradeUrl,
             if (item.verified) TranslatableString.ResString(R.string.CoinPage_MarketsLabel_Verified) else null
         )
     }
 
-    override fun onCleared() {
-        service.stop()
-    }
-
     fun onErrorClick() {
-        service.start()
+        syncMarketTickers()
     }
 
-    fun toggleVerifiedType(verifiedType: VerifiedType) {
-        service.setVerifiedType(verifiedType)
+    fun setExchangeType(type: CoinMarketsModule.ExchangeType) {
+        cexDexMenu = Select(type, CoinMarketsModule.ExchangeType.entries)
+        filterMarketTickers()
+        emitState()
+    }
+
+    fun setVerified(verified: Boolean) {
+        this.verified = verified
+        filterMarketTickers()
+        emitState()
     }
 
 }

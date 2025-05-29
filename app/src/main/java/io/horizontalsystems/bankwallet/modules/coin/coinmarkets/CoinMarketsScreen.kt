@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,14 +16,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -33,17 +35,22 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.ExchangeType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
+import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
+import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -56,63 +63,82 @@ fun CoinMarketsScreen(
     val viewModel = viewModel<CoinMarketsViewModel>(factory = CoinMarketsModule.Factory(fullCoin))
 
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
-    val viewItemState by viewModel.viewStateLiveData.observeAsState()
-    val viewItems by viewModel.viewItemsLiveData.observeAsState()
+    var showExchangeTypeSelector by rememberSaveable { mutableStateOf(false) }
+    val uiState = viewModel.uiState
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Crossfade(viewItemState, label = "") { viewItemState ->
+        Crossfade(uiState.viewState, label = "") { viewItemState ->
             when (viewItemState) {
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
+
                 ViewState.Success -> {
-                    viewItems?.let { items ->
-                        Column(modifier = Modifier.fillMaxSize()) {
-                            if (items.isEmpty()) {
-                                ListEmptyView(
-                                    text = stringResource(R.string.CoinPage_NoDataAvailable),
-                                    icon = R.drawable.ic_no_data
-                                )
-                            } else {
-                                CoinMarketsMenu(
-                                    viewModel.verifiedMenu,
-                                ) {
-                                    viewModel.toggleVerifiedType(it)
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        if (uiState.items.isEmpty()) {
+                            ListEmptyView(
+                                text = stringResource(R.string.CoinPage_NoDataAvailable),
+                                icon = R.drawable.ic_no_data
+                            )
+                        } else {
+                            CoinMarketsMenu(
+                                exchangeTypeMenu = uiState.exchangeTypeMenu,
+                                verified = viewModel.verified,
+                                showExchangeTypeSelector = { showExchangeTypeSelector = true },
+                                onVerifiedEnabled = { verified ->
+                                    viewModel.setVerified(verified)
                                     scrollToTopAfterUpdate = true
                                 }
-                                CoinMarketList(items, scrollToTopAfterUpdate)
-                                if (scrollToTopAfterUpdate) {
-                                    scrollToTopAfterUpdate = false
-                                }
+                            )
+                            CoinMarketList(uiState.items, scrollToTopAfterUpdate)
+                            if (scrollToTopAfterUpdate) {
+                                scrollToTopAfterUpdate = false
                             }
                         }
                     }
                 }
-                null -> {}
             }
+        }
+        if (showExchangeTypeSelector) {
+            AlertGroup(
+                title = R.string.CoinPage_MarketsVerifiedMenu_ExchangeType,
+                select = uiState.exchangeTypeMenu,
+                onSelect = {
+                    viewModel::setExchangeType.invoke(it)
+                    showExchangeTypeSelector = false
+                },
+                onDismiss = { showExchangeTypeSelector = false }
+            )
         }
     }
 }
 
 @Composable
 fun CoinMarketsMenu(
-    menuVerified: Select<VerifiedType>,
-    onToggleVerified: (VerifiedType) -> Unit,
+    exchangeTypeMenu: Select<ExchangeType>,
+    verified: Boolean,
+    showExchangeTypeSelector: () -> Unit,
+    onVerifiedEnabled: (Boolean) -> Unit,
 ) {
 
-    var verifiedType by remember { mutableStateOf(menuVerified) }
-
     HeaderSorting(borderTop = true, borderBottom = true) {
+        ButtonSecondaryWithIcon(
+            modifier = Modifier.padding(start = 16.dp),
+            iconRight = painterResource(R.drawable.ic_down_arrow_20),
+            title = exchangeTypeMenu.selected.title.getString(),
+            onClick = showExchangeTypeSelector
+        )
         Spacer(Modifier.weight(1f))
-        ButtonSecondaryToggle(
+        TurnOnButton(
             modifier = Modifier.padding(end = 16.dp),
-            select = verifiedType,
-            onSelect = {
-                onToggleVerified.invoke(it)
-                verifiedType = Select(it, verifiedType.options)
+            title = stringResource(R.string.CoinPage_MarketsVerifiedMenu_Verified),
+            turnedOn = verified,
+            onToggle = { verified ->
+                onVerifiedEnabled.invoke(verified)
             }
         )
     }
@@ -185,4 +211,44 @@ fun CoinMarketCell(
             MarketCoinSecondRow(subtitle, marketDataValue, null)
         }
     }
+}
+
+@Composable
+fun TurnOnButton(
+    modifier: Modifier,
+    title: String,
+    turnedOn: Boolean,
+    onToggle: (Boolean) -> Unit
+) {
+    val onClick = { onToggle.invoke(!turnedOn) }
+    val buttonColors = if (turnedOn) {
+        ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.yellowD,
+            contentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
+        )
+    } else {
+        SecondaryButtonDefaults.buttonColors()
+    }
+    ButtonSecondary(
+        modifier = modifier,
+        onClick = onClick,
+        contentPadding = PaddingValues(
+            start = 10.dp,
+            end = 16.dp,
+        ),
+        buttonColors = buttonColors,
+        content = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    style = ComposeAppTheme.typography.captionSB,
+                    color = if (turnedOn) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.leah,
+                )
+            }
+        },
+    )
 }
