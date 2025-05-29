@@ -18,7 +18,7 @@ internal data class PiratePlaceCoinDto(
     @SerialName("total_supply")
     val totalSupply: BigDecimal,
     @SerialName("max_supply")
-    val maxSupply: Long?,
+    val maxSupply: Double?,
     val changes: ChangesDto,
     @SerialName("market_cap")
     val marketCap: Map<String, @Serializable(with = BigDecimalSerializer::class) BigDecimal>?,

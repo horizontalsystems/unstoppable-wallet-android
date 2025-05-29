@@ -9,7 +9,7 @@ data class PiratePlaceCoin(
     val symbol: String,
     val circulatingSupply: BigDecimal,
     val totalSupply: BigDecimal,
-    val maxSupply: Long?,
+    val maxSupply: Double?,
     val changes: Changes,
     val marketCap: Map<String, BigDecimal>,
     val image: String,

@@ -13,7 +13,7 @@ class PiratePlaceCoinRaw(
     @SerializedName("total_supply")
     val totalSupply: Double,
     @SerializedName("max_supply")
-    val maxSupply: Long?,
+    val maxSupply: Double?,
     val changes: Changes,
     @SerializedName("market_cap")
     val marketCap: MarketCap?,
