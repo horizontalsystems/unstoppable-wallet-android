@@ -9,11 +9,13 @@ import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteThorChain
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.Response
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
@@ -241,11 +243,8 @@ object ThorChainProvider : IMultiSwapProvider {
             sendTransactionData = getSendTransactionData(
                 tokenIn,
                 amountIn,
-                quoteSwap.inbound_address,
-                quoteSwap.memo,
-                quoteSwap.router,
-                quoteSwap.recommended_gas_rate.toInt(),
-                quoteSwap.dust_threshold?.toInt()
+                quoteSwap,
+                tokenOut
             ),
             priceImpact = null,
             fields = fields,
@@ -255,68 +254,86 @@ object ThorChainProvider : IMultiSwapProvider {
     private fun getSendTransactionData(
         tokenIn: Token,
         amountIn: BigDecimal,
-        inboundAddress: String,
-        memo: String,
-        router: String?,
-        recommendedGasRate: Int,
-        dustThreshold: Int?,
-    ) = when (tokenIn.blockchainType) {
-        BlockchainType.Avalanche,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Ethereum,
-            -> {
-            val transactionData = when (val tokenType = tokenIn.type) {
-                TokenType.Native -> {
-                    TransactionData(
-                        Address(inboundAddress),
-                        amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
-                        memo.toByteArray()
-                    )
+        quoteSwap: Response.QuoteSwap,
+        tokenOut: Token,
+    ): SendTransactionData {
+        val inboundAddress = quoteSwap.inbound_address
+        val memo = quoteSwap.memo
+        val router = quoteSwap.router
+        val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
+        val dustThreshold = quoteSwap.dust_threshold?.toInt()
+
+        val outboundFee = CoinValue(tokenOut, quoteSwap.fees.outbound.movePointLeft(8))
+        val liquidityFee = CoinValue(tokenOut, quoteSwap.fees.liquidity.movePointLeft(8))
+
+        val feesMap = mapOf(
+            FeeType.Liquidity to liquidityFee,
+            FeeType.Outbound to outboundFee,
+        )
+
+        return when (tokenIn.blockchainType) {
+            BlockchainType.Avalanche,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Ethereum,
+                -> {
+                val transactionData = when (val tokenType = tokenIn.type) {
+                    TokenType.Native -> {
+                        TransactionData(
+                            Address(inboundAddress),
+                            amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
+                            memo.toByteArray()
+                        )
+                    }
+
+                    is TokenType.Eip20 -> {
+                        val method = DepositWithExpiryMethod(
+                            Address(inboundAddress),
+                            Address(tokenType.address),
+                            amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
+                            memo,
+                            BigInteger.valueOf(Date().time / 1000 + 1 * 60 * 60)
+                        )
+
+                        checkNotNull(router)
+
+                        TransactionData(
+                            Address(router),
+                            BigInteger.ZERO,
+                            method.encodedABI()
+                        )
+                    }
+
+                    else -> throw IllegalArgumentException()
                 }
 
-                is TokenType.Eip20 -> {
-                    val method = DepositWithExpiryMethod(
-                        Address(inboundAddress),
-                        Address(tokenType.address),
-                        amountIn.movePointRight(tokenIn.decimals).toBigInteger(),
-                        memo,
-                        BigInteger.valueOf(Date().time / 1000 + 1 * 60 * 60)
-                    )
-
-                    checkNotNull(router)
-
-                    TransactionData(
-                        Address(router),
-                        BigInteger.ZERO,
-                        method.encodedABI()
-                    )
-                }
-
-                else -> throw IllegalArgumentException()
+                SendTransactionData.Evm(
+                    transactionData = transactionData,
+                    gasLimit = null,
+                    feesMap = feesMap
+                )
             }
 
-            SendTransactionData.Evm(transactionData, null)
-        }
-
-        BlockchainType.BitcoinCash,
-        BlockchainType.Bitcoin,
-        BlockchainType.Litecoin,
-            -> {
-            SendTransactionData.Btc(
-                address = inboundAddress,
-                memo = memo,
-                amount = amountIn,
-                recommendedGasRate = recommendedGasRate,
-                dustThreshold = dustThreshold,
-                changeToFirstInput = true,
-                utxoFilters = UtxoFilters(
-                    scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),
-                    maxOutputsCountForInputs = 10
+            BlockchainType.BitcoinCash,
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin,
+                -> {
+                SendTransactionData.Btc(
+                    address = inboundAddress,
+                    memo = memo,
+                    amount = amountIn,
+                    recommendedGasRate = recommendedGasRate,
+                    dustThreshold = dustThreshold,
+                    changeToFirstInput = true,
+                    utxoFilters = UtxoFilters(
+                        scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),
+                        maxOutputsCountForInputs = 10
+                    ),
+                    feesMap = feesMap
                 )
-            )
-        }
+            }
 
-        else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException()
+        }
     }
 
     data class Asset(val asset: String, val token: Token)
@@ -346,6 +363,7 @@ interface ThornodeAPI {
 //  "inbound_confirmation_seconds": 600,
 //  "outbound_delay_blocks": 179,
 //  "outbound_delay_seconds": 1074,
+            val fees: Fees,
 //  "fees": {
 //    "asset": "ETH.ETH",
 //    "affiliate": "0",
@@ -372,7 +390,13 @@ interface ThornodeAPI {
 //  "streaming_swap_blocks": 7,
 //  "streaming_swap_seconds": 42,
 //  "total_swap_seconds": 1674
-        )
+        ) {
+            data class Fees(
+                val affiliate: BigDecimal,
+                val outbound: BigDecimal,
+                val liquidity: BigDecimal,
+            )
+        }
 
         data class Pool(
             val asset: String,

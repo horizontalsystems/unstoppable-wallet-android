@@ -10,8 +10,10 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -157,6 +159,7 @@ class SwapConfirmViewModel(
             fiatAmountOutMin = fiatAmountOutMin,
             currency = currency,
             networkFee = sendTransactionState.networkFee,
+            extraFees = sendTransactionState.extraFees,
             cautions = cautions,
             validQuote = sendTransactionState.sendable,
             priceImpact = priceImpactState.priceImpact,
@@ -248,4 +251,18 @@ data class SwapConfirmUiState(
     val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
-)
+    val extraFees: Map<FeeType, SendModule.AmountData>,
+) {
+    val totalFee by lazy {
+        val networkFiatValue = networkFee?.secondary  ?: return@lazy null
+        val networkFee = networkFiatValue.value
+        val extraFeeValues = extraFees.mapNotNull { it.value.secondary?.value }
+        if (extraFeeValues.isEmpty()) return@lazy null
+        val totalValue = networkFee + extraFeeValues.sumOf { it }
+
+        CurrencyValue(
+            networkFiatValue.currencyValue.currency,
+            totalValue
+        )
+    }
+}
