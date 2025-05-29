@@ -33,7 +33,9 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -215,6 +217,26 @@ fun SwapConfirmScreen(navController: NavController) {
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
             )
+            uiState.extraFees.forEach { (type: FeeType, feeAmountData) ->
+                DataFieldFeeTemplate(
+                    navController = navController,
+                    primary = feeAmountData.primary.getFormattedPlain(),
+                    secondary = feeAmountData.secondary?.getFormattedPlain() ?: "---",
+                    title = stringResource(type.stringResId),
+                    infoText = null
+                )
+            }
+        }
+
+        uiState.totalFee?.let { totalFee ->
+            VSpacer(height = 16.dp)
+            SectionUniversalLawrence {
+                SwapInfoRow(
+                    borderTop = true,
+                    title = stringResource(id = R.string.Fee_Total),
+                    value = totalFee.getFormattedFull(),
+                )
+            }
         }
 
         if (uiState.cautions.isNotEmpty()) {
