@@ -220,7 +220,6 @@ object ThorChainProvider : IMultiSwapProvider {
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
         val amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8)
-        val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
         val fields = buildList {
             settingSlippage.value?.let {
@@ -233,7 +232,7 @@ object ThorChainProvider : IMultiSwapProvider {
             tokenOut = tokenOut,
             amountIn = amountIn,
             amountOut = amountOut,
-            amountOutMin = amountOutMin,
+            amountOutMin = null,
             sendTransactionData = getSendTransactionData(
                 tokenIn,
                 amountIn,
