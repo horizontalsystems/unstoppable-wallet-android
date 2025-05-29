@@ -43,6 +43,8 @@ object ThorChainProvider : IMultiSwapProvider {
     override val icon = R.drawable.thorchain
     override val priority = 0
     private val adapterManager = App.adapterManager
+    private val affiliate: String? = null
+    private val affiliateBps: Int? = null
 
     private val thornodeAPI =
         APIClient.retrofit("https://thornode.ninerealms.com", 60).create(ThornodeAPI::class.java)
@@ -168,6 +170,8 @@ object ThorChainProvider : IMultiSwapProvider {
             toAsset = assetOut.asset,
             amount = amountIn.movePointRight(8).toLong(),
             destination = destination,
+            affiliate = affiliate,
+            affiliateBps = affiliateBps
         )
     }
 
@@ -252,12 +256,24 @@ object ThorChainProvider : IMultiSwapProvider {
         tokenOut: Token,
         slippage: BigDecimal,
     ): SendTransactionData {
-        val amountOut = quoteSwap.expected_amount_out.toBigDecimal()
-        val amountOutFeeIncluded = amountOut + quoteSwap.fees.total
-        val amountOutMin = amountOutFeeIncluded - amountOutFeeIncluded / BigDecimal(100) * slippage
-
         val inboundAddress = quoteSwap.inbound_address
-        val memo = quoteSwap.memo + ":" + amountOutMin.toBigInteger().toString()
+        val memo = quoteSwap.memo.let {
+            val amountOut = quoteSwap.expected_amount_out.toBigDecimal()
+            val amountOutFeeIncluded = amountOut + quoteSwap.fees.total
+            val amountOutMin = amountOutFeeIncluded - amountOutFeeIncluded / BigDecimal(100) * slippage
+
+            val parts = it.split(":").toMutableList()
+
+            val amountOutMinStr = amountOutMin.toBigInteger().toString()
+            if (parts.size > 3) {
+                parts[3] = amountOutMinStr
+            } else if (parts.size == 3) {
+                parts.add(amountOutMinStr)
+            }
+
+            parts.joinToString(":")
+        }
+
         val router = quoteSwap.router
         val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
         val dustThreshold = quoteSwap.dust_threshold?.toInt()
@@ -349,6 +365,8 @@ interface ThornodeAPI {
         @Query("to_asset") toAsset: String,
         @Query("amount") amount: Long,
         @Query("destination") destination: String,
+        @Query("affiliate") affiliate: String?,
+        @Query("affiliate_bps") affiliateBps: Int?,
 //        @Query("streaming_interval") streamingInterval: Long,
 //        @Query("streaming_quantity") streamingQuantity: Long,
 //        @Query("tolerance_bps") toleranceBps: Long,
