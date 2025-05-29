@@ -116,10 +116,9 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
     ): ISwapQuote {
-        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
-        val slippage = settingSlippage.valueOrDefault()
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
 
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage)
+        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -159,20 +158,16 @@ object ThorChainProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        slippage: BigDecimal,
     ): Response.QuoteSwap {
         val assetIn = assets.first { it.token == tokenIn }
         val assetOut = assets.first { it.token == tokenOut }
         val destination = resolveDestination(tokenOut)
-
-        val toleranceBps = (slippage * BigDecimal.valueOf(100)).toLong()
 
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn.asset,
             toAsset = assetOut.asset,
             amount = amountIn.movePointRight(8).toLong(),
             destination = destination,
-//            toleranceBps = toleranceBps
         )
     }
 
@@ -220,11 +215,10 @@ object ThorChainProvider : IMultiSwapProvider {
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
     ): ISwapFinalQuote {
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
+
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
-
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage)
-
         val amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8)
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
@@ -244,7 +238,8 @@ object ThorChainProvider : IMultiSwapProvider {
                 tokenIn,
                 amountIn,
                 quoteSwap,
-                tokenOut
+                tokenOut,
+                slippage
             ),
             priceImpact = null,
             fields = fields,
@@ -256,9 +251,14 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         quoteSwap: Response.QuoteSwap,
         tokenOut: Token,
+        slippage: BigDecimal,
     ): SendTransactionData {
+        val amountOut = quoteSwap.expected_amount_out.toBigDecimal()
+        val amountOutFeeIncluded = amountOut + quoteSwap.fees.total
+        val amountOutMin = amountOutFeeIncluded - amountOutFeeIncluded / BigDecimal(100) * slippage
+
         val inboundAddress = quoteSwap.inbound_address
-        val memo = quoteSwap.memo
+        val memo = quoteSwap.memo + ":" + amountOutMin.toBigInteger().toString()
         val router = quoteSwap.router
         val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
         val dustThreshold = quoteSwap.dust_threshold?.toInt()
@@ -395,6 +395,7 @@ interface ThornodeAPI {
                 val affiliate: BigDecimal,
                 val outbound: BigDecimal,
                 val liquidity: BigDecimal,
+                val total: BigDecimal,
             )
         }
 
