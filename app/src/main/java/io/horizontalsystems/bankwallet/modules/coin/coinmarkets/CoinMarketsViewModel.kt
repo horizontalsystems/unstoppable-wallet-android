@@ -62,13 +62,17 @@ class CoinMarketsViewModel(
     }
 
     private fun filterMarketTickers() {
-        filteredMarketTickers = marketTickers.filter {
-            when (cexDexMenu.selected) {
-                CoinMarketsModule.ExchangeType.CEX -> it.centralized
-                CoinMarketsModule.ExchangeType.DEX -> !it.centralized
+        filteredMarketTickers = marketTickers.filter { ticker ->
+            val matchesExchangeType = when (cexDexMenu.selected) {
+                CoinMarketsModule.ExchangeType.CEX -> ticker.centralized
+                CoinMarketsModule.ExchangeType.DEX -> !ticker.centralized
                 CoinMarketsModule.ExchangeType.ALL -> true
             }
-        }.filter { it.verified == verified }
+
+            val matchesVerification = !verified || ticker.verified
+
+            matchesExchangeType && matchesVerification
+        }
 
         emitState()
     }
