@@ -43,8 +43,8 @@ object ThorChainProvider : IMultiSwapProvider {
     override val icon = R.drawable.thorchain
     override val priority = 0
     private val adapterManager = App.adapterManager
-    private val affiliate: String? = null
-    private val affiliateBps: Int? = null
+    private val affiliate = "thor1nyvskcndxfxne0hqwceselq55anayg7a9tes5h"
+    private val affiliateBps = 100
 
     private val thornodeAPI =
         APIClient.retrofit("https://thornode.ninerealms.com", 60).create(ThornodeAPI::class.java)
