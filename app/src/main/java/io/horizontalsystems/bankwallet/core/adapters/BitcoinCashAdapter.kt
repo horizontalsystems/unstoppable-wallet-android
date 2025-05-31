@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.UsedAddress
+import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.kitCoinType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -15,7 +16,6 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
@@ -85,9 +85,6 @@ class BitcoinCashAdapter(
         // ignored for now
     }
 
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
-
     override val blockchainType = BlockchainType.BitcoinCash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
@@ -149,5 +146,42 @@ class BitcoinCashAdapter(
 
         private fun getNetworkType(kitCoinType: MainNetBitcoinCash.CoinType = MainNetBitcoinCash.CoinType.Type145) =
             NetworkType.MainNet(kitCoinType)
+
+        fun firstAddress(accountType: AccountType, tokenType: TokenType) : String {
+            val bitcoinCashCoinType = tokenType.bitcoinCashCoinType ?: throw IllegalArgumentException()
+
+            val kitCoinType = when (bitcoinCashCoinType) {
+                TokenType.AddressType.Type0 -> MainNetBitcoinCash.CoinType.Type0
+                TokenType.AddressType.Type145 -> MainNetBitcoinCash.CoinType.Type145
+            }
+
+            val networkType = NetworkType.MainNet(kitCoinType)
+
+            when (accountType) {
+                is AccountType.Mnemonic -> {
+                    val seed = accountType.seed
+
+                    val address = BitcoinCashKit.firstAddress(
+                        seed,
+                        networkType
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.HdExtendedKey -> {
+                    val key = accountType.hdExtendedKey
+                    val address = BitcoinCashKit.firstAddress(
+                        key,
+                        networkType
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.BitcoinAddress -> {
+                    return accountType.address
+                }
+                else -> throw UnsupportedAccountException()
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvid
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.QuickSwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.marketkit.models.Token
@@ -30,6 +31,7 @@ class SwapQuoteService {
         QuickSwapProvider,
         UniswapProvider,
         UniswapV3Provider,
+        ThorChainProvider,
     )
 
     private var amountIn: BigDecimal? = null
@@ -58,6 +60,12 @@ class SwapQuoteService {
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var quotingJob: Job? = null
     private var settings: Map<String, Any?> = mapOf()
+
+    suspend fun start() {
+        allProviders.forEach {
+            it.start()
+        }
+    }
 
     private fun emitState() {
         _stateFlow.update {

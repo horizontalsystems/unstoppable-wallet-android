@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -11,8 +10,10 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.ISendTransactionService
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -31,7 +32,7 @@ class SwapConfirmViewModel(
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val fiatServiceOutMin: FiatService,
-    val sendTransactionService: ISendTransactionService,
+    val sendTransactionService: AbstractSendTransactionService,
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService
 ) : ViewModelUiState<SwapConfirmUiState>() {
@@ -140,16 +141,7 @@ class SwapConfirmViewModel(
 
         if (cautions.isEmpty()) {
             priceImpactState.priceImpactCaution?.let { hsCaution ->
-                cautions = listOf(
-                    CautionViewItem(
-                        hsCaution.s.toString(),
-                        hsCaution.description.toString(),
-                        when (hsCaution.type) {
-                            HSCaution.Type.Error -> CautionViewItem.Type.Error
-                            HSCaution.Type.Warning -> CautionViewItem.Type.Warning
-                        }
-                    )
-                )
+                cautions = listOf(hsCaution.toCautionViewItem())
             }
         }
 
@@ -167,6 +159,7 @@ class SwapConfirmViewModel(
             fiatAmountOutMin = fiatAmountOutMin,
             currency = currency,
             networkFee = sendTransactionState.networkFee,
+            extraFees = sendTransactionState.extraFees,
             cautions = cautions,
             validQuote = sendTransactionState.sendable,
             priceImpact = priceImpactState.priceImpact,
@@ -184,6 +177,7 @@ class SwapConfirmViewModel(
         loading = true
         emitState()
 
+        sendTransactionService.refreshUuid()
         fetchFinalQuote()
 
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Refresh)
@@ -218,7 +212,7 @@ class SwapConfirmViewModel(
 
     companion object {
         fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
-            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn.blockchainType)
+            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
 
             SwapConfirmViewModel(
                 quote.provider,
@@ -257,4 +251,18 @@ data class SwapConfirmUiState(
     val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
-)
+    val extraFees: Map<FeeType, SendModule.AmountData>,
+) {
+    val totalFee by lazy {
+        val networkFiatValue = networkFee?.secondary  ?: return@lazy null
+        val networkFee = networkFiatValue.value
+        val extraFeeValues = extraFees.mapNotNull { it.value.secondary?.value }
+        if (extraFeeValues.isEmpty()) return@lazy null
+        val totalValue = networkFee + extraFeeValues.sumOf { it }
+
+        CurrencyValue(
+            networkFiatValue.currencyValue.currency,
+            totalValue
+        )
+    }
+}

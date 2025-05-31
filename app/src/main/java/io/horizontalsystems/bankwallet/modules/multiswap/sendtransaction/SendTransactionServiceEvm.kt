@@ -67,7 +67,7 @@ class SendTransactionServiceEvm(
     blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
     initialNonce: Long? = null
-) : ISendTransactionService() {
+) : AbstractSendTransactionService() {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
     private val gasPriceService: IEvmGasPriceService by lazy {
@@ -123,11 +123,13 @@ class SendTransactionServiceEvm(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        uuid = uuid,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,
         loading = loading,
-        fields = fields
+        fields = fields,
+        extraFees = extraFees
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -211,6 +213,8 @@ class SendTransactionServiceEvm(
 
         feeService.setGasLimit(data.gasLimit)
         feeService.setTransactionData(data.transactionData)
+
+        setExtraFeesMap(data.feesMap)
     }
 
     override suspend fun sendTransaction() : SendTransactionResult.Evm {
