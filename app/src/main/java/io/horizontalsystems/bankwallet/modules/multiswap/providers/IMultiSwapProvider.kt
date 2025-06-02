@@ -34,6 +34,7 @@ interface IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
-        sendTransactionSettings: SendTransactionSettings?
+        sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote
     ) : ISwapFinalQuote
 }
