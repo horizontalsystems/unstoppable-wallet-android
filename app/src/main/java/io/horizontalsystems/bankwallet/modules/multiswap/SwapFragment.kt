@@ -67,6 +67,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -368,6 +369,10 @@ private fun SwapScreenInner(
                             text = actionDescription
                         )
                     }
+                }
+
+                if (uiState.cautions.isNotEmpty()) {
+                    Cautions(cautions = uiState.cautions)
                 }
 
                 VSpacer(height = 32.dp)

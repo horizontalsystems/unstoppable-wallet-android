@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
@@ -21,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
@@ -34,6 +36,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.RoundingMode
 import java.util.Date
 
 object ThorChainProvider : IMultiSwapProvider {
@@ -43,8 +46,8 @@ object ThorChainProvider : IMultiSwapProvider {
     override val icon = R.drawable.thorchain
     override val priority = 0
     private val adapterManager = App.adapterManager
-    private val affiliate = "thor1nyvskcndxfxne0hqwceselq55anayg7a9tes5h"
-    private val affiliateBps = 100
+    private const val AFFILIATE = "hrz"
+    private const val AFFILIATE_BPS = 100
 
     private val thornodeAPI =
         APIClient.retrofit("https://thornode.ninerealms.com", 60).create(ThornodeAPI::class.java)
@@ -118,9 +121,16 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
     ): ISwapQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null)
 
         val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
+
+        val cautions = mutableListOf<HSCaution>()
+        val slippageThreshold = getSlippageThreshold(quoteSwap)
+        val slippage = settingSlippage.valueOrDefault()
+        if (slippage < slippageThreshold) {
+            cautions.add(SlippageNotApplicable(slippageThreshold))
+        }
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -145,21 +155,30 @@ object ThorChainProvider : IMultiSwapProvider {
         }
 
         return SwapQuoteThorChain(
-            amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8),
+            amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
             priceImpact = null,
             fields = fields,
             settings = listOf(settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove
+            actionRequired = actionApprove,
+            cautions = cautions,
+            slippageThreshold = slippageThreshold
         )
+    }
+
+    private fun getSlippageThreshold(quoteSwap: Response.QuoteSwap): BigDecimal {
+        return quoteSwap.fees.total
+            .multiply(BigDecimal(100))
+            .divide(quoteSwap.expected_amount_out + quoteSwap.fees.total, 0, RoundingMode.CEILING)
     }
 
     private suspend fun quoteSwap(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
+        slippage: BigDecimal?
     ): Response.QuoteSwap {
         val assetIn = assets.first { it.token == tokenIn }
         val assetOut = assets.first { it.token == tokenOut }
@@ -170,8 +189,9 @@ object ThorChainProvider : IMultiSwapProvider {
             toAsset = assetOut.asset,
             amount = amountIn.movePointRight(8).toLong(),
             destination = destination,
-            affiliate = affiliate,
-            affiliateBps = affiliateBps
+            affiliate = AFFILIATE,
+            affiliateBps = AFFILIATE_BPS,
+            toleranceBps = slippage?.multiply(BigDecimal("100"))?.toLong()
         )
     }
 
@@ -218,15 +238,36 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn)
+        check(swapQuote is SwapQuoteThorChain)
+
+        val slippageThreshold = swapQuote.slippageThreshold
 
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
-        val amountOut = BigDecimal(quoteSwap.expected_amount_out).movePointLeft(8)
+
+        val cautions = mutableListOf<HSCaution>()
+        val finalSlippage: BigDecimal?
+
+        if (slippage >= slippageThreshold) {
+            finalSlippage = slippage
+        } else {
+            cautions.add(SlippageNotApplicable(slippageThreshold))
+
+            finalSlippage = null
+        }
+
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, finalSlippage)
+
+        val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
+
+        val amountOutMin = finalSlippage?.let {
+            amountOut.subtract(amountOut.multiply(it.movePointLeft(2)))
+        }
 
         val fields = buildList {
-            settingSlippage.value?.let {
+            finalSlippage?.let {
                 add(DataFieldSlippage(it))
             }
         }
@@ -236,16 +277,16 @@ object ThorChainProvider : IMultiSwapProvider {
             tokenOut = tokenOut,
             amountIn = amountIn,
             amountOut = amountOut,
-            amountOutMin = null,
+            amountOutMin = amountOutMin,
             sendTransactionData = getSendTransactionData(
                 tokenIn,
                 amountIn,
                 quoteSwap,
-                tokenOut,
-                slippage
+                tokenOut
             ),
             priceImpact = null,
             fields = fields,
+            cautions = cautions,
         )
     }
 
@@ -254,25 +295,9 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         quoteSwap: Response.QuoteSwap,
         tokenOut: Token,
-        slippage: BigDecimal,
     ): SendTransactionData {
         val inboundAddress = quoteSwap.inbound_address
-        val memo = quoteSwap.memo.let {
-            val amountOut = quoteSwap.expected_amount_out.toBigDecimal()
-            val amountOutFeeIncluded = amountOut + quoteSwap.fees.total
-            val amountOutMin = amountOutFeeIncluded - amountOutFeeIncluded / BigDecimal(100) * slippage
-
-            val parts = it.split(":").toMutableList()
-
-            val amountOutMinStr = amountOutMin.toBigInteger().toString()
-            if (parts.size > 3) {
-                parts[3] = amountOutMinStr
-            } else if (parts.size == 3) {
-                parts.add(amountOutMinStr)
-            }
-
-            parts.joinToString(":")
-        }
+        val memo = quoteSwap.memo
 
         val router = quoteSwap.router
         val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
@@ -369,7 +394,7 @@ interface ThornodeAPI {
         @Query("affiliate_bps") affiliateBps: Int?,
 //        @Query("streaming_interval") streamingInterval: Long,
 //        @Query("streaming_quantity") streamingQuantity: Long,
-//        @Query("tolerance_bps") toleranceBps: Long,
+        @Query("tolerance_bps") toleranceBps: Long?,
 
     ): Response.QuoteSwap
 
@@ -401,7 +426,7 @@ interface ThornodeAPI {
             val recommended_gas_rate: String,
 //  "gas_rate_units": "satsperbyte",
             val memo: String,
-            val expected_amount_out: String,
+            val expected_amount_out: BigDecimal,
 //  "expected_amount_out_streaming": "2035299208",
 //  "max_streaming_quantity": 8,
 //  "streaming_swap_blocks": 7,
@@ -463,3 +488,9 @@ class DepositWithExpiryMethod(
 sealed class SwapError : Exception() {
     class NoDestinationAddress : SwapError()
 }
+
+class SlippageNotApplicable(minSlippageApplicable: BigDecimal) : HSCaution(
+    TranslatableString.PlainString("Slippage is not applicable"),
+    Type.Warning,
+    TranslatableString.PlainString("Minimum slippage applicable  for this quote is %${minSlippageApplicable}"),
+)

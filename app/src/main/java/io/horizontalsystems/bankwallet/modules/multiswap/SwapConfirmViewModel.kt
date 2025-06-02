@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -26,7 +27,7 @@ import java.math.BigDecimal
 
 class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
-    swapQuote: ISwapQuote,
+    private val swapQuote: ISwapQuote,
     private val swapSettings: Map<String, Any?>,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
@@ -54,6 +55,7 @@ class SwapConfirmViewModel(
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
     private var quoteFields: List<DataField> = listOf()
+    private var cautionViewItems: List<CautionViewItem> = listOf()
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -143,6 +145,8 @@ class SwapConfirmViewModel(
             priceImpactState.priceImpactCaution?.let { hsCaution ->
                 cautions = listOf(hsCaution.toCautionViewItem())
             }
+
+            cautions += cautionViewItems
         }
 
         return SwapConfirmUiState(
@@ -186,11 +190,12 @@ class SwapConfirmViewModel(
     private fun fetchFinalQuote() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
+                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings, swapQuote)
 
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 quoteFields = finalQuote.fields
+                cautionViewItems = finalQuote.cautions.map(HSCaution::toCautionViewItem)
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)

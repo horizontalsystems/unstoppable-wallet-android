@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.ISwapSetting
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -17,6 +18,7 @@ interface ISwapQuote {
     val tokenOut: Token
     val amountIn: BigDecimal
     val actionRequired: ISwapProviderAction?
+    val cautions: List<HSCaution>
 }
 
 class SwapQuoteUniswap(
@@ -26,7 +28,8 @@ class SwapQuoteUniswap(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote {
     override val amountOut: BigDecimal = tradeData.amountOut!!
     override val priceImpact: BigDecimal? = tradeData.priceImpact
@@ -39,7 +42,8 @@ class SwapQuoteUniswapV3(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote {
     override val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
     override val priceImpact = tradeDataV3.priceImpact
@@ -53,7 +57,8 @@ class SwapQuoteOneInch(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote
 
 class SwapQuoteThorChain(
@@ -64,5 +69,7 @@ class SwapQuoteThorChain(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution>,
+    val slippageThreshold: BigDecimal,
 ) : ISwapQuote
