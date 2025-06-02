@@ -222,7 +222,7 @@ object ThorChainProvider : IMultiSwapProvider {
             BlockchainType.Bitcoin -> {
                 return BitcoinAdapter.firstAddress(account.type, token.type)
             }
-            BlockchainType.BitcoinCash ->{
+            BlockchainType.BitcoinCash -> {
                 return BitcoinCashAdapter.firstAddress(account.type, token.type)
             }
             BlockchainType.Litecoin -> {
@@ -475,13 +475,9 @@ class DepositWithExpiryMethod(
     val amount: BigInteger,
     val memo: String,
     val expiry: BigInteger,
-): ContractMethod() {
-    override val methodSignature = DepositWithExpiryMethod.methodSignature
+) : ContractMethod() {
+    override val methodSignature = "depositWithExpiry(address,address,uint256,string,uint256)"
     override fun getArguments() = listOf(inboundAddress, asset, amount, memo, expiry)
-
-    companion object {
-        const val methodSignature = "depositWithExpiry(address,address,uint256,string,uint256)"
-    }
 }
 
 
@@ -490,7 +486,7 @@ sealed class SwapError : Exception() {
 }
 
 class SlippageNotApplicable(minSlippageApplicable: BigDecimal) : HSCaution(
-    TranslatableString.PlainString("Slippage is not applicable"),
+    TranslatableString.ResString(R.string.SwapWarning_SlippageNotApplicable_Title),
     Type.Warning,
-    TranslatableString.PlainString("Minimum slippage applicable  for this quote is %${minSlippageApplicable}"),
+    TranslatableString.ResString(R.string.SwapWarning_SlippageNotApplicable_Description, minSlippageApplicable),
 )
