@@ -64,7 +64,7 @@ object OneInchProvider : IMultiSwapProvider {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
-        val settingRecipient = SwapSettingRecipient(settings, blockchainType)
+        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
         val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val quote = oneInchKit.getQuoteAsync(
@@ -126,7 +126,7 @@ object OneInchProvider : IMultiSwapProvider {
 
         val gasPrice = sendTransactionSettings.gasPriceInfo.gasPrice
 
-        val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
+        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
 

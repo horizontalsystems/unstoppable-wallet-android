@@ -130,7 +130,7 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
         val chain = evmBlockchainHelper.chain
         val rpcSourceHttp = evmBlockchainHelper.getRpcSourceHttp()
 
-        val settingRecipient = SwapSettingRecipient(settings, blockchainType)
+        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
         val settingSlippage = SwapSettingSlippage(settings, TradeOptions.defaultAllowedSlippage)
         val settingDeadline = SwapSettingDeadline(settings, TradeOptions.defaultTtl)
 
