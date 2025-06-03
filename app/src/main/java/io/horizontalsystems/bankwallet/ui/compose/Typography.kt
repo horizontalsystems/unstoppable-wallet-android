@@ -145,11 +145,8 @@ class Typography internal constructor(
 }
 
 fun ColoredTextStyle(textStyle: TextStyle, color: Color, textAlign: TextAlign = TextAlign.Unspecified): TextStyle {
-    return TextStyle(
+    return textStyle.copy(
         color = color,
-        fontWeight = textStyle.fontWeight,
-        fontSize = textStyle.fontSize,
-        fontStyle = textStyle.fontStyle,
         textAlign = textAlign
     )
 }
