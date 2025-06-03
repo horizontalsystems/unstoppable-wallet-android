@@ -19,8 +19,11 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.R
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -121,9 +124,10 @@ object ThorChainProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
     ): ISwapQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null)
-
+        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
         val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
+
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
 
         val cautions = mutableListOf<HSCaution>()
         val slippageThreshold = getSlippageThreshold(quoteSwap)
@@ -146,6 +150,9 @@ object ThorChainProvider : IMultiSwapProvider {
         }
 
         val fields = buildList {
+            settingRecipient.value?.let {
+                add(DataFieldRecipient(it))
+            }
             settingSlippage.value?.let {
                 add(DataFieldSlippage(it))
             }
@@ -158,7 +165,7 @@ object ThorChainProvider : IMultiSwapProvider {
             amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
             priceImpact = null,
             fields = fields,
-            settings = listOf(settingSlippage),
+            settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
@@ -178,11 +185,12 @@ object ThorChainProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        slippage: BigDecimal?
+        slippage: BigDecimal?,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?
     ): Response.QuoteSwap {
         val assetIn = assets.first { it.token == tokenIn }
         val assetOut = assets.first { it.token == tokenOut }
-        val destination = resolveDestination(tokenOut)
+        val destination = recipient?.hex ?: resolveDestination(tokenOut)
 
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn.asset,
@@ -191,17 +199,13 @@ object ThorChainProvider : IMultiSwapProvider {
             destination = destination,
             affiliate = AFFILIATE,
             affiliateBps = AFFILIATE_BPS,
-            toleranceBps = slippage?.multiply(BigDecimal("100"))?.toLong()
+            toleranceBps = slippage?.movePointRight(2)?.toLong()
         )
     }
 
     private fun resolveDestination(token: Token): String {
         val blockchainType = token.blockchainType
 
-//        if let recipient = storage.recipient(blockchainType: blockchainType) {
-//            return recipient.raw
-//        }
-//
         adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
             return it.receiveAddress
         }
@@ -244,6 +248,7 @@ object ThorChainProvider : IMultiSwapProvider {
 
         val slippageThreshold = swapQuote.slippageThreshold
 
+        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
 
@@ -258,7 +263,7 @@ object ThorChainProvider : IMultiSwapProvider {
             finalSlippage = null
         }
 
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, finalSlippage)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, finalSlippage, settingRecipient.value)
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
@@ -267,6 +272,9 @@ object ThorChainProvider : IMultiSwapProvider {
         }
 
         val fields = buildList {
+            settingRecipient.value?.let {
+                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+            }
             finalSlippage?.let {
                 add(DataFieldSlippage(it))
             }
