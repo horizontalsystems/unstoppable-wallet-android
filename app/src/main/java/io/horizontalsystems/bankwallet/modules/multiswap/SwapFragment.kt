@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,6 +89,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
@@ -249,6 +251,8 @@ private fun SwapScreenInner(
                         amountInputHasFocus = it.hasFocus
                     },
                 )
+                VSpacer(height = 8.dp)
+                AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
 
                 VSpacer(height = 12.dp)
 
@@ -347,10 +351,6 @@ private fun SwapScreenInner(
                             it.GetContent(navController, false)
                         }
                     }
-                } else {
-                    CardsSwapInfo {
-                        AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
-                    }
                 }
 
                 if (uiState.error is PriceImpactTooHigh) {
@@ -411,20 +411,16 @@ private fun SwapScreenInner(
 
 @Composable
 private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
-    QuoteInfoRow(
-        title = {
-            subhead2_grey(text = stringResource(R.string.Swap_AvailableBalance))
-        },
-        value = {
-            val text = if (tokenIn != null && availableBalance != null) {
-                CoinValue(tokenIn, availableBalance).getFormattedFull()
-            } else {
-                "-"
-            }
-
-            subhead2_leah(text = text)
+    Row(modifier = Modifier.padding(horizontal = 32.dp)) {
+        caption_grey(text = stringResource(R.string.Swap_AvailableBalance))
+        val text = if (tokenIn != null && availableBalance != null) {
+            CoinValue(tokenIn, availableBalance).getFormattedFull()
+        } else {
+            "---"
         }
-    )
+        Spacer(modifier = Modifier.weight(1f))
+        caption_grey(text = text)
+    }
 }
 
 @Composable
