@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.core.ISystemInfoManager
 
@@ -14,10 +15,10 @@ class DonationShowManager(
 
     fun shouldShow(): Boolean {
         //show only for FDroid builds
-//        val isFDroidBuild = BuildConfig.FDROID_BUILD
-//        if (!isFDroidBuild) {
-//            return false
-//        }
+        val isFDroidBuild = BuildConfig.FDROID_BUILD
+        if (!isFDroidBuild) {
+            return false
+        }
         //todo in version 0.43 remove changelogShownForAppVersion and update logic
         val prevVersion = localStorage.changelogShownForAppVersion
         val donateAppVersion = localStorage.donateAppVersion

@@ -14,12 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,29 +58,60 @@ fun DonateBanner(onClick: () -> Unit) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(0.6f)
+                    .weight(0.7f)
                     .padding(vertical = 16.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
+                TextWithDynamicScale(
+                    maxLines = 3,
                     text = stringResource(R.string.SettingsBanner_BePartOfTheFuture),
-                    style = ComposeAppTheme.typography.headline1.copy(lineHeight = 22.sp),
                     color = Bright,
+                    style = ComposeAppTheme.typography.headline1.copy(lineHeight = 22.sp),
                 )
-                Text(
+                TextWithDynamicScale(
+                    maxLines = 2,
                     text = stringResource(R.string.SettingsBanner_SupportTheProject),
-                    style = ComposeAppTheme.typography.subhead1,
                     color = YellowD,
+                    style = ComposeAppTheme.typography.subhead1,
                 )
             }
 
             Spacer(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(0.4f)
+                    .weight(0.3f)
             )
         }
     }
+}
+
+@Composable
+fun TextWithDynamicScale(
+    maxLines: Int,
+    text: String,
+    color: Color,
+    style: TextStyle
+) {
+    var currentFontSize by remember { mutableStateOf(style.fontSize) }
+    var readyToDraw by remember { mutableStateOf(false) }
+    Text(
+        text = text,
+        style = style.copy(fontSize = currentFontSize),
+        color = color,
+        maxLines = maxLines,
+        softWrap = true,
+        onTextLayout = { textLayoutResult ->
+            if (textLayoutResult.didOverflowHeight && !readyToDraw) {
+                if (currentFontSize.value > 10f) {
+                    currentFontSize = (currentFontSize.value * 0.95f).sp
+                } else {
+                    readyToDraw = true
+                }
+            } else if (!textLayoutResult.didOverflowHeight) {
+                readyToDraw = true
+            }
+        }
+    )
 }
 
 @Preview
