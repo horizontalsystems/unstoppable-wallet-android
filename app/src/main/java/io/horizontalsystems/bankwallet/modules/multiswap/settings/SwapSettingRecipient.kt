@@ -10,7 +10,7 @@ data class SwapSettingRecipient(
     val settings: Map<String, Any?>,
     val tokenOut: Token
 ) : ISwapSetting {
-    override val id = "recipient"
+    override val id = "recipient_${tokenOut.blockchainType.uid}"
 
     val value = settings[id] as? Address
 
