@@ -760,8 +760,8 @@
     <string name="SettingsBanner_PremiumBannerDescription">Upgrade your experience with Premium features!</string>
     <string name="SettingsBanner_PremiumTryFee">Try for FREE</string>
     <string name="SettingsBanner_GameDescription">Pass tests, complete tasks, and earn tokens!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Be part of the future of private finance</string>
-    <string name="SettingsBanner_SupportTheProject">Defend Privacy</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Defend truly private finance</string>
+    <string name="SettingsBanner_SupportTheProject">Support our independence!</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Support the Privacy Movement</string>
     <string name="SettingsBanner_DonateSubtitle">Defend the future of private finance</string>
@@ -769,7 +769,7 @@
     <string name="SettingsBanner_DonateByJoiningMovement">By supporting us, you defend open and surveillance-free finance:</string>
     <string name="SettingsBanner_DonateUnstoppableWalletTeam">The Privacy-First Development Team </string>
     <string name="SettingsBanner_DonateYourSupportIsCommitment">"Your support isn't just about features - it's resistance against financial surveillance and control"</string>
-    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">"It keeps us independent - protecting thousands who refuse to compromise privacy\" --- Exclusively on F-Droid"</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">"It keeps us independent - protecting thousands who refuse to compromise privacy"</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Exclusively on F-Droid</string>
     <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Privacy-first features - with no tracking, no limits.</string>
     <string name="SettingsBanner_DonateFeaturePrivacy">Duress Mode &amp; extra security</string>
