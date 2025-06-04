@@ -4,6 +4,7 @@ import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAddressValidator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.BitcoinAddress
+import io.horizontalsystems.bitcoincore.crypto.Base58
 import io.horizontalsystems.bitcoincore.network.Network
 import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
 import io.horizontalsystems.bitcoincore.utils.CashAddressConverter
@@ -224,6 +225,11 @@ class AddressHandlerBitcoinCash(network: Network, override val blockchainType: B
 class AddressHandlerSolana : IAddressHandler {
     override fun isSupported(value: String): Boolean {
         return try {
+            //then count size to validate address length
+            //Solana address should be 32 bytes long
+            val bytes = Base58.decode(value)
+            if (bytes.size != 32) throw IllegalStateException()
+
             io.horizontalsystems.solanakit.models.Address(value)
             true
         } catch (e: Throwable) {

@@ -5,12 +5,9 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.subscriptions.core.AddressBlacklist
-import io.horizontalsystems.subscriptions.core.AddressPhishing
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 interface AddressChecker {
-    suspend fun checkAddress(address: Address, token: Token): AddressCheckResult
+    suspend fun isClear(address: Address, token: Token): Boolean
     fun supports(token: Token): Boolean
 }
 
@@ -18,20 +15,9 @@ class PhishingAddressChecker(
     private val spamManager: SpamManager
 ) : AddressChecker {
 
-    override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
-        return when {
-            !EvmBlockchainManager.blockchainTypes.contains(token.blockchainType) -> AddressCheckResult.NotSupported
-            !UserSubscriptionManager.isActionAllowed(AddressPhishing) -> AddressCheckResult.NotAllowed
-            else -> try {
-                val spamAddress = spamManager.find(address.hex.uppercase())
-                if (spamAddress != null)
-                    AddressCheckResult.Detected
-                else
-                    AddressCheckResult.Clear
-            } catch (e: Throwable) {
-                AddressCheckResult.NotAvailable
-            }
-        }
+    override suspend fun isClear(address: Address, token: Token): Boolean {
+        val spamAddress = spamManager.find(address.hex.uppercase())
+        return spamAddress == null
     }
 
     override fun supports(token: Token): Boolean {
@@ -43,32 +29,10 @@ class BlacklistAddressChecker(
     private val hashDitAddressValidator: HashDitAddressValidator,
     private val eip20AddressValidator: Eip20AddressValidator
 ) : AddressChecker {
-    override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
-        if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist)) return AddressCheckResult.NotAllowed
-
-        return try {
-            val hashDitCheckResult = hashDitAddressValidator.check(address, token)
-            val eip20CheckResult = eip20AddressValidator.check(address, token)
-
-            val checkResults = listOf(hashDitCheckResult, eip20CheckResult)
-
-            when {
-                checkResults.contains(AddressCheckResult.Detected) -> {
-                    AddressCheckResult.Detected
-                }
-
-                checkResults.contains(AddressCheckResult.Clear) &&
-                        checkResults.all { it == AddressCheckResult.Clear || it == AddressCheckResult.NotSupported } -> {
-                    AddressCheckResult.Clear
-                }
-
-                else -> {
-                    AddressCheckResult.NotAvailable
-                }
-            }
-        } catch (e: Throwable) {
-            AddressCheckResult.NotAvailable
-        }
+    override suspend fun isClear(address: Address, token: Token): Boolean {
+        val hashDitCheckResult = hashDitAddressValidator.isClear(address, token)
+        val eip20CheckResult = eip20AddressValidator.isClear(address, token)
+        return hashDitCheckResult && eip20CheckResult
     }
 
     override fun supports(token: Token): Boolean {
@@ -79,15 +43,8 @@ class BlacklistAddressChecker(
 class SanctionAddressChecker(
     private val chainalysisAddressValidator: ChainalysisAddressValidator
 ) : AddressChecker {
-    override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
-        if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist))
-            return AddressCheckResult.NotAllowed
-
-        return try {
-            chainalysisAddressValidator.check(address)
-        } catch (e: Throwable) {
-            AddressCheckResult.NotAvailable
-        }
+    override suspend fun isClear(address: Address, token: Token): Boolean {
+        return chainalysisAddressValidator.isClear(address)
     }
 
     override fun supports(token: Token): Boolean {

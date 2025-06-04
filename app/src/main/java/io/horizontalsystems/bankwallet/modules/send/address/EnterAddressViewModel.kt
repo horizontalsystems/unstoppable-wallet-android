@@ -21,6 +21,8 @@ import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.subscriptions.core.AddressBlacklist
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -43,7 +45,8 @@ class EnterAddressViewModel(
     private val canBeSendToAddress: Boolean
         get() = address != null && !addressValidationInProgress && addressValidationError == null
     private var recentAddress: String? = recentAddressManager.getRecentAddress(token.blockchainType)
-    private val contactNameAddresses = contactsRepository.getContactAddressesByBlockchain(token.blockchainType)
+    private val contactNameAddresses =
+        contactsRepository.getContactAddressesByBlockchain(token.blockchainType)
     private var addressValidationInProgress: Boolean = false
     private var addressValidationError: Throwable? = null
     private val availableCheckTypes = addressCheckManager.availableCheckTypes(token)
@@ -70,7 +73,8 @@ class EnterAddressViewModel(
         canBeSendToAddress = canBeSendToAddress,
         recentAddress = recentAddress,
         recentContact = recentAddress?.let { recent ->
-            contactNameAddresses.find { it.contactAddress.address == recentAddress }?.let { SContact(it.name, recent) }
+            contactNameAddresses.find { it.contactAddress.address == recentAddress }
+                ?.let { SContact(it.name, recent) }
         },
         contacts = contactNameAddresses.map { SContact(it.name, it.contactAddress.address) },
         value = value,
@@ -138,7 +142,21 @@ class EnterAddressViewModel(
                     emitState()
                 } else if (addressCheckEnabled) {
                     availableCheckTypes.forEach { type ->
-                        val checkResult = addressCheckManager.check(type, address, token)
+                        val checkResult = try {
+                            if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist)) {
+                                AddressCheckResult.NotAllowed
+                            } else {
+                                val isCLear = addressCheckManager.isClear(type, address, token)
+                                if (isCLear) {
+                                    AddressCheckResult.Clear
+                                } else {
+                                    AddressCheckResult.Detected
+                                }
+                            }
+                        } catch (e: Throwable) {
+                            AddressCheckResult.NotAvailable
+                        }
+
                         ensureActive()
                         checkResults = checkResults.toMutableMap().apply {
                             this[type] = AddressCheckData(false, checkResult)
@@ -167,7 +185,9 @@ class EnterAddressViewModel(
     }
 
     private fun parseDomain(addressText: String): Address {
-        return domainParser.supportedHandler(addressText)?.parseAddress(addressText) ?: Address(addressText)
+        return domainParser.supportedHandler(addressText)?.parseAddress(addressText) ?: Address(
+            addressText
+        )
     }
 
     class Factory(
@@ -181,12 +201,20 @@ class EnterAddressViewModel(
             val coinCode = token.coin.code
             val tokenQuery = TokenQuery(blockchainType, token.type)
             val ensHandler = AddressHandlerEns(blockchainType, EnsResolverHolder.resolver)
-            val udnHandler = AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
-            val addressParserChain = AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
+            val udnHandler =
+                AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
+            val addressParserChain =
+                AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
             val addressUriParser = AddressUriParser(token.blockchainType, token.type)
-            val recentAddressManager = RecentAddressManager(App.accountManager, App.appDatabase.recentAddressDao())
+            val recentAddressManager =
+                RecentAddressManager(App.accountManager, App.appDatabase.recentAddressDao())
             val addressValidator = AddressValidatorFactory.get(token)
-            val addressCheckManager = AddressCheckManager(App.spamManager, App.appConfigProvider, App.evmBlockchainManager, App.evmSyncSourceManager)
+            val addressCheckManager = AddressCheckManager(
+                App.spamManager,
+                App.appConfigProvider,
+                App.evmBlockchainManager,
+                App.evmSyncSourceManager
+            )
             return EnterAddressViewModel(
                 token,
                 addressUriParser,
