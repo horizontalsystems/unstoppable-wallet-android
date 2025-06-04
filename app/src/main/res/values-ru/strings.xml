@@ -764,18 +764,18 @@
     <string name="SettingsBanner_PremiumTryFee">Попробовать БЕСПЛАТНО</string>
     <string name="SettingsBanner_Title" translatable="false">MiniApp</string>
     <string name="SettingsBanner_GameDescription">Пройди тесты, выполни задания и заработай токены!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Открой для себя будущее приватных финансов</string>
-    <string name="SettingsBanner_SupportTheProject">Поддержи проект!</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Поддержите настоящую финансовую приватность</string>
+    <string name="SettingsBanner_SupportTheProject">Помогите нам оставаться независимыми!</string>
 
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Поддержите движение за конфиденциальность</string>
     <string name="SettingsBanner_DonateSubtitle">Внесите вклад в защиту будущего приватных финансов</string>
 
-    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet остаётся бесплатным, без рекламы и с открытым исходным кодом — независимым от слежки со стороны Big Tech.”</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable кошелек остаётся бесплатным, без рекламы и с открытым исходным кодом - независимым от слежки со стороны Big Tech.”</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Поддерживая нас, вы защищаете открытые и свободные от слежки финансы:</string>
     <string name="SettingsBanner_DonateUnstoppableWalletTeam">Команда, ориентированная на конфиденциальность</string>
-    <string name="SettingsBanner_DonateYourSupportIsCommitment">“Ваша поддержка — это не просто доступ к функциям, это сопротивление финансовому мониторингу и контролю”</string>
-    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">“Это помогает нам оставаться независимыми, защищая тысячи людей, которые отказываются идти на компромиссы в вопросах конфиденциальности” — Только на F-Droid</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">Ваша поддержка - это не просто доступ к функциям, это сопротивление финансовому мониторингу и контролю</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Это помогает нам оставаться независимыми, защищая тысячи людей, которые отказываются идти на компромиссы в вопросах конфиденциальности</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Доступно только на F-Droid</string>
     <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Функции с приоритетом конфиденциальности — без отслеживания и ограничений.</string>
     <string name="SettingsBanner_DonateFeaturePrivacy">Режим Duress Mode и дополнительная безопасность</string>
@@ -783,9 +783,9 @@
     <string name="SettingsBanner_DonateFeatureAddress">Проверка черного списка адресов</string>
     <string name="SettingsBanner_DonateFeatureFullAnalytics">Аналитика токенов в сети и вне её</string>
     <string name="SettingsBanner_DonateFeatureAdvanced">Расширенный поиск токенов и фильтры</string>
-    <string name="SettingsBanner_DonateFeaturePriority">Приоритетный доступ к поддержке</string>
+    <string name="SettingsBanner_DonateFeaturePriority">Приоритетный доступ к тех.поддержке</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Каждый вклад имеет значение</string>
-    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Поддерживая Unstoppable Wallet, вы помогаете нам оставаться независимыми и защищать финансовую конфиденциальность.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Поддерживая Unstoppable кошелек, вы помогаете нам оставаться независимыми и защищать финансовую конфиденциальность.</string>
 
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Активно</string>

@@ -760,8 +760,8 @@
     <string name="SettingsBanner_PremiumTryFee">Prueba GRATIS</string>
     <string name="SettingsBanner_Title" translatable="false">MiniApp</string>
     <string name="SettingsBanner_GameDescription">¡Pasa las pruebas, completa las tareas y gana tokens!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Sé parte del futuro de las finanzas privadas</string>
-    <string name="SettingsBanner_SupportTheProject">Defiende la privacidad</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Defiende las finanzas realmente privadas</string>
+    <string name="SettingsBanner_SupportTheProject">¡Apoya nuestra independencia!</string>
 
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Apoya el movimiento por la privacidad</string>
