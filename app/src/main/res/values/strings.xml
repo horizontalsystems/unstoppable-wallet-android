@@ -521,7 +521,7 @@
     <string name="Fee_Total">Total Fee</string>
     <string name="Fee_OutboundFee">Outbound Fee</string>
     <string name="Fee_LiquidityFee">Liquidity Fee</string>
-    <string name="FeeSettings_NetworkFee">Network Fee</string>
+    <string name="FeeSettings_NetworkFee">Fee</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit" translatable="false">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
@@ -1181,10 +1181,7 @@
     <!--Setting_Terms-->
 
     <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
-    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
     <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
-    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
-    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
 
     <!--Setting_Tell Friends-->
 
@@ -1284,11 +1281,11 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Invalid Password</string>
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
-    <string name="Watch_Address_Hint">Enter Your EVM, TRON, TON or Public Address (Bitcoin, Litecoin, Bitcoin Cash) or Account xPubKey.</string>
+    <string name="Watch_Address_Hint">Paste public address or XPUB</string>
     <string name="Watch_Address_Watch">Watch</string>
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>
     <string name="Watch_Select_Coins">Choose Coins</string>
-    <string name="Watch_InfoText">We support addresses from Bitcoin, Ethereum, TON, and many other blockchains.</string>
+    <string name="Watch_InfoText">Supports addresses from EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) and XPUB keys.</string>
     <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
 
     <!--Manage Account-->
