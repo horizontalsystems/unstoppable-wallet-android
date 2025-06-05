@@ -23,10 +23,15 @@ class StellarAdapter(
 
     private var totalBalance: BigDecimal? = null
     private var minimumBalance: BigDecimal = BigDecimal.ZERO
+    private var assets = listOf<StellarAsset.Asset>()
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceData: BalanceData
-        get() = BalanceData(availableBalance, minimumBalance = minimumBalance)
+        get() = BalanceData(
+            availableBalance,
+            minimumBalance = minimumBalance,
+            stellarAssets = assets
+        )
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -48,6 +53,12 @@ class StellarAdapter(
             stellarKit.syncStateFlow.collect {
                 balanceState = it.toAdapterState()
                 balanceStateUpdatedSubject.onNext(Unit)
+            }
+        }
+        coroutineScope.launch {
+            stellarKit.assetBalanceMapFlow.collect {
+                assets = it.keys.filterIsInstance<StellarAsset.Asset>()
+                balanceUpdatedSubject.onNext(Unit)
             }
         }
     }

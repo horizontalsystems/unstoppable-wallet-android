@@ -253,11 +253,20 @@ class BalanceViewItemFactory {
                 wallet.decimal,
                 wallet.token
             )?.let {
+                var info = TranslatableString.ResString(R.string.Info_Reserved_Description).toString()
+                info += "\n\n"
+                info += TranslatableString.ResString(R.string.Info_Reserved_CurrentlyLocked).toString()
+
+                info += "\n1 XLM - " + TranslatableString.ResString(R.string.Info_Reserved_WalletAction).toString()
+                item.balanceData.stellarAssets.forEach {
+                    info += "\n0.5 XLM - ${it.code}"
+                }
+
                 add(
                     LockedValue(
                         title = TranslatableString.ResString(R.string.Balance_Reserved_Title),
                         infoTitle = TranslatableString.ResString(R.string.Info_Reserved_Title),
-                        info = TranslatableString.ResString(R.string.Info_Reserved_Description),
+                        info = TranslatableString.PlainString(info),
                         coinValue = it
                     )
                 )
