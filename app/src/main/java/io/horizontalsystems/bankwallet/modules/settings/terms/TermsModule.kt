@@ -16,18 +16,12 @@ object TermsModule {
 
     enum class TermType(val key: String) {
         Backup("term_backup"),
-        PrivateKeys("term_privatekeys"),
-        DisablingPin("term_disablingpin"),
-        JailBraking("term_jailbraking"),
-        Bugs("term_bugs");
+        DisablingPin("term_disablingpin");
 
         val description: Int
             get() = when (this) {
                 Backup -> R.string.SettingsTerms_Backup
-                PrivateKeys -> R.string.SettingsTerms_PrivateKeys
                 DisablingPin -> R.string.SettingsTerms_DisablingPin
-                JailBraking -> R.string.SettingsTerms_JailBraking
-                Bugs -> R.string.SettingsTerms_Bugs
             }
     }
 
