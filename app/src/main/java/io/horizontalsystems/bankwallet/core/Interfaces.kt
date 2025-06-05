@@ -46,6 +46,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
+import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
@@ -295,6 +296,7 @@ data class BalanceData(
     val notRelayed: BigDecimal = BigDecimal.ZERO,
     val pending: BigDecimal = BigDecimal.ZERO,
     val minimumBalance: BigDecimal = BigDecimal.ZERO,
+    val stellarAssets: List<StellarAsset.Asset> = listOf()
 ) {
     val total get() = available + timeLocked + notRelayed + pending + minimumBalance
 }

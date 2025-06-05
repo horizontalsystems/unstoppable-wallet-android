@@ -856,6 +856,8 @@
 
     <string name="Info_Reserved_Title">Reserved</string>
     <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
+    <string name="Info_Reserved_CurrentlyLocked">Currently locked:</string>
+    <string name="Info_Reserved_WalletAction">Wallet activation</string>
 
     <string name="Info_NotRelayed_Title">Broadcast</string>
     <string name="Info_NotRelayed_Description">The transaction holding this amount is broadcasted but not yet accepted by the network.</string>
