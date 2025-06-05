@@ -36,7 +36,7 @@ class AddressCheckManager(
         return checkers.mapNotNull { (type, checker) -> if (checker.supports(token)) type else null }
     }
 
-    suspend fun check(type: AddressCheckType, address: Address, token: Token): AddressCheckResult {
-        return checkers[type]?.checkAddress(address, token) ?: AddressCheckResult.NotSupported
+    suspend fun isClear(type: AddressCheckType, address: Address, token: Token): Boolean {
+        return checkers[type]?.isClear(address, token) ?: true
     }
 }

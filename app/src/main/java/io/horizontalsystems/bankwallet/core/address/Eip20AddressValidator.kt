@@ -1,62 +1,96 @@
 package io.horizontalsystems.bankwallet.core.address
 
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.rx2.await
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
 class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
-    suspend fun check(address: Address, token: Token): AddressCheckResult {
-        val syncSource = evmSyncSourceManager.defaultSyncSources(token.blockchainType).first()
-        val contractAddress = (token.type as? TokenType.Eip20)?.address?.let { EvmAddress(it) }
-            ?: return AddressCheckResult.NotSupported
 
-        val method = method(address, contractAddress)
-            ?: return AddressCheckResult.NotSupported
+    suspend fun isClear(address: Address, token: Token): Boolean {
+        val contractAddress = (token.type as? TokenType.Eip20)?.address
+            ?: throw TokenError.InvalidTokenType
+
+        return isClear(address, token.coin.uid, token.blockchainType, contractAddress)
+    }
+
+    suspend fun isClear(
+        address: Address,
+        coinUid: String,
+        blockchainType: BlockchainType,
+        contractAddress: String
+    ): Boolean {
+        val evmAddress = try {
+            EvmAddress(address.hex)
+        } catch (e: Throwable) {
+            throw TokenError.InvalidAddress
+        }
+
+        val validContractAddress = try {
+            EvmAddress(contractAddress)
+        } catch (e: Throwable) {
+            throw TokenError.InvalidContractAddress
+        }
+
+        val syncSource = evmSyncSourceManager.defaultSyncSources(blockchainType).firstOrNull()
+            ?: throw TokenError.NoSyncSource
+
+        val method = method(coinUid, blockchainType)
+            ?: throw TokenError.NoMethod
 
         val response: ByteArray =
-            EthereumKit.call(syncSource.rpcSource, contractAddress, method.encodedABI()).await()
+            EthereumKit.call(
+                syncSource.rpcSource,
+                validContractAddress,
+                method.contractMethod(evmAddress).encodedABI()
+            )
+                .await()
 
-        return if (response.contains(1.toByte()))
-            AddressCheckResult.Detected
-        else
-            AddressCheckResult.Clear
+        return !response.contains(1.toByte())
     }
 
     fun supports(token: Token): Boolean {
-        if (!EvmBlockchainManager.blockchainTypes.contains(token.blockchainType)) return false
-        val contractAddress = (token.type as? TokenType.Eip20)?.address?.let { EvmAddress(it) }
-            ?: return false
-
-        return method(Address(""), contractAddress) != null
+        return method(token.coin.uid, token.blockchainType) != null
     }
 
     companion object {
-        fun method(address: Address, contractAddress: EvmAddress): ContractMethod? {
-            val evmAddress = try {
-                EvmAddress(address.hex)
-            } catch (e: Throwable) {
-                return null
-            }
+        fun method(coinUid: String, blockchainType: BlockchainType): Method? {
+            return when (coinUid) {
+                "tether" -> {
+                    when (blockchainType) {
+                        BlockchainType.Ethereum -> Method.BlacklistedMethodUSDT
+                        else -> null
+                    }
+                }
 
-            if (IsBlacklistedMethodUSDT.contractAddresses.contains(contractAddress.eip55)) {
-                return IsBlacklistedMethodUSDT(evmAddress)
-            }
+                "usd-coin" -> {
+                    when (blockchainType) {
+                        BlockchainType.Ethereum,
+                        BlockchainType.Optimism,
+                        BlockchainType.Avalanche,
+                        BlockchainType.ArbitrumOne,
+                        BlockchainType.Polygon,
+                        BlockchainType.ZkSync,
+                        BlockchainType.Base -> Method.BlacklistedMethodUSDC
 
-            if (IsBlacklistedMethodUSDC.contractAddresses.contains(contractAddress.eip55)) {
-                return IsBlacklistedMethodUSDC(evmAddress)
-            }
+                        else -> null
+                    }
+                }
 
-            if (IsFrozenMethodPYUSD.contractAddresses.contains(contractAddress.eip55)) {
-                return IsFrozenMethodPYUSD(evmAddress)
-            }
+                "paypal-usd" -> {
+                    when (blockchainType) {
+                        BlockchainType.Ethereum -> Method.FrozenMethodPYUSD
+                        else -> null
+                    }
+                }
 
-            return null
+                else -> null
+            }
         }
     }
 
@@ -67,10 +101,6 @@ class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
         override fun getArguments(): List<Any> {
             return listOf(address)
         }
-
-        companion object {
-            val contractAddresses = listOf("0xdAC17F958D2ee523a2206206994597C13D831ec7")
-        }
     }
 
     class IsBlacklistedMethodUSDC(val address: EvmAddress) : ContractMethod() {
@@ -79,10 +109,6 @@ class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
 
         override fun getArguments(): List<Any> {
             return listOf(address)
-        }
-
-        companion object {
-            val contractAddresses = listOf("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")
         }
     }
 
@@ -93,9 +119,27 @@ class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
         override fun getArguments(): List<Any> {
             return listOf(address)
         }
+    }
+}
 
-        companion object {
-            val contractAddresses = listOf("0x6c3ea9036406852006290770BEdFcAbA0e23A0e8")
+sealed class Method {
+    object BlacklistedMethodUSDT : Method()
+    object BlacklistedMethodUSDC : Method()
+    object FrozenMethodPYUSD : Method()
+
+    fun contractMethod(evmAddress: EvmAddress): ContractMethod {
+        return when (this) {
+            is BlacklistedMethodUSDT -> Eip20AddressValidator.IsBlacklistedMethodUSDT(evmAddress)
+            is BlacklistedMethodUSDC -> Eip20AddressValidator.IsBlacklistedMethodUSDC(evmAddress)
+            is FrozenMethodPYUSD -> Eip20AddressValidator.IsFrozenMethodPYUSD(evmAddress)
         }
     }
+}
+
+sealed class TokenError : Exception() {
+    object InvalidTokenType : TokenError()
+    object InvalidAddress : TokenError()
+    object InvalidContractAddress : TokenError()
+    object NoSyncSource : TokenError()
+    object NoMethod : TokenError()
 }
