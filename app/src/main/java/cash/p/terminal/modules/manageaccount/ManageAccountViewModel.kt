@@ -75,14 +75,21 @@ class ManageAccountViewModel(
         }
 
         val items = mutableListOf<BackupItem>()
-        if (!account.isBackedUp && !account.isFileBackedUp) {
-            items.add(BackupItem.ManualBackup(true))
-            items.add(BackupItem.LocalBackup(true))
-            items.add(BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRequiredText))
-        } else {
-            items.add(BackupItem.ManualBackup(showAttention = !account.isBackedUp, completed = account.isBackedUp))
-            items.add(BackupItem.LocalBackup(false))
-            items.add(BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRecomendedText))
+        if(account.accountSupportsBackup) {
+            if (!account.isBackedUp && !account.isFileBackedUp) {
+                items.add(BackupItem.ManualBackup(true))
+                items.add(BackupItem.LocalBackup(true))
+                items.add(BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRequiredText))
+            } else {
+                items.add(
+                    BackupItem.ManualBackup(
+                        showAttention = !account.isBackedUp,
+                        completed = account.isBackedUp
+                    )
+                )
+                items.add(BackupItem.LocalBackup(false))
+                items.add(BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRecomendedText))
+            }
         }
 
         return items

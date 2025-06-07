@@ -28,6 +28,14 @@ data class Account(
 ) : Parcelable {
 
     @IgnoredOnParcel
+    val accountSupportsBackup: Boolean
+        get() = !isHardwareWalletAccount
+
+    @IgnoredOnParcel
+    val isHardwareWalletAccount: Boolean
+        get() = type is AccountType.HardwareCard
+
+    @IgnoredOnParcel
     val hasAnyBackup = isBackedUp || isFileBackedUp
 
     @IgnoredOnParcel

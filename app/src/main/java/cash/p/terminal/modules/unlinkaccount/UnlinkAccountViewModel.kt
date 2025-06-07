@@ -17,7 +17,7 @@ class UnlinkAccountViewModel(
         private set
     var unlinkEnabled by mutableStateOf(false)
         private set
-    var showDeleteWarning by mutableStateOf(false)
+    var deleteWarningMsg by mutableStateOf<Int?>(null)
         private set
 
     val deleteButtonText = when {
@@ -27,7 +27,9 @@ class UnlinkAccountViewModel(
 
     init {
         if (account.isWatchAccount) {
-            showDeleteWarning = true
+            deleteWarningMsg = R.string.ManageAccount_DeleteWarning
+        } else if(account.isHardwareWalletAccount){
+            deleteWarningMsg = R.string.ManageAccount_Delete_hardware_wallet_warning
         } else {
             confirmations = listOf(
                 ConfirmationItem(ConfirmationType.ConfirmationRemove),

@@ -244,7 +244,7 @@ class TokenBalanceViewModel(
         val account =
             accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
-            account.hasAnyBackup -> return wallet
+            account.hasAnyBackup || !wallet.account.accountSupportsBackup -> return wallet
             else -> throw BackupRequiredError(account, wallet.coin.name)
         }
     }

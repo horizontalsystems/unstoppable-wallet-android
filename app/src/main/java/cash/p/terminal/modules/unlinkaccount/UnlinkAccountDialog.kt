@@ -21,8 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.requireInput
-
-
 import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsCheckbox
@@ -62,7 +60,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: cash.p.te
 
     val confirmations = viewModel.confirmations
     val unlinkEnabled = viewModel.unlinkEnabled
-    val showDeleteWarning = viewModel.showDeleteWarning
+    val deleteWarningMsg = viewModel.deleteWarningMsg
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_red_24),
@@ -91,10 +89,10 @@ private fun UnlinkAccountScreen(navController: NavController, account: cash.p.te
             }
         }
 
-        if (showDeleteWarning) {
+        deleteWarningMsg?.let {
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(id = R.string.ManageAccount_DeleteWarning)
+                text = stringResource(id = it)
             )
         }
 

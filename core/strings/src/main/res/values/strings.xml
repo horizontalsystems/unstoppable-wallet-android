@@ -1387,6 +1387,7 @@
     <string name="ManageAccount_WatchAddresses">Watch Wallets</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
+    <string name="ManageAccount_Delete_hardware_wallet_warning">Do you want to delete this hardware wallet?</string>
 
     <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
 
