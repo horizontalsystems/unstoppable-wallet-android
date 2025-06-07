@@ -3,13 +3,15 @@ package io.horizontalsystems.core
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.lang.ref.WeakReference
+import java.util.WeakHashMap
 import java.util.concurrent.Executors
+import kotlin.reflect.KClass
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
@@ -22,15 +24,18 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         application.registerActivityLifecycleCallbacks(this)
     }
 
-    var currentActivity: WeakReference<Activity>? = null
-        private set
+    private val activities = WeakHashMap<KClass<out Activity>, AppCompatActivity>()
+
+    val currentActivity: AppCompatActivity?
+        get() = activities.entries
+            .firstOrNull { it.value?.isDestroyed == false }
+            ?.value
 
     private var foregroundActivityCount: Int = 0
     private var aliveActivityCount: Int = 0
 
     @Synchronized
     override fun onActivityStarted(activity: Activity) {
-        currentActivity = WeakReference(activity)
         if (foregroundActivityCount == 0) {
             scope.launch {
                 _stateFlow.emit(BackgroundManagerState.EnterForeground)
@@ -53,7 +58,6 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
 
     @Synchronized
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        currentActivity = WeakReference(activity)
         aliveActivityCount++
     }
 
@@ -67,18 +71,16 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
             }
         }
 
-        if (currentActivity?.get() == activity) {
-            currentActivity = null
-        }
+        activities.remove(activity::class)
     }
 
-    override fun onActivityPaused(p0: Activity) {}
+    override fun onActivityPaused(p0: Activity) = Unit
 
     override fun onActivityResumed(activity: Activity) {
-        currentActivity = WeakReference(activity)
+        activities[activity::class] = activity as? AppCompatActivity
     }
 
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
 
 }
 

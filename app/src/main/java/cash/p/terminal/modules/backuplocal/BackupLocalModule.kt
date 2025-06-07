@@ -18,6 +18,7 @@ object BackupLocalModule {
     private const val BITCOIN_ADDRESS = "bitcoin_address"
     private const val HD_EXTENDED_KEY = "hd_extended_key"
     private const val UFVK = "ufvk"
+    private const val HARDWARE_CARD = "hardware_card"
     private const val CEX = "cex"
 
     //Backup Json file data structure
@@ -79,6 +80,7 @@ object BackupLocalModule {
         is AccountType.HdExtendedKey -> HD_EXTENDED_KEY
         is AccountType.ZCashUfvKey -> UFVK
         is AccountType.Cex -> CEX
+        is AccountType.HardwareCard -> HARDWARE_CARD
     }
 
     @Throws(IllegalStateException::class)
@@ -102,6 +104,12 @@ object BackupLocalModule {
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(Base58.encode(data))
             UFVK -> AccountType.ZCashUfvKey(String(data, Charsets.UTF_8))
+            HARDWARE_CARD -> {
+                val parts = String(data, Charsets.UTF_8).split("@")
+                if (parts.size != 2)
+                    throw IllegalStateException("Non standard hardware card data")
+                AccountType.HardwareCard(parts[0], parts[1])
+            }
             CEX -> {
                 val cexType = CexType.deserialize(String(data, Charsets.UTF_8))
                 if (cexType != null) {
@@ -135,6 +143,9 @@ object BackupLocalModule {
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
         is AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)
         is AccountType.ZCashUfvKey -> accountType.key.toByteArray(Charsets.UTF_8)
+        is AccountType.HardwareCard -> {
+            (accountType.cardId + "@" +accountType.walletPublicKey).toByteArray(Charsets.UTF_8)
+        }
     }
 
     val kdfDefault = KdfParams(

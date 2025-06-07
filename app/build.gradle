@@ -321,6 +321,7 @@ dependencies {
 
     // Wallet kits
     implementation(libs.ton.kit)
+    implementation(libs.ton.kotlin.contract)
     implementation libs.bitcoin.kit
     implementation libs.ethereum.kit
     implementation libs.solana.kit
@@ -362,6 +363,7 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':feature-stacking')
+    implementation project(':feature-tangem')
 
     // Integration with activities
     implementation libs.androidx.activity.compose
@@ -416,6 +418,8 @@ dependencies {
 
     implementation libs.google.play.app.update
     implementation libs.google.play.app.update.ktx
+
+    implementation libs.tangem.sdk
 }
 
 configurations.all {

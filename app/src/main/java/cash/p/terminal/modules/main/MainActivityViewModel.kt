@@ -66,7 +66,7 @@ class MainActivityViewModel(
         viewModelScope.launch {
             pinComponent.isLocked.collect { isLocked ->
                 if(isLocked) {
-                    App.backgroundManager.currentActivity?.get()?.let {
+                    App.backgroundManager.currentActivity?.let {
                         LockScreenActivity.start(it)
                     }
                 }

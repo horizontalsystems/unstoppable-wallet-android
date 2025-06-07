@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-    val kotlin_version = rootProject.ext.get("kotlin_version") as String
     val appcompat_version = rootProject.ext.get("appcompat_version") as String
     val constraint_version = rootProject.ext.get("constraint_version") as String
     val rxjava_version = rootProject.ext.get("rxjava_version") as String

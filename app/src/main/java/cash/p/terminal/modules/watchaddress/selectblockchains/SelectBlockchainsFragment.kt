@@ -40,6 +40,7 @@ import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
@@ -66,7 +67,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
     data class Input(
         val popOffOnSuccess: Int,
         val popOffInclusive: Boolean,
-        val accountType: cash.p.terminal.wallet.AccountType,
+        val accountType: AccountType,
         val accountName: String?,
     ) : Parcelable
 
@@ -74,7 +75,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
 
 @Composable
 private fun SelectBlockchainsScreen(
-    accountType: cash.p.terminal.wallet.AccountType,
+    accountType: AccountType,
     accountName: String?,
     navController: NavController,
     popUpToInclusiveId: Int,

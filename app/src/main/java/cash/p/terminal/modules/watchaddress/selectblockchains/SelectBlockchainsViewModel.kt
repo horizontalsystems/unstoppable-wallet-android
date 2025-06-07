@@ -15,7 +15,7 @@ import cash.p.terminal.wallet.badge
 import io.horizontalsystems.core.imageUrl
 
 class SelectBlockchainsViewModel(
-    private val accountType: cash.p.terminal.wallet.AccountType,
+    private val accountType: AccountType,
     private val accountName: String?,
     private val service: WatchAddressService
 ) : ViewModelUiState<SelectBlockchainsUiState>() {
@@ -36,7 +36,9 @@ class SelectBlockchainsViewModel(
             is AccountType.TonAddress,
             is AccountType.Cex,
             is AccountType.Mnemonic,
+            is AccountType.HardwareCard,
             is AccountType.EvmPrivateKey -> Unit // N/A
+
             is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
                 coinViewItems = tokens.map {

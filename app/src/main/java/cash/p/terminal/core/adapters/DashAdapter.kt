@@ -125,13 +125,13 @@ class DashAdapter(
             wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
             userPeers: String,
-            masterNodesRepository: MasterNodesRepository
+            masterNodesRepository: MasterNodesRepository,
         ): DashKit {
             val account = wallet.account
 
-            when (val accountType = account.type) {
+            return when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
-                    return DashKit(
+                    DashKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
                         walletId = account.id,
@@ -139,13 +139,11 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold,
                         initWithEmptySeeds = true
-                    ).apply {
-                        setupPeers(masterNodesRepository, userPeers)
-                    }
+                    )
                 }
 
                 is AccountType.Mnemonic -> {
-                    return DashKit(
+                    DashKit(
                         context = App.instance,
                         words = accountType.words,
                         passphrase = accountType.passphrase,
@@ -154,13 +152,11 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold,
                         initWithEmptySeeds = true
-                    ).apply {
-                        setupPeers(masterNodesRepository, userPeers)
-                    }
+                    )
                 }
 
                 is AccountType.BitcoinAddress -> {
-                    return DashKit(
+                    DashKit(
                         context = App.instance,
                         watchAddress = accountType.address,
                         walletId = account.id,
@@ -168,12 +164,37 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold,
                         initWithEmptySeeds = true
-                    ).apply {
-                        setupPeers(masterNodesRepository, userPeers)
-                    }
+                    )
+                }
+                is AccountType.HardwareCard -> {
+                    val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    return DashKit(
+                        context = App.instance,
+                        extendedKey = wallet.getHDExtendedKey()!!,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = NetworkType.MainNet,
+                        confirmationsThreshold = confirmationsThreshold,
+                        initWithEmptySeeds = true,
+                        iInputSigner = hardwareWalletEcdaBitcoinSigner,
+                        iSchnorrInputSigner = hardwareWalletSchnorrSigner
+                    )
                 }
 
                 else -> throw UnsupportedAccountException()
+            }.apply {
+                setupPeers(masterNodesRepository, userPeers)
             }
         }
 

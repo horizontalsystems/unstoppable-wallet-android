@@ -6,15 +6,17 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.models.FullTokenAccount
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class SolanaWalletManager(
     private val walletManager: IWalletManager,
     private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val marketKit: MarketKitWrapper
 ) {
+    private val mutex = Mutex()
 
-    @Synchronized
-    fun add(tokenAccounts: List<FullTokenAccount>) {
+    suspend fun add(tokenAccounts: List<FullTokenAccount>) = mutex.withLock {
         val account = accountManager.activeAccount ?: return
         val queries = tokenAccounts
                 .filter { !it.mintAccount.isNft }

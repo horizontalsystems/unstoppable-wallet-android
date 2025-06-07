@@ -3,11 +3,17 @@ package cash.p.terminal.core.managers
 import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.UnsupportedException
 import cash.p.terminal.core.providers.AppConfigProvider
+import cash.p.terminal.core.storage.HardwarePublicKeyStorage
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.entities.TokenType
+import cash.z.ecc.android.sdk.ext.fromHex
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
@@ -17,13 +23,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlow
 
 class SolanaKitManager(
     private val appConfigProvider: AppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage
 ) {
 
     private val coroutineScope =
@@ -71,6 +79,10 @@ class SolanaKitManager(
                     createKitInstance(accountType, account)
                 }
 
+                is AccountType.HardwareCard -> {
+                    createKitInstance(account)
+                }
+
                 else -> throw UnsupportedAccountException()
             }
             startKit()
@@ -110,6 +122,23 @@ class SolanaKitManager(
         val kit = SolanaKit.getInstance(
             application = App.instance,
             addressString = address,
+            rpcSource = rpcSourceManager.rpcSource,
+            walletId = account.id
+        )
+
+        return SolanaKitWrapper(kit, null)
+    }
+
+    private fun createKitInstance(
+        account: Account
+    ): SolanaKitWrapper {
+        val hardwarePublicKey = runBlocking {
+            hardwarePublicKeyStorage.getKey(account.id, BlockchainType.Solana, TokenType.Native)
+        } ?: throw UnsupportedException("Hardware card does not have a public key for Tron")
+
+        val kit = SolanaKit.getInstance(
+            application = App.instance,
+            addressString = Base58.encode(hardwarePublicKey.key.value.fromHex()),
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id
         )

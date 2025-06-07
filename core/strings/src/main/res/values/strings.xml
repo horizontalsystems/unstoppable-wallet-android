@@ -39,6 +39,7 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Advanced">Advanced</string>
+    <string name="hardware_wallet">Hardware wallet</string>
     <string name="Button_Restore">Import</string>
     <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
@@ -75,6 +76,7 @@
     <string name="NotAvailable">n/a</string>
     <string name="Any">Any</string>
     <string name="SyncError">Sync error. Try Again</string>
+    <string name="unknown_send_error">Unknown send error</string>
 
     <string name="FooterText" translatable="false">© PirateCash and Cosanta Foundation 2023</string>
 
@@ -1294,6 +1296,10 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Name, code or contract address</string>
+    <string name="error_no_active_account">No active account found</string>
+    <string name="error_hardware_wallet_not_supported">Not supported by hardware card yet</string>
+    <string name="need_to_sign_times">To create transaction you will need to sign it %d times</string>
+    <string name="need_to_activate_in_tangem_app">Can\'t create wallet, activate card via Tangem app first</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:
@@ -1332,6 +1338,8 @@
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
+    <string name="scan_card">Scan card</string>
+    <string name="scan_card_to_add">Scan card to add token</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>

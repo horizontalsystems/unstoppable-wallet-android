@@ -19,11 +19,13 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.entities.HardwarePublicKey
 import cash.p.terminal.wallet.models.CoinCategory
 import cash.p.terminal.wallet.models.CoinInvestment
 import cash.p.terminal.wallet.models.CoinTreasury
 import coil.load
 import io.horizontalsystems.ethereumkit.core.toRawHexString
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.delay
@@ -253,4 +255,9 @@ inline fun <T> tryOrNull(block: () -> T): T? {
     } catch (_: Throwable) {
        null
     }
+}
+
+fun Context.hasNFC(): Boolean {
+    val pm = getSystemService(Context.NFC_SERVICE) as android.nfc.NfcManager
+    return pm.defaultAdapter?.isEnabled == true
 }

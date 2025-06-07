@@ -191,23 +191,25 @@ class ResendBitcoinViewModel(
     private fun send() {
         val replacementTransaction = replacementTransaction ?: return
 
-        val logger = logger.getScopedUnique()
-        logger.info("click")
+        viewModelScope.launch {
+            val logger = logger.getScopedUnique()
+            logger.info("click")
 
-        try {
-            sendResult = SendResult.Sending
-            emitState()
+            try {
+                sendResult = SendResult.Sending
+                emitState()
 
-            adapter.send(replacementTransaction)
+                adapter.send(replacementTransaction)
 
-            logger.info("success")
+                logger.info("success")
 
-            sendResult = SendResult.Sent()
-            emitState()
-        } catch (e: Throwable) {
-            logger.warning("failed", e)
-            sendResult = SendResult.Failed(createCaution(e))
-            emitState()
+                sendResult = SendResult.Sent()
+                emitState()
+            } catch (e: Throwable) {
+                logger.warning("failed", e)
+                sendResult = SendResult.Failed(createCaution(e))
+                emitState()
+            }
         }
     }
 

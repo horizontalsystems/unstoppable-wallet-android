@@ -16,6 +16,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -53,6 +57,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.Coin
+import io.horizontalsystems.core.CustomSnackbar
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
@@ -85,9 +90,11 @@ fun SendConfirmationScreen(
         sendEntryPointDestId
     }
     val view = LocalView.current
+    var currentSnackbar by remember { mutableStateOf<CustomSnackbar?>(null) }
+
     when (sendResult) {
         SendResult.Sending -> {
-            HudHelper.showInProcessMessage(
+            currentSnackbar = HudHelper.showInProcessMessage(
                 view,
                 R.string.Send_Sending,
                 SnackbarDuration.INDEFINITE
@@ -95,7 +102,7 @@ fun SendConfirmationScreen(
         }
 
         is SendResult.Sent -> {
-            HudHelper.showSuccessMessage(
+            currentSnackbar = HudHelper.showSuccessMessage(
                 view,
                 R.string.Send_Success,
                 SnackbarDuration.MEDIUM
@@ -103,10 +110,12 @@ fun SendConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            HudHelper.showErrorMessage(view, sendResult.caution.getDescription() ?: sendResult.caution.getString())
+            currentSnackbar = HudHelper.showErrorMessage(view, sendResult.caution.getDescription() ?: sendResult.caution.getString())
         }
 
-        null -> Unit
+        null -> {
+            currentSnackbar?.dismiss()
+        }
     }
 
     LaunchedEffect(sendResult) {

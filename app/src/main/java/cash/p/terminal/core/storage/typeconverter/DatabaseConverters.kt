@@ -5,8 +5,10 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.CexDepositNetworkRaw
 import cash.p.terminal.core.providers.CexWithdrawNetworkRaw
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.wallet.entities.HardwarePublicKeyType
 import cash.p.terminal.wallet.entities.SecretList
 import cash.p.terminal.wallet.entities.SecretString
+import cash.p.terminal.wallet.entities.TokenType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.core.entities.BlockchainType
@@ -16,6 +18,28 @@ import java.util.Date
 class DatabaseConverters {
 
     private val gson by lazy { Gson() }
+
+    // TokenType
+    @TypeConverter
+    fun fromTokenType(value: String?): TokenType? {
+        return value?.let { TokenType.fromId(value) }
+    }
+
+    @TypeConverter
+    fun toTokenType(value:TokenType?): String? {
+        return value?.id
+    }
+
+    // HardwarePublicKeyType
+    @TypeConverter
+    fun fromHardwarePublicKeyType(value: Int?): HardwarePublicKeyType? {
+        return value?.let { HardwarePublicKeyType.entries.getOrNull(it) }
+    }
+
+    @TypeConverter
+    fun toHardwarePublicKeyType(value: HardwarePublicKeyType?): Int? {
+        return value?.ordinal
+    }
 
     // BigDecimal
 

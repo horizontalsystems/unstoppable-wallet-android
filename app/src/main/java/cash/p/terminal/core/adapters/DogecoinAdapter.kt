@@ -15,6 +15,7 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.dashkit.DashKit.NetworkType
 import java.math.BigDecimal
 import kotlin.math.pow
 
@@ -106,7 +107,7 @@ class DogecoinAdapter(
 
         private fun createKit(
             wallet: Wallet,
-            syncMode: BitcoinCore.SyncMode
+            syncMode: BitcoinCore.SyncMode,
         ): DogecoinKit {
             val account = wallet.account
 
@@ -120,6 +121,31 @@ class DogecoinAdapter(
                         syncMode = syncMode,
                         networkType = DogecoinKit.NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold,
+                    )
+                }
+
+                is AccountType.HardwareCard -> {
+                    val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    return DogecoinKit(
+                        context = App.instance,
+                        extendedKey = wallet.getHDExtendedKey()!!,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = DogecoinKit.NetworkType.MainNet,
+                        confirmationsThreshold = confirmationsThreshold,
+                        iInputSigner = hardwareWalletEcdaBitcoinSigner,
+                        iSchnorrInputSigner = hardwareWalletSchnorrSigner
                     )
                 }
 

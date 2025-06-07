@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.managewallets
 
-import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.eligibleTokens
 import cash.p.terminal.core.isDefault
 import cash.p.terminal.core.isNative
@@ -11,12 +10,14 @@ import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.receive.FullCoinsProvider
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
-import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -24,7 +25,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlow
+import org.koin.java.KoinJavaComponent.inject
 
 class ManageWalletsService(
     private val walletManager: IWalletManager,
@@ -32,6 +35,10 @@ class ManageWalletsService(
     private val fullCoinsProvider: FullCoinsProvider?,
     private val account: Account?
 ) : Clearable {
+
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(
+        GetHardwarePublicKeyForWalletUseCase::class.java
+    )
 
     private val _itemsFlow = MutableStateFlow<List<Item>>(listOf())
     val itemsFlow
@@ -177,8 +184,11 @@ class ManageWalletsService(
         if (restoreSettings.isNotEmpty()) {
             restoreSettingsService.save(restoreSettings, account, token.blockchainType)
         }
+        val hardwarePublicKey = runBlocking {
+            getHardwarePublicKeyForWalletUseCase(account, token)
+        }
 
-        walletManager.save(listOf(Wallet(token, account)))
+        walletManager.save(listOf(Wallet(token, account, hardwarePublicKey)))
 
         updateSortedItems(token, true)
     }

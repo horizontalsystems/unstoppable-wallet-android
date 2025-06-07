@@ -70,13 +70,15 @@ class AccountManager(
         _newAccountBackupRequiredFlow.update { null }
     }
 
-    override fun save(account: Account) {
+    override fun save(account: Account, updateActive: Boolean) {
         storage.save(account)
 
         updateCache(account)
         accountsSubject.onNext(accounts)
 
-        setActiveAccountId(account.id)
+        if (updateActive) {
+            setActiveAccountId(account.id)
+        }
         if (!account.isBackedUp && !account.isFileBackedUp) {
             _newAccountBackupRequiredFlow.update {
                 account

@@ -53,14 +53,23 @@ class AccountFactory(
     }
 
     override fun getNextAccountName(): String {
-        val nonWatchAccountsCount = accountManager.accounts.count { !it.isWatchAccount }
+        val nonWatchAccountsCount =
+            accountManager.accounts.count { !it.isWatchAccount && it.type !is AccountType.HardwareCard }
 
         return "Wallet ${nonWatchAccountsCount + 1}"
     }
 
+    override fun getNextHardwareAccountName(): String {
+        val hardWalletAccountsCount =
+            accountManager.accounts.count { it.type is AccountType.HardwareCard }
+
+        return "Hardware Wallet ${hardWalletAccountsCount + 1}"
+    }
+
     override fun getNextCexAccountName(cexType: CexType): String {
         val cexAccountsCount = accountManager.accounts.count {
-            it.type is AccountType.Cex && cexType.sameType((it.type as AccountType.Cex).cexType) }
+            it.type is AccountType.Cex && cexType.sameType((it.type as AccountType.Cex).cexType)
+        }
 
         return "${cexType.name()} Wallet ${cexAccountsCount + 1}"
     }

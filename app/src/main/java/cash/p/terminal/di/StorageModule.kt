@@ -16,6 +16,7 @@ import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
+import cash.p.terminal.core.storage.HardwarePublicKeyStorage
 import cash.p.terminal.core.storage.RestoreSettingsStorage
 import cash.p.terminal.modules.balance.DefaultBalanceService
 import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
@@ -26,6 +27,7 @@ import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.wallet.IAccountCleaner
 import cash.p.terminal.wallet.IAccountsStorage
 import cash.p.terminal.wallet.IEnabledWalletStorage
+import cash.p.terminal.wallet.IHardwarePublicKeyStorage
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceXRateRepository
 import io.horizontalsystems.core.IAppNumberFormatter
@@ -43,6 +45,7 @@ val storageModule = module {
     singleOf(::AccountsStorage) bind IAccountsStorage::class
     singleOf(::AccountCleaner) bind IAccountCleaner::class
     singleOf(::EnabledWalletsStorage) bind IEnabledWalletStorage::class
+    singleOf(::HardwarePublicKeyStorage) bind IHardwarePublicKeyStorage::class
     singleOf(::AppConfigProvider)
     singleOf(::BlockchainSettingsStorage)
     factoryOf(::ChangeNowTransactionsStorage)

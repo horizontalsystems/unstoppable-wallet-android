@@ -1,8 +1,11 @@
 package cash.p.terminal.wallet.entities
 
+import android.os.Parcelable
 import androidx.room.Entity
+import kotlinx.parcelize.Parcelize
 
-class SecretString(val value: String)
+@Parcelize
+class SecretString(val value: String) : Parcelable
 
 @JvmInline
 value class EncryptedString(val value: String)

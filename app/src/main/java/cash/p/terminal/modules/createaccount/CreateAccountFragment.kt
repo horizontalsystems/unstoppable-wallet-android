@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,19 +26,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
-import cash.p.terminal.ui_compose.getInput
-
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -48,7 +48,7 @@ class CreateAccountFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<ManageAccountsModule.Input>()
         val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
-        val inclusive = input?.popOffInclusive ?: true
+        val inclusive = input?.popOffInclusive != false
         CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
 
@@ -87,7 +87,7 @@ private fun CreateAccountIntroScreen(
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
+    val viewModel = viewModel<CreateAdvancedAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
 
     LaunchedEffect(viewModel.success) {
@@ -112,7 +112,7 @@ private fun CreateAccountIntroScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = viewModel::createAccount
+                        onClick = viewModel::createMnemonicAccount
                     )
                 ),
                 navigationIcon = {

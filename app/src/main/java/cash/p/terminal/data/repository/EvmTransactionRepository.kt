@@ -4,6 +4,8 @@ import android.content.Context
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.SecretString
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.api.models.AccountState

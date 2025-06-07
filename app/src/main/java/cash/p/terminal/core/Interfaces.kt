@@ -70,6 +70,7 @@ interface IAccountFactory {
     fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
+    fun getNextHardwareAccountName(): String
     fun getNextCexAccountName(cexType: CexType): String
 }
 
@@ -167,7 +168,7 @@ interface ISendBitcoinAdapter {
     ): BitcoinFeeInfo?
 
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-    fun send(
+    suspend fun send(
         amount: BigDecimal,
         address: String,
         memo: String?,
@@ -177,7 +178,7 @@ interface ISendBitcoinAdapter {
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<String>
+    ): String
 }
 
 internal interface ISendEthereumAdapter {

@@ -16,12 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
-
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmModule
@@ -32,6 +32,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -130,7 +131,12 @@ private fun SendEvmConfirmationScreen(
                             SendEvmConfirmationFragment.Result(true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                            val errorMsg = if(t is JsonRpc.ResponseError.RpcError) {
+                                t.error.message
+                            } else {
+                                t.message ?: App.instance.getString(R.string.unknown_send_error)
+                            }
+                            HudHelper.showErrorMessage(view, errorMsg)
                             SendEvmConfirmationFragment.Result(false)
                         }
 

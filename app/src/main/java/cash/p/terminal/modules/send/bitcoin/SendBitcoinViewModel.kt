@@ -4,15 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.LocalizedException
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.Address
@@ -22,8 +19,12 @@ import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Wallet
+import cash.z.ecc.android.sdk.ext.collectWith
+import com.tangem.common.core.TangemSdkError
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class SendBitcoinViewModel(
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<SendBitcoinUiState>() {
     private companion object {
-        val BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS  = listOf(
+        val BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS = listOf(
             BlockchainType.Dogecoin,
             BlockchainType.Cosanta,
             BlockchainType.PirateCash
@@ -69,8 +70,10 @@ class SendBitcoinViewModel(
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
     private var memo: String? = null
-    private var isMemoAvailable: Boolean = blockchainType !in  BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
-    private var isAdvancedSettingsAvailable: Boolean =  blockchainType !in  BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
+    private var isMemoAvailable: Boolean =
+        blockchainType !in BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
+    private var isAdvancedSettingsAvailable: Boolean =
+        blockchainType !in BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -280,11 +283,18 @@ class SendBitcoinViewModel(
                 transactionSorting = btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 rbfEnabled = localStorage.rbfEnabled,
                 logger = logger
-            ).blockingGet()
+            )
 
             logger.info("success")
             sendResult = SendResult.Sent()
+        } catch (e: TangemSdkError.UserCancelled) {
+            sendResult = null
+            logger.info("user cancelled")
         } catch (e: Throwable) {
+            if (e is TangemSdkError) {
+                sendResult = null
+                return@withContext
+            }
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))
         }

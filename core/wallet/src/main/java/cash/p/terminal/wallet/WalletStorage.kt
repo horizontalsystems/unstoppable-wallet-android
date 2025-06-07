@@ -2,11 +2,16 @@ package cash.p.terminal.wallet
 
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.EnabledWallet
+import cash.p.terminal.wallet.entities.HardwarePublicKey
 import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
+import io.horizontalsystems.core.entities.BlockchainType
+import kotlinx.coroutines.runBlocking
 
 class WalletStorage(
     private val marketKit: MarketKitWrapper,
     private val storage: IEnabledWalletStorage,
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase
 ) : IWalletStorage {
 
     private val map: HashMap<Wallet, Long> = HashMap()
@@ -25,7 +30,18 @@ class WalletStorage(
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
             tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                return@mapNotNull Wallet(token, account).apply { map[this] = enabledWallet.id }
+                val hardwarePublicKey = runBlocking {
+                    getHardwarePublicKeyForWalletUseCase(
+                        account = account,
+                        blockchainType = token.blockchainType,
+                        tokenType = token.type
+                    )
+                }
+                return@mapNotNull Wallet(
+                    token = token,
+                    account = account,
+                    hardwarePublicKey = hardwarePublicKey
+                ).apply { map[this] = enabledWallet.id }
             }
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
@@ -45,7 +61,17 @@ class WalletStorage(
                     decimals = enabledWallet.coinDecimals
                 )
 
-                Wallet(token, account).apply { map[this] = enabledWallet.id }
+                val hardwarePublicKey = runBlocking {
+                    getHardwarePublicKeyForWalletUseCase(
+                        account = account,
+                        blockchainType = token.blockchainType,
+                        tokenType = token.type
+                    )
+                }
+
+                Wallet(token = token, account = account, hardwarePublicKey = hardwarePublicKey).apply {
+                    map[this] = enabledWallet.id
+                }
             } else {
                 null
             }

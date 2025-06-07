@@ -234,7 +234,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         is AccountType.ZCashUfvKey ->
             this == BlockchainType.Zcash
 
+        is AccountType.HardwareCard,
         is AccountType.Mnemonic -> true
+
         is AccountType.HdExtendedKey -> {
             val coinTypes = accountType.hdExtendedKey.coinTypes
             when (this) {

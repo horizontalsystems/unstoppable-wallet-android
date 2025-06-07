@@ -10,13 +10,19 @@ import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
+import org.koin.java.KoinJavaComponent.inject
 
 class NetworkSelectViewModel(
-    val activeAccount: cash.p.terminal.wallet.Account,
+    val activeAccount: Account,
     val fullCoin: FullCoin,
     private val walletManager: IWalletManager
 ) : ViewModel() {
     val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
+
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(
+        GetHardwarePublicKeyForWalletUseCase::class.java
+    )
 
     suspend fun getOrCreateWallet(token: Token): Wallet {
         return walletManager
@@ -26,7 +32,12 @@ class NetworkSelectViewModel(
     }
 
     private suspend fun createWallet(token: Token): Wallet {
-        val wallet = Wallet(token, activeAccount)
+
+        val wallet = Wallet(
+            token = token,
+            account = activeAccount,
+            hardwarePublicKey = getHardwarePublicKeyForWalletUseCase(activeAccount, token)
+        )
 
         walletManager.save(listOf(wallet))
 

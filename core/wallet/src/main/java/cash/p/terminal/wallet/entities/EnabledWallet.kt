@@ -14,7 +14,6 @@ import androidx.room.PrimaryKey
                 deferred = true)
         ],
         indices = [Index("accountId", name = "index_EnabledWallet_accountId")])
-
 data class EnabledWallet(
         @PrimaryKey(autoGenerate = true)
         val id: Long = 0,

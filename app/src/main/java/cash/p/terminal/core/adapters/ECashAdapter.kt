@@ -5,6 +5,8 @@ import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -19,11 +21,11 @@ class ECashAdapter(
     override val kit: ECashKit,
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
-    wallet: cash.p.terminal.wallet.Wallet,
+    wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold, 2), ECashKit.Listener, ISendBitcoinAdapter {
 
     constructor(
-        wallet: cash.p.terminal.wallet.Wallet,
+        wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager
     ) : this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
@@ -89,10 +91,10 @@ class ECashAdapter(
     companion object {
         private const val confirmationsThreshold = 1
 
-        private fun createKit(wallet: cash.p.terminal.wallet.Wallet, syncMode: BitcoinCore.SyncMode): ECashKit {
+        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): ECashKit {
             val account = wallet.account
             when (val accountType = account.type) {
-                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+                is AccountType.HdExtendedKey -> {
                     return ECashKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -102,7 +104,7 @@ class ECashAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     return ECashKit(
                         context = App.instance,
                         words = accountType.words,
@@ -113,7 +115,7 @@ class ECashAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+                is AccountType.BitcoinAddress -> {
                     return ECashKit(
                         context = App.instance,
                         watchAddress = accountType.address,

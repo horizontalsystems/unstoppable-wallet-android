@@ -33,14 +33,15 @@ room = "2.6.1"
 javax-inject = "1"
 appcompat = "1.7.0"
 
+tonKotlin = "0.2.15" # same version like in ton-kit
 horizontalsystems-ton = "58321df"
-piratecash-bitcoin = "f165e0c"
-horizontalsystems-ethereum = "aae7f27"
+piratecash-bitcoin = "5234062"
+piratecash-ethereum = "6c880df"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
 piratecash-solana = "a009bcf"
 horizontalsystems-tron = "bdd7602"
-
+tangem-sdk = "415ede7"
 gson = "2.13.0"
 retrofit = "2.11.0"
 okhttp-logging-interceptor = "4.12.0"
@@ -102,13 +103,15 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+ton-kotlin-contract = { module = "org.ton:ton-kotlin-contract", version.ref = "tonKotlin" }
 ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
 solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", version.ref = "piratecash-solana" }
-ethereum-kit = { group = "com.github.horizontalsystems", name = "ethereum-kit-android", version.ref = "horizontalsystems-ethereum" }
+ethereum-kit = { group = "com.github.piratecash", name = "ethereum-kit-android", version.ref = "piratecash-ethereum" }
 blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
 binance-kit = { group = "com.github.horizontalsystems", name = "binance-chain-kit-android", version.ref = "horizontalsystems-binance" }
 tron-kit = { group = "com.github.horizontalsystems", name = "tron-kit-android", version.ref = "horizontalsystems-tron" }
+tangem-sdk = { group = "com.github.piratecash", name = "tangem-sdk-android", version.ref = "tangem-sdk" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 

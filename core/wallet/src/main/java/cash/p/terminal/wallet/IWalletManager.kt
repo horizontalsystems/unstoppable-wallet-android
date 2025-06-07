@@ -8,6 +8,7 @@ interface IWalletManager {
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
 
     fun save(wallets: List<Wallet>)
+    suspend fun saveSuspended(wallets: List<Wallet>)
     fun saveEnabledWallets(enabledWallets: List<EnabledWallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()

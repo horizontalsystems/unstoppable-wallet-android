@@ -4,11 +4,18 @@ import android.os.Handler
 import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.UnsupportedException
 import cash.p.terminal.core.providers.AppConfigProvider
+import cash.p.terminal.core.storage.HardwarePublicKeyStorage
+import cash.p.terminal.core.utils.TronAddressParser
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.entities.HardwarePublicKeyType
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.network.Network
@@ -20,10 +27,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class TronKitManager(
     private val appConfigProvider: AppConfigProvider,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -62,6 +71,9 @@ class TronKitManager(
                     createKitInstance(accountType, account)
                 }
 
+                is AccountType.HardwareCard ->
+                    createKitInstance(account)
+
                 else -> throw UnsupportedAccountException()
             }
             start()
@@ -96,6 +108,26 @@ class TronKitManager(
         account: Account
     ): TronKitWrapper {
         val address = accountType.address
+
+        val kit = TronKit.getInstance(
+            application = App.instance,
+            address = Address.fromBase58(address),
+            network = network,
+            walletId = account.id,
+            tronGridApiKeys = appConfigProvider.trongridApiKeys
+        )
+
+        return TronKitWrapper(kit, null)
+    }
+
+    private fun createKitInstance(
+        account: Account
+    ): TronKitWrapper {
+        val hardwarePublicKey = runBlocking {
+            hardwarePublicKeyStorage.getKey(account.id, BlockchainType.Tron, TokenType.Native)
+        } ?: throw UnsupportedException("Hardware card does not have a public key for Tron")
+
+        val address = TronAddressParser.parseXpubToTronAddress(hardwarePublicKey.key.value)
 
         val kit = TronKit.getInstance(
             application = App.instance,

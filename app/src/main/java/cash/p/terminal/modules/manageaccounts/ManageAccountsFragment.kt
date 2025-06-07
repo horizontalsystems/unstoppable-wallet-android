@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.manageaccounts
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -17,26 +19,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.core.hasNFC
 import cash.p.terminal.core.navigateWithTermsAccepted
-import cash.p.terminal.ui_compose.requireInput
-import cash.p.terminal.navigation.slideFromRight
-
-
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.manageaccount.ManageAccountFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.ActionViewItem
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui.compose.components.HsRadioButton
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsRadioButton
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_lucian
+import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class ManageAccountsFragment : BaseComposeFragment() {
@@ -56,10 +57,10 @@ class ManageAccountsFragment : BaseComposeFragment() {
 @Composable
 fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
     BackupAlert(navController)
+    val context = LocalContext.current
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 
-    val viewItems = viewModel.viewItems
     val finish = viewModel.finish
 
     if (finish) {
@@ -75,37 +76,65 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
         LazyColumn(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-
-                viewItems?.let { (regularAccounts, watchAccounts) ->
-                    if (regularAccounts.isNotEmpty()) {
-                        AccountsSection(regularAccounts, viewModel, navController)
-                        Spacer(modifier = Modifier.height(32.dp))
-                    }
-
-                    if (watchAccounts.isNotEmpty()) {
-                        AccountsSection(watchAccounts, viewModel, navController)
-                        Spacer(modifier = Modifier.height(32.dp))
-                    }
-                }
+                AccountSection(
+                    accounts = viewModel.regularAccountsState,
+                    viewModel = viewModel,
+                    navController = navController
+                )
+                AccountSection(
+                    accounts = viewModel.watchAccountsState,
+                    viewModel = viewModel,
+                    navController = navController
+                )
+                AccountSection(
+                    accounts = viewModel.hardwareAccountsState,
+                    viewModel = viewModel,
+                    navController = navController
+                )
 
                 val args = when (mode) {
-                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(R.id.manageAccountsFragment, false)
-                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(R.id.manageAccountsFragment, true)
+                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(
+                        R.id.manageAccountsFragment,
+                        false
+                    )
+
+                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(
+                        R.id.manageAccountsFragment,
+                        true
+                    )
                 }
 
-                val actions = listOf(
-                    ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                        navController.navigateWithTermsAccepted {
-                            navController.slideFromRight(R.id.createAccountFragment, args)
-                        }
-                    },
-                    ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                        navController.slideFromRight(R.id.importWalletFragment, args)
-                    },
-                    ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
-                        navController.slideFromRight(R.id.watchAddressFragment, args)
+                val actions = buildList {
+                    add(
+                        ActionViewItem(
+                            R.drawable.ic_plus,
+                            R.string.ManageAccounts_CreateNewWallet
+                        ) {
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.createAccountFragment, args)
+                            }
+                        })
+                    add(
+                        ActionViewItem(
+                            R.drawable.ic_download_20,
+                            R.string.ManageAccounts_ImportWallet
+                        ) {
+                            navController.slideFromRight(R.id.importWalletFragment, args)
+                        })
+                    add(
+                        ActionViewItem(
+                            R.drawable.icon_binocule_20,
+                            R.string.ManageAccounts_WatchAddress
+                        ) {
+                            navController.slideFromRight(R.id.watchAddressFragment, args)
+                        })
+                    if (context.hasNFC()) {
+                        add(ActionViewItem(R.drawable.ic_card, R.string.hardware_wallet) {
+                            navController.slideFromRight(R.id.hardwareWalletFragment, args)
+                        })
                     }
-                )
+                }
+
                 CellUniversalLawrenceSection(actions) {
                     RowUniversal(
                         onClick = it.callback
@@ -127,7 +156,25 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 }
 
 @Composable
-private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
+private fun AccountSection(
+    accounts: List<AccountViewItem>?,
+    viewModel: ManageAccountsViewModel,
+    navController: NavController
+) {
+    accounts?.also {
+        if (it.isNotEmpty()) {
+            AccountsSection(it, viewModel, navController)
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+@Composable
+private fun AccountsSection(
+    accounts: List<AccountViewItem>,
+    viewModel: ManageAccountsViewModel,
+    navController: NavController
+) {
     CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
         RowUniversal(
             onClick = {
@@ -158,6 +205,12 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             if (accountViewItem.isWatchAccount) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_binocule_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            } else if (accountViewItem.isHardwareWallet) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_card),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )

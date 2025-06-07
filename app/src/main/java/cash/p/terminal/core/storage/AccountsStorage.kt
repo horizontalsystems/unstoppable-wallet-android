@@ -28,6 +28,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val BITCOIN_ADDRESS = "bitcoin_address"
         private const val HD_EXTENDED_KEY = "hd_extended_key"
         private const val UFVK = "ufvk"
+        private const val HARDWARE_CARD = "hardware_card"
         private const val CEX = "cex"
     }
 
@@ -60,6 +61,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(record.key!!.value)
                             UFVK -> AccountType.ZCashUfvKey(record.key!!.value)
+                            HARDWARE_CARD -> AccountType.HardwareCard(record.key!!.value, record.passphrase!!.value)
                             CEX -> {
                                 CexType.deserialize(record.key!!.value)?.let {
                                     AccountType.Cex(it)
@@ -165,6 +167,11 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.ZCashUfvKey -> {
                 key = SecretString((account.type as AccountType.ZCashUfvKey).key)
                 accountType = UFVK
+            }
+            is AccountType.HardwareCard -> {
+                key = SecretString((account.type as AccountType.HardwareCard).cardId)
+                passphrase = SecretString((account.type as AccountType.HardwareCard).walletPublicKey)
+                accountType = HARDWARE_CARD
             }
         }
 

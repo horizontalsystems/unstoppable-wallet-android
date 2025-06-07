@@ -6,6 +6,8 @@ import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.kitCoinType
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
 import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
@@ -23,11 +25,11 @@ class BitcoinCashAdapter(
     override val kit: BitcoinCashKit,
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
-    wallet: cash.p.terminal.wallet.Wallet,
+    wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
     constructor(
-        wallet: cash.p.terminal.wallet.Wallet,
+        wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         addressType: TokenType.AddressType
@@ -95,14 +97,14 @@ class BitcoinCashAdapter(
         private const val confirmationsThreshold = 3
 
         private fun createKit(
-            wallet: cash.p.terminal.wallet.Wallet,
+            wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
             addressType: TokenType.AddressType
         ): BitcoinCashKit {
             val account = wallet.account
             val networkType = getNetworkType(addressType.kitCoinType)
             when (val accountType = account.type) {
-                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+                is AccountType.HdExtendedKey -> {
                     return BitcoinCashKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -113,7 +115,7 @@ class BitcoinCashAdapter(
                     )
                 }
 
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     return BitcoinCashKit(
                         context = App.instance,
                         words = accountType.words,
@@ -125,7 +127,7 @@ class BitcoinCashAdapter(
                     )
                 }
 
-                is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+                is AccountType.BitcoinAddress -> {
                     return BitcoinCashKit(
                         context = App.instance,
                         watchAddress = accountType.address,
@@ -133,6 +135,31 @@ class BitcoinCashAdapter(
                         syncMode = syncMode,
                         networkType = networkType,
                         confirmationsThreshold = confirmationsThreshold,
+                    )
+                }
+
+                is AccountType.HardwareCard -> {
+                    val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type
+                    )
+                    val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    return BitcoinCashKit(
+                        context = App.instance,
+                        extendedKey = wallet.getHDExtendedKey()!!,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = networkType,
+                        confirmationsThreshold = confirmationsThreshold,
+                        iInputSigner = hardwareWalletEcdaBitcoinSigner,
+                        iSchnorrInputSigner = hardwareWalletSchnorrSigner
                     )
                 }
 

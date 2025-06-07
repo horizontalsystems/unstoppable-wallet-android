@@ -53,7 +53,7 @@ fun CreateAccountAdvancedScreen(
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
+    val viewModel = viewModel<CreateAdvancedAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
 
     LaunchedEffect(viewModel.success) {
@@ -97,7 +97,7 @@ fun CreateAccountAdvancedScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = { viewModel.createAccount() },
+                        onClick = { viewModel.createMnemonicAccount() },
                     )
                 )
             )

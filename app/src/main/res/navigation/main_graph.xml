@@ -259,6 +259,9 @@
         android:id="@+id/watchAddressFragment"
         android:name="cash.p.terminal.modules.watchaddress.WatchAddressFragment" />
     <fragment
+        android:id="@+id/hardwareWalletFragment"
+        android:name="cash.p.terminal.modules.hardwarewallet.HardwareWalletFragment" />
+    <fragment
         android:id="@+id/selectBlockchainsFragment"
         android:name="cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsFragment" />
     <fragment

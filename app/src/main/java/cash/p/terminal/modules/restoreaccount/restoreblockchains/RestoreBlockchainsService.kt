@@ -19,6 +19,7 @@ import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.subjects.BehaviorSubject
@@ -27,7 +28,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlow
+import org.koin.java.KoinJavaComponent.inject
 import java.util.concurrent.CopyOnWriteArrayList
 
 class RestoreBlockchainsService(
@@ -59,6 +62,10 @@ class RestoreBlockchainsService(
             field = value
             itemsObservable.onNext(value)
         }
+
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(
+        GetHardwarePublicKeyForWalletUseCase::class.java
+    )
 
     init {
         coroutineScope.launch {
@@ -207,7 +214,15 @@ class RestoreBlockchainsService(
 
         if (enabledTokens.isEmpty()) return
 
-        val wallets = enabledTokens.map { Wallet(it, account) }
+        val wallets = enabledTokens.map {
+            val hardwarePublicKey = runBlocking {
+                getHardwarePublicKeyForWalletUseCase(
+                    account,
+                    it
+                )
+            }
+            Wallet(it, account, hardwarePublicKey)
+        }
         walletManager.save(wallets)
     }
 

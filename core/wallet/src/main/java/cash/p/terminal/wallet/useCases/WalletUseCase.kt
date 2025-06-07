@@ -5,11 +5,13 @@ import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
+import kotlinx.coroutines.runBlocking
 
 class WalletUseCase(
     private val walletManager: IWalletManager,
     private val accountManager: IAccountManager,
-    private val adapterManager: IAdapterManager
+    private val adapterManager: IAdapterManager,
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase
 ) {
     fun getWallet(token: Token): Wallet? = walletManager.activeWallets.find {
         it.token == token
@@ -22,7 +24,14 @@ class WalletUseCase(
 
     fun createWallet(token: Token): Boolean {
         val account = accountManager.activeAccount ?: return false
-        walletManager.save(listOf(Wallet(token, account)))
+        val hardwarePublicKey = runBlocking {
+            getHardwarePublicKeyForWalletUseCase(
+                account = account,
+                blockchainType = token.blockchainType,
+                tokenType = token.type
+            )
+        }
+        walletManager.save(listOf(Wallet(token, account, hardwarePublicKey)))
         return true
     }
 

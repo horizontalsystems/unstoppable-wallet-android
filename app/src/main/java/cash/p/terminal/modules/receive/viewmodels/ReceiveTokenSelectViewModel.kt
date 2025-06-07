@@ -17,7 +17,9 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 
 class ReceiveTokenSelectViewModel(
     private val walletManager: IWalletManager,
@@ -30,6 +32,9 @@ class ReceiveTokenSelectViewModel(
         ReceiveTokenSelectUiState(
             fullCoins = fullCoins,
         )
+    )
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(
+        GetHardwarePublicKeyForWalletUseCase::class.java
     )
 
     init {
@@ -124,7 +129,11 @@ class ReceiveTokenSelectViewModel(
     }
 
     private suspend fun createWallet(token: Token): Wallet {
-        val wallet = Wallet(token, activeAccount)
+        val wallet = Wallet(
+            token = token,
+            account = activeAccount,
+            hardwarePublicKey = getHardwarePublicKeyForWalletUseCase(activeAccount, token)
+        )
 
         walletManager.save(listOf(wallet))
 

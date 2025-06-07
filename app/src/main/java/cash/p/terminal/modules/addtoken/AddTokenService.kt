@@ -3,19 +3,27 @@ package cash.p.terminal.modules.addtoken
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.order
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
+import kotlinx.coroutines.runBlocking
+import org.koin.java.KoinJavaComponent.inject
 
 class AddTokenService(
     private val coinManager: ICoinManager,
     private val walletManager: IWalletManager,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
     marketKit: MarketKitWrapper,
 ) {
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(
+        GetHardwarePublicKeyForWalletUseCase::class.java
+    )
 
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
@@ -48,15 +56,19 @@ class AddTokenService(
                 blockchain,
                 App.networkManager
             )
+
             BlockchainType.Tron -> {
                 AddTronTokenBlockchainService.getInstance(blockchain)
             }
+
             BlockchainType.Ton -> {
                 AddTonTokenBlockchainService(blockchain)
             }
+
             BlockchainType.Solana -> {
                 AddSolanaTokenBlockchainService.getInstance(blockchain)
             }
+
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
 
@@ -77,7 +89,14 @@ class AddTokenService(
 
     fun addToken(token: TokenInfo) {
         val account = accountManager.activeAccount ?: return
-        val wallet = cash.p.terminal.wallet.Wallet(token.token, account)
+        val hardwarePublicKey = runBlocking {
+            getHardwarePublicKeyForWalletUseCase(
+                account,
+                token.token.blockchainType,
+                token.token.type
+            )
+        }
+        val wallet = Wallet(token.token, account, hardwarePublicKey)
         walletManager.save(listOf(wallet))
     }
 

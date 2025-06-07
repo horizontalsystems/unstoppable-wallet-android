@@ -262,7 +262,7 @@ class BitcoinSendTransactionService(
                 transactionSorting = btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 rbfEnabled = localStorage.rbfEnabled,
                 logger = logger
-            ).blockingGet()
+            )
             SendTransactionResult.Common(SendResult.Sent(recordUid))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))

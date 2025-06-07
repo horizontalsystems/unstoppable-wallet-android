@@ -41,6 +41,11 @@ import cash.p.terminal.core.storage.migrations.Migration_62_63
 import cash.p.terminal.core.storage.migrations.Migration_63_64
 import cash.p.terminal.core.storage.migrations.Migration_64_65
 import cash.p.terminal.core.storage.migrations.Migration_65_66
+import cash.p.terminal.core.storage.migrations.Migration_66_67
+import cash.p.terminal.core.storage.migrations.Migration_67_68
+import cash.p.terminal.core.storage.migrations.Migration_68_69
+import cash.p.terminal.core.storage.migrations.Migration_69_70
+import cash.p.terminal.core.storage.migrations.Migration_70_71
 import cash.p.terminal.core.storage.typeconverter.DatabaseConverters
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
@@ -49,7 +54,6 @@ import cash.p.terminal.entities.EnabledWalletCache
 import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.EvmSyncSourceRecord
-import io.horizontalsystems.core.storage.LogEntry
 import cash.p.terminal.entities.RestoreSettingRecord
 import cash.p.terminal.entities.SyncerState
 import cash.p.terminal.entities.TokenAutoEnabledBlockchain
@@ -67,10 +71,12 @@ import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import cash.p.terminal.wallet.entities.AccountRecord
 import cash.p.terminal.wallet.entities.EnabledWallet
+import cash.p.terminal.wallet.entities.HardwarePublicKey
+import io.horizontalsystems.core.storage.LogEntry
 import io.horizontalsystems.core.storage.LogsDao
 
 @Database(
-    version = 66,
+    version = 71,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -95,10 +101,10 @@ import io.horizontalsystems.core.storage.LogsDao
         CexAssetRaw::class,
         ChartIndicatorSetting::class,
         Pin::class,
-        ChangeNowTransaction::class
+        ChangeNowTransaction::class,
+        HardwarePublicKey::class,
     ]
 )
-
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -121,6 +127,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
     abstract fun pinDao(): PinDao
     abstract fun changeNowTransactionsDao(): ChangeNowTransactionsDao
+    abstract fun hardwarePublicKeyDao(): HardwarePublicKeyDao
 
     companion object {
 
@@ -136,45 +143,50 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "db_p_cash")
 //                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .addMigrations(
-                            Migration_31_32,
-                            Migration_32_33,
-                            Migration_33_34,
-                            Migration_34_35,
-                            Migration_35_36,
-                            Migration_36_37,
-                            Migration_37_38,
-                            Migration_38_39,
-                            Migration_39_40,
-                            Migration_40_41,
-                            Migration_41_42,
-                            Migration_42_43,
-                            Migration_43_44,
-                            Migration_44_45,
-                            Migration_45_46,
-                            Migration_46_47,
-                            Migration_47_48,
-                            Migration_48_49,
-                            Migration_49_50,
-                            Migration_50_51,
-                            Migration_51_52,
-                            Migration_52_53,
-                            Migration_53_54,
-                            Migration_54_55,
-                            Migration_55_56,
-                            Migration_56_57,
-                            Migration_57_58,
-                            Migration_58_59,
-                            Migration_59_60,
-                            Migration_60_61,
-                            Migration_61_62,
-                            Migration_62_63,
-                            Migration_63_64,
-                            Migration_64_65,
-                            Migration_65_66,
-                    )
-                    .build()
+                .allowMainThreadQueries()
+                .addMigrations(
+                    Migration_31_32,
+                    Migration_32_33,
+                    Migration_33_34,
+                    Migration_34_35,
+                    Migration_35_36,
+                    Migration_36_37,
+                    Migration_37_38,
+                    Migration_38_39,
+                    Migration_39_40,
+                    Migration_40_41,
+                    Migration_41_42,
+                    Migration_42_43,
+                    Migration_43_44,
+                    Migration_44_45,
+                    Migration_45_46,
+                    Migration_46_47,
+                    Migration_47_48,
+                    Migration_48_49,
+                    Migration_49_50,
+                    Migration_50_51,
+                    Migration_51_52,
+                    Migration_52_53,
+                    Migration_53_54,
+                    Migration_54_55,
+                    Migration_55_56,
+                    Migration_56_57,
+                    Migration_57_58,
+                    Migration_58_59,
+                    Migration_59_60,
+                    Migration_60_61,
+                    Migration_61_62,
+                    Migration_62_63,
+                    Migration_63_64,
+                    Migration_64_65,
+                    Migration_65_66,
+                    Migration_66_67,
+                    Migration_67_68,
+                    Migration_68_69,
+                    Migration_69_70,
+                    Migration_70_71,
+                )
+                .build()
         }
 
     }

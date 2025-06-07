@@ -35,6 +35,7 @@ import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isOldZCash
 import cash.p.terminal.wallet.isPirateCash
+import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.core.ViewModelUiState
@@ -47,6 +48,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
@@ -74,6 +76,8 @@ class BalanceViewModel(
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val accountManager: IAccountManager by inject(IAccountManager::class.java)
     private val itemsBalanceHidden by lazy { mutableMapOf<Wallet, Boolean>() }
+
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(GetHardwarePublicKeyForWalletUseCase::class.java)
 
     private val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -229,7 +233,8 @@ class BalanceViewModel(
                 Log.d("BalanceViewModel", "Replacing old ZCash with new one")
                 service.disable(oldZCashViewItem.wallet)
                 Log.d("BalanceViewModel", "Activating new ZCash")
-                service.enable(Wallet(token, account))
+                val hardwarePublicKey = runBlocking { getHardwarePublicKeyForWalletUseCase(account, token) }
+                service.enable(Wallet(token, account, hardwarePublicKey))
             }
         }
     }

@@ -101,7 +101,7 @@ class LitecoinAdapter(
         private fun createKit(
             wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
-            derivation: TokenType.Derivation
+            derivation: TokenType.Derivation,
         ): LitecoinKit {
             val account = wallet.account
 
@@ -137,6 +137,31 @@ class LitecoinAdapter(
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                is AccountType.HardwareCard -> {
+                    val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    return LitecoinKit(
+                        context = App.instance,
+                        extendedKey = wallet.getHDExtendedKey()!!,
+                        purpose = derivation.purpose,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = NetworkType.MainNet,
+                        confirmationsThreshold = confirmationsThreshold,
+                        iInputSigner = hardwareWalletEcdaBitcoinSigner,
+                        iSchnorrInputSigner = hardwareWalletSchnorrSigner
                     )
                 }
                 else -> throw UnsupportedAccountException()

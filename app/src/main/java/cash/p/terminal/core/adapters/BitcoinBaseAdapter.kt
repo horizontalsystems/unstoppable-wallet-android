@@ -10,13 +10,17 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionLockInfo
+import cash.p.terminal.tangem.signer.HardwareWalletEcdaSigner
+import cash.p.terminal.tangem.signer.HardwareWalletSchnorrSigner
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IHardwarePublicKeyStorage
 import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -33,22 +37,26 @@ import io.horizontalsystems.bitcoincore.storage.UnspentOutput
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.await
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -65,6 +73,8 @@ abstract class BitcoinBaseAdapter(
     private val scope = CoroutineScope(Dispatchers.Default)
 
     abstract val satoshisInBitcoin: BigDecimal
+
+    val groupsToSignFlow: StateFlow<Int?>? = null
 
     //
     // Adapter implementation
@@ -269,7 +279,7 @@ abstract class BitcoinBaseAdapter(
         return Pair(replacement, transactionRecord(replacement.info))
     }
 
-    fun send(replacementTransaction: ReplacementTransaction): FullTransaction {
+    suspend fun send(replacementTransaction: ReplacementTransaction): FullTransaction {
         return kit.send(replacementTransaction)
     }
 
@@ -299,7 +309,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun send(
+    suspend fun send(
         amount: BigDecimal,
         address: String,
         memo: String?,
@@ -309,27 +319,21 @@ abstract class BitcoinBaseAdapter(
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<String> {
+    ): String {
+        logger.info("call btc-kit.send")
         val sortingType = getTransactionSortingType(transactionSorting)
-        return Single.create { emitter ->
-            try {
-                logger.info("call btc-kit.send")
-                val sendData = kit.send(
-                    address = address,
-                    memo = memo,
-                    value = (amount * satoshisInBitcoin).toLong(),
-                    senderPay = true,
-                    feeRate = feeRate,
-                    sortType = sortingType,
-                    unspentOutputs = unspentOutputs,
-                    pluginData = pluginData ?: mapOf(),
-                    rbfEnabled = rbfEnabled
-                )
-                emitter.onSuccess(sendData.header.uid)
-            } catch (ex: Exception) {
-                emitter.onError(ex)
-            }
-        }
+        val sendData = kit.send(
+            address = address,
+            memo = memo,
+            value = (amount * satoshisInBitcoin).toLong(),
+            senderPay = true,
+            feeRate = feeRate,
+            sortType = sortingType,
+            unspentOutputs = unspentOutputs,
+            pluginData = pluginData ?: mapOf(),
+            rbfEnabled = rbfEnabled
+        )
+        return sendData.header.uid
     }
 
     fun availableBalance(
@@ -530,6 +534,54 @@ abstract class BitcoinBaseAdapter(
                 TransactionDataSortMode.Bip69 -> TransactionDataSortType.Bip69
                 else -> TransactionDataSortType.Shuffle
             }
+
+        @JvmStatic
+        protected fun buildHardwareWalletEcdaBitcoinSigner(
+            accountId: String,
+            cardId: String,
+            blockchainType: BlockchainType,
+            tokenType: TokenType
+        ): HardwareWalletEcdaSigner {
+            val hardwarePublicKeyStorage: IHardwarePublicKeyStorage
+                    by inject(IHardwarePublicKeyStorage::class.java)
+            val hardwarePublicKey = runBlocking {
+                requireNotNull(
+                    hardwarePublicKeyStorage.getKey(
+                        accountId = accountId,
+                        blockchainType = blockchainType,
+                        tokenType = tokenType
+                    )
+                )
+            }
+            return HardwareWalletEcdaSigner(
+                hardwarePublicKey = hardwarePublicKey,
+                cardId = cardId
+            )
+        }
+
+        @JvmStatic
+        protected fun buildHardwareWalletSchnorrBitcoinSigner(
+            accountId: String,
+            cardId: String,
+            blockchainType: BlockchainType,
+            tokenType: TokenType
+        ): HardwareWalletSchnorrSigner {
+            val hardwarePublicKeyStorage: IHardwarePublicKeyStorage
+                    by inject(IHardwarePublicKeyStorage::class.java)
+            val hardwarePublicKey = runBlocking {
+                requireNotNull(
+                    hardwarePublicKeyStorage.getKey(
+                        accountId = accountId,
+                        blockchainType = blockchainType,
+                        tokenType
+                    )
+                )
+            }
+            return HardwareWalletSchnorrSigner(
+                hardwarePublicKey = hardwarePublicKey,
+                cardId = cardId
+            )
+        }
     }
 
 }

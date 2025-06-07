@@ -18,12 +18,12 @@ object ManageWalletsModule {
         private val manageWalletsService by lazy {
             val activeAccount = App.accountManager.activeAccount
             ManageWalletsService(
-                App.walletManager,
-                restoreSettingsService,
-                App.accountManager.activeAccount?.let { account ->
+                walletManager = App.walletManager,
+                restoreSettingsService = restoreSettingsService,
+                fullCoinsProvider = App.accountManager.activeAccount?.let { account ->
                     FullCoinsProvider(App.marketKit, account)
                 },
-                activeAccount
+                account = activeAccount
             )
         }
 

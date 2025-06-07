@@ -19,6 +19,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenType
 import java.math.BigDecimal
+import kotlin.math.pow
 
 class BitcoinAdapter(
     override val kit: BitcoinKit,
@@ -26,7 +27,6 @@ class BitcoinAdapter(
     backgroundManager: BackgroundManager,
     wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinKit.Listener, ISendBitcoinAdapter {
-
     constructor(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
@@ -47,7 +47,7 @@ class BitcoinAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(10.0.pow(decimal.toDouble()))
 
     //
     // BitcoinKit Listener
@@ -140,6 +140,31 @@ class BitcoinAdapter(
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                is AccountType.HardwareCard -> {
+                    val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    return BitcoinKit(
+                        context = App.instance,
+                        extendedKey = wallet.getHDExtendedKey()!!,
+                        purpose = derivation.purpose,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = NetworkType.MainNet,
+                        confirmationsThreshold = confirmationsThreshold,
+                        iInputSigner = hardwareWalletEcdaBitcoinSigner,
+                        iSchnorrInputSigner = hardwareWalletSchnorrSigner,
                     )
                 }
                 else -> throw UnsupportedAccountException()

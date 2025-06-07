@@ -208,6 +208,18 @@ sealed class AccountType : Parcelable {
         }
     }
 
+    @Parcelize
+    data class HardwareCard(val cardId: String, val walletPublicKey: String) : AccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is HardwareCard && cardId == other.cardId && walletPublicKey == other.walletPublicKey
+        }
+
+        override fun hashCode(): Int {
+            return cardId.hashCode()
+        }
+    }
+
+
     val description: String
         get() = when (this) {
             is Mnemonic -> {
@@ -233,6 +245,7 @@ sealed class AccountType : Parcelable {
             is TonAddress -> "Ton Address"
             is EvmPrivateKey -> "EVM Private Key"
             is ZCashUfvKey -> "ZCash UFV Key"
+            is HardwareCard -> "Hardware card"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master -> "BIP32 Root Key"
@@ -297,6 +310,7 @@ sealed class AccountType : Parcelable {
             is TronAddress,
             is TonAddress,
             is BitcoinAddress -> true
+
             is HdExtendedKey -> hdExtendedKey.isPublic
             else -> false
         }

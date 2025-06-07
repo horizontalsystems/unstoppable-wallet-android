@@ -16,7 +16,7 @@ interface IAccountManager {
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
-    fun save(account: Account)
+    fun save(account: Account, updateActive: Boolean = true)
     fun import(accounts: List<Account>)
     fun update(account: Account)
     fun delete(id: String)
