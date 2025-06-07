@@ -72,7 +72,7 @@ class ManageAccountsViewModel(
             title = account.name,
             subtitle = account.type.detailedDescription,
             selected = account == activeAccount,
-            backupRequired = !account.isBackedUp && !account.isFileBackedUp,
+            backupRequired = account.accountSupportsBackup && !account.isBackedUp && !account.isFileBackedUp,
             showAlertIcon = account.accountSupportsBackup && (!account.isBackedUp || account.nonStandard || account.nonRecommended),
             isWatchAccount = account.isWatchAccount,
             isHardwareWallet = account.type is AccountType.HardwareCard,
