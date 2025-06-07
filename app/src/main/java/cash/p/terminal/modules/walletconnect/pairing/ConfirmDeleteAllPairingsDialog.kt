@@ -25,6 +25,7 @@ import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
@@ -50,10 +51,10 @@ class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 
 @Composable
 fun ConfirmDeleteAllScreen(navController: NavController) {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_delete_20),
-            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = stringResource(R.string.WalletConnect_DeleteAllPairs),
             onCloseClick = {
                 navController.popBackStack()

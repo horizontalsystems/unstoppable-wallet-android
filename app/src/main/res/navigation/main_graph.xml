@@ -369,6 +369,9 @@
         android:id="@+id/indicatorsAlertDialog"
         android:name="cash.p.terminal.modules.coin.indicators.IndicatorsAlertDialog" />
     <dialog
+        android:id="@+id/cancelOrScanDialog"
+        android:name="cash.p.terminal.ui.dialogs.CancelOrScanDialog" />
+    <dialog
         android:id="@+id/syncErrorDialog"
         android:name="cash.p.terminal.modules.syncerror.SyncErrorDialog" />
     <dialog

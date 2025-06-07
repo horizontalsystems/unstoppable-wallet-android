@@ -55,6 +55,7 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
+import cash.p.terminal.ui.dialogs.CancelOrScanDialog
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaults
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -64,6 +65,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -80,7 +82,7 @@ class ManageWalletsFragment : BaseComposeFragment() {
             viewModel = viewModel,
             onBackPressed = {
                 if (viewModel.showScanToAddButton) {
-                    viewModel.requestScanToAddTokens()
+                    showScanOrCancelDialog()
                 } else {
                     navController.popBackStack()
                 }
@@ -99,7 +101,7 @@ class ManageWalletsFragment : BaseComposeFragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (viewModel.showScanToAddButton) {
-                        viewModel.requestScanToAddTokens()
+                        showScanOrCancelDialog()
                     } else {
                         isEnabled = false
                         requireActivity().onBackPressedDispatcher.onBackPressed() // Trigger the back press again, which will now be handled by other callbacks or the default system behavior.
@@ -108,6 +110,17 @@ class ManageWalletsFragment : BaseComposeFragment() {
             })
     }
 
+    private fun showScanOrCancelDialog() {
+        findNavController().slideFromBottomForResult<CancelOrScanDialog.Result>(
+            R.id.cancelOrScanDialog
+        ) { result ->
+            if (result.confirmed) {
+                viewModel.requestScanToAddTokens()
+            } else {
+                findNavController().popBackStack()
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)

@@ -678,6 +678,10 @@
     <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
     <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
 
+    <string name="scan">Scan</string>
+    <string name="adding_tokens">Adding tokens</string>
+    <string name="scan_to_add_mesage">You need to scan card to add tokens</string>
+
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
     <string name="EthereumTransaction_Error_Title">Error</string>
