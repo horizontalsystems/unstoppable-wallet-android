@@ -179,7 +179,7 @@ class DashAdapter(
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )
-                    return DashKit(
+                    DashKit(
                         context = App.instance,
                         extendedKey = wallet.getHDExtendedKey()!!,
                         walletId = account.id,
