@@ -18,11 +18,13 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.hasNFC
 import cash.p.terminal.core.navigateWithTermsAccepted
 
 import cash.p.terminal.navigation.slideFromRight
@@ -36,6 +38,7 @@ fun BalanceNoAccount(
     navController: NavController,
     paddingValuesParent: PaddingValues
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(bottom = paddingValuesParent.calculateBottomPadding())
@@ -84,6 +87,20 @@ fun BalanceNoAccount(
                 }
             }
         )
+        if (context.hasNFC()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            ButtonPrimaryDefault(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 48.dp),
+                title = stringResource(R.string.hardware_wallet),
+                onClick = {
+                    navController.navigateWithTermsAccepted {
+                        navController.slideFromRight(R.id.hardwareWalletFragment)
+                    }
+                }
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         ButtonPrimaryTransparent(
             modifier = Modifier
