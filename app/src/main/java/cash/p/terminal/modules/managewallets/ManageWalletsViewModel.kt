@@ -53,9 +53,7 @@ class ManageWalletsViewModel(
     private val excludedBlockChainTypeForHardwareWallet by lazy {
         setOf(
             BlockchainType.Zcash,
-            BlockchainType.ECash,
-            BlockchainType.PirateCash,
-            BlockchainType.Cosanta,
+            BlockchainType.ECash
         )
     }
 

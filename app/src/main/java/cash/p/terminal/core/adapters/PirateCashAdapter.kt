@@ -149,6 +149,30 @@ class PirateCashAdapter(
                     )
                 }
 
+                is AccountType.HardwareCard -> {
+                    val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
+                        accountId = account.id,
+                        cardId = accountType.cardId,
+                        blockchainType = wallet.token.blockchainType,
+                        tokenType = wallet.token.type,
+                    )
+                    return PirateCashKit(
+                        context = App.instance,
+                        extendedKey = wallet.getHDExtendedKey()!!,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        iInputSigner = hardwareWalletEcdaBitcoinSigner,
+                        iSchnorrInputSigner = hardwareWalletSchnorrSigner,
+                    )
+                }
+
+
                 else -> throw UnsupportedAccountException()
             }
         }

@@ -52,8 +52,8 @@ object DerivationConfigV3 : DerivationConfig() {
             BlockchainType.Dash -> mapOf(AddressType.Default to DerivationPath("m/44'/5'/0'"))
             BlockchainType.Ton -> mapOf(AddressType.Default to DerivationPath("m/44'/607'/0'"))
 
-            BlockchainType.Cosanta -> mapOf(AddressType.Default to DerivationPath("m/44'/770'/0'/0/0"))
-            BlockchainType.PirateCash -> mapOf(AddressType.Default to DerivationPath("m/44'/660'/0'/0/0"))
+            BlockchainType.Cosanta -> mapOf(AddressType.Default to DerivationPath("m/44'/770'/0'"))
+            BlockchainType.PirateCash -> mapOf(AddressType.Default to DerivationPath("m/44'/660'/0'"))
 
             BlockchainType.ECash,
             BlockchainType.Zcash,
