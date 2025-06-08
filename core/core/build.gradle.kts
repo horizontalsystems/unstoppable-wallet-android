@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.androidx.material3.android)
     ksp(libs.room.compiler)
 
-    implementation(libs.kotlin.stdlib)
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.constraintlayout:constraintlayout:$constraint_version")
     implementation(libs.android.core.ktx)

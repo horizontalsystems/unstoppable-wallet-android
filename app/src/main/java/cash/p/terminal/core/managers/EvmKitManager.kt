@@ -3,6 +3,7 @@ package cash.p.terminal.core.managers
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.room.concurrent.AtomicInt
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.utils.EvmAddressParser
@@ -78,7 +79,7 @@ class EvmKitManager(
             kitStartedSubject.onNext(value != null)
         }
 
-    private var useCount = 0
+    private var useCount = AtomicInt(0)
     var currentAccount: Account? = null
         private set
     private val evmKitUpdatedSubject = PublishSubject.create<Unit>()
@@ -105,12 +106,11 @@ class EvmKitManager(
                 account = account,
                 blockchainType = blockchainType
             )
-            useCount = 0
+            useCount.set(0)
             currentAccount = account
             subscribeToEvents()
         }
-
-        useCount++
+        useCount.incrementAndGet()
         return this.evmKitWrapper!!
     }
 
@@ -217,9 +217,9 @@ class EvmKitManager(
     @Synchronized
     fun unlink(account: Account) {
         if (account == currentAccount) {
-            useCount -= 1
+            useCount.decrementAndGet()
 
-            if (useCount < 1) {
+            if (useCount.get() < 1) {
                 Log.d("AAA", "stopEvmKit()")
                 stopEvmKit()
             }

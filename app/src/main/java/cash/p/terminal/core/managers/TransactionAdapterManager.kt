@@ -66,8 +66,9 @@ class TransactionAdapterManager(
                 }
             }
 
-            currentAdapters.forEach {
-                adapterFactory.unlinkAdapter(it.key)
+            val adaptersToUnlink = currentAdapters.keys - newAdapters.keys
+            adaptersToUnlink.forEach { source ->
+                adapterFactory.unlinkAdapter(source)
             }
 
             _adaptersState.value = newAdapters
