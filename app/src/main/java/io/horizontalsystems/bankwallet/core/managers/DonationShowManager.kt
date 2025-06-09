@@ -2,16 +2,10 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.core.ISystemInfoManager
 
 class DonationShowManager(
-        private val systemInfoManager: ISystemInfoManager,
-        private val localStorage: ILocalStorage,
+    private val localStorage: ILocalStorage,
 ) {
-
-    private val currentAppVersion: String by lazy {
-        systemInfoManager.appVersion
-    }
 
     fun shouldShow(): Boolean {
         //show only for FDroid builds
@@ -19,20 +13,23 @@ class DonationShowManager(
         if (!isFDroidBuild) {
             return false
         }
-        //todo in version 0.43 remove changelogShownForAppVersion and update logic
-        val prevVersion = localStorage.changelogShownForAppVersion
-        val donateAppVersion = localStorage.donateAppVersion
-        if (donateAppVersion == null && prevVersion == "0.42.3" && currentAppVersion == "0.42.4") {
+
+        val donateUsLastShown = localStorage.donateUsLastShownDate
+
+        //check last shown date is null or more than 30 days ago
+        //else return false
+        val oneMonthPeriod = 30 * 24 * 60 * 60 * 1000L
+        val currentTimeMillis = System.currentTimeMillis()
+        if (donateUsLastShown == null || (currentTimeMillis - donateUsLastShown) > oneMonthPeriod) {
+            localStorage.donateUsLastShownDate = currentTimeMillis
             return true
         }
 
-        //its fresh install, no need to show
-        updateDonateAppVersion()
         return false
     }
 
-    fun updateDonateAppVersion() {
-        localStorage.donateAppVersion = systemInfoManager.appVersion
+    fun updateDonatePageShownDate() {
+        localStorage.donateUsLastShownDate = System.currentTimeMillis()
     }
 
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
@@ -31,6 +32,7 @@ object MainModule {
                 App.wcSessionManager,
                 App.wcManager,
                 App.networkManager,
+                ActionCompletedDelegate
             ) as T
         }
     }
