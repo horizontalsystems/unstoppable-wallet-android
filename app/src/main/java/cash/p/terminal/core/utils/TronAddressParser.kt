@@ -1,6 +1,7 @@
 package cash.p.terminal.core.utils
 
 import io.horizontalsystems.hdwalletkit.Base58
+import io.horizontalsystems.tronkit.models.Address
 import org.bouncycastle.jcajce.provider.digest.Keccak
 import org.bouncycastle.jce.ECNamedCurveTable
 import org.bouncycastle.math.ec.ECCurve
@@ -13,7 +14,7 @@ object TronAddressParser {
     private const val XPUB_PAYLOAD_LENGTH = 78
     private const val TRON_ADDRESS_PREFIX_BYTE: Byte = 0x41.toByte()
 
-    fun parseXpubToTronAddress(xPubKey: String): String {
+    fun parseXpubToTronAddress(xPubKey: String): TronAddressAndPublicKey {
         val decodedXpubWithChecksum = Base58.decode(xPubKey)
         if (decodedXpubWithChecksum.size != XPUB_EXPECTED_DECODED_LENGTH_WITH_CHECKSUM) {
             throw IllegalArgumentException(
@@ -57,6 +58,14 @@ object TronAddressParser {
 
         val dataToEncodeInBase58 = addressWithPrefix + tronAddrChecksum
 
-        return Base58.encode(dataToEncodeInBase58)
+        return TronAddressAndPublicKey(
+            Address.fromBase58(Base58.encode(dataToEncodeInBase58)),
+            uncompressedPublicKeyWithPrefix
+        )
     }
 }
+
+class TronAddressAndPublicKey(
+    val address: Address,
+    val publicKey: ByteArray
+)

@@ -328,7 +328,7 @@ dependencies {
     implementation libs.solanakt
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
-    implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
+    implementation libs.tron.kit
     // Zcash SDK
     coreLibraryDesugaring libs.desugar.jdk.libs
     implementation libs.zcash.android.sdk
