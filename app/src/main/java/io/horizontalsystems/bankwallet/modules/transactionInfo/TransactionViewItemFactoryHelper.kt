@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmTransa
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.SwapTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -648,10 +649,18 @@ object TransactionViewItemFactoryHelper {
             }
 
             is BitcoinOutgoingTransactionRecord ->
-                transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
+                if (transaction.fee?.zeroValue == false) {
+                    items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
+                }
 
             is SolanaOutgoingTransactionRecord -> {
-                if (transaction.fee != null) {
+                transaction.fee?.let {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
+            is ZcashShieldingTransactionRecord -> {
+                if (transaction.fee?.zeroValue == false) {
                     items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
             }

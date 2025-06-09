@@ -35,8 +35,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronInco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord.Direction.Shield
-import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord.Direction.Unshield
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
@@ -1143,20 +1141,6 @@ class TransactionViewItemFactory(
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val title: String
-        val shieldIcon: Int
-        when (record.direction) {
-            Shield -> {
-                title = Translator.getString(R.string.Transactions_Shield)
-                shieldIcon = R.drawable.ic_shield_24
-            }
-
-            Unshield -> {
-                title = Translator.getString(R.string.Transactions_Unshield)
-                shieldIcon = R.drawable.ic_shield_off_24
-            }
-        }
-
         val subtitle = Translator.getString(R.string.Transactions_Transfer)
         val primaryValue = ColoredValue(getCoinString(record.value, true), ColorName.Leah)
         val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
@@ -1170,7 +1154,7 @@ class TransactionViewItemFactory(
         return TransactionViewItem(
             uid = record.uid,
             progress = progress,
-            title = title,
+            title = Translator.getString(record.direction.title),
             subtitle = subtitle,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -1180,7 +1164,7 @@ class TransactionViewItemFactory(
             doubleSpend = false,
             locked = locked,
             spam = record.spam,
-            icon = icon ?: TransactionViewItem.Icon.ImageResource(shieldIcon)
+            icon = icon ?: TransactionViewItem.Icon.ImageResource(record.direction.icon)
         )
     }
 

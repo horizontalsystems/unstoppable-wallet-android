@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExte
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Transaction
@@ -69,13 +70,16 @@ class TransactionInfoViewItemFactory(
 
                         if (transactionType.accountCreated) {
                             itemSections.add(
-                                listOf(Value(
-                                    Translator.getString(R.string.Transactions_OperationType),
-                                    Translator.getString(R.string.Transactions_OperationType_CreateAccount)
-                                ))
+                                listOf(
+                                    Value(
+                                        Translator.getString(R.string.Transactions_OperationType),
+                                        Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                    )
+                                )
                             )
                         }
                     }
+
                     is StellarTransactionRecord.Type.Send -> {
                         sentToSelf = transactionType.sentToSelf
                         itemSections.add(
@@ -92,27 +96,35 @@ class TransactionInfoViewItemFactory(
 
                         if (transactionType.accountCreated) {
                             itemSections.add(
-                                listOf(Value(
-                                    Translator.getString(R.string.Transactions_OperationType),
-                                    Translator.getString(R.string.Transactions_OperationType_CreateAccount)
-                                ))
+                                listOf(
+                                    Value(
+                                        Translator.getString(R.string.Transactions_OperationType),
+                                        Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                    )
+                                )
                             )
                         }
                     }
+
                     is StellarTransactionRecord.Type.ChangeTrust -> {
                         itemSections.add(
-                            listOf(Value(
-                                Translator.getString(R.string.Transactions_OperationType),
-                                Translator.getString(R.string.Transactions_OperationType_ChangeTrust)
-                            ))
+                            listOf(
+                                Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    Translator.getString(R.string.Transactions_OperationType_ChangeTrust)
+                                )
+                            )
                         )
                     }
+
                     is StellarTransactionRecord.Type.Unsupported -> {
                         itemSections.add(
-                            listOf(Value(
-                                Translator.getString(R.string.Transactions_OperationType),
-                                transactionType.type
-                            ))
+                            listOf(
+                                Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    transactionType.type
+                                )
+                            )
                         )
                     }
                 }
@@ -139,6 +151,7 @@ class TransactionInfoViewItemFactory(
 
 //            feeViewItem = record.fee.map { .fee(title: "tx_info.fee".localized, value: feeString(transactionValue: $0, rate: _rate($0))) }
             }
+
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     TransactionViewItemFactoryHelper.getReceiveSectionItems(
@@ -427,6 +440,37 @@ class TransactionInfoViewItemFactory(
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
                         sentToSelf = transaction.sentToSelf,
+                        blockchainType = blockchainType,
+                    )
+                )
+
+                miscItemsSection.addAll(
+                    TransactionViewItemFactoryHelper.getBitcoinSectionItems(
+                        transaction,
+                        transactionItem.lastBlockInfo
+                    )
+                )
+                addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is ZcashShieldingTransactionRecord -> {
+                itemSections.add(
+                    listOf(
+                        Transaction(
+                            Translator.getString(transaction.direction.title),
+                            "",
+                            transaction.direction.icon
+                        )
+                    )
+                )
+                sentToSelf = true
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getSendSectionItems(
+                        value = transaction.value,
+                        toAddress = null,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        sentToSelf = true,
                         blockchainType = blockchainType,
                     )
                 )

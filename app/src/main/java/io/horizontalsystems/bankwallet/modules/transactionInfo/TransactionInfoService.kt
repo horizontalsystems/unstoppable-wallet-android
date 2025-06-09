@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExte
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -154,6 +155,9 @@ class TransactionInfoService(
                     tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
+                }
+                is ZcashShieldingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
                 }
                 else -> emptyList()
             }
