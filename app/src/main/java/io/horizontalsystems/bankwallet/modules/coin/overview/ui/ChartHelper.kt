@@ -168,7 +168,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         movingAverageCurves.clear()
         movingAverageCurves.putAll(
             target.movingAverages
-                .map { (id, movingAverage: ChartIndicator) ->
+                .map { (id, movingAverage: ChartIndicator.MovingAverage) ->
                     id to CurveAnimator2(
                         movingAverage.line,
                         minKey,
@@ -247,7 +247,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         if (target.movingAverages.keys != movingAverageCurves.keys) {
             initMovingAverages()
         } else {
-            target.movingAverages.forEach { (id, u: ChartIndicator) ->
+            target.movingAverages.forEach { (id, u: ChartIndicator.MovingAverage) ->
                 movingAverageCurves[id]?.setTo(
                     u.line,
                     minKey,

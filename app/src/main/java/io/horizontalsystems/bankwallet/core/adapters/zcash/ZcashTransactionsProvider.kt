@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters.zcash
 
 import cash.z.ecc.android.sdk.SdkSynchronizer
+import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionRecipient
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
@@ -9,43 +10,45 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.math.min
 
 class ZcashTransactionsProvider(
-    private val receiveAddress: String,
+    private val accountUuid: AccountUuid,
     private val synchronizer: SdkSynchronizer
 ) {
-
+    private val mutex = Mutex()
     private var transactions = listOf<ZcashTransaction>()
     private val newTransactionsSubject = PublishSubject.create<List<ZcashTransaction>>()
 
-    @Synchronized
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
         synchronizer.coroutineScope.launch {
-            val newTransactions = transactionOverviews.filter { tx ->
-                transactions.none { it.rawId == tx.rawId }
-            }
-
-            if (newTransactions.isNotEmpty()) {
-                val newZcashTransactions = newTransactions.map {
-                    val recipient = if (it.isSentTransaction) {
-                        synchronizer.getRecipients(it)
-                            .filterIsInstance<TransactionRecipient.Address>()
-                            .firstOrNull()
-                            ?.addressValue
-                    } else {
-                        null
-                    }
-
-                    // sdk throws error when fetching memos
-                    // val memo = synchronizer.getMemos(it).firstOrNull()
-
-                    ZcashTransaction(it, recipient, null)
+            mutex.withLock {
+                val newTransactions = transactionOverviews.filter { tx ->
+                    transactions.none { it.transactionHash.contentEquals(tx.txId.value.byteArray) }
                 }
-                newTransactionsSubject.onNext(newZcashTransactions)
-                transactions = (transactions + newZcashTransactions).sortedDescending()
+
+                if (newTransactions.isNotEmpty()) {
+                    val newZcashTransactions = newTransactions.map {
+                        val recipients = if (it.isSentTransaction) {
+                            synchronizer.getRecipients(it)
+                                .filterIsInstance<TransactionRecipient>()
+                                .toList()
+                        } else {
+                            null
+                        }
+
+                        // sdk throws error when fetching memos
+                        // val memo = synchronizer.getMemos(it).firstOrNull()
+
+                        ZcashTransaction(accountUuid, it, recipients, null)
+                    }
+                    newTransactionsSubject.onNext(newZcashTransactions)
+                    transactions = (transactions + newZcashTransactions).sortedDescending()
+                }
             }
         }
     }
@@ -77,38 +80,36 @@ class ZcashTransactionsProvider(
             FilterTransactionType.Incoming -> add { it.isIncoming }
             FilterTransactionType.Outgoing -> add { !it.isIncoming }
             FilterTransactionType.Swap,
-            FilterTransactionType.Approve,
-            -> add { false }
+            FilterTransactionType.Approve -> add { false }
         }
 
         if (address != null) {
-            add {
-                it.toAddress?.lowercase() == address.lowercase()
+            add { tx ->
+                tx.recipients?.any { it.addressValue == address } ?: false
             }
         }
     }
 
-    @Synchronized
     fun getTransactions(
         from: Triple<ByteArray, Long, Int>?,
         transactionType: FilterTransactionType,
         address: String?,
         limit: Int,
     ) = Single.create { emitter ->
-            try {
-                val filters = getFilters(transactionType, address)
-                val filtered = when {
-                    filters.isEmpty() -> transactions
-                    else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
-                }
-
-                val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
-                    filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
-                } ?: 0
-
-                emitter.onSuccess(filtered.subList(fromIndex, min(filtered.size, fromIndex + limit)))
-            } catch (error: Throwable) {
-                emitter.onError(error)
+        try {
+            val filters = getFilters(transactionType, address)
+            val filtered = when {
+                filters.isEmpty() -> transactions
+                else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
             }
+
+            val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
+                filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
+            } ?: 0
+
+            emitter.onSuccess(filtered.subList(fromIndex, min(filtered.size, fromIndex + limit)))
+        } catch (error: Throwable) {
+            emitter.onError(error)
         }
+    }
 }

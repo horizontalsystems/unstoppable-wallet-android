@@ -10,6 +10,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
@@ -248,7 +249,7 @@ dependencies {
     implementation 'androidx.glance:glance-appwidget:1.1.1'
 
     // Room
-    def room_version = '2.6.1'
+    def room_version = '2.7.1'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -272,7 +273,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.code.gson:gson:2.11.0'
     implementation "androidx.biometric:biometric:$biometric_version"
 
     implementation 'com.atlassian.commonmark:commonmark:0.17.0'
@@ -316,8 +317,8 @@ dependencies {
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:bdd7602'
     // Zcash SDK
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-    implementation "cash.z.ecc.android:zcash-android-sdk:2.2.6"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation "cash.z.ecc.android:zcash-android-sdk:2.2.12"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
@@ -342,8 +343,8 @@ dependencies {
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.1'
 
     // UI modules
 

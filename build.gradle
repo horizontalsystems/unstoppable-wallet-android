@@ -7,7 +7,7 @@ buildscript {
         lifecycle_version = '2.8.7'
 
         compose_version = '1.7.5'
-        kotlin_version = '1.9.23'
+        kotlin_version = '2.1.20'
         material_version = "1.12.0"
         appcompat_version = "1.7.0"
         constraint_version = "2.2.0"
@@ -34,7 +34,8 @@ buildscript {
 }
 
 plugins {
-    id 'com.google.devtools.ksp' version '1.9.23-1.0.20' apply false
+    id 'com.google.devtools.ksp' version '2.1.20-1.0.32' apply false
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.1.20' apply false
 }
 
 allprojects {
