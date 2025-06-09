@@ -4,12 +4,13 @@ import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.UnsupportedException
-import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
+import cash.p.terminal.tangem.signer.HardwareWalletSolanaAccountSigner
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.entities.TokenType
 import cash.z.ecc.android.sdk.ext.fromHex
+import com.solana.core.PublicKey
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
@@ -27,7 +28,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlow
 
 class SolanaKitManager(
-    private val appConfigProvider: AppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
     private val backgroundManager: BackgroundManager,
@@ -80,7 +80,7 @@ class SolanaKitManager(
                 }
 
                 is AccountType.HardwareCard -> {
-                    createKitInstance(account)
+                    createKitInstance(account.id, accountType)
                 }
 
                 else -> throw UnsupportedAccountException()
@@ -130,20 +130,28 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-        account: Account
+        accountId: String,
+        accountType: AccountType.HardwareCard,
     ): SolanaKitWrapper {
         val hardwarePublicKey = runBlocking {
-            hardwarePublicKeyStorage.getKey(account.id, BlockchainType.Solana, TokenType.Native)
-        } ?: throw UnsupportedException("Hardware card does not have a public key for Tron")
+            hardwarePublicKeyStorage.getKey(accountId, BlockchainType.Solana, TokenType.Native)
+        } ?: throw UnsupportedException("Hardware card does not have a public key for Solana")
+        val signer = Signer(
+            HardwareWalletSolanaAccountSigner(
+                publicKey = PublicKey(hardwarePublicKey.key.value.fromHex()),
+                hardwarePublicKey = hardwarePublicKey,
+                cardId = accountType.cardId
+            )
+        )
 
         val kit = SolanaKit.getInstance(
             application = App.instance,
             addressString = Base58.encode(hardwarePublicKey.key.value.fromHex()),
             rpcSource = rpcSourceManager.rpcSource,
-            walletId = account.id
+            walletId = accountId
         )
 
-        return SolanaKitWrapper(kit, null)
+        return SolanaKitWrapper(kit, signer)
     }
 
     @Synchronized

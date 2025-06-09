@@ -325,6 +325,7 @@ dependencies {
     implementation libs.bitcoin.kit
     implementation libs.ethereum.kit
     implementation libs.solana.kit
+    implementation libs.solanakt
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'

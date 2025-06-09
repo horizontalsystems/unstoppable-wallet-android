@@ -40,6 +40,7 @@ piratecash-ethereum = "6c880df"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
 piratecash-solana = "a009bcf"
+solanakt = "0f6072a"
 horizontalsystems-tron = "bdd7602"
 tangem-sdk = "415ede7"
 gson = "2.13.0"
@@ -106,6 +107,7 @@ ton-kotlin-contract = { module = "org.ton:ton-kotlin-contract", version.ref = "t
 ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
 solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", version.ref = "piratecash-solana" }
+solanakt = { module = "com.github.piratecash:SolanaKT", version.ref = "solanakt" }
 ethereum-kit = { group = "com.github.piratecash", name = "ethereum-kit-android", version.ref = "piratecash-ethereum" }
 blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
 binance-kit = { group = "com.github.horizontalsystems", name = "binance-chain-kit-android", version.ref = "horizontalsystems-binance" }

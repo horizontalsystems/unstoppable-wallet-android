@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.bitcoin.kit)
 
     implementation(libs.ethereum.kit)
+    implementation(libs.solanakt)
 
     implementation(libs.androidx.navigation.runtime.ktx)
     debugImplementation(libs.androidx.ui.tooling)

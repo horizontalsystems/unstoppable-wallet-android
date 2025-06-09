@@ -5,6 +5,7 @@ import cash.p.terminal.core.managers.SolanaKitWrapper
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
+import io.horizontalsystems.core.SafeSuspendedCall
 import io.horizontalsystems.solanakit.SolanaKit
 import io.horizontalsystems.solanakit.models.Address
 import io.horizontalsystems.solanakit.models.FullTransaction
@@ -63,7 +64,9 @@ class SplAdapter(
     override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
         if (signer == null) throw Exception()
 
-        return solanaKit.sendSpl(mintAddress, to, amount.movePointRight(decimal).toLong(), signer)
+        return SafeSuspendedCall.executeSuspendable {
+            solanaKit.sendSpl(mintAddress, to, amount.movePointRight(decimal).toLong(), signer)
+        }
     }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState = when (syncState) {
