@@ -112,8 +112,7 @@ private fun SettingSections(
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
-    // todo uncomment the line
-    val isFDroidBuild = true // BuildConfig.FDROID_BUILD
+    val isFDroidBuild = BuildConfig.FDROID_BUILD
 
     val banners = buildList<@Composable () -> Unit> {
         if (uiState.showPremiumBanner) {

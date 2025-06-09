@@ -739,17 +739,45 @@
     <string name="Settings_DonateWith">Donar con</string>
     <string name="Settings_Donate_GetAddress">Dirección de donación</string>
     <string name="Settings_Donate_Addresses">Dirección</string>
+    <string name="Settings_Donate_DonationAddresses">Direcciones de donación</string>
     <string name="Settings_Donate_OrSelectCoinToDonate">O selecciona una moneda para donar</string>
+    <string name="Settings_CryptoQuiz">Cuestionario de Cripto</string>
+
     <string name="SettingsSecurity_AutoLock_Immediate">Inmediato</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minuto</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutos</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutos</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutos</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
-    <!--Premium Banner-->
+
+    <!--Banner-->
     <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsBanner_PremiumBannerDescription">¡Mejora tu experiencia con funciones Premium!</string>
     <string name="SettingsBanner_PremiumTryFee">Prueba GRATIS</string>
+    <string name="SettingsBanner_Title" translatable="false">MiniApp</string>
+    <string name="SettingsBanner_GameDescription">¡Pasa las pruebas, completa las tareas y gana tokens!</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Defiende las finanzas realmente privadas</string>
+    <string name="SettingsBanner_SupportTheProject">¡Apoya nuestra independencia!</string>
+
+    <!--Why Donate Page-->
+    <string name="SettingsBanner_DonateTitle">Apoya el movimiento por la privacidad</string>
+    <string name="SettingsBanner_DonateSubtitle">Defiende el futuro de las finanzas privadas</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet sigue siendo gratuito, sin anuncios y de código abierto, independiente de la vigilancia de Big Tech.”</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">Al apoyarnos, defiendes las finanzas abiertas y libres de vigilancia:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">El equipo enfocado en la privacidad</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">“Tu apoyo no solo se trata de funciones, es una resistencia contra la vigilancia financiera y el control”</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">“Nos ayuda a mantenernos independientes, protegiendo a miles que se niegan a comprometer su privacidad” — Exclusivamente en F-Droid</string>
+    <string name="SettingsBanner_DonateExclusivelyOnFDroid">Exclusivamente en F-Droid</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Funciones con prioridad a la privacidad — sin rastreo, sin límites.</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">Modo de presión y seguridad adicional</string>
+    <string name="SettingsBanner_DonateFeatureSignals">Protección avanzada contra phishing</string>
+    <string name="SettingsBanner_DonateFeatureAddress">Verificador de lista negra de direcciones</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Análisis de tokens en cadena y fuera de ella</string>
+    <string name="SettingsBanner_DonateFeatureAdvanced">Búsqueda avanzada de tokens y filtros</string>
+    <string name="SettingsBanner_DonateFeaturePriority">Acceso prioritario al soporte</string>
+    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Cada contribución cuenta</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Al apoyar Unstoppable Wallet, nos ayudas a mantenernos independientes y defender la privacidad financiera.</string>
+
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Activo</string>
     <string name="SettingsSubscription_GetPremium">Hazte usuario Premium</string>
