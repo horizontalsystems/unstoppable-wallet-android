@@ -73,7 +73,7 @@ fun SectionTitleCell(
             Icon(
                 modifier = Modifier.padding(end = 16.dp),
                 painter = painterResource(iconResId),
-                tint = ComposeAppTheme.colors.grey,
+                tint = ComposeAppTheme.colors.leah,
                 contentDescription = null,
             )
         }

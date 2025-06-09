@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.zcash
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashTransaction.ShieldDirection
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
@@ -44,8 +45,9 @@ class ZcashShieldingTransactionRecord(
 
     override val mainValue = value
 
-    enum class Direction {
-        Shield, Unshield;
+    enum class Direction(val title: Int, val icon: Int) {
+        Shield(R.string.Transactions_Shield, R.drawable.ic_shield_24),
+        Unshield(R.string.Transactions_Unshield, R.drawable.ic_shield_off_24);
 
         companion object {
             fun from(wrapperDirection: ShieldDirection): Direction {
