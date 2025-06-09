@@ -246,12 +246,15 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
             SectionItemPosition.First -> {
                 Modifier.clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
             }
+
             SectionItemPosition.Last -> {
                 Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             }
+
             SectionItemPosition.Single -> {
                 Modifier.clip(RoundedCornerShape(12.dp))
             }
+
             else -> Modifier
         }
 
@@ -287,6 +290,7 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             contentDescription = null
                         )
                     }
+
                     is TransactionViewItem.Icon.Platform -> {
                         Icon(
                             modifier = Modifier.size(32.dp),
@@ -295,16 +299,19 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             contentDescription = null
                         )
                     }
+
                     is TransactionViewItem.Icon.Regular -> {
                         val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         HsImage(
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier
+                                .size(32.dp)
                                 .clip(shape),
                             url = icon.url,
                             alternativeUrl = icon.alternativeUrl,
                             placeholder = icon.placeholder
                         )
                     }
+
                     is TransactionViewItem.Icon.Double -> {
                         val backShape = if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         val frontShape = if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
@@ -339,7 +346,15 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             placeholder = icon.front.placeholder,
                         )
                     }
-                    is TransactionViewItem.Icon.ImageResource -> {}
+
+                    is TransactionViewItem.Icon.ImageResource -> {
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            painter = painterResource(icon.resourceId),
+                            tint = ComposeAppTheme.colors.leah,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
             Column(

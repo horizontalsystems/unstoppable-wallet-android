@@ -34,6 +34,9 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExte
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord.Direction.Shield
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord.Direction.Unshield
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
@@ -84,7 +87,12 @@ class TransactionViewItemFactory(
     ): TransactionViewItem.Icon =
         when (value) {
             is TransactionValue.NftValue -> {
-                TransactionViewItem.Icon.Regular(nftMetadata[value.nftUid]?.previewImageUrl, null, R.drawable.icon_24_nft_placeholder, rectangle = true)
+                TransactionViewItem.Icon.Regular(
+                    nftMetadata[value.nftUid]?.previewImageUrl,
+                    null,
+                    R.drawable.icon_24_nft_placeholder,
+                    rectangle = true
+                )
             }
 
             is TransactionValue.CoinValue,
@@ -390,7 +398,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
-                    spam =  record.spam,
+                    spam = record.spam,
                     icon = icon
                 )
             }
@@ -438,6 +446,16 @@ class TransactionViewItemFactory(
                 )
             }
 
+            is ZcashShieldingTransactionRecord -> {
+                createViewItemFromZcashShieldingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    lastBlockTimestamp,
+                    icon
+                )
+            }
+
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
@@ -473,6 +491,7 @@ class TransactionViewItemFactory(
                 iconX = singleValueIconType(recordType.value)
 
             }
+
             is StellarTransactionRecord.Type.Receive -> {
                 title = Translator.getString(R.string.Transactions_Receive)
                 subtitle = Translator.getString(
@@ -483,12 +502,14 @@ class TransactionViewItemFactory(
                 primaryValue = getColoredValue(recordType.value, ColorName.Remus)
                 iconX = singleValueIconType(recordType.value)
             }
+
             is StellarTransactionRecord.Type.ChangeTrust -> {
                 title = Translator.getString(R.string.Transactions_ChangeTrust)
                 subtitle = recordType.trustee.shorten()
                 primaryValue = getColoredValue(recordType.value, ColorName.Leah, true)
                 iconX = singleValueIconType(recordType.value)
             }
+
             is StellarTransactionRecord.Type.Unsupported -> {
                 iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                 title = Translator.getString(R.string.Transactions_StellarTransaction)
@@ -555,6 +576,7 @@ class TransactionViewItemFactory(
 
                     iconX = singleValueIconType(actionType.value)
                 }
+
                 is TonTransactionRecord.Action.Type.Receive -> {
                     title = Translator.getString(R.string.Transactions_Receive)
                     subtitle = Translator.getString(
@@ -565,6 +587,7 @@ class TransactionViewItemFactory(
                     primaryValue = getColoredValue(actionType.value, ColorName.Remus)
                     iconX = singleValueIconType(actionType.value)
                 }
+
                 is TonTransactionRecord.Action.Type.Unsupported -> {
                     title = Translator.getString(R.string.Transactions_TonTransaction)
                     subtitle = actionType.type
@@ -574,30 +597,35 @@ class TransactionViewItemFactory(
 
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                 }
+
                 is TonTransactionRecord.Action.Type.Burn -> {
                     iconX = singleValueIconType(actionType.value)
                     title = Translator.getString(R.string.Transactions_Burn)
                     subtitle = actionType.value.fullName
                     primaryValue = getColoredValue(actionType.value, ColorName.Leah)
                 }
+
                 is TonTransactionRecord.Action.Type.ContractCall -> {
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                     title = Translator.getString(R.string.Transactions_ContractCall)
                     subtitle = actionType.address.shorten()
                     primaryValue = getColoredValue(actionType.value, ColorName.Leah)
                 }
+
                 is TonTransactionRecord.Action.Type.ContractDeploy -> {
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                     title = Translator.getString(R.string.Transactions_ContractDeploy)
                     subtitle = actionType.interfaces.joinToString()
                     primaryValue = null
                 }
+
                 is TonTransactionRecord.Action.Type.Mint -> {
                     iconX = singleValueIconType(actionType.value)
                     title = Translator.getString(R.string.Transactions_Mint)
                     subtitle = actionType.value.fullName
                     primaryValue = getColoredValue(actionType.value, ColorName.Remus)
                 }
+
                 is TonTransactionRecord.Action.Type.Swap -> {
                     iconX = doubleValueIconType(actionType.valueOut, actionType.valueIn)
                     title = Translator.getString(R.string.Transactions_Swap)
@@ -1105,6 +1133,54 @@ class TransactionViewItemFactory(
             date = Date(timestamp * 1000),
             spam = spam,
             icon = icon ?: singleValueIconType(value)
+        )
+    }
+
+    private fun createViewItemFromZcashShieldingTransactionRecord(
+        record: ZcashShieldingTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        lastBlockTimestamp: Long?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val title: String
+        val shieldIcon: Int
+        when (record.direction) {
+            Shield -> {
+                title = Translator.getString(R.string.Transactions_Shield)
+                shieldIcon = R.drawable.ic_shield_24
+            }
+
+            Unshield -> {
+                title = Translator.getString(R.string.Transactions_Unshield)
+                shieldIcon = R.drawable.ic_shield_off_24
+            }
+        }
+
+        val subtitle = Translator.getString(R.string.Transactions_Transfer)
+        val primaryValue = ColoredValue(getCoinString(record.value, true), ColorName.Leah)
+        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+        val lockState = record.lockState(lastBlockTimestamp)
+        val locked = when {
+            lockState == null -> null
+            lockState.locked -> true
+            else -> false
+        }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = title,
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = true,
+            doubleSpend = false,
+            locked = locked,
+            spam = record.spam,
+            icon = icon ?: TransactionViewItem.Icon.ImageResource(shieldIcon)
         )
     }
 

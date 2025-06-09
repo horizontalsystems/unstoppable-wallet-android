@@ -755,6 +755,9 @@
     <string name="Transactions_Approve">Approved</string>
     <string name="Transactions_Swap">Swapped</string>
     <string name="Transactions_Failed">Failed</string>
+    <string name="Transactions_Transfer">Transfer</string>
+    <string name="Transactions_Shield">Shield</string>
+    <string name="Transactions_Unshield">Unshield</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ExternalContractCall">External Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
