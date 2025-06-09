@@ -10,6 +10,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -40,11 +41,8 @@ class ZcashTransactionsProvider(
                         } else {
                             null
                         }
-
-                        // sdk throws error when fetching memos
-                        // val memo = synchronizer.getMemos(it).firstOrNull()
-
-                        ZcashTransaction(accountUuid, it, recipients, null)
+                        val memo = synchronizer.getMemos(it).firstOrNull()
+                        ZcashTransaction(accountUuid, it, recipients, memo)
                     }
                     newTransactionsSubject.onNext(newZcashTransactions)
                     transactions = (transactions + newZcashTransactions).sortedDescending()
