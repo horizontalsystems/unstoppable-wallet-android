@@ -13,9 +13,11 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.WalletEventType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -48,7 +50,8 @@ class MainViewModel(
     private val localStorage: ILocalStorage,
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
-    private val networkManager: INetworkManager
+    private val networkManager: INetworkManager,
+    private val actionCompletedDelegate: ActionCompletedDelegate
 ) : ViewModelUiState<MainModule.UiState>() {
 
     private var wcPendingRequestsCount = 0
@@ -155,6 +158,15 @@ class MainViewModel(
             }
         }
 
+        viewModelScope.launch {
+            actionCompletedDelegate.walletEvents.collect { event ->
+                //ContactAddedToRecent event triggered after successful send transaction
+                if (event == WalletEventType.ContactAddedToRecent && donationShowManager.shouldShow()) {
+                    showDonationPage()
+                }
+            }
+        }
+
         updateSettingsBadge()
         updateTransactionsTabEnabled()
     }
@@ -181,7 +193,7 @@ class MainViewModel(
     }
 
     fun donationShown() {
-        donationShowManager.updateDonateAppVersion()
+        donationShowManager.updateDonatePageShownDate()
         showDonationPage = false
         emitState()
     }
@@ -201,11 +213,6 @@ class MainViewModel(
         viewModelScope.launch {
             if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
                 showWhatsNew()
-            }
-        }
-        viewModelScope.launch {
-            if (!pinComponent.isLocked && donationShowManager.shouldShow()) {
-                showDonationPage()
             }
         }
     }

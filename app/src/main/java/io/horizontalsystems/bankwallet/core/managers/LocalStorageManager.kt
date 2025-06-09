@@ -399,12 +399,6 @@ class LocalStorageManager(
             preferences.edit().putString(CHANGELOG_SHOWN_FOR_APP_VERSION, value).apply()
         }
 
-    override var donateAppVersion: String?
-        get() = preferences.getString("donate_app_version", null)
-        set(value) {
-            preferences.edit().putString("donate_app_version", value).apply()
-        }
-
     override var ignoreRootedDeviceWarning: Boolean
         get() = preferences.getBoolean(IGNORE_ROOTED_DEVICE_WARNING, false)
         set(value) {
@@ -585,6 +579,20 @@ class LocalStorageManager(
                 editor.remove(UI_STATS_ENABLED).apply()
             } else {
                 editor.putBoolean(UI_STATS_ENABLED, value).apply()
+            }
+        }
+
+    override var donateUsLastShownDate: Long?
+        get() {
+            val timestamp = preferences.getLong("donate_us_last_shown_time", 0L)
+            return when (timestamp) {
+                0L -> null
+                else -> timestamp
+            }
+        }
+        set(value) {
+            value?.let {
+                preferences.edit().putLong("donate_us_last_shown_time", it).apply()
             }
         }
 }

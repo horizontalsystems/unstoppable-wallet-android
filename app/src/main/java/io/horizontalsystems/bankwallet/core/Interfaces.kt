@@ -106,7 +106,6 @@ interface ILocalStorage {
     var currentTheme: ThemeType
     var balanceViewType: BalanceViewType?
     var changelogShownForAppVersion: String?
-    var donateAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
@@ -137,6 +136,7 @@ interface ILocalStorage {
 
     var priceChangeInterval: PriceChangeInterval
     val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
+    var donateUsLastShownDate: Long?
 
     fun clear()
 }

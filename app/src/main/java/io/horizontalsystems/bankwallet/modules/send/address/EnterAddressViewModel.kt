@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.address.AddressCheckManager
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.factories.AddressValidatorFactory
+import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Address
@@ -207,7 +208,11 @@ class EnterAddressViewModel(
                 AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
             val addressUriParser = AddressUriParser(token.blockchainType, token.type)
             val recentAddressManager =
-                RecentAddressManager(App.accountManager, App.appDatabase.recentAddressDao())
+                RecentAddressManager(
+                    App.accountManager,
+                    App.appDatabase.recentAddressDao(),
+                    ActionCompletedDelegate
+                )
             val addressValidator = AddressValidatorFactory.get(token)
             val addressCheckManager = AddressCheckManager(
                 App.spamManager,
