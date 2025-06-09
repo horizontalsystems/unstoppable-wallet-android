@@ -52,6 +52,8 @@ dependencies {
 
     implementation(libs.ethereum.kit)
     implementation(libs.solanakt)
+    implementation(libs.ton.kotlin.contract)
+    implementation(libs.ton.kit)
 
     implementation(libs.androidx.navigation.runtime.ktx)
     debugImplementation(libs.androidx.ui.tooling)

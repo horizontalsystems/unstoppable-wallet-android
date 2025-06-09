@@ -34,7 +34,7 @@ javax-inject = "1"
 appcompat = "1.7.0"
 
 tonKotlin = "0.2.15" # same version like in ton-kit
-horizontalsystems-ton = "58321df"
+piratecash-ton = "acae5a0"
 piratecash-bitcoin = "85e36e8"
 piratecash-ethereum = "6c880df"
 horizontalsystems-blockchain-fee = "1d3bd49"
@@ -104,7 +104,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 ton-kotlin-contract = { module = "org.ton:ton-kotlin-contract", version.ref = "tonKotlin" }
-ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
+ton-kit = { group = "com.github.piratecash", name = "ton-kit-android", version.ref = "piratecash-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
 solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", version.ref = "piratecash-solana" }
 solanakt = { module = "com.github.piratecash:SolanaKT", version.ref = "solanakt" }

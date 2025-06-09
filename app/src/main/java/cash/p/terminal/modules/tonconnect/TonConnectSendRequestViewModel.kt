@@ -114,7 +114,7 @@ class TonConnectSendRequestViewModel(
     }
 
     private fun isTestnet(sendRequestEntity: SendRequestEntity): Boolean {
-        return sendRequestEntity.network == TonNetwork.TESTNET.value
+        return sendRequestEntity.network == TonNetwork.TESTNET
     }
 
     private suspend fun prepareEnv() {
@@ -123,7 +123,7 @@ class TonConnectSendRequestViewModel(
             return
         }
 
-        if (isInvalidNetwork(sendRequestEntity.network)) {
+        if (isInvalidNetwork(sendRequestEntity.network.value)) {
             error = TonConnectSendRequestError.InvalidData("Invalid network")
             responseBadRequest(sendRequestEntity)
             return

@@ -13,13 +13,12 @@ import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Value
 import cash.p.terminal.modules.transactionInfo.TransactionViewItemFactoryHelper
 import cash.p.terminal.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import cash.p.terminal.modules.transactions.TransactionStatus
+import cash.p.terminal.tangem.signer.TonPrivateKeyEd25519
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.entities.HardwarePublicKeyType
 import cash.p.terminal.wallet.entities.TokenType
-import cash.z.ecc.android.sdk.ext.fromHex
-import com.tonapps.blockchain.ton.contract.WalletV4R2Contract
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
@@ -40,7 +39,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.ton.api.pub.PublicKeyEd25519
 
 class TonKitManager(
     private val backgroundManager: BackgroundManager,
@@ -118,10 +116,7 @@ class TonKitManager(
                     if (hardwarePublicKey == null || hardwarePublicKey.type != HardwarePublicKeyType.ADDRESS) {
                         throw UnsupportedException("Hardware card does not have a public key for TON")
                     }
-
-                    val walletV4R2Contract =
-                        WalletV4R2Contract(publicKey = PublicKeyEd25519(hardwarePublicKey.key.value.fromHex()))
-                    TonWallet.WatchOnly(walletV4R2Contract.address.toString(userFriendly = true))
+                    TonWallet.FullAccess(TonPrivateKeyEd25519(accountType.cardId, hardwarePublicKey))
                 }
             }
 
