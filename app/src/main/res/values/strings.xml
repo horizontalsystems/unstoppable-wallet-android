@@ -723,10 +723,9 @@
 
     <!--Swap Unlock Access-->
 
-    <string name="Swap_Unlock_PageTitle">Unlock Access</string>
-    <string name="Swap_Unlock_Subtitle">Allow access to the following amount</string>
-    <string name="Swap_Unlock_Info">Grant permission to a smart contract for token trading on your behalf, specifying the allowed amount. No impact on your balance, but incurs a small fee for approval.\n\nPre-approving a higher amount for future trades is cost-effective compared to on-demand approvals.</string>
-    <string name="Swap_Unlock_Unlimited">Unlimited</string>
+    <string name="Swap_Approve_PageTitle">Approve</string>
+    <string name="Swap_Approve_Info">Grant permission to a smart contract for token trading on your behalf, specifying the allowed amount. No impact on your balance, but incurs a small fee for approval.\n\nPre-approving a higher amount for future trades is cost-effective compared to on-demand approvals.</string>
+    <string name="Swap_Approve_Unlimited">Unlimited</string>
 
     <!--Uniswap Info -->
 

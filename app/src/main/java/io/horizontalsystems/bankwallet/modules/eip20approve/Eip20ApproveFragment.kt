@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
@@ -75,7 +74,7 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
     Scaffold(
         topBar = {
             AppBar(
-                title = stringResource(R.string.Swap_Unlock_PageTitle),
+                title = stringResource(R.string.Swap_Approve_PageTitle),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
@@ -110,11 +109,6 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                 .verticalScroll(rememberScrollState())
         ) {
             VSpacer(height = 12.dp)
-            headline1_leah(
-                text = stringResource(R.string.Swap_Unlock_Subtitle),
-                modifier = Modifier.padding(horizontal = 32.dp)
-            )
-            VSpacer(height = 24.dp)
 
             SectionUniversalLawrence {
                 val setOnlyRequired = { viewModel.setAllowanceMode(AllowanceMode.OnlyRequired) }
@@ -143,10 +137,10 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                         onCheckedChange = { setUnlimited.invoke() }
                     )
                     HSpacer(width = 16.dp)
-                    subhead2_leah(text = stringResource(id = R.string.Swap_Unlock_Unlimited))
+                    subhead2_leah(text = stringResource(id = R.string.Swap_Approve_Unlimited))
                 }
             }
-            InfoText(text = stringResource(R.string.Swap_Unlock_Info))
+            InfoText(text = stringResource(R.string.Swap_Approve_Info))
             VSpacer(height = 32.dp)
         }
     }
