@@ -1,8 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.market.category
+package io.horizontalsystems.bankwallet.modules.market.sector
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -10,7 +9,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,39 +24,42 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.platform.InfoBottomSheet
-import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
+import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.SortMenu
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.launch
 
-class MarketCategoryFragment : BaseComposeFragment() {
+class MarketSectorFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<CoinCategory>(navController) { input ->
-            val factory = MarketCategoryModule.Factory(input)
+            val factory = MarketSectorModule.Factory(input)
             val chartViewModel = viewModel<ChartViewModel>(factory = factory)
-            val viewModel = viewModel<MarketCategoryViewModel>(factory = factory)
+            val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
 
-            CategoryScreen(
+            SectorScreen(
                 viewModel = viewModel,
                 chartViewModel = chartViewModel,
                 onCloseButtonClick = { navController.popBackStack() },
@@ -78,21 +79,22 @@ class MarketCategoryFragment : BaseComposeFragment() {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryScreen(
-    viewModel: MarketCategoryViewModel,
+fun SectorScreen(
+    viewModel: MarketSectorViewModel,
     chartViewModel: ChartViewModel,
     onCloseButtonClick: () -> Unit,
     onCoinClick: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
-    val viewItemState by viewModel.viewStateLiveData.observeAsState(ViewState.Loading)
-    val viewItems by viewModel.viewItemsLiveData.observeAsState()
-    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
-    val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
     val infoModalBottomSheetState =
         androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
+
+    val uiState = viewModel.uiState
+
+    var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
+    var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -123,13 +125,13 @@ fun CategoryScreen(
                 .navigationBarsPadding()
         ) {
             HSSwipeRefresh(
-                refreshing = isRefreshing,
+                refreshing = uiState.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                     chartViewModel.refresh()
                 }
             ) {
-                Crossfade(viewItemState) { state ->
+                Crossfade(uiState.viewState) { state ->
                     when (state) {
                         ViewState.Loading -> {
                             Loading()
@@ -146,73 +148,81 @@ fun CategoryScreen(
                         }
 
                         ViewState.Success -> {
-                            viewItems?.let {
-                                val menu by viewModel.menuLiveData.observeAsState()
-
-                                CoinListSlidable(
-                                    items = it,
-                                    scrollToTop = scrollToTopAfterUpdate,
-                                    onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
-                                    onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
-                                    onCoinClick = onCoinClick,
-                                    preItems = {
-                                        item {
-                                            Chart(chartViewModel = chartViewModel)
-                                        }
-                                        menu?.let {
-                                            stickyHeader {
-                                                HeaderSorting(
-                                                    borderTop = true,
-                                                    borderBottom = true
-                                                ) {
-                                                    Box(modifier = Modifier.weight(1f)) {
-                                                        SortMenu(
-                                                            it.sortingFieldSelect.selected.titleResId,
-                                                            viewModel::showSelectorMenu
-                                                        )
-                                                    }
-                                                    Box(
-                                                        modifier = Modifier.padding(
-                                                            start = 8.dp,
-                                                            end = 16.dp
-                                                        )
-                                                    ) {
-                                                        ButtonSecondaryToggle(
-                                                            select = it.marketFieldSelect,
-                                                            onSelect = viewModel::onSelectMarketField
-                                                        )
-                                                    }
+                            CoinListSlidable(
+                                items = uiState.viewItems,
+                                scrollToTop = scrollToTopAfterUpdate,
+                                onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
+                                onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
+                                onCoinClick = onCoinClick,
+                                preItems = {
+                                    item {
+                                        Chart(chartViewModel = chartViewModel)
+                                    }
+                                    stickyHeader {
+                                        HeaderSorting(
+                                            borderTop = true,
+                                            borderBottom = true
+                                        ) {
+                                            HSpacer(width = 16.dp)
+                                            OptionController(
+                                                uiState.sortingField.titleResId,
+                                                onOptionClick = {
+                                                    openSortingSelector = true
                                                 }
-                                            }
+                                            )
+                                            HSpacer(width = 12.dp)
+                                            OptionController(
+                                                uiState.timePeriod.titleResId,
+                                                onOptionClick = {
+                                                    openPeriodSelector = true
+                                                }
+                                            )
+                                            HSpacer(width = 16.dp)
                                         }
                                     }
-                                )
-                                if (scrollToTopAfterUpdate) {
-                                    scrollToTopAfterUpdate = false
                                 }
+                            )
+                            if (scrollToTopAfterUpdate) {
+                                scrollToTopAfterUpdate = false
                             }
                         }
                     }
                 }
             }
         }
-        //Dialog
-        when (val option = selectorDialogState) {
-            is SelectorDialogState.Opened -> {
-                AlertGroup(
-                    R.string.Market_Sort_PopupTitle,
-                    option.select,
-                    { selected ->
-                        scrollToTopAfterUpdate = true
-                        viewModel.onSelectSortingField(selected)
-                    },
-                    { viewModel.onSelectorDialogDismiss() }
-                )
-            }
-
-            SelectorDialogState.Closed,
-            null -> {
-            }
+        //Dialogs
+        if (openPeriodSelector) {
+            AlertGroup(
+                R.string.CoinPage_Period,
+                Select(uiState.timePeriod, viewModel.periods),
+                { selected ->
+                    viewModel.onTimePeriodSelect(selected)
+                    openPeriodSelector = false
+                    stat(
+                        page = StatPage.Markets,
+                        section = StatSection.Platforms,
+                        event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    )
+                },
+                { openPeriodSelector = false }
+            )
+        }
+        if (openSortingSelector) {
+            AlertGroup(
+                R.string.Market_Sort_PopupTitle,
+                Select(uiState.sortingField, viewModel.sortingOptions),
+                { selected ->
+                    viewModel.onSelectSortingField(selected)
+                    openSortingSelector = false
+                    scrollToTopAfterUpdate = true
+                    stat(
+                        page = StatPage.Markets,
+                        section = StatSection.Platforms,
+                        event = StatEvent.SwitchSortType(selected.statSortType)
+                    )
+                },
+                { openSortingSelector = false }
+            )
         }
     }
     if (isInfoBottomSheetVisible) {
