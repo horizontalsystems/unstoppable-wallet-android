@@ -99,7 +99,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                     is SubmitButtonType.Watch -> {
                         add(
                             MenuItem(
-                                title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                                title = TranslatableString.ResString(R.string.Button_Done),
                                 onClick = viewModel::onClickWatch,
                                 enabled = submitType.enabled
                             )
@@ -109,7 +109,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                     is SubmitButtonType.Next -> {
                         add(
                             MenuItem(
-                                title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                                title = TranslatableString.ResString(R.string.Button_Next),
                                 onClick = viewModel::onClickNext,
                                 enabled = submitType.enabled
                             )
