@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.category
+package io.horizontalsystems.bankwallet.modules.market.sector
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -14,7 +14,7 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
-class CoinCategoryMarketDataChartService(
+class CoinSectorMarketDataChartService(
     override val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val categoryUid: String,

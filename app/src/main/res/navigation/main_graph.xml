@@ -232,8 +232,8 @@
         android:id="@+id/sectorsSelectorFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.SectorsSelectorFragment"/>
     <fragment
-        android:id="@+id/marketCategoryFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
+        android:id="@+id/marketSectorFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.sector.MarketSectorFragment"/>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment"/>

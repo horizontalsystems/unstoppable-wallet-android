@@ -7,10 +7,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.SignalsControlManager
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.Analytics
 
 object MarketFavoritesModule {
 
@@ -51,3 +53,9 @@ enum class WatchlistSorting(@StringRes val titleResId: Int): WithTranslatableTit
 
     override val title = TranslatableString.ResString(titleResId)
 }
+
+data class MarketItemWrapper(
+    val marketItem: MarketItem,
+    val favorited: Boolean,
+    val signal: Analytics.TechnicalAdvice.Advice? =  null
+)
