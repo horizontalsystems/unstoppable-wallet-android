@@ -1,13 +1,9 @@
-package cash.p.terminal.core.utils
+package cash.p.terminal.tangem.common
 
-import cash.p.terminal.entities.EthAddressWithPublicKey
+import cash.p.terminal.tangem.domain.model.AddressBytesWithPublicKey
 import io.horizontalsystems.ethereumkit.core.toHexString
-import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.hdwalletkit.Base58
-import io.horizontalsystems.hdwalletkit.HDExtendedKey.Companion.validateChecksum
-import io.horizontalsystems.hdwalletkit.HDExtendedKey.Companion.version
-import io.horizontalsystems.hdwalletkit.HDExtendedKey.DerivedType
-import io.horizontalsystems.hdwalletkit.HDExtendedKey.ParsingError
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDKey
 import org.bouncycastle.jcajce.provider.digest.Keccak
 import org.bouncycastle.jce.ECNamedCurveTable
@@ -16,15 +12,15 @@ import org.bouncycastle.math.ec.ECPoint
 import java.security.MessageDigest
 import kotlin.experimental.and
 
-object EvmAddressParser {
+object CustomXPubKeyAddressParser {
     private const val LENGTH = 82
 
-    fun parse(xPubKey: String): EthAddressWithPublicKey {
-        val version = version(xPubKey)
+    fun parse(xPubKey: String): AddressBytesWithPublicKey {
+        val version = HDExtendedKey.Companion.version(xPubKey)
 
         val data = Base58.decode(xPubKey)
         if (data.size != LENGTH) {
-            throw ParsingError.WrongKeyLength
+            throw HDExtendedKey.ParsingError.WrongKeyLength
         }
 
         val depth = data[4] and 0xff.toByte()
@@ -48,9 +44,9 @@ object EvmAddressParser {
         val hardened = sequence and HDKey.HARDENED_FLAG != 0
         val childNumber = sequence and 0x7FFFFFFF
 
-        val derivedType = DerivedType.initFrom(depth.toInt())
+        val derivedType = HDExtendedKey.DerivedType.Companion.initFrom(depth.toInt())
 
-        validateChecksum(data)
+        HDExtendedKey.Companion.validateChecksum(data)
 
         val bytes: ByteArray = data.copyOfRange(0, data.size - 4)
         val chainCode: ByteArray = bytes.copyOfRange(13, 13 + 32)
@@ -78,6 +74,6 @@ object EvmAddressParser {
         val hashedPublicKeyBytes = keccakDigest.digest(xyPublicKeyBytes)
 
         val addressBytes = hashedPublicKeyBytes.takeLast(20).toByteArray()
-        return EthAddressWithPublicKey(Address(addressBytes), uncompressedPublicKeyWithPrefix)
+        return AddressBytesWithPublicKey(addressBytes, uncompressedPublicKeyWithPrefix)
     }
 }

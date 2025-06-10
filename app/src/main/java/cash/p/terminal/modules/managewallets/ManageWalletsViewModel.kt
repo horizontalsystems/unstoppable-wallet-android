@@ -72,6 +72,9 @@ class ManageWalletsViewModel(
     var errorMsg by mutableStateOf<String?>(null)
         private set
 
+    var closeScreen by mutableStateOf(false)
+        private set
+
     init {
         loadData()
     }
@@ -91,7 +94,7 @@ class ManageWalletsViewModel(
         }
     }
 
-    fun requestScanToAddTokens() = viewModelScope.launch {
+    fun requestScanToAddTokens(closeAfterSuccess: Boolean) = viewModelScope.launch {
         val account = accountManager.activeAccount
         val cardId = (account?.type as? AccountType.HardwareCard?)?.cardId
         if (account == null || cardId == null) {
@@ -128,12 +131,18 @@ class ManageWalletsViewModel(
 
             if (notFoundedTokens.isNotEmpty()) {
                 errorMsg = "Some tokens were not found"
+            } else {
+                errorMsg = null
             }
 
             hardwarePublicKeyStorage.save(publicKeys)
 
             addedTokens.forEach {
                 service.enable(it)
+            }
+
+            if(errorMsg == null && closeAfterSuccess) {
+                closeScreen = true
             }
         }.doOnFailure {
             if (it is UserCancelled) return@launch

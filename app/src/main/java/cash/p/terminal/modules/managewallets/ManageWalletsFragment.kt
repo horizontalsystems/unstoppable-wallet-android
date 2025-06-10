@@ -87,7 +87,9 @@ class ManageWalletsFragment : BaseComposeFragment() {
                     navController.popBackStack()
                 }
             },
-            requestScan = viewModel::requestScanToAddTokens,
+            requestScan = {
+                viewModel.requestScanToAddTokens(false)
+            },
             restoreSettingsViewModel = restoreSettingsViewModel
         )
     }
@@ -115,7 +117,7 @@ class ManageWalletsFragment : BaseComposeFragment() {
             R.id.cancelOrScanDialog
         ) { result ->
             if (result.confirmed) {
-                viewModel.requestScanToAddTokens()
+                viewModel.requestScanToAddTokens(true)
             } else {
                 findNavController().popBackStack()
             }
@@ -172,7 +174,6 @@ private fun ManageWalletsScreen(
                 }
             )
 
-
             coinItems?.let {
                 if (it.isEmpty()) {
                     ListEmptyView(
@@ -227,8 +228,14 @@ private fun ManageWalletsScreen(
             ScanToAddBlock(requestScan)
         }
         LaunchedEffect(viewModel.errorMsg) {
-            if(viewModel.errorMsg != null) {
+            if (viewModel.errorMsg != null) {
                 HudHelper.showErrorMessage(context, viewModel.errorMsg!!)
+            }
+        }
+
+        LaunchedEffect(viewModel.closeScreen) {
+            if (viewModel.closeScreen) {
+                navController.popBackStack()
             }
         }
     }

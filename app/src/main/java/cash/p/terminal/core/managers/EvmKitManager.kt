@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.room.concurrent.AtomicInt
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.utils.EvmAddressParser
+import cash.p.terminal.tangem.common.CustomXPubKeyAddressParser
 import cash.p.terminal.tangem.signer.HardwareWalletEvmSigner
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
@@ -146,8 +146,8 @@ class EvmKitManager(
                         )
                     )
                 }
-                val addressWithPublicKey = EvmAddressParser.parse(publicKey.key.value)
-                address = addressWithPublicKey.address
+                val addressWithPublicKey = CustomXPubKeyAddressParser.parse(publicKey.key.value)
+                address = Address(addressWithPublicKey.addressBytes)
                 signer = HardwareWalletEvmSigner(
                     address = address,
                     publicKey = publicKey,

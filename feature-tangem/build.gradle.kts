@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.ton.kotlin.contract)
     implementation(libs.ton.kit)
     implementation(libs.tron.kit)
+    implementation(libs.binance.kit)
 
     implementation(libs.androidx.navigation.runtime.ktx)
     debugImplementation(libs.androidx.ui.tooling)
