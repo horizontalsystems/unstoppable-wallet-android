@@ -64,7 +64,11 @@ class TonKitManager(
         get() = tonKitWrapper?.tonKit?.statusInfo()
 
     @Synchronized
-    fun getTonKitWrapper(account: Account): TonKitWrapper {
+    fun getTonKitWrapper(
+        account: Account,
+        blockchainType: BlockchainType?,
+        tokenType: TokenType?
+    ): TonKitWrapper {
         if (this.tonKitWrapper != null && currentAccount != account) {
             stop()
         }
@@ -75,7 +79,7 @@ class TonKitManager(
                 is AccountType.TonAddress,
                 is AccountType.HardwareCard,
                 is AccountType.Mnemonic -> {
-                    createKitInstance(getTonWallet(account), account)
+                    createKitInstance(getTonWallet(account, blockchainType, tokenType), account)
                 }
 
                 else -> throw UnsupportedAccountException()
@@ -96,13 +100,17 @@ class TonKitManager(
             is AccountType.HardwareCard,
             is AccountType.TonAddress,
             is AccountType.Mnemonic -> {
-                createKitInstance(getTonWallet(account), account)
+                createKitInstance(getTonWallet(account, null, null), account)
             }
 
             else -> throw UnsupportedAccountException()
         }
 
-    private fun getTonWallet(account: Account): TonWallet {
+    private fun getTonWallet(
+        account: Account,
+        blockchainType: BlockchainType?,
+        tokenType: TokenType?
+    ): TonWallet {
         return when (val accountType = account.type) {
             is AccountType.TonAddress,
             is AccountType.Mnemonic -> {
@@ -112,11 +120,22 @@ class TonKitManager(
             is AccountType.HardwareCard -> {
                 runBlocking {
                     val hardwarePublicKey =
-                        hardwarePublicKeyStorage.getKey(account.id, BlockchainType.Ton, TokenType.Native)
+                        hardwarePublicKeyStorage.getKey(
+                            accountId = account.id,
+                            blockchainType = blockchainType
+                                ?: throw IllegalArgumentException("Blockchain type is null"),
+                            tokenType = tokenType
+                                ?: throw IllegalArgumentException("Token type is null")
+                        )
                     if (hardwarePublicKey == null || hardwarePublicKey.type != HardwarePublicKeyType.ADDRESS) {
                         throw UnsupportedException("Hardware card does not have a public key for TON")
                     }
-                    TonWallet.FullAccess(TonPrivateKeyEd25519(accountType.cardId, hardwarePublicKey))
+                    TonWallet.FullAccess(
+                        TonPrivateKeyEd25519(
+                            accountType.cardId,
+                            hardwarePublicKey
+                        )
+                    )
                 }
             }
 

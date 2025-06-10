@@ -123,7 +123,11 @@ class AdapterFactory(
     }
 
     private fun getJettonAdapter(wallet: Wallet, address: String): IAdapter {
-        val tonKitWrapper = tonKitManager.getTonKitWrapper(wallet.account)
+        val tonKitWrapper = tonKitManager.getTonKitWrapper(
+            account = wallet.account,
+            blockchainType = wallet.token.blockchainType,
+            tokenType = wallet.token.type
+        )
 
         return JettonAdapter(tonKitWrapper, address, wallet)
     }
@@ -235,7 +239,10 @@ class AdapterFactory(
 
                 BlockchainType.PirateCash -> {
                     val syncMode =
-                        btcBlockchainManager.syncMode(BlockchainType.PirateCash, wallet.account.origin)
+                        btcBlockchainManager.syncMode(
+                            BlockchainType.PirateCash,
+                            wallet.account.origin
+                        )
                     PirateCashAdapter(
                         wallet = wallet,
                         syncMode = syncMode,
@@ -296,7 +303,13 @@ class AdapterFactory(
                 }
 
                 BlockchainType.Ton -> {
-                    TonAdapter(tonKitManager.getTonKitWrapper(wallet.account))
+                    TonAdapter(
+                        tonKitManager.getTonKitWrapper(
+                            account = wallet.account,
+                            blockchainType = wallet.token.blockchainType,
+                            tokenType = wallet.token.type
+                        )
+                    )
                 }
 
                 else -> null
@@ -382,7 +395,11 @@ class AdapterFactory(
     }
 
     fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        val tonKitWrapper = tonKitManager.getTonKitWrapper(source.account)
+        val tonKitWrapper = tonKitManager.getTonKitWrapper(
+            account = source.account,
+            blockchainType = source.blockchain.type,
+            tokenType = TokenType.Native
+        )
         val address = tonKitWrapper.tonKit.receiveAddress
 
         val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
