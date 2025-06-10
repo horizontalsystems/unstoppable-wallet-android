@@ -9,12 +9,15 @@ import cash.p.terminal.tangem.domain.usecase.SignOneHashTransactionUseCase
 import cash.p.terminal.tangem.domain.usecase.TangemBlockchainTypeExistUseCase
 import cash.p.terminal.tangem.domain.usecase.TangemCreatePublicKeyUseCase
 import cash.p.terminal.tangem.domain.usecase.TangemScanUseCase
+import cash.p.terminal.wallet.useCases.ScanToAddUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val featureTangemModule = module {
     factoryOf(::TangemScanUseCase)
+    factoryOf(::TangemScanUseCase) bind ScanToAddUseCase::class
     factoryOf(::TangemBlockchainTypeExistUseCase)
     factoryOf(::TangemCreatePublicKeyUseCase)
     factoryOf(::CollectDerivationsUseCase)

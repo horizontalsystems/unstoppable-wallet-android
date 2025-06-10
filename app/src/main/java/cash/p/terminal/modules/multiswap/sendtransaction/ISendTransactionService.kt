@@ -19,6 +19,7 @@ import io.horizontalsystems.core.entities.CurrencyValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -27,7 +28,7 @@ abstract class ISendTransactionService<T>(protected val token: Token) :
     ServiceState<SendTransactionServiceState>() {
 
     private val walletUseCase: WalletUseCase by inject(WalletUseCase::class.java)
-    protected val wallet: Wallet by lazy { walletUseCase.createWalletIfNotExists(token)!! }
+    protected val wallet: Wallet by lazy { runBlocking { walletUseCase.createWalletIfNotExists(token)!! } }
     protected val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
     protected val adapter = (adapterManager.getAdapterForWallet(wallet) as T)
     protected val rate: CurrencyValue?

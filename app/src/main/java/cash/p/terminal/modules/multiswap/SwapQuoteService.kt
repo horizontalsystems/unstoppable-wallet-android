@@ -46,6 +46,8 @@ class SwapQuoteService {
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
     private var tokenOut: Token? = null
+    val tokenOutTmp: Token?
+        get() = tokenOut
     private var quoting = false
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: IMultiSwapProvider? = null

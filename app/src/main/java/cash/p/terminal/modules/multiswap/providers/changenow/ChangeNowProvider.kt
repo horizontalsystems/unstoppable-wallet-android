@@ -205,6 +205,16 @@ class ChangeNowProvider(
             tokenZCashToCreate != null && walletUseCase.getWallet(tokenZCashToCreate) == null
 
         return if (!tokenInWalletCreated || !tokenOutWalletCreated || needCreateTransparentWallet) {
+            val tokensToAdd = mutableSetOf<Token>()
+            if (!tokenInWalletCreated) {
+                tokensToAdd.add(tokenIn)
+            }
+            if (!tokenOutWalletCreated) {
+                tokensToAdd.add(tokenOut)
+            }
+            if (needCreateTransparentWallet) {
+                tokensToAdd.add(tokenZCashToCreate)
+            }
             ActionCreate(
                 inProgress = false,
                 descriptionResId = if (!needCreateTransparentWallet) {
@@ -212,18 +222,7 @@ class ChangeNowProvider(
                 } else {
                     R.string.swap_create_wallet_description_with_zcash
                 },
-                onActionExecuted = { onActionCompleted ->
-                    if (!tokenInWalletCreated) {
-                        walletUseCase.createWallet(tokenIn)
-                    }
-                    if (!tokenOutWalletCreated) {
-                        walletUseCase.createWallet(tokenOut)
-                    }
-                    if (needCreateTransparentWallet) {
-                        walletUseCase.createWallet(tokenZCashToCreate)
-                    }
-                    onActionCompleted()
-                }
+                tokensToAdd = tokensToAdd
             )
         } else {
             null

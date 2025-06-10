@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +56,7 @@ import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
+import cash.p.terminal.modules.multiswap.action.ActionCreate
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
@@ -91,6 +93,7 @@ import cash.p.terminal.wallet.badge
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.toBigDecimalOrNullExt
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -158,6 +161,9 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
                 }
             }
         },
+        onCreateMissingTokens = { tokens ->
+            viewModel.createMissingTokens(tokens)
+        },
         onActionStarted = {
             viewModel.onActionStarted()
         },
@@ -183,6 +189,7 @@ private fun SwapScreenInner(
     onClickProviderSettings: () -> Unit,
     onTimeout: () -> Unit,
     onClickNext: () -> Unit,
+    onCreateMissingTokens: (Set<Token>) -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
     onBalanceClicked: () -> Unit,
@@ -327,7 +334,11 @@ private fun SwapScreenInner(
                             enabled = !action.inProgress,
                             onClick = {
                                 onActionStarted.invoke()
-                                action.execute(navController, onActionCompleted)
+                                if(action is ActionCreate) {
+                                    onCreateMissingTokens(action.tokensToAdd)
+                                } else {
+                                    action.execute(navController, onActionCompleted)
+                                }
                             }
                         )
                     }

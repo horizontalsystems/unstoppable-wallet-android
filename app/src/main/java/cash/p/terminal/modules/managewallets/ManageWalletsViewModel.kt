@@ -11,6 +11,7 @@ import cash.p.terminal.core.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
+import cash.p.terminal.tangem.domain.TangemConfig
 import cash.p.terminal.tangem.domain.usecase.BuildHardwarePublicKeyUseCase
 import cash.p.terminal.tangem.domain.usecase.TangemBlockchainTypeExistUseCase
 import cash.p.terminal.tangem.domain.usecase.TangemScanUseCase
@@ -45,23 +46,6 @@ class ManageWalletsViewModel(
     private val hardwarePublicKeyStorage: HardwarePublicKeyStorage by inject<HardwarePublicKeyStorage>(
         HardwarePublicKeyStorage::class.java
     )
-
-    /**
-     * List of blockchain types that are excluded from hardware wallet support.
-     * This is used to filter out tokens that cannot be enabled on hardware wallets.
-     */
-    private val excludedBlockChainTypeForHardwareWallet by lazy {
-        setOf(
-            BlockchainType.Zcash,
-            BlockchainType.ECash
-        )
-    }
-
-    private val excludedTokenTypesForHardwareWallet by lazy {
-        setOf(
-            TokenType.Derived(TokenType.Derivation.Bip86) // Taproot derivation is not supported on hardware wallets
-        )
-    }
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
 
@@ -185,7 +169,7 @@ class ManageWalletsViewModel(
         if (!isHardwareCard() || tangemBlockchainTypeExistUseCase(token)) {
             service.enable(token)
         } else {
-            if (isExcludedForHardwareCard(token)) {
+            if (TangemConfig.isExcludedForHardwareCard(token)) {
                 showError(App.instance.getString(R.string.error_hardware_wallet_not_supported))
                 return
             }
@@ -224,9 +208,4 @@ class ManageWalletsViewModel(
     }
 
     private fun isHardwareCard() = accountManager.activeAccount?.type is AccountType.HardwareCard
-
-    private fun isExcludedForHardwareCard(token: Token): Boolean {
-        return token.blockchainType in excludedBlockChainTypeForHardwareWallet ||
-                token.type in excludedTokenTypesForHardwareWallet
-    }
 }

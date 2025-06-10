@@ -5,11 +5,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.wallet.Token
 
+/***
+ * Action to add tokens before action
+ */
 class ActionCreate(
     override val inProgress: Boolean,
     @StringRes val descriptionResId: Int,
-    private val onActionExecuted: (onActionCompleted: () -> Unit) -> Unit
+    val tokensToAdd: Set<Token>,
 ) : ISwapProviderAction {
 
     @Composable
@@ -21,7 +25,5 @@ class ActionCreate(
     @Composable
     override fun getDescription() = stringResource(descriptionResId)
 
-    override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
-        onActionExecuted(onActionCompleted)
-    }
+    override fun execute(navController: NavController, onActionCompleted: () -> Unit) = Unit
 }

@@ -9,6 +9,7 @@ import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.Currency
@@ -43,6 +44,7 @@ class SwapViewModel(
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
     private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
+    private val walletUseCase: WalletUseCase by inject(WalletUseCase::class.java)
 
     init {
         viewModelScope.launch {
@@ -217,6 +219,10 @@ class SwapViewModel(
         HudHelper.vibrate(App.instance)
         balanceHiddenManager.toggleBalanceHidden()
         emitState()
+    }
+
+    fun createMissingTokens(tokens: Set<Token>) = viewModelScope.launch {
+        walletUseCase.createWallets(tokens)
     }
 
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)

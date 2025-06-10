@@ -1,0 +1,38 @@
+package cash.p.terminal.tangem.domain
+
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+
+object TangemConfig {
+    /**
+     * List of blockchain types that are excluded from hardware wallet support.
+     * This is used to filter out tokens that cannot be enabled on hardware wallets.
+     */
+    private val excludedBlockChainTypeForHardwareWallet by lazy {
+        setOf(
+            BlockchainType.Zcash,
+            BlockchainType.ECash
+        )
+    }
+
+    private val excludedTokenTypesForHardwareWallet by lazy {
+        setOf(
+            TokenType.Derived(TokenType.Derivation.Bip86) // Taproot derivation is not supported on hardware wallets
+        )
+    }
+
+    fun isExcludedForHardwareCard(token: Token): Boolean {
+        return isExcludedForHardwareCard(token.blockchainType, token.type)
+    }
+
+    fun isExcludedForHardwareCard(token: TokenQuery): Boolean {
+        return isExcludedForHardwareCard(token.blockchainType, token.tokenType)
+    }
+
+    fun isExcludedForHardwareCard(blockchainType: BlockchainType, tokenType: TokenType): Boolean {
+        return blockchainType in excludedBlockChainTypeForHardwareWallet ||
+                tokenType in excludedTokenTypesForHardwareWallet
+    }
+}
