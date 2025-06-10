@@ -28,6 +28,7 @@ class SwapViewModel(
     private val fiatServiceOut: FiatService,
     private val timerService: TimerService,
     private val networkAvailabilityService: NetworkAvailabilityService,
+    private val defaultTokenService: SwapDefaultTokenService,
     tokenIn: Token?
 ) : ViewModelUiState<SwapUiState>() {
 
@@ -95,12 +96,18 @@ class SwapViewModel(
                 emitState()
             }
         }
+        viewModelScope.launch {
+            defaultTokenService.stateFlow.collect {
+                it.tokenOut?.let { quoteService.setTokenOut(it) }
+            }
+        }
 
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
         networkAvailabilityService.start(viewModelScope)
         tokenIn?.let {
             quoteService.setTokenIn(it)
+            defaultTokenService.setTokenIn(it)
         }
     }
 
@@ -236,6 +243,7 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
+                SwapDefaultTokenService(App.marketKit),
                 tokenIn
             ) as T
         }
