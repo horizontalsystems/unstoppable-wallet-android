@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.ZcashBalanceData
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -160,7 +161,7 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val balanceData: BalanceData
-        get() = BalanceData(balance, pending = balancePending)
+        get() = ZcashBalanceData(balanceAvailable, balancePending, balanceUnshielded )
 
     val statusInfo: Map<String, Any>
         get() {
@@ -174,11 +175,14 @@ class ZcashAdapter(
     private val accountBalance: AccountBalance?
         get() = synchronizer.walletBalances.value?.get(zcashAccount.accountUuid)
 
-    private val balance: BigDecimal
+    private val balanceAvailable: BigDecimal
         get() = accountBalance?.available.convertZatoshiToZec(decimalCount)
 
     private val balancePending: BigDecimal
         get() = accountBalance?.pending.convertZatoshiToZec(decimalCount)
+
+    private val balanceUnshielded: BigDecimal
+        get() = accountBalance?.unshielded.convertZatoshiToZec(decimalCount)
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -236,7 +240,7 @@ class ZcashAdapter(
         "https://blockchair.com/zcash/transaction/$transactionHash"
 
     override val availableBalance: BigDecimal
-        get() = balance
+        get() = balanceAvailable
 
     override val fee: BigDecimal
         get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ZcashBalanceData
 import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.swappable
@@ -42,12 +43,19 @@ data class WarningText(
     val text: TranslatableString
 )
 
-data class LockedValue(
+open class LockedValue(
     val title: TranslatableString,
     val infoTitle: TranslatableString,
     val info: TranslatableString,
     val coinValue: DeemedValue<String>
 )
+
+class ZcashLockedValue(
+    title: TranslatableString,
+    infoTitle: TranslatableString,
+    info: TranslatableString,
+    coinValue: DeemedValue<String>
+) : LockedValue(title, infoTitle, info, coinValue)
 
 @Immutable
 data class BalanceViewItem2(
@@ -87,6 +95,7 @@ class BalanceViewItemFactory {
         BlockchainType.Litecoin,
         BlockchainType.Dash,
         BlockchainType.Zcash -> 10
+
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
@@ -102,6 +111,7 @@ class BalanceViewItemFactory {
         BlockchainType.Tron,
         BlockchainType.Stellar,
         BlockchainType.Ton -> 50
+
         is BlockchainType.Unsupported -> 0
     }
 
@@ -118,6 +128,7 @@ class BalanceViewItemFactory {
                     Translator.getString(R.string.Balance_Syncing)
                 }
             }
+
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
             else -> null
         }
@@ -138,6 +149,7 @@ class BalanceViewItemFactory {
                     null
                 }
             }
+
             is AdapterState.SearchingTxs -> {
                 if (state.count > 0) {
                     Translator.getString(R.string.Balance_FoundTx, state.count.toString())
@@ -145,6 +157,7 @@ class BalanceViewItemFactory {
                     null
                 }
             }
+
             else -> null
         }
 
@@ -270,6 +283,25 @@ class BalanceViewItemFactory {
                         coinValue = it
                     )
                 )
+            }
+
+            if (item.balanceData is ZcashBalanceData) {
+                lockedCoinValue(
+                    state,
+                    item.balanceData.unshielded,
+                    hideBalance,
+                    wallet.decimal,
+                    wallet.token
+                )?.let {
+                    add(
+                        ZcashLockedValue(
+                            title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Title),
+                            infoTitle = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
+                            info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
+                            coinValue = it
+                        )
+                    )
+                }
             }
         }
 

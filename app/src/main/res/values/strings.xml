@@ -405,6 +405,11 @@
     <string name="Balance_Receive_Trustline">Trustline</string>
     <string name="Balance_Reserved_Title">Reserved</string>
 
+    <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparent balance can\'t be used in our wallet for now. But this money can be spend by other wallets with t-address supports</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
+
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
 

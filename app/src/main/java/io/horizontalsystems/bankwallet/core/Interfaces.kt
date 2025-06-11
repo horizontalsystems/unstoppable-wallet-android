@@ -291,7 +291,7 @@ interface IBalanceAdapter {
     fun sendAllowed() = balanceState is AdapterState.Synced
 }
 
-data class BalanceData(
+open class BalanceData(
     val available: BigDecimal,
     val timeLocked: BigDecimal = BigDecimal.ZERO,
     val notRelayed: BigDecimal = BigDecimal.ZERO,
@@ -301,6 +301,8 @@ data class BalanceData(
 ) {
     val total get() = available + timeLocked + notRelayed + pending + minimumBalance
 }
+
+class ZcashBalanceData(available: BigDecimal, pending: BigDecimal, val unshielded: BigDecimal): BalanceData(available, pending = pending)
 
 interface IReceiveAdapter {
     val receiveAddress: String
