@@ -76,7 +76,7 @@ fun HidableContent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
             .clickable(enabled = hideScreenText != null, onClick = {
                 hidden = !hidden
                 onToggleHidden?.invoke()
@@ -209,7 +209,7 @@ fun SeedPhraseList(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },

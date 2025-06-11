@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ProvideTextStyle
@@ -65,6 +64,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaul
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults.buttonColors
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -223,7 +223,7 @@ fun SubscriptionOption(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, borderColor, shape = RoundedCornerShape(12.dp))
+            .border(0.5.dp, borderColor, shape = RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -274,7 +274,7 @@ fun ColumnScope.PlanItems(
             click = { onItemClick(item) }
         )
         if (index < items.size - 1) {
-            Divider(color = ComposeAppTheme.colors.blade)
+            HsDivider()
         }
     }
 }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,6 +50,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
@@ -111,10 +111,7 @@ fun MarketScreen(navController: NavController) {
             Crossfade(uiState.marketGlobal, label = "") {
                 MetricsBoard(navController, it, uiState.currency)
             }
-            Divider(
-                color = ComposeAppTheme.colors.blade,
-                thickness = 1.dp
-            )
+            HsDivider()
             TabsSection(navController, tabs, uiState.selectedTab) { tab ->
                 viewModel.onSelect(tab)
             }
@@ -235,7 +232,7 @@ private fun VDivider() {
     Box(
         Modifier
             .fillMaxHeight()
-            .width(1.dp)
+            .width(0.5.dp)
             .background(color = ComposeAppTheme.colors.blade)
     )
 }

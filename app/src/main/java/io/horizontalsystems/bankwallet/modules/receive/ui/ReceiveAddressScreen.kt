@@ -22,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -84,6 +83,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsTextButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -450,11 +450,7 @@ private fun AdditionalDataSection(
     val localView = LocalView.current
 
     items.forEach { item ->
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade
-        )
+        HsDivider(modifier = Modifier.fillMaxWidth())
         RowUniversal(
             modifier = Modifier.height(48.dp),
         ) {
@@ -606,11 +602,7 @@ fun AmountInputDialog(
                 )
             }
 
-            Divider(
-                modifier = Modifier.padding(horizontal = 24.dp),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.jacob
-            )
+            HsDivider(modifier = Modifier.padding(horizontal = 24.dp))
 
             Row(
                 modifier = Modifier

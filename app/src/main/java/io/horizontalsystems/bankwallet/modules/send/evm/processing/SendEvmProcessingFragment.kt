@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -34,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -139,10 +139,7 @@ private fun SendEvmProcessingScreen(
                             blockchainType = BlockchainType.fromUid("ethereum"),
                             navController = navController
                         )
-                        Divider(
-                            thickness = 1.dp,
-                            color = ComposeAppTheme.colors.blade,
-                        )
+                        HsDivider()
                         TransactionInfoCancelCell(
                             transactionHash = "txhash",
                             blockchainType = BlockchainType.fromUid("ethereum"),
@@ -184,7 +181,7 @@ fun TransactionDataView(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.tyler)
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,

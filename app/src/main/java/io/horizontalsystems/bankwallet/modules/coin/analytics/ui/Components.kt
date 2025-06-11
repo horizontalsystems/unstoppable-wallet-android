@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ChartBars
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
@@ -137,11 +137,7 @@ fun AnalyticsFooterCell(
     onActionClick: (CoinAnalyticsModule.ActionType) -> Unit
 ) {
     if (showTopDivider) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-            modifier = Modifier.fillMaxWidth()
-        )
+        HsDivider(modifier = Modifier.fillMaxWidth())
     }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -280,11 +276,7 @@ fun AnalyticsContainer(
 
     VSpacer(12.dp)
     sectionTitle?.let {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-            modifier = Modifier.fillMaxWidth()
-        )
+        HsDivider(modifier = Modifier.fillMaxWidth())
         RowUniversal(content = it)
     }
     Column(
@@ -293,11 +285,7 @@ fun AnalyticsContainer(
         titleRow?.invoke()
         content.invoke()
         if (showFooterDivider) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.blade,
-                modifier = Modifier.fillMaxWidth()
-            )
+            HsDivider(modifier = Modifier.fillMaxWidth())
         }
         Column(
             content = bottomRows

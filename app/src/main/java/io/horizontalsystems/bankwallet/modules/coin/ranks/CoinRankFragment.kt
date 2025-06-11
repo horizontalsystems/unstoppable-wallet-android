@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,6 +52,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTogg
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -165,10 +165,7 @@ private fun LazyListScope.coinRankList(
     navController: NavController
 ) {
     item {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
     }
     items(items) { item ->
         CoinRankCell(
@@ -241,9 +238,6 @@ private fun CoinRankCell(
             }
             HSpacer(16.dp)
         }
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
     }
 }

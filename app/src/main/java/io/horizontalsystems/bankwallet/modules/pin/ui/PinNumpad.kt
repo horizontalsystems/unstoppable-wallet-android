@@ -137,7 +137,7 @@ private fun NumberKey(
         modifier = Modifier
             .size(72.dp)
             .clip(CircleShape)
-            .border(1.dp, ComposeAppTheme.colors.blade, CircleShape)
+            .border(0.5.dp, ComposeAppTheme.colors.blade, CircleShape)
             .clickable(
                 enabled = enabled,
                 onClick = {

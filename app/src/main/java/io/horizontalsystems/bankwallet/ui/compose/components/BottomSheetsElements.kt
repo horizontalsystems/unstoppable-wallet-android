@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,10 +26,7 @@ fun BottomSheetsElementsButtons(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
         Spacer(modifier = Modifier.height(15.dp))
         ButtonPrimaryYellow(
             modifier = Modifier
@@ -73,10 +69,7 @@ fun BottomSheetsElementsInput(onValueChange: (String) -> Unit) {
 @Composable
 fun BottomSheetsElementsText(text: String) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
 
         subhead2_grey(
             modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
@@ -126,10 +119,7 @@ fun BottomSheetsElementsCheckbox(
     onCheckedChange: (Boolean) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
         Row(
             modifier = Modifier
                 .fillMaxWidth()

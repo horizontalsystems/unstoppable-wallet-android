@@ -259,7 +259,7 @@ private fun NumberInputWithButtons(
             .fillMaxWidth()
             .defaultMinSize(minHeight = 44.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+            .border(0.5.dp, borderColor, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence),
         verticalAlignment = Alignment.CenterVertically
     ) {

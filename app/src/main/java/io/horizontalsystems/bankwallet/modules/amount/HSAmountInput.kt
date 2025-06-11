@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import java.math.BigDecimal
 
@@ -131,7 +131,7 @@ fun HSAmountInput(
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .border(0.5.dp, borderColor, RoundedCornerShape(12.dp))
                 .background(ComposeAppTheme.colors.lawrence),
         ) {
             Row(
@@ -219,10 +219,7 @@ fun HSAmountInput(
                 }
             }
 
-            Divider(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                color = ComposeAppTheme.colors.blade
-            )
+            HsDivider(modifier = Modifier.padding(horizontal = 8.dp))
 
             Row(
                 modifier = Modifier

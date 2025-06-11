@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveAddressViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -86,11 +86,7 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
         onErrorClick = { addressViewModel.onErrorClick() },
         slot1 = {
             if (uiState.usedAddresses.isNotEmpty()) {
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.blade
-                )
+                HsDivider(modifier = Modifier.fillMaxWidth())
                 RowUniversal(
                     modifier = Modifier.height(48.dp),
                     onClick = {

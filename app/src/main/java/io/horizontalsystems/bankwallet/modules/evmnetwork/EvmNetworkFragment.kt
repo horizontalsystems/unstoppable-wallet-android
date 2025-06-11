@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -59,6 +58,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -310,11 +310,7 @@ fun RpcCell(
         contentAlignment = Alignment.Center
     ) {
         if (showDivider) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.blade,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
         }
         Row(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),

@@ -220,7 +220,7 @@ private fun LockedBalanceSection(balanceViewItem: BalanceViewItem, navController
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+                .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
         ) {
             balanceViewItem.lockedValues.forEach { lockedValue ->
                 LockedBalanceCell(
