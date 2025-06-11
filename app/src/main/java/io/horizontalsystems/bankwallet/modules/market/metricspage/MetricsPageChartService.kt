@@ -50,6 +50,9 @@ class MetricsPageChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = metricsType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = metricsType.statPage,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod)
+        )
     }
 }

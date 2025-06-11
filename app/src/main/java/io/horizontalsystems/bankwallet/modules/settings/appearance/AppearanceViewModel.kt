@@ -128,7 +128,10 @@ class AppearanceViewModel(
     fun onEnterAppIcon(enabledAppIcon: AppIcon) {
         appIconService.setAppIcon(enabledAppIcon)
 
-        stat(page = StatPage.Appearance, event = StatEvent.SelectAppIcon(enabledAppIcon.titleText.lowercase()))
+        stat(
+            page = StatPage.Appearance,
+            event = StatEvent.SelectAppIcon(enabledAppIcon.titleText.lowercase())
+        )
     }
 
     fun onEnterTheme(themeType: ThemeType) {
@@ -177,7 +180,10 @@ class AppearanceViewModel(
         this.priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
         emitState()
 
-        stat(page = StatPage.Appearance, event = StatEvent.SwitchPriceChangeMode(priceChangeInterval.statValue))
+        stat(
+            page = StatPage.Appearance,
+            event = StatEvent.SwitchPriceChangeMode(priceChangeInterval.statValue)
+        )
     }
 
 }

@@ -72,7 +72,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             EvmPrivateKeyFragment.Input(key)
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.EvmPrivateKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.EvmPrivateKey)
+                        )
                     }
                 }
             }
@@ -87,7 +90,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             StellarSecretKeyFragment.Input(key)
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.StellarSecretKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.StellarSecretKey)
+                        )
                     }
                 }
             }
@@ -105,7 +111,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             )
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.Bip32RootKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.Bip32RootKey)
+                        )
                     }
                 }
             }
@@ -120,7 +129,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.AccountExtendedPrivateKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.AccountExtendedPrivateKey)
+                        )
                     }
                 }
             }

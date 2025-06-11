@@ -71,7 +71,10 @@ fun CreateAccountAdvancedScreen(
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
 
-            stat(page = StatPage.NewWalletAdvanced, event = StatEvent.CreateWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.NewWalletAdvanced,
+                event = StatEvent.CreateWallet(accountType.statAccountType)
+            )
         }
     }
 

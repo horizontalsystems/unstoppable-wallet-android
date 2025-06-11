@@ -391,7 +391,10 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                         )
                     )
 
-                    stat(page = StatPage.TokenPage, event = StatEvent.OpenSend(viewItem.wallet.token))
+                    stat(
+                        page = StatPage.TokenPage,
+                        event = StatEvent.OpenSend(viewItem.wallet.token)
+                    )
                 },
                 enabled = viewItem.sendEnabled
             )

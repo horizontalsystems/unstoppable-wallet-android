@@ -85,7 +85,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         )
                     )
 
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.AccountExtendedPublicKey))
+                    stat(
+                        page = StatPage.PublicKeys,
+                        event = StatEvent.Open(StatPage.AccountExtendedPublicKey)
+                    )
                 }
             }
         }

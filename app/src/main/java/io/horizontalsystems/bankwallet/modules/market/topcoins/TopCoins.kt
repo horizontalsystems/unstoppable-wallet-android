@@ -60,7 +60,7 @@ fun TopCoins(
         onRefresh = {
             viewModel.refresh()
 
-            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.Refresh)
+            stat(page = StatPage.Markets, event = StatEvent.Refresh, section = StatSection.Coins)
         }
     ) {
         Crossfade(uiState.viewState, label = "") { viewState ->
@@ -87,13 +87,21 @@ fun TopCoins(
                         onAddFavorite = { uid ->
                             viewModel.onAddFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.AddToWatchlist(uid))
+                            stat(
+                                page = StatPage.Markets,
+                                event = StatEvent.AddToWatchlist(uid),
+                                section = StatSection.Coins
+                            )
 
                         },
                         onRemoveFavorite = { uid ->
                             viewModel.onRemoveFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.RemoveFromWatchlist(uid))
+                            stat(
+                                page = StatPage.Markets,
+                                event = StatEvent.RemoveFromWatchlist(uid),
+                                section = StatSection.Coins
+                            )
                         },
                         onCoinClick = onCoinClick,
                         preItems = {
@@ -140,7 +148,11 @@ fun TopCoins(
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                    section = StatSection.Coins
+                )
             },
             onDismiss = {
                 openSortingSelector = false
@@ -155,7 +167,11 @@ fun TopCoins(
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchMarketTop(it.statMarketTop))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchMarketTop(it.statMarketTop),
+                    section = StatSection.Coins
+                )
             },
             onDismiss = {
                 openTopSelector = false
@@ -170,7 +186,11 @@ fun TopCoins(
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Coins
+                )
             },
             onDismiss = {
                 openPeriodSelector = false

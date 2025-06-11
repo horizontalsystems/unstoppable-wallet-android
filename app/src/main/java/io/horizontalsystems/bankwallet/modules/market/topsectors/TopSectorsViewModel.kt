@@ -148,8 +148,8 @@ class TopSectorsViewModel(
 
         stat(
             page = StatPage.Markets,
-            section = StatSection.Pairs,
-            event = StatEvent.Refresh
+            event = StatEvent.Refresh,
+            section = StatSection.Pairs
         )
     }
 

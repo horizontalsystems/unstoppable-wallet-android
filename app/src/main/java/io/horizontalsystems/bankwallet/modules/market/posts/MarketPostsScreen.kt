@@ -40,7 +40,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
         onRefresh = {
             viewModel.refresh()
 
-            stat(page = StatPage.Markets, section = StatSection.News, event = StatEvent.Refresh)
+            stat(page = StatPage.Markets, event = StatEvent.Refresh, section = StatSection.News)
         }
     ) {
         Crossfade(viewState) { viewState ->
@@ -63,7 +63,11 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                             ) {
                                 LinkHelper.openLinkInAppBrowser(context, postItem.url)
 
-                                stat(page = StatPage.Markets, section = StatSection.News, event = StatEvent.Open(StatPage.ExternalNews))
+                                stat(
+                                    page = StatPage.Markets,
+                                    event = StatEvent.Open(StatPage.ExternalNews),
+                                    section = StatSection.News
+                                )
                             }
                         }
                         item {

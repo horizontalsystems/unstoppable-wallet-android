@@ -53,6 +53,9 @@ class TvlChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = StatPage.GlobalMetricsTvlInDefi,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod)
+        )
     }
 }

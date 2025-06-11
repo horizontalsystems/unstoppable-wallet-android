@@ -120,15 +120,19 @@ class MarketFavoritesViewModel(
 
         stat(
             page = StatPage.Markets,
-            section = StatSection.Watchlist,
-            event = StatEvent.ShowSignals(false)
+            event = StatEvent.ShowSignals(false),
+            section = StatSection.Watchlist
         )
     }
 
     fun showSignals() {
         service.showSignals()
 
-        stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(true))
+        stat(
+            page = StatPage.Markets,
+            event = StatEvent.ShowSignals(true),
+            section = StatSection.Watchlist
+        )
     }
 
     fun reorder(from: Int, to: Int) {

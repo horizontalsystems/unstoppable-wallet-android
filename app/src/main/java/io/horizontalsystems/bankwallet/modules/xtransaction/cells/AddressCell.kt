@@ -72,8 +72,8 @@ fun AddressCell(
 
                 stat(
                     page = statPage,
-                    section = statSection,
-                    event = StatEvent.Copy(StatEntity.Address)
+                    event = StatEvent.Copy(StatEntity.Address),
+                    section = statSection
                 )
             }
         )
@@ -94,8 +94,8 @@ fun AddressCell(
                         ContactsModule.AddAddressAction.AddToNewContact -> {
                             stat(
                                 page = statPage,
-                                section = statSection,
-                                event = StatEvent.Open(StatPage.ContactNew)
+                                event = StatEvent.Open(StatPage.ContactNew),
+                                section = statSection
                             )
                             ContactsFragment.Input(
                                 Mode.AddAddressToNewContact(
@@ -108,8 +108,8 @@ fun AddressCell(
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
                             stat(
                                 page = statPage,
-                                section = statSection,
-                                event = StatEvent.Open(StatPage.ContactAddToExisting)
+                                event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                section = statSection
                             )
                             ContactsFragment.Input(
                                 Mode.AddAddressToExistingContact(

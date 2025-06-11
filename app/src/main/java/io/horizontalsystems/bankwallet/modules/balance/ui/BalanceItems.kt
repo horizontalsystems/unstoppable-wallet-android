@@ -273,7 +273,10 @@ fun BalanceItems(
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
 
-                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.SendTokenList))
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.SendTokenList)
+                                )
                             }
                         )
                         HSpacer(8.dp)
@@ -285,7 +288,10 @@ fun BalanceItems(
                                     ReceiveAllowedState.Allowed -> {
                                         navController.slideFromRight(R.id.receiveChooseCoinFragment)
 
-                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ReceiveTokenList))
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
+                                        )
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
@@ -299,7 +305,10 @@ fun BalanceItems(
                                             BackupRequiredDialog.Input(account, text)
                                         )
 
-                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.BackupRequired))
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.BackupRequired)
+                                        )
                                     }
 
                                     null -> Unit
@@ -314,7 +323,10 @@ fun BalanceItems(
                                 onClick = {
                                     navController.slideFromRight(R.id.multiswap)
 
-                                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                                    stat(
+                                        page = StatPage.Balance,
+                                        event = StatEvent.Open(StatPage.Swap)
+                                    )
                                 }
                             )
                         }
@@ -355,7 +367,10 @@ fun BalanceItems(
                         onClick = {
                             navController.slideFromRight(R.id.manageWalletsFragment)
 
-                            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.CoinManager))
+                            stat(
+                                page = StatPage.Balance,
+                                event = StatEvent.Open(StatPage.CoinManager)
+                            )
                         }
                     )
 

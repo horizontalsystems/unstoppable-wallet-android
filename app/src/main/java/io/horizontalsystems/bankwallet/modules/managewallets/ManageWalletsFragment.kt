@@ -107,7 +107,10 @@ private fun ManageWalletsScreen(
                         onClick = {
                             navController.slideFromRight(R.id.addTokenFragment)
 
-                            stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.AddToken))
+                            stat(
+                                page = StatPage.CoinManager,
+                                event = StatEvent.Open(StatPage.AddToken)
+                            )
                         }
                     ))
             } else {
@@ -141,17 +144,26 @@ private fun ManageWalletsScreen(
                                 if (viewItem.enabled) {
                                     viewModel.disable(viewItem.item)
 
-                                    stat(page = StatPage.CoinManager, event = StatEvent.DisableToken(viewItem.item))
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.DisableToken(viewItem.item)
+                                    )
                                 } else {
                                     viewModel.enable(viewItem.item)
 
-                                    stat(page = StatPage.CoinManager, event = StatEvent.EnableToken(viewItem.item))
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.EnableToken(viewItem.item)
+                                    )
                                 }
                             },
                             onInfoClick = {
                                 navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
 
-                                stat(page = StatPage.CoinManager, event = StatEvent.OpenTokenInfo(viewItem.item))
+                                stat(
+                                    page = StatPage.CoinManager,
+                                    event = StatEvent.OpenTokenInfo(viewItem.item)
+                                )
                             }
                         )
                     }

@@ -88,7 +88,10 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                         account
                     )
 
-                    stat(page = StatPage.BackupRequired, event = StatEvent.Open(StatPage.ManualBackup))
+                    stat(
+                        page = StatPage.BackupRequired,
+                        event = StatEvent.Open(StatPage.ManualBackup)
+                    )
                 }
             )
             VSpacer(12.dp)
@@ -102,7 +105,10 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
 
-                    stat(page = StatPage.BackupRequired, event = StatEvent.Open(StatPage.FileBackup))
+                    stat(
+                        page = StatPage.BackupRequired,
+                        event = StatEvent.Open(StatPage.FileBackup)
+                    )
                 }
             )
             VSpacer(12.dp)

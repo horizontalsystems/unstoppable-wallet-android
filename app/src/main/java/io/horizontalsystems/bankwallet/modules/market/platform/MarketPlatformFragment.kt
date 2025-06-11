@@ -230,8 +230,8 @@ private fun PlatformScreen(
                 openPeriodSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Platforms
                 )
             },
             { openPeriodSelector = false }

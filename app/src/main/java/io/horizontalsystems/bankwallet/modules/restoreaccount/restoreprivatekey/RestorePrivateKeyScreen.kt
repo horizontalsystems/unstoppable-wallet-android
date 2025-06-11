@@ -54,7 +54,10 @@ fun RestorePrivateKey(
                                 mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletFromKeyAdvanced)
                                 openSelectCoinsScreen.invoke()
 
-                                stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.RestoreSelect))
+                                stat(
+                                    page = StatPage.ImportWalletFromKeyAdvanced,
+                                    event = StatEvent.Open(StatPage.RestoreSelect)
+                                )
                             }
                         }
                     )
@@ -92,13 +95,22 @@ fun RestorePrivateKey(
                     viewModel.onEnterPrivateKey(it)
                 },
                 onClear = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Clear(StatEntity.Key))
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.Clear(StatEntity.Key)
+                    )
                 },
                 onPaste = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Paste(StatEntity.Key))
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.Paste(StatEntity.Key)
+                    )
                 },
                 onScanQR = {
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.ScanQr(StatEntity.Key))
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.ScanQr(StatEntity.Key)
+                    )
                 })
 
             Spacer(Modifier.height(32.dp))

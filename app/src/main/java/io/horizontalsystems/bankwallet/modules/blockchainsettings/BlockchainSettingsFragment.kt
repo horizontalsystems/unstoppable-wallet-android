@@ -107,19 +107,28 @@ private fun onClick(
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
             navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, item.blockchainItem.blockchain)
 
-            stat(page = StatPage.BlockchainSettings, event = StatEvent.OpenBlockchainSettingsBtc(item.blockchainItem.blockchain.uid))
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsBtc(item.blockchainItem.blockchain.uid)
+            )
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
             navController.slideFromBottom(R.id.evmNetworkFragment, item.blockchainItem.blockchain)
 
-            stat(page = StatPage.BlockchainSettings, event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid))
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
+            )
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
             navController.slideFromBottom(R.id.solanaNetworkFragment)
 
-            stat(page = StatPage.BlockchainSettings, event = StatEvent.Open(StatPage.BlockchainSettingsSolana))
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.Open(StatPage.BlockchainSettingsSolana)
+            )
         }
     }
 }

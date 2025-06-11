@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
 
-fun stat(page: StatPage, section: StatSection? = null, event: StatEvent) {
+fun stat(page: StatPage, event: StatEvent, section: StatSection? = null) {
     App.statsManager.logStat(page, section, event)
 }
 

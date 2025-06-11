@@ -138,8 +138,8 @@ fun TopSectorsScreen(
                 openPeriodSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Platforms
                 )
             },
             { openPeriodSelector = false }
@@ -154,8 +154,8 @@ fun TopSectorsScreen(
                 openSortingSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                    section = StatSection.Platforms
                 )
             },
             { openSortingSelector = false }

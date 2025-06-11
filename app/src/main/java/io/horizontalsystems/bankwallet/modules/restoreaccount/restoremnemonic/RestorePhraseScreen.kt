@@ -280,7 +280,10 @@ fun RestorePhrase(
                                     textState = textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
 
-                                    stat(page = statPage, event = StatEvent.Clear(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.Clear(StatEntity.RecoveryPhrase)
+                                    )
                                 }
                             )
                         } else {
@@ -292,7 +295,10 @@ fun RestorePhrase(
                                         QRScannerActivity.getScanQrIntent(context)
                                     )
 
-                                    stat(page = statPage, event = StatEvent.ScanQr(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.ScanQr(StatEntity.RecoveryPhrase)
+                                    )
                                 }
                             )
 
@@ -312,7 +318,10 @@ fun RestorePhrase(
                                         )
                                     }
 
-                                    stat(page = statPage, event = StatEvent.Paste(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.Paste(StatEntity.RecoveryPhrase)
+                                    )
                                 },
                             )
                         }
