@@ -36,6 +36,10 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.CoinSet
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.MarketCap
@@ -320,6 +324,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     navController.slideFromBottom(R.id.sectorsSelectorFragment)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.Sectors)
+                )
             }
         )
     }
@@ -335,6 +343,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceChange)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.PriceChange)
+                )
             }
         )
         AdvancedSearchDropdown(
@@ -344,6 +356,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(PricePeriod)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.PricePeriod)
+                )
             }
 
         )
@@ -354,6 +370,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(TradingSignals)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.TradingSignal)
+                )
             }
         )
         AdvancedSearchDropdown(
@@ -363,6 +383,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceCloseTo)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.PriceCloseTo)
+                )
             }
         )
     }
@@ -377,6 +401,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBtcOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedBtc)
+                )
             }
         )
         AdvancedSearchSwitch(
@@ -386,6 +414,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedEthOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedEth)
+                )
             }
         )
         AdvancedSearchSwitch(
@@ -395,6 +427,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBnbOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedBnb)
+                )
             }
         )
     }
@@ -410,6 +446,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateSolidCexOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.GoodCexVolume)
+                )
             }
         )
         AdvancedSearchSwitch(
@@ -420,6 +460,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateSolidDexOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.GoodDexVolume)
+                )
             }
         )
         AdvancedSearchSwitch(
@@ -430,6 +474,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateGoodDistributionOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.GoodDistribution)
+                )
             }
         )
         AdvancedSearchSwitch(
@@ -439,6 +487,10 @@ fun AdvancedSearchContent(
                 navController.paidAction(AdvancedSearch) {
                     viewModel.updateListedOnTopExchangesOn(it)
                 }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.ListedOnTopExchanges)
+                )
             }
         )
     }

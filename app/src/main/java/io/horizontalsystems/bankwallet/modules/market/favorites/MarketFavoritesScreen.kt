@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPeriod
@@ -157,6 +158,12 @@ fun MarketFavoritesScreen(
                                                             }
                                                         }
                                                     }
+                                                    stat(
+                                                        page = StatPage.MarketOverview,
+                                                        event = StatEvent.OpenPremium(
+                                                            StatPremiumTrigger.TradingSignal),
+                                                        section = StatSection.Watchlist
+                                                    )
                                                 } else {
                                                     viewModel.hideSignals()
                                                 }

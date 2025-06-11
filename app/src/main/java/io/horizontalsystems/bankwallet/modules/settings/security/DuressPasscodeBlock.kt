@@ -14,6 +14,10 @@ import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.ensurePinSet
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
@@ -67,6 +71,10 @@ fun DuressPasscodeBlock(
                         }
                     }
                 }
+                stat(
+                    page = StatPage.Security,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.DuressMode)
+                )
             }
         )
         if (uiState.duressPinEnabled) {

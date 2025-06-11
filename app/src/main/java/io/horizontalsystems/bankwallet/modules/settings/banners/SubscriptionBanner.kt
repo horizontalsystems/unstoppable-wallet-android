@@ -118,12 +118,7 @@ class SubscriptionBannerViewModel : ViewModelUiState<SubscriptionBannerUiState>(
 
     init {
         viewModelScope.launch {
-            val subscriptions = UserSubscriptionManager.getSubscriptions()
-            val plans = subscriptions.flatMap { subscription ->
-                UserSubscriptionManager.getBasePlans(subscription.id)
-            }
-            hasFreeTrial = plans.any { it.hasFreeTrial }
-
+            hasFreeTrial = UserSubscriptionManager.hasFreeTrial()
             emitState()
         }
     }

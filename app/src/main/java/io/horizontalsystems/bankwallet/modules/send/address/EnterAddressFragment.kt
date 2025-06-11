@@ -43,6 +43,10 @@ import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
@@ -158,6 +162,10 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                             navController.paidAction(AddressBlacklist) {
                                 viewModel.onEnterAddress(uiState.value)
                             }
+                            stat(
+                                page = StatPage.Send,
+                                event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
+                            )
                         } else {
                             checkTypeInfoBottomSheet = checkType
                             coroutineScope.launch {

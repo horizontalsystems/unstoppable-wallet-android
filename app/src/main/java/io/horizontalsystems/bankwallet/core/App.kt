@@ -203,6 +203,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
+        var trialExpired: Boolean = false
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -590,6 +591,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             evmLabelManager.sync()
             contactsRepository.initialize()
+            trialExpired = !UserSubscriptionManager.hasFreeTrial()
         }
 
         coroutineScope.launch {
