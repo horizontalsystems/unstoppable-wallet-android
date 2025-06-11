@@ -355,7 +355,11 @@ fun TransactionInfoStatusCell(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(R.id.statusInfoDialog)
-                stat(page = StatPage.TransactionInfo, section = StatSection.Status, event = StatEvent.Open(StatPage.Info))
+                stat(
+                    page = StatPage.TransactionInfo,
+                    event = StatEvent.Open(StatPage.Info),
+                    section = StatSection.Status
+                )
             }
         ) {
             Image(
@@ -498,7 +502,10 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
                 TextHelper.copyText(transactionHash)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.TransactionId))
+                stat(
+                    page = StatPage.TransactionInfo,
+                    event = StatEvent.Copy(StatEntity.TransactionId)
+                )
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -511,7 +518,10 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
                     type = "text/plain"
                 })
 
-                stat(page = StatPage.TransactionInfo, event = StatEvent.Share(StatEntity.TransactionId))
+                stat(
+                    page = StatPage.TransactionInfo,
+                    event = StatEvent.Share(StatEntity.TransactionId)
+                )
             }
         )
     }
@@ -528,7 +538,10 @@ fun TransactionInfoExplorerCell(
         onClick = {
             LinkHelper.openLinkInAppBrowser(context, url)
 
-            stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.ExternalBlockExplorer))
+            stat(
+                page = StatPage.TransactionInfo,
+                event = StatEvent.Open(StatPage.ExternalBlockExplorer)
+            )
         }
     ) {
         Image(
@@ -568,7 +581,10 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
                     TextHelper.copyText(it)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
-                    stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.RawTransaction))
+                    stat(
+                        page = StatPage.TransactionInfo,
+                        event = StatEvent.Copy(StatEntity.RawTransaction)
+                    )
                 }
             }
         )
@@ -602,7 +618,11 @@ fun TransactionInfoBtcLockCell(
                         TransactionLockTimeInfoFragment.Input(lockTime)
                     )
 
-                    stat(page = StatPage.TransactionInfo, section = StatSection.TimeLock, event = StatEvent.Open(StatPage.Info))
+                    stat(
+                        page = StatPage.TransactionInfo,
+                        event = StatEvent.Open(StatPage.Info),
+                        section = StatSection.TimeLock
+                    )
                 }
             ) {
                 Icon(
@@ -733,7 +753,10 @@ private fun openTransactionOptionsModule(
         is BlockchainType.Unsupported -> Unit
     }
 
-    stat(page = StatPage.TransactionInfo, event = StatEvent.OpenResend(blockchainType.uid, type.statResendType))
+    stat(
+        page = StatPage.TransactionInfo,
+        event = StatEvent.OpenResend(blockchainType.uid, type.statResendType)
+    )
 }
 
 private fun statusTitle(status: TransactionStatus) = when (status) {

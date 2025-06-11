@@ -118,8 +118,8 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
 
                 stat(
                     page = StatPage.MarketSearch,
-                    section = section.statSection,
-                    event = StatEvent.OpenCoin(coin.uid)
+                    event = StatEvent.OpenCoin(coin.uid),
+                    section = section.statSection
                 )
             }
         ) { favorited, coinUid ->

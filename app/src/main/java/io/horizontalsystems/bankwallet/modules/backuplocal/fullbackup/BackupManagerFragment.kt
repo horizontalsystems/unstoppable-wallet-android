@@ -63,14 +63,20 @@ class BackupManagerFragment : BaseComposeFragment() {
                         )
                     )
 
-                    stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ImportFullFromFiles))
+                    stat(
+                        page = StatPage.BackupManager,
+                        event = StatEvent.Open(StatPage.ImportFullFromFiles)
+                    )
                 }
             },
             onCreateBackup = {
                 navController.authorizedAction {
                     navController.slideFromRight(R.id.backupLocalFragment)
 
-                    stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ExportFullToFiles))
+                    stat(
+                        page = StatPage.BackupManager,
+                        event = StatEvent.Open(StatPage.ExportFullToFiles)
+                    )
                 }
             }
         )

@@ -212,7 +212,10 @@ fun EtfPage(
                 viewModel.onSelectTimeDuration(selected)
                 openPeriodSelector = false
 
-                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.GlobalMetricsEtf,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                )
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -227,7 +230,10 @@ fun EtfPage(
                 viewModel.onSelectSortBy(selected)
                 openSortingSelector = false
 
-                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.GlobalMetricsEtf,
+                    event = StatEvent.SwitchSortType(selected.statSortType)
+                )
             },
             onDismiss = {
                 openSortingSelector = false

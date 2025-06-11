@@ -111,8 +111,8 @@ fun TopPairsScreen() {
 
                                             stat(
                                                 page = StatPage.Markets,
-                                                section = StatSection.Pairs,
-                                                event = StatEvent.Open(StatPage.ExternalMarketPair)
+                                                event = StatEvent.Open(StatPage.ExternalMarketPair),
+                                                section = StatSection.Pairs
                                             )
                                         }
                                     }

@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -166,7 +165,10 @@ private fun EvmNetworkScreen(
                         BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectSyncSource(item.syncSource)
 
-                            stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.SwitchEvmSource(blockchain.uid, item.name))
+                            stat(
+                                page = StatPage.BlockchainSettingsEvm,
+                                event = StatEvent.SwitchEvmSource(blockchain.uid, item.name)
+                            )
                         }
                     }
                 }
@@ -178,7 +180,10 @@ private fun EvmNetworkScreen(
                         onClick = { syncSource ->
                             viewModel.onSelectSyncSource(syncSource)
 
-                            stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.SwitchEvmSource(blockchain.uid, "custom"))
+                            stat(
+                                page = StatPage.BlockchainSettingsEvm,
+                                event = StatEvent.SwitchEvmSource(blockchain.uid, "custom")
+                            )
                         },
                         onReveal = { id ->
                             if (revealedCardId != id) {
@@ -192,7 +197,10 @@ private fun EvmNetworkScreen(
                         viewModel.onRemoveCustomRpc(it)
                         HudHelper.showErrorMessage(view, R.string.Hud_Removed)
 
-                        stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.DeleteCustomEvmSource(blockchain.uid))
+                        stat(
+                            page = StatPage.BlockchainSettingsEvm,
+                            event = StatEvent.DeleteCustomEvmSource(blockchain.uid)
+                        )
                     }
                 }
 
@@ -201,7 +209,10 @@ private fun EvmNetworkScreen(
                     AddButton {
                         navController.navigate(AddRpcPage)
 
-                        stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid))
+                        stat(
+                            page = StatPage.BlockchainSettingsEvm,
+                            event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid)
+                        )
                     }
                 }
             }

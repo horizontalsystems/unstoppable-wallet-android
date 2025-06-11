@@ -184,7 +184,10 @@ class WatchAddressViewModel(
             accountCreated = true
             emitState()
 
-            stat(page = StatPage.WatchWallet, event = StatEvent.WatchWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.WatchWallet,
+                event = StatEvent.WatchWallet(accountType.statAccountType)
+            )
         } catch (_: Exception) {
 
         }

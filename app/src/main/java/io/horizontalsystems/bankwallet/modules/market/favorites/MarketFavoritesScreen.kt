@@ -56,7 +56,11 @@ fun MarketFavoritesScreen(
         onRefresh = {
             viewModel.refresh()
 
-            stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.Refresh)
+            stat(
+                page = StatPage.Markets,
+                event = StatEvent.Refresh,
+                section = StatSection.Watchlist
+            )
         }
     ) {
         Crossfade(
@@ -86,13 +90,21 @@ fun MarketFavoritesScreen(
                             onRemoveFavorite = { uid ->
                                 viewModel.removeFromFavorites(uid)
 
-                                stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.RemoveFromWatchlist(uid))
+                                stat(
+                                    page = StatPage.Markets,
+                                    event = StatEvent.RemoveFromWatchlist(uid),
+                                    section = StatSection.Watchlist
+                                )
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
 
-                                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.OpenCoin(coinUid))
+                                stat(
+                                    page = StatPage.Markets,
+                                    event = StatEvent.OpenCoin(coinUid),
+                                    section = StatSection.Watchlist
+                                )
                             },
                             onReorder = { from, to ->
                                 viewModel.reorder(from, to)
@@ -173,7 +185,11 @@ fun MarketFavoritesScreen(
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectSortingField(selected)
 
-                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                    section = StatSection.Watchlist
+                )
             },
             onDismiss = {
                 openSortingSelector = false
@@ -189,7 +205,11 @@ fun MarketFavoritesScreen(
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectPeriod(selected)
 
-                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Watchlist
+                )
             },
             onDismiss = {
                 openPeriodSelector = false

@@ -105,7 +105,10 @@ class CoinOverviewChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = StatPage.CoinOverview, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod)
+        )
     }
 
     private fun getItemsByPeriodType(

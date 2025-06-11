@@ -265,7 +265,10 @@ fun RestorePhraseNonStandard(
                                     textState = textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
 
-                                    stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Clear(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = StatPage.ImportWalletNonStandard,
+                                        event = StatEvent.Clear(StatEntity.RecoveryPhrase)
+                                    )
                                 }
                             )
                         } else {
@@ -277,7 +280,10 @@ fun RestorePhraseNonStandard(
                                         QRScannerActivity.getScanQrIntent(context)
                                     )
 
-                                    stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.ScanQr(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = StatPage.ImportWalletNonStandard,
+                                        event = StatEvent.ScanQr(StatEntity.RecoveryPhrase)
+                                    )
                                 }
                             )
 
@@ -296,7 +302,10 @@ fun RestorePhraseNonStandard(
                                             textInClipboard.length
                                         )
 
-                                        stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Paste(StatEntity.RecoveryPhrase))
+                                        stat(
+                                            page = StatPage.ImportWalletNonStandard,
+                                            event = StatEvent.Paste(StatEntity.RecoveryPhrase)
+                                        )
                                     }
                                 },
                             )
@@ -360,7 +369,10 @@ fun RestorePhraseNonStandard(
         openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
 
-        stat(page = StatPage.ImportWalletNonStandard, event = StatEvent.Open(StatPage.RestoreSelect))
+        stat(
+            page = StatPage.ImportWalletNonStandard,
+            event = StatEvent.Open(StatPage.RestoreSelect)
+        )
     }
 
     if (showCustomKeyboardDialog) {

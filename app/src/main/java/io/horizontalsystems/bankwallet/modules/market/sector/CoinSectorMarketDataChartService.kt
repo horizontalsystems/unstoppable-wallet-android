@@ -40,6 +40,9 @@ class CoinSectorMarketDataChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = StatPage.CoinCategory,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod)
+        )
     }
 }

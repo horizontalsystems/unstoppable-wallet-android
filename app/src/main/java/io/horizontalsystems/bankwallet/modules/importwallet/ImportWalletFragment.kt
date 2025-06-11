@@ -97,7 +97,10 @@ private fun ImportWalletScreen(
                                 )
                             )
 
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromFiles))
+                            stat(
+                                page = StatPage.ImportWallet,
+                                event = StatEvent.Open(StatPage.ImportWalletFromFiles)
+                            )
                         }
                     }
                 } catch (e: Throwable) {
@@ -160,7 +163,10 @@ private fun ImportWalletScreen(
                                 ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
                             )
 
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
+                            stat(
+                                page = StatPage.ImportWallet,
+                                event = StatEvent.Open(StatPage.ImportWalletFromKey)
+                            )
                         }
                     }
                 )

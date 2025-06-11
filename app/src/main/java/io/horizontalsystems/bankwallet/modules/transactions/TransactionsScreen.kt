@@ -94,7 +94,10 @@ fun TransactionsScreen(
                         onClick = {
                             navController.slideFromRight(R.id.transactionFilterFragment)
 
-                            stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionFilter))
+                            stat(
+                                page = StatPage.Transactions,
+                                event = StatEvent.Open(StatPage.TransactionFilter)
+                            )
                         },
                     )
                 )

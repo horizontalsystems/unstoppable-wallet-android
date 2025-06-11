@@ -141,13 +141,25 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                     blockchainType = item.blockchainType,
                     navController = navController,
                     onCopy = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Copy(StatEntity.Address))
+                        stat(
+                            page = statPage,
+                            event = StatEvent.Copy(StatEntity.Address),
+                            section = item.statSection
+                        )
                     },
                     onAddToExisting = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                        stat(
+                            page = statPage,
+                            event = StatEvent.Open(StatPage.ContactAddToExisting),
+                            section = item.statSection
+                        )
                     },
                     onAddToNew = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                        stat(
+                            page = statPage,
+                            event = StatEvent.Open(StatPage.ContactNew),
+                            section = item.statSection
+                        )
                     }
                 )
             }

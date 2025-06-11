@@ -72,7 +72,11 @@ fun TopPlatforms(
             onRefresh = {
                 viewModel.refresh()
 
-                stat(page = StatPage.Markets, section = StatSection.Platforms, event = StatEvent.Refresh)
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.Refresh,
+                    section = StatSection.Platforms
+                )
             }
         ) {
             Crossfade(uiState.viewState, label = "") { state ->
@@ -102,8 +106,8 @@ fun TopPlatforms(
 
                                     stat(
                                         page = StatPage.Markets,
-                                        section = StatSection.Platforms,
-                                        event = StatEvent.OpenPlatform(it.uid)
+                                        event = StatEvent.OpenPlatform(it.uid),
+                                        section = StatSection.Platforms
                                     )
                                 },
                                 preItems = {
@@ -144,8 +148,8 @@ fun TopPlatforms(
                 openPeriodSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Platforms
                 )
             },
             { openPeriodSelector = false }
@@ -160,8 +164,8 @@ fun TopPlatforms(
                 openSortingSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                    section = StatSection.Platforms
                 )
             },
             { openSortingSelector = false }

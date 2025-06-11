@@ -322,5 +322,5 @@ private fun onCoinClick(coinUid: String, navController: NavController) {
 
     navController.slideFromRight(R.id.coinFragment, arguments)
 
-    stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.OpenCoin(coinUid))
+    stat(page = StatPage.Markets, event = StatEvent.OpenCoin(coinUid), section = StatSection.Coins)
 }

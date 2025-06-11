@@ -71,7 +71,10 @@ private fun RestoreAccountNavHost(
                 openNonStandardRestore = {
                     navController.navigate("restore_phrase_nonstandard")
 
-                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.ImportWalletNonStandard))
+                    stat(
+                        page = StatPage.ImportWalletFromKeyAdvanced,
+                        event = StatEvent.Open(StatPage.ImportWalletNonStandard)
+                    )
                 },
                 onBackClick = { navController.popBackStack() }
             )
