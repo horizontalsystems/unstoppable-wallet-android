@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
@@ -120,6 +121,10 @@ private fun SettingSections(
                 SubscriptionBanner(
                     onClick = {
                         navController.slideFromBottom(R.id.buySubscriptionFragment)
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
+                        )
                     }
                 )
             }
@@ -330,6 +335,10 @@ private fun SettingSections(
                     navController.paidAction(VIPSupport) {
                         openVipSupport.invoke()
                     }
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.OpenPremium(StatPremiumTrigger.VipSupport)
+                    )
                 }
             )
             Divider(
@@ -344,6 +353,10 @@ private fun SettingSections(
                     navController.paidAction(AddressBlacklist) {
                         navController.slideFromRight(R.id.addressCheckerFragment)
                     }
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
+                    )
                 }
             )
         }

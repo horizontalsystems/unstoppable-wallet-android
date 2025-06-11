@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -164,6 +165,11 @@ private fun SearchResultsScreen(
                                                             }
                                                         }
                                                     }
+                                                    stat(
+                                                        page = StatPage.AdvancedSearchResults,
+                                                        event = StatEvent.OpenPremium(
+                                                            StatPremiumTrigger.TradingSignal)
+                                                    )
                                                 } else {
                                                     viewModel.hideSignals()
                                                 }
