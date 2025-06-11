@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -59,6 +58,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -254,7 +254,7 @@ fun SecurityCheckCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         backgroundColor = ComposeAppTheme.colors.tyler,
-        border = BorderStroke(1.dp, ComposeAppTheme.colors.blade),
+        border = BorderStroke(0.5.dp, ComposeAppTheme.colors.blade),
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp
     ) {
@@ -303,11 +303,7 @@ fun SecurityCheckCard(
                 )
             }
 
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                color = ComposeAppTheme.colors.blade,
-                thickness = 1.dp
-            )
+            HsDivider(modifier = Modifier.fillMaxWidth())
 
             results()
         }

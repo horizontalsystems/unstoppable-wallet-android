@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -62,6 +61,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -332,10 +332,7 @@ private fun SettingSections(
                     }
                 }
             )
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.blade,
-            )
+            HsDivider()
             HsSettingCell(
                 title = R.string.SettingsAddressChecker_Title,
                 icon = R.drawable.ic_radar_24,
@@ -528,13 +525,11 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
                 appVersion
             ).uppercase()
         )
-        Divider(
+        HsDivider(
             modifier = Modifier
                 .width(100.dp)
-                .padding(top = 8.dp, bottom = 4.5.dp),
-            thickness = 0.5.dp,
-            color = ComposeAppTheme.colors.blade
-        )
+                .padding(top = 8.dp, bottom = 4.5.dp)
+            )
         Text(
             text = stringResource(R.string.Settings_InfoSubtitle),
             style = ComposeAppTheme.typography.micro,

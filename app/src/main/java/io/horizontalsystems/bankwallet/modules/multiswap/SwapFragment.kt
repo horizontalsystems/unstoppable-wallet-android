@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -84,6 +83,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -596,11 +596,7 @@ private fun SwapInput(
                 onClickCoin = onClickCoinTo
             )
         }
-        Divider(
-            modifier = Modifier.align(Alignment.Center),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade
-        )
+        HsDivider(modifier = Modifier.align(Alignment.Center))
         ButtonSecondaryCircle(
             modifier = Modifier.align(Alignment.Center),
             icon = R.drawable.ic_arrow_down_20,

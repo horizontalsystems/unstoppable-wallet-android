@@ -37,7 +37,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -144,11 +143,7 @@ fun CoinListSlidable(
                         )
                     }
                 )
-                Divider(
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.blade,
-                    modifier = Modifier.align(Alignment.BottomCenter)
-                )
+                HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
             }
         }
         item {
@@ -233,10 +228,7 @@ fun CoinList(
                     }
                 }
             }
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.blade,
-            )
+            HsDivider()
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))

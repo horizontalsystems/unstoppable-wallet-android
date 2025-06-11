@@ -385,7 +385,7 @@ private fun BirthdayHeightInput(
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
             .height(44.dp)
             .padding(horizontal = 16.dp),

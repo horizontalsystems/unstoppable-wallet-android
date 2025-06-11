@@ -28,11 +28,7 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
             .background(ComposeAppTheme.colors.tyler)
             .height(44.dp)
     ) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
+        HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
 
         TabRow(
             modifier = Modifier
@@ -85,11 +81,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
             .background(ComposeAppTheme.colors.tyler)
             .height(44.dp)
     ) {
-        Divider(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
 
         ScrollableTabRow(
             selectedTabIndex = selectedIndex,

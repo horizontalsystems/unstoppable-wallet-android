@@ -44,7 +44,7 @@ fun <T> CardTabs(
                 val lastElement = index == tabItems.lastIndex
 
                 val border = if (selected) {
-                    Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
+                    Modifier.border(0.5.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
                 } else {
                     Modifier
                 }

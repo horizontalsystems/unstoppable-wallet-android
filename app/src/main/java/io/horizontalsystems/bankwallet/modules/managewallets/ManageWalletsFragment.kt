@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -129,10 +129,7 @@ private fun ManageWalletsScreen(
                 LazyColumn {
                     item {
                         Spacer(modifier = Modifier.height(12.dp))
-                        Divider(
-                            thickness = 1.dp,
-                            color = ComposeAppTheme.colors.blade,
-                        )
+                        HsDivider()
                     }
                     items(it) { viewItem ->
                         CoinCell(
@@ -237,10 +234,7 @@ private fun CoinCell(
                 onCheckedChange = { onItemClick.invoke() },
             )
         }
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
     }
 }
 

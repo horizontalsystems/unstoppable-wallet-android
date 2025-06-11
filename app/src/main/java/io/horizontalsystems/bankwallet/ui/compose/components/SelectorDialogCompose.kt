@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -63,7 +62,7 @@ fun <T> SelectorDialogCompose(
                             }
                         )
                 ) {
-                    Divider(thickness = 1.dp, color = ComposeAppTheme.colors.blade)
+                    HsDivider()
                     val color = if (item.selected) {
                         ComposeAppTheme.colors.jacob
                     } else {

@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +34,7 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -87,10 +87,7 @@ fun AddressCheckTokenSelectorScreen(
                 )
             }
             if (uiState.tokens.isNotEmpty()) {
-                Divider(
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.blade,
-                )
+                HsDivider()
             }
             VSpacer(32.dp)
         }
@@ -105,10 +102,7 @@ private fun TokenCell(
     val imageSource =
         ImageSource.Remote(token.blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32)
     Column {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.blade,
-        )
+        HsDivider()
         RowUniversal(
             onClick = { onItemClick.invoke(token) },
             modifier = Modifier.padding(horizontal = 16.dp),
