@@ -177,7 +177,7 @@ private fun MainScreen(
                     }
                     HsBottomNavigation(
                         backgroundColor = ComposeAppTheme.colors.blade,
-                        elevation = 10.dp
+                        elevation = 0.dp
                     ) {
                         uiState.mainNavItems.forEach { item ->
                             HsBottomNavigationItem(
