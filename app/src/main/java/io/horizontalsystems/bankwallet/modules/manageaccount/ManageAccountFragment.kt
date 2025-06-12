@@ -88,7 +88,8 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageAccount_Save),
                     onClick = { viewModel.onSave() },
-                    enabled = viewModel.viewState.canSave
+                    enabled = viewModel.viewState.canSave,
+                    tint = ComposeAppTheme.colors.jacob
                 )
             )
         )

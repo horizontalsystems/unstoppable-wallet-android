@@ -84,7 +84,8 @@ private fun SwapSelectProviderScreenInner(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Done),
-                        onClick = onClickClose
+                        onClick = onClickClose,
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 ),
             )

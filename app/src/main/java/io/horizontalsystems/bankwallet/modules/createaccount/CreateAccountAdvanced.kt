@@ -103,6 +103,7 @@ fun CreateAccountAdvancedScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Create),
                         onClick = { viewModel.createAccount() },
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 )
             )

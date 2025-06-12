@@ -56,7 +56,8 @@ fun RestorePrivateKey(
 
                                 stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.RestoreSelect))
                             }
-                        }
+                        },
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 )
             )

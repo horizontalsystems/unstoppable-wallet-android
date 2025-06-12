@@ -101,7 +101,8 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.Button_Done),
                                 onClick = viewModel::onClickWatch,
-                                enabled = submitType.enabled
+                                enabled = submitType.enabled,
+                                tint = ComposeAppTheme.colors.jacob
                             )
                         )
                     }

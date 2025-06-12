@@ -292,7 +292,8 @@ fun SendEvmFeeSettingsScreen(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Reset),
                     enabled = !viewModel.isRecommendedSettingsSelected,
-                    onClick = { viewModel.onClickReset() }
+                    onClick = { viewModel.onClickReset() },
+                    tint = ComposeAppTheme.colors.jacob
                 )
             )
         )
