@@ -424,4 +424,7 @@
     <fragment
         android:id="@+id/addressCheckFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckFragment"/>
+    <fragment
+        android:id="@+id/roiSelectCoinsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.roi.RoiSelectCoinsFragment"/>
 </navigation>

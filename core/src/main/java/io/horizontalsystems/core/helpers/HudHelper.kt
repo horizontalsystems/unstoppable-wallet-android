@@ -108,6 +108,23 @@ object HudHelper {
 
     fun showWarningMessage(
         contentView: View,
+        text: String,
+        duration: SnackbarDuration = SnackbarDuration.SHORT,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM
+    ): CustomSnackbar? {
+        return showHudNotification(
+            contentView = contentView,
+            text = text,
+            backgroundColor = R.color.grey,
+            duration = duration,
+            gravity = gravity,
+            icon = R.drawable.ic_attention_24,
+            iconTint = R.color.jacob
+        )
+    }
+
+    fun showWarningMessage(
+        contentView: View,
         resId: Int,
         duration: SnackbarDuration = SnackbarDuration.SHORT,
         gravity: SnackbarGravity = SnackbarGravity.BOTTOM

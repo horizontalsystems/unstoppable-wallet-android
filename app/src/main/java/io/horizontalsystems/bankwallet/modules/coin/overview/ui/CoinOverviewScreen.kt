@@ -53,10 +53,12 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -202,8 +204,12 @@ fun CoinOverviewScreen(
                                 }
 
                                 if (overview.roi.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    CellSingleLineClear(borderTop = true) {
+                                        body_leah(text = stringResource(R.string.CoinPage_ROI_Title, viewModel.fullCoin.coin.code))
+                                    }
                                     Spacer(modifier = Modifier.height(12.dp))
-                                    Roi(overview.roi)
+                                    Roi(overview.roi, navController)
                                 }
 
                                 viewModel.tokenVariants?.let { tokenVariants ->

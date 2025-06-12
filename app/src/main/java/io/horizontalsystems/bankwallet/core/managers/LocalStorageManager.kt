@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
+import io.horizontalsystems.bankwallet.modules.roi.PerformanceCoin
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
@@ -207,6 +208,17 @@ class LocalStorageManager(
         set(value) {
             val versionsString = gson.toJson(value)
             preferences.edit().putString(APP_VERSIONS, versionsString).apply()
+        }
+
+    override var roiPerformanceCoins: List<PerformanceCoin>
+        get() {
+            val jsonStr = preferences.getString("roiPerformanceCoins", null) ?: return listOf()
+            val type = object : TypeToken<ArrayList<PerformanceCoin>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit().putString("roiPerformanceCoins", jsonStr).apply()
         }
 
     override var isAlertNotificationOn: Boolean
