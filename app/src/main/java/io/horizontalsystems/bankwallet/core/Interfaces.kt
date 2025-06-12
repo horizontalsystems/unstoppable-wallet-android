@@ -380,7 +380,7 @@ interface ISendZcashAdapter {
     val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long
+    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger)
 }
 
 interface IAdapter {

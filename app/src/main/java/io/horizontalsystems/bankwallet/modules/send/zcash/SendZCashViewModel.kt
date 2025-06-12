@@ -151,7 +151,7 @@ class SendZCashViewModel(
         try {
             sendResult = SendResult.Sending
 
-            val send = adapter.send(
+            adapter.send(
                 amountState.amount!!,
                 addressState.address!!.hex,
                 memoState.memo,

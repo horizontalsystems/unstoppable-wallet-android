@@ -52,7 +52,6 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -277,7 +276,12 @@ class ZcashAdapter(
         memo = ""
     )
 
-    private suspend fun sendProposal(
+    override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger) {
+        logger.info("call sendTransferProposal")
+        sendTransferProposal(amount, address, memo)
+    }
+
+    private suspend fun transferProposal(
         amount: BigDecimal,
         address: String,
         memo: String
@@ -320,16 +324,16 @@ class ZcashAdapter(
         }
     }
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long {
-        TODO()
-//        val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, zcashAccount)
-//        logger.info("call synchronizer.sendToAddress")
-//        synchronizer.proposeTransfer(zcashAccount, address, amount.convertZecToZatoshi(), memo)
-//        return synchronizer.sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
+    private suspend fun sendTransferProposal(
+        amount: BigDecimal,
+        address: String,
+        memo: String
+    ) {
+        val transferProposal = transferProposal(amount, address, memo)
+        send(transferProposal)
     }
 
     // Subscribe to a synchronizer on its own scope and begin responding to events
-    @OptIn(FlowPreview::class)
     private fun subscribe(synchronizer: SdkSynchronizer) {
         // Note: If any of these callback functions directly touch the UI, then the scope used here
         //       should not live longer than that UI or else the context and view tree will be
