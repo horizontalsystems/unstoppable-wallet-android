@@ -29,7 +29,7 @@ class ZcashTransactionsProvider(
         synchronizer.coroutineScope.launch {
             mutex.withLock {
                 val newTransactions = transactionOverviews.filter { tx ->
-                    transactions.none { it.transactionHash.contentEquals(tx.txId.value.byteArray) }
+                    transactions.none { it.transactionHash.contentEquals(tx.txId.value.byteArray) && it.minedHeight == tx.minedHeight?.value }
                 }
 
                 if (newTransactions.isNotEmpty()) {
@@ -45,7 +45,9 @@ class ZcashTransactionsProvider(
                         ZcashTransaction(accountUuid, it, recipients, memo)
                     }
                     newTransactionsSubject.onNext(newZcashTransactions)
-                    transactions = (transactions + newZcashTransactions).sortedDescending()
+                    val notUpdatedTransactions =
+                        transactions.filter { old -> newZcashTransactions.none { new -> new.transactionHash.contentEquals(old.transactionHash) } }
+                    transactions = (notUpdatedTransactions + newZcashTransactions).sortedDescending()
                 }
             }
         }

@@ -9,6 +9,7 @@ import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
 import cash.z.ecc.android.sdk.ext.ZcashSdk
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
+import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
 import cash.z.ecc.android.sdk.ext.fromHex
 import cash.z.ecc.android.sdk.model.Account
 import cash.z.ecc.android.sdk.model.AccountBalance
@@ -16,14 +17,17 @@ import cash.z.ecc.android.sdk.model.AccountCreateSetup
 import cash.z.ecc.android.sdk.model.BlockHeight
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
+import cash.z.ecc.android.sdk.model.Proposal
+import cash.z.ecc.android.sdk.model.TransactionSubmitResult
 import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.ZcashNetwork
+import cash.z.ecc.android.sdk.model.Zip32AccountIndex
+import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -50,6 +54,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import java.util.regex.Pattern
@@ -81,6 +86,8 @@ class ZcashAdapter(
     private val seed = accountType.seed
 
     private val zcashAccount: Account
+
+    private val minimalShieldThreshold: BigDecimal = BigDecimal("0.0004") // minimal transparent balance to shielding
 
     override val receiveAddress: String
 
@@ -160,8 +167,8 @@ class ZcashAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val balanceData: BalanceData
-        get() = ZcashBalanceData(balanceAvailable, balancePending, balanceUnshielded )
+    override val balanceData: ZcashBalanceData
+        get() = ZcashBalanceData(balanceAvailable, balancePending, balanceUnshielded)
 
     val statusInfo: Map<String, Any>
         get() {
@@ -253,6 +260,63 @@ class ZcashAdapter(
             is AddressType.Shielded -> ZCashAddressType.Shielded
             is AddressType.Tex -> ZCashAddressType.Shielded
             AddressType.Unified -> ZCashAddressType.Unified
+        }
+    }
+
+    suspend fun sendShieldProposal() {
+        val shieldProposal = shieldProposal() ?: throw IllegalStateException("Couldn't create shield proposal")
+        send(shieldProposal)
+    }
+
+    suspend fun shieldTransactionFee(): BigDecimal? =
+        shieldProposal()?.totalFeeRequired()?.convertZatoshiToZec()
+
+    private suspend fun shieldProposal(): Proposal? = synchronizer.proposeShielding(
+        account = zcashAccount,
+        shieldingThreshold = minimalShieldThreshold.convertZecToZatoshi(),
+        memo = ""
+    )
+
+    private suspend fun sendProposal(
+        amount: BigDecimal,
+        address: String,
+        memo: String
+    ) = synchronizer.proposeTransfer(
+        account = zcashAccount,
+        recipient = address,
+        amount = amount.convertZecToZatoshi(),
+        memo = memo
+    )
+
+    private suspend fun send(proposal: Proposal) {
+        val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
+
+        try {
+            val results = synchronizer.createProposedTransactions(proposal, spendingKey).toList()
+            results.forEach { result ->
+                when (result) {
+                    is TransactionSubmitResult.Success -> {}
+
+                    is TransactionSubmitResult.Failure -> {
+                        val errorMsg = buildString {
+                            append("Transaction submission failed. ")
+                            append("TxId: ${result.txIdString()}, ")
+                            append("gRPC error: ${result.grpcError}, ")
+                            append("Code: ${result.code}, ")
+                            append("Description: ${result.description ?: "None"}")
+                        }
+                        throw IllegalStateException(errorMsg)
+                    }
+
+                    is TransactionSubmitResult.NotAttempted -> {
+                        throw IllegalStateException("Transaction not attempted. TxId: ${result.txIdString()}")
+                    }
+                }
+            }
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Invalid proposal: ${e.message}", e)
+        } catch (e: Exception) {
+            throw RuntimeException("Unexpected error while sending Zcash: ${e.message}", e)
         }
     }
 
