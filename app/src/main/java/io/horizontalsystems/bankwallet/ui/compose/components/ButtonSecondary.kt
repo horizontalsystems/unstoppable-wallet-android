@@ -115,7 +115,7 @@ fun ButtonSecondaryWithIcon(
                     modifier = Modifier.padding(start = 2.dp),
                     painter = iconRight,
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.andy
+                    tint = ComposeAppTheme.colors.leah
                 )
             }
         },
