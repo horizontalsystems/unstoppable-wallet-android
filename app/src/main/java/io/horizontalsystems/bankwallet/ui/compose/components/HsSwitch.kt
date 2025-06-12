@@ -7,7 +7,9 @@ import androidx.compose.material.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import io.horizontalsystems.bankwallet.ui.compose.Bright
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Orange
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -23,12 +25,12 @@ fun HsSwitch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = ComposeAppTheme.colors.white,
-                uncheckedThumbColor = ComposeAppTheme.colors.blade,
-                checkedTrackColor = ComposeAppTheme.colors.yellowD,
-                uncheckedTrackColor = ComposeAppTheme.colors.elenaD,
+                checkedThumbColor = Bright,
+                uncheckedThumbColor = Bright,
+                checkedTrackColor = Orange,
+                uncheckedTrackColor = ComposeAppTheme.colors.andy,
                 checkedTrackAlpha = 1f,
-                uncheckedTrackAlpha = 0.2f,
+                uncheckedTrackAlpha = 1f,
             ),
             enabled = enabled
         )
