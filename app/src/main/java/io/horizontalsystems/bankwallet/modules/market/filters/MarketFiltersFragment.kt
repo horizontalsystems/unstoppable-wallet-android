@@ -106,7 +106,8 @@ private fun AdvancedSearchScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Reset),
-                        onClick = { viewModel.reset() }
+                        onClick = { viewModel.reset() },
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 ),
             )

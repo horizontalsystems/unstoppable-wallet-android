@@ -233,6 +233,7 @@ fun SendBtcFeeSettingsScreen(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Reset),
                     enabled = uiState.resetEnabled,
+                    tint = ComposeAppTheme.colors.jacob,
                     onClick = {
                         viewModel.reset()
                     }

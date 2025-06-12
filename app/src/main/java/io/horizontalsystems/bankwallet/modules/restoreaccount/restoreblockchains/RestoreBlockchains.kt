@@ -164,7 +164,8 @@ fun ManageWalletsScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Restore),
                             onClick = { viewModel.onRestore() },
-                            enabled = doneButtonEnabled
+                            enabled = doneButtonEnabled,
+                            tint = ComposeAppTheme.colors.jacob
                         )
                     ),
                 )

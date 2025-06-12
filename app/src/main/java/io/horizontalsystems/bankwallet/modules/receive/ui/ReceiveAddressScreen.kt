@@ -153,7 +153,8 @@ fun ReceiveAddressScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Done),
-                        onClick = closeModule
+                        onClick = closeModule,
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 )
             )

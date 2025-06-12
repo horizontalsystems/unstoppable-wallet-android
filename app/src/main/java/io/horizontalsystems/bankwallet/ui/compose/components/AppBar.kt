@@ -129,7 +129,7 @@ fun AppBar(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
                         .size(24.dp),
-                    color = ComposeAppTheme.colors.jacob,
+                    color = ComposeAppTheme.colors.grey,
                     strokeWidth = 2.dp
                 )
             }
@@ -157,7 +157,7 @@ fun AppBar(
                                     modifier = Modifier
                                         .size(16.dp)
                                         .scale(scaleX = -1f, scaleY = 1f),
-                                    color = ComposeAppTheme.colors.jacob,
+                                    color = ComposeAppTheme.colors.grey,
                                     strokeWidth = 1.5.dp
                                 )
                             }

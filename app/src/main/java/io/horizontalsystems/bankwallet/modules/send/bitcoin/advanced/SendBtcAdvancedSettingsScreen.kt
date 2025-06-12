@@ -114,7 +114,8 @@ fun SendBtcAdvancedSettingsScreen(
                                 onClick = {
                                     sendBitcoinViewModel.reset()
                                     viewModel.reset()
-                                }
+                                },
+                                tint = ComposeAppTheme.colors.jacob
                             )
                         )
                     )

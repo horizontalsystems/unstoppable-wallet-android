@@ -127,7 +127,8 @@ private fun AddTokenScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Add),
                         onClick = viewModel::onAddClick,
-                        enabled = uiState.addButtonEnabled
+                        enabled = uiState.addButtonEnabled,
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 )
             )

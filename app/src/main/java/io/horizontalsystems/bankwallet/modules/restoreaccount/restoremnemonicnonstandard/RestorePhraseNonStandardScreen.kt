@@ -148,7 +148,8 @@ fun RestorePhraseNonStandard(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Next),
-                        onClick = viewModel::onProceed
+                        onClick = viewModel::onProceed,
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 )
             )

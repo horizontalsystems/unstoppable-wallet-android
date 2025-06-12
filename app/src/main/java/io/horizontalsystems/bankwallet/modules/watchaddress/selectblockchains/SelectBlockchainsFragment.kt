@@ -111,7 +111,8 @@ private fun SelectBlockchainsScreen(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Done),
                     onClick = viewModel::onClickWatch,
-                    enabled = submitEnabled
+                    enabled = submitEnabled,
+                    tint = ComposeAppTheme.colors.jacob
                 )
             ),
         )

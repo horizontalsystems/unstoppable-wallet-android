@@ -117,7 +117,8 @@ private fun CreateAccountIntroScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = viewModel::createAccount
+                        onClick = viewModel::createAccount,
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 ),
                 navigationIcon = {
