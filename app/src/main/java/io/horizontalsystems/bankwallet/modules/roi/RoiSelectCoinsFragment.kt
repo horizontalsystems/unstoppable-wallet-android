@@ -1,0 +1,134 @@
+package io.horizontalsystems.bankwallet.modules.roi
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.core.helpers.HudHelper
+
+class RoiSelectCoinsFragment  : BaseComposeFragment() {
+    @Composable
+    override fun GetContent(navController: NavController) {
+        RoiSelectCoinsScreen(navController)
+    }
+
+}
+
+@Composable
+fun RoiSelectCoinsScreen(navController: NavController) {
+    val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
+
+    val uiState = viewModel.uiState
+
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.ROI_SelectCoin_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Search),
+                        icon = R.drawable.icon_search,
+                        onClick = {
+                        },
+                    )
+                )
+            )
+        },
+        bottomBar = {
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Button_Apply),
+                    enabled = uiState.isSaveable,
+                    onClick = {
+                        viewModel.onApply()
+                        navController.popBackStack()
+                    }
+                )
+            }
+        },
+        backgroundColor = ComposeAppTheme.colors.tyler,
+    ) {
+        Column(
+            modifier = Modifier.padding(it),
+        ) {
+            VSpacer(12.dp)
+            SectionUniversalLawrence {
+                uiState.periods.forEachIndexed { i, period ->
+                    CellUniversal(borderTop = i != 0) {
+                        body_leah(text = "Period ${i + 1}")
+                    }
+                }
+            }
+
+            VSpacer(24.dp)
+            CellUniversal {
+                body_leah(text = stringResource(R.string.ROI_SelectCoin_SelectAssets))
+                HFillSpacer(minWidth = 8.dp)
+                body_leah(text = "${uiState.selectedCoins.size}/3")
+            }
+
+            LazyColumn {
+                items(uiState.items) { item ->
+                    val checked = uiState.selectedCoins.contains(item.performanceCoin)
+                    val view = LocalView.current
+                    val onClick = {
+                        try {
+                            viewModel.onToggle(item, !checked)
+                        } catch (e: Throwable) {
+                            HudHelper.showWarningMessage(
+                                view,
+                                text = e.message ?: e.javaClass.simpleName
+                            )
+                        }
+                    }
+                    CellUniversal(
+                        onClick = { onClick.invoke() }
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            body_leah(text = item.code)
+                            VSpacer(1.dp)
+                            subhead1_grey(text = item.name)
+                        }
+                        HsCheckbox(
+                            checked = checked,
+                            onCheckedChange = { onClick.invoke() }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

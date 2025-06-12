@@ -36,7 +36,6 @@ data class MarketTickerViewItem(
 
 sealed class RoiViewItem {
     class HeaderRowViewItem(
-        val title: String,
         val periods: List<HsTimePeriod>,
     ) : RoiViewItem()
 
@@ -88,11 +87,11 @@ class CoinViewFactory(
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()
-        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods))
+        rows.add(RoiViewItem.HeaderRowViewItem(timePeriods))
         performance.forEach { (vsCurrency, performanceVsCurrency) ->
             if (performanceVsCurrency.isNotEmpty()) {
                 val values = timePeriods.map { performanceVsCurrency[it] }
-                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values))
+                rows.add(RoiViewItem.RowViewItem(vsCurrency.uppercase(), values))
             }
         }
 

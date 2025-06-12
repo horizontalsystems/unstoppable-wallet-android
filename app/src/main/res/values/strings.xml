@@ -1522,6 +1522,9 @@
     <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_NoDataAvailable">No data available</string>
     <string name="CoinPage_AddToWallet">Add To Wallet</string>
+    <string name="CoinPage_ROI_Title">Relative Change vs %s</string>
+    <string name="CoinPage_ROI_Vs">vs</string>
+    <string name="CoinPage_ROI_SelectCoins">Select Coins</string>
     <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
@@ -1555,6 +1558,10 @@
     <string name="CoinPage_MarketsVerifiedMenu_All">All</string>
     <string name="CoinPage_MarketsVerifiedMenu_Cex" translatable="false">CEX</string>
     <string name="CoinPage_MarketsVerifiedMenu_Dex" translatable="false">DEX</string>
+
+    <string name="ROI_SelectCoin_Title">Select Coin</string>
+    <string name="ROI_SelectCoin_SelectAssets">Select Assets</string>
+    <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">Only %s coins can be selected</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>

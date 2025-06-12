@@ -61,7 +61,7 @@ class CoinOverviewViewModel(
             field = value
             showHudMessage = value
         }
-    private var fullCoin = service.fullCoin
+    val fullCoin = service.fullCoin
     private var activeAccount = accountManager.activeAccount
     private var activeWallets = walletManager.activeWallets
 
