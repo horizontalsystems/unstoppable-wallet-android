@@ -58,6 +58,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
+import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -211,7 +212,7 @@ private fun TokenBalanceHeader(
         }
         VSpacer(height = 24.dp)
         ButtonsRow(viewItem = balanceViewItem, navController = navController, viewModel = viewModel)
-        LockedBalanceSection(balanceViewItem)
+        LockedBalanceSection(balanceViewItem, navController)
         balanceViewItem.warning?.let {
             VSpacer(height = 8.dp)
             TextImportantWarning(
@@ -226,7 +227,7 @@ private fun TokenBalanceHeader(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LockedBalanceSection(balanceViewItem: BalanceViewItem) {
+private fun LockedBalanceSection(balanceViewItem: BalanceViewItem, navController: NavController) {
     val infoModalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var bottomSheetContent by remember { mutableStateOf<BottomSheetContent?>(null) }
     val coroutineScope = rememberCoroutineScope()
@@ -246,7 +247,15 @@ private fun LockedBalanceSection(balanceViewItem: BalanceViewItem) {
                 if (lockedValue is ZcashLockedValue) {
                     actionButtonTitle = stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield)
                     onClickActionButton = {
-                        // TODO open send shield confirmation screen
+                        coroutineScope.launch {
+                            bottomSheetContent = null
+                            infoModalBottomSheetState.hide()
+                        }
+
+                        navController.slideFromRight(
+                            R.id.shieldZcash,
+                            ShieldZcashFragment.Input(balanceViewItem.wallet, R.id.tokenBalanceFragment)
+                        )
                     }
                 } else {
                     actionButtonTitle = null

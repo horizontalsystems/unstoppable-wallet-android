@@ -71,14 +71,15 @@ fun SendConfirmationScreen(
     coin: Coin,
     feeCoin: Coin,
     amount: BigDecimal,
-    address: Address,
+    address: Address?,
     contact: Contact?,
-    fee: BigDecimal,
+    fee: BigDecimal?,
     lockTimeInterval: LockTimeInterval?,
     memo: String?,
     rbfEnabled: Boolean?,
     onClickSend: () -> Unit,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    title: String? = null
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
         R.id.sendXFragment
@@ -125,7 +126,7 @@ fun SendConfirmationScreen(
 
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = stringResource(R.string.Send_Confirmation_Title),
+            title = title ?: stringResource(R.string.Send_Confirmation_Title),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
@@ -162,35 +163,37 @@ fun SendConfirmationScreen(
 
                         ConfirmAmountCell(currencyAmount, coinAmount, coin)
                     }
-                    add {
-                        TransactionInfoAddressCell(
-                            title = stringResource(R.string.Send_Confirmation_To),
-                            value = address.hex,
-                            showAdd = contact == null,
-                            blockchainType = blockchainType,
-                            navController = navController,
-                            onCopy = {
-                                stat(
-                                    page = StatPage.SendConfirmation,
-                                    event = StatEvent.Copy(StatEntity.Address),
-                                    section = StatSection.AddressTo
-                                )
-                            },
-                            onAddToExisting = {
-                                stat(
-                                    page = StatPage.SendConfirmation,
-                                    event = StatEvent.Open(StatPage.ContactAddToExisting),
-                                    section = StatSection.AddressTo
-                                )
-                            },
-                            onAddToNew = {
-                                stat(
-                                    page = StatPage.SendConfirmation,
-                                    event = StatEvent.Open(StatPage.ContactNew),
-                                    section = StatSection.AddressTo
-                                )
-                            }
-                        )
+                    address?.let {
+                        add {
+                            TransactionInfoAddressCell(
+                                title = stringResource(R.string.Send_Confirmation_To),
+                                value = address.hex,
+                                showAdd = contact == null,
+                                blockchainType = blockchainType,
+                                navController = navController,
+                                onCopy = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Copy(StatEntity.Address)
+                                    )
+                                },
+                                onAddToExisting = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting)
+                                    )
+                                },
+                                onAddToNew = {
+                                    stat(
+                                        page = StatPage.SendConfirmation,
+                                        section = StatSection.AddressTo,
+                                        event = StatEvent.Open(StatPage.ContactNew)
+                                    )
+                                }
+                            )
+                        }
                     }
                     contact?.let {
                         add {
