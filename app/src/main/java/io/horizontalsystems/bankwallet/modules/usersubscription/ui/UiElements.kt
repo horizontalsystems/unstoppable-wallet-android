@@ -271,6 +271,8 @@ fun ColumnScope.PlanItems(
             icon = item.iconRes,
             title = item.titleStringRes,
             subtitle = item.descriptionStringRes,
+            first = index == 0,
+            last = index == items.size - 1,
             click = { onItemClick(item) }
         )
         if (index < items.size - 1) {
@@ -284,15 +286,20 @@ fun PremiumFeatureItem(
     icon: Int,
     title: Int,
     subtitle: Int,
+    first: Boolean,
+    last: Boolean,
     click: () -> Unit = {}
 ) {
+    val topPadding = if (first) 16.dp else 12.dp
+    val bottomPadding = if (last) 16.dp else 12.dp
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .clickable { click() }
-            .background(ComposeAppTheme.colors.blade)
-            .padding(vertical = 12.dp, horizontal = 16.dp)
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(horizontal = 16.dp)
+            .padding(top = topPadding, bottom = bottomPadding)
     ) {
         Icon(
             painter = painterResource(icon),
