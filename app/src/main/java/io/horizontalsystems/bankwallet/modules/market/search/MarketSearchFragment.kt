@@ -157,34 +157,36 @@ fun MarketSearchResults(
             }
         ) {
             itemSections.forEach { (section, coinItems) ->
-                section.title.ifPresent {
-                    stickyHeader {
-                        HeaderStick(
-                            borderTop = true,
-                            text = stringResource(id = section.title.get())
-                        )
-                    }
-                }
-                items(coinItems) { item ->
-                    val coin = item.fullCoin.coin
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(IntrinsicSize.Max)
-                    ) {
-                        Box(modifier = Modifier.background(ComposeAppTheme.colors.tyler)) {
-                            MarketCoin(
-                                coinUid = coin.uid,
-                                coinCode = coin.code,
-                                coinName = coin.name,
-                                coinIconUrl = coin.imageUrl,
-                                alternativeCoinIconUrl = coin.alternativeImageUrl,
-                                coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                                favourited = item.favourited,
-                                onFavoriteClick = onFavoriteClick,
-                                onClick = { onCoinClick(coin, section) },
+                if (coinItems.isNotEmpty()) {
+                    section.title.ifPresent {
+                        stickyHeader {
+                            HeaderStick(
+                                borderTop = true,
+                                text = stringResource(id = section.title.get())
                             )
+                        }
+                    }
+                    items(coinItems) { item ->
+                        val coin = item.fullCoin.coin
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Max)
+                        ) {
+                            Box(modifier = Modifier.background(ComposeAppTheme.colors.tyler)) {
+                                MarketCoin(
+                                    coinUid = coin.uid,
+                                    coinCode = coin.code,
+                                    coinName = coin.name,
+                                    coinIconUrl = coin.imageUrl,
+                                    alternativeCoinIconUrl = coin.alternativeImageUrl,
+                                    coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                                    favourited = item.favourited,
+                                    onFavoriteClick = onFavoriteClick,
+                                    onClick = { onCoinClick(coin, section) },
+                                )
+                            }
                         }
                     }
                 }

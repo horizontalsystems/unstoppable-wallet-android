@@ -239,7 +239,7 @@ fun ButtonPrimaryRed(
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.lucian,
-            contentColor = ComposeAppTheme.colors.blade,
+            contentColor = ComposeAppTheme.colors.lawrence,
             disabledBackgroundColor = ComposeAppTheme.colors.blade,
             disabledContentColor = ComposeAppTheme.colors.andy,
         ),
