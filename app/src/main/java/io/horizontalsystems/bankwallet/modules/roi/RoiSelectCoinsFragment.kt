@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,6 +55,7 @@ class RoiSelectCoinsFragment : BaseComposeFragment() {
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RoiSelectCoinsScreen(navController: NavController) {
     val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
@@ -104,14 +108,15 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                     CellUniversal(borderTop = i != 0) {
                         body_leah(text = text)
                         HFillSpacer(16.dp)
-                        ButtonSecondaryWithIcon(
-                            modifier = Modifier.padding(start = 16.dp),
-                            iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                            title = period.title.getString(),
-                            onClick = {
-                                dialog = PeriodSelectorDialog(text, period, i)
-                            }
-                        )
+                        CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+                            ButtonSecondaryWithIcon(
+                                iconRight = painterResource(R.drawable.ic_down_arrow_20),
+                                title = period.title.getString(),
+                                onClick = {
+                                    dialog = PeriodSelectorDialog(text, period, i)
+                                }
+                            )
+                        }
                     }
                 }
             }
