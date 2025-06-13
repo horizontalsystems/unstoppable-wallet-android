@@ -154,18 +154,18 @@ class EvmSyncSourceManager(
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "LlamaNodes",
+                    "dRPC",
                     RpcSource.Http(
-                        listOf(URI("https://base.llamarpc.com")),
+                        listOf(URI("https://base.drpc.org")),
                         null
                     ),
                     defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "Omnia",
+                    "PublicNode",
                     RpcSource.Http(
-                        listOf(URI("https://endpoints.omniatech.io/v1/base/mainnet/public")),
+                        listOf(URI("https://base-rpc.publicnode.com")),
                         null
                     ),
                     defaultTransactionSource(blockchainType)
