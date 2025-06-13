@@ -4,53 +4,38 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.chart.stringResId
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.util.UUID
 
 class RoiSelectCoinsViewModel(
-    private val localStorage: ILocalStorage,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
+    private val roiManager: RoiManager
 ) : ViewModelUiState<RoiSelectCoinsUiState>() {
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RoiSelectCoinsViewModel(App.localStorage, App.marketKit) as T
-        }
-    }
+    private var periods = listOf(HsTimePeriod.Week1, HsTimePeriod.Month1, HsTimePeriod.Month3, HsTimePeriod.Month6, HsTimePeriod.Year1, HsTimePeriod.Year5)
+    private var selectedPeriods = roiManager.getSelectedPeriods()
+    private var selectedCoins = roiManager.getSelectedCoins()
 
-    private var periods = listOf(
-        HsTimePeriod.Week1,
-        HsTimePeriod.Year1
-    )
-
-    private val gold = PerformanceCoin("tether-gold", "GOLD", "Commodity")
-    private val sp500 = PerformanceCoin("sp500", "SP500", "S&P 500")
-    private val defaultCoins = listOf(gold, sp500, PerformanceCoin("bitcoin", "BTC", "Bitcoin"))
-    private val defaultPeriods = listOf(
-        HsTimePeriod.Month6,
-        HsTimePeriod.Year1
-    )
-    private var items: List<XxxItem> = listOf()
-
-    private var selectedCoins = localStorage.roiPerformanceCoins.ifEmpty { defaultCoins }
     private val coinImages = mapOf(
         "tether-gold" to R.drawable.ic_gold_32,
         "sp500" to R.drawable.ic_sp500_32,
     )
+    private var coinItems: List<CoinItem> = listOf()
 
     init {
-        val tmpItems = mutableListOf<XxxItem>()
+        val tmpItems = mutableListOf<CoinItem>()
 
         val fullCoins = marketKit.fullCoins("", 100).toMutableList()
 
-        defaultCoins.map { defaultCoin ->
+        roiManager.defaultCoins.map { defaultCoin ->
             val index = fullCoins.indexOfFirst { it.coin.uid == defaultCoin.uid }
             val fullCoin = if (index != -1) {
                 fullCoins.removeAt(index)
@@ -58,34 +43,35 @@ class RoiSelectCoinsViewModel(
                 null
             }
 
-            val xxxItem = if (fullCoin != null) {
-                XxxItem.fromCoin(fullCoin.coin)
+            val coinItem = if (fullCoin != null) {
+                CoinItem.fromCoin(fullCoin.coin)
             } else {
-                XxxItem(defaultCoin, localImage = coinImages[defaultCoin.uid])
+                CoinItem(defaultCoin, localImage = coinImages[defaultCoin.uid])
             }
 
-            tmpItems.add(xxxItem)
+            tmpItems.add(coinItem)
         }
 
         tmpItems.addAll(
             fullCoins.map {
-                XxxItem.fromCoin(it.coin)
+                CoinItem.fromCoin(it.coin)
             }
         )
 
-        items = tmpItems
+        coinItems = tmpItems
 
         emitState()
     }
 
     override fun createState() = RoiSelectCoinsUiState(
-        periods = periods,
-        items = items,
-        isSaveable = selectedCoins.size == 3,
-        selectedCoins = selectedCoins
+        periods = periods.map { it.toTranslatable() },
+        selectedPeriods = selectedPeriods.map { it.toTranslatable() },
+        coinItems = coinItems,
+        selectedCoins = selectedCoins,
+        isSaveable = selectedCoins.size == 3
     )
 
-    fun onToggle(item: XxxItem, selected: Boolean) {
+    fun onToggle(item: CoinItem, selected: Boolean) {
         if (selected) {
             if (selectedCoins.size >= 3) throw CapacityExceededException()
 
@@ -98,28 +84,50 @@ class RoiSelectCoinsViewModel(
     }
 
     fun onApply() {
-        localStorage.roiPerformanceCoins = selectedCoins
+        roiManager.update(selectedCoins, selectedPeriods)
+    }
+
+    fun onSelectPeriod(index: Int, selected: HsTimePeriodTranslatable) {
+        val selectedTimePeriod = selected.timePeriod
+
+        val mutableList = selectedPeriods.toMutableList()
+
+        val indexToReset = selectedPeriods.indexOf(selectedTimePeriod)
+        if (indexToReset != -1) {
+            mutableList[indexToReset] = (periods - selectedTimePeriod).first()
+        }
+
+        mutableList[index] = selectedTimePeriod
+
+        selectedPeriods = mutableList
+
+        emitState()
+    }
+
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return RoiSelectCoinsViewModel(
+                App.marketKit,
+                RoiManager(App.localStorage)
+            ) as T
+        }
     }
 }
 
 class CapacityExceededException : Exception(Translator.getString(R.string.ROI_SelectCoin_Warning_AllowedNumberOfCoins, 3))
 
 data class RoiSelectCoinsUiState(
-    val periods: List<HsTimePeriod>,
-    val items: List<XxxItem>,
-    val isSaveable: Boolean,
+    val periods: List<HsTimePeriodTranslatable>,
+    val selectedPeriods: List<HsTimePeriodTranslatable>,
+    val coinItems: List<CoinItem>,
     val selectedCoins: List<PerformanceCoin>,
+    val isSaveable: Boolean,
 ) {
     val uuid = UUID.randomUUID().toString()
 }
 
-data class PerformanceCoin(
-    val uid: String,
-    val code: String,
-    val name: String,
-)
-
-data class XxxItem(
+data class CoinItem(
     val performanceCoin: PerformanceCoin,
     val imageUrl: String? = null,
     val alternativeImageUrl: String? = null,
@@ -130,16 +138,23 @@ data class XxxItem(
     val name by performanceCoin::name
 
     companion object {
-        fun fromCoin(coin: Coin): XxxItem {
-            return XxxItem(
-                PerformanceCoin(
-                    coin.uid,
-                    coin.code,
-                    coin.name,
-                ),
-                coin.imageUrl,
-                coin.alternativeImageUrl,
-            )
-        }
+        fun fromCoin(coin: Coin) = CoinItem(
+            PerformanceCoin(
+                coin.uid,
+                coin.code,
+                coin.name,
+            ),
+            coin.imageUrl,
+            coin.alternativeImageUrl,
+        )
     }
+}
+
+data class HsTimePeriodTranslatable(val timePeriod: HsTimePeriod) : WithTranslatableTitle {
+    override val title = TranslatableString.ResString(timePeriod.stringResId)
+
+}
+
+fun HsTimePeriod.toTranslatable(): HsTimePeriodTranslatable {
+    return HsTimePeriodTranslatable(this)
 }

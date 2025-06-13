@@ -44,6 +44,7 @@ import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
@@ -74,6 +75,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var selectedPeriods: List<HsTimePeriod>
     var roiPerformanceCoins: List<PerformanceCoin>
     var marketSearchRecentCoinUids: List<String>
     var zcashAccountIds: Set<String>

@@ -142,7 +142,7 @@ fun TopCoins(
 
     if (openSortingSelector) {
         AlertGroup(
-            title = R.string.Market_Sort_PopupTitle,
+            title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortingField, uiState.sortingFields),
             onSelect = { selected ->
                 viewModel.onSelectSortingField(selected)
@@ -161,7 +161,7 @@ fun TopCoins(
     }
     if (openTopSelector) {
         AlertGroup(
-            title = R.string.Market_Tab_Coins,
+            title = stringResource(R.string.Market_Tab_Coins),
             select = Select(uiState.topMarket, uiState.topMarkets),
             onSelect = {
                 viewModel.onSelectTopMarket(it)
@@ -180,7 +180,7 @@ fun TopCoins(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.CoinPage_Period,
+            title = stringResource(R.string.CoinPage_Period),
             select = Select(uiState.period, uiState.periods),
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)

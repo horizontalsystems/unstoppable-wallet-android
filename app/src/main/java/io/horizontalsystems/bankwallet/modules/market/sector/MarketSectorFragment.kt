@@ -193,7 +193,7 @@ fun SectorScreen(
         //Dialogs
         if (openPeriodSelector) {
             AlertGroup(
-                R.string.CoinPage_Period,
+                stringResource(R.string.CoinPage_Period),
                 Select(uiState.timePeriod, viewModel.periods),
                 { selected ->
                     viewModel.onTimePeriodSelect(selected)
@@ -209,7 +209,7 @@ fun SectorScreen(
         }
         if (openSortingSelector) {
             AlertGroup(
-                R.string.Market_Sort_PopupTitle,
+                stringResource(R.string.Market_Sort_PopupTitle),
                 Select(uiState.sortingField, viewModel.sortingOptions),
                 { selected ->
                     viewModel.onSelectSortingField(selected)

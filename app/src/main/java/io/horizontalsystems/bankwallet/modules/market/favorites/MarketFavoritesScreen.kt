@@ -184,7 +184,7 @@ fun MarketFavoritesScreen(
 
     if (openSortingSelector) {
         AlertGroup(
-            title = R.string.Market_Sort_PopupTitle,
+            title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortingField, viewModel.sortingOptions),
             onSelect = { selected ->
                 manualOrderEnabled = false
@@ -205,7 +205,7 @@ fun MarketFavoritesScreen(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.CoinPage_Period,
+            title = stringResource(R.string.CoinPage_Period),
             select = Select(uiState.period, viewModel.periods),
             onSelect = { selected ->
                 openPeriodSelector = false

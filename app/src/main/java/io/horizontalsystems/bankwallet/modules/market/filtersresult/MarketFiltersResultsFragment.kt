@@ -188,7 +188,7 @@ private fun SearchResultsScreen(
 
             if (openSortingSelector) {
                 AlertGroup(
-                    title = R.string.Market_Sort_PopupTitle,
+                    title = stringResource(R.string.Market_Sort_PopupTitle),
                     select = uiState.selectSortingField,
                     onSelect = { selected ->
                         viewModel.onSelectSortingField(selected)

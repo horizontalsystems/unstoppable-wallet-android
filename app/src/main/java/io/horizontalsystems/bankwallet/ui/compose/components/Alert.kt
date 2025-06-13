@@ -1,16 +1,18 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -19,10 +21,10 @@ import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
 @Composable
 fun <T : WithTranslatableTitle> AlertGroup(
-    @StringRes title: Int,
+    title: String,
     select: Select<T>,
     onSelect: (T) -> Unit,
-    onDismiss: (() -> Unit)
+    onDismiss: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Column(
@@ -47,7 +49,7 @@ fun <T : WithTranslatableTitle> AlertGroup(
 }
 
 @Composable
-fun AlertHeader(@StringRes title: Int) {
+fun AlertHeader(text: String) {
     Box(
         modifier = Modifier
             .height(40.dp)
@@ -55,7 +57,7 @@ fun AlertHeader(@StringRes title: Int) {
             .background(ComposeAppTheme.colors.lawrence),
         contentAlignment = Alignment.Center
     ) {
-        subhead1_grey(stringResource(title))
+        subhead1_grey(text)
     }
 }
 
