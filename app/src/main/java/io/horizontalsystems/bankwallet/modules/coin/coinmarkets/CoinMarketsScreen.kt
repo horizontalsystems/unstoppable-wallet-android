@@ -105,7 +105,7 @@ fun CoinMarketsScreen(
         }
         if (showExchangeTypeSelector) {
             AlertGroup(
-                title = R.string.CoinPage_MarketsVerifiedMenu_ExchangeType,
+                title = stringResource(R.string.CoinPage_MarketsVerifiedMenu_ExchangeType),
                 select = uiState.exchangeTypeMenu,
                 onSelect = {
                     viewModel::setExchangeType.invoke(it)

@@ -206,7 +206,7 @@ fun EtfPage(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.CoinPage_Period,
+            title = stringResource(R.string.CoinPage_Period),
             select = Select(uiState.timeDuration, viewModel.timeDurations),
             onSelect = { selected ->
                 viewModel.onSelectTimeDuration(selected)
@@ -224,7 +224,7 @@ fun EtfPage(
     }
     if (openSortingSelector) {
         AlertGroup(
-            title = R.string.Market_Sort_PopupTitle,
+            title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortBy, viewModel.sortByOptions),
             onSelect = { selected ->
                 viewModel.onSelectSortBy(selected)

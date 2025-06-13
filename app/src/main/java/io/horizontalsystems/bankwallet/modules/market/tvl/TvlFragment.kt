@@ -205,7 +205,7 @@ class TvlFragment : BaseComposeFragment() {
                 when (val option = chainSelectorDialogState) {
                     is SelectorDialogState.Opened -> {
                         AlertGroup(
-                            title = R.string.MarketGlobalMetrics_ChainSelectorTitle,
+                            title = stringResource(R.string.MarketGlobalMetrics_ChainSelectorTitle),
                             select = option.select,
                             onSelect = {
                                 chartViewModel.onSelectChain(it)

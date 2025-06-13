@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.IThirdKeyboard
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -208,6 +209,17 @@ class LocalStorageManager(
         set(value) {
             val versionsString = gson.toJson(value)
             preferences.edit().putString(APP_VERSIONS, versionsString).apply()
+        }
+
+    override var selectedPeriods: List<HsTimePeriod>
+        get() {
+            val jsonStr = preferences.getString("selectedPeriods", null) ?: return listOf()
+            val type = object : TypeToken<ArrayList<HsTimePeriod>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit().putString("selectedPeriods", jsonStr).apply()
         }
 
     override var roiPerformanceCoins: List<PerformanceCoin>

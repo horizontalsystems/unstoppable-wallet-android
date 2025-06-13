@@ -9,9 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,9 +25,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -36,7 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
 
-class RoiSelectCoinsFragment  : BaseComposeFragment() {
+class RoiSelectCoinsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         RoiSelectCoinsScreen(navController)
@@ -84,14 +92,26 @@ fun RoiSelectCoinsScreen(navController: NavController) {
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
+        var dialog: PeriodSelectorDialog? by rememberSaveable { mutableStateOf(null) }
+
         Column(
             modifier = Modifier.padding(it),
         ) {
             VSpacer(12.dp)
             SectionUniversalLawrence {
-                uiState.periods.forEachIndexed { i, period ->
+                uiState.selectedPeriods.forEachIndexed { i, period ->
+                    val text = stringResource(R.string.ROI_Period_N, i + 1)
                     CellUniversal(borderTop = i != 0) {
-                        body_leah(text = "Period ${i + 1}")
+                        body_leah(text = text)
+                        HFillSpacer(16.dp)
+                        ButtonSecondaryWithIcon(
+                            modifier = Modifier.padding(start = 16.dp),
+                            iconRight = painterResource(R.drawable.ic_down_arrow_20),
+                            title = period.title.getString(),
+                            onClick = {
+                                dialog = PeriodSelectorDialog(text, period, i)
+                            }
+                        )
                     }
                 }
             }
@@ -104,7 +124,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
             }
 
             LazyColumn {
-                items(uiState.items) { item ->
+                items(uiState.coinItems) { item ->
                     val checked = uiState.selectedCoins.contains(item.performanceCoin)
                     val view = LocalView.current
                     val onClick = {
@@ -145,5 +165,26 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                 }
             }
         }
+
+        dialog?.let {
+            AlertGroup(
+                title = it.title,
+                select = Select(it.period, uiState.periods),
+                onSelect = { selected ->
+                    viewModel.onSelectPeriod(it.index, selected)
+                    dialog = null
+                },
+                onDismiss = {
+                    dialog = null
+                }
+            )
+        }
+
     }
 }
+
+data class PeriodSelectorDialog(
+    val title: String,
+    val period: HsTimePeriodTranslatable,
+    val index: Int,
+)

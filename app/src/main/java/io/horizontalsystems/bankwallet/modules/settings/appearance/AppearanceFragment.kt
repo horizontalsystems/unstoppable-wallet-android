@@ -292,7 +292,7 @@ fun AppearanceScreen(navController: NavController) {
         //Dialogs
         if (openThemeSelector) {
             AlertGroup(
-                R.string.Settings_Theme,
+                stringResource(R.string.Settings_Theme),
                 uiState.themeOptions,
                 { selected ->
                     viewModel.onEnterTheme(selected)
@@ -303,7 +303,7 @@ fun AppearanceScreen(navController: NavController) {
         }
         if (openLaunchPageSelector) {
             AlertGroup(
-                R.string.Settings_LaunchScreen,
+                stringResource(R.string.Settings_LaunchScreen),
                 uiState.launchScreenOptions,
                 { selected ->
                     viewModel.onEnterLaunchPage(selected)
@@ -314,7 +314,7 @@ fun AppearanceScreen(navController: NavController) {
         }
         if (openBalanceValueSelector) {
             AlertGroup(
-                R.string.Appearance_BalanceValue,
+                stringResource(R.string.Appearance_BalanceValue),
                 uiState.balanceViewTypeOptions,
                 { selected ->
                     viewModel.onEnterBalanceViewType(selected)
@@ -325,7 +325,7 @@ fun AppearanceScreen(navController: NavController) {
         }
         if (openPriceChangeIntervalSelector) {
             AlertGroup(
-                R.string.Appearance_PriceChangeInterval,
+                stringResource(R.string.Appearance_PriceChangeInterval),
                 uiState.priceChangeIntervalOptions,
                 { selected ->
                     viewModel.onSetPriceChangeInterval(selected)

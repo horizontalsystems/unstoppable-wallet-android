@@ -1562,6 +1562,7 @@
     <string name="ROI_SelectCoin_Title">Select Coin</string>
     <string name="ROI_SelectCoin_SelectAssets">Select Assets</string>
     <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">Only %s coins can be selected</string>
+    <string name="ROI_Period_N">Period %s</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>

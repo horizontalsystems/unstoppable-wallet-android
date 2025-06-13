@@ -150,7 +150,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                     when (val option = chainSelectorDialogState) {
                         is CoinTreasuriesModule.SelectorDialogState.Opened -> {
                             AlertGroup(
-                                R.string.CoinPage_Treasuries_FilterTitle,
+                                stringResource(R.string.CoinPage_Treasuries_FilterTitle),
                                 option.select,
                                 viewModel::onSelectTreasuryType,
                                 viewModel::onTreasuryTypeSelectorDialogDismiss
