@@ -9,7 +9,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import io.horizontalsystems.bankwallet.ui.compose.Bright
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Orange
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -27,7 +26,7 @@ fun HsSwitch(
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Bright,
                 uncheckedThumbColor = Bright,
-                checkedTrackColor = Orange,
+                checkedTrackColor = ComposeAppTheme.colors.jacob,
                 uncheckedTrackColor = ComposeAppTheme.colors.andy,
                 checkedTrackAlpha = 1f,
                 uncheckedTrackAlpha = 1f,
