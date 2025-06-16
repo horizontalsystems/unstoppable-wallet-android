@@ -35,7 +35,7 @@ class RoiSelectCoinsViewModel(
     init {
         val tmpItems = mutableListOf<CoinItem>()
 
-        val fullCoins = marketKit.fullCoins("", 100).toMutableList()
+        val fullCoins = marketKit.topFullCoins(100).toMutableList()
 
         roiManager.defaultCoins.map { defaultCoin ->
             val index = fullCoins.indexOfFirst { it.coin.uid == defaultCoin.uid }
