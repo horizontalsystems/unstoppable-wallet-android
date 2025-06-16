@@ -33,7 +33,7 @@ platform :android do
         service_credentials_file: "service-account.json",
         release_notes: "F-Droid Build - Author: #{commit[:author]}, changes: #{commit[:message]}",
         groups: "horsysteam",
-        apk_path: "app/build/outputs/apk/fdroid/debug/app-fdroid-debug-unsigned.apk"
+        apk_path: "app/build/outputs/apk/fdroidCi/debug/app-fdroidCi-debug.apk"
       )
     end
 
