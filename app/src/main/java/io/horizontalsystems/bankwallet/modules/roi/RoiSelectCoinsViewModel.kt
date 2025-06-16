@@ -38,8 +38,8 @@ class RoiSelectCoinsViewModel(
 
         val fullCoins = marketKit.topFullCoins(100).toMutableList()
 
-        roiManager.defaultCoins.map { defaultCoin ->
-            val index = fullCoins.indexOfFirst { it.coin.uid == defaultCoin.uid }
+        roiManager.prioritizedCoins.map { prioritizedCoin ->
+            val index = fullCoins.indexOfFirst { it.coin.uid == prioritizedCoin.uid }
             val fullCoin = if (index != -1) {
                 fullCoins.removeAt(index)
             } else {
@@ -49,7 +49,7 @@ class RoiSelectCoinsViewModel(
             val coinItem = if (fullCoin != null) {
                 CoinItem.fromCoin(fullCoin.coin)
             } else {
-                CoinItem(defaultCoin, localImage = coinImages[defaultCoin.uid])
+                CoinItem(prioritizedCoin, localImage = coinImages[prioritizedCoin.uid])
             }
 
             tmpItems.add(coinItem)

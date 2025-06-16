@@ -9,7 +9,12 @@ class RoiManager(private val localStorage: ILocalStorage) {
 
     private val gold = PerformanceCoin("tether-gold", "GOLD", "Commodity")
     private val sp500 = PerformanceCoin("sp500", "SP500", "S&P 500")
-    val defaultCoins = listOf(gold, sp500, PerformanceCoin("bitcoin", "BTC", "Bitcoin"))
+    val prioritizedCoins = listOf(gold, sp500, PerformanceCoin("bitcoin", "BTC", "Bitcoin"))
+    private val defaultCoins = listOf(
+        sp500,
+        PerformanceCoin("bitcoin", "BTC", "Bitcoin"),
+        PerformanceCoin("tether", "USDT", "Tether")
+    )
     private val defaultPeriods = listOf(
         HsTimePeriod.Month6,
         HsTimePeriod.Year1
