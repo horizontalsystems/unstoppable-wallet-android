@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.coin.analytics
 
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.MarketKitWrapper

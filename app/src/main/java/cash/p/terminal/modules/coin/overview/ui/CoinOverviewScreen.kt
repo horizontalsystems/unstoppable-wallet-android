@@ -27,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromBottomForResult
 import cash.p.terminal.modules.coin.CoinLink
 import cash.p.terminal.modules.coin.overview.CoinOverviewModule
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewModel
@@ -57,7 +57,7 @@ import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.wallet.models.LinkType
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable

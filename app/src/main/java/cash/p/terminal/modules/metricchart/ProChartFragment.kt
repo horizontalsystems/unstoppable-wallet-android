@@ -18,8 +18,9 @@ import cash.p.terminal.ui_compose.getInputX
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class ProChartFragment : BaseComposableBottomSheetFragment() {
@@ -45,7 +46,7 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
                 cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     BottomSheetHeader(
                         iconPainter = painterResource(R.drawable.ic_chart_24),
-                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                         title = input.title,
                         onCloseClick = { close() }
                     ) {

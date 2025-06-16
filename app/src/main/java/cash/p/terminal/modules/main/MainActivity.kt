@@ -9,8 +9,8 @@ import androidx.navigation.fragment.NavHostFragment
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseActivity
-import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottomForResult
 import cash.p.terminal.modules.intro.IntroActivity
 import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.lockscreen.LockScreenActivity

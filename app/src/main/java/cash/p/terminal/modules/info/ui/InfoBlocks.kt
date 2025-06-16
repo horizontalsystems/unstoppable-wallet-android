@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.InfoTextBody
 import cash.p.terminal.ui_compose.components.body_bran
 
 @Composable

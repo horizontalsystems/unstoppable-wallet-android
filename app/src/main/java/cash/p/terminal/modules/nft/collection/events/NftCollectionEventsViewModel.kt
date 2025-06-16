@@ -9,7 +9,7 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.entities.nft.NftEventMetadata.EventType
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.modules.coin.ContractInfo

@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.ServiceState
 import cash.p.terminal.wallet.Warning
 import cash.p.terminal.core.ethereum.EvmCoinService
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.entities.FeePriceScale
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel

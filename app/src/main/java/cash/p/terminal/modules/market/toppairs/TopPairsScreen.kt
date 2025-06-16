@@ -29,9 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.fiatIconUrl
-
-
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.overview.TopPairViewItem

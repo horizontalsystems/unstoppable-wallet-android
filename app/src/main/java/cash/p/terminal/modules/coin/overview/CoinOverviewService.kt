@@ -2,7 +2,7 @@ package cash.p.terminal.modules.coin.overview
 
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.entities.FullCoin
@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.net.URL
 
 class CoinOverviewService(

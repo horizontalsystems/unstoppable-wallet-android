@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.getInput
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaultWithIcon
@@ -26,8 +26,8 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 import kotlinx.parcelize.Parcelize
 
@@ -60,7 +60,7 @@ fun BackupRequiredScreen(navController: NavController, account: cash.p.terminal.
     cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
-            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.ManageAccount_BackupRequired_Title),
             onCloseClick = {
                 navController.popBackStack()

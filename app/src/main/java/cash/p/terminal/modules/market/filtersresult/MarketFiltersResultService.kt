@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.market.filtersresult
 
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.category.MarketItemWrapper

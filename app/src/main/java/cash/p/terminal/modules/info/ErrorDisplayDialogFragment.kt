@@ -21,9 +21,10 @@ import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
@@ -60,7 +61,7 @@ private fun ErrorDisplayScreen(
     cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.icon_24_warning_2),
-            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = title,
             onCloseClick = {
                 navController.popBackStack()

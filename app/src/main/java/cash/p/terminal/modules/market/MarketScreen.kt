@@ -31,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.posts.MarketPostsScreen

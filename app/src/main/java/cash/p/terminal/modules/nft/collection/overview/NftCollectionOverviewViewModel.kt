@@ -12,7 +12,7 @@ import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.entities.nft.NftCollectionMetadata
 import cash.p.terminal.modules.coin.ContractInfo
 import cash.p.terminal.modules.nft.collection.NftCollectionModule.Tab

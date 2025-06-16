@@ -24,10 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromBottomForResult
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection

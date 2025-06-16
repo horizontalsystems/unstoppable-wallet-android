@@ -2,10 +2,8 @@ package cash.p.terminal.modules.market.favorites
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.core.ViewModelUiState
-
-
-import cash.p.terminal.entities.DataState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.category.MarketItemWrapper

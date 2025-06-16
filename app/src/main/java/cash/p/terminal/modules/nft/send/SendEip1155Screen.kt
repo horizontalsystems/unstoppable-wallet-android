@@ -35,8 +35,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRightForResult
-import cash.p.terminal.entities.DataState
+import io.horizontalsystems.core.slideFromRightForResult
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.AddressViewModel
 import cash.p.terminal.modules.address.HSAddressInput

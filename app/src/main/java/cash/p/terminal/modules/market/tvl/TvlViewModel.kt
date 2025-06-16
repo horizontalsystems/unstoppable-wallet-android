@@ -4,8 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState

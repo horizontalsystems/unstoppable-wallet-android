@@ -36,14 +36,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRightForResult
+import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.contacts.ChooseContactFragment
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.entities.BlockchainType

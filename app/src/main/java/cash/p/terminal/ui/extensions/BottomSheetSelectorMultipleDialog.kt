@@ -32,6 +32,8 @@ import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import io.horizontalsystems.core.helpers.HudHelper
 import java.util.UUID
 

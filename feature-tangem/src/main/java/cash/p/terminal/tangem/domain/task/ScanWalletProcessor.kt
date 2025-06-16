@@ -3,22 +3,18 @@ package cash.p.terminal.tangem.domain.task
 import cash.p.terminal.tangem.domain.RING_BATCH_IDS
 import cash.p.terminal.tangem.domain.RING_BATCH_PREFIX
 import cash.p.terminal.tangem.domain.card.CardConfig
-import cash.p.terminal.tangem.domain.derivation.DerivationConfig
-import cash.p.terminal.tangem.domain.getDerivationStyle
-import cash.p.terminal.tangem.domain.model.BlockchainToDerive
 import cash.p.terminal.tangem.domain.model.ProductType
 import cash.p.terminal.tangem.domain.model.ScanResponse
 import cash.p.terminal.tangem.domain.usecase.CollectDerivationsUseCase
 import cash.p.terminal.wallet.entities.TokenQuery
-import cash.p.terminal.wallet.entities.TokenType
 import com.tangem.common.CompletionResult
 import com.tangem.common.card.Card
 import com.tangem.common.card.FirmwareVersion
 import com.tangem.common.core.CardSession
 import com.tangem.operations.backup.PrimaryCard
+import com.tangem.operations.backup.StartPrimaryCardLinkingTask
 import com.tangem.operations.derivation.DeriveMultipleWalletPublicKeysTask
 import io.horizontalsystems.core.FeatureCoroutineExceptionHandler
-import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -47,16 +43,6 @@ internal class ScanWalletProcessor(
         startLinkingForBackupIfNeeded(card, session, callback)
     }
 
-    private fun startLinkingForBackupIfNeeded(
-        card: Card,
-        session: CardSession,
-        callback: (result: CompletionResult<ScanResponse>) -> Unit,
-    ) {
-        mainScope.launch {
-            deriveKeysIfNeeded(card, session, callback)
-        }
-    }
-
     private fun deriveKeysIfNeeded(
         card: Card,
         session: CardSession,
@@ -72,7 +58,7 @@ internal class ScanWalletProcessor(
                 primaryCard = primaryCard,
             )
 
-            val derivations =  collectDerivationsUseCase(card, config, blockchainsToDerive)
+            val derivations = collectDerivationsUseCase(card, config, blockchainsToDerive)
             if (derivations.isEmpty() || !card.settings.isHDWalletAllowed) {
                 callback(CompletionResult.Success(scanResponse))
                 return@launch
@@ -100,4 +86,26 @@ internal class ScanWalletProcessor(
         }
     }
 
+    private fun startLinkingForBackupIfNeeded(
+        card: Card,
+        session: CardSession,
+        callback: (result: CompletionResult<ScanResponse>) -> Unit,
+    ) = mainScope.launch {
+        if (card.backupStatus == Card.BackupStatus.NoBackup && card.wallets.isNotEmpty()) {
+            StartPrimaryCardLinkingTask().run(session) { linkingResult ->
+                when (linkingResult) {
+                    is CompletionResult.Success -> {
+                        primaryCard = linkingResult.data
+                        deriveKeysIfNeeded(card, session, callback)
+                    }
+
+                    is CompletionResult.Failure -> {
+                        deriveKeysIfNeeded(card, session, callback)
+                    }
+                }
+            }
+        } else {
+            deriveKeysIfNeeded(card, session, callback)
+        }
+    }
 }

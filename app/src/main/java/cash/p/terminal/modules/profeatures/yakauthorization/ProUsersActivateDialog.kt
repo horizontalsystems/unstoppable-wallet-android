@@ -20,8 +20,8 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 
 class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {

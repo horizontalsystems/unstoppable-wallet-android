@@ -13,7 +13,7 @@ import cash.p.terminal.core.LocalizedException
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendResult

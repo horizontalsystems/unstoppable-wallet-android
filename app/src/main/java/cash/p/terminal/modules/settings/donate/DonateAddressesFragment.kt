@@ -15,17 +15,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
-
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_leah

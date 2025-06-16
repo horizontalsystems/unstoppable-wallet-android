@@ -27,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.getInput
-import cash.p.terminal.core.setNavigationResultX
+import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.ListEmptyView

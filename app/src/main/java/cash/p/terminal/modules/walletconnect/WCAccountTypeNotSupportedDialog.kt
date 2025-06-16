@@ -24,9 +24,10 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.TextImportantWarning
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
@@ -74,7 +75,7 @@ fun WCAccountTypeNotSupportedScreen(
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
         onCloseClick = onCloseClick
     ) {

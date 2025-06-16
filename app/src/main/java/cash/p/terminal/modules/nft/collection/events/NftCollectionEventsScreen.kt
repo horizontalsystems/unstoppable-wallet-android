@@ -20,10 +20,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
-import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.core.slideFromBottom
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.ContractInfo
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.asset.NftAssetModule
@@ -31,7 +30,7 @@ import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.OnBottomReached
 import cash.p.terminal.ui.compose.SelectOptional
 import cash.p.terminal.ui.compose.components.*
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui_compose.components.body_leah
@@ -89,7 +88,7 @@ private fun ContractBottomSheet(
         iconPainter = painterResource(R.drawable.icon_paper_contract_20),
         title = stringResource(R.string.CoinPage_Contracts),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
     ) {
         Spacer(Modifier.height(12.dp))
 

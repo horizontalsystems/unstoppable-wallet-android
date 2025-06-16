@@ -34,12 +34,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.navigation.slideFromRight
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
 import cash.p.terminal.modules.coin.overview.ui.Loading

@@ -7,7 +7,7 @@ import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.address.AddressParserChain
 import cash.p.terminal.modules.address.AddressValidationException

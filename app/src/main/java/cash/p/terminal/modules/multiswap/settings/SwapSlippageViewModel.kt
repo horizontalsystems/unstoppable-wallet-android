@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.strings.helpers.Translator
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.multiswap.settings.ui.InputButton
 import io.reactivex.Observable
 import kotlinx.coroutines.launch

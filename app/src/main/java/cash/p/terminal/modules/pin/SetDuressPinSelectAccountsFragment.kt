@@ -28,7 +28,7 @@ import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsCheckbox
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah

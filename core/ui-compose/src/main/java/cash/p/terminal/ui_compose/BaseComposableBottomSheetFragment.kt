@@ -1,4 +1,4 @@
-package cash.p.terminal.ui.extensions
+package cash.p.terminal.ui_compose
 
 import android.os.Bundle
 import android.view.View
@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import cash.p.terminal.R
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.body_grey

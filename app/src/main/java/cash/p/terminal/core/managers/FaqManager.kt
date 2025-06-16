@@ -9,7 +9,7 @@ import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.entities.Faq
 import cash.p.terminal.entities.FaqMap
 import cash.p.terminal.modules.markdown.MarkdownFragment

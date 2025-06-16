@@ -58,7 +58,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.subhead1_jacob
 import cash.p.terminal.ui_compose.components.subhead1_leah
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 

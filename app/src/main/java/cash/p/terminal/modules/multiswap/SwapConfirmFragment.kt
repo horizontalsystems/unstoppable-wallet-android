@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.multiswap
 
 import android.os.Parcelable
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -21,9 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.setNavigationResultX
+import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions

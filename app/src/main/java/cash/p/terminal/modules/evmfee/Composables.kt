@@ -44,7 +44,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.wallet.Warning
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import cash.p.terminal.modules.fee.FeeCell

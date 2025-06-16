@@ -3,7 +3,7 @@ package cash.p.terminal.modules.tonconnect
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import cash.p.terminal.core.setNavigationResultX
+import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import kotlinx.android.parcel.Parcelize

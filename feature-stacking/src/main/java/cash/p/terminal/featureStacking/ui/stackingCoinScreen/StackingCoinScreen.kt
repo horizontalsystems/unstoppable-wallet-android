@@ -58,7 +58,7 @@ import io.horizontalsystems.chartview.chart.ChartModule
 import io.horizontalsystems.chartview.chart.ChartUiState
 import io.horizontalsystems.chartview.chart.SelectedItem
 import io.horizontalsystems.chartview.ui.Chart
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.models.HsTimePeriod
 import java.math.BigDecimal

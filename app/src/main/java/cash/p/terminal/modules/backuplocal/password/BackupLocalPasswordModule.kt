@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.wallet.PassphraseValidator
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 
 object BackupLocalPasswordModule {
 

@@ -3,8 +3,9 @@ package cash.p.terminal.modules.backuplocal.password
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.IAccountManager
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.PassphraseValidator
@@ -81,7 +82,7 @@ class BackupLocalPasswordViewModel(
         } else {
             passphraseState = DataState.Error(
                 Exception(
-                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
                 )
             )
         }
@@ -178,7 +179,7 @@ class BackupLocalPasswordViewModel(
 
         if (passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
-                Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation))
+                Exception(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation))
             )
         }
 

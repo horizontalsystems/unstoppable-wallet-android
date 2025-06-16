@@ -3,7 +3,7 @@ package cash.p.terminal.modules.coin.ranks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration

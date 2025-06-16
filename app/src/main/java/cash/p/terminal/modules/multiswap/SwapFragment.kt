@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,9 +50,9 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromBottomForResult
-import cash.p.terminal.core.slideFromRightForResult
+import io.horizontalsystems.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.multiswap.action.ActionCreate
@@ -91,9 +90,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.badge
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.toBigDecimalOrNullExt
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.net.UnknownHostException
 

@@ -1,8 +1,6 @@
 package cash.p.terminal.modules.walletconnect.request.sendtransaction
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,8 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import io.horizontalsystems.core.logger.AppLogger
-import cash.p.terminal.core.slideFromBottom
-
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault

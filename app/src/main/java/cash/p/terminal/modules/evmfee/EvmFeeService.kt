@@ -2,7 +2,7 @@ package cash.p.terminal.modules.evmfee
 
 import cash.p.terminal.core.EvmError
 import cash.p.terminal.core.convertedError
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData

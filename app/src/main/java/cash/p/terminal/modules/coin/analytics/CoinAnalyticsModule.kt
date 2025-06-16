@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.audits.CoinAuditsModule
 import cash.p.terminal.modules.coin.detectors.IssueParcelable
 import cash.p.terminal.ui_compose.components.ImageSource

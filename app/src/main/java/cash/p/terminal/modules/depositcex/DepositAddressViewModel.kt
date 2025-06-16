@@ -9,7 +9,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.core.providers.CexProviderManager
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.receive.ReceiveModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

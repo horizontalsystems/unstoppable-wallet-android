@@ -11,7 +11,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cash.p.terminal.R
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.components.ListErrorView
 

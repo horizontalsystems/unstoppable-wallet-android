@@ -7,7 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule.ListType
 import cash.p.terminal.modules.market.SortingField

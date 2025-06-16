@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottomForResult
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure

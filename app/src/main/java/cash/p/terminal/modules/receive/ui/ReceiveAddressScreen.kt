@@ -57,9 +57,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import cash.p.terminal.R
-
-
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.receive.ReceiveModule
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
@@ -69,7 +67,7 @@ import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.TextImportantWarning
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.session.WCSessionModule
 import cash.p.terminal.ui.compose.components.BadgeText

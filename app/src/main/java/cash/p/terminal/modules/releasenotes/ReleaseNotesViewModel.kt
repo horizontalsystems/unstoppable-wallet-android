@@ -9,7 +9,7 @@ import cash.p.terminal.core.INetworkManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.providers.AppConfigProvider
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.markdown.MarkdownBlock
 import cash.p.terminal.modules.markdown.MarkdownVisitorBlock
 import kotlinx.coroutines.flow.launchIn

@@ -3,8 +3,8 @@ package cash.p.terminal.modules.multiswap.settings
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
 import cash.p.terminal.strings.helpers.Translator
-import cash.p.terminal.entities.DataState
-import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import java.math.BigDecimal
 
 object SwapSettingsModule {

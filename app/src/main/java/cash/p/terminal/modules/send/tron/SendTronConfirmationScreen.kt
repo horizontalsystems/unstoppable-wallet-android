@@ -30,10 +30,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.core.slideFromBottom
-
-
-
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.fee.HSFeeRaw

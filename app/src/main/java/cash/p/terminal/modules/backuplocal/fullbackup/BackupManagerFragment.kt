@@ -26,7 +26,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.navigateWithTermsAccepted
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.importwallet.getFileName
 import cash.p.terminal.modules.restorelocal.RestoreLocalFragment

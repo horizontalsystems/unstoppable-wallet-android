@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.evmfee.legacy
 
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.evmfee.Bound
 import cash.p.terminal.modules.evmfee.FeeSettingsWarning
 import cash.p.terminal.modules.evmfee.GasPriceInfo

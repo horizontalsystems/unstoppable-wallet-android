@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.wallet.Warning
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.CautionViewItemFactory
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import kotlinx.coroutines.launch
 
 class SendEvmSettingsViewModel(

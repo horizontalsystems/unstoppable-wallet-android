@@ -28,13 +28,13 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

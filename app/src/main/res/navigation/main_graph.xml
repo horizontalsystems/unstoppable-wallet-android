@@ -353,6 +353,9 @@
     <fragment
         android:id="@+id/кeyAccountInfoFragment"
         android:name="cash.p.terminal.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
+    <fragment
+        android:id="@+id/hardwareWalletOnboardingFragment"
+        android:name="cash.p.terminal.tangem.ui.HardwareWalletOnboardingFragment" />
     <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />
@@ -372,11 +375,20 @@
         android:id="@+id/cancelOrScanDialog"
         android:name="cash.p.terminal.ui.dialogs.CancelOrScanDialog" />
     <dialog
+        android:id="@+id/addAccessCodeDialog"
+        android:name="cash.p.terminal.tangem.ui.accesscode.AddAccessCodeDialog" />
+    <dialog
+        android:id="@id/resetBackupDialog"
+        android:name="cash.p.terminal.tangem.ui.resetBackupDialog.ResetBackupDialog" />
+    <dialog
         android:id="@+id/syncErrorDialog"
         android:name="cash.p.terminal.modules.syncerror.SyncErrorDialog" />
     <dialog
         android:id="@+id/unlinkConfirmationDialog"
         android:name="cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog" />
+    <dialog
+        android:id="@+id/resetToFactorySettingsDialog"
+        android:name="cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsDialog" />
     <dialog
         android:id="@+id/feeSettingsInfoDialog"
         android:name="cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog" />

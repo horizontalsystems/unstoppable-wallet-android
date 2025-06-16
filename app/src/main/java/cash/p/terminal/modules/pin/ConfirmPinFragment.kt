@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.setNavigationResultX
+import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.modules.pin.ui.PinConfirm
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.getInput

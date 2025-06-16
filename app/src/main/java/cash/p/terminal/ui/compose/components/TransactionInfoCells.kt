@@ -31,11 +31,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.navigation.slideFromRight
-
-
-
 import cash.p.terminal.modules.contacts.ContactsFragment
 import cash.p.terminal.modules.contacts.ContactsModule
 import cash.p.terminal.modules.contacts.Mode

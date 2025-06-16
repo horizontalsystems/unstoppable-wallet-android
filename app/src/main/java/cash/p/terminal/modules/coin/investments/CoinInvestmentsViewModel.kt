@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.core.logoUrl
-import cash.p.terminal.entities.DataState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.ViewItem
 import io.horizontalsystems.core.helpers.DateHelper

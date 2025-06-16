@@ -19,7 +19,7 @@ import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.modules.info.ui.InfoHeader
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
-import cash.p.terminal.ui.compose.components.InfoTextBody
+import cash.p.terminal.ui_compose.components.InfoTextBody
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize

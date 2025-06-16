@@ -25,7 +25,7 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.composablePage
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
 import cash.p.terminal.modules.addtoken.blockchainselector.BlockchainSelectorResult
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
@@ -33,7 +33,7 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.FormsInput
-import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItem

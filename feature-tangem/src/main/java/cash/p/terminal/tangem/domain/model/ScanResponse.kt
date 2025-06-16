@@ -13,10 +13,7 @@ data class ScanResponse(
     val secondTwinPublicKey: String? = null,
     val derivedKeys: Map<KeyWalletPublicKey, ExtendedPublicKeysMap> = mapOf(),
     val primaryCard: PrimaryCard? = null,
-) {
-    val isRing: Boolean
-        get() = productType == ProductType.Ring
-}
+)
 
 typealias KeyWalletPublicKey = ByteArrayKey
 

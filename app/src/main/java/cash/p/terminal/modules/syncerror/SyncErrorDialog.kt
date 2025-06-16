@@ -27,13 +27,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.getInput
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper

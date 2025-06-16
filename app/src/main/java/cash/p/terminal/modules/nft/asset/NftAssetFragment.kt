@@ -54,9 +54,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.getInput
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.navigation.slideFromRight
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.entities.nft.NftAssetMetadata
 import cash.p.terminal.entities.nft.NftEventMetadata
 import cash.p.terminal.entities.nft.NftUid
@@ -76,7 +76,7 @@ import cash.p.terminal.ui_compose.components.CellMultilineLawrenceSection
 import cash.p.terminal.ui_compose.components.CellSingleLine
 import cash.p.terminal.ui_compose.components.CellSingleLineClear
 import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem

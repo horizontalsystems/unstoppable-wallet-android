@@ -5,7 +5,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.entities.tokenType
 import cash.p.terminal.modules.address.AddressParserChain
 import cash.p.terminal.modules.address.ZCashUfvkParser

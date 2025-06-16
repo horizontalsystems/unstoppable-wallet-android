@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.info.ui.InfoHeader
 import cash.p.terminal.strings.helpers.TranslatableString

@@ -35,7 +35,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.RateAppManager
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.contacts.ContactsFragment
 import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -45,7 +45,7 @@ import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui.compose.components.BadgeText
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection

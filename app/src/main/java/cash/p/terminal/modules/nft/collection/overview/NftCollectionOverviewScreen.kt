@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.About
 import cash.p.terminal.modules.coin.overview.ui.Contracts
 import cash.p.terminal.modules.coin.overview.ui.Loading

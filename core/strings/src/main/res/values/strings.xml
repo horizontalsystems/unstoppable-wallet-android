@@ -681,6 +681,41 @@
     <string name="scan">Scan</string>
     <string name="adding_tokens">Adding tokens</string>
     <string name="scan_to_add_mesage">You need to scan card to add tokens</string>
+    <string name="create_wallet">Create wallet</string>
+    <string name="create">Create</string>
+    <string name="error_wallets_creating">Error during creating wallets</string>
+    <string name="issuer_signature_loading_failed">Couldn\'t load the card\'s certificate. Please try again later.</string>
+    <string name="error_backup_card">Error during adding backup card</string>
+
+    <!-- Hardware wallet onboarding -->
+    <string name="unknown_error">Unknown error, please try later</string>
+    <string name="generate_keys_privately">Generate keys privately</string>
+    <string name="onboarding_create_wallet_options_message">Your keys will be securely generated inside the chip. There is no seed phrase, which means nobody can export or steal it.</string>
+    <string name="add_backup_card">Add backup</string>
+    <string name="common_continue">Continue</string>
+    <string name="add_more_backup_cards">Add more backup cards</string>
+    <string name="finalize_backup">Finalize backup</string>
+    <string name="np_backup_devices">No backup devices</string>
+    <string name="more_backup_devices">Add more backup devices</string>
+    <string name="onboarding_subtitle_no_backup_cards">To start the backup process add up to two backup cards.</string>
+    <string name="onboarding_subtitle_more_backup_cards">You can add more backup cards to increase security and flexibility.</string>
+    <string name="onboarding_access_code_intro_title">Create Access Code</string>
+    <string name="onboarding_access_code_intro_description">The access code protects your wallet card and ensures only you can use it. It’s required for important actions like making transactions or managing your wallet. Keep it safe and don’t share it with anyone.</string>
+    <string name="onboarding_access_code_hint">Choose any word, phrase, or number you want as your access code</string>
+    <string name="access_code">Access code</string>
+    <string name="repeat_access_code">Repeat access code</string>
+    <string name="access_code_must_be_4">Access code must be at least 4 symbols</string>
+    <string name="access_code_confirmation_does_not_match">Access code confirmation does not match</string>
+    <string name="onboarding_subtitle_scan_backup_card_format">Prepare the backup card with number %s</string>
+    <string name="common_origin_card">Primary card</string>
+    <string name="common_backup_card">Backup card</string>
+    <string name="reset_to_factory_settings">Reset to Factory Settings</string>
+    <string name="reset">Reset</string>
+    <string name="reset_card_with_backup_to_factory_message">Factory Reset will completely delete the wallet from the selected card. You will not be able to restore the current wallet or use the card or ring to recover the access code.</string>
+    <string name="reset_card_to_factory_condition_1">I understand that after performing this action, I will no longer have access to the current wallet</string>
+    <string name="reset_card_to_factory_condition_2">I realize that I can\'t use this card to recover my access code on the other cards of the current wallet</string>
+    <string name="common_attention">Attention</string>
+    <string name="onboarding_linking_error_card_with_wallets">Another wallet has already been created on the card you\'re trying to add. If you have funds in this wallet, please withdraw it and then reset this card and add it as a backup.</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
@@ -1303,7 +1338,7 @@
     <string name="error_no_active_account">No active account found</string>
     <string name="error_hardware_wallet_not_supported">Not supported by hardware card yet</string>
     <string name="need_to_sign_times">To create transaction you will need to sign it %d times</string>
-    <string name="need_to_activate_in_tangem_app">Can\'t create wallet, activate card via Tangem app first</string>
+    <string name="initial_message_create_wallet_body">To create the wallet tap the card as shown above and do not remove until the end of the operation</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:

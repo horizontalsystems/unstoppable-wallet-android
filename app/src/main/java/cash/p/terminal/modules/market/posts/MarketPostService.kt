@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.market.posts
 
 import cash.p.terminal.wallet.MarketKitWrapper
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import cash.p.terminal.wallet.models.Post

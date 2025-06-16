@@ -4,10 +4,9 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.MarketKitWrapper
-
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.MarketModule

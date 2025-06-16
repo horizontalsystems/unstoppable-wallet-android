@@ -22,8 +22,7 @@ import androidx.core.view.doOnLayout
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.slideFromBottom
-
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.extensions.MetricData

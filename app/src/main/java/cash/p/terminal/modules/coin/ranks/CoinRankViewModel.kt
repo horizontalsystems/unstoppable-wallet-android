@@ -6,7 +6,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
 import cash.p.terminal.modules.coin.ranks.CoinRankModule.RankAnyValue
 import cash.p.terminal.modules.coin.ranks.CoinRankModule.UiState

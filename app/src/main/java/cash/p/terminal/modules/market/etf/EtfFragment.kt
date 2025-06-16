@@ -43,9 +43,8 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
-
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.chartview.chart.GraphicLine
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui_compose.components.ImageSource

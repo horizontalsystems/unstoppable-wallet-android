@@ -18,9 +18,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import cash.p.terminal.R
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.TextImportantWarning
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class ConfirmationDialog(
     private val listener: Listener,
@@ -58,7 +61,7 @@ class ConfirmationDialog(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+                ComposeAppTheme {
                     BottomScreen()
                 }
             }
@@ -69,7 +72,7 @@ class ConfirmationDialog(
     private fun BottomScreen() {
         BottomSheetHeader(
             iconPainter = painterResource(icon ?: R.drawable.ic_attention_24),
-            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = title,
             onCloseClick = { close() }
         ) {

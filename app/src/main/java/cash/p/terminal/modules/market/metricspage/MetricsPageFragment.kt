@@ -23,7 +23,7 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromRight
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import io.horizontalsystems.chartview.ui.Chart

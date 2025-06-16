@@ -96,7 +96,7 @@ class ManageAccountViewModel(
     }
 
     private fun getKeyActions(account: Account): List<KeyAction> {
-        if (!account.isBackedUp && !account.isFileBackedUp) {
+        if (!account.isBackedUp && !account.isFileBackedUp && account.accountSupportsBackup) {
             return emptyList()
         }
         return when (account.type) {

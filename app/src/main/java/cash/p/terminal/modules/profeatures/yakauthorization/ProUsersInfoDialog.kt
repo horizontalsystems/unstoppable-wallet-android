@@ -26,8 +26,8 @@ import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.subhead2_leah
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 
 class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
@@ -41,7 +41,7 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+                ComposeAppTheme {
                     ProUsersInfoScreen(
                         findNavController(),
                         listOf(
@@ -63,7 +63,7 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
 private fun ProUsersInfoScreen(navController: NavController, features: List<String>) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_24_lock),
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
             navController.popBackStack()

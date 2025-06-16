@@ -4,7 +4,7 @@ import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.GuidesManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.retryWhen
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.entities.GuideCategory
 import cash.p.terminal.entities.GuideCategoryMultiLang
 import cash.p.terminal.entities.GuideSection

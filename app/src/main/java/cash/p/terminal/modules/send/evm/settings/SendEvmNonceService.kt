@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.send.evm.settings
 
 import cash.p.terminal.wallet.Warning
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.evmfee.FeeSettingsError
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter

@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
 import io.horizontalsystems.core.ViewModelUiState
-
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule.WalletBackup
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupViewItemFactory
@@ -16,6 +15,7 @@ import cash.p.terminal.modules.backuplocal.fullbackup.RestoreException
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.OtherBackupViewItem
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.WalletBackupViewItem
 import cash.p.terminal.modules.restorelocal.RestoreLocalModule.UiState
+import cash.p.terminal.strings.helpers.Translator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -126,7 +126,7 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -157,7 +157,7 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -188,7 +188,7 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }

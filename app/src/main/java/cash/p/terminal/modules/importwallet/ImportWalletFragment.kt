@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -31,7 +30,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.core.navigateWithTermsAccepted
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet

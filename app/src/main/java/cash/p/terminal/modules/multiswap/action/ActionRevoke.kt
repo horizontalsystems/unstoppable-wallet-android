@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromBottomForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.eip20revoke.Eip20RevokeConfirmFragment
 import cash.p.terminal.wallet.Token

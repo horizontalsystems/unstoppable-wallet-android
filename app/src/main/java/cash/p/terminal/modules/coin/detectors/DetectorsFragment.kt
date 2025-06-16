@@ -41,7 +41,7 @@ import cash.p.terminal.modules.coin.detectors.DetectorsModule.DetectorsTab
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TabItem
 import cash.p.terminal.ui_compose.components.Tabs

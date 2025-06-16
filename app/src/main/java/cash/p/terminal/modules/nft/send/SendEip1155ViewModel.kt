@@ -9,7 +9,7 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.adapters.nft.INftAdapter
 import cash.p.terminal.core.managers.NftMetadataManager
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.modules.send.evm.SendEvmAddressService
 import cash.p.terminal.modules.send.evm.SendEvmData

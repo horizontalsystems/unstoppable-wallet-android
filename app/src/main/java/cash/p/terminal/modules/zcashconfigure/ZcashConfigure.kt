@@ -58,14 +58,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.setNavigationResultX
+import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.strings.helpers.TranslatableString
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent

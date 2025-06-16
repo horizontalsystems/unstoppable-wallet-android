@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow

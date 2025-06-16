@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal

@@ -35,10 +35,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
@@ -58,7 +57,7 @@ import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.body_lucian
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.SnackbarDuration
@@ -98,7 +97,7 @@ fun ContactScreen(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             when (bottomSheetType) {
                 null -> {
@@ -110,7 +109,7 @@ fun ContactScreen(
                         title = stringResource(R.string.Contacts_DeleteContact),
                         text = stringResource(R.string.Contacts_DeleteContact_Warning),
                         iconPainter = painterResource(R.drawable.ic_delete_20),
-                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
                         confirmText = stringResource(R.string.Button_Delete),
                         cautionType = Caution.Type.Error,
                         cancelText = stringResource(R.string.Button_Cancel),
@@ -124,7 +123,7 @@ fun ContactScreen(
                         title = stringResource(R.string.Alert_TitleWarning),
                         text = stringResource(R.string.Contacts_DiscardChanges_Warning),
                         iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                         confirmText = stringResource(R.string.Contacts_DiscardChanges),
                         cautionType = Caution.Type.Error,
                         cancelText = stringResource(R.string.Contacts_KeepEditing),

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.wallet.entities.UsedAddress
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.receive.viewmodels.ReceiveAddressViewModel
 import java.math.BigDecimal
 

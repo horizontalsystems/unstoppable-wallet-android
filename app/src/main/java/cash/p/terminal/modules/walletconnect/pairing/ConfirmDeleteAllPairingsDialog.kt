@@ -19,11 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.setNavigationResultX
+import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
 import cash.p.terminal.ui_compose.components.TextImportantWarning
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize

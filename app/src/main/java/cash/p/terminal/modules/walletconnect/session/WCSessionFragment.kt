@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.NavigationBarDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +33,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.getInputX
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.session.ui.StatusCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

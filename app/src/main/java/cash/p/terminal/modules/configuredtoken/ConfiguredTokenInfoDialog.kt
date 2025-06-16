@@ -22,20 +22,19 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_leah
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeaderMultiline
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeaderMultiline
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.wallet.Token
@@ -55,7 +54,7 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                ConfiguredTokenInfo(navController, navController.requireInput<cash.p.terminal.wallet.Token>())
+                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
             }
         }
     }

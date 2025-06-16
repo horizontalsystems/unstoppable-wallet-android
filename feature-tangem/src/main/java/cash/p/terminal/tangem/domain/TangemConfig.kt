@@ -1,11 +1,28 @@
 package cash.p.terminal.tangem.domain
 
+import cash.p.terminal.wallet.BuildConfig
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.BlockchainType
 
 object TangemConfig {
+
+    val getDefaultTokens by lazy {
+        listOfNotNull(
+            TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
+            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
+            TokenQuery(
+                BlockchainType.BinanceSmartChain,
+                TokenType.Eip20(BuildConfig.PIRATE_CONTRACT)
+            ),
+            TokenQuery(
+                BlockchainType.BinanceSmartChain,
+                TokenType.Eip20(BuildConfig.COSANTA_CONTRACT)
+            ),
+        )
+    }
     /**
      * List of blockchain types that are excluded from hardware wallet support.
      * This is used to filter out tokens that cannot be enabled on hardware wallets.

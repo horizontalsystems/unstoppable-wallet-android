@@ -27,6 +27,7 @@ object ManageAccountModule {
         RecoveryPhrase,
         PublicKeys,
         PrivateKeys,
+        ResetToFactorySettings,
     }
 
     sealed class BackupItem{

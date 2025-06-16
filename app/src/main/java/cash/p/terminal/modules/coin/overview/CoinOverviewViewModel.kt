@@ -14,7 +14,7 @@ import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.order
 import cash.p.terminal.core.supports
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
 import cash.p.terminal.strings.helpers.Translator

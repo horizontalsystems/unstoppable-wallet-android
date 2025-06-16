@@ -3,9 +3,8 @@ package cash.p.terminal.modules.market.category
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
-import cash.p.terminal.entities.DataState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule

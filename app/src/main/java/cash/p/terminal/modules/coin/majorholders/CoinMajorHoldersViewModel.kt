@@ -6,7 +6,7 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.brandColor
 import cash.p.terminal.wallet.MarketKitWrapper
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.CoinViewFactory
 import cash.p.terminal.modules.coin.MajorHolderItem
 import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersModule.UiState

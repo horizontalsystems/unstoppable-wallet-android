@@ -24,7 +24,7 @@ import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.entities.SectionItemPosition

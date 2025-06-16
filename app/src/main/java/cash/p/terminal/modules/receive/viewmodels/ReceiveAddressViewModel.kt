@@ -7,7 +7,7 @@ import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.AddressUri
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.receive.ReceiveModule
 import cash.p.terminal.modules.receive.ReceiveModule.AdditionalData
 import cash.p.terminal.strings.helpers.Translator

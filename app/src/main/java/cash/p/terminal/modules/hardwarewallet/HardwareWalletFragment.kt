@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
+import cash.p.terminal.tangem.ui.HardwareWalletError
+import cash.p.terminal.tangem.ui.HardwareWalletOnboardingFragment.*
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
@@ -26,6 +28,7 @@ import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.slideFromRightForResult
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -38,6 +41,41 @@ class HardwareWalletFragment : BaseComposeFragment() {
         val inclusive = input?.popOffInclusive != false
         val viewModel = koinViewModel<HardwareWalletViewModel>()
 
+        val view = LocalView.current
+
+        LaunchedEffect(Unit) {
+            viewModel.errorEvents.collect { error ->
+                when (error) {
+                    HardwareWalletError.CardNotActivated -> {
+                        navController.slideFromRightForResult<Result>(
+                            resId = R.id.hardwareWalletOnboardingFragment,
+                            input = Input(viewModel.accountName)
+                        ) {
+                            viewModel.success = it.success
+                        }
+                    }
+
+                    HardwareWalletError.WalletsNotCreated -> {
+                        HudHelper.showErrorMessage(
+                            contenView = view,
+                            resId = R.string.error_wallets_creating
+                        )
+                    }
+
+                    HardwareWalletError.AttestationFailed,
+                    HardwareWalletError.UnknownError -> {
+                        HudHelper.showErrorMessage(
+                            contenView = view,
+                            resId = R.string.unknown_error
+                        )
+                    }
+
+                    is HardwareWalletError.NeedFactoryReset -> Unit
+                    HardwareWalletError.ErrorInBackupCard -> Unit
+                }
+            }
+        }
+
         HardwareWalletScreen(
             navController = navController,
             onScanCard = viewModel::scanCard,
@@ -48,7 +86,7 @@ class HardwareWalletFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun HardwareWalletScreen(
+internal fun HardwareWalletScreen(
     navController: NavController,
     onScanCard: () -> Unit,
     onFinish: () -> Unit,
@@ -57,7 +95,7 @@ fun HardwareWalletScreen(
     val view = LocalView.current
 
     LaunchedEffect(viewModel.success) {
-        viewModel.success?.let { accountType ->
+        if (viewModel.success) {
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_Created,
@@ -66,17 +104,7 @@ fun HardwareWalletScreen(
             )
             delay(300)
 
-            onFinish.invoke()
-            viewModel.onSuccessMessageShown()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.errorEvents.collect { error ->
-            HudHelper.showErrorMessage(
-                contenView = view,
-                resId = R.string.need_to_activate_in_tangem_app,
-            )
+            onFinish()
         }
     }
 

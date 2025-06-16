@@ -57,7 +57,7 @@ import cash.p.terminal.ui_compose.components.body_remus
 import io.horizontalsystems.chartview.cell.CellUniversal
 import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch

@@ -6,7 +6,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.wallet.Account
 
 object UnlinkAccountModule {
-    class Factory(private val account: cash.p.terminal.wallet.Account) : ViewModelProvider.Factory {
+    class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return UnlinkAccountViewModel(account, App.accountManager) as T

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.strings.helpers.TranslatableString

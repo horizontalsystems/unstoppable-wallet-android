@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.ViewModelUiState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

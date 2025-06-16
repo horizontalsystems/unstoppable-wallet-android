@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.ViewModelUiState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import io.horizontalsystems.core.CurrencyManager

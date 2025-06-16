@@ -43,12 +43,12 @@ import cash.p.terminal.ui_compose.components.D1
 import cash.p.terminal.ui_compose.components.D2
 import cash.p.terminal.ui_compose.components.D7
 import cash.p.terminal.ui_compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable

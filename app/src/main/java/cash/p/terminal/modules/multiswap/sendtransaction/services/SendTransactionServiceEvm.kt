@@ -23,7 +23,7 @@ import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.tryOrNull
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.evmfee.Eip1559FeeSettings
 import cash.p.terminal.modules.evmfee.EvmCommonGasDataService

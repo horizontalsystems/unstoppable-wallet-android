@@ -16,7 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
-import cash.p.terminal.core.slideFromRightForResult
+import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.entities.Address
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.address.AddressParserModule

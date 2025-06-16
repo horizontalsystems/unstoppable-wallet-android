@@ -3,7 +3,7 @@ package io.horizontalsystems.chartview.chart
 import cash.p.terminal.ui_compose.components.TabItem
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.entity.ChartInfoData
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.models.HsTimePeriod
 
 data class ChartUiState(

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.InfoTextBody
+import cash.p.terminal.ui_compose.components.InfoTextBody
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSpacer

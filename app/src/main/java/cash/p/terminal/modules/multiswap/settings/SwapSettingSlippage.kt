@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.modules.multiswap.settings.ui.SlippageAmount
-import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 

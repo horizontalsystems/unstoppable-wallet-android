@@ -29,7 +29,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

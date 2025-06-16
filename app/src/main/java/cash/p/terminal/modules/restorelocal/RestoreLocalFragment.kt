@@ -56,10 +56,10 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.FormsInputPassword
+import cash.p.terminal.ui_compose.components.FormsInputPassword
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.adapters.nft.INftAdapter
 import cash.p.terminal.core.managers.NftMetadataManager
 import cash.p.terminal.core.utils.AddressUriParser
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.entities.nft.EvmNftRecord
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.modules.address.AddressParserViewModel

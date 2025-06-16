@@ -28,7 +28,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoTextBody
+import cash.p.terminal.ui_compose.components.InfoTextBody
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui_compose.components.VSpacer

@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -25,7 +25,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

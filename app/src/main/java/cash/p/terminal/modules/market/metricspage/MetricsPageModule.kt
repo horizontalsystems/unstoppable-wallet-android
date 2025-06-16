@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.chartview.chart.ChartModule
 import io.horizontalsystems.chartview.chart.ChartViewModel

@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.coin.reports
 
 import cash.p.terminal.wallet.MarketKitWrapper
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.wallet.models.CoinReport
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

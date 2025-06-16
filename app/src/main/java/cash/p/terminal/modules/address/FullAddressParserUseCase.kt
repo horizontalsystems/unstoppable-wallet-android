@@ -4,7 +4,7 @@ import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.core.utils.ToncoinUriParser
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.wallet.title
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers

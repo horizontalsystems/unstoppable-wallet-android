@@ -1,6 +1,4 @@
-package cash.p.terminal.entities
-
-import io.horizontalsystems.core.entities.ViewState
+package cash.p.terminal.ui_compose.entities
 
 sealed class DataState<out T> {
     data class Success<out T>(val data: T) : DataState<T>()

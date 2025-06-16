@@ -44,8 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
-
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.balance.BalanceAccountsViewModel
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceScreenState
@@ -67,7 +66,7 @@ import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.entities.SectionItemPosition
 import cash.p.terminal.ui_compose.sectionItemBorder
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 
 @Composable
 fun TransactionsScreen(

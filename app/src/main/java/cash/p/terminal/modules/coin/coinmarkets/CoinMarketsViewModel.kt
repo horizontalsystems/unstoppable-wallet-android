@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.DataState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.MarketTickerViewItem
 import cash.p.terminal.strings.helpers.TranslatableString
 import kotlinx.coroutines.launch

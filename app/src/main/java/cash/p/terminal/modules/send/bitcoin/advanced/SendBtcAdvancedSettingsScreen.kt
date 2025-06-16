@@ -40,10 +40,10 @@ import cash.p.terminal.modules.send.bitcoin.TransactionInputsSortInfoPage
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.TextImportantWarning
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton

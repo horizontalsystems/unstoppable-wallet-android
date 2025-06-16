@@ -9,9 +9,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.core.feePriceScale
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.entities.FeePriceScale
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.evmfee.FeeSummaryViewItem
 import cash.p.terminal.modules.evmfee.FeeViewItem
 import cash.p.terminal.modules.evmfee.GasPriceInfo

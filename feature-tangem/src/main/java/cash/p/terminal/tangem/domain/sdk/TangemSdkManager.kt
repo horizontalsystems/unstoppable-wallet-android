@@ -1,10 +1,14 @@
 package cash.p.terminal.tangem.domain.sdk
 
 import androidx.annotation.DrawableRes
+import cash.p.terminal.core.R
+import cash.p.terminal.tangem.domain.model.ProductType
 import cash.p.terminal.tangem.domain.model.ScanResponse
+import cash.p.terminal.tangem.domain.task.CreateProductWalletTask
+import cash.p.terminal.tangem.domain.task.ResetToFactorySettingsTask
 import cash.p.terminal.tangem.domain.task.ScanProductTask
+import cash.p.terminal.tangem.domain.task.reponse.CreateProductWalletTaskResponse
 import cash.p.terminal.wallet.entities.TokenQuery
-import cash.p.terminal.wallet.entities.TokenType
 import com.tangem.Log
 import com.tangem.Message
 import com.tangem.TangemSdk
@@ -17,6 +21,8 @@ import com.tangem.common.card.Card
 import com.tangem.common.core.CardSessionRunnable
 import com.tangem.common.core.TangemSdkError
 import com.tangem.common.core.UserCodeRequestPolicy
+import com.tangem.common.doOnResult
+import com.tangem.common.doOnSuccess
 import com.tangem.common.extensions.ByteArrayKey
 import com.tangem.common.services.secure.SecureStorage
 import com.tangem.common.usersCode.UserCodeRepository
@@ -29,7 +35,7 @@ import com.tangem.operations.derivation.DeriveWalletPublicKeyTask
 import com.tangem.operations.preflightread.PreflightReadFilter
 import com.tangem.operations.sign.SignHashResponse
 import com.tangem.operations.sign.SignResponse
-import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.CoreApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -44,8 +50,10 @@ class TangemSdkManager(
 ) {
 
     private val awaitInitializationMutex = Mutex()
+    internal var lastScanResponse: ScanResponse? = null
+        private set
 
-    private val tangemSdk: TangemSdk
+    internal val tangemSdk: TangemSdk
         get() = cardSdkConfigRepository.sdk
 
     private val userCodeRepository by lazy {
@@ -121,7 +129,11 @@ class TangemSdkManager(
                 ),
                 cardId = cardId,
                 initialMessage = message
-            )
+            ).also {
+                if (it is CompletionResult.Success) {
+                    lastScanResponse = it.data
+                }
+            }
         }
     }
 
@@ -181,37 +193,37 @@ class TangemSdkManager(
         }
     }
 
-    /*
-        suspend fun createProductWallet(
-            scanResponse: ScanResponse,
-            shouldReset: Boolean,
-        ): CompletionResult<CreateProductWalletTaskResponse> {
-            tangemSdk.config.setupForProduct(
-                if (scanResponse.cardTypesResolver.isRing()) {
-                    ProductType.RING
-                } else {
-                    ProductType.CARD
-                },
-            )
+    suspend fun createProductWallet(
+        scanResponse: ScanResponse,
+        shouldReset: Boolean = false
+    ): CompletionResult<CreateProductWalletTaskResponse> {
+        tangemSdk.config.setupForProduct(
+            if (scanResponse.productType == ProductType.Ring) {
+                com.tangem.common.core.ProductType.RING
+            } else {
+                com.tangem.common.core.ProductType.CARD
+            },
+        )
 
-            return runTaskAsync(
-                runnable = CreateProductWalletTask(
-                    cardTypesResolver = scanResponse.cardTypesResolver,
-                    derivationStyleProvider = scanResponse.derivationStyleProvider,
-                    shouldReset = shouldReset,
-                ),
-                cardId = scanResponse.card.cardId,
-                initialMessage = if (scanResponse.cardTypesResolver.isRing()) {
-                    Message(resources.getStringSafe(R.string.initial_message_create_wallet_body_ring))
-                } else {
-                    Message(resources.getStringSafe(R.string.initial_message_create_wallet_body))
-                },
-                iconScanRes = if (scanResponse.cardTypesResolver.isRing()) R.drawable.img_hand_scan_ring else null,
-                preflightReadFilter = null,
-            )
-                .doOnResult { tangemSdk.config.setupForProduct(ProductType.ANY) }
-        }
-    */
+        return runTaskAsync(
+            runnable = CreateProductWalletTask(
+                shouldReset = shouldReset,
+            ),
+            cardId = scanResponse.card.cardId,
+            initialMessage = Message(CoreApp.instance.getString(R.string.initial_message_create_wallet_body)),
+            iconScanRes = null,
+            preflightReadFilter = null,
+        ).doOnResult { tangemSdk.config.setupForProduct(com.tangem.common.core.ProductType.ANY) }
+            .doOnSuccess { result ->
+                lastScanResponse?.let {
+                    lastScanResponse = it.copy(
+                        card = result.card,
+                        derivedKeys = result.derivedKeys,
+                        primaryCard = result.primaryCard,
+                    )
+                }
+            }
+    }
 
     suspend fun derivePublicKeys(
         cardId: String?,
@@ -236,20 +248,18 @@ class TangemSdkManager(
         )
     }
 
-    /*
-        suspend fun resetToFactorySettings(
-            cardId: String,
-            allowsRequestAccessCodeFromRepository: Boolean,
-        ): CompletionResult<Boolean> {
-            return runTaskAsyncReturnOnMain(
-                runnable = ResetToFactorySettingsTask(
-                    allowsRequestAccessCodeFromRepository = allowsRequestAccessCodeFromRepository,
-                ),
-                cardId = cardId,
-                initialMessage = Message(resources.getStringSafe(R.string.card_settings_reset_card_to_factory)),
-            )
-        }
-    */
+    suspend fun resetToFactorySettings(
+        cardId: String,
+        allowsRequestAccessCodeFromRepository: Boolean,
+    ): CompletionResult<Boolean> {
+        return runTaskAsyncReturnOnMain(
+            runnable = ResetToFactorySettingsTask(
+                allowsRequestAccessCodeFromRepository = allowsRequestAccessCodeFromRepository,
+            ),
+            cardId = cardId,
+            initialMessage = Message(CoreApp.instance.getString(R.string.reset_to_factory_settings)),
+        )
+    }
 
     /*
         suspend fun resetBackupCard(

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/BottomDialogMediumAnimations</item>
+    </style>
+
+    <style name="BottomDialogMediumAnimations">
+        <item name="android:windowEnterAnimation">@anim/slide_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_to_bottom</item>
+    </style>
+</resources>

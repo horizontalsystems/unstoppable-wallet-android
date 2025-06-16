@@ -1,4 +1,4 @@
-package io.horizontalsystems.core.entities
+package cash.p.terminal.ui_compose.entities
 
 sealed class ViewState {
     class Error(val t: Throwable) : ViewState()

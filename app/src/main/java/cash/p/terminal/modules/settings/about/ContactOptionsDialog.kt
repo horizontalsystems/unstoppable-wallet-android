@@ -25,8 +25,8 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.findNavController

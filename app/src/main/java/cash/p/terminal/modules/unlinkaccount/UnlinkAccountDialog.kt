@@ -27,9 +27,10 @@ import cash.p.terminal.ui.compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.subhead2_leah
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.helpers.HudHelper
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
@@ -54,7 +55,7 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun UnlinkAccountScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
+private fun UnlinkAccountScreen(navController: NavController, account: Account) {
     val viewModel =
         viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 

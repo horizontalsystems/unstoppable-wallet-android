@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.syncerror.SyncErrorDialog

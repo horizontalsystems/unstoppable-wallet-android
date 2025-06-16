@@ -20,7 +20,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

@@ -75,6 +75,7 @@ dependencies {
 
     implementation(project(":core:strings"))
     implementation(project(":core:ui-compose"))
+    implementation(project(":core:navigation"))
 
     testImplementation("junit:junit:$junit_version")
 }

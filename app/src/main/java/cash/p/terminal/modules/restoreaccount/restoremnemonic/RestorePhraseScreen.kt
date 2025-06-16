@@ -64,11 +64,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
-
-
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.createaccount.MnemonicLanguageCell
 import cash.p.terminal.modules.createaccount.PassphraseCell
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
@@ -86,7 +84,7 @@ import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CustomKeyboardWarningDialog
 import cash.p.terminal.ui.compose.components.FormsInput
-import cash.p.terminal.ui.compose.components.FormsInputPassword
+import cash.p.terminal.ui_compose.components.FormsInputPassword
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItem

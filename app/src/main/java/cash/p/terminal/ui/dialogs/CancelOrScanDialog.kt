@@ -21,10 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.setNavigationResultX
-import cash.p.terminal.ui.compose.components.InfoTextBody
-import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.core.setNavigationResultX
+import cash.p.terminal.ui_compose.components.InfoTextBody
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.findNavController
@@ -43,7 +43,7 @@ class CancelOrScanDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ConfirmDeleteAllPairingsScreen(findNavController())
+                CancelOrScanScreen(findNavController())
             }
         }
     }
@@ -53,7 +53,7 @@ class CancelOrScanDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun ConfirmDeleteAllPairingsScreen(navController: NavController) {
+private fun CancelOrScanScreen(navController: NavController) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_card),

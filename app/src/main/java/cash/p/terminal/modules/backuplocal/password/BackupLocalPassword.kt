@@ -25,8 +25,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.ui.compose.components.FormsInputPassword
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.FormsInputPassword
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui_compose.components.HsBackButton

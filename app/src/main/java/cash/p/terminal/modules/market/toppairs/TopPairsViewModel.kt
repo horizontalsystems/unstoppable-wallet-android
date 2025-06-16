@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.MarketKitWrapper
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.market.overview.TopPairViewItem
 import io.horizontalsystems.core.CurrencyManager
 import kotlinx.coroutines.CancellationException

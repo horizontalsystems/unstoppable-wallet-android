@@ -5,7 +5,7 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.MarketModule

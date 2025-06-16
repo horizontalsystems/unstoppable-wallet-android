@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     implementation(libs.compose.tooling)
@@ -50,8 +49,11 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
+
+    implementation(libs.androidx.material3.android)
+    implementation(libs.material)
+    debugImplementation(libs.androidx.ui.tooling)
+
     implementation(project(":core:strings"))
     implementation(project(":core:resources"))
-    implementation(libs.androidx.material3.android)
-    debugImplementation(libs.androidx.ui.tooling)
 }

@@ -25,6 +25,8 @@ import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -55,7 +57,7 @@ fun BottomSheetSelectorMultiple(
                     .clip(RoundedCornerShape(12.dp))
                     .border(
                         1.dp,
-                        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel10,
+                        ComposeAppTheme.colors.steel10,
                         RoundedCornerShape(12.dp)
                     )
             ) {

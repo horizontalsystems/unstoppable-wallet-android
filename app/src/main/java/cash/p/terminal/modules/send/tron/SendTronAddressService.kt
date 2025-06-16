@@ -3,7 +3,7 @@ package cash.p.terminal.modules.send.tron
 import cash.p.terminal.R
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.entities.Address
-import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey

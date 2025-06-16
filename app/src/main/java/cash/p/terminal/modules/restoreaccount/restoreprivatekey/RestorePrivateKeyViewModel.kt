@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.hexToByteArray
-import cash.p.terminal.wallet.AccountType
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.EmptyText
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NoValidKey
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NonPrivateKey
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NotSupportedDerivedType
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import java.math.BigInteger
@@ -46,7 +46,7 @@ class RestorePrivateKeyViewModel(
             accountType(text)
         } catch (e: Exception) {
             inputState = DataState.Error(
-                Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_PrivateKey_InvalidKey))
+                Exception(Translator.getString(R.string.Restore_PrivateKey_InvalidKey))
             )
             null
         }

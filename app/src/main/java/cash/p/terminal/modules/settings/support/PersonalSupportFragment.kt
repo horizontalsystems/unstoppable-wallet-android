@@ -40,7 +40,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

@@ -8,8 +8,8 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.brandColor
 import cash.p.terminal.core.order
 import io.horizontalsystems.core.entities.Currency
-import cash.p.terminal.entities.DataState
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ActionType
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo

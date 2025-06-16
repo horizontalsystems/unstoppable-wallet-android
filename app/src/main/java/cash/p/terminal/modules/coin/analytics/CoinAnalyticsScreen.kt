@@ -19,9 +19,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.navigation.slideFromRight
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsBlockHeader
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsChart
@@ -36,7 +36,7 @@ import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.reports.CoinReportsFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.ui_compose.components.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.StackBarSlice

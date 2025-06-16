@@ -15,7 +15,7 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui_compose.components.TextImportantWarning

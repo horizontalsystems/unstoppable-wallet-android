@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.market.tvl
 
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.subjects.BehaviorSubject

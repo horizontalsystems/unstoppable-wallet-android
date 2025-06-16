@@ -34,8 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.slideFromBottom
-
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.balance.AccountViewItem
@@ -55,7 +54,7 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

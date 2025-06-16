@@ -10,8 +10,8 @@ import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.entities.Value
-import io.horizontalsystems.core.entities.ViewState
-import io.horizontalsystems.core.entities.viewState
+import cash.p.terminal.ui_compose.entities.ViewState
+import cash.p.terminal.ui_compose.entities.viewState
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.models.HsTimePeriod
 import kotlinx.coroutines.Dispatchers

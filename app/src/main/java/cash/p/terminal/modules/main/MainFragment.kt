@@ -38,7 +38,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.RateAppManager
-import cash.p.terminal.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog

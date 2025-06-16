@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.DataState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.ui.compose.components.FormsInputAddress
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl

@@ -21,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
-import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.core.slideFromBottom
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.subhead2_grey

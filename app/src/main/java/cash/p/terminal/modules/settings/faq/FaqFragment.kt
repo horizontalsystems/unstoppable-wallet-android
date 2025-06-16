@@ -18,9 +18,8 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.navigation.slideFromRight
-
 import cash.p.terminal.entities.Faq
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.ui_compose.components.AppBar

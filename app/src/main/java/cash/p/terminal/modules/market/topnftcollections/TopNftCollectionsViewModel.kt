@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
-import io.horizontalsystems.core.entities.ViewState
-import io.horizontalsystems.core.entities.viewState
+import cash.p.terminal.ui_compose.entities.ViewState
+import cash.p.terminal.ui_compose.entities.viewState
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField

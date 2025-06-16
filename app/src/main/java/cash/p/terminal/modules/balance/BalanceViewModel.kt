@@ -11,7 +11,6 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.adapters.zcash.ZcashAddressValidator
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.managers.PriceManager
-
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
@@ -40,7 +39,7 @@ import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers

@@ -25,7 +25,7 @@ import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.requireInput
-import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.tvl.TvlModule
 import cash.p.terminal.ui_compose.components.HSSwipeRefresh
