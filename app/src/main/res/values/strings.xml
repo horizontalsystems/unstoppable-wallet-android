@@ -1528,8 +1528,15 @@
     <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
-    <string name="CoinPage_Performance_Week">1 Week</string>
-    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_Performance_Day1">Day</string>
+    <string name="CoinPage_Performance_Week1">1 Week</string>
+    <string name="CoinPage_Performance_Week2">2 Week</string>
+    <string name="CoinPage_Performance_Month1">1 Month</string>
+    <string name="CoinPage_Performance_Month3">3 Months</string>
+    <string name="CoinPage_Performance_Month6">6 Months</string>
+    <string name="CoinPage_Performance_Year1">1 Year</string>
+    <string name="CoinPage_Performance_Year2">2 Years</string>
+    <string name="CoinPage_Performance_Year5">5 Years</string>
     <string name="CoinPage_ShowMore">Show More</string>
     <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>

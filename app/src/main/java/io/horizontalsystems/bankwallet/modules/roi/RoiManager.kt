@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.roi
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class RoiManager(private val localStorage: ILocalStorage) {
 
@@ -13,6 +15,9 @@ class RoiManager(private val localStorage: ILocalStorage) {
         HsTimePeriod.Year1
     )
 
+    private val _dataUpdatedFlow = MutableSharedFlow<Unit>()
+    val dataUpdatedFlow = _dataUpdatedFlow.asSharedFlow()
+
     fun getSelectedCoins(): List<PerformanceCoin> {
         return localStorage.roiPerformanceCoins.ifEmpty { defaultCoins }
     }
@@ -21,8 +26,10 @@ class RoiManager(private val localStorage: ILocalStorage) {
         return localStorage.selectedPeriods.ifEmpty { defaultPeriods }
     }
 
-    fun update(selectedCoins: List<PerformanceCoin>, selectedPeriods: List<HsTimePeriod>) {
+    suspend fun update(selectedCoins: List<PerformanceCoin>, selectedPeriods: List<HsTimePeriod>) {
         localStorage.roiPerformanceCoins = selectedCoins
         localStorage.selectedPeriods = selectedPeriods
+
+        _dataUpdatedFlow.emit(Unit)
     }
 }

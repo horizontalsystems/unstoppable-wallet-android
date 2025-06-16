@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.roi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -14,6 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class RoiSelectCoinsViewModel(
@@ -84,7 +86,9 @@ class RoiSelectCoinsViewModel(
     }
 
     fun onApply() {
-        roiManager.update(selectedCoins, selectedPeriods)
+        viewModelScope.launch {
+            roiManager.update(selectedCoins, selectedPeriods)
+        }
     }
 
     fun onSelectPeriod(index: Int, selected: HsTimePeriodTranslatable) {
@@ -107,10 +111,7 @@ class RoiSelectCoinsViewModel(
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RoiSelectCoinsViewModel(
-                App.marketKit,
-                RoiManager(App.localStorage)
-            ) as T
+            return RoiSelectCoinsViewModel(App.marketKit, App.roiManager) as T
         }
     }
 }
