@@ -86,18 +86,19 @@ class CoinViewFactory(
 ) {
 
     fun getRoi(performance: Map<String, Map<HsTimePeriod, BigDecimal>>): List<RoiViewItem> {
-        val roiCoinsMap = roiManager.getSelectedCoins().associateBy { it.uid }
+        val selectedCoins = roiManager.getSelectedCoins()
 
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()
         rows.add(RoiViewItem.HeaderRowViewItem(timePeriods))
-        performance.forEach { (vsCurrency, performanceVsCurrency) ->
-            val title = roiCoinsMap[vsCurrency]?.code ?: vsCurrency
 
-            if (performanceVsCurrency.isNotEmpty()) {
-                val values = timePeriods.map { performanceVsCurrency[it] }
-                rows.add(RoiViewItem.RowViewItem(title.uppercase(), values))
+        selectedCoins.forEach { performanceCoin ->
+            performance[performanceCoin.uid]?.let { performanceVsCurrency ->
+                if (performanceVsCurrency.isNotEmpty()) {
+                    val values = timePeriods.map { performanceVsCurrency[it] }
+                    rows.add(RoiViewItem.RowViewItem(performanceCoin.code.uppercase(), values))
+                }
             }
         }
 

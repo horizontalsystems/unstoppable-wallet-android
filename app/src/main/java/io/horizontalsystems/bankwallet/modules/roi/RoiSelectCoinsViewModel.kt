@@ -30,7 +30,7 @@ class RoiSelectCoinsViewModel(
         "tether-gold" to R.drawable.ic_gold_32,
         "sp500" to R.drawable.ic_sp500_32,
     )
-    private var coinItems: List<CoinItem> = listOf()
+    private val coinItems: List<CoinItem>
 
     init {
         val tmpItems = mutableListOf<CoinItem>()
@@ -61,8 +61,6 @@ class RoiSelectCoinsViewModel(
         )
 
         coinItems = tmpItems
-
-        emitState()
     }
 
     override fun createState() = RoiSelectCoinsUiState(
@@ -87,7 +85,10 @@ class RoiSelectCoinsViewModel(
 
     fun onApply() {
         viewModelScope.launch {
-            roiManager.update(selectedCoins, selectedPeriods)
+            val sorted = selectedCoins.sortedBy { sc ->
+                coinItems.indexOfFirst { it.performanceCoin.uid == sc.uid }
+            }
+            roiManager.update(sorted, selectedPeriods)
         }
     }
 
