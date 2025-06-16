@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.addresschecker.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +30,7 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
@@ -127,24 +124,10 @@ private fun TokenCell(
                         maxLines = 1,
                     )
                     token.badge?.let { labelText ->
-                        Box(
-                            modifier = Modifier
-                                .padding(start = 6.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.blade)
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(
-                                    start = 4.dp,
-                                    end = 4.dp,
-                                    bottom = 1.dp
-                                ),
-                                text = labelText,
-                                color = ComposeAppTheme.colors.leah,
-                                style = ComposeAppTheme.typography.microSB,
-                                maxLines = 1,
-                            )
-                        }
+                        Badge(
+                            text = labelText,
+                            modifier = Modifier.padding(start = 6.dp)
+                        )
                     }
                 }
                 subhead2_grey(

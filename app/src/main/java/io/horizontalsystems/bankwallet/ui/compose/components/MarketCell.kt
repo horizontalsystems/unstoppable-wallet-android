@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -133,24 +131,10 @@ fun MarketCoinFirstRow(
                 overflow = TextOverflow.Ellipsis
             )
             if (badge != null) {
-                Box(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(ComposeAppTheme.colors.blade)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(
-                            start = 4.dp,
-                            end = 4.dp,
-                            bottom = 1.dp
-                        ),
-                        text = badge,
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.microSB,
-                        maxLines = 1,
-                    )
-                }
+                Badge(
+                    text = badge,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
             if (advice != null) {
                 HSpacer(8.dp)

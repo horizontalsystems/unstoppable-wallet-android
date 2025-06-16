@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
@@ -153,24 +154,10 @@ fun BalanceCardInner(
                             overflow = TextOverflow.Ellipsis
                         )
                         if (!viewItem.badge.isNullOrBlank()) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.blade)
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(
-                                        start = 4.dp,
-                                        end = 4.dp,
-                                        bottom = 1.dp
-                                    ),
-                                    text = viewItem.badge,
-                                    color = ComposeAppTheme.colors.leah,
-                                    style = ComposeAppTheme.typography.microSB,
-                                    maxLines = 1,
-                                )
-                            }
+                            Badge(
+                                modifier = Modifier.padding(start = 8.dp),
+                                text = viewItem.badge,
+                            )
                         }
                     }
                     Spacer(Modifier.width(24.dp))
