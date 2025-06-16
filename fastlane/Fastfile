@@ -29,7 +29,7 @@ platform :android do
       gradle(task: "assembleFdroidCiDebug", flags: "--stacktrace --no-daemon")
 
       firebase_app_distribution(
-        app: "1:308085819273:android:99855eb14f0a33f5a00358",
+        app: "1:308085819273:android:3c060bb15aa35d79a00358",
         service_credentials_file: "service-account.json",
         release_notes: "F-Droid Build - Author: #{commit[:author]}, changes: #{commit[:message]}",
         groups: "horsysteam",
