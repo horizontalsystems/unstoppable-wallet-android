@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.roi
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,17 +30,14 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -55,7 +53,7 @@ class RoiSelectCoinsFragment : BaseComposeFragment() {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun RoiSelectCoinsScreen(navController: NavController) {
     val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
@@ -64,19 +62,14 @@ fun RoiSelectCoinsScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            AppBar(
+            SearchBar(
                 title = stringResource(R.string.ROI_SelectCoin_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Search),
-                        icon = R.drawable.icon_search,
-                        onClick = {
-                        },
-                    )
-                )
+                searchHintText = stringResource(R.string.Market_Search),
+                menuItems = listOf(),
+                onClose = { navController.popBackStack() },
+                onSearchTextChanged = { text ->
+                    viewModel.onFilter(text)
+                }
             )
         },
         bottomBar = {
