@@ -81,6 +81,13 @@ android {
             buildConfigField "boolean", "FDROID_BUILD", "true"
         }
 
+        fdroidCi {
+            dimension = "distribution"
+            applicationIdSuffix ".fdroidci"
+            buildConfigField "boolean", "FDROID_BUILD", "true"
+            signingConfig signingConfigs.appCenter
+        }
+
         ci {
             dimension = "distribution"
 
