@@ -98,6 +98,7 @@ import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
+import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
@@ -203,6 +204,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
+        lateinit var roiManager: RoiManager
         var trialExpired: Boolean = false
     }
 
@@ -462,6 +464,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appVersion = appConfigProvider.appVersion
         )
         tonConnectManager.start()
+
+        roiManager = RoiManager(localStorage)
 
         startTasks()
     }

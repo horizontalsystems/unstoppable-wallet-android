@@ -65,8 +65,7 @@ fun Roi(roi: List<RoiViewItem>, navController: NavController) {
                                 )
                                 caption_grey(
                                     modifier = Modifier.weight(1f),
-                                    text = period.periodNameStringResId?.let { stringResource(id = it) }
-                                        ?: "",
+                                    text = stringResource(id = period.periodNameStringResId),
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -123,9 +122,15 @@ fun Roi(roi: List<RoiViewItem>, navController: NavController) {
 
 }
 
-val HsTimePeriod.periodNameStringResId: Int?
+val HsTimePeriod.periodNameStringResId: Int
     get() = when (this) {
-        HsTimePeriod.Week1 -> R.string.CoinPage_Performance_Week
-        HsTimePeriod.Month1 -> R.string.CoinPage_Performance_Month
-        else -> null
+        HsTimePeriod.Day1 -> R.string.CoinPage_Performance_Day1
+        HsTimePeriod.Week1 -> R.string.CoinPage_Performance_Week1
+        HsTimePeriod.Week2 -> R.string.CoinPage_Performance_Week2
+        HsTimePeriod.Month1 -> R.string.CoinPage_Performance_Month1
+        HsTimePeriod.Month3 -> R.string.CoinPage_Performance_Month3
+        HsTimePeriod.Month6 -> R.string.CoinPage_Performance_Month6
+        HsTimePeriod.Year1 -> R.string.CoinPage_Performance_Year1
+        HsTimePeriod.Year2 -> R.string.CoinPage_Performance_Year2
+        HsTimePeriod.Year5 -> R.string.CoinPage_Performance_Year5
     }
