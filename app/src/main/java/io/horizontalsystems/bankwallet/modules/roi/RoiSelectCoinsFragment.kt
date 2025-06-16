@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -44,6 +45,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.subscriptions.core.TokenInsights
 
 class RoiSelectCoinsFragment : BaseComposeFragment() {
     @Composable
@@ -106,7 +108,9 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 title = period.title.getString(),
                                 onClick = {
-                                    dialog = PeriodSelectorDialog(text, period, i)
+                                    navController.paidAction(TokenInsights) {
+                                        dialog = PeriodSelectorDialog(text, period, i)
+                                    }
                                 }
                             )
                         }
@@ -126,13 +130,15 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                     val checked = uiState.selectedCoins.contains(item.performanceCoin)
                     val view = LocalView.current
                     val onClick = {
-                        try {
-                            viewModel.onToggle(item, !checked)
-                        } catch (e: Throwable) {
-                            HudHelper.showWarningMessage(
-                                view,
-                                text = e.message ?: e.javaClass.simpleName
-                            )
+                        navController.paidAction(TokenInsights) {
+                            try {
+                                viewModel.onToggle(item, !checked)
+                            } catch (e: Throwable) {
+                                HudHelper.showWarningMessage(
+                                    view,
+                                    text = e.message ?: e.javaClass.simpleName
+                                )
+                            }
                         }
                     }
                     CellUniversal(
