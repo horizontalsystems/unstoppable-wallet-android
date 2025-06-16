@@ -26,7 +26,7 @@ platform :android do
       commit = last_git_commit
 
       gradle(task: "clean")
-      gradle(task: "assembleFdroidDebug", flags: "--stacktrace --no-daemon")
+      gradle(task: "assembleFdroidCiDebug", flags: "--stacktrace --no-daemon")
 
       firebase_app_distribution(
         app: "1:308085819273:android:99855eb14f0a33f5a00358",
