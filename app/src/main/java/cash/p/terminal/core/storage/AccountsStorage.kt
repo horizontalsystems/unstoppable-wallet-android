@@ -61,7 +61,20 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(record.key!!.value)
                             UFVK -> AccountType.ZCashUfvKey(record.key!!.value)
-                            HARDWARE_CARD -> AccountType.HardwareCard(record.key!!.value, record.passphrase!!.value)
+                            HARDWARE_CARD -> {
+                                val cardIdAndBackupCardsCount = record.key!!.value.split("@")
+                                val cardId = cardIdAndBackupCardsCount[0]
+                                val backupCardsCount = if(cardIdAndBackupCardsCount.size > 1) {
+                                    cardIdAndBackupCardsCount[1].toIntOrNull() ?: 0
+                                } else {
+                                    0
+                                }
+                                AccountType.HardwareCard(
+                                    cardId = cardId,
+                                    backupCardsCount = backupCardsCount,
+                                    walletPublicKey = record.passphrase!!.value
+                                )
+                            }
                             CEX -> {
                                 CexType.deserialize(record.key!!.value)?.let {
                                     AccountType.Cex(it)
@@ -169,8 +182,9 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 accountType = UFVK
             }
             is AccountType.HardwareCard -> {
-                key = SecretString((account.type as AccountType.HardwareCard).cardId)
-                passphrase = SecretString((account.type as AccountType.HardwareCard).walletPublicKey)
+                val accountTypeCard = account.type as AccountType.HardwareCard
+                key = SecretString(accountTypeCard.cardId+"@"+accountTypeCard.backupCardsCount)
+                passphrase = SecretString(accountTypeCard.walletPublicKey)
                 accountType = HARDWARE_CARD
             }
         }

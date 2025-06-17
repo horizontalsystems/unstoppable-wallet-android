@@ -711,11 +711,14 @@
     <string name="common_backup_card">Backup card</string>
     <string name="reset_to_factory_settings">Reset to Factory Settings</string>
     <string name="reset">Reset</string>
+    <string name="reset_backup_card">Reset backup card</string>
     <string name="reset_card_with_backup_to_factory_message">Factory Reset will completely delete the wallet from the selected card. You will not be able to restore the current wallet or use the card or ring to recover the access code.</string>
     <string name="reset_card_to_factory_condition_1">I understand that after performing this action, I will no longer have access to the current wallet</string>
     <string name="reset_card_to_factory_condition_2">I realize that I can\'t use this card to recover my access code on the other cards of the current wallet</string>
     <string name="common_attention">Attention</string>
     <string name="onboarding_linking_error_card_with_wallets">Another wallet has already been created on the card you\'re trying to add. If you have funds in this wallet, please withdraw it and then reset this card and add it as a backup.</string>
+    <string name="initial_message_reset_backup_card_header">Tap the card #%s of the wallet</string>
+    <string name="skip_and_finish">Skip and Finish</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>

@@ -27,7 +27,7 @@ import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
-import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsDialog
+import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
@@ -60,6 +60,7 @@ internal fun ManageAccountScreen(
     account: Account,
     onCloseClicked: () -> Unit,
     onSaveClicked: () -> Unit,
+    deleteAccount: () -> Unit,
     onNameChanged: (String) -> Unit
 ) {
     if (viewState.closeScreen) {
@@ -134,6 +135,7 @@ internal fun ManageAccountScreen(
             KeyActions(
                 viewState = viewState,
                 account = account,
+                deleteAccount = deleteAccount,
                 navController = navController
             )
 
@@ -167,6 +169,7 @@ internal fun ManageAccountScreen(
 private fun KeyActions(
     viewState: ManageAccountModule.ViewState,
     account: Account,
+    deleteAccount: () -> Unit,
     navController: NavController
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
@@ -223,11 +226,12 @@ private fun KeyActions(
                         title = stringResource(id = R.string.reset_to_factory_settings),
                         icon = painterResource(id = R.drawable.ic_delete_20)
                     ) {
-                        navController.slideFromBottomForResult<ResetToFactorySettingsDialog.Result>(
-                            R.id.resetToFactorySettingsDialog
+                        navController.slideFromBottomForResult<ResetToFactorySettingsFragment.Result>(
+                            resId = R.id.resetToFactorySettingsFragment,
+                            input = ResetToFactorySettingsFragment.Input(account)
                         ) {
                             if (it.success) {
-
+                                deleteAccount()
                             }
                         }
                     }
@@ -337,7 +341,6 @@ private fun AccountActionItem(
     badge: String? = null,
     onClick: (() -> Unit)? = null
 ) {
-
     RowUniversal(
         onClick = onClick
     ) {
@@ -468,13 +471,18 @@ private fun ManageAccountScreenPreview() {
             account = Account(
                 id = "id",
                 name = "name",
-                type = AccountType.HardwareCard(cardId = "", walletPublicKey = ""),
+                type = AccountType.HardwareCard(
+                    cardId = "",
+                    backupCardsCount = 0,
+                    walletPublicKey = ""
+                ),
                 origin = AccountOrigin.Created,
                 level = 0
             ),
             onCloseClicked = {},
             onSaveClicked = {},
-            onNameChanged = {}
+            onNameChanged = {},
+            deleteAccount = {}
         )
     }
 }

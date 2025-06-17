@@ -356,6 +356,9 @@
     <fragment
         android:id="@+id/hardwareWalletOnboardingFragment"
         android:name="cash.p.terminal.tangem.ui.HardwareWalletOnboardingFragment" />
+    <fragment
+        android:id="@+id/resetToFactorySettingsFragment"
+        android:name="cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment" />
     <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />
@@ -386,9 +389,6 @@
     <dialog
         android:id="@+id/unlinkConfirmationDialog"
         android:name="cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog" />
-    <dialog
-        android:id="@+id/resetToFactorySettingsDialog"
-        android:name="cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsDialog" />
     <dialog
         android:id="@+id/feeSettingsInfoDialog"
         android:name="cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog" />

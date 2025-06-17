@@ -134,7 +134,15 @@ internal class HardwareWalletOnboardingViewModel(
                 }
                 val lastScanResponse = tangemCreateWalletUseCase.tangemSdkManager.lastScanResponse
                 if (backupHardwareWalletUseCase.isBackupFinished() && lastScanResponse != null && accountName != null) {
-                    createHardwareWalletUseCase(accountName!!, lastScanResponse)
+                    createHardwareWalletUseCase(
+                        accountName = accountName!!,
+                        // added backup count to response
+                        scanResponse = lastScanResponse.copy(
+                            card = lastScanResponse.card.copy(
+                                backupStatus = result.data.backupStatus
+                            )
+                        )
+                    )
                     _uiState.value = _uiState.value.copy(
                         success = true
                     )
@@ -156,7 +164,7 @@ internal class HardwareWalletOnboardingViewModel(
     }
 
     fun resetCard(cardId: String) = viewModelScope.launch {
-        resetToFactorySettingsUseCase(cardId, false)
+        resetToFactorySettingsUseCase.resetPrimaryCard(cardId, false)
     }
 }
 

@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import cash.p.terminal.strings.R
+import cash.p.terminal.tangem.domain.TangemConfig
 import cash.p.terminal.tangem.domain.canonicalise
 import cash.p.terminal.tangem.domain.usecase.SignHashesTransactionUseCase
 import cash.p.terminal.wallet.entities.HardwarePublicKey
@@ -202,7 +203,7 @@ class HardwareWalletEcdaSigner(
                 is CompletionResult.Failure -> throw signResponse.error
             }
             if (signedData.size != data.size) {
-                delay(1000) //delay for tangem sdk not to get Busy error
+                delay(TangemConfig.SCAN_DELAY) //delay for tangem sdk not to get Busy error
             }
         }
         return data.map { dataToSign ->

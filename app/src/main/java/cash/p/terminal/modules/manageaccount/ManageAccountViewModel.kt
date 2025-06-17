@@ -17,7 +17,7 @@ import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountViewModel(
     accountId: String,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
 
     val account: Account = accountManager.account(accountId)!!
@@ -63,6 +63,11 @@ class ManageAccountViewModel(
         viewState = viewState.copy(closeScreen = false)
     }
 
+    fun deleteAccount() {
+        accountManager.delete(account.id)
+        viewState = viewState.copy(closeScreen = true)
+    }
+
     private fun getBackupItems(account: Account): List<BackupItem> {
         if (account.isWatchAccount) {
             return emptyList()
@@ -75,7 +80,7 @@ class ManageAccountViewModel(
         }
 
         val items = mutableListOf<BackupItem>()
-        if(account.accountSupportsBackup) {
+        if (account.accountSupportsBackup) {
             if (!account.isBackedUp && !account.isFileBackedUp) {
                 items.add(BackupItem.ManualBackup(true))
                 items.add(BackupItem.LocalBackup(true))
@@ -111,7 +116,10 @@ class ManageAccountViewModel(
                 KeyAction.PublicKeys,
             )
 
-            is AccountType.HardwareCard,
+            is AccountType.HardwareCard -> listOf(
+                KeyAction.ResetToFactorySettings
+            )
+
             is AccountType.ZCashUfvKey,
             is AccountType.EvmAddress,
             is AccountType.SolanaAddress,
@@ -142,5 +150,4 @@ class ManageAccountViewModel(
             viewState.copy(closeScreen = true)
         }
     }
-
 }

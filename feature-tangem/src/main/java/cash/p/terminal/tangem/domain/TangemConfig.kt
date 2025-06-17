@@ -8,6 +8,9 @@ import io.horizontalsystems.core.entities.BlockchainType
 
 object TangemConfig {
 
+    // Delay to prevent scanning too fast to avoid TangemSdkError
+    const val SCAN_DELAY = 1000L
+
     val getDefaultTokens by lazy {
         listOfNotNull(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),

@@ -104,12 +104,6 @@ object BackupLocalModule {
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(Base58.encode(data))
             UFVK -> AccountType.ZCashUfvKey(String(data, Charsets.UTF_8))
-            HARDWARE_CARD -> {
-                val parts = String(data, Charsets.UTF_8).split("@")
-                if (parts.size != 2)
-                    throw IllegalStateException("Non standard hardware card data")
-                AccountType.HardwareCard(parts[0], parts[1])
-            }
             CEX -> {
                 val cexType = CexType.deserialize(String(data, Charsets.UTF_8))
                 if (cexType != null) {

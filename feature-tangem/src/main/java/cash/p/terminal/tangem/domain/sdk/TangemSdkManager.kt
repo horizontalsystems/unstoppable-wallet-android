@@ -5,6 +5,7 @@ import cash.p.terminal.core.R
 import cash.p.terminal.tangem.domain.model.ProductType
 import cash.p.terminal.tangem.domain.model.ScanResponse
 import cash.p.terminal.tangem.domain.task.CreateProductWalletTask
+import cash.p.terminal.tangem.domain.task.ResetBackupCardTask
 import cash.p.terminal.tangem.domain.task.ResetToFactorySettingsTask
 import cash.p.terminal.tangem.domain.task.ScanProductTask
 import cash.p.terminal.tangem.domain.task.reponse.CreateProductWalletTaskResponse
@@ -249,9 +250,9 @@ class TangemSdkManager(
     }
 
     suspend fun resetToFactorySettings(
-        cardId: String,
+        cardId: String?,
         allowsRequestAccessCodeFromRepository: Boolean,
-    ): CompletionResult<Boolean> {
+    ): CompletionResult<Pair<ByteArray?, Boolean>> {
         return runTaskAsyncReturnOnMain(
             runnable = ResetToFactorySettingsTask(
                 allowsRequestAccessCodeFromRepository = allowsRequestAccessCodeFromRepository,
@@ -261,22 +262,20 @@ class TangemSdkManager(
         )
     }
 
-    /*
-        suspend fun resetBackupCard(
-            cardNumber: Int,
-            userWalletId: UserWalletId
-        ): CompletionResult<Boolean> {
-            return runTaskAsyncReturnOnMain(
-                runnable = ResetBackupCardTask(userWalletId),
-                initialMessage = Message(
-                    resources.getStringSafe(
-                        R.string.initial_message_reset_backup_card_header,
-                        cardNumber.toString(),
-                    ),
+    suspend fun resetBackupCard(
+        cardNumber: Int,
+        firstWalletPublicKey: ByteArray
+    ): CompletionResult<Pair<ByteArray?, Boolean>> {
+        return runTaskAsyncReturnOnMain(
+            runnable = ResetBackupCardTask(firstWalletPublicKey),
+            initialMessage = Message(
+                CoreApp.instance.getString(
+                    R.string.initial_message_reset_backup_card_header,
+                    cardNumber.toString(),
                 ),
-            )
-        }
-    */
+            ),
+        )
+    }
 
     suspend fun saveAccessCode(accessCode: String, cardsIds: Set<String>): CompletionResult<Unit> {
         return userCodeRepository.save(

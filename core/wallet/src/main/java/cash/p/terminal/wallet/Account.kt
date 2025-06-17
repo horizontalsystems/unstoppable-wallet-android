@@ -217,9 +217,16 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class HardwareCard(val cardId: String, val walletPublicKey: String) : AccountType() {
+    data class HardwareCard(
+        val cardId: String,
+        val backupCardsCount: Int,
+        val walletPublicKey: String
+    ) : AccountType() {
         override fun equals(other: Any?): Boolean {
-            return other is HardwareCard && cardId == other.cardId && walletPublicKey == other.walletPublicKey
+            return other is HardwareCard &&
+                    cardId == other.cardId &&
+                    backupCardsCount == other.backupCardsCount &&
+                    walletPublicKey == other.walletPublicKey
         }
 
         override fun hashCode(): Int {

@@ -32,6 +32,7 @@ internal class CreateHardwareWalletUseCase(
     ): AccountType.HardwareCard {
         val accountType = AccountType.HardwareCard(
             cardId = scanResponse.card.cardId,
+            backupCardsCount = scanResponse.card.backupStatus?.linkedCardsCount ?: 0,
             walletPublicKey = scanResponse.card.cardPublicKey.toHexString()
         )
         val account = accountFactory.account(
