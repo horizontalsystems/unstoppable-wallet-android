@@ -18,7 +18,7 @@ class DonationShowManager(
 
         //check last shown date is null or more than 30 days ago
         //else return false
-        val oneMonthPeriod = 60 * 60 * 1000L //todo reverse after testing, 30 * 24 * 60 * 60 * 1000L
+        val oneMonthPeriod = 30 * 24 * 60 * 60 * 1000L
         val currentTimeMillis = System.currentTimeMillis()
         if (donateUsLastShown == null || (currentTimeMillis - donateUsLastShown) > oneMonthPeriod) {
             localStorage.donateUsLastShownDate = currentTimeMillis
