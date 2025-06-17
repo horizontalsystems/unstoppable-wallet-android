@@ -85,7 +85,6 @@ class HardwareWalletSchnorrSigner(
         val walletPublicKey =
             hardwarePublicKey.publicKey.copyOfRange(1, hardwarePublicKey.publicKey.size)
         val signResponse: CompletionResult<SignResponse> = signHashesTransactionUseCase(
-            cardId = cardId,
             hashes = dataToSign.toTypedArray(),
             walletPublicKey = walletPublicKey,
             derivationPath = DerivationPath(fullDerivationPathString)
@@ -127,7 +126,6 @@ class HardwareWalletSchnorrSigner(
         val walletPublicKey =
             hardwarePublicKey.publicKey.copyOfRange(1, hardwarePublicKey.publicKey.size)
         val signResponse: CompletionResult<SignResponse> = signHashesTransactionUseCase(
-            cardId = cardId,
             hashes = arrayOf(signatureHash),
             walletPublicKey = walletPublicKey,
             derivationPath = DerivationPath(fullDerivationPathString)

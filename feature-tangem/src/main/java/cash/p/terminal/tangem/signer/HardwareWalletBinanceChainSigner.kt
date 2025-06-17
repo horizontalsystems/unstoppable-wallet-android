@@ -31,7 +31,6 @@ class HardwareWalletBinanceChainSigner(
         return runBlocking {
             val signBytesResponse =
                 signOneHashTransactionUseCase(
-                    cardId = cardId,
                     hash = message,
                     walletPublicKey = hardwarePublicKey.publicKey,
                     derivationPath = DerivationPath(hardwarePublicKey.derivationPath)

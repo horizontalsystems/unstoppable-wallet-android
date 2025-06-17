@@ -22,7 +22,6 @@ class HardwareWalletSolanaAccountSigner(
         return runBlocking {
             val signBytesResponse =
                 signOneHashTransactionUseCase(
-                    cardId = cardId,
                     hash = serializedMessage,
                     walletPublicKey = hardwarePublicKey.publicKey,
                     derivationPath = DerivationPath(hardwarePublicKey.derivationPath)

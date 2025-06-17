@@ -116,7 +116,7 @@ class HardwareWalletEvmSigner(
         isLegacy: Boolean
     ): Signature {
         val signBytesResponse =
-            signOneHashTransactionUseCase(cardId, hash, walletPublicKey, DerivationPath(publicKey.derivationPath))
+            signOneHashTransactionUseCase(hash, walletPublicKey, DerivationPath(publicKey.derivationPath))
         when (signBytesResponse) {
             is CompletionResult.Success -> {
                 val byteSignature = signBytesResponse.data.signature

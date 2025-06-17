@@ -80,7 +80,6 @@ class HardwareWalletEcdaSigner(
             "${hardwarePublicKey.derivationPath}/$changeSegment/$addressIndexSegment"
         Log.d("HardwareWalletSigner", "sigScriptEcdsaData $fullDerivationPathString")
         val signResponse: CompletionResult<SignResponse> = signHashesTransactionUseCase(
-            cardId = cardId,
             hashes = arrayOf(hashToSign),
             walletPublicKey = hardwarePublicKey.publicKey,
             derivationPath = DerivationPath(fullDerivationPathString)
@@ -178,7 +177,6 @@ class HardwareWalletEcdaSigner(
             val fullDerivationPathForAddress = DerivationPath(fullDerivationPathString)
 
             val signResponse: CompletionResult<SignResponse> = signHashesTransactionUseCase(
-                cardId = cardId,
                 hashes = dataHashes.toTypedArray(),
                 walletPublicKey = hardwarePublicKey.publicKey,
                 derivationPath = fullDerivationPathForAddress

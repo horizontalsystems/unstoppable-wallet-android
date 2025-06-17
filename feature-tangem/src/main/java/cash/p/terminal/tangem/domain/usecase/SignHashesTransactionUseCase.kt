@@ -7,13 +7,12 @@ import com.tangem.crypto.hdWallet.DerivationPath
 class SignHashesTransactionUseCase(private val tangemSdkManager: TangemSdkManager) {
 
     suspend operator fun invoke(
-        cardId: String?,
         hashes: Array<ByteArray>,
         walletPublicKey: ByteArray,
         derivationPath: DerivationPath?,
         message: Message? = null
     ) = tangemSdkManager.sign(
-        cardId = cardId,
+        cardId = null,
         hashes = hashes,
         walletPublicKey = walletPublicKey,
         derivationPath = derivationPath,

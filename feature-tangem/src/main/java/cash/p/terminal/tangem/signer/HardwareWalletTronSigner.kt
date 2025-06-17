@@ -36,7 +36,6 @@ class HardwareWalletTronSigner(
         return runBlocking {
             val signBytesResponse =
                 signOneHashTransactionUseCase(
-                    cardId = cardId,
                     hash = rawTransactionHash,
                     walletPublicKey = hardwarePublicKey.publicKey,
                     derivationPath = DerivationPath(hardwarePublicKey.derivationPath)
