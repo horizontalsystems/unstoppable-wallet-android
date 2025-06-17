@@ -365,6 +365,7 @@ dependencies {
     baseReleaseImplementation project(':subscriptions-google-play')
 
     fdroidImplementation project(':subscriptions-fdroid')
+    fdroidCiImplementation project(':subscriptions-fdroid')
     ciImplementation project(':subscriptions-dev')
 
     // Integration with activities
