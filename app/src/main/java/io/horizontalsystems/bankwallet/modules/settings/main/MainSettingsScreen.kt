@@ -321,12 +321,12 @@ private fun SettingSections(
         }
     )
 
-    if (!BuildConfig.FDROID_BUILD) {
-        VSpacer(24.dp)
+    VSpacer(24.dp)
 
-        PremiumHeader()
+    PremiumHeader()
 
-        SectionPremiumUniversalLawrence {
+    SectionPremiumUniversalLawrence {
+        if (!BuildConfig.FDROID_BUILD) {
             HsSettingCell(
                 title = R.string.Settings_VipSupport,
                 icon = R.drawable.ic_support_yellow_24,
@@ -342,22 +342,23 @@ private fun SettingSections(
                 }
             )
             HsDivider()
-            HsSettingCell(
-                title = R.string.SettingsAddressChecker_Title,
-                icon = R.drawable.ic_radar_24,
-                iconTint = ComposeAppTheme.colors.jacob,
-                onClick = {
-                    navController.paidAction(AddressBlacklist) {
-                        navController.slideFromRight(R.id.addressCheckerFragment)
-                    }
-                    stat(
-                        page = StatPage.Settings,
-                        event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
-                    )
-                }
-            )
         }
+        HsSettingCell(
+            title = R.string.SettingsAddressChecker_Title,
+            icon = R.drawable.ic_radar_24,
+            iconTint = ComposeAppTheme.colors.jacob,
+            onClick = {
+                navController.paidAction(AddressBlacklist) {
+                    navController.slideFromRight(R.id.addressCheckerFragment)
+                }
+                stat(
+                    page = StatPage.Settings,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
+                )
+            }
+        )
     }
+
 
     VSpacer(32.dp)
 
