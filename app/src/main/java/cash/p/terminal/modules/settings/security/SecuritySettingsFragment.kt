@@ -31,10 +31,10 @@ import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.pin.SetPinFragment
-import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsModule
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
+import cash.p.terminal.modules.settings.security.ui.HardwareWalletBiometricBlock
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
 import cash.p.terminal.modules.settings.security.ui.TransactionAutoHideBlock
@@ -51,6 +51,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseComposeFragment() {
@@ -59,9 +60,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
         SecurityTorSettingsModule.Factory()
     }
 
-    private val securitySettingsViewModel by viewModels<SecuritySettingsViewModel> {
-        SecurityPasscodeSettingsModule.Factory()
-    }
+    private val securitySettingsViewModel by viewModel<SecuritySettingsViewModel>()
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -163,7 +162,8 @@ class SecuritySettingsFragment : BaseComposeFragment() {
                         securitySettingsViewModel.onTransferPasscodeEnabledChange(false)
                     }
                 }
-            }
+            },
+            onEnableSaveAccessCodeForHardwareWallet = securitySettingsViewModel::enableSaveAccessCodeForHardwareWallet
         )
     }
 
@@ -224,6 +224,7 @@ private fun SecurityCenterScreen(
     onTransferPasscodeEnabledChange: (Boolean) -> Unit,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
+    onEnableSaveAccessCodeForHardwareWallet:(Boolean) -> Unit,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
@@ -310,6 +311,11 @@ private fun SecurityCenterScreen(
             TorBlock(
                 torViewModel,
                 showAppRestartAlert,
+            )
+
+            HardwareWalletBiometricBlock(
+                enabled = securitySettingsViewModel.uiState.isSaveAccessCodeForHardwareWalletEnabled,
+                onValueChanged = onEnableSaveAccessCodeForHardwareWallet
             )
 
             DuressPasscodeBlock(

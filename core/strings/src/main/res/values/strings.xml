@@ -1229,6 +1229,8 @@
     <string name="SettingsSecurity_SyncModeHybridDescription">Fast</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Slow. Highest Privacy.</string>
+    <string name="app_settings_saved_access_codes">Save Access Code</string>
+    <string name="app_settings_saved_access_codes_footer">Biometric authentication will be requested instead of the access code for interactions with your hardware wallet.</string>
 
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>

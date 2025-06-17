@@ -1,24 +1,26 @@
 package cash.p.terminal.modules.settings.security.passcode
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.managers.BalanceHiddenManager
+import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.TransactionHiddenManager
+import cash.p.terminal.tangem.domain.sdk.CardSdkConfigRepository
 import cash.p.terminal.wallet.managers.ITransactionHiddenManager
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
-import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import org.koin.java.KoinJavaComponent.inject
 
 class SecuritySettingsViewModel(
-    systemInfoManager: ISystemInfoManager,
-    private val pinComponent: IPinComponent,
-    private val balanceHiddenManager: BalanceHiddenManager,
-    private val localStorage: ILocalStorage
+    private val cardSdkConfigRepository: CardSdkConfigRepository
 ) : ViewModelUiState<SecuritySettingsUiState>() {
+
+    private val systemInfoManager = CoreApp.systemInfoManager
+    private val pinComponent = CoreApp.pinComponent
+    private val balanceHiddenManager = App.balanceHiddenManager
+    private val localStorage = App.localStorage
+
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
 
     private val transactionHiddenManager: TransactionHiddenManager by inject(
@@ -47,9 +49,10 @@ class SecuritySettingsViewModel(
         transactionAutoHideEnabled = transactionHiddenManager.transactionHiddenFlow.value.transactionHidden,
         displayLevel = transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel,
         transactionAutoHideSeparatePinExists =
-        transactionHiddenManager.transactionHiddenFlow.value.transactionAutoHidePinExists,
+            transactionHiddenManager.transactionHiddenFlow.value.transactionAutoHidePinExists,
         autoLockIntervalName = localStorage.autoLockInterval.title,
-        transferPasscodeEnabled = localStorage.transferPasscodeEnabled
+        transferPasscodeEnabled = localStorage.transferPasscodeEnabled,
+        isSaveAccessCodeForHardwareWalletEnabled = cardSdkConfigRepository.isBiometricsRequestPolicy
     )
 
     fun enableBiometrics() {
@@ -76,7 +79,7 @@ class SecuritySettingsViewModel(
         if (balanceHiddenManager.balanceAutoHidden) {
             balanceHiddenManager.setBalanceAutoHidden(false)
         }
-        if(!pinComponent.isPinSet) {
+        if (!pinComponent.isPinSet) {
             transactionHiddenManager.setTransactionHideEnabled(false)
         }
         emitState()
@@ -111,6 +114,11 @@ class SecuritySettingsViewModel(
     fun update() {
         emitState()
     }
+
+    fun enableSaveAccessCodeForHardwareWallet(enabled: Boolean) {
+        cardSdkConfigRepository.isBiometricsRequestPolicy = enabled
+        emitState()
+    }
 }
 
 data class SecuritySettingsUiState(
@@ -122,5 +130,6 @@ data class SecuritySettingsUiState(
     val displayLevel: TransactionDisplayLevel,
     val transactionAutoHideSeparatePinExists: Boolean,
     val transferPasscodeEnabled: Boolean,
-    val autoLockIntervalName: Int
+    val autoLockIntervalName: Int,
+    val isSaveAccessCodeForHardwareWalletEnabled: Boolean
 )
