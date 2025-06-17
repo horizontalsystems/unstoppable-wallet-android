@@ -35,7 +35,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.RateAppManager
-import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.contacts.ContactsFragment
 import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -45,11 +44,11 @@ import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui.compose.components.BadgeText
-import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
@@ -57,6 +56,7 @@ import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.subhead1_jacob
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.slideFromBottom
 
 @Composable
 fun SettingsScreen(
@@ -387,7 +387,7 @@ fun HsSettingCell(
     value: String? = null,
     counterBadge: String? = null,
     showAlert: Boolean = false,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -415,7 +415,10 @@ fun HsSettingCell(
             subhead1_grey(
                 text = value,
                 maxLines = 1,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(
+                    horizontal =
+                        if (onClick != null) 8.dp else 0.dp
+                )
             )
         }
 
@@ -427,11 +430,13 @@ fun HsSettingCell(
             )
             Spacer(Modifier.width(12.dp))
         }
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-        )
+        if (onClick != null) {
+            Image(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                contentDescription = null,
+            )
+        }
     }
 }
 

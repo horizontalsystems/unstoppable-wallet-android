@@ -220,7 +220,8 @@ sealed class AccountType : Parcelable {
     data class HardwareCard(
         val cardId: String,
         val backupCardsCount: Int,
-        val walletPublicKey: String
+        val walletPublicKey: String,
+        val signedHashes: Int
     ) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is HardwareCard &&

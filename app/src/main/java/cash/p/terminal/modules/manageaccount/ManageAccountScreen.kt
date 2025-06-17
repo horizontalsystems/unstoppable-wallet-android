@@ -28,6 +28,7 @@ import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
 import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment
+import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
@@ -93,6 +94,19 @@ internal fun ManageAccountScreen(
                 hint = "",
                 onValueChange = onNameChanged
             )
+
+            viewState.signedHashes?.let {
+                VSpacer(32.dp)
+                CellUniversalLawrenceSection(
+                    listOf {
+                        HsSettingCell(
+                            title = R.string.signed,
+                            icon = R.drawable.ic_info_20,
+                            value = stringResource(R.string.details_row_subtitle_signed_hashes_format, it),
+                        )
+                    }
+                )
+            }
 
             when (viewState.headerNote) {
                 HeaderNote.NonStandardAccount -> {
@@ -480,7 +494,8 @@ private fun ManageAccountScreenPreview() {
                 closeScreen = false,
                 headerNote = HeaderNote.None,
                 keyActions = listOf(KeyAction.ChangeAccessCode, KeyAction.ResetToFactorySettings),
-                backupActions = emptyList()
+                backupActions = emptyList(),
+                signedHashes = 2
             ),
             account = Account(
                 id = "id",
@@ -488,7 +503,8 @@ private fun ManageAccountScreenPreview() {
                 type = AccountType.HardwareCard(
                     cardId = "",
                     backupCardsCount = 0,
-                    walletPublicKey = ""
+                    walletPublicKey = "",
+                    signedHashes = 2
                 ),
                 origin = AccountOrigin.Created,
                 level = 0

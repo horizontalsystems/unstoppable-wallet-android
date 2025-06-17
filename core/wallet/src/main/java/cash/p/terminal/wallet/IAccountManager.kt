@@ -15,6 +15,7 @@ interface IAccountManager {
     val newAccountBackupRequiredFlow: StateFlow<Account?>
 
     fun setActiveAccountId(activeAccountId: String?)
+    fun updateSignedHashes(signedHashes: Int)
     fun account(id: String): Account?
     fun save(account: Account, updateActive: Boolean = true)
     fun import(accounts: List<Account>)

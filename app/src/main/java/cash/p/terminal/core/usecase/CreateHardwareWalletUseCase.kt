@@ -7,6 +7,7 @@ import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.tangem.domain.TangemConfig
 import cash.p.terminal.tangem.domain.model.ScanResponse
+import cash.p.terminal.tangem.domain.totalSignedHashes
 import cash.p.terminal.tangem.domain.usecase.BuildHardwarePublicKeyUseCase
 import cash.p.terminal.tangem.domain.usecase.ICreateHardwareWalletUseCase
 import cash.p.terminal.wallet.Account
@@ -33,7 +34,8 @@ internal class CreateHardwareWalletUseCase(
         val accountType = AccountType.HardwareCard(
             cardId = scanResponse.card.cardId,
             backupCardsCount = scanResponse.card.backupStatus?.linkedCardsCount ?: 0,
-            walletPublicKey = scanResponse.card.cardPublicKey.toHexString()
+            walletPublicKey = scanResponse.card.cardPublicKey.toHexString(),
+            signedHashes = scanResponse.card.totalSignedHashes()
         )
         val account = accountFactory.account(
             name = accountName,

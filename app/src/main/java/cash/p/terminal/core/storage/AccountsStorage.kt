@@ -62,17 +62,12 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(record.key!!.value)
                             UFVK -> AccountType.ZCashUfvKey(record.key!!.value)
                             HARDWARE_CARD -> {
-                                val cardIdAndBackupCardsCount = record.key!!.value.split("@")
-                                val cardId = cardIdAndBackupCardsCount[0]
-                                val backupCardsCount = if(cardIdAndBackupCardsCount.size > 1) {
-                                    cardIdAndBackupCardsCount[1].toIntOrNull() ?: 0
-                                } else {
-                                    0
-                                }
+                                val parts = record.key!!.value.split("@")
                                 AccountType.HardwareCard(
-                                    cardId = cardId,
-                                    backupCardsCount = backupCardsCount,
-                                    walletPublicKey = record.passphrase!!.value
+                                    cardId = parts.getOrElse(0) { "" },
+                                    backupCardsCount = parts.getOrNull(1)?.toIntOrNull() ?: 0,
+                                    walletPublicKey = record.passphrase!!.value,
+                                    signedHashes = parts.getOrNull(2)?.toIntOrNull() ?: 0
                                 )
                             }
                             CEX -> {
@@ -183,7 +178,13 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             }
             is AccountType.HardwareCard -> {
                 val accountTypeCard = account.type as AccountType.HardwareCard
-                key = SecretString(accountTypeCard.cardId+"@"+accountTypeCard.backupCardsCount)
+                key = SecretString(
+                    listOf(
+                        accountTypeCard.cardId,
+                        accountTypeCard.backupCardsCount,
+                        accountTypeCard.signedHashes
+                    ).joinToString("@")
+                )
                 passphrase = SecretString(accountTypeCard.walletPublicKey)
                 accountType = HARDWARE_CARD
             }

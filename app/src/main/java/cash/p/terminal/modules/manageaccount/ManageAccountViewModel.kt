@@ -34,6 +34,7 @@ class ManageAccountViewModel(
             headerNote = account.headerNote(false),
             keyActions = getKeyActions(account),
             backupActions = getBackupItems(account),
+            signedHashes = (account.type as? AccountType.HardwareCard)?.signedHashes
         )
     )
         private set

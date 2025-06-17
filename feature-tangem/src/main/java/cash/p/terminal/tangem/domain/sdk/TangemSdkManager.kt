@@ -9,6 +9,7 @@ import cash.p.terminal.tangem.domain.task.ResetBackupCardTask
 import cash.p.terminal.tangem.domain.task.ResetToFactorySettingsTask
 import cash.p.terminal.tangem.domain.task.ScanProductTask
 import cash.p.terminal.tangem.domain.task.reponse.CreateProductWalletTaskResponse
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.entities.TokenQuery
 import com.tangem.Log
 import com.tangem.Message
@@ -50,6 +51,7 @@ import kotlin.coroutines.resume
 
 class TangemSdkManager(
     private val cardSdkConfigRepository: CardSdkConfigRepository,
+    private val accountManager: IAccountManager
 ) {
 
     private val awaitInitializationMutex = Mutex()
@@ -157,6 +159,7 @@ class TangemSdkManager(
             when (result) {
                 is CompletionResult.Success ->
                     if (continuation.isActive) {
+                        accountManager.updateSignedHashes(result.data.totalSignedHashes ?: 0)
                         continuation.resume(CompletionResult.Success(result.data))
                     }
 
@@ -185,6 +188,7 @@ class TangemSdkManager(
             when (result) {
                 is CompletionResult.Success ->
                     if (continuation.isActive) {
+                        accountManager.updateSignedHashes(result.data.totalSignedHashes ?: 0)
                         continuation.resume(CompletionResult.Success(result.data))
                     }
 

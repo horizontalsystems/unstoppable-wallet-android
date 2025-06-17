@@ -1,7 +1,6 @@
 package cash.p.terminal.tangem.domain
 
 import cash.p.terminal.tangem.domain.derivation.DerivationStyle
-import cash.p.terminal.tangem.domain.model.ProductType
 import com.tangem.common.card.Card
 import com.tangem.common.card.FirmwareVersion
 import java.util.Locale
@@ -51,16 +50,8 @@ fun Card.isExcluded(): Boolean {
 private val excludedBatches = listOf("0027", "0030", "0031", "0035", "DA88", "AF56")
 private val excludedIssuers = listOf("TTM BANK")
 
-/*
-fun Card.derivationParams(derivationPath: DerivationPath?): DerivationParams? {
-    return derivationStyle?.let {
-        when (derivationPath) {
-            null -> DerivationParams.Default(it)
-            else -> DerivationParams.Custom(derivationPath)
-        }
-    }
-}
-*/
+fun Card.totalSignedHashes() =
+    wallets.sumOf { it.totalSignedHashes ?: 0 }
 
 private enum class TwinCardNumber(val number: Int) {
     First(1), Second(2);

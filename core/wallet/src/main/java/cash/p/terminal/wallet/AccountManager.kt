@@ -62,6 +62,23 @@ class AccountManager(
         }
     }
 
+    override fun updateSignedHashes(signedHashes: Int) {
+        activeAccount?.let {
+            val hardwareCard = it.type as? AccountType.HardwareCard ?: return
+            val updatedAccount = it.copy(
+                type = hardwareCard.copy(
+                    signedHashes = signedHashes
+                )
+            )
+            storage.update(updatedAccount)
+            activeAccount = updatedAccount
+            updateCache(updatedAccount)
+            _activeAccountStateFlow.update {
+                ActiveAccountState.ActiveAccount(updatedAccount)
+            }
+        }
+    }
+
     override fun account(id: String): Account? {
         return accounts.find { account -> account.id == id }
     }
@@ -180,7 +197,7 @@ class AccountManager(
 
 class NoActiveAccount : Exception()
 
-sealed class ActiveAccountState() {
+sealed class ActiveAccountState {
     class ActiveAccount(val account: Account?) : ActiveAccountState()
     object NotLoaded : ActiveAccountState()
 }
