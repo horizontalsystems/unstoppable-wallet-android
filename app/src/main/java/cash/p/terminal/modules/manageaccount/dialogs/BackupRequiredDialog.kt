@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.getInput
 import io.horizontalsystems.core.slideFromBottom
-
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaultWithIcon
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
@@ -29,6 +28,7 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.wallet.Account
 import kotlinx.parcelize.Parcelize
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
@@ -52,12 +52,12 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
     }
 
     @Parcelize
-    data class Input(val account: cash.p.terminal.wallet.Account, val text: String) : Parcelable
+    data class Input(val account: Account, val text: String) : Parcelable
 }
 
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: cash.p.terminal.wallet.Account, text: String) {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
+    ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),

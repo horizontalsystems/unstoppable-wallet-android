@@ -9,11 +9,13 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.balance.headerNote
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
+import cash.p.terminal.tangem.domain.sdk.TangemSdkManager
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.IAccountManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import org.koin.java.KoinJavaComponent.inject
 
 class ManageAccountViewModel(
     accountId: String,
@@ -21,6 +23,7 @@ class ManageAccountViewModel(
 ) : ViewModel() {
 
     val account: Account = accountManager.account(accountId)!!
+    private val tangemSdkManager: TangemSdkManager by inject(TangemSdkManager::class.java)
 
     var viewState by mutableStateOf(
         ManageAccountModule.ViewState(
@@ -42,6 +45,10 @@ class ManageAccountViewModel(
             accountManager.accountsFlowable.asFlow()
                 .collect { handleUpdatedAccounts(it) }
         }
+    }
+
+    fun changeAccessCode() = viewModelScope.launch {
+        tangemSdkManager.setAccessCode(null)
     }
 
     fun onChange(name: String) {
@@ -117,6 +124,7 @@ class ManageAccountViewModel(
             )
 
             is AccountType.HardwareCard -> listOf(
+                KeyAction.ChangeAccessCode,
                 KeyAction.ResetToFactorySettings
             )
 

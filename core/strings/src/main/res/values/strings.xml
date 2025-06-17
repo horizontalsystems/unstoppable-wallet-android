@@ -709,6 +709,7 @@
     <string name="onboarding_subtitle_scan_backup_card_format">Prepare the backup card with number %s</string>
     <string name="common_origin_card">Primary card</string>
     <string name="common_backup_card">Backup card</string>
+    <string name="change_access_code">Change Access Code</string>
     <string name="reset_to_factory_settings">Reset to Factory Settings</string>
     <string name="reset">Reset</string>
     <string name="reset_backup_card">Reset backup card</string>
@@ -719,6 +720,7 @@
     <string name="onboarding_linking_error_card_with_wallets">Another wallet has already been created on the card you\'re trying to add. If you have funds in this wallet, please withdraw it and then reset this card and add it as a backup.</string>
     <string name="initial_message_reset_backup_card_header">Tap the card #%s of the wallet</string>
     <string name="skip_and_finish">Skip and Finish</string>
+    <string name="initial_message_change_access_code_body">To change the access code tap the card or ring as shown above and do not remove until the end of the operation</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>

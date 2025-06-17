@@ -38,7 +38,7 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
                 val navController = findNavController()
                 val input = navController.requireInput<Input>()
 
-                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+                ComposeAppTheme {
                     FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
                 }
             }

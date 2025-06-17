@@ -14,6 +14,7 @@ import com.tangem.Log
 import com.tangem.Message
 import com.tangem.TangemSdk
 import com.tangem.common.CompletionResult
+import com.tangem.common.SuccessResponse
 import com.tangem.common.UserCode
 import com.tangem.common.UserCodeType
 import com.tangem.common.authentication.AuthenticationManager
@@ -33,6 +34,7 @@ import com.tangem.operations.ScanTask
 import com.tangem.operations.derivation.DerivationTaskResponse
 import com.tangem.operations.derivation.DeriveMultipleWalletPublicKeysTask
 import com.tangem.operations.derivation.DeriveWalletPublicKeyTask
+import com.tangem.operations.pins.SetUserCodeCommand
 import com.tangem.operations.preflightread.PreflightReadFilter
 import com.tangem.operations.sign.SignHashResponse
 import com.tangem.operations.sign.SignResponse
@@ -305,15 +307,13 @@ class TangemSdkManager(
         }
     */
 
-    /*
-        suspend fun setAccessCode(cardId: String?): CompletionResult<SuccessResponse> {
-            return runTaskAsyncReturnOnMain(
-                SetUserCodeCommand.changeAccessCode(null),
-                cardId,
-                initialMessage = Message(resources.getStringSafe(R.string.initial_message_change_access_code_body)),
-            )
-        }
-    */
+    suspend fun setAccessCode(cardId: String?): CompletionResult<SuccessResponse> {
+        return runTaskAsyncReturnOnMain(
+            SetUserCodeCommand.changeAccessCode(null),
+            cardId,
+            initialMessage = Message(CoreApp.instance.getString(R.string.initial_message_change_access_code_body)),
+        )
+    }
 
     /*
         suspend fun setLongTap(cardId: String?): CompletionResult<SuccessResponse> {

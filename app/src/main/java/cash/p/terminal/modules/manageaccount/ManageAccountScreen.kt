@@ -61,7 +61,8 @@ internal fun ManageAccountScreen(
     onCloseClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     deleteAccount: () -> Unit,
-    onNameChanged: (String) -> Unit
+    onNameChanged: (String) -> Unit,
+    onChangeAccessCode: () -> Unit
 ) {
     if (viewState.closeScreen) {
         navController.popBackStack()
@@ -136,6 +137,7 @@ internal fun ManageAccountScreen(
                 viewState = viewState,
                 account = account,
                 deleteAccount = deleteAccount,
+                changeAccessCode = onChangeAccessCode,
                 navController = navController
             )
 
@@ -170,6 +172,7 @@ private fun KeyActions(
     viewState: ManageAccountModule.ViewState,
     account: Account,
     deleteAccount: () -> Unit,
+    changeAccessCode: () -> Unit,
     navController: NavController
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
@@ -234,6 +237,17 @@ private fun KeyActions(
                                 deleteAccount()
                             }
                         }
+                    }
+                }
+            }
+
+            KeyAction.ChangeAccessCode -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.change_access_code),
+                        icon = painterResource(id = R.drawable.ic_key_20)
+                    ) {
+                        changeAccessCode()
                     }
                 }
             }
@@ -465,7 +479,7 @@ private fun ManageAccountScreenPreview() {
                 canSave = true,
                 closeScreen = false,
                 headerNote = HeaderNote.None,
-                keyActions = listOf(KeyAction.ResetToFactorySettings),
+                keyActions = listOf(KeyAction.ChangeAccessCode, KeyAction.ResetToFactorySettings),
                 backupActions = emptyList()
             ),
             account = Account(
@@ -482,7 +496,8 @@ private fun ManageAccountScreenPreview() {
             onCloseClicked = {},
             onSaveClicked = {},
             onNameChanged = {},
-            deleteAccount = {}
+            deleteAccount = {},
+            onChangeAccessCode = {}
         )
     }
 }
