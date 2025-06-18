@@ -62,10 +62,8 @@ internal fun ManageAccountScreen(
     account: Account,
     onCloseClicked: () -> Unit,
     onSaveClicked: () -> Unit,
-    deleteAccount: () -> Unit,
     onNameChanged: (String) -> Unit,
-    accessCodeRecovery: () -> Unit,
-    onChangeAccessCode: () -> Unit
+    onActionClick: (KeyAction) -> Unit,
 ) {
     if (viewState.closeScreen) {
         navController.popBackStack()
@@ -155,9 +153,7 @@ internal fun ManageAccountScreen(
             KeyActions(
                 viewState = viewState,
                 account = account,
-                deleteAccount = deleteAccount,
-                changeAccessCode = onChangeAccessCode,
-                onAccessCodeRecoveryClick = accessCodeRecovery,
+                onActionClick = onActionClick,
                 navController = navController
             )
 
@@ -191,9 +187,7 @@ internal fun ManageAccountScreen(
 private fun KeyActions(
     viewState: ManageAccountModule.ViewState,
     account: Account,
-    deleteAccount: () -> Unit,
-    onAccessCodeRecoveryClick: () -> Unit,
-    changeAccessCode: () -> Unit,
+    onActionClick: (KeyAction) -> Unit,
     navController: NavController
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
@@ -255,7 +249,7 @@ private fun KeyActions(
                             input = ResetToFactorySettingsFragment.Input(account)
                         ) {
                             if (it.success) {
-                                deleteAccount()
+                                onActionClick(keyAction)
                             }
                         }
                     }
@@ -268,7 +262,7 @@ private fun KeyActions(
                         title = stringResource(id = R.string.card_settings_access_code_recovery_title),
                         icon = painterResource(id = R.drawable.icon_unlocked_48)
                     ) {
-                        onAccessCodeRecoveryClick()
+                        onActionClick(keyAction)
                     }
                 }
             }
@@ -279,7 +273,18 @@ private fun KeyActions(
                         title = stringResource(id = R.string.change_access_code),
                         icon = painterResource(id = R.drawable.ic_key_20)
                     ) {
-                        changeAccessCode()
+                        onActionClick(keyAction)
+                    }
+                }
+            }
+
+            KeyAction.ForgotAccessCode -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.forgot_access_code),
+                        icon = painterResource(id = R.drawable.icon_warning_2_20)
+                    ) {
+                        onActionClick(keyAction)
                     }
                 }
             }
@@ -514,7 +519,8 @@ private fun ManageAccountScreenPreview() {
                 keyActions = listOf(
                     KeyAction.AccessCodeRecovery,
                     KeyAction.ChangeAccessCode,
-                    KeyAction.ResetToFactorySettings
+                    KeyAction.ResetToFactorySettings,
+                    KeyAction.ForgotAccessCode,
                 ),
                 backupActions = emptyList(),
                 signedHashes = 2
@@ -534,9 +540,7 @@ private fun ManageAccountScreenPreview() {
             onCloseClicked = {},
             onSaveClicked = {},
             onNameChanged = {},
-            deleteAccount = {},
-            onChangeAccessCode = {},
-            accessCodeRecovery = {}
+            onActionClick = {}
         )
     }
 }

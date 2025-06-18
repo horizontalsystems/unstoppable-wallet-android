@@ -46,10 +46,8 @@ class ManageAccountFragment : BaseComposeFragment() {
             account = viewModel.account,
             onCloseClicked = viewModel::onClose,
             onSaveClicked = viewModel::onSave,
-            deleteAccount = viewModel::deleteAccount,
             onNameChanged = viewModel::onChange,
-            onChangeAccessCode = viewModel::changeAccessCode,
-            accessCodeRecovery = viewModel::accessCodeRecovery
+            onActionClick = viewModel::onActionClick
         )
     }
 

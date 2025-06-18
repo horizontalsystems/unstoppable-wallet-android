@@ -711,6 +711,7 @@
     <string name="common_backup_card">Backup card</string>
     <string name="change_access_code">Change Access Code</string>
     <string name="reset_to_factory_settings">Reset to Factory Settings</string>
+    <string name="forgot_access_code">Forgot Access Code</string>
     <string name="reset">Reset</string>
     <string name="reset_backup_card">Reset backup card</string>
     <string name="reset_card_with_backup_to_factory_message">Factory Reset will completely delete the wallet from the selected card. You will not be able to restore the current wallet or use the card or ring to recover the access code.</string>

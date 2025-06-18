@@ -320,15 +320,12 @@ class TangemSdkManager(
         )
     }
 
-    /*
-        suspend fun setLongTap(cardId: String?): CompletionResult<SuccessResponse> {
-            return runTaskAsyncReturnOnMain(
-                SetUserCodeCommand.resetUserCodes(),
-                cardId,
-                initialMessage = Message(resources.getStringSafe(R.string.initial_message_tap_header)),
-            )
+    suspend fun resetAccessCode(cardId: String) =
+        suspendCancellableCoroutine { continuation ->
+            tangemSdk.setAccessCode(null, cardId) { result ->
+                if (continuation.isActive) continuation.resume(result)
+            }
         }
-    */
 
     suspend fun setAccessCodeRecoveryEnabled(
         cardId: String?,
@@ -397,13 +394,6 @@ class TangemSdkManager(
         }
     }*/
 
-    /*@Deprecated("TangemSdkManager shouldn't returns a string from resources")
-    fun getString(@StringRes stringResId: Int, vararg formatArgs: Any?): String {
-        val args = formatArgs.toSet().filterNotNull().toTypedArray()
-
-        return resources.getStringSafe(stringResId, *args)
-    }*/
-
     /*fun setUserCodeRequestPolicy(policy: UserCodeRequestPolicy) {
         tangemSdk.config.userCodeRequestPolicy = policy
     }*/
@@ -427,64 +417,6 @@ class TangemSdkManager(
             tangemSdk.authenticationManager
         }
     }
-
-    // region Twin-specific
-
-    /*suspend fun createFirstTwinWallet(
-        cardId: String,
-        initialMessage: Message,
-    ): CompletionResult<CreateWalletResponse> {
-        return runTaskAsync(
-            runnable = CreateFirstTwinWalletTask(cardId),
-            cardId = cardId,
-            initialMessage = initialMessage,
-            preflightReadFilter = null,
-        )
-    }
-
-    suspend fun createSecondTwinWallet(
-        firstPublicKey: String,
-        firstCardId: String,
-        issuerKeys: KeyPair,
-        preparingMessage: Message,
-        creatingWalletMessage: Message,
-        initialMessage: Message,
-    ): CompletionResult<CreateWalletResponse> {
-        val task = CreateSecondTwinWalletTask(
-            firstPublicKey = firstPublicKey,
-            firstCardId = firstCardId,
-            issuerKeys = issuerKeys,
-            preparingMessage = preparingMessage,
-            creatingWalletMessage = creatingWalletMessage,
-        )
-        return runTaskAsync(runnable = task, cardId = null, initialMessage = initialMessage, preflightReadFilter = null)
-    }
-
-    fun changeProductType(isRing: Boolean) {
-        tangemSdk.config.setupForProduct(
-            type = if (isRing) ProductType.RING else ProductType.CARD,
-        )
-    }
-
-    fun clearProductType() {
-        tangemSdk.config.setupForProduct(type = ProductType.ANY)
-    }
-
-    suspend fun finalizeTwin(
-        secondCardPublicKey: ByteArray,
-        issuerKeyPair: KeyPair,
-        cardId: String,
-        initialMessage: Message,
-    ): CompletionResult<ScanResponse> {
-        return runTaskAsync(
-            runnable = FinalizeTwinTask(secondCardPublicKey, issuerKeyPair),
-            cardId = cardId,
-            initialMessage = initialMessage,
-            preflightReadFilter = null,
-        )
-    }*/
-
-    // endregion
 
     companion object {
         private const val MAX_INITIALIZE_ATTEMPTS = 10

@@ -55,15 +55,33 @@ class ManageAccountViewModel(
         }
     }
 
-    fun changeAccessCode() = viewModelScope.launch {
+    private fun changeAccessCode() = viewModelScope.launch {
         tangemSdkManager.setAccessCode(null)
     }
 
-    fun accessCodeRecovery() = viewModelScope.launch {
+    private fun accessCodeRecovery() = viewModelScope.launch {
         tangemSdkManager.scanCard(cardId = null, allowRequestAccessCodeFromRepository = false)
             .doOnSuccess {
                 _showAccessCodeRecoveryDialog.trySend(it)
             }
+    }
+
+    private fun forgotAccessCode() = viewModelScope.launch {
+        val accessType = account.type as? AccountType.HardwareCard ?: return@launch
+        tangemSdkManager.resetAccessCode(accessType.cardId)
+    }
+
+    fun onActionClick(action: KeyAction) {
+        when (action) {
+            KeyAction.ResetToFactorySettings -> deleteAccount()
+            KeyAction.ChangeAccessCode -> changeAccessCode()
+            KeyAction.AccessCodeRecovery -> accessCodeRecovery()
+            KeyAction.ForgotAccessCode -> forgotAccessCode()
+
+            KeyAction.RecoveryPhrase,
+            KeyAction.PublicKeys,
+            KeyAction.PrivateKeys -> Unit
+        }
     }
 
     fun onChange(name: String) {
@@ -85,7 +103,7 @@ class ManageAccountViewModel(
         viewState = viewState.copy(closeScreen = false)
     }
 
-    fun deleteAccount() {
+    private fun deleteAccount() {
         accountManager.delete(account.id)
         viewState = viewState.copy(closeScreen = true)
     }
@@ -141,6 +159,7 @@ class ManageAccountViewModel(
             is AccountType.HardwareCard -> listOf(
                 KeyAction.AccessCodeRecovery,
                 KeyAction.ChangeAccessCode,
+                KeyAction.ForgotAccessCode,
                 KeyAction.ResetToFactorySettings
             )
 
