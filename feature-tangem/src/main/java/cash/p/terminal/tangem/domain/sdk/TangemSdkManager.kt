@@ -39,6 +39,7 @@ import com.tangem.operations.pins.SetUserCodeCommand
 import com.tangem.operations.preflightread.PreflightReadFilter
 import com.tangem.operations.sign.SignHashResponse
 import com.tangem.operations.sign.SignResponse
+import com.tangem.operations.usersetttings.SetUserCodeRecoveryAllowedTask
 import io.horizontalsystems.core.CoreApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -329,23 +330,21 @@ class TangemSdkManager(
         }
     */
 
-    /*
-        suspend fun setAccessCodeRecoveryEnabled(
-            cardId: String?,
-            enabled: Boolean,
-        ): CompletionResult<SuccessResponse> {
-            return runTaskAsyncReturnOnMain(
-                SetUserCodeRecoveryAllowedTask(enabled),
-                cardId,
-                initialMessage = Message(resources.getStringSafe(R.string.initial_message_tap_header)),
-            )
-        }
-    */
+    suspend fun setAccessCodeRecoveryEnabled(
+        cardId: String?,
+        enabled: Boolean,
+    ): CompletionResult<SuccessResponse> {
+        return runTaskAsyncReturnOnMain(
+            SetUserCodeRecoveryAllowedTask(enabled),
+            cardId,
+            initialMessage = Message(CoreApp.instance.getString(R.string.initial_message_tap_header)),
+        )
+    }
 
     suspend fun scanCard(
         cardId: String?,
         allowRequestAccessCodeFromRepository: Boolean,
-        message: Message?,
+        message: Message? = null,
     ): CompletionResult<Card> = runTaskAsyncReturnOnMain(
         runnable = ScanTask(allowRequestAccessCodeFromRepository),
         cardId = cardId,

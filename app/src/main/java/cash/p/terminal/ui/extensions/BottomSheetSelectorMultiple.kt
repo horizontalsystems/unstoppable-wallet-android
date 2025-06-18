@@ -37,7 +37,7 @@ fun BottomSheetSelectorMultiple(
 ) {
     val selected = remember(config.uuid) { mutableStateListOf<Int>().apply { addAll(config.selectedIndexes) } }
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = config.icon.painter(),
             title = config.title,

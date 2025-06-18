@@ -26,7 +26,7 @@ import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsCheckbox
+import cash.p.terminal.ui_compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui_compose.components.AppBar

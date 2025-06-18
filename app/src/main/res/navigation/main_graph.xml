@@ -363,6 +363,9 @@
         android:id="@+id/contactOptionsDialog"
         android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />
     <dialog
+        android:id="@+id/accessCodeRecoveryDialog"
+        android:name="cash.p.terminal.tangem.ui.accesscoderecovery.AccessCodeRecoveryDialog" />
+    <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog" />
     <dialog

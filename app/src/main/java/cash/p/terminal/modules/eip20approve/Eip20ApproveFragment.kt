@@ -19,7 +19,7 @@ import io.horizontalsystems.core.setNavigationResultX
 import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.strings.helpers.TranslatableString
-import cash.p.terminal.ui.compose.components.HsCheckbox
+import cash.p.terminal.ui_compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar

@@ -15,6 +15,7 @@ import cash.p.terminal.tangem.domain.usecase.TangemScanUseCase
 import cash.p.terminal.tangem.domain.usecase.ValidateBackUseCase
 import cash.p.terminal.tangem.ui.HardwareWalletOnboardingViewModel
 import cash.p.terminal.tangem.ui.accesscode.AddAccessCodeViewModel
+import cash.p.terminal.tangem.ui.accesscoderecovery.AccessCodeRecoveryViewModel
 import cash.p.terminal.wallet.useCases.ScanToAddUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -41,4 +42,5 @@ val featureTangemModule = module {
 
     viewModelOf(::HardwareWalletOnboardingViewModel)
     viewModelOf(::AddAccessCodeViewModel)
+    viewModelOf(::AccessCodeRecoveryViewModel)
 }

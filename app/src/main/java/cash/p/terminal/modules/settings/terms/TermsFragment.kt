@@ -23,7 +23,7 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.strings.helpers.TranslatableString
-import cash.p.terminal.ui.compose.components.HsCheckbox
+import cash.p.terminal.ui_compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow

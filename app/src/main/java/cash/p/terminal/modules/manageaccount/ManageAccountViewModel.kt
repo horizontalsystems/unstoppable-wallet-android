@@ -13,6 +13,10 @@ import cash.p.terminal.tangem.domain.sdk.TangemSdkManager
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.IAccountManager
+import com.tangem.common.card.Card
+import com.tangem.common.doOnSuccess
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import org.koin.java.KoinJavaComponent.inject
@@ -41,6 +45,9 @@ class ManageAccountViewModel(
 
     private var newName = account.name
 
+    private val _showAccessCodeRecoveryDialog = Channel<Card>(Channel.UNLIMITED)
+    val showAccessCodeRecoveryDialog = _showAccessCodeRecoveryDialog.receiveAsFlow()
+
     init {
         viewModelScope.launch {
             accountManager.accountsFlowable.asFlow()
@@ -50,6 +57,13 @@ class ManageAccountViewModel(
 
     fun changeAccessCode() = viewModelScope.launch {
         tangemSdkManager.setAccessCode(null)
+    }
+
+    fun accessCodeRecovery() = viewModelScope.launch {
+        tangemSdkManager.scanCard(cardId = null, allowRequestAccessCodeFromRepository = false)
+            .doOnSuccess {
+                _showAccessCodeRecoveryDialog.trySend(it)
+            }
     }
 
     fun onChange(name: String) {
@@ -125,6 +139,7 @@ class ManageAccountViewModel(
             )
 
             is AccountType.HardwareCard -> listOf(
+                KeyAction.AccessCodeRecovery,
                 KeyAction.ChangeAccessCode,
                 KeyAction.ResetToFactorySettings
             )

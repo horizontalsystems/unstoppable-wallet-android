@@ -29,7 +29,8 @@ object ManageAccountModule {
         PublicKeys,
         PrivateKeys,
         ResetToFactorySettings,
-        ChangeAccessCode
+        ChangeAccessCode,
+        AccessCodeRecovery
     }
 
     sealed class BackupItem{

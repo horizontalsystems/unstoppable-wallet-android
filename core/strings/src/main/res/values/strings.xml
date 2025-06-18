@@ -721,6 +721,13 @@
     <string name="initial_message_reset_backup_card_header">Tap the card #%s of the wallet</string>
     <string name="skip_and_finish">Skip and Finish</string>
     <string name="initial_message_change_access_code_body">To change the access code tap the card or ring as shown above and do not remove until the end of the operation</string>
+    <string name="card_settings_access_code_recovery_title">Access code recovery</string>
+    <string name="card_settings_access_code_recovery_disabled_description">Disable this option if you don\'t want this card to be used to reset access codes on other cards or rings in this wallet. Please note that this will also prevent you from resetting the access code on this card.</string>
+    <string name="card_settings_access_code_recovery_enabled_description">Allows you to use this card to reset access code on other cards in this wallet</string>
+    <string name="initial_message_tap_header">Tap the card</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="save">Save</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>

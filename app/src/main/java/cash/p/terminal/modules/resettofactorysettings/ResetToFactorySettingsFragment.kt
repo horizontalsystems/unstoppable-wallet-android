@@ -1,13 +1,14 @@
 package cash.p.terminal.modules.resettofactorysettings
 
 import android.os.Parcelable
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,7 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.tangem.ui.HardwareWalletError
-import cash.p.terminal.ui.compose.components.HsCheckbox
+import cash.p.terminal.ui_compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
@@ -110,80 +111,90 @@ private fun ResetToFactorySettingsScreen(
         )
     }
     var checkedItems by remember { mutableStateOf(setOf<Int>()) }
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = stringResource(R.string.reset_to_factory_settings),
-            navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
-        )
-        Spacer(Modifier.height(12.dp))
-        CellUniversalLawrenceSection(confirmations, showFrame = true) { item ->
-            val itemId = item.id
-            RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = {
-                    if (!uiState.primaryCardWasReset) {
-                        checkedItems = if (itemId in checkedItems) {
-                            checkedItems - itemId
-                        } else {
-                            checkedItems + itemId
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.reset_to_factory_settings),
+                navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
+            )
+        },
+        containerColor = ComposeAppTheme.colors.tyler,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxHeight()
+        ) {
+            Spacer(Modifier.height(12.dp))
+            CellUniversalLawrenceSection(confirmations, showFrame = true) { item ->
+                val itemId = item.id
+                RowUniversal(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onClick = {
+                        if (!uiState.primaryCardWasReset) {
+                            checkedItems = if (itemId in checkedItems) {
+                                checkedItems - itemId
+                            } else {
+                                checkedItems + itemId
+                            }
                         }
                     }
+                ) {
+                    HsCheckbox(
+                        checked = itemId in checkedItems,
+                        enabled = !uiState.primaryCardWasReset,
+                        onCheckedChange = { checked ->
+                            checkedItems = if (checked) {
+                                checkedItems + itemId
+                            } else {
+                                checkedItems - itemId
+                            }
+                        },
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    subhead2_leah(
+                        text = item.getString()
+                    )
                 }
-            ) {
-                HsCheckbox(
-                    checked = itemId in checkedItems,
-                    enabled = !uiState.primaryCardWasReset,
-                    onCheckedChange = { checked ->
-                        checkedItems = if (checked) {
-                            checkedItems + itemId
-                        } else {
-                            checkedItems - itemId
-                        }
-                    },
-                )
-                Spacer(Modifier.width(16.dp))
-                subhead2_leah(
-                    text = item.getString()
-                )
             }
-        }
 
-        Spacer(Modifier.height(16.dp))
-        TextImportantWarning(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(id = R.string.reset_card_with_backup_to_factory_message)
-        )
+            Spacer(Modifier.height(16.dp))
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = stringResource(id = R.string.reset_card_with_backup_to_factory_message)
+            )
 
-        val showFinishButton = uiState.primaryCardWasReset
-        Spacer(Modifier.weight(1f))
-        ButtonPrimaryRed(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
-            title = stringResource(
-                if (!showFinishButton) {
-                    R.string.reset
-                } else {
-                    R.string.reset_backup_card
-                }
-            ),
-            onClick = onResetCardClick,
-            enabled = checkedItems.size == 2
-        )
-        if (showFinishButton) {
-            Spacer(Modifier.height(8.dp))
-            ButtonPrimaryDefault(
+            val showFinishButton = uiState.primaryCardWasReset
+            Spacer(Modifier.weight(1f))
+            ButtonPrimaryRed(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                title = stringResource(R.string.skip_and_finish),
-                onClick = {
-                    navController.popBackStack()
-                },
+                title = stringResource(
+                    if (!showFinishButton) {
+                        R.string.reset
+                    } else {
+                        R.string.reset_backup_card
+                    }
+                ),
+                onClick = onResetCardClick,
                 enabled = checkedItems.size == 2
             )
+            if (showFinishButton) {
+                Spacer(Modifier.height(8.dp))
+                ButtonPrimaryDefault(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.skip_and_finish),
+                    onClick = {
+                        navController.popBackStack()
+                    },
+                    enabled = checkedItems.size == 2
+                )
+            }
+            Spacer(Modifier.height(32.dp))
         }
-        Spacer(Modifier.height(32.dp))
     }
 }
 

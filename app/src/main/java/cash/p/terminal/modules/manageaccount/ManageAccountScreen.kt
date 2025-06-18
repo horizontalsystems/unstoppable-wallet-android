@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -63,6 +64,7 @@ internal fun ManageAccountScreen(
     onSaveClicked: () -> Unit,
     deleteAccount: () -> Unit,
     onNameChanged: (String) -> Unit,
+    accessCodeRecovery: () -> Unit,
     onChangeAccessCode: () -> Unit
 ) {
     if (viewState.closeScreen) {
@@ -102,7 +104,10 @@ internal fun ManageAccountScreen(
                         HsSettingCell(
                             title = R.string.signed,
                             icon = R.drawable.ic_info_20,
-                            value = stringResource(R.string.details_row_subtitle_signed_hashes_format, it),
+                            value = stringResource(
+                                R.string.details_row_subtitle_signed_hashes_format,
+                                it
+                            ),
                         )
                     }
                 )
@@ -152,6 +157,7 @@ internal fun ManageAccountScreen(
                 account = account,
                 deleteAccount = deleteAccount,
                 changeAccessCode = onChangeAccessCode,
+                onAccessCodeRecoveryClick = accessCodeRecovery,
                 navController = navController
             )
 
@@ -186,6 +192,7 @@ private fun KeyActions(
     viewState: ManageAccountModule.ViewState,
     account: Account,
     deleteAccount: () -> Unit,
+    onAccessCodeRecoveryClick: () -> Unit,
     changeAccessCode: () -> Unit,
     navController: NavController
 ) {
@@ -251,6 +258,17 @@ private fun KeyActions(
                                 deleteAccount()
                             }
                         }
+                    }
+                }
+            }
+
+            KeyAction.AccessCodeRecovery -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.card_settings_access_code_recovery_title),
+                        icon = painterResource(id = R.drawable.icon_unlocked_48)
+                    ) {
+                        onAccessCodeRecoveryClick()
                     }
                 }
             }
@@ -493,7 +511,11 @@ private fun ManageAccountScreenPreview() {
                 canSave = true,
                 closeScreen = false,
                 headerNote = HeaderNote.None,
-                keyActions = listOf(KeyAction.ChangeAccessCode, KeyAction.ResetToFactorySettings),
+                keyActions = listOf(
+                    KeyAction.AccessCodeRecovery,
+                    KeyAction.ChangeAccessCode,
+                    KeyAction.ResetToFactorySettings
+                ),
                 backupActions = emptyList(),
                 signedHashes = 2
             ),
@@ -513,7 +535,8 @@ private fun ManageAccountScreenPreview() {
             onSaveClicked = {},
             onNameChanged = {},
             deleteAccount = {},
-            onChangeAccessCode = {}
+            onChangeAccessCode = {},
+            accessCodeRecovery = {}
         )
     }
 }

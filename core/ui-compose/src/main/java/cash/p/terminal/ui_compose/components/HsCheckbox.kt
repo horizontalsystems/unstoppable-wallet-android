@@ -1,4 +1,4 @@
-package cash.p.terminal.ui.compose.components
+package cash.p.terminal.ui_compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.R
+import cash.p.terminal.ui_compose.R
 
 @Composable
 fun HsCheckbox(
