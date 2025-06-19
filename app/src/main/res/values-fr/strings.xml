@@ -16,6 +16,8 @@
     <string name="Button_ScanQr">QR Code à scanner</string>
     <string name="Button_Close">Fermer</string>
     <string name="Button_Ok">OK</string>
+    <string name="Button_Activate">Activer</string>
+    <string name="Button_Later">Plus tard</string>
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
@@ -50,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuer quand même</string>
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
+    <string name="Error_AssetNotEnabled">Le destinataire n\'a pas activé %s, il ne peut donc pas le recevoir.</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">n/a</string>
     <string name="Any">N\'importe lequel</string>
@@ -125,7 +128,6 @@
     <string name="Restore_ZCash_OldWallet">Portefeuille existant</string>
     <string name="Restore_ZCash_OldWallet_Description">A des transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">La synchronisation initiale avec la blockchain peut consommer beaucoup de trafic Internet.</string>
-
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. marché</string>
@@ -274,6 +276,10 @@
     <string name="Market_Filter_TimePeriod_3M">3 Mois</string>
     <string name="Market_Filter_TimePeriod_6M">6 Mois</string>
     <string name="Market_Filter_TimePeriod_1Y">1 An</string>
+    <string name="Market_Filter_TimePeriod_2Y">2 ans</string>
+    <string name="Market_Filter_TimePeriod_3Y">3 ans</string>
+    <string name="Market_Filter_TimePeriod_4Y">4 ans</string>
+    <string name="Market_Filter_TimePeriod_5Y">5 ans</string>
     <string name="Market_Sorting_Manual">Manuel</string>
     <string name="Market_Sorting_Gainers">Gagnants</string>
     <string name="Market_Sorting_Losers">Perdants</string>
@@ -326,6 +332,13 @@
     <string name="Balance_Receive_ChangeAddresses">Adresses de changement</string>
     <string name="Balance_SendHint_CoinName">Nom de la pièce</string>
     <string name="Balance_ReceiveHint_Search">Chercher</string>
+    <string name="Balance_Receive_ActivationRequired">Pour recevoir une adresse, vous devez activer le jeton. Ceci est requis par le réseau Stellar.</string>
+    <string name="Balance_Receive_Trustline">Ligne de confiance</string>
+    <string name="Balance_Reserved_Title">Réservé</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Title">Transparence</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Montant transparent</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Le solde transparent ne peut pas être utilisé dans notre portefeuille pour le moment. Mais cet argent peut être dépensé par d\'autres portefeuilles avec le support des t-address</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Shield">Bouclier</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <!--Send-->
@@ -367,7 +380,7 @@
     <string name="Send_Address_Error_Detected">Détectée</string>
     <string name="Send_Address_Error_Clear">Effacer</string>
     <string name="Send_Address_AddressCheck">Vérification d\'adresse</string>
-    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck">Contrôle de l\'hameçonnage</string>
     <string name="Send_Address_PhishingCheck_Info1">Analyse l\'adresse de destination fournie pour détecter d\'éventuels risques d\'hameçonnage.</string>
     <string name="Send_Address_PhishingCheck_Info2">RAS : Aucune activité suspecte détectée.</string>
     <string name="Send_Address_PhishingCheck_Info3">Détecté : Il semble que quelqu\'un essaie de vous inciter à envoyer des fonds vers une adresse incorrecte. Ne continuez pas sans être absolument certain que l\'adresse est correcte. Envisagez d\'abord d\'envoyer une petite transaction test.</string>
@@ -375,7 +388,7 @@
     <string name="Send_Address_BlacklistCheck_Info1">Vérifie si l\'adresse de destination figure sur des listes noires officielles ou non officielles.</string>
     <string name="Send_Address_BlacklistCheck_Info2">RAS : Aucun signalement sur liste noire.</string>
     <string name="Send_Address_BlacklistCheck_Info3">Détecté : L\'adresse est sur liste noire et peut être associée à des risques juridiques ou de sécurité. Procédez avec prudence. De nombreuses plateformes d\'échange de cryptomonnaies restreignent les utilisateurs qui déposent ou retirent des fonds depuis des portefeuilles ayant interagi avec des adresses figurant sur une liste noire. Gardez cela à l\'esprit.</string>
-    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck">Contrôle des sanctions</string>
     <string name="Send_Address_SanctionCheck_Info1">Vérifie si l\'adresse du destinataire est soumise à des sanctions internationales, en utilisant les données de Chainalysis.com.</string>
     <string name="Send_Address_SanctionCheck_Info2">RAS : Aucune sanction détectée.</string>
     <string name="Send_Address_SanctionCheck_Info3">Détecté : Risque juridique potentiel. Les transactions avec cette adresse peuvent être restreintes ou illégales dans certaines juridictions.</string>
@@ -419,6 +432,9 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Nonce utilisé</string>
     <string name="SendEvmSettings_Error_NonceUsed">Une transaction exécutée avec ce nonce existe déjà.</string>
     <!-- Fee Settings -->
+    <string name="Fee_Total">Frais totaux</string>
+    <string name="Fee_OutboundFee">Frais sortants</string>
+    <string name="Fee_LiquidityFee">Frais de liquidité</string>
     <string name="FeeSettings_NetworkFee">Frais de réseau</string>
     <string name="FeeSettings_NetworkFee_Info">Le coût d\'une opération de paiement donnée, tel que mesuré de prime abord sur le réseau.</string>
     <string name="FeeSettings_GasLimit_Info">La complexité des transactions est mesurée en unités appelées \"gas\". Elles varient en fonction du contrat intelligent en cours d\'exécution. La limite de gas est le volume maximum estimé de gas nécessaire pour son exécution. Le volume de gaz réellement utilisé est généralement inférieur.</string>
@@ -554,6 +570,8 @@
     <string name="Swap_Confirm_Title">Confirmer</string>
     <string name="SwapConfirm_QuoteExpired">Devis expiré</string>
     <string name="SwapConfirm_FetchingFinalQuote">Récupération du devis final</string>
+    <string name="SwapWarning_SlippageNotApplicable_Title">Slippage n\'est pas applicable</string>
+    <string name="SwapWarning_SlippageNotApplicable_Description">Le slippage minimum applicable pour ce devis est %s%%</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
@@ -572,16 +590,23 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">%s Adresse non valide</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <!-- Swap Confirmation -->
+    <string name="ActivationRequired_DialogTitle">Activer le jeton</string>
+    <string name="ActivationRequired_DialogDescription">Pour recevoir %s, vous devez activer le jeton. Le réseau Stellar nécessite une ligne de confiance pour chaque jeton. Sans elle, votre portefeuille ne peut pas recevoir %s — la transaction sera rejetée et les fonds ne seront pas livrés.</string>
+    <string name="Activate_YouActivate">Vous activez</string>
+    <string name="Activate_Activating">Activation</string>
+    <string name="Activate_AlreadyActive_Title">Déjà actif</string>
+    <string name="Activate_AlreadyActive_Description">Le jeton est déjà actif.</string>
+    <string name="Activate_InsufficientBalance_Title">Solde insuffisant</string>
+    <string name="Activate_InsufficientBalance_Description">Vous n\'avez pas assez de solde XLM pour activer ce jeton.</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">Vous pouvez échanger %s, ou vous devez révoquer et approuver le nouveau montant</string>
     <string name="Approve_Spender">Dépendant</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
     <string name="Approve_YouRevoke">Vous révoquez</string>
     <!--Swap Unlock Access-->
-    <string name="Swap_Unlock_PageTitle">Accès déverrouillé</string>
-    <string name="Swap_Unlock_Subtitle">Autoriser l\'accès au montant suivant</string>
-    <string name="Swap_Unlock_Info">Accorder l\'autorisation à un contrat intelligent pour effectuer des échanges de jetons en votre nom, en spécifiant le montant autorisé. Cela n\'affecte pas votre solde, mais entraîne de petits frais pour l\'approbation.\n\nPréapprouver un montant plus élevé pour les transactions futures est plus rentable que d\'approuver à la demande.</string>
-    <string name="Swap_Unlock_Unlimited">Illimité</string>
+    <string name="Swap_Approve_PageTitle">Approuver</string>
+    <string name="Swap_Approve_Info">Accorder l\'autorisation à un contrat intelligent pour effectuer des échanges de jetons en votre nom, en spécifiant le montant autorisé. Cela n\'affecte pas votre solde, mais entraîne de petits frais pour l\'approbation.\n\nPréapprouver un montant plus élevé pour les transactions futures est plus rentable que d\'approuver à la demande.</string>
+    <string name="Swap_Approve_Unlimited">Illimité</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
     <string name="SwapInfo_AllowanceDescription">Le montant qu\'un échange peut dépenser pour le compte de l\'utilisateur lors de l\'exécution de swaps de jetons. Une provision suffisante est requise avant de pouvoir effectuer une opération d\'échange réelle.</string>
@@ -595,6 +620,8 @@
     <string name="Transactions_WaitForSync">Veuillez attendre la fin de la synchronisation.</string>
     <string name="Transactions_Pending">En attente</string>
     <string name="Transactions_Receive">Reçue</string>
+    <string name="Transactions_AccountCreated">Compte créé</string>
+    <string name="Transactions_ChangeTrust">Changer la confiance</string>
     <string name="Transactions_Completed">Terminé</string>
     <string name="Transactions_Processing">Traitement en cours</string>
     <string name="Transactions_Send">Envoyée</string>
@@ -603,11 +630,15 @@
     <string name="Transactions_Approve">Approuvé</string>
     <string name="Transactions_Swap">Échangé</string>
     <string name="Transactions_Failed">Échec</string>
+    <string name="Transactions_Transfer">Transfert</string>
+    <string name="Transactions_Shield">Bouclier</string>
+    <string name="Transactions_Unshield">Débouclier</string>
     <string name="Transactions_ContractCall">Appel de contrat</string>
     <string name="Transactions_ExternalContractCall">Appel externe</string>
     <string name="Transactions_ContractCreation">Création du contrat</string>
     <string name="Transactions_ContractDeploy">Déploiement du contrat</string>
     <string name="Transactions_To">a %s</string>
+    <string name="Transactions_By">par %s</string>
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited_CoinCode">%s illimité</string>
     <string name="Transaction_Unlimited">illimité</string>
@@ -625,7 +656,11 @@
     <string name="Transactions_Swaps">Echanger</string>
     <string name="Transactions_Approvals">Approbations</string>
     <string name="Transactions_Unknown">Transaction inconnue</string>
+    <string name="Transactions_OperationType">Type d\'opération</string>
+    <string name="Transactions_OperationType_ChangeTrust">Changer la confiance</string>
+    <string name="Transactions_OperationType_CreateAccount">Créer un compte</string>
     <string name="Transactions_TonTransaction">Transaction TON</string>
+    <string name="Transactions_StellarTransaction">Transaction Stellar</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
     <string name="Transactions_Multiple">Multiples</string>
     <string name="Transactions_Filter">Filtre</string>
@@ -684,6 +719,10 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Impossible de remplacer</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
+    <string name="Info_Reserved_Title">Réservé</string>
+    <string name="Info_Reserved_Description">Le réseau Stellar verrouille 1 XLM pour activer le portefeuille et 0.5 XLM comme réserve pour chaque jeton activé dans votre portefeuille.</string>
+    <string name="Info_Reserved_CurrentlyLocked">Actuellement verrouillé :</string>
+    <string name="Info_Reserved_WalletAction">Activation du portefeuille</string>
     <string name="Info_NotRelayed_Title">Diffuser</string>
     <string name="Info_NotRelayed_Description">La transaction contenant ce montant a été diffusée mais n\'a pas encore été acceptée par le réseau.</string>
     <string name="Info_ProcessingBalance_Title">Montant en cours de traitement</string>
@@ -714,6 +753,7 @@
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
+    <string name="Settings_AppSettings">Paramètres de l\'application</string>
     <string name="Settings_Subscription">Abonnement</string>
     <string name="Settings_Contact_ViaTelegram">par Telegram</string>
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
@@ -741,17 +781,58 @@
     <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Adresse du don</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
+    <string name="Settings_Donate_DonationAddresses">Adresses du don</string>
     <string name="Settings_Donate_OrSelectCoinToDonate">Ou sélectionnez une pièce à faire un don</string>
+    <string name="Settings_CryptoQuiz">Quiz en crypto</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
-    <!--Premium Banner-->
+    <!--Address Checker-->
+    <string name="SettingsAddressChecker_Title">Vérificateur d\'adresse</string>
+    <string name="SettingsAddressChecker_RecipientCheck">Vérification du destinataire</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Vérifie l\'adresse du destinataire avant l\'envoi.</string>
+    <string name="SettingsAddressChecker_CheckAddress">Vérifier l\'adresse</string>
+    <string name="SettingsAddressChecker_SelectBlockchain">Sélectionnez la Blockchain</string>
+    <string name="SettingsAddressChecker_SelectCoin">Sélectionner une pièce</string>
+    <string name="SettingsAddressChecker_OnSubject">sur %s</string>
+    <string name="SettingsAddressChecker_SanctionsCheck">Contrôle des sanctions</string>
+    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
+    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalyse.com</string>
+    <string name="SettingsAddressChecker_ChainalysisCheckDescription">La chainalyse est une plate-forme d\'analyse de la blockchain qui fournit des outils pour le suivi, l\'étude et l\'évaluation du risque d\'adresses de crypto-monnaies. Il aide à identifier les adresses associées aux sanctions, à la fraude et à d\'autres activités illicites.</string>
+    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
+    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit est une plateforme de sécurité qui permet aux utilisateurs de vérifier les adresses du portefeuille pour les risques tels que les sanctions et l\'état de la liste noire. Il aide les utilisateurs à éviter d\'interagir avec des adresses potentiellement malveillantes ou bloquées.</string>
+    <string name="SettingsAddressChecker_TetherBlacklistDescription">Vous permet de vérifier si une adresse de portefeuille est blacklistée par Tether (USDT). Si une adresse est sur la liste noire, les jetons USDT qui y sont associés peuvent être gelés, ce qui les rend inaccessibles et non transférables. Cette vérification aide les utilisateurs à éviter d\'interagir avec des adresses à haut risque ou restreintes.</string>
+    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Vous permet de vérifier si une adresse de portefeuille est blacklistée par l\'émetteur USDC (Circle). Les adresses figurant sur la liste noire peuvent être gelées pour des raisons de conformité, de fraude ou de réglementation. L\'utilisation de cette vérification réduit le risque d\'envoyer des fonds vers des portefeuilles bloqués ou suspects.</string>
+    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Fournit un moyen de vérifier si une adresse de portefeuille est blacklistée par PYUSD, émise par PayPal. Les fonds détenus à des adresses sur liste noire peuvent être gelés et inutilisables, généralement en raison de préoccupations d\'ordre juridique ou de sécurité. Cet outil aide à assurer des transactions plus sûres et conformes avec PYUSD.</string>
+    <string name="SettingsAddressChecker_InvalidAddress">L\'adresse que vous avez saisie semble non valide. Veuillez vérifier les fautes de frappe ou les problèmes de formatage et réessayez.</string>
+    <!--Banners-->
     <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsBanner_PremiumBannerDescription">Améliorez votre expérience avec les fonctionnalités Premium !</string>
     <string name="SettingsBanner_PremiumTryFee">Essayez GRATUITEMENT</string>
+    <string name="SettingsBanner_GameDescription">Passez des tests, complétez des tâches et gagnez des jetons !</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Faire partie de l\'avenir de la finance privée</string>
+    <string name="SettingsBanner_SupportTheProject">Soutenez le projet !</string>
+    <!--Why Donate Page-->
+    <string name="SettingsBanner_DonateTitle">Soutenir le mouvement imparable</string>
+    <string name="SettingsBanner_DonateSubtitle">Faire partie de l\'avenir de la finance privée</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">« Unstoppable Wallet a été gratuit, sans publicité et open-source dès le premier jour — et cela restera ainsi. »</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">En rejoignant le mouvement Unstoppable, vous optez pour une finance ouverte et privée :</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">L’équipe de porte-monnaie Unstoppable</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">Votre soutien ne consiste pas seulement à débloquer des fonctionnalités, il s’agit d’un engagement envers la vie privée, la liberté et l’accès ouvert pour tous.</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Il aide à garder le portefeuille sans publicité, sécurisé et réellement indépendant, pour vous et pour des centaines de milliers de personnes qui comptent sur lui dans le monde entier.</string>
+    <string name="SettingsBanner_DonateExclusivelyOnFDroid">Exclusivement sur F-Droid</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Unstoppable Wallet vous offre des fonctionnalités avancées — sans abonnement, sans limites :</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Analyse complète et données sur les jetons</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">Mode Confidentialité &amp; Mode Détresse</string>
+    <string name="SettingsBanner_DonateFeatureSignals">Signaux pour un trading sûr</string>
+    <string name="SettingsBanner_DonateFeatureAddress">Vérificateur de liste noire d\'adresse</string>
+    <string name="SettingsBanner_DonateFeatureAdvanced">Recherche avancée de ressources et filtres</string>
+    <string name="SettingsBanner_DonateFeaturePriority">Accès prioritaire au support</string>
+    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Tous les éléments de soutien sont importants.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">En prenant en charge Unstoppable Wallet, vous nous aidez à grandir, améliorer et rester indépendant.</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Actif</string>
     <string name="SettingsSubscription_GetPremium">Devenez Premium</string>
@@ -779,7 +860,6 @@
     <string name="Premium_UpgradeText">Améliorez votre expérience avec les fonctionnalités Premium !</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Profitez de toute la puissance de l\'application.</string>
     <string name="Premium_SelectSubscription">Sélectionner l\'abonnement</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights">Analytique</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Recherche Avancée</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Signaux et Tendances</string>
@@ -787,7 +867,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Protection Anti-arnaques</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Vérification Liste Noire</string>
     <string name="Premium_UpgradeFeature_VipSupport">Groupe VIP</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Accès aux listes top-100 selon des critères clés</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrage multi-niveaux sur plusieurs paramètres</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Surveillance automatique des tendances du marché pour vos tokens</string>
@@ -795,7 +874,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">Protection automatique efficace contre les arnaques et attaques de phishing</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Garantie de légalité pour vos opérations crypto</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Accès à l\'équipe du portefeuille pour un support technique rapide.</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Votre outil tout-en-un pour une analyse approfondie. Parcourez des listes sélectionnées des 250 meilleurs jetons selon le volume d\'échanges, la liquidité des plateformes, le comportement des détenteurs et les tendances on-chain—le tout en un coup d\'œil. Filtrez, analysez et gardez une longueur d\'avance.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Éliminez le bruit et concentrez-vous avec précision sur les jetons à fort potentiel. Utilisez la Recherche Avancée pour filtrer des milliers de jetons par volume d\'échanges, blockchain, capitalisation boursière, tendances de prix, secteur et performance—et bien plus encore. Puissant, précis et conçu pour la découverte.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Ne manquez plus jamais une opportunité de trading. Le Suivi des Tendances vous livre des alertes en temps réel alimentées par une analyse technique avancée, vous aidant à identifier les tendances, repérer les percées et éviter les pièges avant qu\'ils ne surviennent. Agissez vite, tradez intelligemment et maximisez vos gains.</string>
@@ -803,12 +881,14 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Une seule adresse erronée, et vos cryptos disparaissent à jamais. Unstoppable analyse automatiquement les adresses des destinataires pour détecter les modèles suspects et vous protège contre les dernières menaces d\'hameçonnage, vous empêchant d\'envoyer des fonds à un pirate informatique. Bloquez les transferts frauduleux avant qu\'ils ne se produisent.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protégez-vous des entités à risque et sous sanctions. Le Vérificateur de Liste Noire filtre automatiquement les adresses des destinataires par rapport aux bases de données à haut risque, signalant les arnaques, fraudes et entités sanctionnées avant tout envoi. Si une adresse est sur liste noire, vous le saurez avant de commettre une erreur coûteuse. Sécurisez vos transactions. Gardez vos cryptos propres. Restez conforme.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Faites partie de l\'évolution. Rejoignez le Groupe VIP pour communiquer directement avec notre équipe de support technique. Votez pour les fonctionnalités à venir et obtenez un aperçu exclusif des futures mises à jour. Votre voix compte — aidez-nous à façonner le portefeuille crypto de nouvelle génération.</string>
-
     <string name="Premium_HighlyRatedSecurity">Sécurité hautement évaluée, confidentialité exceptionnelle et un portefeuille véritablement non-custodial.</string>
     <string name="Premium_ApprovedBy">Approuvé et audité par :</string>
     <string name="Premium_WhatUsersSay">Ce que disent les utilisateurs :</string>
     <string name="Premium_SubscriptionPeriod_Month">mois</string>
     <string name="Premium_SubscriptionPeriod_Year">année</string>
+    <string name="Premium_SubscriptionPeriod_Annually">Annuellement</string>
+    <string name="Premium_SubscriptionPeriod_Monthly">Mensuellement</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">ÉCONOMISEZ 31%</string>
     <string name="Appearance_MarketsTab">TAB DES MARCHÉS</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
@@ -816,9 +896,11 @@
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_HideMarketsTab">Masquer les marchés</string>
     <string name="Appearance_HideBalanceTabButtons">Masquer les boutons</string>
+    <string name="Appearance_AmountRounding">Arrondi du montant</string>
     <string name="Appearance_BalanceAutoHide">Masquer le Solde Automatiquement</string>
     <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde à chaque ouverture de l\'application, indépendamment des préférences précédentes.</string>
     <string name="Appearance_PriceChangeInterval">Variation de prix %</string>
+    <string name="Appearance_HideButtonsInfo">La configuration « Masquer les boutons» masque les boutons Envoyer, Recevoir et Permuter dans l\'onglet Solde.</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
     <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
@@ -912,10 +994,7 @@
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Sauvegarde sécurisée des phrases de récupération pour chaque portefeuille. C\'est le seul moyen de récupérer l\'accès aux fonds si l\'application ne fonctionne pas.</string>
-    <string name="SettingsTerms_PrivateKeys">Les phrases de récupération du portefeuille sont générées aléatoirement sur l\'appareil lors de l\'installation et ne sont pas stockées ailleurs.</string>
     <string name="SettingsTerms_DisablingPin">La désactivation du code PIN (code) sur le smartphone supprime tous les portefeuilles de l\'application. Des phrases de récupération seront nécessaires pour restaurer l\'accès aux fonds.</string>
-    <string name="SettingsTerms_JailBraking">La mise en prison (root), l\'utilisation d\'un système d\'exploitation obsolète et l\'installation d\'applications à partir de sources inconnues peuvent mettre en danger la sécurité des fonds.</string>
-    <string name="SettingsTerms_Bugs">Il peut y avoir des problèmes de logiciels non découverts dans le code alimentant cette application, ce qui peut causer un dysfonctionnement de l\'application.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Soyez Unstoppable</string>
@@ -993,6 +1072,7 @@
     <string name="Watch_Address_Watch">Suivi</string>
     <string name="Watch_Select_Blockchains">Choisir la blockchain</string>
     <string name="Watch_Select_Coins">Crypto Monnaie</string>
+    <string name="Watch_InfoText">Supporte les adresses des clés EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) et XPUB.</string>
     <string name="Watch_Error_InvalidAddressFormat">Le format de l\'adresse n\'est pas pris en charge</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
@@ -1047,6 +1127,9 @@
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">Clé privée EVM</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Appuyez pour afficher la clé privée</string>
+    <!-- Stellar Secret Key -->
+    <string name="StellarSecretKey_Title">Clé secrète Stellar</string>
+    <string name="StellarSecretKey_ShowSecretKey">Appuyez pour afficher la clé secrète</string>
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
@@ -1056,8 +1139,10 @@
     <string name="PrivateKeys_Title">Clés privées</string>
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Permet un contrôle total des crypto-monnaies basées sur l\'EVM, c\'est-à-dire Ethereum, Binance Smart Chain, etc. dans leur portefeuille respectif.</string>
+    <string name="PrivateKeys_StellarSecretKey">Clé secrète Stellar</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Donne un contrôle total sur le compte Stellar dans chaque portefeuille.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Permet d\'exercer un contrôle total sur les actifs du portefeuille correspondant.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Clé privée étendue du compte</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Permet un contrôle total du Bitcoin et des autres crypto-monnaies basées sur l\'UTXO, c\'est-à-dire Litecoin, Bitcoin Cash, Dash, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_NeverShareWarning">Ne partagez jamais votre phrase de récupération avec quiconque. Une équipe imparable ne demandera jamais votre phrase de récupération.</string>
     <!-- Public Keys -->
@@ -1153,11 +1238,21 @@
     <string name="CoinPage_NoData">Pas de données</string>
     <string name="CoinPage_NoDataAvailable">Aucune donnée disponible</string>
     <string name="CoinPage_AddToWallet">Ajouté au portefeuille</string>
+    <string name="CoinPage_ROI_Title">Changement relatif vs %s</string>
+    <string name="CoinPage_ROI_Vs">contre</string>
+    <string name="CoinPage_ROI_SelectCoins">Sélectionner des Pièces</string>
     <string name="CoinPage_InWallet">Dans Wallet</string>
     <string name="CoinPage_Favorite">Favori</string>
     <string name="CoinPage_Unfavorite">Retirer des Favoris</string>
-    <string name="CoinPage_Performance_Week">1 Semaine</string>
-    <string name="CoinPage_Performance_Month">1 Mois</string>
+    <string name="CoinPage_Performance_Day1">Jour</string>
+    <string name="CoinPage_Performance_Week1">1 Semaine</string>
+    <string name="CoinPage_Performance_Week2">2 Semaines</string>
+    <string name="CoinPage_Performance_Month1">1 Mois</string>
+    <string name="CoinPage_Performance_Month3">3 Mois</string>
+    <string name="CoinPage_Performance_Month6">6 Mois</string>
+    <string name="CoinPage_Performance_Year1">1 An</string>
+    <string name="CoinPage_Performance_Year2">2 ans</string>
+    <string name="CoinPage_Performance_Year5">5 ans</string>
     <string name="CoinPage_ShowMore">Afficher plus</string>
     <string name="CoinPage_ShowLess">Afficher moins</string>
     <string name="CoinPage_LaunchDate">Date de création</string>
@@ -1182,7 +1277,12 @@
     <string name="CoinPage_AiGeneratedText">Ceci est une description générée par intelligence artificielle basée sur le matériel de référence fourni pour la cryptomonnaie donnée. Elle peut contenir des erreurs.</string>
     <string name="CoinPage_MarketsLabel_Verified">VÉRIFIÉ</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Vérifié</string>
+    <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">Type d\'échange</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">Tout</string>
+    <string name="ROI_SelectCoin_Title">Sélectionner une pièce</string>
+    <string name="ROI_SelectCoin_SelectAssets">Sélectionner les actifs</string>
+    <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">Seules les pièces %s peuvent être sélectionnées</string>
+    <string name="ROI_Period_N">Période %s</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total des échanges pour le jeton sur les principales plateformes d\'échange centralisées au cours d\'une période de 30 jours.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Graphique montrant la variation du volume quotidien de trading du jeton sur les principales plateformes d\'échange centralisées sur une période d\'un an.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Classement du jeton en fonction du volume de négociation sur les principales bourses centralisées au cours d\'une période de 30 jours.</string>

@@ -30,7 +30,7 @@ WALLET FEATURES:
 
 - Avalanche Wallet >> Vollständige Unterstützung für die Avalanche C-Chain-Blockchain.
 
-- Binance Wallet >> Vollständige Unterstützung für originale Binance Chain (inkl. BEP2) und Binance Smart Chain.
+- Binance Wallet >> Vollständige Unterstützung für originale Binance Chain (inkl.
 
 - Crypto Academy >> Die App umfasst zwei Kurse, die Neueinsteiger auf leicht verständliche Weise in die Welt der Kryptowährungen und des DeFi-Ökosystems einführen sollen und wesentliche Aspekte der Sicherheit, Speicherung, Privatsphäre, Transaktion und des Austauschs von Kryptowährungen abdecken.
 

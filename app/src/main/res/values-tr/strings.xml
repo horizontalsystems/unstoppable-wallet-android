@@ -16,6 +16,8 @@
     <string name="Button_ScanQr">QR Kod Okuma</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
+    <string name="Button_Activate">Activate</string>
+    <string name="Button_Later">Sonra</string>
     <string name="Button_Done">Bitti</string>
     <string name="Button_Retry">Yeniden Dene</string>
     <string name="Button_Change">Değiştir</string>
@@ -125,7 +127,6 @@
     <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
     <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
-
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">P. Değeri</string>
@@ -240,8 +241,6 @@
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
-    <string name="Market_Filter_Top_2000">Top 2000</string>
-    <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Sonuçları Göster</string>
     <string name="Market_Filter_ShowResults_Counter">Sonuçları Göster: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
@@ -351,7 +350,6 @@
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
     <string name="Send_Confirmation_YouReceive">Alacağınız</string>
     <string name="Send_Confirmation_Mint">Mint</string>
-    <string name="Send_Confirmation_Burn">Burn</string>
     <string name="Send_Confirmation_To">Alan</string>
     <string name="Send_Confirmation_Own">Kendi</string>
     <string name="Send_Confirmation_Method">Yöntem</string>
@@ -367,15 +365,12 @@
     <string name="Send_Address_Error_Detected">Tespit Edildi</string>
     <string name="Send_Address_Error_Clear">Temizle</string>
     <string name="Send_Address_AddressCheck">Adres Kontrolü</string>
-    <string name="Send_Address_PhishingCheck">Phishing Check</string>
     <string name="Send_Address_PhishingCheck_Info1">Sağlanan hedef adresi olası oltalama riskleri için analiz eder.</string>
     <string name="Send_Address_PhishingCheck_Info2">Temiz: Şüpheli aktivite tespit edilmedi.</string>
     <string name="Send_Address_PhishingCheck_Info3">Tespit Edildi: Birisi sizi yanlış bir adrese para göndermeye kandırmaya çalışıyor gibi görünüyor. Adresin doğru olduğundan kesinlikle emin olmadıkça devam etmeyin. Önce küçük bir test işlemi göndermeyi düşünün.</string>
-    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
     <string name="Send_Address_BlacklistCheck_Info1">Hedef adresin resmi veya gayri resmi kara listelerde listelenip listelenmediğini kontrol eder.</string>
     <string name="Send_Address_BlacklistCheck_Info2">Temiz: Kara liste işareti yok.</string>
     <string name="Send_Address_BlacklistCheck_Info3">Tespit Edildi: Adres kara listeye alınmıştır ve yasal veya güvenlik riskleriyle ilişkili olabilir. Dikkatli ilerleyin. Birçok kripto borsası, kara listeye alınmış adreslerle etkileşime girmiş cüzdanlardan para yatıran veya çeken kullanıcıları kısıtlar. Bunu aklınızda bulundurun.</string>
-    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
     <string name="Send_Address_SanctionCheck_Info1">Chainalysis.com\'dan alınan verileri kullanarak, alıcının adresinin uluslararası yaptırımlara tabi olup olmadığını doğrular.</string>
     <string name="Send_Address_SanctionCheck_Info2">Temiz: Yaptırım tespit edilmedi.</string>
     <string name="Send_Address_SanctionCheck_Info3">Tespit Edildi: Potansiyel yasal risk. Bu adresle yapılan işlemler belirli yargı bölgelerinde kısıtlanabilir veya yasadışı olabilir.</string>
@@ -576,16 +571,17 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Geçersiz %s adres</string>
     <string name="SwapSettings_Warning_UnusualSlippage">İşleminiz varlık fiyatını etkileyebilir</string>
     <!-- Swap Confirmation -->
+    <string name="Activate_Activating">Activating</string>
+    <string name="Activate_InsufficientBalance_Title">Yetersiz Bakiye</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s alışverişi yapabilir veya yeni tutarı iptal edip onaylamanız gerekir</string>
     <string name="Approve_Spender">Harcayan</string>
     <string name="Approve_YouApprove">Sen Onaylıyorsun</string>
     <string name="Approve_YouRevoke">Sen iptal et</string>
     <!--Swap Unlock Access-->
-    <string name="Swap_Unlock_PageTitle">Erişimi Aç</string>
-    <string name="Swap_Unlock_Subtitle">Aşağıdaki miktar için erişime izin ver</string>
-    <string name="Swap_Unlock_Info">Akıllı bir sözleşmeye, adınıza token ticareti yapabilmesi için izin verin ve izin verilen miktarı belirtin. Bakiyenize herhangi bir etkisi olmaz, ancak onay için küçük bir ücret alınır.\n\nGelecekteki işlemler için daha yüksek bir miktarın önceden onaylanması, talep üzerine onaylara göre maliyet açısından daha avantajlıdır.</string>
-    <string name="Swap_Unlock_Unlimited">Sınırsız</string>
+    <string name="Swap_Approve_PageTitle">Onayla</string>
+    <string name="Swap_Approve_Info">Akıllı bir sözleşmeye, adınıza token ticareti yapabilmesi için izin verin ve izin verilen miktarı belirtin. Bakiyenize herhangi bir etkisi olmaz, ancak onay için küçük bir ücret alınır.\n\nGelecekteki işlemler için daha yüksek bir miktarın önceden onaylanması, talep üzerine onaylara göre maliyet açısından daha avantajlıdır.</string>
+    <string name="Swap_Approve_Unlimited">Sınırsız</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Ödenek</string>
     <string name="SwapInfo_AllowanceDescription">Bir borsanın, token takaslarını yürütürken kullanıcının adına harcayabileceği ödenek miktarı. Fiili bir takas işleminin gerçekleşmesinde yeterli ödenek gereklidir.</string>
@@ -607,6 +603,7 @@
     <string name="Transactions_Approve">Onayla</string>
     <string name="Transactions_Swap">Takas Edildi</string>
     <string name="Transactions_Failed">Başarısız</string>
+    <string name="Transactions_Transfer">Aktar</string>
     <string name="Transactions_ContractCall">Sözleşme Çağrısı</string>
     <string name="Transactions_ExternalContractCall">Harici Çağrı</string>
     <string name="Transactions_ContractCreation">Sözleşme Oluşturma</string>
@@ -718,6 +715,7 @@
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
     <string name="Settings_Appearance">Görünüm</string>
+    <string name="Settings_AppSettings">Uygulama Ayarları</string>
     <string name="Settings_Subscription">Abonelik</string>
     <string name="Settings_Contact_ViaTelegram">Telegram aracılığıyla</string>
     <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
@@ -751,10 +749,11 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 dakika</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 dakika</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 saat</string>
-    <!--Premium Banner-->
-    <string name="SettingsBanner_Premium">Premium</string>
+    <!--Address Checker-->
+    <!--Banners-->
     <string name="SettingsBanner_PremiumBannerDescription">Premium özelliklerle deneyiminizi yükseltin!</string>
     <string name="SettingsBanner_PremiumTryFee">ÜCRETSİZ Deneyin</string>
+    <!--Why Donate Page-->
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Aktif</string>
     <string name="SettingsSubscription_GetPremium">Get Premium</string>
@@ -764,7 +763,6 @@
     <string name="SettingsSubscription_ManageSubscription">Aboneliği Yönet</string>
     <string name="Period_Days">%s gün</string>
     <!--Premium Screens-->
-    <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Planı seçin</string>
     <string name="Premium_EnjoyFreePeriod">İlk %s ÜCRETSİZ olarak kullanın.</string>
     <string name="Premium_CancelSubscriptionInfo">Aboneliğinizi istediğiniz zaman iptal edebilirsiniz.</string>
@@ -782,7 +780,6 @@
     <string name="Premium_UpgradeText">Premium özelliklerle deneyiminizi yükseltin!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
     <string name="Premium_SelectSubscription">Abonelik Seçin</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights">Token Analitiği</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Gelişmiş Arama</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Sinyaller ve Trendler</string>
@@ -790,7 +787,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Dolandırıcılık Koruması</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Kara Liste Kontrolü</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP Grubu</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Önemli kriterlere göre ilk 100 listelerine erişim</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Çoklu parametreler üzerinden çok seviyeli filtreleme</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Tokenleriniz için piyasa trendlerinin otomatik takibi</string>
@@ -798,7 +794,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">Dolandırıcılık ve oltalama saldırılarına karşı etkili otomatik koruma</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Kripto işlemlerinizin yasallığı için garanti</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Derinlemesine analiz için tek araçınız. İşlem hacmi, borsa likiditesi, yatırımcı davranışı ve zincir üstü trendlere dayalı olarak düzenlenmiş En İyi 250 token listesine göz atın—hepsi tek bir bakışta. Filtreleyin, analiz edin ve öne geçin.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Gereksiz detayları bırakın ve yüksek potansiyelli tokenlere hassasiyetle odaklanın. Gelişmiş Arama\'yı kullanarak binlerce tokeni işlem hacmi, blok zinciri, piyasa değeri, fiyat trendleri, sektör ve performansa göre filtreleyebilirsiniz—ve daha fazlası. Güçlü, doğru ve keşif için tasarlanmış.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Bir daha hiçbir ticaret fırsatını kaçırmayın. Trendleri İzleyin, gelişmiş teknik analize dayalı gerçek zamanlı uyarılar sunarak trendleri belirlemenize, ani yükselişleri tespit etmenize ve sorunları önceden fark etmenize yardımcı olur. Hızlı hareket edin, akıllı ticaret yapın ve kazançlarınızı maksimize edin.</string>
@@ -806,12 +801,13 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Yanlış bir adres ve kripto paranız sonsuza dek kaybolabilir. Unstoppable, alıcı adresleri şüpheli kalıplar için otomatik olarak tarar ve en son oltalama tehditlerine karşı savunma sağlayarak fonlarınızı bir bilgisayar korsanına göndermenizi önler. Gerçekleşmeden önce sahte transferleri engelleyin.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Kendinizi riskli ve yaptırım uygulanan kuruluşlardan koruyun. Kara Liste Kontrolcüsü, göndermeden önce alıcı adresleri yüksek riskli veritabanlarına karşı otomatik olarak tarar ve dolandırıcılık, sahtekarlık ve yaptırım uygulanan kuruluşları işaretler. Bir adres kara listeye alınmışsa, maliyetli bir hata yapmadan önce bileceksiniz. İşlemlerinizi güvence altına alın. Kripto paranızı temiz tutun. Uyumlu kalın.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seja parte da evolução. Junte-se ao Grupo VIP para se conectar diretamente com nossa equipe de suporte técnico. Vote nas próximas funcionalidades e tenha uma prévia exclusiva das atualizações futuras. Sua voz importa—ajude a moldar a carteira de criptomoedas de próxima geração.</string>
-
     <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
     <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
     <string name="Premium_WhatUsersSay">Kullanıcılar ne diyor:</string>
     <string name="Premium_SubscriptionPeriod_Month">ay</string>
     <string name="Premium_SubscriptionPeriod_Year">yıl</string>
+    <string name="Premium_SubscriptionPeriod_Annually">Yıllık</string>
+    <string name="Premium_SubscriptionPeriod_Monthly">Aylık</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
@@ -915,10 +911,7 @@
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">CÜZDANLARI İZLE</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Her cüzdan için kurtarma ifadelerini güvenli bir şekilde yedekleyin. Uygulama arızalanırsa fonlara yeniden erişmenin tek yolu budur.</string>
-    <string name="SettingsTerms_PrivateKeys">Cüzdan kurtarma ifadeleri kurulum sırasında cihazda rastgele oluşturulur ve başka bir yerde saklanmaz.</string>
     <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
-    <string name="SettingsTerms_JailBraking">Jailbreak, eski (OS) işletim sistemlerini kullanmak ve bilinmeyen kaynaklardan uygulama yüklemek fonların güvenliğini tehlikeye atabilir.</string>
-    <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
@@ -1053,6 +1046,7 @@
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM Özel anahtar</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
+    <!-- Stellar Secret Key -->
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
@@ -1063,7 +1057,6 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Ilgili cüzdan içinde EVM tabanlı kripto, yani Ethereum, Binance Smart Chain vb. Üzerinde tam kontrol sağlar.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">İlgili cüzdandaki varlıklar üzerinde tam kontrol sağlar.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Ilgili cüzdan içinde Bitcoin ve diğer UTXO tabanlı kriptolar üzerinde tam kontrol sağlar, yani Litecoin, Bitcoin Cash, Dash vb.</string>
     <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
@@ -1162,8 +1155,11 @@
     <string name="CoinPage_InWallet">Cüzdanda</string>
     <string name="CoinPage_Favorite">Favori</string>
     <string name="CoinPage_Unfavorite">Favori Olmayan</string>
-    <string name="CoinPage_Performance_Week">1 Hafta</string>
-    <string name="CoinPage_Performance_Month">1 Ay</string>
+    <string name="CoinPage_Performance_Week1">1 Hafta</string>
+    <string name="CoinPage_Performance_Month1">1 Ay</string>
+    <string name="CoinPage_Performance_Month3">3 Ay</string>
+    <string name="CoinPage_Performance_Month6">6 Ay</string>
+    <string name="CoinPage_Performance_Year1">1 Yıl</string>
     <string name="CoinPage_ShowMore">Daha Fazlası</string>
     <string name="CoinPage_ShowLess">Daha Fazla Oku</string>
     <string name="CoinPage_LaunchDate">Başlangıç ​​tarihi</string>

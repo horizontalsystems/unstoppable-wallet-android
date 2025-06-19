@@ -11,6 +11,7 @@
     <string name="Button_Disable">غیرفعال</string>
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
+    <string name="Button_Later">بعداً</string>
     <string name="Button_Done">انجام شد</string>
     <string name="Button_Retry">دوباره امتحان کنید</string>
     <string name="Button_Change">تغییر</string>
@@ -153,6 +154,7 @@
     <string name="Send_Warning_LowFee_Description">تراکنش ممکن است گیر کند یا موفقیت آمیز نباشد</string>
     <!-- Send Evm Settings -->
     <!-- Fee Settings -->
+    <string name="FeeSettings_NetworkFee">هزينه</string>
     <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">پرمخاطره</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">پرمخاطره</string>
@@ -242,10 +244,12 @@
     <string name="SwapSettings_Error_InvalidAddress">آدرس نامعتبر</string>
     <string name="SwapSettings_Warning_UnusualSlippage">معامله شما می تواند پیشرو باشد</string>
     <!-- Swap Confirmation -->
+    <string name="Activate_InsufficientBalance_Title">موجودی ناکافی</string>
     <!--Approve-->
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
     <!--Swap Unlock Access-->
+    <string name="Swap_Approve_PageTitle">تایید</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
@@ -261,6 +265,7 @@
     <string name="Transactions_Processing">پردازش</string>
     <string name="Transactions_Send">ارسال شد</string>
     <string name="Transactions_Failed">ناموفق</string>
+    <string name="Transactions_Transfer">انتقال</string>
     <string name="Transactions_ContractCall">تماس قرارداد</string>
     <string name="Transactions_ContractCreation">ایجاد قرارداد</string>
     <string name="Transactions_To">به %s</string>
@@ -341,7 +346,9 @@
     <string name="Settings_Appearance">ظاهر</string>
     <string name="Settings_PersonalSupport_Request">درخواست</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">۱ ساعت</string>
-    <!--Premium Banner-->
+    <!--Address Checker-->
+    <!--Banners-->
+    <!--Why Donate Page-->
     <!--Setting Subscription -->
     <!--Premium Screens-->
     <string name="Appearance_AppIcon">نماد برنامه</string>
@@ -445,6 +452,7 @@
     <string name="RecoveryPhrase_Title">عبارت بازیابی</string>
     <string name="RecoveryPhrase_Verify">تایید</string>
     <!-- Evm Private Key -->
+    <!-- Stellar Secret Key -->
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
     <!-- Private Keys -->
@@ -483,8 +491,10 @@
     <string name="CoinPage_Website">وب سایت پروژه</string>
     <string name="CoinPage_Twitter_NoTweets">هنوز توییتی وجود ندارد</string>
     <string name="CoinPage_AddToWallet">Added To Wallet</string>
-    <string name="CoinPage_Performance_Week">1Week</string>
-    <string name="CoinPage_Performance_Month"> 1Month </string>
+    <string name="CoinPage_Performance_Week1">1Week</string>
+    <string name="CoinPage_Performance_Month1">1Month</string>
+    <string name="CoinPage_Performance_Month6">6Months</string>
+    <string name="CoinPage_Performance_Year1">1Year</string>
     <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
     <string name="Coin_Analytics_Period_1m">۱ ماه</string>
     <string name="Coin_Analytics_Indicators_Risky">پرمخاطره</string>
@@ -536,5 +546,4 @@
     <string name="Contacts_NameHint">نام</string>
     <string name="Contacts_AddressHint">آدرس یا دامنه</string>
     <string name="Hud_Text_Connected">ارتباط برقرار شد</string>
-
 </resources>
