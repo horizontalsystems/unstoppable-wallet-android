@@ -1,5 +1,7 @@
 Una poderosa billetera múltiple sin custodia para Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH y zCash (ZEC), que admite NFT y una amplia gama de otros activos.
 
+Ahora con soporte para la billetera de hardware Tangem, donde las claves privadas se generan y almacenan de forma segura en la tarjeta, sin ser reveladas ni almacenadas en ningún lugar. No hay frase semilla que escribir o guardar, lo que hace prácticamente imposible que un atacante robe tus activos.
+
 Incluye DEX en cadena integrado, análisis de nivel institucional para mercados criptográficos y NFT, herramientas de privacidad avanzadas y una interfaz centrada en el ser humano.
 
 También admite cadenas de bloques emergentes como PirateCash (PIRATE) y Cosanta (COSA).

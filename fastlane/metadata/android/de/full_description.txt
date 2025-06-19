@@ -1,5 +1,7 @@
 Eine leistungsstarke, nicht verwahrte Multi-Wallet für Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH und zCash (ZEC), die NFTs und eine Vielzahl anderer Vermögenswerte unterstützt.
 
+Jetzt mit Unterstützung für die Tangem-Hardware-Wallet – private Schlüssel werden direkt auf der Karte sicher generiert und gespeichert, niemals offengelegt oder irgendwo gespeichert. Es gibt keine Seed-Phrase zum Aufschreiben oder Aufbewahren, was es Angreifern praktisch unmöglich macht, Ihre Vermögenswerte zu stehlen.
+
 Beinhaltet integriertes On-Chain-DEX, Analysen auf institutioneller Ebene für Krypto- und NFT-Märkte, erweiterte Datenschutztools und eine auf den Menschen ausgerichtete Schnittstelle.
 
 Unterstützt auch neue Blockchains wie PirateCash (PIRATE) und Cosanta (COSA).

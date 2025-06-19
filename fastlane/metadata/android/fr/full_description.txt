@@ -1,5 +1,7 @@
 Un puissant multi-portefeuille non dépositaire pour Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH et zCash (ZEC), prenant en charge les NFT et un large éventail d'autres actifs.
 
+Désormais compatible avec le portefeuille matériel Tangem, où les clés privées sont générées et stockées en toute sécurité sur la carte, sans jamais être exposées ni enregistrées. Il n’y a pas de phrase de récupération à noter, ce qui rend pratiquement impossible le vol de vos actifs par un attaquant.
+
 Comprend un DEX en chaîne intégré, des analyses de niveau institutionnel pour les marchés de la cryptographie et du NFT, des outils de confidentialité avancés et une interface centrée sur l'humain.
 
 Prend également en charge les blockchains émergentes comme PirateCash (PIRATE) et Cosanta (COSA).

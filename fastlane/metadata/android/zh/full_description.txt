@@ -1,5 +1,7 @@
 功能强大的非托管多钱包，适用于比特币 (BTC)、以太坊 (ETH)、币安智能链 (BNB)、狗狗币 (DOGE)、Toncoin (TON)、Solana (SOL)、Avalanche、DASH 和 zCash (ZEC)，支持 NFT 和各种其他资产。
 
+新增对 Tangem 硬件钱包的支持：私钥直接在卡片内生成并安全存储，绝不会泄露，完全没有助记词，极大地防止了恶意行为者窃取您的资产。
+
 包括内置的链上 DEX、针对加密货币和 NFT 市场的机构级分析、先进的隐私工具以及以人为本的界面。
 
 还支持新兴区块链，如 PirateCash (PIRATE) 和 Cosanta (COSA)。
