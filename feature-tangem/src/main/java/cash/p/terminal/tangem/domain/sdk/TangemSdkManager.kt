@@ -320,9 +320,9 @@ class TangemSdkManager(
         )
     }
 
-    suspend fun resetAccessCode(cardId: String) =
+    suspend fun restoreAccessCode(cardId: String) =
         suspendCancellableCoroutine { continuation ->
-            tangemSdk.setAccessCode(null, cardId) { result ->
+            tangemSdk.restoreAccessCode(cardId) { result ->
                 if (continuation.isActive) continuation.resume(result)
             }
         }

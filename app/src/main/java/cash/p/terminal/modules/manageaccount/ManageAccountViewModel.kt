@@ -68,7 +68,7 @@ class ManageAccountViewModel(
 
     private fun forgotAccessCode() = viewModelScope.launch {
         val accessType = account.type as? AccountType.HardwareCard ?: return@launch
-        tangemSdkManager.resetAccessCode(accessType.cardId)
+        tangemSdkManager.restoreAccessCode(accessType.cardId)
     }
 
     fun onActionClick(action: KeyAction) {
