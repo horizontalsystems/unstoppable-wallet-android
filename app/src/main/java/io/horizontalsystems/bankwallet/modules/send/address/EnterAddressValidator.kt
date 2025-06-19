@@ -97,6 +97,6 @@ class ZcashAddressValidator(
 }
 
 sealed class AddressValidationError : Throwable() {
-    class NoAdapter() : AddressValidationError()
+    class NoAdapter : AddressValidationError()
     class SendToSelfForbidden(override val message: String) : AddressValidationError()
 }
