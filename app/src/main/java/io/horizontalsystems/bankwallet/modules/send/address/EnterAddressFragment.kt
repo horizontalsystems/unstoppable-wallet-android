@@ -232,14 +232,16 @@ fun AddressCheck(
     if (addressValidationInProgress) {
         //show nothing
     } else if (addressValidationError != null) {
-        TextImportantError(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            icon = R.drawable.ic_attention_20,
-            title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-            text = addressValidationError.getErrorMessage()
-                ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
-        )
-        VSpacer(32.dp)
+        val errorMessage = addressValidationError.getErrorMessage()
+        if (errorMessage != null) {
+            TextImportantError(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = R.drawable.ic_attention_20,
+                title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+                text = errorMessage
+            )
+            VSpacer(32.dp)
+        }
     }
 
     if (checkResults.isNotEmpty()) {
@@ -290,7 +292,8 @@ private fun Throwable.getErrorMessage() = when (this) {
         stringResource(R.string.Error_AssetNotEnabled, code)
     }
 
-    else -> this.message
+    is AddressValidationError -> this.message
+    else -> null
 }
 
 @Composable
