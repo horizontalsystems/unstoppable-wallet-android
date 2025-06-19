@@ -97,6 +97,8 @@ class ZcashAddressValidator(
 }
 
 sealed class AddressValidationError : Throwable() {
-    class NoAdapter : AddressValidationError()
+    class NoAdapter : AddressValidationError() {
+        override val message = "Send adapter is not found"
+    }
     class SendToSelfForbidden(override val message: String) : AddressValidationError()
 }
