@@ -51,8 +51,7 @@ class EnterAddressViewModel(
     private var addressValidationInProgress: Boolean = false
     private var addressValidationError: Throwable? = null
     private val availableCheckTypes = addressCheckManager.availableCheckTypes(token)
-    private var checkResults: Map<AddressCheckType, AddressCheckData> =
-        availableCheckTypes.associateWith { AddressCheckData(true) }.toMutableMap()
+    private var checkResults: Map<AddressCheckType, AddressCheckData> = mapOf()
     private var value = ""
     private var inputState: DataState<Address>? = null
     private var parseAddressJob: Job? = null
@@ -94,7 +93,7 @@ class EnterAddressViewModel(
         inputState = null
         addressValidationInProgress = true
         addressValidationError = null
-        checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
+        checkResults = mapOf()
 
         if (value.isBlank()) {
             this.value = ""
@@ -139,9 +138,12 @@ class EnterAddressViewModel(
                 }
 
                 if (addressValidationError != null) {
-                    checkResults = availableCheckTypes.associateWith { AddressCheckData(false) }
+                    checkResults = mapOf()
                     emitState()
                 } else if (addressCheckEnabled) {
+                    checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
+                    emitState()
+
                     availableCheckTypes.forEach { type ->
                         val checkResult = try {
                             if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist)) {
@@ -158,10 +160,8 @@ class EnterAddressViewModel(
                             AddressCheckResult.NotAvailable
                         }
 
+                        checkResults += mapOf(type to AddressCheckData(false, checkResult))
                         ensureActive()
-                        checkResults = checkResults.toMutableMap().apply {
-                            this[type] = AddressCheckData(false, checkResult)
-                        }
                         emitState()
                     }
                 }
