@@ -32,6 +32,7 @@
     <string name="Button_Start">Начать</string>
     <string name="Button_Create">Создать</string>
     <string name="Button_Advanced">Доп. настройки</string>
+    <string name="hardware_wallet">Аппаратный кошелёк</string>
     <string name="Button_Restore">Импорт</string>
     <string name="Button_WatchAddress">Просмотр кошелька</string>
     <string name="Button_Reset">Сбросить</string>
@@ -576,6 +577,7 @@
     <string name="WalletConnect_UnsupportedRequest_WarningTitle">Не поддерживается</string>
     <string name="WalletConnect_UnsupportedRequest_WarningDescription">Формат запроса не поддерживается кошельком</string>
     <!--EthereumTransaction-->
+    <string name="save">Сохранить</string>
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Недостаточный баланс</string>
@@ -1002,6 +1004,7 @@
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Медленно, приватно</string>
+    <string name="details_row_subtitle_signed_hashes_format">%s хэшей</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
@@ -1088,6 +1091,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
     <string name="ManageCoins_Search">Название, код или адрес контракта</string>
+    <string name="initial_message_create_wallet_body">Чтобы создать кошелёк, приложите карту, как показано выше и не убирайте её до завершения операции.</string>
     <string name="ManageCoins_AddToken">Добавить токен</string>
     <string name="ManageCoins_NoResults">Ничего не найдено. Попробуйте добавить токен вручную, если вы знаете его адрес смарт-контракта.</string>
     <string name="ManageCoins_BipsDescription">Существует 4 распространенных формата адресов %1$s кошельков для получения входящих платежей:
@@ -1113,6 +1117,7 @@
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
+    <string name="scan_card_to_add">Сканируйте карту, чтобы добавить токен</string>
     <string name="ImportWallet_BackupFile">Резервный файл</string>
     <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
@@ -1155,6 +1160,7 @@
     <string name="ManageAccount_WatchAddresses">Просмотр кошелька</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
     <string name="ManageAccount_DeleteWarning">Вы хотите приостановить просмотр этого адреса кошелька?</string>
+    <string name="ManageAccount_Delete_hardware_wallet_warning">Вы хотите удалить этот аппаратный кошелёк?</string>
     <string name="Balance_Receive_BackupRequired_Description">Вам нужно сделать резервную копию %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Настройки сети</string>
@@ -1819,4 +1825,60 @@
     <string name="week_period">Неделя</string>
     <string name="month_period">Месяц</string>
     <string name="year_period">Год</string>
+    <string name="unknown_send_error">Неизвестная ошибка отправки</string>
+    <string name="scan">Сканировать</string>
+    <string name="adding_tokens">Добавление токенов</string>
+    <string name="scan_to_add_mesage">Чтобы добавить токены, необходимо отсканировать карту.</string>
+    <string name="create_wallet">Создать кошелёк</string>
+    <string name="create">Создать</string>
+    <string name="error_wallets_creating">Ошибка при создании кошельков</string>
+    <string name="issuer_signature_loading_failed">Не удалось загрузить сертификат карты. Пожалуйста, попробуйте позже.</string>
+    <string name="error_backup_card">Ошибка при добавлении резервной карты</string>
+    <string name="unknown_error">Неизвестная ошибка, пожалуйста, попробуйте позже.</string>
+    <string name="generate_keys_privately">Генерция ключей в приватном режиме</string>
+    <string name="onboarding_create_wallet_options_message">Ваши ключи будут безопасно сгенерированы внутри чипа. Сид-фраза отсутствует, что означает, что никто не сможет экспортировать или украсть их.</string>
+    <string name="add_backup_card">Добавить резервную копию</string>
+    <string name="common_continue">Продолжить</string>
+    <string name="add_more_backup_cards">Добавить ещё резервные карты</string>
+    <string name="finalize_backup">Завершить резервное копирование</string>
+    <string name="np_backup_devices">Нет резервных устройств</string>
+    <string name="more_backup_devices">Добавить ещё резервные устройства</string>
+    <string name="onboarding_subtitle_no_backup_cards">Чтобы начать процесс резервного копирования, добавьте до двух резервных карт.</string>
+    <string name="onboarding_subtitle_more_backup_cards">Вы можете добавить больше резервных карт для повышения безопасности и гибкости.</string>
+    <string name="onboarding_access_code_intro_title">Создать код доступа</string>
+    <string name="onboarding_access_code_intro_description">Код доступа защищает вашу карту-кошелёк и гарантирует, что только вы сможете её использовать. Он требуется для важных действий, таких как проведение транзакций или управление кошельком. Храните его в безопасности и не делитесь им ни с кем.</string>
+    <string name="onboarding_access_code_hint">Выберите любое слово, фразу или число в качестве кода доступа.</string>
+    <string name="access_code">Код доступа</string>
+    <string name="repeat_access_code">Повторите код доступа</string>
+    <string name="access_code_must_be_4">Код доступа должен содержать не менее 4 символов</string>
+    <string name="access_code_confirmation_does_not_match">Подтверждение кода доступа не совпадает</string>
+    <string name="onboarding_subtitle_scan_backup_card_format">Подготовьте резервную карту с номером %s</string>
+    <string name="common_origin_card">Основная карта</string>
+    <string name="common_backup_card">Резервная карта</string>
+    <string name="change_access_code">Изменить код доступа</string>
+    <string name="reset_to_factory_settings">Сброс до заводских настроек</string>
+    <string name="forgot_access_code">Забыл код доступа</string>
+    <string name="reset">Сбросить</string>
+    <string name="reset_backup_card">Сбросить резервную карту</string>
+    <string name="reset_card_with_backup_to_factory_message">Сброс до заводских настроек полностью удалит кошелёк с выбранной карты. Вы не сможете восстановить текущий кошелёк или использовать карту или кольцо для восстановления кода доступа.</string>
+    <string name="reset_card_to_factory_condition_1">Я понимаю, что после выполнения этого действия у меня больше не будет доступа к текущему кошельку.</string>
+    <string name="reset_card_to_factory_condition_2">Я понимаю, что не смогу использовать эту карту для восстановления кода доступа на других картах текущего кошелька.</string>
+    <string name="common_attention">Внимание</string>
+    <string name="onboarding_linking_error_card_with_wallets">На карте, которую вы пытаетесь добавить, уже создан другой кошелёк. Если в этом кошельке есть средства, пожалуйста, выведите их, затем сбросьте карту и добавьте её как резервную.</string>
+    <string name="initial_message_reset_backup_card_header">Приложите карту №%s от кошелька</string>
+    <string name="skip_and_finish">Пропустить и завершить</string>
+    <string name="initial_message_change_access_code_body">Чтобы изменить код доступа, приложите карту или кольцо, как показано выше, и не убирайте до завершения операции.</string>
+    <string name="card_settings_access_code_recovery_title">Восстановление кода доступа</string>
+    <string name="card_settings_access_code_recovery_disabled_description">Отключите эту опцию, если не хотите, чтобы эта карта использовалась для сброса кодов доступа на других картах или кольцах в этом кошельке. Обратите внимание, что это также помешает вам сбросить код доступа на этой карте.</string>
+    <string name="card_settings_access_code_recovery_enabled_description">Позволяет использовать эту карту для сброса кода доступа на других картах в этом кошельке.</string>
+    <string name="initial_message_tap_header">Приложите карту</string>
+    <string name="enabled">Включено</string>
+    <string name="disabled">Отключено</string>
+    <string name="app_settings_saved_access_codes">Сохранить код доступа</string>
+    <string name="app_settings_saved_access_codes_footer">Вместо кода доступа для взаимодействия с вашим аппаратным кошельком будет запрашиваться биометрическая аутентификация.</string>
+    <string name="signed">Подписано</string>
+    <string name="error_no_active_account">Активный аккаунт не найден</string>
+    <string name="error_hardware_wallet_not_supported">Пока не поддерживается аппаратной картой</string>
+    <string name="need_to_sign_times">Для создания транзакции вам потребуется подписать её %d раз(а)</string>
+    <string name="scan_card">Сканируйте карту</string>
 </resources>
