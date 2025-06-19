@@ -62,6 +62,8 @@ class MarketKitWrapper(
 
     fun fullCoins(coinUids: List<String>) = marketKit.fullCoins(coinUids)
 
+    fun fullCoinsByCoinCode(coinCodes: List<String>) = marketKit.fullCoinsByCoinCodes(coinCodes)
+
     fun allCoins() = marketKit.allCoins()
 
     fun token(query: TokenQuery) = marketKit.token(query)
