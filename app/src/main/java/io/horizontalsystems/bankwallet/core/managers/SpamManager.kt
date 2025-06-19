@@ -40,7 +40,7 @@ class SpamManager(
     appConfigProvider: AppConfigProvider
 ) {
     private val coinValueLimits = appConfigProvider.spamCoinValueLimits
-    private val coins = marketKitWrapper.fullCoins(coinValueLimits.map { it.key })
+    private val coins = marketKitWrapper.fullCoinsByCoinCode(coinValueLimits.map { it.key })
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var transactionSubscriptionJob: Job? = null
 
@@ -162,7 +162,7 @@ class SpamManager(
 
         val coinsMap = mutableMapOf<Address, BigInteger>()
         for (token in tokens) {
-            val value = coinValueLimits[token.coin.uid] ?: continue
+            val value = coinValueLimits[token.coin.code] ?: continue
 
             when (val tokenType = token.type) {
                 is TokenType.Eip20 -> {
