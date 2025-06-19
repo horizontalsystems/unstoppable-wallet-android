@@ -20,7 +20,7 @@ internal class BackupHardwareWalletUseCase(
     }
 
     suspend fun addBackup(primaryCard: PrimaryCard) = suspendCoroutine { continuation ->
-        if ( backupService.backupCardIds.isEmpty() && backupService.primaryCardId != null) {
+        if (backupService.backupCardIds.isEmpty() && backupService.primaryCardId != null) {
             backupService.discardSavedBackup()
         }
         backupService.setPrimaryCard(primaryCard)
