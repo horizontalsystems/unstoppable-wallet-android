@@ -49,10 +49,6 @@ class NetworkManager : INetworkManager {
     override fun getEvmInfo(host: String, path: String): Single<JsonObject> {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
-
-    override suspend fun getBep2Tokens(): List<Bep2TokenInfoService.Bep2Token> {
-        return Bep2TokenInfoService.service().tokens()
-    }
 }
 
 object ServiceFullTransaction {
@@ -98,27 +94,6 @@ object ServiceEvmContractInfo {
 
 }
 
-object Bep2TokenInfoService {
-    private val apiUrl = "https://dex.binance.org/api/v1/"
-
-    fun service(): TokenInfoAPI {
-        return APIClient.retrofit(apiUrl, 60)
-            .create(TokenInfoAPI::class.java)
-    }
-
-    interface TokenInfoAPI {
-        @GET("tokens")
-        suspend fun tokens(
-            @Query("limit") limit: Int = 1000
-        ): List<Bep2Token>
-    }
-
-    data class Bep2Token(
-        val name: String,
-        val original_symbol: String,
-        val symbol: String
-    )
-}
 
 object ServiceGuide {
     fun service(apiURL: String): GuidesAPI {
