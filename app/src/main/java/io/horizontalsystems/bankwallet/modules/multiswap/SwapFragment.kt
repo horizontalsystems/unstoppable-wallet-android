@@ -508,6 +508,8 @@ private fun ProviderField(
 
 @Composable
 fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
+    if (amountIn <= BigDecimal.ZERO || amountOut <= BigDecimal.ZERO) return
+
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
