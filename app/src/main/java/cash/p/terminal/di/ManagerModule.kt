@@ -4,7 +4,6 @@ import androidx.preference.PreferenceManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.AdapterManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
-import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.DefaultCurrencyManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
@@ -36,7 +35,6 @@ import org.koin.dsl.module
 val managerModule = module {
     singleOf(::LanguageManager)
     singleOf(::DefaultCurrencyManager) bind CurrencyManager::class
-    singleOf(::BinanceKitManager)
     singleOf(::SolanaRpcSourceManager)
     singleOf(::AdapterManager) bind IAdapterManager::class
     singleOf(::LocalStorageManager) bind ILocalStorage::class

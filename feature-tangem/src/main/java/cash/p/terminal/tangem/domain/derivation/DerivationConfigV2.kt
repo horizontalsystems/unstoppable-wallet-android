@@ -51,7 +51,6 @@ object DerivationConfigV2 : DerivationConfig() {
             BlockchainType.Base
                 -> mapOf(AddressType.Default to DerivationPath("m/44'/60'/0'/0/0"))
 
-            BlockchainType.BinanceChain -> mapOf(AddressType.Default to DerivationPath("m/44'/714'/0'/0/0"))
             BlockchainType.Dogecoin -> mapOf(AddressType.Default to DerivationPath("m/44'/3'/0'"))
             BlockchainType.Tron -> mapOf(AddressType.Default to DerivationPath("m/44'/195'/0'/0/0"))
             BlockchainType.Dash -> mapOf(AddressType.Default to DerivationPath("m/44'/5'/0'"))

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.wallet.alternativeImageUrl
-import cash.p.terminal.core.bep2TokenUrl
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
@@ -28,9 +27,6 @@ class ConfiguredTokenInfoViewModel(
         val type = when (val type = token.type) {
             is TokenType.Eip20 -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
-            }
-            is TokenType.Bep2 -> {
-                ConfiguredTokenInfoType.Contract(type.symbol, token.blockchain.type.imageUrl, token.blockchain.bep2TokenUrl(type.symbol))
             }
             is TokenType.Spl -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))

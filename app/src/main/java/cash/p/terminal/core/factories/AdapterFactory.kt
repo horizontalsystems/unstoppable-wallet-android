@@ -6,7 +6,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ITransactionsAdapter
-import cash.p.terminal.core.adapters.BinanceAdapter
 import cash.p.terminal.core.adapters.BitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinCashAdapter
 import cash.p.terminal.core.adapters.CosantaAdapter
@@ -32,7 +31,6 @@ import cash.p.terminal.core.adapters.TronTransactionConverter
 import cash.p.terminal.core.adapters.TronTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
-import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmLabelManager
@@ -59,7 +57,6 @@ class AdapterFactory(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
@@ -289,10 +286,6 @@ class AdapterFactory(
                     getEvmAdapter(wallet)
                 }
 
-                BlockchainType.BinanceChain -> {
-                    getBinanceAdapter(wallet, "BNB")
-                }
-
                 BlockchainType.Solana -> {
                     val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
                     SolanaAdapter(solanaKitWrapper)
@@ -323,21 +316,10 @@ class AdapterFactory(
                 }
             }
 
-            is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
             is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
             is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
             is TokenType.Unsupported -> null
         }
-
-    private fun getBinanceAdapter(
-        wallet: Wallet,
-        symbol: String
-    ): BinanceAdapter? {
-        val query = TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
-        return coinManager.getToken(query)?.let { feeToken ->
-            BinanceAdapter(binanceKitManager.binanceKit(wallet), symbol, feeToken, wallet)
-        }
-    }
 
     fun evmTransactionsAdapter(
         source: TransactionSource,
@@ -432,10 +414,6 @@ class AdapterFactory(
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(wallet.account)
-            }
-
-            BlockchainType.BinanceChain -> {
-                binanceKitManager.unlink(wallet.account)
             }
 
             BlockchainType.Solana -> {

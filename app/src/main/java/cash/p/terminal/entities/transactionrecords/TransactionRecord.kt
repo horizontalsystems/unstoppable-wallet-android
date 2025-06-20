@@ -3,7 +3,6 @@ package cash.p.terminal.entities.transactionrecords
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
@@ -104,17 +103,6 @@ val List<TransactionRecord>.nftUids: Set<NftUid>
 
 fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransactionRecord? =
     when (this) {
-        is BinanceChainTransactionRecord -> {
-            if (transactionRecordType == TransactionRecordType.BINANCE_OUTGOING) {
-                ShortOutgoingTransactionRecord(
-                    amountOut = mainValue?.decimalValue?.abs(),
-                    token = mainValue.token,
-                    timestamp = timestamp * 1000
-                )
-            } else {
-                null
-            }
-        }
 
         is BitcoinTransactionRecord ->
             if (transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING) {

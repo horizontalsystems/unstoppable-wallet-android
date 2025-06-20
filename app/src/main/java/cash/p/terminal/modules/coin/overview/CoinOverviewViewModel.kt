@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.bep2TokenUrl
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.jettonUrl
@@ -196,23 +195,6 @@ class CoinOverviewViewModel(
                                 copyValue = tokenType.address,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
-                                name = token.blockchain.name,
-                                token = token,
-                                canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
-                        )
-                    }
-
-                    is TokenType.Bep2 -> {
-                        val inWallet =
-                            canAddToWallet && activeWallets.any { it.token == token }
-                        items.add(
-                            TokenVariant(
-                                value = tokenType.symbol,
-                                copyValue = tokenType.symbol,
-                                imgUrl = token.blockchainType.imageUrl,
-                                explorerUrl = token.blockchain.bep2TokenUrl(tokenType.symbol),
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,

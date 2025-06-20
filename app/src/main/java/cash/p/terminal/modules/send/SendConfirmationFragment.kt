@@ -8,8 +8,6 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
-import cash.p.terminal.modules.send.binance.SendBinanceConfirmationScreen
-import cash.p.terminal.modules.send.binance.SendBinanceViewModel
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.solana.SendSolanaConfirmationScreen
@@ -37,16 +35,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                 SendBitcoinConfirmationScreen(
                     navController,
                     sendBitcoinViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
-            }
-            Type.Bep2 -> {
-                val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
-
-                SendBinanceConfirmationScreen(
-                    navController,
-                    sendBinanceViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId
                 )
@@ -96,7 +84,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
 
     @Parcelize
     enum class Type : Parcelable {
-        Bitcoin, Bep2, ZCash, Solana, Tron, Ton
+        Bitcoin, ZCash, Solana, Tron, Ton
     }
 
     @Parcelize

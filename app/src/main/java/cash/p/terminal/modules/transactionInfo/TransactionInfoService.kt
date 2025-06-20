@@ -7,7 +7,6 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
@@ -152,23 +151,6 @@ class TransactionInfoService(
                                 tx.fee,
                                 tx.mainValue
                             ).map { it?.coinUid }
-                        }
-
-                        else -> emptyList()
-                    }
-                }
-
-                is BinanceChainTransactionRecord -> {
-                    when (transactionRecord.transactionRecordType) {
-                        TransactionRecordType.BINANCE_INCOMING -> {
-                            listOf(tx.mainValue.coinUid)
-                        }
-
-                        TransactionRecordType.BINANCE_OUTGOING -> {
-                            listOf(
-                                tx.fee,
-                                tx.mainValue
-                            ).map { it.coinUid }
                         }
 
                         else -> emptyList()

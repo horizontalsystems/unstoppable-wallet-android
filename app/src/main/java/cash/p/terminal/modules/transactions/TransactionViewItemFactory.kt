@@ -11,7 +11,6 @@ import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
@@ -364,16 +363,6 @@ class TransactionViewItemFactory(
                 progress = progress,
                 icon = icon
             )
-
-            is BinanceChainTransactionRecord -> {
-                createViewItemFromBinanceChaiTransactionRecord(
-                    transactionItem = transactionItem,
-                    record = record,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon
-                )
-            }
 
             is BitcoinTransactionRecord ->
                 createViewItemFromBitcoinTransactionRecord(
@@ -1200,66 +1189,6 @@ class TransactionViewItemFactory(
         )
     }
 
-    private fun createViewItemFromBinanceChaiTransactionRecord(
-        transactionItem: TransactionItem,
-        record: BinanceChainTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem = tryConvertToChangeNowViewItemSwap(
-        transactionItem = transactionItem,
-        token = record.mainValue.token,
-        isIncoming = record.transactionRecordType == TransactionRecordType.BINANCE_INCOMING
-    ) ?: if (record.transactionRecordType == TransactionRecordType.BINANCE_INCOMING) {
-        createViewItemFromBinanceChainIncomingTransactionRecord(
-            record,
-            currencyValue,
-            progress,
-            icon
-        )
-    } else {
-        createViewItemFromBinanceChainOutgoingTransactionRecord(
-            record,
-            currencyValue,
-            progress,
-            icon
-        )
-    }
-
-    private fun createViewItemFromBinanceChainOutgoingTransactionRecord(
-        record: BinanceChainTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.mainValue, true), ColorName.Leah)
-        } else {
-            getColoredValue(record.mainValue, ColorName.Lucian)
-        }
-
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(
-                R.string.Transactions_To,
-                mapped(record.to!!, record.blockchainType)
-            ),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.mainValue)
-        )
-    }
-
     private fun tryConvertToChangeNowViewItemSwap(
         transactionItem: TransactionItem,
         token: Token?,
@@ -1381,34 +1310,6 @@ class TransactionViewItemFactory(
             8
         )
         return "$sign $numberFormatted"
-    }
-
-    private fun createViewItemFromBinanceChainIncomingTransactionRecord(
-        record: BinanceChainTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = Translator.getString(
-                R.string.Transactions_From,
-                mapped(record.from!!, record.blockchainType)
-            ),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.mainValue)
-        )
     }
 
     private fun createViewItemFromTronTransactionRecord(

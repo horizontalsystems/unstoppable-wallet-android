@@ -149,9 +149,6 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                         ?.let { wallet ->
                             adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
                         }
-                if (it.blockchainType == BlockchainType.BinanceChain) {
-                    Log.d("CoinTest", "${it.coin.code} ${it.coin.name} ${it.blockchainType}")
-                }
                 CoinBalanceItem(it, balance, getFiatValue(it, balance))
             }
             .sortedWith(compareByDescending { it.balance })

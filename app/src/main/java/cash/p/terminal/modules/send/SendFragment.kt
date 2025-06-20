@@ -17,9 +17,6 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.modules.amount.AmountInputModeModule
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
-import cash.p.terminal.modules.send.binance.SendBinanceModule
-import cash.p.terminal.modules.send.binance.SendBinanceScreen
-import cash.p.terminal.modules.send.binance.SendBinanceViewModel
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinModule
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinNavHost
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
@@ -88,29 +85,6 @@ class SendFragment : BaseFragment() {
                                     title = title,
                                     fragmentNavController = findNavController(),
                                     viewModel = sendBitcoinViewModel,
-                                    amountInputModeViewModel = amountInputModeViewModel,
-                                    sendEntryPointDestId = sendEntryPointDestId,
-                                    prefilledData = prefilledData,
-                                )
-                            }
-                        }
-                    }
-
-                    is BlockchainType.BinanceChain -> {
-                        val factory = SendBinanceModule.Factory(wallet, predefinedAddress)
-                        val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
-                            factory
-                        }
-                        setContent {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .systemBarsPadding()
-                            ) {
-                                SendBinanceScreen(
-                                    title = title,
-                                    navController = findNavController(),
-                                    viewModel = sendBinanceViewModel,
                                     amountInputModeViewModel = amountInputModeViewModel,
                                     sendEntryPointDestId = sendEntryPointDestId,
                                     prefilledData = prefilledData,

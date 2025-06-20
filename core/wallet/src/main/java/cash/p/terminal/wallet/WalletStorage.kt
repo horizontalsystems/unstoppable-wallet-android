@@ -2,8 +2,8 @@ package cash.p.terminal.wallet
 
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.EnabledWallet
-import cash.p.terminal.wallet.entities.HardwarePublicKey
 import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.runBlocking
@@ -20,7 +20,15 @@ class WalletStorage(
         val enabledWallets = storage.enabledWallets(account.id)
         map.clear()
 
-        val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
+        val queries = enabledWallets.mapNotNull {
+            TokenQuery.fromId(it.tokenQueryId)?.let {
+                if (it.blockchainType is BlockchainType.Unsupported) {
+                    return@mapNotNull null
+                } else {
+                    it
+                }
+            }
+        }
         val tokens = marketKit.tokens(queries)
 
         val blockchainUids = queries.map { it.blockchainType.uid }
@@ -69,7 +77,11 @@ class WalletStorage(
                     )
                 }
 
-                Wallet(token = token, account = account, hardwarePublicKey = hardwarePublicKey).apply {
+                Wallet(
+                    token = token,
+                    account = account,
+                    hardwarePublicKey = hardwarePublicKey
+                ).apply {
                     map[this] = enabledWallet.id
                 }
             } else {

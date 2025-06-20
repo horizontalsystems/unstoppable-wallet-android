@@ -16,7 +16,6 @@ import cash.p.terminal.core.managers.AppVersionManager
 import cash.p.terminal.core.managers.BackupManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.BaseTokenManager
-import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.CexAssetManager
 import cash.p.terminal.core.managers.ConnectivityManager
@@ -162,7 +161,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var connectivityManager: ConnectivityManager
         val appDatabase: AppDatabase by inject(AppDatabase::class.java)
         val enabledWalletsStorage: IEnabledWalletStorage by inject(IEnabledWalletStorage::class.java)
-        val binanceKitManager: BinanceKitManager by inject(BinanceKitManager::class.java)
         val solanaKitManager: SolanaKitManager by inject(SolanaKitManager::class.java)
         val tronKitManager: TronKitManager by inject(TronKitManager::class.java)
         val tonKitManager: TonKitManager by inject(TonKitManager::class.java)

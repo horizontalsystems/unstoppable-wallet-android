@@ -111,7 +111,6 @@ solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", ver
 solanakt = { module = "com.github.piratecash:SolanaKT", version.ref = "solanakt" }
 ethereum-kit = { group = "com.github.piratecash", name = "ethereum-kit-android", version.ref = "piratecash-ethereum" }
 blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
-binance-kit = { group = "com.github.piratecash", name = "binance-chain-kit-android", version.ref = "piratecash-binance" }
 tron-kit = { group = "com.github.piratecash", name = "tron-kit-android", version.ref = "piratecash-tron" }
 tangem-sdk = { group = "com.github.piratecash", name = "tangem-sdk-android", version.ref = "tangem-sdk" }
 

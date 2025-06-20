@@ -37,8 +37,7 @@ class AddressParserChain(
                 BlockchainType.Cosanta,
                 BlockchainType.PirateCash,
                 BlockchainType.Dash,
-                BlockchainType.Zcash,
-                BlockchainType.BinanceChain -> {
+                BlockchainType.Zcash -> {
                     addressParserChain.addHandler(AddressHandlerPure(tokenQuery.blockchainType))
                 }
 

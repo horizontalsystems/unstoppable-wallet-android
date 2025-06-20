@@ -2,7 +2,6 @@ package cash.p.terminal.modules.multiswap.sendtransaction
 
 import android.util.Log
 import cash.p.terminal.core.UnsupportedException
-import cash.p.terminal.modules.multiswap.sendtransaction.services.BinanceChainSendTransactionService
 import cash.p.terminal.modules.multiswap.sendtransaction.services.BitcoinSendTransactionService
 import cash.p.terminal.modules.multiswap.sendtransaction.services.SendTransactionServiceEvm
 import cash.p.terminal.modules.multiswap.sendtransaction.services.SolanaSendTransactionService
@@ -67,10 +66,6 @@ object SendTransactionServiceFactory {
                     SendTransactionServiceEvm(token)
                 }
 
-                BlockchainType.BinanceChain -> {
-                    BinanceChainSendTransactionService(token)
-                }
-
                 BlockchainType.Solana -> {
                     SolanaSendTransactionService(token)
                 }
@@ -94,7 +89,6 @@ object SendTransactionServiceFactory {
                 }
             }
 
-            is TokenType.Bep2 -> BinanceChainSendTransactionService(token)
             is TokenType.Spl -> SolanaSendTransactionService(token)
 //            is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
 

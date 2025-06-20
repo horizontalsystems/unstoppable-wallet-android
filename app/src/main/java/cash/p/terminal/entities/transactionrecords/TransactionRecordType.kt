@@ -12,9 +12,6 @@ enum class TransactionRecordType {
     BITCOIN_INCOMING,
     BITCOIN_OUTGOING,
 
-    BINANCE_INCOMING,
-    BINANCE_OUTGOING,
-
     EVM,
     EVM_APPROVE,
     EVM_CONTRACT_CALL,

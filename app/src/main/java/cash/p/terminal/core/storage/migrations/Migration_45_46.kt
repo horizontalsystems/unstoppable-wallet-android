@@ -87,11 +87,6 @@ object Migration_45_46 : Migration(45, 46) {
             is CoinType.ArbitrumOneErc20 -> {
                 TokenQuery(BlockchainType.ArbitrumOne, TokenType.Eip20(coinType.address))
             }
-            is CoinType.Bep2 -> if (coinType.symbol == "BNB") {
-                TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
-            } else {
-                TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(coinType.symbol))
-            }
             else -> {
                 TokenQuery(BlockchainType.Unsupported(""), TokenType.Unsupported("", ""))
             }
@@ -171,9 +166,6 @@ private sealed class CoinType : Parcelable {
     class ArbitrumOneErc20(val address: String) : CoinType()
 
     @Parcelize
-    class Bep2(val symbol: String) : CoinType()
-
-    @Parcelize
     class Avalanche(val address: String) : CoinType()
 
     @Parcelize
@@ -226,7 +218,6 @@ private sealed class CoinType : Parcelable {
             is Mrc20 -> "mrc20|$address"
             is OptimismErc20 -> "optimismErc20|$address"
             is ArbitrumOneErc20 -> "arbitrumOneErc20|$address"
-            is Bep2 -> "bep2|$symbol"
             is Avalanche -> "avalanche|$address"
             is Fantom -> "fantom|$address"
             is HarmonyShard0 -> "harmonyShard0|$address"
@@ -265,7 +256,6 @@ private sealed class CoinType : Parcelable {
         is Mrc20 -> shorted("mrc20", address)
         is OptimismErc20 -> shorted("optimismErc20", address)
         is ArbitrumOneErc20 -> shorted("arbitrumOneErc20", address)
-        is Bep2 -> "bep2|$symbol"
         is Avalanche -> shorted("avalanche", address)
         is Fantom -> shorted("fantom", address)
         is HarmonyShard0 -> shorted("harmonyShard0", address)
@@ -305,7 +295,6 @@ private sealed class CoinType : Parcelable {
             } else {
                 when (chunks[0]) {
                     "erc20" -> Erc20(chunks[1])
-                    "bep2" -> Bep2(chunks[1])
                     "bep20" -> Bep20(chunks[1])
                     "mrc20" -> Mrc20(chunks[1])
                     "optimismErc20" -> OptimismErc20(chunks[1])

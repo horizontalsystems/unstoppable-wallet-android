@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.bitcoin.kit)
     implementation(libs.ethereum.kit)
     implementation(libs.blockchain.fee.kit)
-    implementation(libs.binance.kit)
     implementation(libs.tron.kit)
     implementation(libs.gson)
 

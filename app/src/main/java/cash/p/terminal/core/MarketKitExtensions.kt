@@ -38,7 +38,6 @@ val Token.isSupported: Boolean
 val Token.iconPlaceholder: Int
     get() = when (type) {
         is TokenType.Eip20 -> blockchainType.tokenIconPlaceholder
-        is TokenType.Bep2 -> R.drawable.bep2
         else -> R.drawable.coin_placeholder
     }
 
@@ -94,10 +93,6 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
 
-        BlockchainType.BinanceChain -> {
-            tokenType is TokenType.Native || tokenType is TokenType.Bep2
-        }
-
         BlockchainType.Solana -> {
             tokenType is TokenType.Native || tokenType is TokenType.Spl
         }
@@ -121,7 +116,6 @@ val Blockchain.description: String
         BlockchainType.Zcash -> "ZEC"
         BlockchainType.Litecoin -> "LTC (BIP44, BIP49, BIP84, BIP86)"
         BlockchainType.Dash -> "DASH"
-        BlockchainType.BinanceChain -> "BNB, BEP2 tokens"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
         BlockchainType.Polygon -> "MATIC, ERC20 tokens"
@@ -141,8 +135,6 @@ val Blockchain.description: String
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
 fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
-
-fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asset/$symbol"
 
 val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
     get() = when (this) {
@@ -168,7 +160,6 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.ECash,
         BlockchainType.Litecoin,
         BlockchainType.Dash,
-        BlockchainType.BinanceChain,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
@@ -186,7 +177,6 @@ val BlockchainType.tokenIconPlaceholder: Int
     get() = when (this) {
         BlockchainType.Ethereum -> R.drawable.erc20
         BlockchainType.BinanceSmartChain -> R.drawable.bep20
-        BlockchainType.BinanceChain -> R.drawable.bep2
         BlockchainType.Avalanche -> R.drawable.avalanche_erc20
         BlockchainType.Polygon -> R.drawable.polygon_erc20
         BlockchainType.Optimism -> R.drawable.optimism_erc20
@@ -507,7 +497,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Dash,
         BlockchainType.BitcoinCash,
         BlockchainType.Litecoin,
-        BlockchainType.BinanceChain,
         BlockchainType.Solana,
         BlockchainType.ECash,
         BlockchainType.Tron,

@@ -211,7 +211,6 @@ class WatchAddressViewModel(
 
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
-        BlockchainType.BinanceChain,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,

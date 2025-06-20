@@ -1,6 +1,5 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.adapters.BinanceAdapter
 import cash.p.terminal.core.adapters.BitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinCashAdapter
 import cash.p.terminal.core.adapters.DashAdapter
@@ -19,7 +18,6 @@ class AccountCleaner : IAccountCleaner {
     }
 
     private fun clearAccount(accountId: String) {
-        BinanceAdapter.clear(accountId)
         BitcoinAdapter.clear(accountId)
         BitcoinCashAdapter.clear(accountId)
         ECashAdapter.clear(accountId)

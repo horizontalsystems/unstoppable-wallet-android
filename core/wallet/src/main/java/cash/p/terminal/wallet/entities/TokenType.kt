@@ -39,9 +39,6 @@ sealed class TokenType : Parcelable {
     data class Eip20(val address: String) : TokenType()
 
     @Parcelize
-    data class Bep2(val symbol: String) : TokenType()
-
-    @Parcelize
     data class Spl(val address: String) : TokenType()
 
     @Parcelize
@@ -55,7 +52,6 @@ sealed class TokenType : Parcelable {
             val parts = when (this) {
                 Native -> listOf("native")
                 is Eip20 -> listOf("eip20", address)
-                is Bep2 -> listOf("bep2", symbol)
                 is Spl -> listOf("spl", address)
                 is Jetton -> listOf("the-open-network", address)
                 is AddressTyped -> listOf("address_type", type.name.lowercase())
@@ -74,7 +70,6 @@ sealed class TokenType : Parcelable {
         get() = when (this) {
             is Native -> Value("native", "")
             is Eip20 -> Value("eip20", address)
-            is Bep2 -> Value("bep2", symbol)
             is Spl -> Value("spl", address)
             is Jetton -> Value("the-open-network", address)
             is AddressTyped -> Value("address_type", type.name)
@@ -97,12 +92,6 @@ sealed class TokenType : Parcelable {
                 "eip20" -> {
                     if (reference.isNotBlank()) {
                         return Eip20(reference)
-                    }
-                }
-
-                "bep2" -> {
-                    if (reference.isNotBlank()) {
-                        return Bep2(reference)
                     }
                 }
 

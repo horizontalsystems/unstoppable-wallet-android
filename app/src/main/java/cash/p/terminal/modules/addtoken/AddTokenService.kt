@@ -32,7 +32,6 @@ class AddTokenService(
         BlockchainType.Ton,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
-        BlockchainType.BinanceChain,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
@@ -52,10 +51,6 @@ class AddTokenService(
         if (reference.isEmpty()) return null
 
         val blockchainService = when (blockchain.type) {
-            BlockchainType.BinanceChain -> AddBep2TokenBlockchainService(
-                blockchain,
-                App.networkManager
-            )
 
             BlockchainType.Tron -> {
                 AddTronTokenBlockchainService.getInstance(blockchain)

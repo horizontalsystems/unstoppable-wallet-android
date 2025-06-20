@@ -22,7 +22,7 @@ fun BlockchainType.getSupportedCurves(): List<EllipticCurve> {
         BlockchainType.ArbitrumOne,
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
-        BlockchainType.BinanceChain, BlockchainType.BinanceSmartChain,
+        BlockchainType.BinanceSmartChain,
         BlockchainType.Ethereum,
         BlockchainType.Gnosis,
         BlockchainType.Polygon,
@@ -70,7 +70,6 @@ fun BlockchainType.getCoinTypeString(): String {
         BlockchainType.Zcash -> "133'"
         BlockchainType.Ethereum -> "60'"
         BlockchainType.BinanceSmartChain -> "60'"
-        BlockchainType.BinanceChain -> "714'"
         BlockchainType.Polygon -> "60'"
         BlockchainType.Avalanche -> "60'"
         BlockchainType.Optimism -> "60'"

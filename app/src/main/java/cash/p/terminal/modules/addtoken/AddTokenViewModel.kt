@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
@@ -97,23 +98,17 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
 
     private fun getErrorText(error: Throwable): String = when (error) {
         is AddTokenService.TokenError.NotFound -> {
-            if (selectedBlockchain.type == BlockchainType.BinanceChain)
-                cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmToken_Bep2NotFound)
-            else
-                cash.p.terminal.strings.helpers.Translator.getString(
+            Translator.getString(
                     R.string.AddEvmToken_ContractAddressNotFoundInBlockchain,
                     selectedBlockchain.name
                 )
         }
 
         is AddTokenService.TokenError.InvalidReference -> {
-            if (selectedBlockchain.type == BlockchainType.BinanceChain)
-                cash.p.terminal.strings.helpers.Translator.getString(R.string.AddToken_InvalidBep2Symbol)
-            else
-                cash.p.terminal.strings.helpers.Translator.getString(R.string.AddToken_InvalidContractAddress)
+            Translator.getString(R.string.AddToken_InvalidContractAddress)
         }
 
-        else -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Error)
+        else -> Translator.getString(R.string.Error)
     }
 }
 

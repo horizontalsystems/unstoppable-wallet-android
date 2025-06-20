@@ -7,7 +7,6 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.adapters.TonAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
-import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.wallet.MarketKitWrapper
@@ -33,7 +32,6 @@ class AppStatusViewModel(
     private val adapterManager: IAdapterManager,
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val binanceKitManager: BinanceKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val solanaKitManager: SolanaKitManager,
@@ -195,10 +193,6 @@ class AppStatusViewModel(
                 }
             }
 
-        binanceKitManager.statusInfo?.let { statusInfo ->
-            blockchainStatus["Binance Chain"] = statusInfo
-        }
-
         tronKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Tron"] = statusInfo
         }
@@ -264,12 +258,6 @@ class AppStatusViewModel(
                     blocks.add(block)
                 }
             }
-
-        binanceKitManager.statusInfo?.let { statusInfo ->
-            val title = if (blocks.isEmpty()) "Blockchain Status" else null
-            val block = getBlockchainInfoBlock(title, "Binance Chain", statusInfo)
-            blocks.add(block)
-        }
 
         tronKitManager.statusInfo?.let { statusInfo ->
             val title = if (blocks.isEmpty()) "Blockchain Status" else null

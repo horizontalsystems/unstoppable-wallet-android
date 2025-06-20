@@ -143,7 +143,6 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.Zcash to "zs1hwyqs4mfrynq0ysjmhv8wuau5zam0gwpx8ujfv8epgyufkmmsp6t7cfk9y0th7qyx7fsc5azm08",
             BlockchainType.Ethereum to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.BinanceSmartChain to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
-            BlockchainType.BinanceChain to "bnb132w7sndlwn340jgqff2m9m4nsddx3hga55nx3l",
             BlockchainType.Polygon to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.PirateCash to "PB2vfGqfagNb12DyYTZBYWGnreyt7E4Pug",
             BlockchainType.Avalanche to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",

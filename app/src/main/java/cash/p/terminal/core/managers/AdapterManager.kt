@@ -27,7 +27,6 @@ class AdapterManager(
     private val adapterFactory: AdapterFactory,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager
@@ -114,7 +113,6 @@ class AdapterManager(
             evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
         }
 
-        binanceKitManager.binanceKit?.refresh()
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
         tonKitManager.tonKitWrapper?.tonKit?.refresh()

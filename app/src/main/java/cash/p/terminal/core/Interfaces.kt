@@ -19,7 +19,6 @@ import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.AdapterState
-import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.ethereumkit.models.Address
@@ -107,14 +106,6 @@ interface IWordsManager {
     fun generateWords(count: Int = 12): List<String>
 }
 
-interface IBinanceKitManager {
-    val binanceKit: BinanceChainKit?
-    val statusInfo: Map<String, Any>?
-
-    fun binanceKit(wallet: Wallet): BinanceChainKit
-    fun unlink(account: Account)
-}
-
 interface ITransactionsAdapter {
     val explorerTitle: String
     val transactionsState: AdapterState
@@ -186,15 +177,6 @@ internal interface ISendEthereumAdapter {
     val balanceData: BalanceData
 
     fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
-}
-
-interface ISendBinanceAdapter {
-    val availableBalance: BigDecimal
-    val availableBinanceBalance: BigDecimal
-    val fee: BigDecimal
-
-    fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<String>
 }
 
 interface ISendZcashAdapter {

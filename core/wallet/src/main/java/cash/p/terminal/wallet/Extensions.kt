@@ -60,7 +60,6 @@ val TokenQuery.protocolType: String?
                 BlockchainType.Tron,
                 BlockchainType.Ton -> null
 
-                BlockchainType.BinanceChain -> "BEP2"
                 else -> blockchainType.title
             }
         }
@@ -74,7 +73,6 @@ val TokenQuery.protocolType: String?
             }
         }
 
-        is TokenType.Bep2 -> "BEP2"
         is TokenType.Jetton -> "JETTON"
         else -> blockchainType.title
     }
@@ -93,7 +91,6 @@ val BlockchainType.title: String
         BlockchainType.Polygon -> "Polygon"
         BlockchainType.Avalanche -> "Avalanche"
         BlockchainType.ArbitrumOne -> "ArbitrumOne"
-        BlockchainType.BinanceChain -> "BNB Beacon Coin"
         BlockchainType.Optimism -> "Optimism"
         BlockchainType.Base -> "Base"
         BlockchainType.ZkSync -> "ZKsync"
@@ -117,7 +114,6 @@ val TokenType.meta: String?
     get() = when (this) {
         is TokenType.Derived -> this.derivation.name
         is TokenType.AddressTyped -> this.type.name
-        is TokenType.Bep2 -> this.symbol
         is TokenType.AddressSpecTyped -> this.type.name
         else -> null
     }

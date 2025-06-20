@@ -4,7 +4,6 @@ import cash.p.terminal.R
 import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.core.managers.TonHelper
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
@@ -387,42 +386,6 @@ class TransactionInfoViewItemFactory(
 
                     else -> {}
 
-                }
-            }
-
-            is BinanceChainTransactionRecord -> {
-                when (transaction.transactionRecordType) {
-                    TransactionRecordType.BINANCE_INCOMING -> {
-                        itemSections.add(
-                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                                value = transaction.mainValue,
-                                fromAddress = transaction.from,
-                                coinPrice = rates[transaction.mainValue.coinUid],
-                                hideAmount = transactionItem.hideAmount,
-                                blockchainType = blockchainType,
-                            )
-                        )
-
-                        addMemoItem(transaction.memo, miscItemsSection)
-                    }
-
-                    TransactionRecordType.BINANCE_OUTGOING -> {
-                        sentToSelf = transaction.sentToSelf
-                        itemSections.add(
-                            TransactionViewItemFactoryHelper.getSendSectionItems(
-                                value = transaction.mainValue,
-                                toAddress = transaction.to,
-                                coinPrice = rates[transaction.mainValue.coinUid],
-                                hideAmount = transactionItem.hideAmount,
-                                sentToSelf = transaction.sentToSelf,
-                                blockchainType = blockchainType,
-                            )
-                        )
-
-                        addMemoItem(transaction.memo, miscItemsSection)
-                    }
-
-                    else -> {}
                 }
             }
 
