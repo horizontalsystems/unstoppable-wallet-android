@@ -2,6 +2,8 @@ package cash.p.terminal.modules.pin
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -18,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
@@ -45,7 +47,8 @@ class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
 
 @Composable
 fun SetDuressPinSelectAccountsScreen(navController: NavController) {
-    val viewModel = viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
+    val viewModel =
+        viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
     val regularAccounts = viewModel.regularAccounts
     val watchAccounts = viewModel.watchAccounts
     val selected = remember { mutableStateListOf<String>() }
@@ -59,8 +62,53 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
-        },
-        bottomBar = {
+        }
+    ) { innerPaddings ->
+        Column(
+            modifier = Modifier
+                .padding(innerPaddings)
+                .fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+            ) {
+                InfoText(
+                    text = stringResource(R.string.DuressPinSelectAccounts_Description),
+                    paddingBottom = 32.dp
+                )
+
+                if (regularAccounts.isNotEmpty()) {
+                    ItemsSection(
+                        title = stringResource(R.string.DuressPinSelectAccounts_SectionWallets_Title),
+                        items = regularAccounts,
+                        selected = selected
+                    ) { account, checked ->
+                        if (checked) {
+                            selected.add(account.id)
+                        } else {
+                            selected.remove(account.id)
+                        }
+                    }
+                    VSpacer(height = 32.dp)
+                }
+
+                if (watchAccounts.isNotEmpty()) {
+                    ItemsSection(
+                        title = stringResource(R.string.DuressPinSelectAccounts_SectionWatchWallets_Title),
+                        items = watchAccounts,
+                        selected = selected
+                    ) { account, checked ->
+                        if (checked) {
+                            selected.add(account.id)
+                        } else {
+                            selected.remove(account.id)
+                        }
+                    }
+                    VSpacer(height = 32.dp)
+                }
+            }
+            Spacer(Modifier.weight(1f))
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
                     modifier = Modifier
@@ -68,50 +116,12 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRight(R.id.setDuressPinFragment, SetDuressPinFragment.Input(selected))
+                        navController.slideFromRight(
+                            R.id.setDuressPinFragment,
+                            SetDuressPinFragment.Input(selected)
+                        )
                     },
                 )
-            }
-        }
-    ) { innerPaddings ->
-        Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .verticalScroll(rememberScrollState())
-        ) {
-            InfoText(
-                text = stringResource(R.string.DuressPinSelectAccounts_Description),
-                paddingBottom = 32.dp
-            )
-
-            if (regularAccounts.isNotEmpty()) {
-                ItemsSection(
-                    title = stringResource(R.string.DuressPinSelectAccounts_SectionWallets_Title),
-                    items = regularAccounts,
-                    selected = selected
-                ) { account, checked ->
-                    if (checked) {
-                        selected.add(account.id)
-                    } else {
-                        selected.remove(account.id)
-                    }
-                }
-                VSpacer(height = 32.dp)
-            }
-
-            if (watchAccounts.isNotEmpty()) {
-                ItemsSection(
-                    title = stringResource(R.string.DuressPinSelectAccounts_SectionWatchWallets_Title),
-                    items = watchAccounts,
-                    selected = selected
-                ) { account, checked ->
-                    if (checked) {
-                        selected.add(account.id)
-                    } else {
-                        selected.remove(account.id)
-                    }
-                }
-                VSpacer(height = 32.dp)
             }
         }
     }

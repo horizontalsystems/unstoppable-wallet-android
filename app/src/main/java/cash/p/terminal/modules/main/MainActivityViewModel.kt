@@ -5,25 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.tonapps.wallet.data.core.entity.SendRequestEntity
-import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.core.App
-import cash.p.terminal.core.App.Companion.tonConnectManager
-import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.DAppRequestEntityWrapper
 import cash.p.terminal.core.managers.TonConnectManager
 import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.modules.lockscreen.LockScreenActivity
 import cash.p.terminal.modules.walletconnect.WCDelegate
-import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
+import cash.p.terminal.wallet.IAccountManager
+import com.walletconnect.web3.wallet.client.Wallet
+import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
 import io.horizontalsystems.tonkit.models.SignTransaction
-import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 
 class MainActivityViewModel(
     private val userManager: UserManager,
@@ -40,6 +40,9 @@ class MainActivityViewModel(
     val tcSendRequest = MutableLiveData<SignTransaction?>()
     val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
+
+    private val backgroundManager: BackgroundManager by inject(BackgroundManager::class.java)
+    private var lockScreenJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -62,16 +65,23 @@ class MainActivityViewModel(
                 tcDappRequest.postValue(it)
             }
         }
+    }
 
-        viewModelScope.launch {
-            pinComponent.isLocked.collect { isLocked ->
-                if(isLocked) {
-                    App.backgroundManager.currentActivity?.let {
+    fun startLockScreenMonitoring() {
+        lockScreenJob?.cancel()
+        lockScreenJob = viewModelScope.launch {
+            pinComponent.isLocked.collectLatest { isLocked ->
+                if (isLocked) {
+                    backgroundManager.currentActivity?.let {
                         LockScreenActivity.start(it)
                     }
                 }
             }
         }
+    }
+
+    fun stopLockScreenMonitoring() {
+        lockScreenJob?.cancel()
     }
 
     fun setIntent(intent: Intent) {

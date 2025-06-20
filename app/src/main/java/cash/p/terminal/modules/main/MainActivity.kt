@@ -26,7 +26,13 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.startLockScreenMonitoring()
         validate()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopLockScreenMonitoring()
     }
 
     override fun onNewIntent(intent: Intent) {
