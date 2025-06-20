@@ -1882,7 +1882,6 @@ INSERT INTO Coin VALUES('bitswift','Bitswift','BITS',null,null,100);
 INSERT INTO Coin VALUES('bittwatt','Bittwatt','BWT',null,'bittwatt',100);
 INSERT INTO Coin VALUES('bitant','BitANT','BITANT',null,null,100);
 INSERT INTO Coin VALUES('biopassport','Bio Passport','BIOT',null,'biopassport',100);
-INSERT INTO Coin VALUES('bitcoin-bep2','Bitcoin BEP2','BTCB',null,'bitcoin-bep2',100);
 INSERT INTO Coin VALUES('bidipass','BidiPass','BDP',null,'bidipass',100);
 INSERT INTO Coin VALUES('bitcoin-hot','Bitcoin Hot','BTH',null,null,100);
 INSERT INTO Coin VALUES('bitcoin-international','Bitcoin International','BTCI',null,null,100);
@@ -8115,7 +8114,6 @@ INSERT INTO TokenEntity VALUES('astroport','terra','terra',null,'terra1xj49zyqrw
 INSERT INTO TokenEntity VALUES('binancecoin','binancecoin','native',18,'');
 INSERT INTO TokenEntity VALUES('binancecoin','binance-smart-chain','native',18,'');
 INSERT INTO TokenEntity VALUES('binance-usd','binance-smart-chain','eip20',18,'0xe9e7cea3dedca5984780bafc599bd69add087d56');
-INSERT INTO TokenEntity VALUES('binance-usd','binancecoin','bep2',18,'BUSD-BD1');
 INSERT INTO TokenEntity VALUES('binance-usd','astar','astar',null,'0x4bf769b05e832fcdc9053fffbc78ca889acb5e1e');
 INSERT INTO TokenEntity VALUES('binance-usd','elastos','elastos',null,'0x9f1d0ed4e041c503bd487e5dc9fc935ab57f9a57');
 INSERT INTO TokenEntity VALUES('binance-usd','sora','sora',null,'0x00567d096a736f33bf78cad7b01e33463923b9c933ee13ab7e3fb7b23f5f953a');
@@ -8195,7 +8193,6 @@ INSERT INTO TokenEntity VALUES('bitspawn','ethereum','eip20',18,'0xe516d78d784c7
 INSERT INTO TokenEntity VALUES('big-data-protocol','ethereum','eip20',18,'0xf3dcbc6d72a4e1892f7917b7c43b74131df8480e');
 INSERT INTO TokenEntity VALUES('bitball','ethereum','eip20',18,'0x06e0feb0d74106c7ada8497754074d222ec6bcdf');
 INSERT INTO TokenEntity VALUES('bigshortbets','ethereum','eip20',18,'0x131157c6760f78f7ddf877c0019eba175ba4b6f6');
-INSERT INTO TokenEntity VALUES('blockchain-certified-data-token','binancecoin','bep2',null,'');
 INSERT INTO TokenEntity VALUES('blockchain-certified-data-token','ethereum','eip20',18,'0xacfa209fb73bf3dd5bbfb1101b9bc999c49062a5');
 INSERT INTO TokenEntity VALUES('bibox-token','ethereum','eip20',18,'0x009c43b42aefac590c719e971020575974122803');
 INSERT INTO TokenEntity VALUES('bismuth','binance-smart-chain','eip20',8,'0x56672ecb506301b1e32ed28552797037c54d36a9');
@@ -8270,7 +8267,6 @@ INSERT INTO TokenEntity VALUES('bittwatt','ethereum','eip20',18,'0xca3ea3061d638
 INSERT INTO TokenEntity VALUES('bitant','ethereum','eip20',18,'0x15ee120fd69bec86c1d38502299af7366a41d1a6');
 INSERT INTO TokenEntity VALUES('bitant','optimistic-ethereum','eip20',18,'0x5029c236320b8f15ef0a657054b84d90bfbeded3');
 INSERT INTO TokenEntity VALUES('biopassport','ethereum','eip20',9,'0xc07a150ecadf2cc352f5586396e344a6b17625eb');
-INSERT INTO TokenEntity VALUES('bitcoin-bep2','binancecoin','bep2',18,'BTCB-1DE');
 INSERT INTO TokenEntity VALUES('bidipass','ethereum','eip20',18,'0x593114f03a0a575aece9ed675e52ed68d2172b8c');
 INSERT INTO TokenEntity VALUES('bitcoin-hot','bitcoin-hot','native',null,'');
 INSERT INTO TokenEntity VALUES('bitcoin-international','binance-smart-chain','eip20',9,'0x79f8e9862c5240f316fabf31e5406e497d65484d');
@@ -8319,7 +8315,6 @@ INSERT INTO TokenEntity VALUES('bit2me','ethereum','eip20',18,'0xd7c302fc3ac829c
 INSERT INTO TokenEntity VALUES('bit2me','binance-smart-chain','eip20',18,'0x6e2a5ea25b161befa6a8444c71ae3a89c39933c6');
 INSERT INTO TokenEntity VALUES('bitica-coin','bitica-coin','native',null,'');
 INSERT INTO TokenEntity VALUES('bitica-coin','ethereum','eip20',18,'0x3a3547d62e9f9e76f99d51d5ab4f07aae0db2dbb');
-INSERT INTO TokenEntity VALUES('binanceidr','binancecoin','bep2',18,'BIDR-0E9');
 INSERT INTO TokenEntity VALUES('binanceidr','binanceidr','native',null,'');
 INSERT INTO TokenEntity VALUES('binance-peg-xrp','binance-smart-chain','eip20',18,'0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe');
 INSERT INTO TokenEntity VALUES('bitflowers','bitflowers','native',null,'');
@@ -8678,7 +8673,6 @@ INSERT INTO TokenEntity VALUES('certik','certik','native',null,'');
 INSERT INTO TokenEntity VALUES('compound-0x','ethereum','eip20',8,'0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407');
 INSERT INTO TokenEntity VALUES('cocos-bcx','ethereum','eip20',18,'0xc4c7ea4fab34bd9fb9a5e1b1a98df76e26e6407c');
 INSERT INTO TokenEntity VALUES('catecoin','binance-smart-chain','eip20',9,'0xe4fae3faa8300810c835970b9187c268f55d998f');
-INSERT INTO TokenEntity VALUES('concierge-io','binancecoin','bep2',18,'AVA-645');
 INSERT INTO TokenEntity VALUES('celo-dollar','celo','celo',null,'0x765de816845861e75a25fca122bb6898b8b1282a');
 INSERT INTO TokenEntity VALUES('chain-games','polygon-pos','eip20',18,'0xd55fce7cdab84d84f2ef3f99816d765a2a94a509');
 INSERT INTO TokenEntity VALUES('chain-games','harmony-shard-0','harmony-shard-0',null,'0x84ec08c887dd8c14d389abe56e609379b7c5262e');
@@ -8689,7 +8683,6 @@ INSERT INTO TokenEntity VALUES('coin-of-the-champions','binance-smart-chain','ei
 INSERT INTO TokenEntity VALUES('chain-guardians','polygon-pos','eip20',18,'0x2ab4f9ac80f33071211729e45cfc346c1f8446d5');
 INSERT INTO TokenEntity VALUES('chain-guardians','binance-smart-chain','eip20',18,'0x1613957159e9b0ac6c80e824f7eea748a32a0ae2');
 INSERT INTO TokenEntity VALUES('chain-guardians','ethereum','eip20',18,'0x1fe24f25b1cf609b9c4e7e12d802e3640dfa5e43');
-INSERT INTO TokenEntity VALUES('contentos','binancecoin','bep2',18,'COS-2E4');
 INSERT INTO TokenEntity VALUES('chainx','polkadot','polkadot',null,'');
 INSERT INTO TokenEntity VALUES('civilization','polygon-pos','eip20',18,'0x42f6bdcfd82547e89f1069bf375aa60e6c6c063d');
 INSERT INTO TokenEntity VALUES('civilization','ethereum','eip20',18,'0x37fe0f067fa808ffbdd12891c0858532cfe7361d');
@@ -9085,7 +9078,6 @@ INSERT INTO TokenEntity VALUES('datamine','polygon-pos','eip20',18,'0xb75bbd7998
 INSERT INTO TokenEntity VALUES('datamine','ethereum','eip20',18,'0xf80d589b3dbe130c270a69f1a69d050f268786df');
 INSERT INTO TokenEntity VALUES('dark-matter','ethereum','eip20',18,'0x79126d32a86e6663f3aaac4527732d0701c1ae6c');
 INSERT INTO TokenEntity VALUES('dark-matter','polygon-pos','eip20',18,'0xd28449bb9bb659725accad52947677cce3719fd7');
-INSERT INTO TokenEntity VALUES('cryptobonusmiles','binancecoin','bep2',18,'CBM-4B2');
 INSERT INTO TokenEntity VALUES('cryptobonusmiles','ethereum','eip20',18,'0x95efd1fe6099f65a7ed524def487483221094947');
 INSERT INTO TokenEntity VALUES('cryption-network','polygon-pos','eip20',18,'0xd1e6354fb05bf72a8909266203dab80947dceccf');
 INSERT INTO TokenEntity VALUES('cryption-network','ethereum','eip20',18,'0x429876c4a6f89fb470e92456b8313879df98b63c');
@@ -10484,7 +10476,6 @@ INSERT INTO TokenEntity VALUES('hundred-finance','ethereum','eip20',18,'0x100100
 INSERT INTO TokenEntity VALUES('handle-fi','arbitrum-one','eip20',18,'0xdb298285fe4c5410b05390ca80e8fbe9de1f259b');
 INSERT INTO TokenEntity VALUES('handle-fi','polygon-pos','eip20',18,'0xdb298285fe4c5410b05390ca80e8fbe9de1f259b');
 INSERT INTO TokenEntity VALUES('handle-fi','ethereum','eip20',18,'0xdb298285fe4c5410b05390ca80e8fbe9de1f259b');
-INSERT INTO TokenEntity VALUES('honest-mining','binancecoin','bep2',null,'HNST-3C9');
 INSERT INTO TokenEntity VALUES('hempcoin-thc','hempcoin-thc','native',null,'');
 INSERT INTO TokenEntity VALUES('hodl-token','binance-smart-chain','eip20',9,'0x0e9766df73973abcfedde700497c57110ee5c301');
 INSERT INTO TokenEntity VALUES('humaniq','ethereum','eip20',8,'0xcbcc0f036ed4788f63fc0fee32873d6a7487b908');
@@ -10665,7 +10656,6 @@ INSERT INTO TokenEntity VALUES('icon','icon','native',null,'');
 INSERT INTO TokenEntity VALUES('illuvium','ethereum','eip20',18,'0x767fe9edc9e0df98e07454847909b5e959d7ca0e');
 INSERT INTO TokenEntity VALUES('iostoken','iostoken','native',null,'');
 INSERT INTO TokenEntity VALUES('jasmycoin','ethereum','eip20',18,'0x7420b4b9a0110cdc71fb720908340c03f9bc03ec');
-INSERT INTO TokenEntity VALUES('kava','binancecoin','bep2',null,'');
 INSERT INTO TokenEntity VALUES('injective-protocol','ethereum','eip20',18,'0xe28b3b32b6c345a34ff64674606124dd5aceca30');
 INSERT INTO TokenEntity VALUES('injective-protocol','binance-smart-chain','eip20',18,'0xa2b726b1145a4773f68593cf171187d8ebe4d495');
 INSERT INTO TokenEntity VALUES('just','tron','eip20',18,'TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9');
@@ -12782,7 +12772,6 @@ INSERT INTO TokenEntity VALUES('ridotto','ethereum','eip20',18,'0x4740735aa98dc8
 INSERT INTO TokenEntity VALUES('revain','tron','eip20',6,'TD4bVgcwj3FRbmAo283HxNvqZvY7T3uD8k');
 INSERT INTO TokenEntity VALUES('revain','ethereum','eip20',6,'0x2ef52ed7de8c5ce03a4ef0efbe9b7450f2d7edc9');
 INSERT INTO TokenEntity VALUES('reth2','ethereum','eip20',18,'0x20bc832ca081b91433ff6c17f85701b6e92486c5');
-INSERT INTO TokenEntity VALUES('raven-protocol','binancecoin','bep2',18,'RAVEN-F66');
 INSERT INTO TokenEntity VALUES('raven-protocol','binance-smart-chain','eip20',18,'0xcd7c5025753a49f1881b31c48caa7c517bb46308');
 INSERT INTO TokenEntity VALUES('quadrant-protocol','ethereum','eip20',18,'0xc28e931814725bbeb9e670676fabbcb694fe7df2');
 INSERT INTO TokenEntity VALUES('putincoin','putincoin','native',null,'');
@@ -13523,7 +13512,6 @@ INSERT INTO TokenEntity VALUES('switcheo','neo','neo',null,'ab38352559b8b203bde5
 INSERT INTO TokenEntity VALUES('switcheo','binance-smart-chain','eip20',8,'0x250b211ee44459dad5cd3bca803dd6a7ecb5d46c');
 INSERT INTO TokenEntity VALUES('suterusu','ethereum','eip20',18,'0xaa2ce7ae64066175e0b90497ce7d9c190c315db4');
 INSERT INTO TokenEntity VALUES('sylo','ethereum','eip20',18,'0xf293d23bf2cdc05411ca0eddd588eb1977e8dcd4');
-INSERT INTO TokenEntity VALUES('swingby','binancecoin','bep2',18,'SWINGBY-888');
 INSERT INTO TokenEntity VALUES('swingby','ethereum','eip20',18,'0x8287c7b963b405b7b8d467db9d79eec40625b13a');
 INSERT INTO TokenEntity VALUES('swingby','binance-smart-chain','eip20',18,'0x71de20e0c4616e7fcbfdd3f875d568492cbe4739');
 INSERT INTO TokenEntity VALUES('synthetify-token','solana','spl',6,'4dmKkXNHdgYsXqBHCuMikNQWwVomZURhYvkkX5c4pQ7y');
@@ -13784,7 +13772,6 @@ INSERT INTO TokenEntity VALUES('the-graph','sora','sora',null,'0x00d1fb79bbd1005
 INSERT INTO TokenEntity VALUES('the-graph','harmony-shard-0','harmony-shard-0',null,'0x002fa662f2e09de7c306d2bab0085ee9509488ff');
 INSERT INTO TokenEntity VALUES('the-graph','polygon-pos','eip20',18,'0x5fe2b58c013d7601147dcdd68c143a77499f5531');
 INSERT INTO TokenEntity VALUES('the-graph','ethereum','eip20',18,'0xc944e90c64b2c07662a292be6244bdf05cda44a7');
-INSERT INTO TokenEntity VALUES('thorchain','binancecoin','bep2',null,'RUNE-B1A');
 INSERT INTO TokenEntity VALUES('theta-fuel','theta-fuel','native',null,'');
 INSERT INTO TokenEntity VALUES('telcoin','polygon-pos','eip20',2,'0xdf7837de1f2fa4631d716cf2502f8b230f1dcc32');
 INSERT INTO TokenEntity VALUES('telcoin','sora','sora',null,'0x008f925e3e422218604fac1cc2f06f3ef9c1e244e0d2a9a823e5bd8ce9778434');
@@ -14097,7 +14084,6 @@ INSERT INTO TokenEntity VALUES('true-usd','tron','eip20',18,'TUpMhErZL2fhh4sVNUL
 INSERT INTO TokenEntity VALUES('true-usd','harmony-shard-0','harmony-shard-0',null,'0x553a1151f3df3620fc2b5a75a6edda629e3da350');
 INSERT INTO TokenEntity VALUES('true-usd','sora','sora',null,'0x006d336effe921106f7817e133686bbc4258a4e0d6fed3a9294d8a8b27312cee');
 INSERT INTO TokenEntity VALUES('true-usd','fantom','eip20',18,'0x9879abdea01a879644185341f7af7d8343556b7a');
-INSERT INTO TokenEntity VALUES('true-usd','binancecoin','bep2',null,'');
 INSERT INTO TokenEntity VALUES('true-usd','polygon-pos','eip20',18,'0x2e1ad108ff1d8c782fcbbb89aad783ac49586756');
 INSERT INTO TokenEntity VALUES('ufo-gaming','ethereum','eip20',18,'0x249e38ea4102d0cf8264d3701f1a0e39c4f2dc3b');
 INSERT INTO TokenEntity VALUES('uma','avalanche','eip20',18,'0x3bd2b1c7ed8d396dbb98ded3aebb41350a5b2339');
@@ -14106,7 +14092,6 @@ INSERT INTO TokenEntity VALUES('uma','ethereum','eip20',18,'0x04fa0d235c4abf4bcf
 INSERT INTO TokenEntity VALUES('velas','binance-smart-chain','eip20',18,'0xe9c803f48dffe50180bd5b01dc04da939e3445fc');
 INSERT INTO TokenEntity VALUES('velas','ethereum','eip20',18,'0x8c543aed163909142695f2d2acd0d55791a9edb9');
 INSERT INTO TokenEntity VALUES('ultra','ethereum','eip20',4,'0xd13c7342e1ef687c5ad21b27c2b65d772cab5c8c');
-INSERT INTO TokenEntity VALUES('trust-wallet-token','binancecoin','bep2',18,'TWT-8C2');
 INSERT INTO TokenEntity VALUES('trust-wallet-token','binance-smart-chain','eip20',18,'0x4b0f1812e5df2a09796481ff14017e6005508003');
 INSERT INTO TokenEntity VALUES('verge','verge','native',null,'');
 INSERT INTO TokenEntity VALUES('unibright','polygon-pos','eip20',8,'0x7fbc10850cae055b27039af31bd258430e714c62');
@@ -14159,7 +14144,6 @@ INSERT INTO TokenEntity VALUES('unicrypt-2','ethereum','eip20',18,'0xadb2437e6f6
 INSERT INTO TokenEntity VALUES('veed','vechain','vechain',null,'0x67fd63f6068962937ec81ab3ae3bf9871e524fc9');
 INSERT INTO TokenEntity VALUES('vecrv-dao-yvault','ethereum','eip20',18,'0xc5bddf9843308380375a611c18b50fb9341f502a');
 INSERT INTO TokenEntity VALUES('universe-xyz','ethereum','eip20',18,'0x618679df9efcd19694bb1daa8d00718eacfa2883');
-INSERT INTO TokenEntity VALUES('troy','binancecoin','bep2',null,'TROY-9B8');
 INSERT INTO TokenEntity VALUES('trubadger','binance-smart-chain','eip20',18,'0xc003f5193cabe3a6cbb56948dfeaae2276a6aa5e');
 INSERT INTO TokenEntity VALUES('unicly-cryptopunks-collection','ethereum','eip20',18,'0x8d2bffcbb19ff14a698c424fbcdcfd17aab9b905');
 INSERT INTO TokenEntity VALUES('unmarshal','binance-smart-chain','eip20',18,'0x2fa5daf6fe0708fbd63b1a7d1592577284f52256');
@@ -14419,7 +14403,6 @@ INSERT INTO TokenEntity VALUES('woo-network','fantom','eip20',18,'0x6626c47c00f1
 INSERT INTO TokenEntity VALUES('woo-network','polygon-pos','eip20',18,'0x1b815d120b3ef02039ee11dc2d33de7aa4a8c603');
 INSERT INTO TokenEntity VALUES('woo-network','ethereum','eip20',18,'0x4691937a7508860f876c9c0a2a617e7d9e945d4b');
 INSERT INTO TokenEntity VALUES('wazirx','polygon-pos','eip20',8,'0x72d6066f486bd0052eefb9114b66ae40e0a6031a');
-INSERT INTO TokenEntity VALUES('wazirx','binancecoin','bep2',8,'WRX-ED1');
 INSERT INTO TokenEntity VALUES('wazirx','binance-smart-chain','eip20',8,'0x8e17ed70334c87ece574c9d537bc153d8609e2a3');
 INSERT INTO TokenEntity VALUES('wilder-world','ethereum','eip20',18,'0x2a3bff78b79a009976eea096a51a948a3dc00e34');
 INSERT INTO TokenEntity VALUES('vethor-token','vechain','vechain',null,'');

@@ -25,7 +25,6 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.CexType
 import cash.p.terminal.wallet.Token
-import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
