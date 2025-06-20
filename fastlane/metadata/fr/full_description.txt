@@ -24,7 +24,7 @@ CARACTÉRISTIQUES DU WALLET :
 
 - A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. En outre, la possibilité d'interagir avec n'importe quel service intelligent, alimenté par un contrat sur la blockchain via le protocole WalletConnect.
 
-- Portefeuille Ethereum >> Prise en charge complète de la blockchain Ethereum, son écosystème croissant de jetons (ERC20, jetons NFT, etc.). , et d'autres services décentralisés tels que l'ENS (Ethereum Name Service).
+- Portefeuille Ethereum >> Prise en charge complète de la blockchain Ethereum, son écosystème croissant de jetons (ERC20, jetons NFT, etc.).
 
 - Portefeuille Ethereum L2 >> Artbitrum, Optimism, Support Polygonal.
 

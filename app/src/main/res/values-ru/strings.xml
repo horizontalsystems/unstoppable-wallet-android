@@ -112,7 +112,7 @@
     <string name="Restore_RestoreBy">Через</string>
     <string name="Restore_RecoveryPhrase">Фраза восстановления</string>
     <string name="Restore_PrivateKey">Приватный ключ</string>
-    <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
+    <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key, секретный ключ Stellar или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите фразу восстановления</string>
     <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
@@ -593,7 +593,7 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Активировать токен</string>
-    <string name="ActivationRequired_DialogDescription">Чтобы получить %s, вам нужно активировать токен. Для каждого токена Stellar сети требуется установить линию доверия. Без него ваш кошелек не может получить %s — транзакция будет отклонена, а средства не будут доставлены.</string>
+    <string name="ActivationRequired_DialogDescription">Чтобы получить %s, необходимо активировать токен. Сеть Stellar требует установить доверительную линию (trustline) для каждого токена. Без этого ваш кошелёк не сможет принять %s - транзакция будет отклонена, и средства не будут доставлены.</string>
     <string name="Activate_YouActivate">Вы активируете</string>
     <string name="Activate_Activating">Активация</string>
     <string name="Activate_AlreadyActive_Title">Уже активен</string>
@@ -662,7 +662,7 @@
     <string name="Transactions_OperationType_ChangeTrust">Изменить Доверие</string>
     <string name="Transactions_OperationType_CreateAccount">Создать Аккаунт</string>
     <string name="Transactions_TonTransaction">Транзакция TON</string>
-    <string name="Transactions_StellarTransaction">Звёздная Транзакция</string>
+    <string name="Transactions_StellarTransaction">Stellar Транзакция</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
@@ -722,7 +722,7 @@
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_Reserved_Title">Зарезервировано</string>
-    <string name="Info_Reserved_Description">Stellar сеть блокирует 1 XLM для активации кошелька и 0.5 XLM в качестве резерва для каждого токена, активированного в вашем кошельке.</string>
+    <string name="Info_Reserved_Description">Сеть Stellar блокирует 1 XLM для активации кошелька и 0,5 XLM в качестве резерва для каждого активированного в кошельке токена.</string>
     <string name="Info_Reserved_CurrentlyLocked">Сейчас заблокирован:</string>
     <string name="Info_Reserved_WalletAction">Активация кошелька</string>
     <string name="Info_NotRelayed_Title">Передача</string>
@@ -1072,7 +1072,7 @@
     <string name="Watch_Address_Watch">Смотреть</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
-    <string name="Watch_InfoText">Поддерживает адреса из ключей EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) и XPUB.</string>
+    <string name="Watch_InfoText">Поддерживаются адреса из сетей EVM, Tron, TON, Stellar, Bitcoin-семейства (BTC, LTC, BCH, Dash) и XPUB-ключи.</string>
     <string name="Watch_Error_InvalidAddressFormat">Формат адреса не поддерживается</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
@@ -1128,7 +1128,7 @@
     <string name="EvmPrivateKey_Title">Приватный ключ EVM</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Stellar Secret Key -->
-    <string name="StellarSecretKey_Title">Звёздный Секретный Ключ</string>
+    <string name="StellarSecretKey_Title">Секретный ключ Stellar</string>
     <string name="StellarSecretKey_ShowSecretKey">Нажмите, чтобы показать секретный ключ</string>
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
@@ -1139,8 +1139,8 @@
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Предоставляет полный контроль над криптовалютами на базе EVM, т.е. Ethereum, Binance Smart Chain и т.д. в пределах соответствующего кошелька.</string>
-    <string name="PrivateKeys_StellarSecretKey">Звёздный Секретный Ключ</string>
-    <string name="PrivateKeys_StellarSecretKeyDescription">Даёт полный контроль над Stellar аккаунтом в соответствующем кошельке.</string>
+    <string name="PrivateKeys_StellarSecretKey">Секретный ключ Stellar</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Предоставляет полный контроль над активами Stellar в данном кошельке.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Предоставляет полный контроль над активами на соответствующем кошельке.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Расширенный приватный ключ аккаунта</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Предоставляет полный контроль над Bitcoin и другими криптовалютами на базе UTXO, такими как Litecoin, Bitcoin Cash, Dash и т.д. в пределах соответствующего кошелька.</string>

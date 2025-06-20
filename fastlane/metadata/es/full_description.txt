@@ -24,7 +24,7 @@ FUNCIONES DE WALLEJ:
 
 - A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. Además, la capacidad de interactuar con cualquier servicio inteligente impulsado por contrato en la cadena de bloques a través del protocolo WalletConnect.
 
-- Ethereum Wallet >> Soporte total para blockchain de Ethereum, su creciente ecosistema de tokens (ERC20, NFT tokens, etc.). , y otros servicios descentralizados como ENS (Ethereum Name Service).
+- Ethereum Wallet >> Soporte total para blockchain de Ethereum, su creciente ecosistema de tokens (ERC20, NFT tokens, etc.).
 
 - Ethereum L2 Wallet >> Artbitrum, Optimismo.
 
@@ -32,7 +32,7 @@ FUNCIONES DE WALLEJ:
 
 - Binance Wallet >> Soporte completo para la cadena original de Binance (incluyendo BEP2) y Binance Smart Chain.
 
-- Crypto Academy >> La aplicación incluye dos cursos destinados a los recién llegados al mundo de las criptomonedas y el ecosistema DeFi de una manera fácil de digerir cubriendo aspectos esenciales de la seguridad de las criptomonedas. almacenamiento, privacidad, transacciones e intercambio.
+- Crypto Academy >> La aplicación incluye dos cursos destinados a los recién llegados al mundo de las criptomonedas y el ecosistema DeFi de una manera fácil de digerir cubriendo aspectos esenciales de la seguridad de las criptomonedas.
 
 - Wallet for Privacy Coins >> Totalmente soporta las principales monedas de privacidad (ZCash, DASH) de manera SPV. Una de las pocas billeteras capaces de soportar transacciones Zcash completamente protegidas, así como la capacidad de privatizar las transacciones de Bitcoin.
 

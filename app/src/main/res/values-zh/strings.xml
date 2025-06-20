@@ -1126,7 +1126,7 @@
     <string name="EvmPrivateKey_Title">EVM 私钥</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
     <!-- Stellar Secret Key -->
-    <string name="StellarSecretKey_Title">恒星秘密密钥</string>
+    <string name="StellarSecretKey_Title">Stellar 私钥</string>
     <string name="StellarSecretKey_ShowSecretKey">点击以显示密钥</string>
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
