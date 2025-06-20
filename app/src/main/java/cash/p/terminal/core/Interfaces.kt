@@ -3,7 +3,6 @@ package cash.p.terminal.core
 import com.google.gson.JsonObject
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
-import cash.p.terminal.core.managers.Bep2TokenInfoService
 import cash.p.terminal.core.providers.FeeRates
 import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.data.repository.EvmTransactionRepository
@@ -89,7 +88,6 @@ interface INetworkManager {
 
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
-    suspend fun getBep2Tokens(): List<Bep2TokenInfoService.Bep2Token>
 }
 
 interface IClipboardManager {
