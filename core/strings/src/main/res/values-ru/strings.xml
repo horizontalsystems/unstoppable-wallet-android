@@ -1835,7 +1835,7 @@
     <string name="issuer_signature_loading_failed">Не удалось загрузить сертификат карты. Пожалуйста, попробуйте позже.</string>
     <string name="error_backup_card">Ошибка при добавлении резервной карты</string>
     <string name="unknown_error">Неизвестная ошибка, пожалуйста, попробуйте позже.</string>
-    <string name="generate_keys_privately">Генерция ключей в приватном режиме</string>
+    <string name="generate_keys_privately">Генерация ключей в приватном режиме</string>
     <string name="onboarding_create_wallet_options_message">Ваши ключи будут безопасно сгенерированы внутри чипа. Сид-фраза отсутствует, что означает, что никто не сможет экспортировать или украсть их.</string>
     <string name="add_backup_card">Добавить резервную копию</string>
     <string name="common_continue">Продолжить</string>
