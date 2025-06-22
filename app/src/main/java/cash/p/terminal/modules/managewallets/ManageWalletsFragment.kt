@@ -246,7 +246,7 @@ private fun ScanToAddBlock(requestScan: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
-        contentColor = ComposeAppTheme.colors.light,
+        contentColor = ComposeAppTheme.colors.tyler,
     ) {
         ButtonPrimaryYellow(
             modifier = Modifier
