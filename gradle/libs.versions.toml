@@ -33,7 +33,7 @@ appcompat = "1.7.0"
 
 tonKotlin = "0.2.15" # same version like in ton-kit
 piratecash-ton = "acae5a0"
-piratecash-bitcoin = "8477758"
+piratecash-bitcoin = "d830c94"
 piratecash-ethereum = "6c880df"
 horizontalsystems-blockchain-fee = "1d3bd49"
 piratecash-solana = "a009bcf"
