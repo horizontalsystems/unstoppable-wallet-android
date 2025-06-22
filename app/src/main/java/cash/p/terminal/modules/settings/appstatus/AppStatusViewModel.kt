@@ -66,6 +66,20 @@ class AppStatusViewModel(
         }
     }
 
+    private companion object {
+        val bitcoinLikeChains =
+            listOf(
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Dash,
+                BlockchainType.Litecoin,
+                BlockchainType.ECash,
+                BlockchainType.Dogecoin,
+                BlockchainType.Cosanta,
+                BlockchainType.PirateCash,
+            )
+    }
+
     override fun createState() = AppStatusModule.UiState(
         appStatusAsText = appStatusAsText,
         blockViewItems = blockViewItems
@@ -163,14 +177,6 @@ class AppStatusViewModel(
 
     private fun getBlockchainStatus(): Map<String, Any> {
         val blockchainStatus = LinkedHashMap<String, Any>()
-        val bitcoinLikeChains =
-            listOf(
-                BlockchainType.Bitcoin,
-                BlockchainType.BitcoinCash,
-                BlockchainType.Dash,
-                BlockchainType.Litecoin,
-                BlockchainType.ECash
-            )
 
         walletManager.activeWallets
             .filter { bitcoinLikeChains.contains(it.token.blockchainType) }
@@ -217,14 +223,6 @@ class AppStatusViewModel(
 
     private fun getBlockchainStatusBlock(): List<AppStatusModule.BlockData> {
         val blocks = mutableListOf<AppStatusModule.BlockData>()
-        val bitcoinLikeChains =
-            listOf(
-                BlockchainType.Bitcoin,
-                BlockchainType.BitcoinCash,
-                BlockchainType.Dash,
-                BlockchainType.Litecoin,
-                BlockchainType.ECash,
-            )
 
         walletManager.activeWallets
             .filter { bitcoinLikeChains.contains(it.token.blockchainType) }
