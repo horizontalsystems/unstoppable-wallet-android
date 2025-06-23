@@ -66,11 +66,13 @@ class TransactionFilterService(
             FilterToken(it.token, it.transactionSource)
         }
 
-        val additionalFilterTokens = transactionAdapterManager.adaptersReadyFlow.value.map { map ->
-            marketKitWrapper.tokens(map.value.additionalTokenQueries).map {
-                FilterToken(it, map.key)
+        val additionalFilterTokens = transactionAdapterManager.adaptersReadyFlow.value.flatMap { map ->
+            map.value.additionalTokenQueries.chunked(30).flatMap { chunk ->
+                marketKitWrapper.tokens(chunk).map { token ->
+                    FilterToken(token, map.key)
+                }
             }
-        }.flatten()
+        }
 
         val combinedTokenAndSources = filterTokens.plus(additionalFilterTokens)
         val sortedTokenAndSources = combinedTokenAndSources
