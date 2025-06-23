@@ -16,6 +16,8 @@
     <string name="Button_ScanQr">Scan QR Code</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
+    <string name="Button_Activate">Activate</string>
+    <string name="Button_Later">Later</string>
     <string name="Button_Done">Fertig</string>
     <string name="Button_Retry">Wiederholen</string>
     <string name="Button_Change">Ändern</string>
@@ -50,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continue Anyway</string>
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
+    <string name="Error_AssetNotEnabled">The recipient hasn\'t enabled %s, therefore they are unable to receive it.</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">n/a</string>
     <string name="Any">Beliebig</string>
@@ -108,7 +111,7 @@
     <string name="Restore_RestoreBy">Wiederherstellen von</string>
     <string name="Restore_RecoveryPhrase">Wiederherstellungsphrase</string>
     <string name="Restore_PrivateKey">Privater Schlüssel</string>
-    <string name="Restore_PrivateKeyHint">Geben Sie EVM privaten Schlüssel, BIP32 Root-Schlüssel oder  Account Extended Private Key ein</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key, Stellar Secret Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 oder 24 Wörter eingeben</string>
     <string name="Restore_NonStandardRestore">Nicht standardmäßige Wiederherstellung</string>
     <string name="Restore_NonStandard_Description">Diese Seite bietet einen speziellen Wallet-Wiederherstellungsmechanismus für Unstoppable-Benutzer, die ein nicht standardmäßiges Wallet haben. Im Allgemeinen könnten solche Wallets in der Unstoppable-Version 0.27–0.28 mit einer nicht-englischen mnemonischen Wortliste und/oder einem Sonderzeichen in der Wallet-Passphrase (d. h. einem diakritischen Symbol) erstellt worden sein.
@@ -126,11 +129,6 @@
     <string name="Restore_ZCash_OldWallet">Vorhandene Wallet</string>
     <string name="Restore_ZCash_OldWallet_Description">Hat Transaktionen</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
-    <string name="ImportCexAccount_SelectCex">Select CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">Select the centralized exchange to which you want to connect.</string>
-    <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
-    <string name="ImportCexAccountBinance_ApiKey">API Key</string>
-    <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
@@ -279,6 +277,10 @@
     <string name="Market_Filter_TimePeriod_3M">3 Months</string>
     <string name="Market_Filter_TimePeriod_6M">6 Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_TimePeriod_2Y">2 Years</string>
+    <string name="Market_Filter_TimePeriod_3Y">3 Years</string>
+    <string name="Market_Filter_TimePeriod_4Y">4 Years</string>
+    <string name="Market_Filter_TimePeriod_5Y">5 Years</string>
     <string name="Market_Sorting_Manual">Manual</string>
     <string name="Market_Sorting_Gainers">Gainers</string>
     <string name="Market_Sorting_Losers">Losers</string>
@@ -331,6 +333,13 @@
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
+    <string name="Balance_Receive_ActivationRequired">To receive an address you need to activate the token. This is required by the Stellar network.</string>
+    <string name="Balance_Receive_Trustline">Trustline</string>
+    <string name="Balance_Reserved_Title">Reserved</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparent balance can\'t be used in our wallet for now. But this money can be spend by other wallets with t-address supports</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <!--Send-->
@@ -424,7 +433,10 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Nonce verwendet</string>
     <string name="SendEvmSettings_Error_NonceUsed">Eine ausgeführte Transaktion mit diesem nonce existiert bereits.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Network Fee</string>
+    <string name="Fee_Total">Total Fee</string>
+    <string name="Fee_OutboundFee">Outbound Fee</string>
+    <string name="Fee_LiquidityFee">Liquidity Fee</string>
+    <string name="FeeSettings_NetworkFee">Fee</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
@@ -559,6 +571,8 @@
     <string name="Swap_Confirm_Title">Confirm</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
+    <string name="SwapWarning_SlippageNotApplicable_Title">Slippage is not applicable</string>
+    <string name="SwapWarning_SlippageNotApplicable_Description">Minimum slippage applicable  for this quote is %s%%</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap-Einstellungen</string>
     <string name="SwapSettings_SlippageTitle">Slippage-Toleranz</string>
@@ -577,16 +591,23 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Ungültige %s Adresse</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ihre Transaktion kann vorzeitig ausgeführt werden</string>
     <!-- Swap Confirmation -->
+    <string name="ActivationRequired_DialogTitle">Activate Token</string>
+    <string name="ActivationRequired_DialogDescription">To receive %s, you need to activate the token. The Stellar network requires a trustline to be established for each token. Without it, your wallet cannot receive %s — the transaction will be rejected and the funds will not be delivered.</string>
+    <string name="Activate_YouActivate">You Activate</string>
+    <string name="Activate_Activating">Activating</string>
+    <string name="Activate_AlreadyActive_Title">Already Active</string>
+    <string name="Activate_AlreadyActive_Description">The token is already active.</string>
+    <string name="Activate_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="Activate_InsufficientBalance_Description">You don\’t have enough XLM balance to activate this token.</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">Sie können %s tauschen, oder Sie müssen den neuen Betrag widerrufen und genehmigen</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Sie genehmigen</string>
     <string name="Approve_YouRevoke">Du widerrufen</string>
     <!--Swap Unlock Access-->
-    <string name="Swap_Unlock_PageTitle">Unlock Access</string>
-    <string name="Swap_Unlock_Subtitle">Allow access to the following amount</string>
-    <string name="Swap_Unlock_Info">Grant permission to a smart contract for token trading on your behalf, specifying the allowed amount. No impact on your balance, but incurs a small fee for approval.\n\nPre-approving a higher amount for future trades is cost-effective compared to on-demand approvals.</string>
-    <string name="Swap_Unlock_Unlimited">Unlimited</string>
+    <string name="Swap_Approve_PageTitle">Approve</string>
+    <string name="Swap_Approve_Info">Grant permission to a smart contract for token trading on your behalf, specifying the allowed amount. No impact on your balance, but incurs a small fee for approval.\n\nPre-approving a higher amount for future trades is cost-effective compared to on-demand approvals.</string>
+    <string name="Swap_Approve_Unlimited">Unlimited</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
     <string name="SwapInfo_AllowanceDescription">Der Betrag, den ein Austausch im Namen des Benutzers ausgeben kann, wenn Token Swaps ausgeführt werden. Bevor eine tatsächliche Swap-Transaktion durchgeführt werden kann, ist eine vorherige Transaktion erforderlich, die ausreichende Zertifikate festlegt.</string>
@@ -600,6 +621,8 @@
     <string name="Transactions_WaitForSync">Bitte warten bis die Synchronisation abgeschlossen ist.</string>
     <string name="Transactions_Pending">Anstehend</string>
     <string name="Transactions_Receive">Received</string>
+    <string name="Transactions_AccountCreated">Account Created</string>
+    <string name="Transactions_ChangeTrust">Change Trust</string>
     <string name="Transactions_Completed">Abgeschlossen</string>
     <string name="Transactions_Processing">In Bearbeitung</string>
     <string name="Transactions_Send">Sent</string>
@@ -608,11 +631,15 @@
     <string name="Transactions_Approve">Approved</string>
     <string name="Transactions_Swap">Swapped</string>
     <string name="Transactions_Failed">Fehlgeschlagen</string>
+    <string name="Transactions_Transfer">Transfer</string>
+    <string name="Transactions_Shield">Shield</string>
+    <string name="Transactions_Unshield">Unshield</string>
     <string name="Transactions_ContractCall">Vertragsaufruf</string>
     <string name="Transactions_ExternalContractCall">Externe Anrufe</string>
     <string name="Transactions_ContractCreation">Vertragserstellung</string>
     <string name="Transactions_ContractDeploy">Contract Deploy</string>
     <string name="Transactions_To">an %s</string>
+    <string name="Transactions_By">by %s</string>
     <string name="Transactions_From">von %s</string>
     <string name="Transaction_Unlimited_CoinCode">unlimited %s</string>
     <string name="Transaction_Unlimited">unlimited</string>
@@ -630,7 +657,11 @@
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Genehmigungen</string>
     <string name="Transactions_Unknown">Unbekannte Transaktion</string>
+    <string name="Transactions_OperationType">Operation Type</string>
+    <string name="Transactions_OperationType_ChangeTrust">Change Trust</string>
+    <string name="Transactions_OperationType_CreateAccount">Create Account</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
+    <string name="Transactions_StellarTransaction">Stellar Transaction</string>
     <string name="Transactions_Unknown_Description">Transaktion kann nicht analysiert werden</string>
     <string name="Transactions_Multiple">Mehrere</string>
     <string name="Transactions_Filter">Filter</string>
@@ -689,6 +720,10 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Unable to replace</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Der Absender hat diese Geldmittel mit einer Ausgabesperre versehen, die am %s abläuft.\n\nKeine Sorge, die empfangenen Bitcoins gehören bereits Ihnen, aber bis zum Ablauf der Sperrfrist können Sie diese nicht im Bitcoin-Netzwerk ausgeben.</string>
+    <string name="Info_Reserved_Title">Reserved</string>
+    <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
+    <string name="Info_Reserved_CurrentlyLocked">Currently locked:</string>
+    <string name="Info_Reserved_WalletAction">Wallet activation</string>
     <string name="Info_NotRelayed_Title">Broadcast</string>
     <string name="Info_NotRelayed_Description">The transaction holding this amount is broadcasted but not yet accepted by the network.</string>
     <string name="Info_ProcessingBalance_Title">Processing amount</string>
@@ -712,13 +747,14 @@
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_Theme">Design</string>
-    <string name="Settings_Terms">Bedingungen</string>
+    <string name="Settings_Terms">Security Terms</string>
     <string name="Settings_Privacy">Privatsphäre</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_AppStatus">App-Status</string>
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="Settings_LaunchScreen">Startbildschirm</string>
     <string name="Settings_Appearance">Darstellung</string>
+    <string name="Settings_AppSettings">App Settings</string>
     <string name="Settings_Subscription">Subscription</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
@@ -755,31 +791,49 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
+    <!--Address Checker-->
+    <string name="SettingsAddressChecker_Title">Address Checker</string>
+    <string name="SettingsAddressChecker_RecipientCheck">Recipient Check</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Checks the recipient address for risks before sending.</string>
+    <string name="SettingsAddressChecker_CheckAddress">Check Address</string>
+    <string name="SettingsAddressChecker_SelectBlockchain">Select Blockchain</string>
+    <string name="SettingsAddressChecker_SelectCoin">Select Coin</string>
+    <string name="SettingsAddressChecker_OnSubject">on %s</string>
+    <string name="SettingsAddressChecker_SanctionsCheck">Sanctions Check</string>
+    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
+    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
+    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis is a blockchain analysis platform that provides tools for tracking, investigating, and assessing the risk of cryptocurrency addresses. It helps identify addresses associated with sanctions, fraud, and other illicit activities.</string>
+    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
+    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit is a security platform that allows users to check wallet addresses for risks such as sanctions and blacklist status. It helps users avoid interacting with potentially malicious or blocked addresses.</string>
+    <string name="SettingsAddressChecker_TetherBlacklistDescription">Allows you to verify whether a wallet address is blacklisted by Tether (USDT). If an address is blacklisted, any USDT tokens associated with it may be frozen, making them inaccessible and non-transferable. This check helps users avoid interacting with high-risk or restricted addresses.</string>
+    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Enables you to check if a wallet address is blacklisted by the USDC issuer (Circle). Addresses on the blacklist may have their USDC holdings frozen due to compliance, fraud, or regulatory reasons. Using this check reduces the risk of sending funds to blocked or suspicious wallets.</string>
+    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Provides a way to verify if a wallet address is blacklisted by PYUSD, issued by PayPal. Funds held at blacklisted addresses may be frozen and unusable, typically due to legal or security concerns. This tool helps ensure safer and compliant transactions with PYUSD.</string>
+    <string name="SettingsAddressChecker_InvalidAddress">The address you entered appears to be invalid. Please double-check for typos or formatting issues and try again.</string>
     <!--Banners-->
     <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsBanner_PremiumBannerDescription">Upgrade your experience with Premium features!</string>
     <string name="SettingsBanner_PremiumTryFee">Try for FREE</string>
     <string name="SettingsBanner_GameDescription">Pass tests, complete tasks, and earn tokens!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Defend truly private finance</string>
-    <string name="SettingsBanner_SupportTheProject">Support our independence!</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Be part of the future of private finance</string>
+    <string name="SettingsBanner_SupportTheProject">Support the Project!</string>
     <!--Why Donate Page-->
-    <string name="SettingsBanner_DonateTitle">Support the Privacy Movement</string>
-    <string name="SettingsBanner_DonateSubtitle">Defend the future of private finance</string>
-    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet stays free, ad-free, and open-source - independent from Big Tech surveillance.”</string>
-    <string name="SettingsBanner_DonateByJoiningMovement">By supporting us, you defend open and surveillance-free finance:</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletTeam">The Privacy-First Development Team </string>
-    <string name="SettingsBanner_DonateYourSupportIsCommitment">"Your support isn't just about features - it's resistance against financial surveillance and control"</string>
-    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">"It keeps us independent - protecting thousands who refuse to compromise privacy"</string>
+    <string name="SettingsBanner_DonateTitle">Support the Unstoppable Movement</string>
+    <string name="SettingsBanner_DonateSubtitle">Be part of the future of private finance</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet has been free, ad-free, and open-source from day one — and it will stay that way.”</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">By joining the Unstoppable movement, you stand for open and private finance:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">The Unstoppable Wallet Team</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">Your support isn’t just about unlocking features — it’s a commitment to privacy, freedom, and open access for all.</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">It helps keep the wallet ad-free, secure, and truly independent — for you and for hundreds of thousands who rely on it worldwide.</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Exclusively on F-Droid</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Privacy-first features - with no tracking, no limits.</string>
-    <string name="SettingsBanner_DonateFeaturePrivacy">Duress Mode &amp; extra security</string>
-    <string name="SettingsBanner_DonateFeatureSignals">Advanced phishing protection</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Unstoppable Wallet gives you advanced features — with no subscription, no limits:</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Full analytics and data about tokens</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">Privacy Mode &amp; Duress Mode</string>
+    <string name="SettingsBanner_DonateFeatureSignals">Signals for confident trading</string>
     <string name="SettingsBanner_DonateFeatureAddress">Address blacklist checker</string>
-    <string name="SettingsBanner_DonateFeatureFullAnalytics">Onchain and offchain token analytics</string>
-    <string name="SettingsBanner_DonateFeatureAdvanced">Extensive token search and filters</string>
+    <string name="SettingsBanner_DonateFeatureAdvanced">Advanced asset search and filters</string>
     <string name="SettingsBanner_DonateFeaturePriority">Priority access to support</string>
-    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Every contribution matters</string>
-    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">By supporting Unstoppable Wallet, you help us stay independent and defend financial privacy.</string>
+    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Every bit of support matters.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">By supporting Unstoppable Wallet, you help us grow, improve, and stay independent.</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Active</string>
     <string name="SettingsSubscription_GetPremium">Get Premium</string>
@@ -843,9 +897,11 @@
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
     <string name="Appearance_HideMarketsTab">Hide Markets</string>
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
+    <string name="Appearance_AmountRounding">Amount Rounding</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
+    <string name="Appearance_HideButtonsInfo">The “Hide Buttons” configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
@@ -943,10 +999,7 @@
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Sicheres Backup der Wiederherstellungsausdrücke für jede Wallet. Dies ist die einzige Möglichkeit, den Zugriff auf Gelder zurückzugewinnen, wenn die App nicht funktioniert.</string>
-    <string name="SettingsTerms_PrivateKeys">Die Wallet-Wiederherstellungs-Phrasen werden während des Setups zufällig auf dem Gerät generiert und werden an anderer Stelle nicht gespeichert.</string>
     <string name="SettingsTerms_DisablingPin">Das Deaktivieren der PIN (Code) auf dem Smartphone löscht alle Brieftaschen aus der App. Wiederherstellungs-Phrasen werden benötigt, um den Zugriff auf Gelder wiederherzustellen.</string>
-    <string name="SettingsTerms_JailBraking">Jailbreaking (Rooting), Verwendung veralteter Betriebssysteme und das Installieren von Apps aus unbekannten Quellen könnten die Sicherheit des Geldes gefährden.</string>
-    <string name="SettingsTerms_Bugs">Möglicherweise gibt es unentdeckte Softwarefehler in dem Code, der diese App aktiviert, was zu Fehlfunktionen der App führen kann.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Sei unaufhaltsam</string>
@@ -1002,7 +1055,7 @@
     <string name="ManageAccounts_Title">Wallets verwalten</string>
     <string name="ManageAccounts_CreateNewWallet">Erstellen</string>
     <string name="ManageAccounts_ImportWallet">Wiederherstellen</string>
-    <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
+    <string name="ManageAccounts_WatchAddress">Watch Address</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
@@ -1018,10 +1071,11 @@
     <string name="ImportBackupFile_EnterPassword_Description">Enter the backup password to import your wallet.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Invalid Password</string>
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
-    <string name="Watch_Address_Hint">Enter Your EVM, TRON, TON or Public Address (Bitcoin, Litecoin, Bitcoin Cash) or Account xPubKey.</string>
+    <string name="Watch_Address_Hint">Paste public address or XPUB</string>
     <string name="Watch_Address_Watch">Beobachten</string>
     <string name="Watch_Select_Blockchains">Blockchain auswählen</string>
     <string name="Watch_Select_Coins">Coins auswählen</string>
+    <string name="Watch_InfoText">Supports addresses from EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) and XPUB keys.</string>
     <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
@@ -1076,6 +1130,9 @@
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM privater Schlüssel</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
+    <!-- Stellar Secret Key -->
+    <string name="StellarSecretKey_Title">Stellar Secret Key</string>
+    <string name="StellarSecretKey_ShowSecretKey">Tap to show secret key</string>
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
@@ -1085,6 +1142,8 @@
     <string name="PrivateKeys_Title">Private Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Gewährt volle Kontrolle über EVM-basierte Kryptos, d.h. Ethereum, Binance Smart Chain etc innerhalb der jeweiligen Wallet.</string>
+    <string name="PrivateKeys_StellarSecretKey">Stellar Secret Key</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Grants full control over Stellar account within respective wallet.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Gewährt die volle Kontrolle über die Vermögenswerte auf der jeweiligen Brieftasche.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Gewährt volle Kontrolle über Bitcoin und andere auf UTXO basierende Kryptos, z.B. Litecoin, Bitcoin Cash, Dash, etc. innerhalb der jeweiligen Wallet.</string>
@@ -1182,11 +1241,21 @@
     <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_NoDataAvailable">No data available</string>
     <string name="CoinPage_AddToWallet">Zum Wallet hinzugefügt</string>
+    <string name="CoinPage_ROI_Title">Relative Change vs %s</string>
+    <string name="CoinPage_ROI_Vs">vs</string>
+    <string name="CoinPage_ROI_SelectCoins">Select Coins</string>
     <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
-    <string name="CoinPage_Performance_Week">1 Week</string>
-    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_Performance_Day1">Day</string>
+    <string name="CoinPage_Performance_Week1">1 Week</string>
+    <string name="CoinPage_Performance_Week2">2 Week</string>
+    <string name="CoinPage_Performance_Month1">1 Month</string>
+    <string name="CoinPage_Performance_Month3">3 Months</string>
+    <string name="CoinPage_Performance_Month6">6 Months</string>
+    <string name="CoinPage_Performance_Year1">1 Year</string>
+    <string name="CoinPage_Performance_Year2">2 Years</string>
+    <string name="CoinPage_Performance_Year5">5 Years</string>
     <string name="CoinPage_ShowMore">Show More</string>
     <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
@@ -1211,7 +1280,12 @@
     <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
     <string name="CoinPage_MarketsLabel_Verified">VERIFIED</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Verified</string>
+    <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">Exchange Type</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">All</string>
+    <string name="ROI_SelectCoin_Title">Select Coin</string>
+    <string name="ROI_SelectCoin_SelectAssets">Select Assets</string>
+    <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">Only %s coins can be selected</string>
+    <string name="ROI_Period_N">Period %s</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
@@ -1456,12 +1530,4 @@
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
     <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>
     <string name="Hud_Text_Connected">Connected</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">Choose Coin</string>
-    <string name="Cex_ChooseNetwork">Choose Network</string>
-    <string name="Cex_ChooseNetwork_Description">Choose a network and get an address to deposit.</string>
-    <string name="Cex_SelectCoin_Search">Name or code</string>
-    <string name="CexDeposit_Title">Deposit %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">Failed to connect your API Key</string>
-    <!--Cex Withdraw Module-->
 </resources>
