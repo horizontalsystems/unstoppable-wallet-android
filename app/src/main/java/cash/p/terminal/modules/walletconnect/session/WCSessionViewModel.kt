@@ -19,6 +19,8 @@ import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Inval
 import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Killed
 import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Ready
 import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
@@ -31,7 +33,7 @@ import kotlin.coroutines.suspendCoroutine
 class WCSessionViewModel(
     private val sessionManager: WCSessionManager,
     private val connectivityManager: ConnectivityManager,
-    private val account: cash.p.terminal.wallet.Account?,
+    private val account: Account?,
     private val topic: String?,
     private val evmBlockchainManager: EvmBlockchainManager
 ) : ViewModelUiState<WCSessionUiState>() {
@@ -497,18 +499,18 @@ class WCSessionViewModel(
         }
     }
 
-    private fun getEvmAddress(account: cash.p.terminal.wallet.Account, chain: Chain) =
+    private fun getEvmAddress(account: Account, chain: Chain) =
         when (val accountType = account.type) {
-            is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+            is AccountType.Mnemonic -> {
                 val seed: ByteArray = accountType.seed
                 Signer.address(seed, chain)
             }
 
-            is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> {
+            is AccountType.EvmPrivateKey -> {
                 Signer.address(accountType.key)
             }
 
-            is cash.p.terminal.wallet.AccountType.EvmAddress -> {
+            is AccountType.EvmAddress -> {
                 Address(accountType.address)
             }
 
@@ -524,7 +526,7 @@ class WCSessionViewModel(
         )
     )
 
-    private fun getSupportedBlockchains(account: cash.p.terminal.wallet.Account) = supportedChains.map {
+    private fun getSupportedBlockchains(account: Account) = supportedChains.map {
         val address = getEvmAddress(account, it).eip55
         WCBlockchain(it.id, it.name, address)
     }

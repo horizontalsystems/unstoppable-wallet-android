@@ -314,7 +314,9 @@ sealed class AccountType : Parcelable {
 
     val supportsWalletConnect: Boolean
         get() = when (this) {
-            is Mnemonic, is EvmPrivateKey -> true
+            is HardwareCard,
+            is Mnemonic,
+            is EvmPrivateKey -> true
             else -> false
         }
 
