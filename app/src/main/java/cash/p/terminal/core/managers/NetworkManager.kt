@@ -29,10 +29,6 @@ class NetworkManager : INetworkManager {
         return ServiceGuide.service(host).getGuide(path)
     }
 
-    override suspend fun getReleaseNotes(host: String, path: String): JsonObject {
-        return ServiceChangeLogs.service(host).getReleaseNotes(path)
-    }
-
     override fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject> {
         return ServiceFullTransaction.service(host, isSafeCall).getFullTransaction(path)
     }
@@ -103,20 +99,6 @@ object ServiceGuide {
     interface GuidesAPI {
         @GET
         suspend fun getGuide(@Url path: String): String
-    }
-}
-
-object ServiceChangeLogs {
-    fun service(apiURL: String): ChangeLogsAPI {
-        return APIClient.retrofit(apiURL, 60)
-            .create(ChangeLogsAPI::class.java)
-    }
-
-    interface ChangeLogsAPI {
-
-        @GET
-        @Headers("Content-Type: application/json")
-        suspend fun getReleaseNotes(@Url path: String): JsonObject
     }
 }
 

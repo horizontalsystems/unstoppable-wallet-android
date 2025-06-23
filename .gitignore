@@ -6,3 +6,5 @@
 /captures
 /local.properties
 .externalNativeBuild
+/app/src/main/assets/common/changelog_*.md
+/app/src/main/assets/common/CHNAGELOG_*.md

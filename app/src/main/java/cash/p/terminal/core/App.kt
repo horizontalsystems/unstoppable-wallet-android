@@ -315,7 +315,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         releaseNotesManager =
-            ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
+            ReleaseNotesManager(systemInfoManager, localStorage)
 
         setAppTheme()
 

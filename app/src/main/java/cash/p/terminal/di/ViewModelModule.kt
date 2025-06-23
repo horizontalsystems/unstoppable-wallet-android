@@ -1,6 +1,7 @@
 package cash.p.terminal.di
 
 import cash.p.terminal.modules.hardwarewallet.HardwareWalletViewModel
+import cash.p.terminal.modules.releasenotes.ReleaseNotesViewModel
 import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsViewModel
 import cash.p.terminal.modules.settings.displaytransactions.DisplayTransactionsViewModel
 import cash.p.terminal.modules.settings.privacy.PrivacyViewModel
@@ -14,4 +15,5 @@ val viewModelModule = module {
     viewModelOf(::HardwareWalletViewModel)
     viewModelOf(::ResetToFactorySettingsViewModel)
     viewModelOf(::SecuritySettingsViewModel)
+    viewModelOf(::ReleaseNotesViewModel)
 }

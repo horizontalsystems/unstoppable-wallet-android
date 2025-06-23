@@ -1,5 +1,6 @@
 package cash.p.terminal.core.di
 
+import cash.p.terminal.di.mainUseCaseModule
 import cash.p.terminal.di.managerModule
 import cash.p.terminal.di.repositoryModule
 import cash.p.terminal.di.storageModule
@@ -22,6 +23,7 @@ val appModule = module {
         featureTangemModule,
         networkModule,
         swapProvidersModule,
+        mainUseCaseModule,
         useCaseModule
     )
 }
