@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSpamManager
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -50,7 +50,7 @@ class EvmTransactionConverter(
     private val coinManager: ICoinManager,
     private val evmKitWrapper: EvmKitWrapper,
     private val source: TransactionSource,
-    private val spamManager: SpamManager,
+    private val spamManager: EvmSpamManager,
     private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {

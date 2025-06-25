@@ -34,7 +34,7 @@ class TokenBalanceModule {
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
                 NftMetadataService(App.nftMetadataManager),
-                App.spamManager
+                App.localStorage,
             )
 
             return TokenBalanceViewModel(

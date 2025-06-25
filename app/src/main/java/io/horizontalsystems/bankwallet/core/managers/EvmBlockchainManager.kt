@@ -14,7 +14,7 @@ class EvmBlockchainManager(
     private val syncSourceManager: EvmSyncSourceManager,
     private val marketKit: MarketKitWrapper,
     private val accountManagerFactory: EvmAccountManagerFactory,
-    private val spamManager: SpamManager
+    private val spamManager: EvmSpamManager
 ) {
     private val evmKitManagersMap = mutableMapOf<BlockchainType, Pair<EvmKitManager, EvmAccountManager>>()
 

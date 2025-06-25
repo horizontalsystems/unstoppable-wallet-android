@@ -29,7 +29,7 @@ class EvmTransactionsAdapter(
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, App.spamManager, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, App.evmSpamManager, baseToken, evmLabelManager)
 
     override val explorerTitle: String
         get() = evmTransactionSource.name

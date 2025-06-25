@@ -20,7 +20,7 @@ object TransactionsModule {
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
                 NftMetadataService(App.nftMetadataManager),
-                App.spamManager
+                App.localStorage
             )
             val transactionViewItemFactory = TransactionViewItemFactory(
                 App.evmLabelManager,
@@ -35,7 +35,7 @@ object TransactionsModule {
                 App.balanceHiddenManager,
                 App.transactionAdapterManager,
                 App.walletManager,
-                TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
+                TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.localStorage),
                 App.localStorage,
             ) as T
         }

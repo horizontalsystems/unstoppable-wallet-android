@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -14,7 +14,7 @@ import java.util.UUID
 class TransactionFilterService(
     private val marketKitWrapper: MarketKitWrapper,
     private val transactionAdapterManager: TransactionAdapterManager,
-    private val spamManager: SpamManager
+    private val localStorage: ILocalStorage,
 ) {
     private var blockchains: List<Blockchain?> = listOf(null)
     private var selectedBlockchain: Blockchain? = null
@@ -24,7 +24,7 @@ class TransactionFilterService(
     private var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
     private var contact: Contact? = null
     private var uniqueId = UUID.randomUUID().toString()
-    private var hideSuspiciousTx = spamManager.hideSuspiciousTx
+    private var hideSuspiciousTx = localStorage.hideSuspiciousTransactions
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -136,7 +136,7 @@ class TransactionFilterService(
         selectedBlockchain = null
         contact = null
         hideSuspiciousTx = true
-        spamManager.updateFilterHideSuspiciousTx(true)
+        localStorage.hideSuspiciousTransactions = true
 
         emitState()
     }
@@ -161,7 +161,7 @@ class TransactionFilterService(
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
         hideSuspiciousTx = checked
-        spamManager.updateFilterHideSuspiciousTx(checked)
+        localStorage.hideSuspiciousTransactions = checked
         emitState()
     }
 

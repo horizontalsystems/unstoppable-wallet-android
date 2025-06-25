@@ -4,12 +4,12 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.SpamAddressStorage
-import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.SpamAddress
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
+import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.events.TransferEventInstance
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
@@ -24,7 +24,6 @@ import io.horizontalsystems.nftkit.events.Eip1155TransferEventInstance
 import io.horizontalsystems.nftkit.events.Eip721TransferEventInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -42,7 +41,6 @@ class SpamManager(
     private val coinValueLimits = appConfigProvider.spamCoinValueLimits
     private val coins = marketKitWrapper.fullCoinsByCoinCode(coinValueLimits.map { it.key })
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private var transactionSubscriptionJob: Job? = null
 
     private val stableCoinCodes = listOf("USDT", "USDC", "DAI", "BUSD", "EURS")
     private val negligibleValue = BigDecimal("0.01")
@@ -118,7 +116,7 @@ class SpamManager(
                     for (transfer in eip20Transfers) {
                         val query = TokenQuery(blockchainType, TokenType.Eip20(transfer.contractAddress.hex))
 
-                        val minValue = coinsMap[transfer.contractAddress]
+                        val minValue = coinsMap[transfer.contractAddress.hex]
 
                         val isSpam = if (minValue != null) {
                             transfer.value <= minValue
@@ -160,15 +158,14 @@ class SpamManager(
         val tokens = coins.map { coin -> coin.tokens.filter { it.blockchainType == blockchainType } }.flatten()
         var baseCoinValue = BigInteger.ZERO
 
-        val coinsMap = mutableMapOf<Address, BigInteger>()
+        val coinsMap = mutableMapOf<String, BigInteger>()
         for (token in tokens) {
             val value = coinValueLimits[token.coin.code] ?: continue
 
             when (val tokenType = token.type) {
                 is TokenType.Eip20 -> {
                     try {
-                        val address = Address(tokenType.address)
-                        coinsMap[address] = scaleUp(value, token.decimals)
+                        coinsMap[tokenType.address] = scaleUp(value, token.decimals)
                     } catch (err: Throwable) {
                         Unit
                     }
@@ -210,7 +207,7 @@ class SpamManager(
 
         val spamConfig = spamConfig(blockchainType)
 
-        transactionSubscriptionJob = coroutineScope.launch {
+        coroutineScope.launch {
             evmKitWrapper.evmKit.allTransactionsFlowable.asFlow().cancellable()
                 .collect { (fullTransactions, _) ->
                     handle(fullTransactions, evmKitWrapper.evmKit.receiveAddress, spamConfig)
@@ -263,6 +260,6 @@ class SpamManager(
 
 data class SpamConfig(
     val baseCoinValue: BigInteger,
-    val coinsMap: Map<Address, BigInteger>,
+    val coinsMap: Map<String, BigInteger>,
     val blockchainType: BlockchainType,
 )

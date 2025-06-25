@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
+import io.horizontalsystems.bankwallet.core.factories.SpamManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
@@ -37,6 +38,7 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSpamManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.KeyStoreCleaner
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
@@ -56,7 +58,6 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
@@ -69,6 +70,7 @@ import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.TronSpamManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
@@ -200,7 +202,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var contactsRepository: ContactsRepository
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
-        lateinit var spamManager: SpamManager
+        lateinit var spamManagerFactory: SpamManagerFactory
+        lateinit var evmSpamManager: EvmSpamManager
+        lateinit var tronSpamManager: TronSpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
@@ -280,6 +284,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
+        tronSpamManager = TronSpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider)
+        tronSpamManager.subscribeToKitStart(tronKitManager)
+
         tonKitManager = TonKitManager(backgroundManager)
         stellarKitManager = StellarKitManager(backgroundManager)
 
@@ -303,7 +310,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletActivator = WalletActivator(walletManager, marketKit)
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
-        spamManager = SpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider)
+        evmSpamManager = EvmSpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
@@ -316,7 +323,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmSyncSourceManager,
             marketKit,
             evmAccountManagerFactory,
-            spamManager
+            evmSpamManager
         )
 
         val tronAccountManager = TronAccountManager(
@@ -466,6 +473,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tonConnectManager.start()
 
         roiManager = RoiManager(localStorage)
+
+        spamManagerFactory = SpamManagerFactory(evmSpamManager, tronSpamManager)
 
         startTasks()
     }

@@ -215,7 +215,7 @@ class EnterAddressViewModel(
                 )
             val addressValidator = AddressValidatorFactory.get(token)
             val addressCheckManager = AddressCheckManager(
-                App.spamManager,
+                App.spamManagerFactory.spamManager(blockchainType),
                 App.appConfigProvider,
                 App.evmBlockchainManager,
                 App.evmSyncSourceManager

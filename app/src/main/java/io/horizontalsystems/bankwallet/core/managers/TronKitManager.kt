@@ -53,6 +53,7 @@ class TronKitManager(
 
         if (this.tronKitWrapper == null) {
             val accountType = account.type
+            currentAccount = account
             this.tronKitWrapper = when (accountType) {
                 is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
@@ -66,7 +67,6 @@ class TronKitManager(
             }
             start()
             useCount = 0
-            currentAccount = account
         }
 
         useCount++

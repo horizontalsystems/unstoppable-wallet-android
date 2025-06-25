@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
 import android.util.Log
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -206,7 +207,7 @@ class AdapterFactory(
     fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val tronKitWrapper = tronKitManager.getTronKitWrapper(source.account)
         val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
-        val tronTransactionConverter = TronTransactionConverter(coinManager, tronKitWrapper, source, baseToken, evmLabelManager)
+        val tronTransactionConverter = TronTransactionConverter(coinManager, tronKitWrapper, source, baseToken, evmLabelManager, App.tronSpamManager)
 
         return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
     }

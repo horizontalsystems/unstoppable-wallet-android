@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
@@ -28,7 +28,7 @@ class TransactionsService(
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
     private val nftMetadataService: NftMetadataService,
-    private val spamManager: SpamManager,
+    private val localStorage: ILocalStorage,
 ) : Clearable {
 
     private val _itemsFlow = MutableStateFlow<List<TransactionItem>>(listOf())
@@ -195,7 +195,7 @@ class TransactionsService(
                 newRecords.add(record)
             }
 
-            if (record.spam && spamManager.hideSuspiciousTx) return@forEach
+            if (record.spam && localStorage.hideSuspiciousTransactions) return@forEach
 
             transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)

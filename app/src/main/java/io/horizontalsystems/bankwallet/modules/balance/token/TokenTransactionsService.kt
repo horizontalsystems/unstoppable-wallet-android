@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -37,7 +37,7 @@ class TokenTransactionsService(
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
     private val nftMetadataService: NftMetadataService,
-    private val spamManager: SpamManager,
+    private val localStorage: ILocalStorage,
 ) : Clearable {
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -193,7 +193,7 @@ class TokenTransactionsService(
                 newRecords.add(record)
             }
 
-            if (record.spam && spamManager.hideSuspiciousTx) return@forEach
+            if (record.spam && localStorage.hideSuspiciousTransactions) return@forEach
 
             transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)

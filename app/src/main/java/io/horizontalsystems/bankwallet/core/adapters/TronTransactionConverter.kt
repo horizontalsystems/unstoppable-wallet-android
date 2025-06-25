@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.TronSpamManager
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
@@ -38,13 +38,15 @@ class TronTransactionConverter(
     private val tronKitWrapper: TronKitWrapper,
     private val source: TransactionSource,
     private val baseToken: Token,
-    private val evmLabelManager: EvmLabelManager
+    private val evmLabelManager: EvmLabelManager,
+    private val tronSpamManager: TronSpamManager,
 ) {
     private val tronKit: TronKit
         get() = tronKitWrapper.tronKit
 
     fun transactionRecord(fullTransaction: FullTransaction): TronTransactionRecord {
         val transaction = fullTransaction.transaction
+        val isSpam = tronSpamManager.isSpam(transaction.hash)
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
             is NativeTransactionDecoration -> {
@@ -57,7 +59,7 @@ class TronTransactionConverter(
                                 source = source,
                                 from = contract.ownerAddress.base58,
                                 value = baseCoinValue(contract.amount, false),
-                                spam = contract.amount < BigInteger.TEN
+                                spam = isSpam
                             )
                         } else {
                             TronOutgoingTransactionRecord(
@@ -122,10 +124,11 @@ class TronTransactionConverter(
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
                         TronExternalContractCallTransactionRecord(
-                            transaction, baseToken, source, App.spamManager,
+                            transaction, baseToken, source,
                             getInternalEvents(internalTransactions) +
                                     getIncomingEip20Events(incomingEip20Transfers),
-                            getOutgoingEip20Events(outgoingEip20Transfers)
+                            getOutgoingEip20Events(outgoingEip20Transfers),
+                            isSpam
                         )
                     }
 

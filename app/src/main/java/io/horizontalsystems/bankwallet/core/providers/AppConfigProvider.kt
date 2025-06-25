@@ -188,7 +188,8 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         "DAI" to 0.01,
         "BUSD" to 0.01,
         "EURS" to 0.01,
-        "BSC-USD" to 0.01
+        "BSC-USD" to 0.01,
+        "TRX" to 10.0,
     )
 
     val chainalysisBaseUrl by lazy {
