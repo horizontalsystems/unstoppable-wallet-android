@@ -50,7 +50,7 @@ class EvmTransactionConverter(
     private val coinManager: ICoinManager,
     private val evmKitWrapper: EvmKitWrapper,
     private val source: TransactionSource,
-    private val spamManager: EvmSpamManager,
+    private val evmSpamManager: EvmSpamManager,
     private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {
@@ -59,7 +59,7 @@ class EvmTransactionConverter(
 
     fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
         val transaction = fullTransaction.transaction
-        val isSpam = spamManager.isSpam(transaction.hash)
+        val isSpam = evmSpamManager.isSpam(fullTransaction, evmKit.receiveAddress, evmKitWrapper.blockchainType)
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
             is ContractCreationDecoration -> {

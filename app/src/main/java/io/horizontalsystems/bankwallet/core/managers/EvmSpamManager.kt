@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigInteger
+import java.util.concurrent.ConcurrentHashMap
 
 class EvmSpamManager(
     localStorage: ILocalStorage,
@@ -33,6 +34,8 @@ class EvmSpamManager(
     marketKitWrapper: MarketKitWrapper,
     appConfigProvider: AppConfigProvider
 ) : BaseSpamManager(localStorage, coinManager, spamAddressStorage, marketKitWrapper, appConfigProvider) {
+
+    private val cache = ConcurrentHashMap<BlockchainType, SpamConfig>()
 
     fun subscribeToKitStart(evmKitManager: EvmKitManager, blockchainType: BlockchainType) {
         coroutineScope.launch {
@@ -50,10 +53,22 @@ class EvmSpamManager(
         return EvmBlockchainManager.blockchainTypes.contains(blockchainType)
     }
 
+    fun isSpam(fullTransaction: FullTransaction, userAddress: Address, blockchainType: BlockchainType): Boolean {
+        val spamConfig = getSpamConfig(blockchainType)
+
+        return scanSpamAddresses(fullTransaction, userAddress, spamConfig).isNotEmpty()
+    }
+
+    private fun getSpamConfig(blockchainType: BlockchainType): SpamConfig {
+        return cache.computeIfAbsent(blockchainType) {
+            createSpamConfig(it)
+        }
+    }
+
     private fun handleEvmKitStarted(evmKitManager: EvmKitManager?, blockchainType: BlockchainType) {
         val wrapper = evmKitManager?.evmKitWrapper ?: return
         val account = evmKitManager.currentAccount ?: return
-        val spamConfig = spamConfig(blockchainType)
+        val spamConfig = getSpamConfig(blockchainType)
 
         coroutineScope.launch {
             sync(wrapper.evmKit, account, spamConfig)

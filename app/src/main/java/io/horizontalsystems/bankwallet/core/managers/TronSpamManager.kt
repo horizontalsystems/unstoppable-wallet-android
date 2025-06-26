@@ -30,7 +30,7 @@ class TronSpamManager(
     appConfigProvider: AppConfigProvider
 ) : BaseSpamManager(localStorage, coinManager, spamAddressStorage, marketKitWrapper, appConfigProvider) {
 
-    private val spamConfig by lazy { spamConfig(BlockchainType.Tron) }
+    private val spamConfig by lazy { createSpamConfig(BlockchainType.Tron) }
 
     fun subscribeToKitStart(kitManager: TronKitManager) {
         coroutineScope.launch {
@@ -45,6 +45,10 @@ class TronSpamManager(
 
     override fun supports(blockchainType: BlockchainType): Boolean {
         return blockchainType == BlockchainType.Tron
+    }
+
+    fun isSpam(fullTransaction: FullTransaction, userAddress: Address): Boolean {
+        return scanSpamAddresses(fullTransaction, userAddress, spamConfig).isNotEmpty()
     }
 
     private fun handleEvmKitStarted(kitManager: TronKitManager?) {

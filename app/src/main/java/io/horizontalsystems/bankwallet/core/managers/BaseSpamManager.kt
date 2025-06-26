@@ -33,11 +33,7 @@ abstract class BaseSpamManager(
         return spamAddressStorage.findByAddress(address)
     }
 
-    fun isSpam(transactionHash: ByteArray): Boolean {
-        return spamAddressStorage.isSpam(transactionHash)
-    }
-
-    protected fun spamConfig(blockchainType: BlockchainType): SpamConfig {
+    protected fun createSpamConfig(blockchainType: BlockchainType): SpamConfig {
         val tokens = fullCoins.flatMap { it.tokens.filter { it.blockchainType == blockchainType } }
         var baseCoinValue = BigInteger.ZERO
         val coinsMap = mutableMapOf<String, BigInteger>()

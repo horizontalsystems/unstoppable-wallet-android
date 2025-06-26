@@ -46,7 +46,7 @@ class TronTransactionConverter(
 
     fun transactionRecord(fullTransaction: FullTransaction): TronTransactionRecord {
         val transaction = fullTransaction.transaction
-        val isSpam = tronSpamManager.isSpam(transaction.hash)
+        val isSpam = tronSpamManager.isSpam(fullTransaction, tronKit.address)
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
             is NativeTransactionDecoration -> {
