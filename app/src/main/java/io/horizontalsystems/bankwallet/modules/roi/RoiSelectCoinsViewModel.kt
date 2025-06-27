@@ -28,7 +28,7 @@ class RoiSelectCoinsViewModel(
 
     private val coinImages = mapOf(
         "tether-gold" to R.drawable.ic_gold_32,
-        "sp500" to R.drawable.ic_sp500_32,
+        "snp" to R.drawable.ic_sp500_32,
     )
     private val allCoinItems: List<CoinItem>
     private var coinItems: List<CoinItem>

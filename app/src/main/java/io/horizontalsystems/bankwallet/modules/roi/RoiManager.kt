@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 class RoiManager(private val localStorage: ILocalStorage) {
 
     private val gold = PerformanceCoin("tether-gold", "GOLD", "Commodity")
-    private val sp500 = PerformanceCoin("sp500", "SP500", "S&P 500")
+    private val sp500 = PerformanceCoin("snp", "SP500", "S&P 500")
     val prioritizedCoins = listOf(gold, sp500, PerformanceCoin("bitcoin", "BTC", "Bitcoin"))
     private val defaultCoins = listOf(
         sp500,
