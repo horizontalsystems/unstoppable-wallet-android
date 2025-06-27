@@ -56,7 +56,12 @@ val Token.swappable: Boolean
         BlockchainType.ArbitrumOne,
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin -> true
+        BlockchainType.Litecoin,
+        BlockchainType.Stellar,
+        BlockchainType.Solana,
+        BlockchainType.Tron,
+            -> true
+
         else -> false
     }
 
@@ -300,6 +305,34 @@ val BlockchainType.feePriceScale: FeePriceScale
     get() = when (this) {
         BlockchainType.Avalanche -> FeePriceScale.Navax
         else -> FeePriceScale.Gwei
+    }
+
+val BlockchainType.isEvm: Boolean
+    get() = when (this) {
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Avalanche,
+        BlockchainType.Base,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Ethereum,
+        BlockchainType.Fantom,
+        BlockchainType.Gnosis,
+        BlockchainType.Optimism,
+        BlockchainType.Polygon,
+        BlockchainType.ZkSync,
+            -> true
+
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Dash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Solana,
+        BlockchainType.Stellar,
+        BlockchainType.Ton,
+        BlockchainType.Tron,
+        is BlockchainType.Unsupported,
+        BlockchainType.Zcash,
+            -> false
     }
 
 fun BlockchainType.supports(accountType: AccountType): Boolean {
