@@ -27,9 +27,12 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceBtc(token)
             }
 
+            BlockchainType.Tron -> {
+                SendTransactionServiceTron(token)
+            }
+
             BlockchainType.Zcash,
             BlockchainType.Solana,
-            BlockchainType.Tron,
             BlockchainType.Ton,
             BlockchainType.Stellar,
             is BlockchainType.Unsupported,
