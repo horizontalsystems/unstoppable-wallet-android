@@ -19,6 +19,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.hexStringToByteArray
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -160,6 +161,10 @@ object AllBridgeProvider : IMultiSwapProvider {
             )
 
             resAmountIn -= gasFee.stablecoin.float
+
+            if (resAmountIn < BigDecimal.ZERO) {
+                throw Exception("Amount is less than required fee")
+            }
         }
 
         val amount = resAmountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
@@ -225,6 +230,19 @@ object AllBridgeProvider : IMultiSwapProvider {
                     gasLimit = null
                 )
             }
+        } else if (tokenIn.blockchainType == BlockchainType.Tron) {
+            if (tokenIn.blockchainType != tokenOut.blockchainType) {
+                val rawTransaction = allBridgeAPI.rawBridgeTron(
+                    amount = amount,
+                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
+                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
+                    sourceToken = tokenPairIn.abToken.tokenAddress,
+                    destinationToken = tokenPairOut.abToken.tokenAddress,
+                    feePaymentMethod = feePaymentMethod.value
+                )
+
+                return SendTransactionData.Tron(rawTransaction)
+            }
         }
 
         TODO("Not yet implemented")
@@ -259,6 +277,17 @@ interface AllBridgeAPI {
         @Query("messenger") messenger: String = "ALLBRIDGE",
         @Query("feePaymentMethod") feePaymentMethod: String,
     ): Response.RawTransaction
+
+    @GET("/raw/bridge")
+    suspend fun rawBridgeTron(
+        @Query("amount") amount: Int,
+        @Query("sender") sender: String,
+        @Query("recipient") recipient: String,
+        @Query("sourceToken") sourceToken: String,
+        @Query("destinationToken") destinationToken: String,
+        @Query("messenger") messenger: String = "ALLBRIDGE",
+        @Query("feePaymentMethod") feePaymentMethod: String,
+    ): CreatedTransaction
 
     @GET("/gas/fee")
     suspend fun gasFee(
