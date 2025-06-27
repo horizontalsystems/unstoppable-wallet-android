@@ -3,12 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.IReceiveAdapter
-import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
-import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
-import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
@@ -190,7 +185,7 @@ object ThorChainProvider : IMultiSwapProvider {
     ): Response.QuoteSwap {
         val assetIn = assets.first { it.token == tokenIn }
         val assetOut = assets.first { it.token == tokenOut }
-        val destination = recipient?.hex ?: resolveDestination(tokenOut)
+        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn.asset,
@@ -201,39 +196,6 @@ object ThorChainProvider : IMultiSwapProvider {
             affiliateBps = AFFILIATE_BPS,
             toleranceBps = slippage?.movePointRight(2)?.toLong()
         )
-    }
-
-    private fun resolveDestination(token: Token): String {
-        val blockchainType = token.blockchainType
-
-        adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
-            return it.receiveAddress
-        }
-
-        val accountManager = App.accountManager
-        val evmBlockchainManager = App.evmBlockchainManager
-
-        val account = accountManager.activeAccount ?: throw NoActiveAccount()
-
-        when (blockchainType) {
-            BlockchainType.Avalanche,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Ethereum -> {
-                val chain = evmBlockchainManager.getChain(blockchainType)
-                val evmAddress = account.type.evmAddress(chain) ?: throw SwapError.NoDestinationAddress()
-                return evmAddress.eip55
-            }
-            BlockchainType.Bitcoin -> {
-                return BitcoinAdapter.firstAddress(account.type, token.type)
-            }
-            BlockchainType.BitcoinCash -> {
-                return BitcoinCashAdapter.firstAddress(account.type, token.type)
-            }
-            BlockchainType.Litecoin -> {
-                return LitecoinAdapter.firstAddress(account.type, token.type)
-            }
-            else -> throw SwapError.NoDestinationAddress()
-        }
     }
 
     override suspend fun fetchFinalQuote(
