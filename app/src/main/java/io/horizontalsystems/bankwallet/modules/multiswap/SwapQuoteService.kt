@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.util.Log
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapProvider
@@ -32,6 +33,7 @@ class SwapQuoteService {
         UniswapProvider,
         UniswapV3Provider,
         ThorChainProvider,
+        AllBridgeProvider,
     )
 
     private var amountIn: BigDecimal? = null
