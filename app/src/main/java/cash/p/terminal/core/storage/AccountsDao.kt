@@ -14,6 +14,9 @@ interface AccountsDao {
     @Update
     fun update(accountRow: AccountRecord)
 
+    @Query("SELECT * FROM AccountRecord WHERE id = :id")
+    fun loadAccount(id: String): AccountRecord?
+
     @Query("UPDATE AccountRecord SET deleted = 1 WHERE id = :id")
     fun delete(id: String)
 

@@ -31,7 +31,9 @@ object ManageAccountModule {
         ResetToFactorySettings,
         ChangeAccessCode,
         AccessCodeRecovery,
-        ForgotAccessCode
+        ForgotAccessCode,
+        ViewKey,
+        SpendKey
     }
 
     sealed class BackupItem{

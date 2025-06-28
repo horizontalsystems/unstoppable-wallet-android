@@ -49,6 +49,10 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
             }
 
+            BlockchainType.Monero -> {
+                addressHandlers.add(AddressHandlerMonero())
+            }
+
             BlockchainType.Cosanta -> {
                 val network = MainNetCosanta()
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))

@@ -30,6 +30,7 @@ class WatchAddressService(
             when (accountType) {
                 is AccountType.Cex,
                 is AccountType.Mnemonic,
+                is AccountType.MnemonicMonero,
                 is AccountType.HardwareCard,
                 is AccountType.EvmPrivateKey -> Unit // N/A
 

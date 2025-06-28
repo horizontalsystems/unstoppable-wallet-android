@@ -72,6 +72,7 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Cosanta,
         BlockchainType.ECash,
         BlockchainType.Dogecoin,
+        BlockchainType.Monero,
         BlockchainType.Dash -> {
             tokenType is TokenType.Native
         }
@@ -225,6 +226,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
             this == BlockchainType.Zcash
 
         is AccountType.HardwareCard,
+        is AccountType.MnemonicMonero,
         is AccountType.Mnemonic -> true
 
         is AccountType.HdExtendedKey -> {

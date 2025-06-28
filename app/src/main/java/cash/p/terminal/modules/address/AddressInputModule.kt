@@ -41,6 +41,9 @@ object AddressInputModule {
                 BlockchainType.ArbitrumOne -> {
                     addressParserChain.addHandler(AddressHandlerEvm(tokenQuery.blockchainType))
                 }
+                BlockchainType.Monero -> {
+                    addressParserChain.addHandler(AddressHandlerMonero())
+                }
                 BlockchainType.Solana -> {
                     addressParserChain.addHandler(AddressHandlerSolana())
                 }
@@ -99,6 +102,7 @@ object AddressInputModule {
                 BlockchainType.Solana,
                 BlockchainType.Tron,
                 BlockchainType.Ton,
+                BlockchainType.Monero,
                 is BlockchainType.Unsupported -> Unit
             }
 

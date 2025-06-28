@@ -17,19 +17,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.core.managers.FaqManager
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.manageaccount.ui.PassphraseCell
 import cash.p.terminal.modules.manageaccount.ui.SeedPhraseList
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.Account
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
@@ -48,7 +49,7 @@ class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 @Composable
 fun RecoveryPhraseScreen(
     navController: NavController,
-    account: cash.p.terminal.wallet.Account
+    account: Account
 ) {
     val viewModel = viewModel<BackupKeyViewModel>(factory = BackupKeyModule.Factory(account))
 
@@ -87,8 +88,10 @@ fun RecoveryPhraseScreen(
             ) {
                 hidden = !hidden
             }
-            Spacer(Modifier.height(24.dp))
-            PassphraseCell(viewModel.passphrase, hidden)
+            if (viewModel.showPassphraseBlock) {
+                Spacer(Modifier.height(24.dp))
+                PassphraseCell(viewModel.passphrase, hidden)
+            }
             Spacer(modifier = Modifier.weight(1f))
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(

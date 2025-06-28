@@ -28,6 +28,13 @@ class BackupConfirmKeyViewModel(
 
             reset()
             emitState()
+        } else if (account.type is AccountType.MnemonicMonero) {
+            wordsIndexed = (account.type as AccountType.MnemonicMonero).words.mapIndexed { index, s ->
+                Pair(index, s)
+            }
+
+            reset()
+            emitState()
         } else {
             wordsIndexed = listOf()
         }
@@ -45,6 +52,7 @@ class BackupConfirmKeyViewModel(
         val wordsCountToGuess = when (wordsIndexed.size) {
             12 -> 2
             15, 18, 21 -> 3
+            25,
             24 -> 4
             else -> 2
         }

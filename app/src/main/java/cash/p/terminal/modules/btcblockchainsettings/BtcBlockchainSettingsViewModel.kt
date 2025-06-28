@@ -21,7 +21,6 @@ internal class BtcBlockchainSettingsViewModel(
 ) : ViewModelUiState<BtcBlockchainSettingsUIState>() {
 
     private val localStorage by inject<ILocalStorage>(ILocalStorage::class.java)
-    private val adapterFactory by inject<AdapterFactory>(AdapterFactory::class.java)
 
     private val isCustomPeersEnabled = service.blockchain.type == BlockchainType.Dash
 

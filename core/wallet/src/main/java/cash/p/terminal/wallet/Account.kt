@@ -181,6 +181,13 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    data class MnemonicMonero(
+        val words: List<String>,
+        val password: String,
+        val walletInnerName: String
+    ) : AccountType()
+
+    @Parcelize
     data class EvmPrivateKey(val key: BigInteger) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is EvmPrivateKey && key == other.key
@@ -262,6 +269,7 @@ sealed class AccountType : Parcelable {
             is EvmPrivateKey -> "EVM Private Key"
             is ZCashUfvKey -> "ZCash UFV Key"
             is HardwareCard -> "Hardware card"
+            is MnemonicMonero -> "Monero Wallet"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master -> "BIP32 Root Key"

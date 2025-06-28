@@ -80,6 +80,7 @@ data object Wallet2CardConfig : CardConfig {
             BlockchainType.Ton -> EllipticCurve.Ed25519Slip0010
             BlockchainType.Base -> EllipticCurve.Secp256k1
             BlockchainType.Zcash,
+            BlockchainType.Monero,
             is BlockchainType.Unsupported -> null
         }
     }

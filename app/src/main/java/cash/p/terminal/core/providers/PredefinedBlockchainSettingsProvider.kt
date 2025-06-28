@@ -3,6 +3,7 @@ package cash.p.terminal.core.providers
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
+import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.entities.BlockchainType
 
 class PredefinedBlockchainSettingsProvider(
@@ -10,7 +11,7 @@ class PredefinedBlockchainSettingsProvider(
     private val zcashBirthdayProvider: ZcashBirthdayProvider
 ) {
 
-    fun prepareNew(account: cash.p.terminal.wallet.Account, blockchainType: BlockchainType) {
+    fun prepareNew(account: Account, blockchainType: BlockchainType) {
         val settings = RestoreSettings()
         when (blockchainType) {
             BlockchainType.Zcash -> {

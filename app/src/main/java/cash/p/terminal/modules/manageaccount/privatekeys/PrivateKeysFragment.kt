@@ -33,7 +33,7 @@ class PrivateKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account = navController.getInput<cash.p.terminal.wallet.Account>()
+        val account = navController.getInput<Account>()
         if (account == null) {
             Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
             navController.popBackStack()

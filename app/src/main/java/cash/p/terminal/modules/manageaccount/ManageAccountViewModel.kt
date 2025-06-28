@@ -80,6 +80,8 @@ class ManageAccountViewModel(
 
             KeyAction.RecoveryPhrase,
             KeyAction.PublicKeys,
+            KeyAction.ViewKey,
+            KeyAction.SpendKey,
             KeyAction.PrivateKeys -> Unit
         }
     }
@@ -103,7 +105,7 @@ class ManageAccountViewModel(
         viewState = viewState.copy(closeScreen = false)
     }
 
-    private fun deleteAccount() {
+    private fun deleteAccount() = viewModelScope.launch {
         accountManager.delete(account.id)
         viewState = viewState.copy(closeScreen = true)
     }
@@ -149,6 +151,12 @@ class ManageAccountViewModel(
                 KeyAction.RecoveryPhrase,
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
+            )
+
+            is AccountType.MnemonicMonero -> listOf(
+                KeyAction.RecoveryPhrase,
+                KeyAction.ViewKey,
+                KeyAction.SpendKey,
             )
 
             is AccountType.EvmPrivateKey -> listOf(

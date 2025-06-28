@@ -305,6 +305,10 @@ class AdapterFactory(
                     )
                 }
 
+                BlockchainType.Monero -> {
+
+                }
+
                 else -> null
             }
 

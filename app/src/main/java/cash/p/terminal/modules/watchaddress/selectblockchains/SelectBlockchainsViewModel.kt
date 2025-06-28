@@ -37,6 +37,7 @@ class SelectBlockchainsViewModel(
             is AccountType.Cex,
             is AccountType.Mnemonic,
             is AccountType.HardwareCard,
+            is AccountType.MnemonicMonero,
             is AccountType.EvmPrivateKey -> Unit // N/A
 
             is AccountType.EvmAddress -> {

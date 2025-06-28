@@ -10,6 +10,7 @@ import io.horizontalsystems.tronkit.toBigInteger
 
 object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
+    private const val MNEMONIC_MONERO = "mnemonic_monero"
     private const val PRIVATE_KEY = "private_key"
     private const val ADDRESS = "evm_address"
     private const val SOLANA_ADDRESS = "solana_address"
@@ -71,6 +72,7 @@ object BackupLocalModule {
 
     fun getAccountTypeString(accountType: AccountType): String = when (accountType) {
         is AccountType.Mnemonic -> MNEMONIC
+        is AccountType.MnemonicMonero -> MNEMONIC_MONERO
         is AccountType.EvmPrivateKey -> PRIVATE_KEY
         is AccountType.EvmAddress -> ADDRESS
         is AccountType.SolanaAddress -> SOLANA_ADDRESS
@@ -121,6 +123,16 @@ object BackupLocalModule {
         is AccountType.Mnemonic -> {
             val passphrasePart = if (accountType.passphrase.isNotBlank()) {
                 "@" + accountType.passphrase
+            } else {
+                ""
+            }
+            val combined = accountType.words.joinToString(" ") + passphrasePart
+            combined.toByteArray(Charsets.UTF_8)
+        }
+
+        is AccountType.MnemonicMonero -> {
+            val passphrasePart = if (accountType.password.isNotBlank()) {
+                "@" + accountType.password
             } else {
                 ""
             }

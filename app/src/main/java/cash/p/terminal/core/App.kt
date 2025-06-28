@@ -98,6 +98,9 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.m2049r.levin.util.NetCipherHelper
+import com.m2049r.levin.util.NetCipherHelper.OnStatusChangedListener
+import com.m2049r.xmrwallet.model.WalletManager
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
@@ -122,6 +125,7 @@ import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.java.KoinJavaComponent.inject
+import timber.log.Timber
 import java.security.MessageDigest
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -207,6 +211,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             androidContext(this@App)
             modules(appModule)
         }
+
+        // For Monero
+        initCipherForMonero()
 
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
@@ -378,6 +385,33 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled =
             localStorage.shareCrashDataEnabled
+    }
+
+    private fun initCipherForMonero() {
+        NetCipherHelper.createInstance(this@App)
+        val cipherTag = "NetCipherHelper"
+        NetCipherHelper.register(object : OnStatusChangedListener {
+            override fun connected() {
+                Timber.tag(cipherTag).d("CONNECTED")
+                WalletManager.getInstance().setProxy(NetCipherHelper.getProxy())
+            }
+
+            override fun disconnected() {
+                Timber.tag(cipherTag).d("DISCONNECTED")
+                WalletManager.getInstance().setProxy("")
+            }
+
+            override fun notInstalled() {
+                Timber.tag(cipherTag).d("NOT INSTALLED")
+                WalletManager.getInstance().setProxy("")
+            }
+
+            override fun notEnabled() {
+                Timber.tag(cipherTag).d("NOT ENABLED")
+                notInstalled()
+            }
+        })
+
     }
 
     override fun newImageLoader(): ImageLoader {

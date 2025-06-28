@@ -12,6 +12,7 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import com.m2049r.xmrwallet.model.Wallet
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
@@ -126,6 +127,7 @@ class AddressHandlerUdn(
             BlockchainType.Ton -> "TON"
             BlockchainType.Cosanta -> "COSA"
             BlockchainType.PirateCash -> "PIRATECASH"
+            BlockchainType.Monero -> "XMR"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
@@ -243,6 +245,18 @@ class AddressHandlerSolana : IAddressHandler {
         return Address(value, blockchainType = blockchainType)
     }
 
+}
+
+class AddressHandlerMonero : IAddressHandler {
+    override fun isSupported(value: String): Boolean {
+        return Wallet.isAddressValid(value)
+    }
+
+    override val blockchainType = BlockchainType.Monero
+
+    override fun parseAddress(value: String): Address {
+        return Address(value, blockchainType = blockchainType)
+    }
 }
 
 class AddressHandlerZcash : IAddressHandler {

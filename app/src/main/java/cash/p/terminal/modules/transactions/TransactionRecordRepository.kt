@@ -93,6 +93,7 @@ class TransactionRecordRepository(
                 BlockchainType.PirateCash,
                 BlockchainType.Cosanta,
                 BlockchainType.Dash,
+                BlockchainType.Monero,
                 BlockchainType.Zcash -> mergedWallets.add(wallet)
 
                 BlockchainType.Ethereum,

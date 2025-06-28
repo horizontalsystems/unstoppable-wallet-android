@@ -60,6 +60,7 @@ object DerivationConfigV2 : DerivationConfig() {
 
             BlockchainType.ECash,
             BlockchainType.Zcash,
+            BlockchainType.Monero,
             is BlockchainType.Unsupported ->
                 throw IllegalArgumentException("Unsupported blockchain type: $blockchainType")
         }.mapValues {

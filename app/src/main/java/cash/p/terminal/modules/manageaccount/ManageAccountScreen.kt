@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -28,7 +27,9 @@ import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
+import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment
+import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment.Input
 import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -246,7 +247,7 @@ private fun KeyActions(
                     ) {
                         navController.slideFromBottomForResult<ResetToFactorySettingsFragment.Result>(
                             resId = R.id.resetToFactorySettingsFragment,
-                            input = ResetToFactorySettingsFragment.Input(account)
+                            input = Input(account)
                         ) {
                             if (it.success) {
                                 onActionClick(keyAction)
@@ -285,6 +286,28 @@ private fun KeyActions(
                         icon = painterResource(id = R.drawable.icon_warning_2_20)
                     ) {
                         onActionClick(keyAction)
+                    }
+                }
+            }
+
+            KeyAction.ViewKey -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.view_key),
+                        icon = painterResource(id = R.drawable.icon_binocule_20)
+                    ) {
+
+                    }
+                }
+            }
+
+            KeyAction.SpendKey -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.spend_key),
+                        icon = painterResource(id = R.drawable.icon_paper_contract_20)
+                    ) {
+
                     }
                 }
             }

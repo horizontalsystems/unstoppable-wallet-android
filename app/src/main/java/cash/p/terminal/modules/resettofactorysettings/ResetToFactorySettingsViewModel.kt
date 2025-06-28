@@ -1,7 +1,9 @@
 package cash.p.terminal.modules.resettofactorysettings
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.tangem.domain.TangemConfig
@@ -33,6 +35,9 @@ internal class ResetToFactorySettingsViewModel(
 
     private val _errorEvents = Channel<HardwareWalletError>(capacity = 1)
     val errorEvents = _errorEvents.receiveAsFlow()
+
+    var closeScreen by mutableStateOf(false)
+        private set
 
     var account: Account? = null
         set(value) {
@@ -96,8 +101,9 @@ internal class ResetToFactorySettingsViewModel(
         }
     }
 
-    fun deleteAccount() {
+    fun deleteAccount() = viewModelScope.launch {
         accountManager.delete(account!!.id)
+        closeScreen = true
     }
 
     private fun handleTangemError(error: TangemError) {

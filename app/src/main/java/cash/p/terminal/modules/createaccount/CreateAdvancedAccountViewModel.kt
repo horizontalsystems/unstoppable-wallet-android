@@ -4,14 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
-import cash.p.terminal.ui_compose.entities.DataState
+import cash.p.terminal.core.usecase.GenerateMoneroWalletUseCase
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
 import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
@@ -22,6 +24,8 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.normalizeNFKD
 import io.horizontalsystems.core.entities.BlockchainType
+import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 
 class CreateAdvancedAccountViewModel(
     private val accountFactory: IAccountFactory,
@@ -35,7 +39,11 @@ class CreateAdvancedAccountViewModel(
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
-    val mnemonicKinds = CreateAccountModule.Kind.values().toList()
+    val mnemonicKinds = CreateAccountModule.Kind.entries
+
+    private val generateMoneroWalletUseCase: GenerateMoneroWalletUseCase by inject(
+        GenerateMoneroWalletUseCase::class.java
+    )
 
     val defaultAccountName = accountFactory.getNextAccountName()
     var accountName: String = defaultAccountName
@@ -43,6 +51,9 @@ class CreateAdvancedAccountViewModel(
         private set
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
+        private set
+
+    var showPassphraseBlock by mutableStateOf(true)
         private set
 
     var passphraseEnabled by mutableStateOf(false)
@@ -57,12 +68,18 @@ class CreateAdvancedAccountViewModel(
     var success by mutableStateOf<AccountType?>(null)
         private set
 
-    fun createMnemonicAccount() {
-        if (passphraseEnabled && passphraseIsInvalid()) {
-            return
+    fun createMnemonicAccount() = viewModelScope.launch {
+        if (showPassphraseBlock && passphraseEnabled && passphraseIsInvalid()) {
+            return@launch
         }
 
-        val accountType = mnemonicAccountType(selectedKind.wordsCount)
+        val accountType =
+            if (selectedKind.wordsCount == CreateAccountModule.Kind.Mnemonic25.wordsCount) {
+                generateMoneroWalletUseCase()
+            } else {
+                mnemonicAccountType(selectedKind.wordsCount)
+            } ?: return@launch
+
         val account = accountFactory.account(
             name = accountName,
             type = accountType,
@@ -73,7 +90,13 @@ class CreateAdvancedAccountViewModel(
 
         accountManager.save(account)
         activateDefaultWallets(account)
-        predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
+
+        // Skip birthdayHeight calculation for ZCash for tangem and monero accounts
+        if (accountType !is AccountType.MnemonicMonero &&
+            accountType !is AccountType.HardwareCard
+        ) {
+            predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
+        }
         success = accountType
     }
 
@@ -101,6 +124,7 @@ class CreateAdvancedAccountViewModel(
 
     fun setMnemonicKind(kind: CreateAccountModule.Kind) {
         selectedKind = kind
+        showPassphraseBlock = kind != CreateAccountModule.Kind.Mnemonic25
     }
 
     fun setPassphraseEnabledState(enabled: Boolean) {
@@ -139,10 +163,14 @@ class CreateAdvancedAccountViewModel(
         return false
     }
 
-    private fun activateDefaultWallets(
-        account: Account,
-        tokenQueries: List<TokenQuery> = getDefaultTokens()
-    ) = walletActivator.activateWallets(account, tokenQueries)
+    private suspend fun activateDefaultWallets(account: Account) {
+        val tokenQueries = if (account.type is AccountType.MnemonicMonero) {
+            listOf(TokenQuery(BlockchainType.Monero, TokenType.Native))
+        } else {
+            getDefaultTokens()
+        }
+        walletActivator.activateWalletsSuspended(account, tokenQueries)
+    }
 
     private fun getDefaultTokens() = listOfNotNull(
         TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),

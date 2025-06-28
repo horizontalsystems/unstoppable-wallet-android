@@ -11,6 +11,7 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.LocalStorageManager
+import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
@@ -25,6 +26,7 @@ import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.managers.ITransactionHiddenManager
+import com.m2049r.xmrwallet.service.MoneroWalletService
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CurrencyManager
 import org.koin.core.module.dsl.factoryOf
@@ -52,6 +54,10 @@ val managerModule = module {
     singleOf(::RestoreSettingsManager)
     singleOf(::EvmLabelManager)
     factoryOf(::SolanaWalletManager)
+
+    singleOf(::MoneroKitManager)
+    singleOf(::MoneroWalletService)
+
     singleOf(::TransactionAdapterManager)
     singleOf(::TransactionSyncStateRepository)
     singleOf(::BalanceHiddenManager) bind IBalanceHiddenManager::class

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
@@ -20,18 +21,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.requireInput
+import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
+import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.subhead2_leah
-import cash.p.terminal.ui_compose.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.requireInput
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -46,7 +49,7 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
 
-                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+                ComposeAppTheme {
                     UnlinkAccountScreen(navController, navController.requireInput())
                 }
             }
@@ -62,6 +65,13 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
     val confirmations = viewModel.confirmations
     val unlinkEnabled = viewModel.unlinkEnabled
     val deleteWarningMsg = viewModel.deleteWarningMsg
+
+    LaunchedEffect(viewModel.closeScreen) {
+        if (viewModel.closeScreen) {
+            delay(1000)
+            navController.popBackStack()
+        }
+    }
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_red_24),

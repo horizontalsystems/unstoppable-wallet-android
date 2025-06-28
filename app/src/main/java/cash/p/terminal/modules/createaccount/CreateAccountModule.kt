@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.PassphraseValidator
-import org.koin.compose.koinInject
 
 object CreateAccountModule {
 
@@ -32,7 +32,8 @@ object CreateAccountModule {
         Mnemonic15(15),
         Mnemonic18(18),
         Mnemonic21(21),
-        Mnemonic24(24);
+        Mnemonic24(24),
+        Mnemonic25(25);
 
         val title = cash.p.terminal.strings.helpers.Translator.getString(
             R.string.CreateWallet_N_Words,
@@ -40,10 +41,16 @@ object CreateAccountModule {
         )
 
         val titleLong: String
-            get() = if (this == Mnemonic12) cash.p.terminal.strings.helpers.Translator.getString(
-                R.string.CreateWallet_N_WordsRecommended,
-                wordsCount
-            )
-            else title
+            get() = when(this) {
+                Mnemonic12 -> Translator.getString(
+                    R.string.CreateWallet_N_WordsRecommended,
+                    wordsCount
+                )
+                Mnemonic25 -> Translator.getString(
+                    R.string.CreateWallet_N_Words_monero,
+                    wordsCount
+                )
+                else -> title
+            }
     }
 }

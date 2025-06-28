@@ -27,5 +27,5 @@ val walletFeatureModule = module {
 
     singleOf(::GetHardwarePublicKeyForWalletUseCase)
 
-    includes(mappersModule)
+    includes(mappersModule, useCasesModule)
 }

@@ -7,9 +7,8 @@ import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.entities.BlockchainType
 
-class AppConfigProvider(localStorage: ILocalStorage) {
+class AppConfigProvider {
 
-    val appId by lazy { localStorage.appId }
     val appVersion by lazy { BuildConfig.VERSION_NAME }
     val appBuild by lazy { BuildConfig.VERSION_CODE }
     val companyWebPageLink by lazy { Translator.getString(R.string.companyWebPageLink) }
@@ -106,7 +105,6 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     }
 
     val fiatDecimal: Int = 2
-    val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
     val currencies: List<Currency> = listOf(
         Currency("AUD", "A$", 2, R.drawable.icon_32_flag_australia),
@@ -156,5 +154,4 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2"
         ).toList().sortedBy { it.first.uid }.toMap()
     }
-
 }

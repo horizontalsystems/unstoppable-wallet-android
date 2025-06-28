@@ -54,6 +54,10 @@ class AddressParserChain(
                     addressParserChain.addHandler(AddressHandlerEvm(tokenQuery.blockchainType))
                 }
 
+                BlockchainType.Monero -> {
+                    addressParserChain.addHandler(AddressHandlerMonero())
+                }
+
                 BlockchainType.Solana -> {
                     addressParserChain.addHandler(AddressHandlerSolana())
                 }

@@ -8,6 +8,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 fun BlockchainType.getSupportedCurves(): List<EllipticCurve> {
     return when (this) {
         BlockchainType.Zcash,
+        BlockchainType.Monero,
         is BlockchainType.Unsupported -> emptyList()
         /*Tezos,
             -> listOf(
@@ -56,33 +57,5 @@ internal fun BlockchainType.preparePublicKeyByType(data: ByteArray): ByteArray {
         EllipticCurve.Secp256k1 -> data.toCompressedPublicKey()
 //        PublicKeyType.SECP256K1EXTENDED -> data.toDecompressedPublicKey()
         else -> data
-    }
-}
-
-fun BlockchainType.getCoinTypeString(): String {
-    return when (this) {
-        BlockchainType.Bitcoin -> "0'"
-        BlockchainType.BitcoinCash -> "145'"
-        BlockchainType.ECash -> "145'"
-        BlockchainType.Litecoin -> "2'"
-        BlockchainType.Dogecoin -> "3'"
-        BlockchainType.Dash -> "5'"
-        BlockchainType.Zcash -> "133'"
-        BlockchainType.Ethereum -> "60'"
-        BlockchainType.BinanceSmartChain -> "60'"
-        BlockchainType.Polygon -> "60'"
-        BlockchainType.Avalanche -> "60'"
-        BlockchainType.Optimism -> "60'"
-        BlockchainType.ArbitrumOne -> "60'"
-        BlockchainType.Solana -> "501'"
-        BlockchainType.Gnosis -> "700'"
-        BlockchainType.Fantom -> "60'"
-        BlockchainType.Tron -> "195'"
-        BlockchainType.Ton -> "607'"
-        BlockchainType.Base -> "60'"
-        BlockchainType.ZkSync -> "60'"
-        BlockchainType.Cosanta -> "770'"
-        BlockchainType.PirateCash -> "660'"
-        is BlockchainType.Unsupported -> throw IllegalArgumentException("Unsupported blockchain uid: ${this._uid}")
     }
 }

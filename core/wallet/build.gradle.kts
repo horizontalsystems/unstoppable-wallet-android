@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.ethereum.kit)
     implementation(libs.blockchain.fee.kit)
     implementation(libs.tron.kit)
+    implementation(libs.monero.kit)
     implementation(libs.gson)
 
     implementation(libs.retrofit)

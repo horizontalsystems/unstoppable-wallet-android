@@ -20,7 +20,7 @@ interface IAccountManager {
     fun save(account: Account, updateActive: Boolean = true)
     fun import(accounts: List<Account>)
     fun update(account: Account)
-    fun delete(id: String)
+    suspend fun delete(id: String)
     fun clear()
     fun clearAccounts()
     fun onHandledBackupRequiredNewAccount()

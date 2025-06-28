@@ -40,6 +40,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResultX
+import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -71,6 +72,13 @@ class ResetToFactorySettingsFragment : BaseComposeFragment() {
             }
         }
 
+        LaunchedEffect(viewModel.closeScreen) {
+            if (viewModel.closeScreen) {
+                delay(1000)
+                navController.popBackStack()
+            }
+        }
+
         LaunchedEffect(viewModel.uiState.value.primaryCardWasReset) {
             if (viewModel.uiState.value.primaryCardWasReset) {
                 navController.setNavigationResultX(Result(true))
@@ -80,7 +88,6 @@ class ResetToFactorySettingsFragment : BaseComposeFragment() {
         LaunchedEffect(viewModel.uiState.value.success) {
             if (viewModel.uiState.value.success) {
                 viewModel.deleteAccount()
-                navController.popBackStack()
             }
         }
 
