@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.TronKit
@@ -77,6 +78,15 @@ class TronTransactionsAdapter(
             .asFlowable()
     }
 
+    override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
+        return rxSingle {
+            tronKit.getFullTransactionsAfter(fromTransactionId?.hexStringToByteArrayOrNull())
+                .map {
+                    transactionConverter.transactionRecord(it)
+                }
+        }
+    }
+
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =
         when (syncState) {
             is TronKit.SyncState.Synced -> AdapterState.Synced
@@ -117,10 +127,12 @@ class TronTransactionsAdapter(
                 token != null -> incomingTag(token)
                 else -> TransactionTag.INCOMING
             }
+
             FilterTransactionType.Outgoing -> when {
                 token != null -> outgoingTag(token)
                 else -> TransactionTag.OUTGOING
             }
+
             FilterTransactionType.Swap -> TransactionTag.SWAP
             FilterTransactionType.Approve -> TransactionTag.TRC20_APPROVE
         }

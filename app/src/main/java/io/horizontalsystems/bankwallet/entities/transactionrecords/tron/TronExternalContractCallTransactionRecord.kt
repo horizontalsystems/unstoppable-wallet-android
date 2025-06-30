@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.tron
 
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
@@ -12,15 +11,15 @@ class TronExternalContractCallTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
-    spamManager: SpamManager,
     val incomingEvents: List<TransferEvent>,
-    val outgoingEvents: List<TransferEvent>
+    val outgoingEvents: List<TransferEvent>,
+    spam: Boolean
 ) : TronTransactionRecord(
     transaction = transaction,
     baseToken = baseToken,
     source = source,
     foreignTransaction = true,
-    spam = spamManager.isSpam(incomingEvents, outgoingEvents)
+    spam = spam
 ) {
 
     override val mainValue: TransactionValue?

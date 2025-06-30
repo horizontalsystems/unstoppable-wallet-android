@@ -315,8 +315,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             backgroundManager,
             evmSyncSourceManager,
             marketKit,
-            evmAccountManagerFactory,
-            spamManager
+            evmAccountManagerFactory
         )
 
         val tronAccountManager = TronAccountManager(
