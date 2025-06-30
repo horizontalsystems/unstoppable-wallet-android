@@ -50,7 +50,6 @@ class EvmTransactionConverter(
     private val coinManager: ICoinManager,
     private val evmKitWrapper: EvmKitWrapper,
     private val source: TransactionSource,
-    private val spamManager: SpamManager,
     private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {
@@ -59,7 +58,6 @@ class EvmTransactionConverter(
 
     fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
         val transaction = fullTransaction.transaction
-        val isSpam = spamManager.isSpam(transaction.hash)
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
             is ContractCreationDecoration -> {
@@ -67,19 +65,41 @@ class EvmTransactionConverter(
             }
 
             is IncomingDecoration -> {
-                EvmIncomingTransactionRecord(transaction, baseToken, source, decoration.from.eip55, baseCoinValue(decoration.value, false), isSpam)
+                val transactionValue = baseCoinValue(decoration.value, false)
+                val isSpam = SpamManager.isSpam(listOf(TransferEvent(decoration.from.eip55, transactionValue)))
+                EvmIncomingTransactionRecord(transaction, baseToken, source, decoration.from.eip55, transactionValue, isSpam)
             }
 
             is OutgoingDecoration -> {
-                EvmOutgoingTransactionRecord(transaction, baseToken, source, decoration.to.eip55, baseCoinValue(decoration.value, true), decoration.sentToSelf)
+                EvmOutgoingTransactionRecord(
+                    transaction,
+                    baseToken,
+                    source,
+                    decoration.to.eip55,
+                    baseCoinValue(decoration.value, true),
+                    decoration.sentToSelf
+                )
             }
 
             is OutgoingEip20Decoration -> {
-                EvmOutgoingTransactionRecord(transaction, baseToken, source, decoration.to.eip55, getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo), decoration.sentToSelf)
+                EvmOutgoingTransactionRecord(
+                    transaction,
+                    baseToken,
+                    source,
+                    decoration.to.eip55,
+                    getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo),
+                    decoration.sentToSelf
+                )
             }
 
             is ApproveEip20Decoration -> {
-                ApproveTransactionRecord(transaction, baseToken, source, decoration.spender.eip55, getEip20Value(decoration.contractAddress, decoration.value, false))
+                ApproveTransactionRecord(
+                    transaction,
+                    baseToken,
+                    source,
+                    decoration.spender.eip55,
+                    getEip20Value(decoration.contractAddress, decoration.value, false)
+                )
             }
 
             is SwapDecoration -> {
@@ -169,38 +189,40 @@ class EvmTransactionConverter(
                 val contractAddress = transaction.to
                 val value = transaction.value
 
+                val incomingEvents = getInternalEvents(internalTransactions) +
+                        getIncomingEip20Events(incomingEip20Transfers) +
+                        getIncomingEip721Events(incomingEip721Transfers) +
+                        getIncomingEip1155Events(incomingEip1155Transfers)
+
+                val outgoingEvents = getOutgoingEip20Events(outgoingEip20Transfers) +
+                        getOutgoingEip721Events(outgoingEip721Transfers) +
+                        getOutgoingEip1155Events(outgoingEip1155Transfers)
+
                 when {
                     transaction.from == address && contractAddress != null && value != null -> {
                         ContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.eip55,
                             transaction.input?.let { evmLabelManager.methodLabel(it) },
-                            getInternalEvents(internalTransactions) +
-                                    getIncomingEip20Events(incomingEip20Transfers) +
-                                    getIncomingEip721Events(incomingEip721Transfers) +
-                                    getIncomingEip1155Events(incomingEip1155Transfers),
-                            getTransactionValueEvents(transaction) +
-                                    getOutgoingEip20Events(outgoingEip20Transfers) +
-                                    getOutgoingEip721Events(outgoingEip721Transfers) +
-                                    getOutgoingEip1155Events(outgoingEip1155Transfers)
+                            incomingEvents,
+                            getTransactionValueEvents(transaction) + outgoingEvents
                         )
                     }
+
                     transaction.from != address && transaction.to != address -> {
+                        val isSpam = SpamManager.isSpam(incomingEvents + outgoingEvents)
                         ExternalContractCallTransactionRecord(
                             transaction, baseToken, source,
-                            getInternalEvents(internalTransactions) +
-                                    getIncomingEip20Events(incomingEip20Transfers) +
-                                    getIncomingEip721Events(incomingEip721Transfers) +
-                                    getIncomingEip1155Events(incomingEip1155Transfers),
-                            getOutgoingEip20Events(outgoingEip20Transfers) +
-                                    getOutgoingEip721Events(outgoingEip721Transfers) +
-                                    getOutgoingEip1155Events(outgoingEip1155Transfers),
+                            incomingEvents,
+                            outgoingEvents,
                             isSpam
                         )
                     }
+
                     else -> null
                 }
             }
+
             else -> null
         }
 
@@ -234,6 +256,7 @@ class EvmTransactionConverter(
             token != null -> {
                 TransactionValue.CoinValue(token, convertAmount(amount, token.decimals, negative))
             }
+
             tokenInfo != null -> {
                 TransactionValue.TokenValue(
                     tokenName = tokenInfo.tokenName,
@@ -243,6 +266,7 @@ class EvmTransactionConverter(
                     coinIconPlaceholder = evmKitWrapper.blockchainType.tokenIconPlaceholder
                 )
             }
+
             else -> {
                 TransactionValue.RawValue(value = amount)
             }
@@ -254,6 +278,7 @@ class EvmTransactionConverter(
             SwapDecoration.Token.EvmCoin -> {
                 baseCoinValue(amount, negative)
             }
+
             is SwapDecoration.Token.Eip20Coin -> {
                 getEip20Value(token.address, amount, negative, token.tokenInfo)
             }
@@ -265,6 +290,7 @@ class EvmTransactionConverter(
             OneInchDecoration.Token.EvmCoin -> {
                 baseCoinValue(amount, negative)
             }
+
             is OneInchDecoration.Token.Eip20Coin -> {
                 getEip20Value(token.address, amount, negative, token.tokenInfo)
             }
