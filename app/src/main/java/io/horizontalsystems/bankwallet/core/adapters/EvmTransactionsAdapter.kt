@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
@@ -12,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -29,7 +29,7 @@ class EvmTransactionsAdapter(
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, App.spamManager, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseToken, evmLabelManager)
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
@@ -66,6 +66,12 @@ class EvmTransactionsAdapter(
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
+            it.map { tx -> transactionConverter.transactionRecord(tx) }
+        }
+    }
+
+    override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
+        return evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull()).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -108,10 +114,12 @@ class EvmTransactionsAdapter(
                 token != null -> TransactionTag.tokenIncoming(coinTagName(token))
                 else -> TransactionTag.INCOMING
             }
+
             FilterTransactionType.Outgoing -> when {
                 token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
                 else -> TransactionTag.OUTGOING
             }
+
             FilterTransactionType.Swap -> TransactionTag.SWAP
             FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
         }

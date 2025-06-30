@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
+import java.math.BigDecimal
 
 class AppConfigProvider(localStorage: ILocalStorage) {
 
@@ -182,13 +183,13 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     }
 
     // coinCode -> min value
-    val spamCoinValueLimits: Map<String, Double> = mapOf(
-        "USDT" to 0.01,
-        "USDC" to 0.01,
-        "DAI" to 0.01,
-        "BUSD" to 0.01,
-        "EURS" to 0.01,
-        "BSC-USD" to 0.01
+    val spamCoinValueLimits: Map<String, BigDecimal> = mapOf(
+        "USDT" to BigDecimal("0.01"),
+        "USDC" to BigDecimal("0.01"),
+        "DAI" to BigDecimal("0.01"),
+        "BUSD" to BigDecimal("0.01"),
+        "EURS" to BigDecimal("0.01"),
+        "BSC-USD" to BigDecimal("0.01")
     )
 
     val chainalysisBaseUrl by lazy {

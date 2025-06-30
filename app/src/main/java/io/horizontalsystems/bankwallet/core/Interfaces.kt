@@ -272,6 +272,10 @@ interface ITransactionsAdapter {
         address: String?,
     ): Single<List<TransactionRecord>>
 
+    fun getTransactionsAfter(
+        fromTransactionId: String?
+    ): Single<List<TransactionRecord>> = Single.just(emptyList())
+
     fun getRawTransaction(transactionHash: String): String? = null
 
     fun getTransactionRecordsFlowable(

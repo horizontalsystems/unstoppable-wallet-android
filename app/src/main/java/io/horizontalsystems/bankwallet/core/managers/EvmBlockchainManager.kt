@@ -38,7 +38,7 @@ class EvmBlockchainManager(
 
         evmKitManagersMap[blockchainType] = pair
 
-        spamManager.subscribeToKitStart(evmKitManager, blockchainType)
+//        spamManager.subscribeToKitStart(evmKitManager, blockchainType)
 
         return pair
     }
