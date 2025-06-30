@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.factories
 
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
@@ -25,6 +26,10 @@ class TransferEventFactory {
 
             is TronIncomingTransactionRecord -> {
                 listOf(TransferEvent(transactionRecord.from, transactionRecord.value))
+            }
+
+            is StellarTransactionRecord -> {
+                StellarTransactionRecord.eventsForPhishingCheck(transactionRecord.type)
             }
 
             else -> {

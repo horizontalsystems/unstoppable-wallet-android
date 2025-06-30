@@ -528,7 +528,8 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             sentToSelf = sentToSelf,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: iconX
+            icon = icon ?: iconX,
+            spam = record.spam
         )
     }
 

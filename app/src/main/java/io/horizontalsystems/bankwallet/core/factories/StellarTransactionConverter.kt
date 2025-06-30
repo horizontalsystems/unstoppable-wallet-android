@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.factories
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord.Type
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -48,6 +49,7 @@ class StellarTransactionConverter(
                         accountCreated = false,
                     )
                 }
+
                 incoming -> {
                     type = Type.Receive(
                         value = transactionValue,
@@ -80,6 +82,7 @@ class StellarTransactionConverter(
                         accountCreated = true
                     )
                 }
+
                 incoming -> {
                     type = Type.Receive(
                         value = transactionValue,
@@ -113,7 +116,10 @@ class StellarTransactionConverter(
             )
         }
 
-        return StellarTransactionRecord(baseToken, source, operation, type)
+        val eventsForPhishingCheck = StellarTransactionRecord.eventsForPhishingCheck(type)
+        val spam = SpamManager.isSpam(eventsForPhishingCheck)
+
+        return StellarTransactionRecord(baseToken, source, operation, type, spam)
     }
 
     private fun getToken(asset: StellarAsset): Token? {

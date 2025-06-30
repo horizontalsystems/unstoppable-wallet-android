@@ -191,6 +191,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         "EURS" to BigDecimal("0.01"),
         "BSC-USD" to BigDecimal("0.01"),
         "TRX" to BigDecimal("10"),
+        "XLM" to BigDecimal("0.01"),
     )
 
     val chainalysisBaseUrl by lazy {
