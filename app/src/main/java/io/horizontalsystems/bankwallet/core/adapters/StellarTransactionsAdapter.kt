@@ -52,7 +52,7 @@ class StellarTransactionsAdapter(
         val beforeId = (from as StellarTransactionRecord?)?.operation?.id
 
         rxSingle {
-            stellarKit.operations(tagQuery, beforeId = beforeId, limit = limit)
+            stellarKit.operationsBefore(tagQuery, fromId = beforeId, limit = limit)
                 .map {
                     transactionConverter.convert(it)
                 }
@@ -63,7 +63,7 @@ class StellarTransactionsAdapter(
 
     override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
         return rxSingle {
-            stellarKit.operationsAfter(fromTransactionId?.toLongOrNull(), 10000)
+            stellarKit.operationsAfter(TagQuery(null, null, null), fromTransactionId?.toLongOrNull(), 10000)
                 .map {
                     transactionConverter.convert(it)
                 }
