@@ -4,15 +4,15 @@ buildscript {
     ext {
         compile_sdk_version = 35
         min_sdk_version = 27
-        lifecycle_version = '2.8.7'
+        lifecycle_version = '2.9.1'
 
-        compose_version = '1.7.5'
+        compose_version = '1.8.3'
         kotlin_version = '2.1.20'
         material_version = "1.12.0"
-        appcompat_version = "1.7.0"
-        constraint_version = "2.2.0"
+        appcompat_version = "1.7.1"
+        constraint_version = "2.2.1"
         core_ktx_version = "1.15.0"
-        fragment_ktx_version = "1.8.5"
+        fragment_ktx_version = "1.8.8"
         navigation_ktx_version = "2.8.4"
         rxjava_version = "2.2.19"
         biometric_version = "1.1.0"
