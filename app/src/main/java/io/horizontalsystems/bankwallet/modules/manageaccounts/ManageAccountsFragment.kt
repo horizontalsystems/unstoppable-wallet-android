@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
@@ -157,7 +157,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 }
             )
             Column(modifier = Modifier.weight(1f)) {
-                body_leah(text = accountViewItem.title)
+                headline2_leah(text = accountViewItem.title)
                 if (accountViewItem.backupRequired) {
                     subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
                 } else if (accountViewItem.migrationRequired) {

@@ -333,7 +333,7 @@ fun CellFooterPreview() {
 @Composable
 fun RowUniversal(
     modifier: Modifier = Modifier,
-    verticalPadding: Dp = 12.dp,
+    verticalPadding: Dp = 16.dp,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     onClick: (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit,

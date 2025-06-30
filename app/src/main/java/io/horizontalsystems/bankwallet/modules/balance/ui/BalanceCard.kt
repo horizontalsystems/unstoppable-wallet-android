@@ -41,9 +41,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.diffText
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
@@ -148,7 +148,7 @@ fun BalanceCardInner(
                         modifier = Modifier.weight(weight = 1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        body_leah(
+                        headline2_leah(
                             text = viewItem.wallet.coin.code,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis

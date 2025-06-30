@@ -141,7 +141,7 @@ fun MarketCoinFirstRow(
                 SignalBadge(advice)
             }
         }
-        body_leah(
+        headline2_leah(
             text = value ?: "n/a",
             maxLines = 1,
         )

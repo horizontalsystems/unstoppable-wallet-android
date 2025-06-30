@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class SetDuressPinIntroFragment : BaseComposeFragment() {
@@ -137,7 +137,7 @@ private fun NotesCell(icon: Painter, title: String, description: String, borderT
             )
             HSpacer(width = 16.dp)
             Column {
-                body_leah(text = title)
+                headline2_leah(text = title)
                 VSpacer(height = 1.dp)
                 subhead2_grey(text = description)
             }

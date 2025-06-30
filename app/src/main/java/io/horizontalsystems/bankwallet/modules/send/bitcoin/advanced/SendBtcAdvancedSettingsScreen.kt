@@ -52,6 +52,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
@@ -304,7 +305,7 @@ private fun BottomSheetTransactionOrderSelector(
             ) {
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
-                    body_leah(text = stringResource(item.mode.title))
+                    headline2_leah(text = stringResource(item.mode.title))
                     subhead2_grey(text = stringResource(item.mode.description))
                 }
                 Box(

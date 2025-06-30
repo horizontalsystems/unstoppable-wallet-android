@@ -63,7 +63,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -333,7 +333,7 @@ fun RpcCell(
                     else -> stringResource(id = R.string.WalletConnect_Unnamed)
                 }
 
-                body_leah(
+                headline2_leah(
                     text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
