@@ -199,6 +199,9 @@
         android:id="@+id/markdownFragment"
         android:name="cash.p.terminal.modules.markdown.MarkdownFragment"/>
     <fragment
+        android:id="@+id/markdownLocalFragment"
+        android:name="cash.p.terminal.modules.markdown.localreader.MarkdownLocalFragment"/>
+    <fragment
         android:id="@+id/addTokenFragment"
         android:name="cash.p.terminal.modules.addtoken.AddTokenFragment"/>
     <fragment

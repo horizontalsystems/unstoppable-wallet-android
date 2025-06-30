@@ -5,10 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.INetworkManager
+import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.providers.AppConfigProvider
+import cash.p.terminal.domain.usecase.GetReleaseNotesUseCase
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.markdown.MarkdownBlock
 import cash.p.terminal.modules.markdown.MarkdownVisitorBlock
@@ -16,15 +17,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
-import java.net.URL
 
 class ReleaseNotesViewModel(
-    private val networkManager: INetworkManager,
-    private val contentUrl: String,
-    private val connectivityManager: ConnectivityManager,
-    private val releaseNotesManager: ReleaseNotesManager,
-    appConfigProvider: AppConfigProvider
+    private val getReleaseNotesUseCase: GetReleaseNotesUseCase,
 ) : ViewModel() {
+
+    private val connectivityManager: ConnectivityManager = App.connectivityManager
+    private val appConfigProvider: AppConfigProvider = App.appConfigProvider
+    private val releaseNotesManager: ReleaseNotesManager = App.releaseNotesManager
 
     val twitterUrl = appConfigProvider.appTwitterLink
     val telegramUrl = appConfigProvider.appTelegramLink
@@ -60,7 +60,7 @@ class ReleaseNotesViewModel(
     private fun loadContent() {
         viewModelScope.launch {
             try {
-                val content = getContent()
+                val content = getReleaseNotesUseCase()
                 markdownBlocks = getMarkdownBlocks(content)
                 viewState = ViewState.Success
             } catch (e: Exception) {
@@ -78,16 +78,5 @@ class ReleaseNotesViewModel(
         document.accept(markdownVisitor)
 
         return markdownVisitor.blocks + MarkdownBlock.Footer()
-    }
-
-    private suspend fun getContent(): String {
-        val url = URL(contentUrl)
-        val releaseNotesJsonObject =
-            networkManager.getReleaseNotes("${url.protocol}://${url.host}", contentUrl)
-
-        return when {
-            releaseNotesJsonObject.has("body") -> releaseNotesJsonObject.asJsonObject["body"].asString
-            else -> ""
-        }
     }
 }

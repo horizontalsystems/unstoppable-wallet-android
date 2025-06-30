@@ -77,7 +77,6 @@ interface IRandomProvider {
 
 interface INetworkManager {
     suspend fun getMarkdown(host: String, path: String): String
-    suspend fun getReleaseNotes(host: String, path: String): JsonObject
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(
         host: String,

@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.markdown.MarkdownContent
@@ -31,17 +30,20 @@ import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.caption_jacob
-import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.getInput
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReleaseNotesFragment : BaseComposeFragment() {
+    private val viewModel: ReleaseNotesViewModel by viewModel()
 
     @Composable
     override fun GetContent(navController: NavController) {
         ReleaseNotesScreen(
             closeablePopup = navController.getInput<Input>()?.showAsClosablePopup ?: false,
             onCloseClick = { navController.popBackStack() },
+            viewModel = viewModel
         )
     }
 
@@ -53,7 +55,7 @@ class ReleaseNotesFragment : BaseComposeFragment() {
 fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
-    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory())
+    viewModel: ReleaseNotesViewModel
 ) {
     BackHandler() {
         viewModel.whatsNewShown()

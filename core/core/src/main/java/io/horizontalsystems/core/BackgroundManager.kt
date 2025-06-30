@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.WeakHashMap
 import java.util.concurrent.Executors
-import kotlin.reflect.KClass
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
@@ -24,12 +23,11 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         application.registerActivityLifecycleCallbacks(this)
     }
 
-    private val activities = WeakHashMap<KClass<out Activity>, AppCompatActivity>()
+    private val activities = WeakHashMap<Activity, AppCompatActivity>()
 
     val currentActivity: AppCompatActivity?
-        get() = activities.entries
-            .firstOrNull { it.value?.isDestroyed == false }
-            ?.value
+        get() = activities.values
+            .firstOrNull { it?.isDestroyed == false }
 
     private var foregroundActivityCount: Int = 0
     private var aliveActivityCount: Int = 0
@@ -71,13 +69,13 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
             }
         }
 
-        activities.remove(activity::class)
+        activities.remove(activity)
     }
 
     override fun onActivityPaused(p0: Activity) = Unit
 
     override fun onActivityResumed(activity: Activity) {
-        activities[activity::class] = activity as? AppCompatActivity
+        activities[activity] = activity as? AppCompatActivity
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit

@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import androidx.annotation.StringRes
 import androidx.navigation.NavController
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
@@ -13,6 +14,7 @@ import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.entities.Faq
 import cash.p.terminal.entities.FaqMap
 import cash.p.terminal.modules.markdown.MarkdownFragment
+import cash.p.terminal.modules.markdown.localreader.MarkdownLocalFragment
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -41,6 +43,13 @@ object FaqManager {
         navController.slideFromBottom(
             R.id.markdownFragment,
             MarkdownFragment.Input(getFaqUrl(path, language), true, true)
+        )
+    }
+
+    fun showFaqPage(navController: NavController, @StringRes resId: Int) {
+        navController.slideFromBottom(
+            R.id.markdownLocalFragment,
+            MarkdownLocalFragment.Input(resId, true)
         )
     }
 

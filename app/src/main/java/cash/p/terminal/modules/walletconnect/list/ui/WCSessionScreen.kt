@@ -99,13 +99,13 @@ fun WCSessionsScreen(
 
     ModalBottomSheetLayout(
         sheetState = invalidUrlBottomSheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             ConfirmationBottomSheet(
                 title = stringResource(R.string.WalletConnect_Title),
                 text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
                 iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-                iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+                iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                 confirmText = stringResource(R.string.Button_TryAgain),
                 cautionType = Caution.Type.Warning,
                 cancelText = stringResource(R.string.Button_Cancel),
@@ -134,7 +134,7 @@ fun WCSessionsScreen(
                             title = TranslatableString.ResString(R.string.Info_Title),
                             icon = R.drawable.ic_info_24,
                             onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
+                                FaqManager.showFaqPage(navController, R.string.WalletConnect_info)
                             }
                         )
                     )

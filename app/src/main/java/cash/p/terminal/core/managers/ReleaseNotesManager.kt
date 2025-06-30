@@ -1,31 +1,22 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
 
 class ReleaseNotesManager(
         private val systemInfoManager: ISystemInfoManager,
-        private val localStorage: ILocalStorage,
-        appConfigProvider: AppConfigProvider
+        private val localStorage: ILocalStorage
 ) {
 
     private val currentAppVersion: String by lazy {
         systemInfoManager.appVersion
     }
 
-    val releaseNotesUrl =
-        "${appConfigProvider.releaseNotesUrl}${Version(currentAppVersion).versionForUrl}"
-
     fun shouldShowChangeLog(): Boolean {
         val shownForVersion = localStorage.changelogShownForAppVersion
 
         if (shownForVersion != null) {
-            return if (Version(currentAppVersion) > Version(shownForVersion)) {
-                true
-            } else {
-                false
-            }
+            return Version(currentAppVersion) > Version(shownForVersion)
         }
 
         //its fresh install, no need to show
@@ -43,17 +34,6 @@ class Version(private val value: String) : Comparable<Version> {
     //Semantic Version: Major/Minor/Patch
 
     private val splitted by lazy { value.split(".").map { it.toIntOrNull() ?: 0 }.toMutableList() }
-
-    val versionForUrl by lazy {
-        //release notes available for version with 0 as patch number
-        //e.g. 0.23.0
-        if (splitted.size >= 3) {
-            "${splitted[0]}.${splitted[1]}.0"
-        } else {
-            value
-        }
-    }
-
 
     //compare only first two numbers, which stands for Major and Minor versions
     override fun compareTo(other: Version): Int {
