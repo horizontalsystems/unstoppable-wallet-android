@@ -61,6 +61,15 @@ class StellarTransactionsAdapter(
         Single.just(listOf())
     }
 
+    override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
+        return rxSingle {
+            stellarKit.operationsAfter(fromTransactionId?.toLongOrNull(), 10000)
+                .map {
+                    transactionConverter.convert(it)
+                }
+        }
+    }
+
     private fun getTagQuery(
         token: Token?,
         transactionType: FilterTransactionType,

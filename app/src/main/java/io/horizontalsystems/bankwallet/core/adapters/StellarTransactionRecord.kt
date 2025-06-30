@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.marketkit.models.Token
@@ -12,6 +13,7 @@ class StellarTransactionRecord(
     source: TransactionSource,
     val operation: Operation,
     val type: Type,
+    spam: Boolean,
 ) : TransactionRecord(
     uid = operation.id.toString(),
     transactionHash = operation.transactionHash,
@@ -20,7 +22,7 @@ class StellarTransactionRecord(
     confirmationsThreshold = null,
     timestamp = operation.timestamp,
     failed = !operation.transactionSuccessful,
-    spam = false,
+    spam = spam,
     source = source,
 ) {
     override val mainValue = type.mainValue
@@ -63,5 +65,18 @@ class StellarTransactionRecord(
         TransactionStatus.Failed
     } else {
         TransactionStatus.Completed
+    }
+
+    companion object {
+        fun eventsForPhishingCheck(type: Type): List<TransferEvent> =
+            when (type) {
+                is Type.Receive -> {
+                    listOf(TransferEvent(type.from, type.value))
+                }
+
+                is Type.ChangeTrust,
+                is Type.Send,
+                is Type.Unsupported -> listOf()
+            }
     }
 }
