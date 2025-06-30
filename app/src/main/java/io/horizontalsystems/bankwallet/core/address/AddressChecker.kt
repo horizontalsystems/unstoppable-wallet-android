@@ -4,6 +4,7 @@ import HashDitAddressValidator
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 
 interface AddressChecker {
@@ -15,13 +16,15 @@ class PhishingAddressChecker(
     private val spamManager: SpamManager
 ) : AddressChecker {
 
+    private val supportedBlockchainTypes =  EvmBlockchainManager.blockchainTypes + listOf(BlockchainType.Tron)
+
     override suspend fun isClear(address: Address, token: Token): Boolean {
-        val spamAddress = spamManager.find(address.hex.uppercase())
+        val spamAddress = spamManager.find(address.hex)
         return spamAddress == null
     }
 
     override fun supports(token: Token): Boolean {
-        return EvmBlockchainManager.blockchainTypes.contains(token.blockchainType)
+        return supportedBlockchainTypes.contains(token.blockchainType)
     }
 }
 

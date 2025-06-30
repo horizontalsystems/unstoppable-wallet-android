@@ -16,7 +16,7 @@ interface SpamAddressDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(spamAddresses: List<SpamAddress>)
 
-    @Query("SELECT * FROM SpamAddress WHERE address = :address LIMIT 1")
+    @Query("SELECT * FROM SpamAddress WHERE address = :address COLLATE NOCASE LIMIT 1")
     fun getByAddress(address: String): SpamAddress?
 
     @Query("SELECT * FROM SpamAddress WHERE transactionHash = :hash LIMIT 1")

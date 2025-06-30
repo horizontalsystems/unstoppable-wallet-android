@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 
 class TransferEventFactory {
 
@@ -15,6 +17,14 @@ class TransferEventFactory {
 
             is ExternalContractCallTransactionRecord -> {
                 transactionRecord.incomingEvents + transactionRecord.outgoingEvents
+            }
+
+            is TronExternalContractCallTransactionRecord -> {
+                transactionRecord.incomingEvents + transactionRecord.outgoingEvents
+            }
+
+            is TronIncomingTransactionRecord -> {
+                listOf(TransferEvent(transactionRecord.from, transactionRecord.value))
             }
 
             else -> {
