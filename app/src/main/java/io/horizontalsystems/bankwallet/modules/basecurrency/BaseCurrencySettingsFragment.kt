@@ -42,7 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
@@ -203,7 +203,7 @@ private fun CurrencyCell(
             contentDescription = null
         )
         Column(modifier = Modifier.weight(1f)) {
-            body_leah(
+            headline2_leah(
                 text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

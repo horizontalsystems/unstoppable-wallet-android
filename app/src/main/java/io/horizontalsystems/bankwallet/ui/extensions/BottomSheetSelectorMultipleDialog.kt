@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -119,7 +119,7 @@ class BottomSheetSelectorMultipleDialog(
                             )
                         }
                         Column(modifier = Modifier.padding(vertical = 12.dp)) {
-                            body_leah(text = item.title)
+                            headline2_leah(text = item.title)
                             subhead2_grey(text = item.subtitle)
                         }
                         Spacer(modifier = Modifier.weight(1f))

@@ -152,7 +152,7 @@ private fun TweetTitle(tweet: TweetViewItem) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            body_leah(text = tweet.title)
+            headline2_leah(text = tweet.title)
             Spacer(modifier = Modifier.height(3.dp))
             caption_grey(text = tweet.subtitle)
         }

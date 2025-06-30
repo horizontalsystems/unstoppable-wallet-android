@@ -62,6 +62,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
@@ -389,7 +390,7 @@ fun AddressSuggestions(
                 }
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            body_leah(recentContact.name)
+            headline2_leah(recentContact.name)
             subhead2_grey(recentContact.address.shortAddress)
         }
     } else recent?.let { address ->
@@ -438,7 +439,7 @@ fun AddressSuggestions(
                         }
                         .padding(horizontal = 16.dp, vertical = 12.dp)
                 ) {
-                    body_leah(contact.name)
+                    headline2_leah(contact.name)
                     subhead2_grey(contact.address.shortAddress)
                 }
             }

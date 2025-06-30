@@ -43,7 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
@@ -176,7 +176,7 @@ fun TCSessionCell(
                     else -> stringResource(id = R.string.TonConnect_Unnamed)
                 }
 
-                body_leah(
+                headline2_leah(
                     text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

@@ -52,7 +52,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Coin
 import java.util.Optional
@@ -231,7 +231,7 @@ private fun MarketCoin(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            body_leah(
+            headline2_leah(
                 text = coinCode,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

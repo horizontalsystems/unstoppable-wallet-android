@@ -64,7 +64,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.core.helpers.HudHelper
@@ -370,7 +370,7 @@ private fun BackupFileItems(
                             ) {
 
                                 Column(modifier = Modifier.weight(1f)) {
-                                    body_leah(text = walletBackupViewItem.name)
+                                    headline2_leah(text = walletBackupViewItem.name)
                                     if (walletBackupViewItem.backupRequired) {
                                         subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
                                     } else {

@@ -39,7 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -152,7 +152,7 @@ fun ChooseContactScreen(
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
                             ) {
-                                body_leah(text = contact.name)
+                                headline2_leah(text = contact.name)
                                 VSpacer(height = 1.dp)
                                 subhead2_grey(text = contact.address.shorten())
                             }

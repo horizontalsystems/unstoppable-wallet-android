@@ -31,7 +31,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import kotlinx.coroutines.launch
 
@@ -139,7 +139,7 @@ fun ReceiveCoin(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                body_leah(
+                headline2_leah(
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 16.dp),

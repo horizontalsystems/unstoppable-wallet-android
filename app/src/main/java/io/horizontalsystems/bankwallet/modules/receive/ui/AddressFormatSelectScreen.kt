@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
@@ -87,7 +87,7 @@ fun AddressFormatCell(
                 .weight(1f)
                 .padding(start = 16.dp)
         ) {
-            body_leah(text = title)
+            headline2_leah(text = title)
             subhead2_grey(text = subtitle)
         }
         Icon(

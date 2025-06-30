@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MarketDataValueComp
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.marketkit.models.CoinCategory
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -205,7 +206,7 @@ fun TopSectorItem(
         Column(
             horizontalAlignment = Alignment.End
         ) {
-            body_leah(
+            headline2_leah(
                 text = viewItem.marketCapValue ?: "n/a",
                 maxLines = 1,
             )
