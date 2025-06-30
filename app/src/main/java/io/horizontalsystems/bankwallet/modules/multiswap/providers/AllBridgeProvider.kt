@@ -34,7 +34,7 @@ object AllBridgeProvider : IMultiSwapProvider {
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     private val allBridgeAPI =
-        APIClient.retrofit("http://192.168.1.28:3000", 60).create(AllBridgeAPI::class.java)
+        APIClient.retrofit("http://192.168.1.8:3000", 60).create(AllBridgeAPI::class.java)
 
     private val blockchainTypes = mapOf(
         "ARB" to BlockchainType.ArbitrumOne,
@@ -169,7 +169,7 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         val amount = resAmountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
         val bridgeAmounts = allBridgeAPI.bridgeReceiveCalculate(
-            amount = amount.toString(),
+            amount = amount,
             sourceToken = sourceToken,
             destinationToken = destinationToken,
         )
@@ -185,13 +185,14 @@ object AllBridgeProvider : IMultiSwapProvider {
         swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
         val bridgeAmounts = getQuote(tokenIn, tokenOut, amountIn)
-        val sendTransactionData = getSendTransactionData(tokenIn, tokenOut, amountIn)
+        val amountOut = bridgeAmounts.amountReceivedInFloat
+        val sendTransactionData = getSendTransactionData(tokenIn, tokenOut, amountIn, amountOut)
 
         return object : ISwapFinalQuote {
             override val tokenIn: Token = tokenIn
             override val tokenOut: Token = tokenOut
             override val amountIn: BigDecimal = amountIn
-            override val amountOut: BigDecimal = bridgeAmounts.amountReceivedInFloat
+            override val amountOut: BigDecimal = amountOut
             override val amountOutMin: BigDecimal? = null
             override val sendTransactionData: SendTransactionData = sendTransactionData
             override val priceImpact: BigDecimal? = null
@@ -204,15 +205,28 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
+        amountOutMin: BigDecimal,
     ): SendTransactionData {
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val tokenPairOut = tokenPairs.first { it.token == tokenOut }
 
-        val amount = amountIn.movePointRight(tokenPairIn.abToken.decimals).toInt()
+        val amount = amountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
 
         if (tokenIn.blockchainType.isEvm) {
-            if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = allBridgeAPI.rawBridge(
+            val rawTransaction: AllBridgeAPI.Response.RawTransaction
+            if (tokenIn.blockchainType == tokenOut.blockchainType) {
+                val amountOutMinInt = amountOutMin.movePointRight(tokenPairOut.abToken.decimals).toBigInteger()
+
+                rawTransaction = allBridgeAPI.rawSwap(
+                    amount = amount,
+                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
+                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
+                    sourceToken = tokenPairIn.abToken.tokenAddress,
+                    destinationToken = tokenPairOut.abToken.tokenAddress,
+                    minimumReceiveAmount = amountOutMinInt
+                )
+            } else {
+                rawTransaction = allBridgeAPI.rawBridge(
                     amount = amount,
                     sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                     recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
@@ -220,17 +234,19 @@ object AllBridgeProvider : IMultiSwapProvider {
                     destinationToken = tokenPairOut.abToken.tokenAddress,
                     feePaymentMethod = feePaymentMethod.value
                 )
-
-                return SendTransactionData.Evm(
-                    transactionData = TransactionData(
-                        to = Address(rawTransaction.to),
-                        value = rawTransaction.value.toBigInteger(),
-                        input = rawTransaction.data.hexStringToByteArray(),
-                    ),
-                    gasLimit = null
-                )
             }
-        } else if (tokenIn.blockchainType == BlockchainType.Tron) {
+
+            return SendTransactionData.Evm(
+                transactionData = TransactionData(
+                    to = Address(rawTransaction.to),
+                    value = rawTransaction.value?.toBigInteger() ?: BigInteger.ZERO,
+                    input = rawTransaction.data.hexStringToByteArray(),
+                ),
+                gasLimit = null
+            )
+        }
+
+        if (tokenIn.blockchainType == BlockchainType.Tron) {
             if (tokenIn.blockchainType != tokenOut.blockchainType) {
                 val rawTransaction = allBridgeAPI.rawBridgeTron(
                     amount = amount,
@@ -261,15 +277,25 @@ interface AllBridgeAPI {
 
     @GET("/bridge/receive/calculate")
     suspend fun bridgeReceiveCalculate(
-        @Query("amount") amount: String,
+        @Query("amount") amount: BigInteger,
         @Query("sourceToken") sourceToken: String,
         @Query("destinationToken") destinationToken: String,
         @Query("messenger") messenger: String = "ALLBRIDGE",
     ): Response.BridgeAmounts
 
+    @GET("/raw/swap")
+    suspend fun rawSwap(
+        @Query("amount") amount: BigInteger,
+        @Query("sender") sender: String,
+        @Query("recipient") recipient: String,
+        @Query("sourceToken") sourceToken: String,
+        @Query("destinationToken") destinationToken: String,
+        @Query("minimumReceiveAmount") minimumReceiveAmount: BigInteger,
+    ): Response.RawTransaction
+
     @GET("/raw/bridge")
     suspend fun rawBridge(
-        @Query("amount") amount: Int,
+        @Query("amount") amount: BigInteger,
         @Query("sender") sender: String,
         @Query("recipient") recipient: String,
         @Query("sourceToken") sourceToken: String,
@@ -280,7 +306,7 @@ interface AllBridgeAPI {
 
     @GET("/raw/bridge")
     suspend fun rawBridgeTron(
-        @Query("amount") amount: Int,
+        @Query("amount") amount: BigInteger,
         @Query("sender") sender: String,
         @Query("recipient") recipient: String,
         @Query("sourceToken") sourceToken: String,
@@ -310,7 +336,7 @@ interface AllBridgeAPI {
         data class RawTransaction(
             val from: String,
             val to: String,
-            val value: BigDecimal,
+            val value: BigDecimal?,
             val data: String,
         )
 
