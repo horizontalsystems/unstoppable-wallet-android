@@ -56,7 +56,7 @@ class TronTransactionsAdapter(
         address: String?,
     ): Single<List<TransactionRecord>> {
         return rxSingle {
-            tronKit.getFullTransactions(
+            tronKit.getFullTransactionsBefore(
                 getFilters(token, transactionType, address),
                 from?.transactionHash?.hexStringToByteArray(),
                 limit
@@ -80,7 +80,7 @@ class TronTransactionsAdapter(
 
     override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
         return rxSingle {
-            tronKit.getFullTransactionsAfter(fromTransactionId?.hexStringToByteArrayOrNull())
+            tronKit.getFullTransactionsAfter(listOf(), fromTransactionId?.hexStringToByteArrayOrNull())
                 .map {
                     transactionConverter.transactionRecord(it)
                 }
