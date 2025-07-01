@@ -39,6 +39,9 @@ object SwapHelper {
             BlockchainType.Litecoin -> {
                 return LitecoinAdapter.firstAddress(account.type, token.type)
             }
+            BlockchainType.Tron -> {
+                return App.tronKitManager.getAddress(account.type)
+            }
             else -> throw SwapError.NoDestinationAddress()
         }
     }

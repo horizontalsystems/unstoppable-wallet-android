@@ -140,6 +140,12 @@ class TronKitManager(
             }
         }
     }
+
+    fun getAddress(type: AccountType) = when (type) {
+        is AccountType.TronAddress -> type.address
+        is AccountType.Mnemonic -> TronKit.getAddress(type.seed, network).base58
+        else -> throw UnsupportedAccountException()
+    }
 }
 
 class TronKitWrapper(val tronKit: TronKit, val signer: Signer?)
