@@ -3,8 +3,10 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.transaction.Signer
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +17,7 @@ import java.math.BigInteger
 abstract class BaseTronAdapter(
     tronKitWrapper: TronKitWrapper,
     val decimal: Int
-) : IAdapter, IBalanceAdapter, IReceiveAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendTronAdapter {
 
     val tronKit = tronKitWrapper.tronKit
     protected val signer: Signer? = tronKitWrapper.signer
@@ -41,11 +43,17 @@ abstract class BaseTronAdapter(
 
     // ISendTronAdapter
 
-    suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
+    override suspend fun send(createdTransaction: CreatedTransaction) {
+        if (signer == null) throw Exception()
+
+        tronKit.send(createdTransaction, signer)
+    }
+
+    override suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
         tronKit.isAccountActive(address)
     }
 
-    fun isOwnAddress(address: Address): Boolean {
+    override fun isOwnAddress(address: Address): Boolean {
         return address == tronKit.address
     }
 

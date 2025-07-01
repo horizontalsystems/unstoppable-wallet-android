@@ -15,6 +15,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -40,6 +41,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     private var feeState = feeService.stateFlow.value
 
     private var networkFee: SendModule.AmountData? = null
+    private var createdTransaction: CreatedTransaction? = null
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -88,7 +90,9 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Tron)
 
-//        data.createdTransaction
+        createdTransaction = data.createdTransaction
+
+        emitState()
 
 //        amountService.setAmount()
 
@@ -101,7 +105,12 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     }
 
     override suspend fun sendTransaction(): SendTransactionResult {
-        adapter.send(amountState.amount!!, addressState.tronAddress!!, feeState.feeLimit)
+        val tmpCreatedTransaction = createdTransaction
+        if (tmpCreatedTransaction != null) {
+            adapter.send(tmpCreatedTransaction)
+        } else {
+            adapter.send(amountState.amount!!, addressState.tronAddress!!, feeState.feeLimit)
+        }
 
         return SendTransactionResult.Tron
     }
@@ -110,7 +119,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
         uuid = uuid,
         networkFee = networkFee,
         cautions = listOf(),
-        sendable = amountState.canBeSend && feeState.canBeSend && addressState.canBeSend,
+        sendable = createdTransaction != null || (amountState.canBeSend && feeState.canBeSend && addressState.canBeSend),
         loading = false,
         fields = listOf(),
         extraFees = extraFees
