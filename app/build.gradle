@@ -315,7 +315,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:market-kit-android:3cf59c4'
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
-    implementation 'com.github.horizontalsystems:tron-kit-android:71a7b55'
+    implementation 'com.github.horizontalsystems:tron-kit-android:3b1682e'
     // Zcash SDK
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation "cash.z.ecc.android:zcash-android-sdk:2.2.12"

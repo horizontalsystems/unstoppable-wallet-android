@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.tronkit.TronKit.SyncState
@@ -19,7 +18,7 @@ class Trc20Adapter(
     tronKitWrapper: TronKitWrapper,
     contractAddress: String,
     wallet: Wallet
-) : BaseTronAdapter(tronKitWrapper, wallet.decimal), ISendTronAdapter {
+) : BaseTronAdapter(tronKitWrapper, wallet.decimal) {
 
     private val contractAddress: Address = Address.fromBase58(contractAddress)
 
