@@ -31,10 +31,13 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceTron(token)
             }
 
+            BlockchainType.Stellar -> {
+                SendTransactionServiceStellar(token)
+            }
+
             BlockchainType.Zcash,
             BlockchainType.Solana,
             BlockchainType.Ton,
-            BlockchainType.Stellar,
             is BlockchainType.Unsupported,
                 -> throw UnsupportedException("")
         }
