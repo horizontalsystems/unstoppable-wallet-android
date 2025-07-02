@@ -261,6 +261,23 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
         }
 
+        if (tokenIn.blockchainType == BlockchainType.Stellar) {
+            if (tokenIn.blockchainType != tokenOut.blockchainType) {
+                val rawTransaction = allBridgeAPI.rawBridgeStellar(
+                    amount = amount,
+                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
+                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
+                    sourceToken = tokenPairIn.abToken.tokenAddress,
+                    destinationToken = tokenPairOut.abToken.tokenAddress,
+                    feePaymentMethod = feePaymentMethod.value
+                )
+
+                Log.e("AAA", "rawTransaction: $rawTransaction")
+
+//                return SendTransactionData.Tron(rawTransaction)
+            }
+        }
+
         TODO("Not yet implemented")
     }
 
@@ -314,6 +331,17 @@ interface AllBridgeAPI {
         @Query("messenger") messenger: String = "ALLBRIDGE",
         @Query("feePaymentMethod") feePaymentMethod: String,
     ): CreatedTransaction
+
+    @GET("/raw/bridge")
+    suspend fun rawBridgeStellar(
+        @Query("amount") amount: BigInteger,
+        @Query("sender") sender: String,
+        @Query("recipient") recipient: String,
+        @Query("sourceToken") sourceToken: String,
+        @Query("destinationToken") destinationToken: String,
+        @Query("messenger") messenger: String = "ALLBRIDGE",
+        @Query("feePaymentMethod") feePaymentMethod: String,
+    ): String
 
     @GET("/gas/fee")
     suspend fun gasFee(
