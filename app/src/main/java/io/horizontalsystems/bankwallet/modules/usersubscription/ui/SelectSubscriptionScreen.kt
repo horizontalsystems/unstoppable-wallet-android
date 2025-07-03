@@ -110,7 +110,7 @@ fun SelectSubscriptionScreen(
                 VSpacer(24.dp)
                 if (subscription != null) {
                     Column(
-                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                        modifier = Modifier.clip(RoundedCornerShape(16.dp))
                     ) {
                         PlanItems(
                             items = subscription.actions,

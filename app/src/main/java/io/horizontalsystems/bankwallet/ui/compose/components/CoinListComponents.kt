@@ -422,7 +422,7 @@ fun CategoryCard(
 ) {
     Card(
         modifier = Modifier.height(128.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = 0.dp,
         backgroundColor = ComposeAppTheme.colors.lawrence,
         onClick = onClick

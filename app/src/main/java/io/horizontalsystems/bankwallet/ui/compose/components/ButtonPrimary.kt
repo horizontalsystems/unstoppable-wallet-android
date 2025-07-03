@@ -318,7 +318,7 @@ fun ButtonPrimary(
     modifier: Modifier = Modifier,
     buttonColors: ButtonColors,
     enabled: Boolean = true,
-    shape: Shape = RoundedCornerShape(25.dp),
+    shape: Shape = RoundedCornerShape(28.dp),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
@@ -364,13 +364,13 @@ object ButtonPrimaryDefaults {
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.widthIn directly on [Button].
      */
-    val MinWidth = 50.dp
+    val MinWidth = 56.dp
 
     /**
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.heightIn directly on [Button].
      */
-    val MinHeight = 50.dp
+    val MinHeight = 56.dp
 
     @Composable
     fun textButtonColors(

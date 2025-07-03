@@ -109,8 +109,8 @@ private fun SwapSelectProviderScreenInner(
                 RowUniversal(
                     modifier = Modifier
                         .padding(top = if (i == 0) 0.dp else 8.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(1.dp, borderColor, RoundedCornerShape(16.dp))
                         .padding(horizontal = 16.dp),
                     onClick = { onSelectQuote.invoke(viewItem.quote) }
                 ) {

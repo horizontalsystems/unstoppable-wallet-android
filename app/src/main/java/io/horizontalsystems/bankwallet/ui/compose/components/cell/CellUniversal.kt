@@ -116,8 +116,8 @@ private fun SectionPremiumUniversal(
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(0.5.dp, brush, RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .border(0.5.dp, brush, RoundedCornerShape(16.dp))
             .background(backgroundColor),
         content = content
     )
@@ -131,7 +131,7 @@ private fun SectionUniversal(
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(backgroundColor),
         content = content
     )

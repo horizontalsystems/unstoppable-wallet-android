@@ -150,7 +150,6 @@ fun CoinOverviewScreen(
                                 CellUniversalLawrenceSection {
                                     RowUniversal(
                                         modifier = Modifier
-                                            .height(52.dp)
                                             .fillMaxWidth()
                                             .padding(horizontal = 16.dp),
                                     ) {
@@ -172,6 +171,7 @@ fun CoinOverviewScreen(
                                                 )
                                             } else {
                                                 ButtonSecondaryDefault(
+                                                    modifier = Modifier.height(28.dp),
                                                     title = stringResource(id = R.string.Button_Show),
                                                     onClick = {
                                                         viewModel.enableChartIndicators()
@@ -185,6 +185,7 @@ fun CoinOverviewScreen(
                                             }
                                             HSpacer(width = 8.dp)
                                             ButtonSecondaryCircle(
+                                                modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
                                                 navController.slideFromRight(R.id.indicatorsFragment)

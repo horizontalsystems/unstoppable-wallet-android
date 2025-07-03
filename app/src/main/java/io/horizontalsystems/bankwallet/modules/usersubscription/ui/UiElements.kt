@@ -223,8 +223,8 @@ fun SubscriptionOption(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .border(0.5.dp, borderColor, shape = RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(12.dp))
+            .border(0.5.dp, borderColor, shape = RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {

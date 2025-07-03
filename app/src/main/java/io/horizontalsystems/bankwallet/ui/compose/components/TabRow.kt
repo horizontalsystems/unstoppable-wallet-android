@@ -6,8 +6,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Orange
 
 data class TabItem<T>(val title: String, val selected: Boolean, val item: T, val icon: ImageSource? = null, val label: String? = null, val enabled: Boolean = true)
 
@@ -42,7 +48,7 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                     modifier = Modifier
                         .tabIndicatorOffset(tabPositions[selectedIndex])
                         .clip(RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp)),
-                    color = ComposeAppTheme.colors.jacob
+                    color = Orange
                 )
             }
         ) {
@@ -56,16 +62,13 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                         onClick.invoke(tab.item)
                     },
                     content = {
-                        ProvideTextStyle(
-                            ComposeAppTheme.typography.subhead
-                        ) {
-                            Text(
-                                text = tab.title,
-                                color = if (selectedIndex == index) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
+                        Text(
+                            text = tab.title,
+                            color = if (selectedIndex == index) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                            style = if (selectedIndex == index) ComposeAppTheme.typography.subheadB else ComposeAppTheme.typography.subheadSB,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     })
             }
         }
@@ -93,7 +96,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                     modifier = Modifier
                         .tabIndicatorOffset(tabPositions[selectedIndex])
                         .clip(RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp)),
-                    color = ComposeAppTheme.colors.jacob
+                    color = Orange
                 )
             }
         ) {
@@ -112,7 +115,8 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                         ) {
                             Text(
                                 text = tab.title,
-                                color = if (tab.selected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
+                                color = if (tab.selected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                                style = if (tab.selected) ComposeAppTheme.typography.subheadB else ComposeAppTheme.typography.subheadSB,
                             )
                         }
                     }

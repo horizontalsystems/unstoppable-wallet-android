@@ -251,11 +251,11 @@ fun AddressCheck(
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .border(
                     0.5.dp,
                     ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(12.dp)
+                    RoundedCornerShape(16.dp)
                 )
         ) {
             checkResults.forEach { (addressCheckType, checkData) ->
@@ -379,11 +379,11 @@ fun AddressSuggestions(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .border(
                     0.5.dp,
                     ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(12.dp)
+                    RoundedCornerShape(16.dp)
                 )
                 .clickable {
                     onClick.invoke(recentContact.address)
@@ -399,11 +399,11 @@ fun AddressSuggestions(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .border(
                     0.5.dp,
                     ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(12.dp)
+                    RoundedCornerShape(16.dp)
                 )
                 .clickable {
                     onClick.invoke(address)
@@ -420,11 +420,11 @@ fun AddressSuggestions(
                 .padding(bottom = 24.dp)
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .border(
                     0.5.dp,
                     ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(12.dp)
+                    RoundedCornerShape(16.dp)
                 )
         ) {
             contacts.forEachIndexed { index, contact ->
