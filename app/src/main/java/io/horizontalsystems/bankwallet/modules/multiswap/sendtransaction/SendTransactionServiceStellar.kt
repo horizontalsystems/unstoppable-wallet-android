@@ -84,7 +84,7 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
         emitState()
     }
 
-    override fun setSendTransactionData(data: SendTransactionData) {
+    override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Stellar)
 
         memo = data.memo

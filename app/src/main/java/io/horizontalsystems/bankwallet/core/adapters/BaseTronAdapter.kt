@@ -6,8 +6,10 @@ import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.network.Network
+import io.horizontalsystems.tronkit.transaction.Fee
 import io.horizontalsystems.tronkit.transaction.Signer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,6 +44,16 @@ abstract class BaseTronAdapter(
         get() = tronKit.network == Network.Mainnet
 
     // ISendTronAdapter
+
+    override suspend fun estimateFee(contract: Contract): List<Fee> {
+        return tronKit.estimateFee(contract)
+    }
+
+    override suspend fun send(contract: Contract) {
+        if (signer == null) throw Exception()
+
+        tronKit.send(contract, signer)
+    }
 
     override suspend fun send(createdTransaction: CreatedTransaction) {
         if (signer == null) throw Exception()

@@ -8,4 +8,5 @@ sealed class SendTransactionResult {
     data class Btc(val transactionRecord: BitcoinTransactionRecord?) : SendTransactionResult()
     object Tron : SendTransactionResult()
     object Stellar : SendTransactionResult()
+    object Solana : SendTransactionResult()
 }
