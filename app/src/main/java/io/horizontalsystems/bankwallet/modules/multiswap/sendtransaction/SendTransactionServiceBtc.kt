@@ -151,7 +151,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         extraFees = extraFees
     )
 
-    override fun setSendTransactionData(data: SendTransactionData) {
+    override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Btc)
 
         memo = data.memo

@@ -22,7 +22,7 @@ abstract class AbstractSendTransactionService: ServiceState<SendTransactionServi
     private val baseCurrency = App.currencyManager.baseCurrency
 
     abstract fun start(coroutineScope: CoroutineScope)
-    abstract fun setSendTransactionData(data: SendTransactionData)
+    abstract suspend fun setSendTransactionData(data: SendTransactionData)
     @Composable
     abstract fun GetSettingsContent(navController: NavController)
     abstract suspend fun sendTransaction() : SendTransactionResult
