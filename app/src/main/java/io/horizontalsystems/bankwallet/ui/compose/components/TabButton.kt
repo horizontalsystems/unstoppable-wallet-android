@@ -73,7 +73,12 @@ fun TabButtonSecondaryTransparent(
 ) {
     TabBox(
         colors = TabDefaults.textButtonColors(),
-        content = { Text(title) },
+        content = {
+            Text(
+                text = title,
+                style = if (selected) ComposeAppTheme.typography.subheadB else ComposeAppTheme.typography.subheadSB,
+            )
+        },
         selected = selected,
         enabled = enabled,
         onSelect = onSelect

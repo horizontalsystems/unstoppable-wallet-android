@@ -89,8 +89,8 @@ class BottomSheetSelectorMultipleDialog(
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
         ) {
             items.forEachIndexed { index, item ->
                 val onClick = if (item.copyableString != null) {

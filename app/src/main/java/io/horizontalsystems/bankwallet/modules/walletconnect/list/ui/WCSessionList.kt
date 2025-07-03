@@ -160,9 +160,9 @@ private fun LazyListScope.WCSection(
 }
 
 fun getShape(itemsCount: Int, index: Int): Shape = when {
-    itemsCount == 1 -> RoundedCornerShape(12.dp)
-    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
-    0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
+    itemsCount == 1 -> RoundedCornerShape(16.dp)
+    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp)
+    0 == index -> RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp)
     else -> RoundedCornerShape(0.dp)
 }
 

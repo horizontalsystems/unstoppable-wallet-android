@@ -44,7 +44,7 @@ fun <T> CardTabs(
                 val lastElement = index == tabItems.lastIndex
 
                 val border = if (selected) {
-                    Modifier.border(0.5.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
+                    Modifier.border(0.5.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(16.dp))
                 } else {
                     Modifier
                 }
@@ -54,7 +54,7 @@ fun <T> CardTabs(
                         .padding(end = if (lastElement) 0.dp else 12.dp)
                         .then(border)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(16.dp))
                         .background(ComposeAppTheme.colors.lawrence),
                     selected = selected,
                     onClick = {

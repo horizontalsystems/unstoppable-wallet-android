@@ -76,7 +76,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+                    .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
             ) {
                 if (viewModel.biometricAuthSupported) {
                     NotesCell(

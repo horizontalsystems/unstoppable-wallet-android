@@ -235,8 +235,8 @@ private fun LockedBalanceSection(balanceViewItem: BalanceViewItem, navController
     if (balanceViewItem.lockedValues.isNotEmpty()) {
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
         ) {
             balanceViewItem.lockedValues.forEach { lockedValue ->
                 val infoTitle = lockedValue.infoTitle.getString()

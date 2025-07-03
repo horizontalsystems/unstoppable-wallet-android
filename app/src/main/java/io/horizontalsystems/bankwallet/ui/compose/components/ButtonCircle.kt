@@ -25,7 +25,7 @@ fun ButtonPrimaryCircle(
     HsIconButton(
         onClick = { onClick() },
         modifier = Modifier
-            .size(50.dp)
+            .size(56.dp)
             .clip(shape)
             .background(if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.blade),
         enabled = enabled,

@@ -206,9 +206,9 @@ private fun UtxoCell(
     bottomRoundedCorners: Boolean
 ) {
     val shape = when {
-        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(12.dp)
-        topRoundedCorners -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(16.dp)
+        topRoundedCorners -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
         else -> RoundedCornerShape(0.dp)
     }
     Box(

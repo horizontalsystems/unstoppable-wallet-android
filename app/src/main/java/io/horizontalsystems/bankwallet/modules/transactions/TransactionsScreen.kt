@@ -244,24 +244,24 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
     ) {
         val clipModifier = when (position) {
             SectionItemPosition.First -> {
-                Modifier.clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                Modifier.clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             }
 
             SectionItemPosition.Last -> {
-                Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
             }
 
             SectionItemPosition.Single -> {
-                Modifier.clip(RoundedCornerShape(12.dp))
+                Modifier.clip(RoundedCornerShape(16.dp))
             }
 
             else -> Modifier
         }
 
         val borderModifier = if (position != SectionItemPosition.Single) {
-            Modifier.sectionItemBorder(0.5.dp, ComposeAppTheme.colors.blade, 12.dp, position)
+            Modifier.sectionItemBorder(0.5.dp, ComposeAppTheme.colors.blade, 16.dp, position)
         } else {
-            Modifier.border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+            Modifier.border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
         }
 
         RowUniversal(
