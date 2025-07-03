@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
 import java.math.BigDecimal
 
@@ -25,7 +26,10 @@ sealed class SendTransactionData {
         val feesMap: Map<FeeType, CoinValue>
     ) : SendTransactionData()
 
-    data class Tron(val createdTransaction: CreatedTransaction) : SendTransactionData()
+    sealed class Tron : SendTransactionData() {
+        data class WithContract(val contract: Contract) : Tron()
+        data class WithCreateTransaction(val transaction: CreatedTransaction) : Tron()
+    }
     data class Stellar(
         val address: String,
         val memo: String,

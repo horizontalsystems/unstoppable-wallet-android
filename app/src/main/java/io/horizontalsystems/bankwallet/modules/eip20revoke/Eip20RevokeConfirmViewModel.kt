@@ -86,8 +86,10 @@ class Eip20RevokeConfirmViewModel(
 
         checkNotNull(eip20Adapter)
 
-        val transactionData = eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
-        sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+        viewModelScope.launch {
+            val transactionData = eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
+            sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+        }
     }
 
     suspend fun revoke() = withContext(Dispatchers.Default) {

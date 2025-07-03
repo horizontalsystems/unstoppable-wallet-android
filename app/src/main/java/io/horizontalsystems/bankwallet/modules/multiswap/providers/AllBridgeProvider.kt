@@ -116,16 +116,25 @@ object AllBridgeProvider : IMultiSwapProvider {
     ): ISwapQuote {
         val bridgeAmounts = getQuote(tokenIn, tokenOut, amountIn)
 
-        val bridgeAddress = try {
-            val tokenPairIn = tokenPairs.first { it.token == tokenIn }
-            Address(tokenPairIn.abToken.bridgeAddress)
-        } catch (_: Throwable) {
-            null
-        }
+        val tokenPairIn = tokenPairs.first { it.token == tokenIn }
+        val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
-        val allowance = bridgeAddress?.let { EvmSwapHelper.getAllowance(tokenIn, it) }
-        val actionApprove = bridgeAddress?.let {
-            EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
+        var actionRequired: ISwapProviderAction? = null
+
+        if (tokenIn.blockchainType.isEvm) {
+            val bridgeAddressEvm = try {
+                Address(bridgeAddress)
+            } catch (_: Throwable) {
+                null
+            }
+
+            if (bridgeAddressEvm != null) {
+                val allowance = EvmSwapHelper.getAllowance(tokenIn, bridgeAddressEvm)
+                actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, bridgeAddressEvm, tokenIn)
+            }
+        } else if (tokenIn.blockchainType == BlockchainType.Tron) {
+            val allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
+            actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
         }
 
         return object : ISwapQuote {
@@ -136,7 +145,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             override val tokenIn: Token = tokenIn
             override val tokenOut: Token = tokenOut
             override val amountIn: BigDecimal = amountIn
-            override val actionRequired: ISwapProviderAction? = actionApprove
+            override val actionRequired: ISwapProviderAction? = actionRequired
             override val cautions: List<HSCaution> = listOf()
         }
     }
@@ -257,7 +266,7 @@ object AllBridgeProvider : IMultiSwapProvider {
                     feePaymentMethod = feePaymentMethod.value
                 )
 
-                return SendTransactionData.Tron(rawTransaction)
+                return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
             }
         }
 

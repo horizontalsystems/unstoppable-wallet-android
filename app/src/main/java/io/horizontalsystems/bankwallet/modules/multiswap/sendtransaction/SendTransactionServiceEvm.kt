@@ -208,7 +208,7 @@ class SendTransactionServiceEvm(
         emitState()
     }
 
-    override fun setSendTransactionData(data: SendTransactionData) {
+    override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Evm)
 
         feeService.setGasLimit(data.gasLimit)

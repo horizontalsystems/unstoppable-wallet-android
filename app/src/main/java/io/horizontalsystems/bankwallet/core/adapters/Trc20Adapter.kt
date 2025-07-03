@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.tronkit.TronKit.SyncState
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.TriggerSmartContract
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.math.BigInteger
 
 class Trc20Adapter(
     tronKitWrapper: TronKitWrapper,
@@ -75,4 +77,23 @@ class Trc20Adapter(
         is SyncState.Syncing -> AdapterState.Syncing()
     }
 
+    suspend fun allowance(spenderAddress: String): BigDecimal {
+        val tronAddress = Address.fromBase58(spenderAddress)
+
+        return balanceInBigDecimal(tronKit.getTrc20Allowance(contractAddress, tronAddress), decimal)
+    }
+
+    fun approveTrc20TriggerSmartContract(spenderAddress: String, requiredAllowance: BigDecimal): TriggerSmartContract {
+        val tronAddress = Address.fromBase58(spenderAddress)
+        val amountBigInt = requiredAllowance.movePointRight(decimal).toBigInteger()
+
+        return tronKit.approveTrc20TriggerSmartContract(contractAddress, tronAddress, amountBigInt)
+    }
+
+    fun approveTrc20TriggerSmartContractUnlim(spenderAddress: String): TriggerSmartContract {
+        val tronAddress = Address.fromBase58(spenderAddress)
+        val max = BigInteger.ONE.shiftLeft(256).subtract(BigInteger.ONE)
+
+        return tronKit.approveTrc20TriggerSmartContract(contractAddress, tronAddress, max)
+    }
 }
