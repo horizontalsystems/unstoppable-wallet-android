@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -271,6 +272,23 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
 
         if (tokenIn.blockchainType == BlockchainType.Stellar) {
+            if (tokenIn.blockchainType != tokenOut.blockchainType) {
+                val rawTransaction = allBridgeAPI.rawBridgeStellar(
+                    amount = amount,
+                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
+                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
+                    sourceToken = tokenPairIn.abToken.tokenAddress,
+                    destinationToken = tokenPairOut.abToken.tokenAddress,
+                    feePaymentMethod = feePaymentMethod.value
+                )
+
+                Log.e("AAA", "rawTransaction: $rawTransaction")
+
+//                return SendTransactionData.Tron(rawTransaction)
+            }
+        }
+
+        if (tokenIn.blockchainType == BlockchainType.Solana) {
             if (tokenIn.blockchainType != tokenOut.blockchainType) {
                 val rawTransaction = allBridgeAPI.rawBridgeStellar(
                     amount = amount,

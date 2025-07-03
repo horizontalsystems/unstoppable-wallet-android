@@ -35,8 +35,11 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceStellar(token)
             }
 
+            BlockchainType.Solana -> {
+                SendTransactionServiceSolana(token)
+            }
+
             BlockchainType.Zcash,
-            BlockchainType.Solana,
             BlockchainType.Ton,
             is BlockchainType.Unsupported,
                 -> throw UnsupportedException("")
