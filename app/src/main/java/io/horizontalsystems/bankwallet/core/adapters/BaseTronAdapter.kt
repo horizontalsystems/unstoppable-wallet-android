@@ -49,6 +49,10 @@ abstract class BaseTronAdapter(
         return tronKit.estimateFee(contract)
     }
 
+    override suspend fun estimateFee(transaction: CreatedTransaction): List<Fee> {
+        return tronKit.estimateFee(transaction)
+    }
+
     override suspend fun send(contract: Contract) {
         if (signer == null) throw Exception()
 
