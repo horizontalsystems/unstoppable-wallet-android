@@ -427,4 +427,7 @@
     <fragment
         android:id="@+id/roiSelectCoinsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.roi.RoiSelectCoinsFragment"/>
+    <fragment
+        android:id="@+id/vaultFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultFragment" />
 </navigation>

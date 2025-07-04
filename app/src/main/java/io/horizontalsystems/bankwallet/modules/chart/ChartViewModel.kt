@@ -138,11 +138,18 @@ open class ChartViewModel(
                     diff
                 )
             }
+
+            val diff = if (chartPointsWrapper.customHint == null) {
+                Value.Percent(chartData.diff())
+            } else {
+                null
+            }
+
             ChartModule.ChartHeaderView(
                 value = currentValue,
-                valueHint = null,
+                valueHint = chartPointsWrapper.customHint,
                 date = null,
-                diff = Value.Percent(chartData.diff()),
+                diff = diff,
                 extraData = dominanceData
             )
         }

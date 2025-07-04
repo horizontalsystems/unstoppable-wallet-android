@@ -49,6 +49,7 @@ object MarketModule {
     enum class Tab(@StringRes val titleResId: Int) {
         Coins(R.string.Market_Tab_Coins),
         Watchlist(R.string.Market_Tab_Watchlist),
+        Earn(R.string.Market_Tab_Earn),
         Sectors(R.string.Market_Tab_Sectors),
         Posts(R.string.Market_Tab_Posts),
         Platform(R.string.Market_Tab_Platform),

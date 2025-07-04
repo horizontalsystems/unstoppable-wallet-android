@@ -319,6 +319,7 @@ val MarketModule.Tab.statTab: StatTab
     get() = when (this) {
         MarketModule.Tab.Posts -> StatTab.News
         MarketModule.Tab.Watchlist -> StatTab.Watchlist
+        MarketModule.Tab.Earn -> StatTab.Earn
         MarketModule.Tab.Coins -> StatTab.Coins
         MarketModule.Tab.Platform -> StatTab.Platforms
         MarketModule.Tab.Pairs -> StatTab.Pairs
