@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.ISwapSetting
@@ -236,7 +237,7 @@ object AllBridgeProvider : IMultiSwapProvider {
                     minimumReceiveAmount = amountOutMinInt
                 )
             } else {
-                rawTransaction = allBridgeAPI.rawBridge(
+                rawTransaction = rawBridge<Response.RawTransaction>(
                     amount = amount,
                     sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                     recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
@@ -258,7 +259,7 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         if (tokenIn.blockchainType == BlockchainType.Tron) {
             if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = allBridgeAPI.rawBridgeTron(
+                val rawTransaction = rawBridge<CreatedTransaction>(
                     amount = amount,
                     sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                     recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
@@ -273,7 +274,7 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         if (tokenIn.blockchainType == BlockchainType.Stellar) {
             if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = allBridgeAPI.rawBridgeStellar(
+                val rawTransaction = rawBridge<String>(
                     amount = amount,
                     sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                     recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
@@ -290,7 +291,7 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         if (tokenIn.blockchainType == BlockchainType.Solana) {
             if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = allBridgeAPI.rawBridgeStellar(
+                val rawTransaction = rawBridge<String>(
                     amount = amount,
                     sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                     recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
@@ -306,6 +307,28 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
 
         TODO("Not yet implemented")
+    }
+
+    private suspend inline fun <reified T> rawBridge(
+        amount: BigInteger,
+        sender: String,
+        recipient: String,
+        sourceToken: String,
+        destinationToken: String,
+        messenger: String = "ALLBRIDGE",
+        feePaymentMethod: String,
+    ): T {
+        val rawBridgeStr = allBridgeAPI.rawBridge(
+            amount,
+            sender,
+            recipient,
+            sourceToken,
+            destinationToken,
+            messenger,
+            feePaymentMethod
+        )
+
+        return APIClient.gson.fromJson(rawBridgeStr, T::class.java)
     }
 
     enum class FeePaymentMethod(val value: String) {
@@ -339,28 +362,6 @@ interface AllBridgeAPI {
 
     @GET("/raw/bridge")
     suspend fun rawBridge(
-        @Query("amount") amount: BigInteger,
-        @Query("sender") sender: String,
-        @Query("recipient") recipient: String,
-        @Query("sourceToken") sourceToken: String,
-        @Query("destinationToken") destinationToken: String,
-        @Query("messenger") messenger: String = "ALLBRIDGE",
-        @Query("feePaymentMethod") feePaymentMethod: String,
-    ): Response.RawTransaction
-
-    @GET("/raw/bridge")
-    suspend fun rawBridgeTron(
-        @Query("amount") amount: BigInteger,
-        @Query("sender") sender: String,
-        @Query("recipient") recipient: String,
-        @Query("sourceToken") sourceToken: String,
-        @Query("destinationToken") destinationToken: String,
-        @Query("messenger") messenger: String = "ALLBRIDGE",
-        @Query("feePaymentMethod") feePaymentMethod: String,
-    ): CreatedTransaction
-
-    @GET("/raw/bridge")
-    suspend fun rawBridgeStellar(
         @Query("amount") amount: BigInteger,
         @Query("sender") sender: String,
         @Query("recipient") recipient: String,
