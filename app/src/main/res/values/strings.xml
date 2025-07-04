@@ -176,6 +176,7 @@
     <string name="Market_Field_HighestVolume">Highest Volume</string>
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_Filter_PopupTitle">Filter by</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_SeeAll">See All</string>
     <string name="Market_PoweredByApi">Powered By CoinGeko API</string>
@@ -185,6 +186,7 @@
     <string name="Market_Tab_Pairs">Pairs</string>
     <string name="Market_Tab_Sectors">Sectors</string>
     <string name="Market_Tab_Watchlist">Favorites</string>
+    <string name="Market_Tab_Earn">Earn</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your favorites are empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Signals">Signals</string>
@@ -200,6 +202,18 @@
     <string name="Market_Signal_Risky_Description">Elevated risk level, requires caution.</string>
     <string name="Market_Signal_Warning">Always remember to apply risk management, and note that this is not financial advice.</string>
     <string name="Market_Signal_TurnOn">Turn on</string>
+
+    <string name="MarketEarn_Filter_AllAssets">All assets</string>
+    <string name="MarketEarn_Filter_AllChains">All chains</string>
+    <string name="MarketEarn_Filter_ETHYield">ETH yield</string>
+    <string name="MarketEarn_Filter_USDYield">USD yield</string>
+    <string name="MarketEarn_OpenDapp">Open dapp</string>
+
+    <string name="MarketEarn_Vault_TVL">TVL</string>
+    <string name="MarketEarn_Vault_Network">Network</string>
+    <string name="MarketEarn_Vault_Protocol">Protocol</string>
+    <string name="MarketEarn_Vault_UnderlyingToken">Underlying token</string>
+    <string name="MarketEarn_Vault_Holders">Holders</string>
 
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>

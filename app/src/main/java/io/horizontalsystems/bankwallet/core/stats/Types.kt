@@ -552,6 +552,7 @@ enum class StatTab(val key: String) {
     Overview("overview"),
     News("news"),
     Watchlist("watchlist"),
+    Earn("earn"),
     Analytics("analytics"),
     All("all"),
     Incoming("incoming"),

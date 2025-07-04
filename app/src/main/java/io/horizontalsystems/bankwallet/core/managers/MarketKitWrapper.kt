@@ -14,6 +14,7 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.NftTopCollection
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.Vault
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -301,5 +302,15 @@ class MarketKitWrapper(
     fun etfs(currencyCode: String) = marketKit.etfSingle(currencyCode)
 
     fun etfPoints(currencyCode: String) = marketKit.etfPointSingle(currencyCode)
+
+    // Vaults
+
+    fun vaults(): Single<List<Vault>> {
+        return requestWithAuthToken { marketKit.vaultsSingle() }
+    }
+
+    fun vault(address: String, periodType: HsTimePeriod): Single<Vault> {
+        return requestWithAuthToken { marketKit.vaultSingle(address, periodType) }
+    }
 
 }

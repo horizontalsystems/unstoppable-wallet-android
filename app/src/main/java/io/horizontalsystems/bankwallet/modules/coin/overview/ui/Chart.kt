@@ -94,7 +94,7 @@ fun HsChartLineHeader(
 
     RowUniversal(
         modifier = Modifier
-            .height(64.dp)
+            .height(72.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
