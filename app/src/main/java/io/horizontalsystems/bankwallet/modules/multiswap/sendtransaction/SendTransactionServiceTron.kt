@@ -25,15 +25,14 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     private val adapter = App.adapterManager.getAdapterForToken<ISendTronAdapter>(token)!!
     private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
-    val coinMaxAllowedDecimals = token.decimals
-    val amountService = SendAmountService(
+    private val amountService = SendAmountService(
         AmountValidator(),
         token.coin.code,
-        adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
+        adapter.balanceData.available.setScale(token.decimals, RoundingMode.DOWN),
         token.type.isNative,
     )
-    val addressService = SendTronAddressService(adapter, token)
-    val feeService = SendTronFeeService(adapter, feeToken)
+    private val addressService = SendTronAddressService(adapter, token)
+    private val feeService = SendTronFeeService(adapter, feeToken)
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
@@ -73,7 +72,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     private suspend fun handleUpdatedAddressState(state: SendTronAddressService.State) {
         addressState = state
 
-        feeService.setAddress(addressState.address)
+        feeService.setTronAddress(addressState.tronAddress)
 
         emitState()
     }
@@ -93,6 +92,8 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
 
         if (data is SendTransactionData.Tron.WithContract) {
             feeService.setContract(data.contract)
+        } else if (data is SendTransactionData.Tron.WithCreateTransaction) {
+            feeService.setFeeLimit(data.transaction.raw_data.fee_limit)
         }
 
         emitState()

@@ -425,6 +425,7 @@ interface ISendTronAdapter {
     val trxBalanceData: BalanceData
 
     suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
+    suspend fun estimateFee(transaction: CreatedTransaction): List<Fee>
     suspend fun estimateFee(contract: Contract): List<Fee>
     suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
     suspend fun send(contract: Contract)
