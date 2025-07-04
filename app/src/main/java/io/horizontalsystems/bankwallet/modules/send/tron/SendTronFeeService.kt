@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send.tron
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.ServiceState
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +26,7 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
     suspend fun setAmount(amount: BigDecimal?) {
         this.amount = amount
 
+        resetFees()
         refreshFees()
         emitState()
     }
@@ -33,26 +34,28 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
     suspend fun setContract(contract: Contract) {
         this.contract = contract
 
+        resetFees()
         refreshFees()
         emitState()
     }
 
-    suspend fun setAddress(address: Address?) {
-        this.tronAddress = address?.let {
-            TronAddress.fromBase58(it.hex)
-        }
+    fun setFeeLimit(feeLimit: Long?) {
+        resetFees()
 
+        this.feeLimit = feeLimit
+        fee = feeLimit?.toBigDecimal()?.movePointLeft(feeToken.decimals)
+        emitState()
+    }
+
+    suspend fun setTronAddress(address: Address?) {
+        this.tronAddress = address
+
+        resetFees()
         refreshFees()
         emitState()
     }
 
     private suspend fun refreshFees() = withContext(Dispatchers.Default) {
-        feeLimit = null
-        fee = null
-        activationFee = null
-        resourcesConsumed = null
-        error = null
-
         try {
             val contract = this@SendTronFeeService.contract
             val fees: List<Fee>
@@ -96,11 +99,19 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
                 energy
             }
 
-            val totalFee = fees.sumOf { it.feeInSuns }.toBigInteger()
+            val totalFee = fees.sumOf { it.feeInSuns }
             fee = totalFee.toBigDecimal().movePointLeft(feeToken.decimals)
         } catch (error: Throwable) {
             this@SendTronFeeService.error = error
         }
+    }
+
+    private fun resetFees() {
+        feeLimit = null
+        fee = null
+        activationFee = null
+        resourcesConsumed = null
+        error = null
     }
 
     override fun createState() = State(
