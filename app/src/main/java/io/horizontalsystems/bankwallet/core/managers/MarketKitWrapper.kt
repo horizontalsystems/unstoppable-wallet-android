@@ -13,6 +13,7 @@ import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.NftTopCollection
+import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.Vault
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -290,6 +291,8 @@ class MarketKitWrapper(
 
     fun requestVipSupport(subscriptionId: String): Single<Map<String, String>> =
         requestWithAuthToken { marketKit.requestVipSupport(it, subscriptionId) }
+
+    fun getStocks(): Single<List<Stock>> = marketKit.getStocks()
 
     // Stats
 

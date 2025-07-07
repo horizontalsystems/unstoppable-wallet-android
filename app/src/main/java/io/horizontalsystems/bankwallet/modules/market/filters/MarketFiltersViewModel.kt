@@ -32,6 +32,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     private var outperformedBtcOn = false
     private var outperformedEthOn = false
     private var outperformedBnbOn = false
+    private var outperformedGoldOn = false
+    private var outperformedSnpOn = false
     private var listedOnTopExchangesOn = false
     private var solidCexOn = false
     private var solidDexOn = false
@@ -93,6 +95,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         outperformedBtcOn = outperformedBtcOn,
         outperformedEthOn = outperformedEthOn,
         outperformedBnbOn = outperformedBnbOn,
+        outperformedGoldOn = outperformedGoldOn,
+        outperformedSnpOn = outperformedSnpOn,
         selectedBlockchainsValue = selectedBlockchainsValue,
         selectedBlockchains = selectedBlockchains,
         blockchainOptions = blockchainOptions,
@@ -119,6 +123,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         outperformedBtcOn = false
         outperformedEthOn = false
         outperformedBnbOn = false
+        outperformedGoldOn = false
+        outperformedSnpOn = false
         listedOnTopExchangesOn = false
         solidCexOn = false
         solidDexOn = false
@@ -226,6 +232,20 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         reloadData()
     }
 
+    fun updateOutperformedGoldOn(checked: Boolean) {
+        resetEnabled = true
+        outperformedGoldOn = checked
+        emitState()
+        reloadData()
+    }
+
+    fun updateOutperformedSnpOn(checked: Boolean) {
+        resetEnabled = true
+        outperformedSnpOn = checked
+        emitState()
+        reloadData()
+    }
+
     fun updateListedOnTopExchangesOn(checked: Boolean) {
         resetEnabled = true
         listedOnTopExchangesOn = checked
@@ -285,6 +305,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
                 service.filterOutperformedBtcOn = outperformedBtcOn
                 service.filterOutperformedEthOn = outperformedEthOn
                 service.filterOutperformedBnbOn = outperformedBnbOn
+                service.filterOutperformedGoldOn = outperformedGoldOn
+                service.filterOutperformedSnpOn = outperformedSnpOn
                 service.filterListedOnTopExchanges = listedOnTopExchangesOn
                 service.filterSolidCex = solidCexOn
                 service.filterSolidDex = solidDexOn
@@ -293,6 +315,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
                 service.filterPriceCloseToAtl = priceCloseTo == PriceCloseTo.Atl
                 service.filterBlockchains = selectedBlockchains
                 service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
+
+                if (outperformedSnpOn && service.sp500PriceChanges == null) {
+                    service.setSp500PriceChanges()
+                }
 
                 val numberOfItems = service.fetchNumberOfItems()
 
@@ -348,6 +374,8 @@ data class MarketFiltersUiState(
     val outperformedBtcOn: Boolean,
     val outperformedEthOn: Boolean,
     val outperformedBnbOn: Boolean,
+    val outperformedGoldOn: Boolean,
+    val outperformedSnpOn: Boolean,
     val selectedBlockchainsValue: String?,
     val selectedBlockchains: List<Blockchain>,
     val blockchainOptions: List<BlockchainViewItem>,
