@@ -150,7 +150,7 @@ class AccountManager(
 
     override suspend fun delete(id: String) = withContext(Dispatchers.IO) {
         val accountToDelete = storage.loadAccount(id)
-        if(accountToDelete?.type is AccountType.MnemonicMonero) {
+        if (accountToDelete?.type is AccountType.MnemonicMonero) {
             removeMoneroWalletFilesUseCase(accountToDelete.type.walletInnerName)
         }
 

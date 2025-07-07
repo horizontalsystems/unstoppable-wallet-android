@@ -13,6 +13,7 @@ fun AdvancedRestoreScreen(
     openSelectCoinsScreen: () -> Unit,
     openNonStandardRestore: () -> Unit,
     onBackClick: () -> Unit,
+    onFinish: () -> Unit
 ) {
     when (restoreMenuViewModel.restoreOption) {
         RestoreOption.RecoveryPhrase -> {
@@ -23,6 +24,7 @@ fun AdvancedRestoreScreen(
                 openSelectCoins = openSelectCoinsScreen,
                 openNonStandardRestore = openNonStandardRestore,
                 onBackClick = onBackClick,
+                onFinish = onFinish
             )
         }
         RestoreOption.PrivateKey -> {

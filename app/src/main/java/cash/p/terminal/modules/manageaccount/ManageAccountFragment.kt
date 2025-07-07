@@ -8,6 +8,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.authorizedAction
+import cash.p.terminal.modules.manageaccount.generalprivatekey.GeneralPrivateKeyFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.tangem.ui.accesscoderecovery.AccessCodeRecoveryDialog
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.requireInput
@@ -47,7 +50,31 @@ class ManageAccountFragment : BaseComposeFragment() {
             onCloseClicked = viewModel::onClose,
             onSaveClicked = viewModel::onSave,
             onNameChanged = viewModel::onChange,
-            onActionClick = viewModel::onActionClick
+            onActionClick = {
+                if (it == ManageAccountModule.KeyAction.ViewKey) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.generalPrivateKeyFragment,
+                            GeneralPrivateKeyFragment.Input(
+                                viewModel.getMoneroViewKey(),
+                                getString(R.string.view_key)
+                            )
+                        )
+                    }
+                } else if (it == ManageAccountModule.KeyAction.SpendKey) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.generalPrivateKeyFragment,
+                            GeneralPrivateKeyFragment.Input(
+                                viewModel.getMoneroSpendKey(),
+                                getString(R.string.spend_key)
+                            )
+                        )
+                    }
+                } else {
+                    viewModel.onActionClick(it)
+                }
+            }
         )
     }
 

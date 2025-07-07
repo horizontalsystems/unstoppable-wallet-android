@@ -184,6 +184,7 @@ sealed class AccountType : Parcelable {
     data class MnemonicMonero(
         val words: List<String>,
         val password: String,
+        val height: Long,
         val walletInnerName: String
     ) : AccountType()
 

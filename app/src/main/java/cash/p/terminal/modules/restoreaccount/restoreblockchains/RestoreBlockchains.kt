@@ -112,7 +112,7 @@ fun ManageWalletsScreen(
                 iconTint = R.color.white
             )
             delay(300)
-            onFinish.invoke()
+            onFinish()
         }
     }
 

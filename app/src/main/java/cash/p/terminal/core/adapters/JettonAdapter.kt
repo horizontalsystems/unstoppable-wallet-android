@@ -63,7 +63,7 @@ class JettonAdapter(
         coroutineScope.cancel()
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
     }
 
     override val availableBalance: BigDecimal

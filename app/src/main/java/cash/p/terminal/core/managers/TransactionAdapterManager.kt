@@ -75,7 +75,7 @@ class TransactionAdapterManager(
             _initializationFlow.value = true
         }
 
-    private fun createTransactionAdapter(
+    private suspend fun createTransactionAdapter(
         adapter: IAdapter,
         source: TransactionSource
     ): ITransactionsAdapter? {
@@ -103,6 +103,10 @@ class TransactionAdapterManager(
 
             BlockchainType.Ton -> {
                 adapterFactory.tonTransactionsAdapter(source)
+            }
+
+            BlockchainType.Monero -> {
+                adapterFactory.moneroTransactionsAdapter(source)
             }
 
             else -> adapter as? ITransactionsAdapter

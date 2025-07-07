@@ -22,6 +22,8 @@ import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.core.managers.TronKitManager
+import cash.p.terminal.core.managers.WalletActivator
+import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
@@ -29,6 +31,7 @@ import cash.p.terminal.wallet.managers.ITransactionHiddenManager
 import com.m2049r.xmrwallet.service.MoneroWalletService
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -54,6 +57,10 @@ val managerModule = module {
     singleOf(::RestoreSettingsManager)
     singleOf(::EvmLabelManager)
     factoryOf(::SolanaWalletManager)
+    factoryOf(::WalletActivator)
+
+    singleOf(::Mnemonic)
+    factoryOf(::WordsManager)
 
     singleOf(::MoneroKitManager)
     singleOf(::MoneroWalletService)

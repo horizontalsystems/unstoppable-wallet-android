@@ -2,7 +2,6 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
@@ -13,7 +12,9 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.TransactionLockState
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
@@ -647,6 +648,10 @@ object TransactionViewItemFactoryHelper {
                 if (transaction.transactionRecordType == TransactionRecordType.SOLANA_OUTGOING && transaction.fee != null) {
                     items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
+            }
+
+            is MoneroTransactionRecord -> {
+                items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
             }
         }
 

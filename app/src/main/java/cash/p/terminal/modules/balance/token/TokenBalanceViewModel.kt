@@ -138,7 +138,7 @@ class TokenBalanceViewModel(
     private fun updateSecondaryValue(totalBalanceValue: TotalService.State = totalBalance.stateFlow.value) {
         if (totalBalanceValue is TotalService.State.Visible) {
             // Check if the current secondary value is the same as the wallet's coin and switch to next
-            if(!showCurrencyAsSecondary && totalBalanceValue.coinValue?.coin?.uid == wallet.coin.uid) {
+            if (!showCurrencyAsSecondary && totalBalanceValue.coinValue?.coin?.uid == wallet.coin.uid) {
                 toggleTotalType()
                 return
             }

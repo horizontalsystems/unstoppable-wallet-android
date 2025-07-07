@@ -63,7 +63,7 @@ internal class Eip20Adapter(
         // stopped via EthereumKitManager
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         stackingManager.loadInvestmentData(wallet, receiveAddress, true)
         eip20Kit.refresh()
     }

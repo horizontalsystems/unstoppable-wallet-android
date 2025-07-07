@@ -59,6 +59,7 @@ private fun RestoreAccountNavHost(
                 openSelectCoins = { navController.navigate("restore_select_coins") },
                 openNonStandardRestore = { navController.navigate("restore_phrase_nonstandard") },
                 onBackClick = { fragmentNavController.popBackStack() },
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
             )
         }
         composablePage("restore_phrase_advanced") {
@@ -69,7 +70,8 @@ private fun RestoreAccountNavHost(
                 openNonStandardRestore = {
                     navController.navigate("restore_phrase_nonstandard")
                 },
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
             )
         }
         composablePage("restore_select_coins") {

@@ -26,7 +26,7 @@ internal class EvmAdapter(evmTransactionRepository: EvmTransactionRepository, co
         // stopped via EthereumKitManager
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         // refreshed via EthereumKitManager
     }
 

@@ -4,11 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.IAccountManager
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class UnlinkAccountViewModel(
@@ -57,7 +57,10 @@ class UnlinkAccountViewModel(
         }
     }
 
-    fun onUnlink() = viewModelScope.launch {
+    /***
+     * We use GlobalScope to finish the process even after dialog was closed
+     */
+    fun onUnlink() = GlobalScope.launch {
         accountManager.delete(account.id)
         closeScreen = true
     }

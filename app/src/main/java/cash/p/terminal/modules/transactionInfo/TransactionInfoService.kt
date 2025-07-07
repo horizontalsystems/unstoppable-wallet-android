@@ -9,6 +9,7 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
@@ -151,6 +152,23 @@ class TransactionInfoService(
                                 tx.fee,
                                 tx.mainValue
                             ).map { it?.coinUid }
+                        }
+
+                        else -> emptyList()
+                    }
+                }
+
+                is MoneroTransactionRecord -> {
+                    when (transactionRecord.transactionRecordType) {
+                        TransactionRecordType.MONERO_INCOMING -> {
+                            listOf(tx.mainValue.coinUid)
+                        }
+
+                        TransactionRecordType.MONERO_OUTGOING -> {
+                            listOf(
+                                tx.fee,
+                                tx.mainValue
+                            ).map { it.coinUid }
                         }
 
                         else -> emptyList()

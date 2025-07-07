@@ -1,4 +1,5 @@
 package cash.p.terminal.modules.coin.overview.ui
+
 import android.content.Context
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
@@ -27,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import io.horizontalsystems.core.slideFromBottomForResult
 import cash.p.terminal.modules.coin.CoinLink
 import cash.p.terminal.modules.coin.overview.CoinOverviewModule
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewModel
@@ -50,6 +50,7 @@ import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.wallet.entities.FullCoin
@@ -57,8 +58,8 @@ import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.wallet.models.LinkType
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
-import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.slideFromBottomForResult
 
 @Composable
 fun CoinOverviewScreen(
@@ -286,9 +287,9 @@ fun Error(message: String) {
 }
 
 @Composable
-fun Loading() {
+fun Loading(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(

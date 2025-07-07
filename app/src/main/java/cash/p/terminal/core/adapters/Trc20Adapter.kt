@@ -32,7 +32,7 @@ class Trc20Adapter(
         // stopped via TronKitManager
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         // refreshed via TronKitManager
     }
 

@@ -61,9 +61,9 @@ abstract class TransactionRecord(
     open fun status(lastBlockHeight: Int?): TransactionStatus {
         if (failed) {
             return TransactionStatus.Failed
-        } else if (blockHeight != null && lastBlockHeight != null) {
+        } else if (blockHeight != null) {
             val threshold = confirmationsThreshold ?: 1
-            val confirmations = lastBlockHeight - blockHeight.toInt() + 1
+            val confirmations = (lastBlockHeight ?: 0) - blockHeight.toInt() + 1
 
             return if (confirmations >= threshold) {
                 TransactionStatus.Completed

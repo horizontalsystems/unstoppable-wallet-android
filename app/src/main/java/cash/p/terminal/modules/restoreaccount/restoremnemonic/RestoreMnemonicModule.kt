@@ -1,30 +1,18 @@
 package cash.p.terminal.modules.restoreaccount.restoremnemonic
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.core.App
 import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.hdwalletkit.Language
 
 object RestoreMnemonicModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreMnemonicViewModel(
-                App.accountFactory,
-                App.wordsManager,
-                App.thirdKeyboardStorage,
-            ) as T
-        }
-    }
-
     data class UiState(
         val passphraseEnabled: Boolean,
         val passphraseError: String?,
         val invalidWordRanges: List<IntRange>,
         val error: String?,
-        val accountType: cash.p.terminal.wallet.AccountType?,
+        val errorHeight: String?,
+        val height: String,
+        val isMoneroMnemonic: Boolean,
+        val accountType: AccountType?,
         val wordSuggestions: WordSuggestions?,
         val language: Language,
     )

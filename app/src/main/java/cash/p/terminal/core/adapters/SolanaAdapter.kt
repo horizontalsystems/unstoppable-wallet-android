@@ -28,7 +28,7 @@ class SolanaAdapter(private val kitWrapper: SolanaKitWrapper) :
         // stopped via EthereumKitManager
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         kitWrapper.solanaKit.refresh()
     }
 

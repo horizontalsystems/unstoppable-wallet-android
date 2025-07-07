@@ -385,14 +385,12 @@ class ZcashAdapter(
         synchronizer.close()
     }
 
-    override fun refresh() {
-        scope.launch {
+    override suspend fun refresh() = withContext(Dispatchers.IO) {
             with(synchronizer as SdkSynchronizer) {
                 refreshAllBalances()
                 refreshTransactions()
             }
         }
-    }
 
     override val debugInfo: String
         get() = ""

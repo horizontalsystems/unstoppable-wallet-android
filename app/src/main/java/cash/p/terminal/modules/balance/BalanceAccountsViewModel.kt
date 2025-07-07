@@ -17,21 +17,22 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
     init {
         accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
-                handleAccount(it)
-            }
+            handleAccount(it)
+        }
     }
 
     private fun handleAccount(activeAccountState: ActiveAccountState) {
-        when(activeAccountState) {
-            ActiveAccountState.NotLoaded -> { }
+        when (activeAccountState) {
+            ActiveAccountState.NotLoaded -> {}
             is ActiveAccountState.ActiveAccount -> {
                 balanceScreenState = if (activeAccountState.account != null) {
                     BalanceScreenState.HasAccount(
                         AccountViewItem(
-                            activeAccountState.account!!.isWatchAccount,
-                            activeAccountState.account!!.name,
-                            activeAccountState.account!!.id,
-                            activeAccountState.account!!.type
+                            isWatchAccount = activeAccountState.account!!.isWatchAccount,
+                            isCoinManagerEnabled = activeAccountState.account?.type !is AccountType.MnemonicMonero,
+                            name = activeAccountState.account!!.name,
+                            id = activeAccountState.account!!.id,
+                            type = activeAccountState.account!!.type
                         )
                     )
                 } else {
@@ -44,6 +45,7 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
 data class AccountViewItem(
     val isWatchAccount: Boolean,
+    val isCoinManagerEnabled: Boolean,
     val name: String = "",
     val id: String,
     val type: AccountType

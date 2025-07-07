@@ -3,7 +3,7 @@ package cash.p.terminal.wallet
 interface IAdapter {
     fun start()
     fun stop()
-    fun refresh()
+    suspend fun refresh()
 
     val debugInfo: String
 }

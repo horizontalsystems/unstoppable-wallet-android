@@ -1,108 +1,168 @@
 package io.horizontalsystems.core.entities
 
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 sealed class BlockchainType : Parcelable {
-    @Parcelize
-    object Bitcoin : BlockchainType()
+    abstract val uid: String
+    open val stringRepresentation: String get() = uid
 
     @Parcelize
-    object BitcoinCash : BlockchainType()
+    object Bitcoin : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "bitcoin"
+    }
 
     @Parcelize
-    object ECash : BlockchainType()
+    object BitcoinCash : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "bitcoin-cash"
+        @IgnoredOnParcel
+        override val stringRepresentation = "bitcoinCash"
+    }
 
     @Parcelize
-    object Litecoin : BlockchainType()
+    object ECash : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "ecash"
+    }
 
     @Parcelize
-    object Dogecoin : BlockchainType()
+    object Litecoin : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "litecoin"
+    }
 
     @Parcelize
-    object Dash : BlockchainType()
+    object Dogecoin : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "dogecoin"
+    }
 
     @Parcelize
-    object Zcash : BlockchainType()
+    object Dash : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "dash"
+    }
 
     @Parcelize
-    object Ethereum : BlockchainType()
+    object Zcash : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "zcash"
+    }
 
     @Parcelize
-    object BinanceSmartChain : BlockchainType()
+    object Ethereum : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "ethereum"
+    }
 
     @Parcelize
-    object Polygon : BlockchainType()
+    object BinanceSmartChain : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "binance-smart-chain"
+        @IgnoredOnParcel
+        override val stringRepresentation = "binanceSmartChain"
+    }
 
     @Parcelize
-    object Avalanche : BlockchainType()
+    object Polygon : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "polygon-pos"
+        @IgnoredOnParcel
+        override val stringRepresentation = "polygon"
+    }
 
     @Parcelize
-    object Optimism : BlockchainType()
+    object Avalanche : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "avalanche"
+    }
 
     @Parcelize
-    object ArbitrumOne : BlockchainType()
+    object Optimism : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "optimistic-ethereum"
+        @IgnoredOnParcel
+        override val stringRepresentation = "optimism"
+    }
 
     @Parcelize
-    object Solana : BlockchainType()
+    object ArbitrumOne : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "arbitrum-one"
+        @IgnoredOnParcel
+        override val stringRepresentation = "arbitrumOne"
+    }
 
     @Parcelize
-    object Gnosis : BlockchainType()
+    object Solana : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "solana"
+    }
 
     @Parcelize
-    object Fantom : BlockchainType()
+    object Gnosis : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "gnosis"
+    }
 
     @Parcelize
-    object Tron: BlockchainType()
+    object Fantom : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "fantom"
+    }
 
     @Parcelize
-    object Ton: BlockchainType()
+    object Tron : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "tron"
+    }
 
     @Parcelize
-    object Base: BlockchainType()
+    object Ton : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "the-open-network"
+    }
 
     @Parcelize
-    object Cosanta: BlockchainType()
+    object Base : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "base"
+    }
 
     @Parcelize
-    object PirateCash: BlockchainType()
+    object Cosanta : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "cosanta"
+    }
 
     @Parcelize
-    object ZkSync: BlockchainType()
+    object PirateCash : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "piratecash"
+    }
 
     @Parcelize
-    object Monero: BlockchainType()
+    object ZkSync : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "zksync"
+    }
 
     @Parcelize
-    class Unsupported(val _uid: String) : BlockchainType()
+    object Monero : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "monero"
+    }
 
-    val uid: String
-        get() = when (this) {
-            is Bitcoin -> "bitcoin"
-            is BitcoinCash -> "bitcoin-cash"
-            is ECash -> "ecash"
-            is Litecoin -> "litecoin"
-            is Dogecoin -> "dogecoin"
-            is Dash -> "dash"
-            is Zcash -> "zcash"
-            is Ethereum -> "ethereum"
-            is BinanceSmartChain -> "binance-smart-chain"
-            is Polygon -> "polygon-pos"
-            is Avalanche -> "avalanche"
-            is Optimism -> "optimistic-ethereum"
-            is ArbitrumOne -> "arbitrum-one"
-            is Solana -> "solana"
-            is Gnosis -> "gnosis"
-            is Fantom -> "fantom"
-            is Tron -> "tron"
-            is Ton -> "the-open-network"
-            is Base -> "base"
-            is ZkSync -> "zksync"
-            is Cosanta -> "cosanta"
-            is PirateCash -> "piratecash"
-            is Monero -> "monero"
-            is Unsupported -> this._uid
-        }
+    @Parcelize
+    class Unsupported(val _uid: String) : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid: String get() = _uid
+        @IgnoredOnParcel
+        override val stringRepresentation: String get() = "unsupported|$uid"
+    }
 
     override fun equals(other: Any?): Boolean {
         return other is BlockchainType && other.uid == uid
@@ -112,61 +172,34 @@ sealed class BlockchainType : Parcelable {
         return uid.hashCode()
     }
 
-    override fun toString() = when (this) {
-        Bitcoin -> "bitcoin"
-        BitcoinCash -> "bitcoinCash"
-        ECash -> "ecash"
-        Litecoin -> "litecoin"
-        Dogecoin -> "dogecoin"
-        Dash -> "dash"
-        Zcash -> "zcash"
-        Ethereum -> "ethereum"
-        BinanceSmartChain -> "binanceSmartChain"
-        Polygon -> "polygon"
-        Avalanche -> "avalanche"
-        ArbitrumOne -> "arbitrumOne"
-        Optimism -> "optimism"
-        Solana -> "solana"
-        Gnosis -> "gnosis"
-        Fantom -> "fantom"
-        Tron -> "tron"
-        Ton -> "the-open-network"
-        Base -> "base"
-        ZkSync -> "zksync"
-        Cosanta -> "cosanta"
-        PirateCash -> "piratecash"
-        Monero -> "monero"
-        is Unsupported -> "unsupported|$uid"
-    }
+    override fun toString() = stringRepresentation
 
     companion object {
-
-        fun fromUid(uid: String): BlockchainType =
-            when (uid) {
-                "bitcoin" -> Bitcoin
-                "bitcoin-cash" -> BitcoinCash
-                "ecash" -> ECash
-                "litecoin" -> Litecoin
-                "dogecoin" -> Dogecoin
-                "dash" -> Dash
-                "zcash" -> Zcash
-                "ethereum" -> Ethereum
-                "binance-smart-chain" -> BinanceSmartChain
-                "polygon-pos" -> Polygon
-                "avalanche" -> Avalanche
-                "optimistic-ethereum" -> Optimism
-                "arbitrum-one" -> ArbitrumOne
-                "solana" -> Solana
-                "gnosis" -> Gnosis
-                "fantom" -> Fantom
-                "tron" -> Tron
-                "the-open-network" -> Ton
-                "base" -> Base
-                "cosanta" -> Cosanta
-                "piratecash" -> PirateCash
-                else -> Unsupported(uid)
-            }
-
+        fun fromUid(uid: String): BlockchainType = when (uid) {
+            "bitcoin" -> Bitcoin
+            "bitcoin-cash" -> BitcoinCash
+            "ecash" -> ECash
+            "litecoin" -> Litecoin
+            "dogecoin" -> Dogecoin
+            "dash" -> Dash
+            "zcash" -> Zcash
+            "ethereum" -> Ethereum
+            "binance-smart-chain" -> BinanceSmartChain
+            "polygon-pos" -> Polygon
+            "avalanche" -> Avalanche
+            "optimistic-ethereum" -> Optimism
+            "arbitrum-one" -> ArbitrumOne
+            "solana" -> Solana
+            "gnosis" -> Gnosis
+            "fantom" -> Fantom
+            "tron" -> Tron
+            "the-open-network" -> Ton
+            "base" -> Base
+            "cosanta" -> Cosanta
+            "piratecash" -> PirateCash
+            "zksync" -> ZkSync
+            "monero" -> Monero
+            else -> Unsupported(uid)
+        }
     }
-
 }

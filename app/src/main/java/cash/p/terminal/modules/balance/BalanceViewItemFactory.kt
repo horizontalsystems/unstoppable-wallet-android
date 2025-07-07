@@ -76,6 +76,7 @@ data class BalanceViewItem2(
     val swapEnabled: Boolean = false,
     val errorMessage: String?,
     val isWatchAccount: Boolean,
+    val isSwipeToDeleteEnabled: Boolean,
     val stackingUnpaid: DeemedValue<String>?
 )
 
@@ -316,6 +317,7 @@ class BalanceViewItemFactory {
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,
+        isSwipeToDeleteEnabled: Boolean,
         balanceViewType: BalanceViewType,
         networkAvailable: Boolean,
         showStackingUnpaid: Boolean
@@ -374,6 +376,7 @@ class BalanceViewItemFactory {
             swapEnabled = state is AdapterState.Synced,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
+            isSwipeToDeleteEnabled = isSwipeToDeleteEnabled,
             stackingUnpaid = stackingUnpaid
         )
     }

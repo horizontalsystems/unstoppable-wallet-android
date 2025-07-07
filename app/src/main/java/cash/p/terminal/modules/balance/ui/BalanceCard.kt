@@ -86,6 +86,7 @@ fun BalanceCardSwipable(
             cardOffset = 72f,
             onReveal = { onReveal(viewItem.wallet.hashCode()) },
             onConceal = onConceal,
+            enabled = viewItem.isSwipeToDeleteEnabled,
             content = {
                 BalanceCard(
                     onClick = onClick,

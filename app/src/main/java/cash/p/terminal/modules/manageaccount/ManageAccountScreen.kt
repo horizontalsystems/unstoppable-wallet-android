@@ -27,7 +27,6 @@ import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
-import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment
 import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment.Input
 import cash.p.terminal.modules.settings.main.HsSettingCell
@@ -296,7 +295,7 @@ private fun KeyActions(
                         title = stringResource(id = R.string.view_key),
                         icon = painterResource(id = R.drawable.icon_binocule_20)
                     ) {
-
+                        onActionClick(keyAction)
                     }
                 }
             }
@@ -307,7 +306,7 @@ private fun KeyActions(
                         title = stringResource(id = R.string.spend_key),
                         icon = painterResource(id = R.drawable.icon_paper_contract_20)
                     ) {
-
+                        onActionClick(keyAction)
                     }
                 }
             }

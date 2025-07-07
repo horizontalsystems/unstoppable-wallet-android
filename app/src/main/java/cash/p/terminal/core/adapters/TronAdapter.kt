@@ -27,7 +27,7 @@ class TronAdapter(kitWrapper: TronKitWrapper) : BaseTronAdapter(kitWrapper, deci
         // stopped via TronKitManager
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         // refreshed via TronKitManager
     }
 

@@ -9,15 +9,12 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenQuery
 import kotlinx.coroutines.runBlocking
-import org.koin.java.KoinJavaComponent.inject
 
 class WalletActivator(
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
+    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase,
 ) {
-
-    private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject<GetHardwarePublicKeyForWalletUseCase>(GetHardwarePublicKeyForWalletUseCase::class.java)
-
     @Deprecated("Use activateWalletsSuspended instead")
     fun activateWallets(account: Account, tokenQueries: List<TokenQuery>) {
         val wallets = tokenQueries.mapNotNull { tokenQuery ->

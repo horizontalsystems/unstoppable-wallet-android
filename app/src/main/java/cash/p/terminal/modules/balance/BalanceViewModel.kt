@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.adapters.zcash.ZcashAddressValidator
 import cash.p.terminal.core.factories.uriScheme
@@ -40,6 +41,8 @@ import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.ui_compose.entities.ViewState
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +53,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
+import kotlin.getValue
 
 class BalanceViewModel(
     private val service: DefaultBalanceService,
@@ -74,6 +78,8 @@ class BalanceViewModel(
 
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val accountManager: IAccountManager by inject(IAccountManager::class.java)
+    private val coinManager: ICoinManager by inject(ICoinManager::class.java)
+    private val walletUseCase: WalletUseCase by inject(WalletUseCase::class.java)
     private val itemsBalanceHidden by lazy { mutableMapOf<Wallet, Boolean>() }
 
     private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(GetHardwarePublicKeyForWalletUseCase::class.java)
@@ -201,6 +207,7 @@ class BalanceViewModel(
                         currency = service.baseCurrency,
                         hideBalance = balanceHidden && itemsBalanceHidden[balanceItem.wallet] == true,
                         watchAccount = service.isWatchAccount,
+                        isSwipeToDeleteEnabled = !isSingleWalletAccount(),
                         balanceViewType = balanceViewType,
                         networkAvailable = service.networkAvailable,
                         showStackingUnpaid = true
@@ -310,6 +317,25 @@ class BalanceViewModel(
         return when {
             tmpAccount.hasAnyBackup -> ReceiveAllowedState.Allowed
             else -> ReceiveAllowedState.BackupRequired(tmpAccount)
+        }
+    }
+
+    private fun isSingleWalletAccount(): Boolean {
+        val account = accountManager.activeAccount ?: return false
+        return account.type is AccountType.MnemonicMonero
+    }
+
+    /***
+     * Return wallet if single wallet account (like Monero)
+     */
+    fun getSingleWalletForReceive(): Wallet? {
+        val account = accountManager.activeAccount ?: return null
+        return if(account.type is AccountType.MnemonicMonero) {
+            coinManager.getToken(TokenQuery(BlockchainType.Monero, TokenType.Native))?.let {
+                walletUseCase.getWallet(it)
+            }
+        } else {
+            null
         }
     }
 

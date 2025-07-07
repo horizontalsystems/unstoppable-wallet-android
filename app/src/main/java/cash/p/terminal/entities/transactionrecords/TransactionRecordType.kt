@@ -28,4 +28,7 @@ enum class TransactionRecordType {
     TRON_EXTERNAL_CONTRACT_CALL,
     TRON_INCOMING,
     TRON_OUTGOING,
+
+    MONERO_INCOMING,
+    MONERO_OUTGOING,
 }

@@ -65,11 +65,15 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                     record.passphrase?.value ?: ""
                 )
 
-                MNEMONIC_MONERO -> AccountType.MnemonicMonero(
-                    words = record.words!!.list,
-                    password = record.passphrase!!.value,
-                    walletInnerName = record.key!!.value
-                )
+                MNEMONIC_MONERO -> {
+                    val parts = record.key!!.value.split("@")
+                    AccountType.MnemonicMonero(
+                        words = record.words!!.list,
+                        password = record.passphrase!!.value,
+                        height = parts.getOrNull(1)?.toLongOrNull() ?: 0L,
+                        walletInnerName = parts.getOrNull(0) ?: "",
+                    )
+                }
 
                 PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
                 ADDRESS -> AccountType.EvmAddress(record.key!!.value)
@@ -166,7 +170,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 val mnemonicMonero = (account.type as AccountType.MnemonicMonero)
                 words = SecretList(mnemonicMonero.words)
                 passphrase = SecretString(mnemonicMonero.password)
-                key = SecretString(mnemonicMonero.walletInnerName)
+                key = SecretString(mnemonicMonero.walletInnerName+"@"+mnemonicMonero.height)
                 accountType = MNEMONIC_MONERO
             }
 

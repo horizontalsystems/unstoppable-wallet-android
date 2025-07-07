@@ -115,6 +115,8 @@
     <string name="ConfirmPassphrase">Confirm</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s words</string>
+    <string name="restoreheight_title">Restore Height</string>
+    <string name="restoreheight_hint">Restore Height or Date (YYYY-MM-DD)</string>
     <string name="CreateWallet_N_Words_monero">%s words (Monero only)</string>
     <string name="CreateWallet_PassphraseConfirm">Confirm</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
@@ -146,6 +148,9 @@
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
+    <string name="Restore_Error_MnemonicWordCount_monero">Wrong words count. It must be 25 words. You entered: %d</string>
+    <string name="inavlid_height">Invalid height</string>
+    <string name="monero_restore_error">Monero restore error</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
@@ -157,6 +162,7 @@
     <string name="Restore_PrivateKey">Private Key</string>
     <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter Recovery Phrase</string>
+    <string name="monero_restore_seed">Monero restore seed</string>
     <string name="Restore_NonStandardRestore">Non-Standard Import</string>
     <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to P.CASH users who have a non-standard wallet. Such wallets might have been created in P.CASH version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
 
@@ -1355,6 +1361,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="error_no_active_account">No active account found</string>
+    <string name="monero_not_supported_for_wallet">Monero is not supported for this wallet. Please create a new one with a 25-word seed.</string>
     <string name="error_hardware_wallet_not_supported">Not supported by hardware card yet</string>
     <string name="need_to_sign_times">To create transaction you will need to sign it %d times</string>
     <string name="initial_message_create_wallet_body">To create the wallet tap the card as shown above and do not remove until the end of the operation</string>

@@ -188,6 +188,12 @@ interface ISendSolanaAdapter {
     suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
 }
 
+interface ISendMoneroAdapter {
+    val balanceData: BalanceData
+    suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
+}
+
 interface ISendTonAdapter {
     val availableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?)

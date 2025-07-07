@@ -19,7 +19,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.ui_compose.getInput
-
 import cash.p.terminal.modules.receive.ReceiveRoutes.BCH_ADDRESS_FORMAT_SCREEN
 import cash.p.terminal.modules.receive.ReceiveRoutes.COIN_SELECT_SCREEN
 import cash.p.terminal.modules.receive.ReceiveRoutes.DERIVATION_SELECT_SCREEN
@@ -36,13 +35,14 @@ import cash.p.terminal.modules.receive.viewmodels.BchAddressTypeSelectViewModel
 import cash.p.terminal.modules.receive.viewmodels.DerivationSelectViewModel
 import cash.p.terminal.modules.receive.viewmodels.ReceiveAddressViewModel
 import cash.p.terminal.modules.receive.viewmodels.ReceiveSharedViewModel
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ReceiveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val wallet = navController.getInput<cash.p.terminal.wallet.Wallet>()
+        val wallet = navController.getInput<Wallet>()
         ReceiveScreen(
             wallet,
             navController
@@ -62,7 +62,7 @@ object ReceiveRoutes {
 
 @Composable
 fun ReceiveScreen(
-    wallet: cash.p.terminal.wallet.Wallet?,
+    wallet: Wallet?,
     fragmentNavController: NavController
 ) {
     val startDestination = if (wallet != null) RECEIVE_ADDRESS_SCREEN else COIN_SELECT_SCREEN
@@ -203,7 +203,7 @@ fun ReceiveScreen(
     }
 }
 
-private fun onSelectWallet(wallet: cash.p.terminal.wallet.Wallet, viewModel: ReceiveSharedViewModel, navController: NavController) {
+private fun onSelectWallet(wallet: Wallet, viewModel: ReceiveSharedViewModel, navController: NavController) {
     viewModel.wallet = wallet
     navController.navigate(RECEIVE_ADDRESS_SCREEN)
 }

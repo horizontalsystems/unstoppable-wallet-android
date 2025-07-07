@@ -61,47 +61,50 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
-import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.createaccount.MnemonicLanguageCell
 import cash.p.terminal.modules.createaccount.PassphraseCell
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreByMenu
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
-import cash.p.terminal.ui.compose.Keyboard
 import cash.p.terminal.strings.helpers.TranslatableString
-import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui.compose.Keyboard
 import cash.p.terminal.ui.compose.components.BoxTyler44
 import cash.p.terminal.ui.compose.components.ButtonSecondary
-import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CustomKeyboardWarningDialog
 import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.SelectorDialogCompose
+import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui.compose.observeKeyboardState
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.FormsInputPassword
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.SelectorDialogCompose
-import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.captionSB_leah
 import cash.p.terminal.ui_compose.components.caption_lucian
-import cash.p.terminal.ui.compose.observeKeyboardState
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RestorePhrase(
@@ -112,8 +115,9 @@ fun RestorePhrase(
     openSelectCoins: () -> Unit,
     openNonStandardRestore: () -> Unit,
     onBackClick: () -> Unit,
+    onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
+    val viewModel = koinViewModel<RestoreMnemonicViewModel>()
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
@@ -124,25 +128,29 @@ fun RestorePhrase(
     var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
     val keyboardState by observeKeyboardState()
 
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-            viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+                textState =
+                    textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+                viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+            }
         }
-    }
 
     val borderColor = if (uiState.error != null) {
-        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
+        ComposeAppTheme.colors.red50
     } else {
-        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
+        ComposeAppTheme.colors.steel20
     }
 
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(R.string.ManageAccounts_ImportWallet),
+            title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(
+                R.string.ManageAccounts_ImportWallet
+            ),
             navigationIcon = {
                 HsBackButton(onClick = onBackClick)
             },
@@ -170,8 +178,9 @@ fun RestorePhrase(
                     hint = viewModel.defaultName,
                     onValueChange = viewModel::onEnterName
                 )
-                Spacer(Modifier.height(32.dp))
-
+                Spacer(Modifier.height(16.dp))
+                MoneroMode(uiState.isMoneroMnemonic, viewModel::onToggleMoneroMnemonic)
+                Spacer(Modifier.height(16.dp))
                 if (advanced) {
                     RestoreByMenu(restoreMenuViewModel)
                     Spacer(Modifier.height(32.dp))
@@ -185,7 +194,6 @@ fun RestorePhrase(
                         .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                         .background(ComposeAppTheme.colors.lawrence),
                 ) {
-
                     val style = SpanStyle(
                         color = ComposeAppTheme.colors.lucian,
                         fontWeight = FontWeight.Normal,
@@ -253,7 +261,6 @@ fun RestorePhrase(
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
                         if (textState.text.isNotEmpty()) {
                             ButtonSecondaryCircle(
                                 modifier = Modifier.padding(end = 16.dp),
@@ -306,6 +313,28 @@ fun RestorePhrase(
                     )
                 }
 
+                if (!advanced) {
+                    if (uiState.isMoneroMnemonic) {
+                        Spacer(Modifier.height(16.dp))
+                        HeaderText(stringResource(id = R.string.restoreheight_title))
+                        FormsInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            initial = uiState.height,
+                            pasteEnabled = false,
+                            singleLine = true,
+                            hint = stringResource(R.string.restoreheight_hint),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            onValueChange = viewModel::onChangeHeightText
+                        )
+                        uiState.errorHeight?.let { errorText ->
+                            Spacer(Modifier.height(8.dp))
+                            caption_lucian(
+                                modifier = Modifier.padding(horizontal = 32.dp),
+                                text = errorText
+                            )
+                        }
+                    }
+                }
                 Spacer(Modifier.height(32.dp))
 
                 if (advanced) {
@@ -316,33 +345,38 @@ fun RestorePhrase(
                         coroutineScope
                     )
                 } else {
-                    CellSingleLineLawrenceSection {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    openRestoreAdvanced?.invoke()
-                                }
-                                .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            body_leah(text = stringResource(R.string.Button_Advanced))
-                            Spacer(modifier = Modifier.weight(1f))
-                            Image(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_arrow_right),
-                                contentDescription = null,
-                            )
+                    if (!uiState.isMoneroMnemonic) {
+                        CellSingleLineLawrenceSection {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable {
+                                        openRestoreAdvanced?.invoke()
+                                    }
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                body_leah(text = stringResource(R.string.Button_Advanced))
+                                Spacer(modifier = Modifier.weight(1f))
+                                Image(
+                                    modifier = Modifier.size(20.dp),
+                                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                                    contentDescription = null,
+                                )
+                            }
                         }
-                    }
 
-                    Spacer(Modifier.height(32.dp))
+                        Spacer(Modifier.height(32.dp))
+                    }
                 }
             }
 
             Column {
                 if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
-                    SuggestionsBar(modifier = Modifier.imePadding(), wordSuggestions = uiState.wordSuggestions) { wordItem, suggestion ->
+                    SuggestionsBar(
+                        modifier = Modifier.imePadding(),
+                        wordSuggestions = uiState.wordSuggestions
+                    ) { wordItem, suggestion ->
                         HudHelper.vibrate(context)
 
                         val cursorIndex = wordItem.range.first + suggestion.length + 1
@@ -365,9 +399,13 @@ fun RestorePhrase(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
-        openSelectCoins.invoke()
-        viewModel.onSelectCoinsShown()
+        if (accountType is AccountType.MnemonicMonero) {
+            onFinish()
+        } else {
+            mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
+            openSelectCoins.invoke()
+            viewModel.onSelectCoinsShown()
+        }
     }
 
     if (showCustomKeyboardDialog) {
@@ -524,5 +562,26 @@ fun SuggestionsBar(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun MoneroMode(enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = { onCheckedChange(!enabled) },
+    ) {
+        body_leah(
+            text = stringResource(R.string.monero_restore_seed),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp, end = 8.dp)
+        )
+        HsSwitch(
+            checked = enabled,
+            onCheckedChange = onCheckedChange
+        )
     }
 }

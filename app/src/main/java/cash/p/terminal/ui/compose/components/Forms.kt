@@ -1,14 +1,11 @@
 package cash.p.terminal.ui.compose.components
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +14,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -47,14 +43,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.utils.ModuleField
-import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
@@ -92,6 +89,7 @@ fun FormsInput(
                 ComposeAppTheme.colors.red50
             }
         }
+
         else -> ComposeAppTheme.colors.steel20
     }
 
@@ -115,7 +113,7 @@ fun FormsInput(
                 mutableStateOf(TextFieldValue(initial ?: "", TextRange(initial?.length ?: 0)))
             }
 
-            prefix?.let{
+            prefix?.let {
                 body_grey(
                     modifier = Modifier.padding(start = 12.dp),
                     text = prefix
@@ -133,7 +131,8 @@ fun FormsInput(
                 enabled = enabled,
                 value = textState,
                 onValueChange = { textFieldValue ->
-                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+                    val textFieldValueProcessed =
+                        textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
 
                     val text = textFieldValueProcessed.text
                     if (maxLength == null || text.length <= maxLength) {
@@ -142,7 +141,8 @@ fun FormsInput(
                     } else {
                         // Need to set textState to new instance of TextFieldValue with the same values
                         // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                        textState =
+                            TextFieldValue(text = textState.text, selection = textState.selection)
                     }
                 },
                 textStyle = ColoredTextStyle(
@@ -171,6 +171,7 @@ fun FormsInput(
                 is DataState.Loading -> {
                     HSCircularProgressIndicator()
                 }
+
                 is DataState.Error -> {
                     Icon(
                         modifier = Modifier.padding(end = 8.dp),
@@ -179,6 +180,7 @@ fun FormsInput(
                         tint = cautionColor
                     )
                 }
+
                 is DataState.Success -> {
                     Icon(
                         modifier = Modifier.padding(end = 8.dp),
@@ -187,6 +189,7 @@ fun FormsInput(
                         tint = ComposeAppTheme.colors.remus
                     )
                 }
+
                 else -> {
                     Spacer(modifier = Modifier.width(28.dp))
                 }
@@ -205,18 +208,23 @@ fun FormsInput(
                 )
             } else {
                 if (qrScannerEnabled) {
-                    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                    val qrScannerLauncher =
+                        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                            if (result.resultCode == Activity.RESULT_OK) {
+                                val scannedText =
+                                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                            val textProcessed = textPreprocessor.process(scannedText)
-                            textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                            onValueChange.invoke(textProcessed)
+                                val textProcessed = textPreprocessor.process(scannedText)
+                                textState = textState.copy(
+                                    text = textProcessed,
+                                    selection = TextRange(textProcessed.length)
+                                )
+                                onValueChange.invoke(textProcessed)
+                            }
                         }
-                    }
 
                     ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
+                        modifier = Modifier.padding(end = if (pasteEnabled) 8.dp else 16.dp),
                         icon = R.drawable.ic_qr_scan_20,
                         onClick = {
                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
@@ -234,7 +242,10 @@ fun FormsInput(
                         onClick = {
                             clipboardManager.getText()?.text?.let { textInClipboard ->
                                 val textProcessed = textPreprocessor.process(textInClipboard)
-                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                textState = textState.copy(
+                                    text = textProcessed,
+                                    selection = TextRange(textProcessed.length)
+                                )
                                 onValueChange.invoke(textProcessed)
                             }
                         },
@@ -251,6 +262,17 @@ fun FormsInput(
                 style = ComposeAppTheme.typography.caption
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FormsInputPreview() {
+    ComposeAppTheme {
+        FormsInput(
+            hint = "Hint",
+            onValueChange = {}
+        )
     }
 }
 
@@ -287,6 +309,7 @@ fun FormsInputMultiline(
                 ComposeAppTheme.colors.red50
             }
         }
+
         else -> ComposeAppTheme.colors.steel20
     }
 
@@ -321,7 +344,8 @@ fun FormsInputMultiline(
                 enabled = enabled,
                 value = textState,
                 onValueChange = { textFieldValue ->
-                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+                    val textFieldValueProcessed =
+                        textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
 
                     val text = textFieldValueProcessed.text
                     if (maxLength == null || text.length <= maxLength) {
@@ -330,7 +354,8 @@ fun FormsInputMultiline(
                     } else {
                         // Need to set textState to new instance of TextFieldValue with the same values
                         // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                        textState =
+                            TextFieldValue(text = textState.text, selection = textState.selection)
                     }
                 },
                 textStyle = ColoredTextStyle(
@@ -364,6 +389,7 @@ fun FormsInputMultiline(
                     is DataState.Loading -> {
                         HSCircularProgressIndicator()
                     }
+
                     is DataState.Error -> {
                         Icon(
                             modifier = Modifier.padding(end = 8.dp),
@@ -372,6 +398,7 @@ fun FormsInputMultiline(
                             tint = cautionColor
                         )
                     }
+
                     is DataState.Success -> {
                         Icon(
                             modifier = Modifier.padding(end = 8.dp),
@@ -380,6 +407,7 @@ fun FormsInputMultiline(
                             tint = ComposeAppTheme.colors.remus
                         )
                     }
+
                     else -> {
 
                     }
@@ -399,18 +427,23 @@ fun FormsInputMultiline(
                     )
                 } else {
                     if (qrScannerEnabled) {
-                        val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                            if (result.resultCode == Activity.RESULT_OK) {
-                                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                        val qrScannerLauncher =
+                            rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                                if (result.resultCode == Activity.RESULT_OK) {
+                                    val scannedText =
+                                        result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                                val textProcessed = textPreprocessor.process(scannedText)
-                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                                onValueChange.invoke(textProcessed)
+                                    val textProcessed = textPreprocessor.process(scannedText)
+                                    textState = textState.copy(
+                                        text = textProcessed,
+                                        selection = TextRange(textProcessed.length)
+                                    )
+                                    onValueChange.invoke(textProcessed)
+                                }
                             }
-                        }
 
                         ButtonSecondaryCircle(
-                            modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
+                            modifier = Modifier.padding(end = if (pasteEnabled) 8.dp else 16.dp),
                             icon = R.drawable.ic_qr_scan_20,
                             onClick = {
                                 qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
@@ -430,7 +463,10 @@ fun FormsInputMultiline(
                             onClick = {
                                 clipboardManager.getText()?.text?.let { textInClipboard ->
                                     val textProcessed = textPreprocessor.process(textInClipboard)
-                                    textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                    textState = textState.copy(
+                                        text = textProcessed,
+                                        selection = TextRange(textProcessed.length)
+                                    )
                                     onValueChange.invoke(textProcessed)
                                 }
 

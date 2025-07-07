@@ -1,10 +1,12 @@
 package cash.p.terminal.modules.backuplocal
 
-import com.google.gson.annotations.SerializedName
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.RestoreSettingType
+import cash.p.terminal.core.usecase.MoneroWalletUseCase
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.CexType
+import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.tronkit.toBigInteger
 
@@ -86,7 +88,7 @@ object BackupLocalModule {
     }
 
     @Throws(IllegalStateException::class)
-    fun getAccountTypeFromData(accountType: String, data: ByteArray): AccountType {
+    suspend fun getAccountTypeFromData(accountType: String, data: ByteArray): AccountType {
         return when (accountType) {
             MNEMONIC -> {
                 val parts = String(data, Charsets.UTF_8).split("@", limit = 2)
@@ -98,12 +100,32 @@ object BackupLocalModule {
                 AccountType.Mnemonic(words, passphrase)
             }
 
+            MNEMONIC_MONERO -> {
+                val parts = String(data, Charsets.UTF_8).split("@", limit = 3)
+                if(parts.size != 2) {
+                    throw IllegalStateException("Wrong monero backup format")
+                }
+                val words = parts[0].split(" ")
+                val height = parts[1].toLong()
+                val generateMoneroWalletUseCase: MoneroWalletUseCase = getKoinInstance()
+                return generateMoneroWalletUseCase.restore(
+                    words,
+                    height,
+                ) ?: throw IllegalStateException("Wallet is empty")
+            }
+
             PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
             ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
             TON_ADDRESS -> AccountType.TonAddress(String(data, Charsets.UTF_8))
-            BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
+            BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(
+                String(
+                    data,
+                    Charsets.UTF_8
+                )
+            )
+
             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(Base58.encode(data))
             UFVK -> AccountType.ZCashUfvKey(String(data, Charsets.UTF_8))
             CEX -> {
@@ -131,12 +153,10 @@ object BackupLocalModule {
         }
 
         is AccountType.MnemonicMonero -> {
-            val passphrasePart = if (accountType.password.isNotBlank()) {
-                "@" + accountType.password
-            } else {
-                ""
-            }
-            val combined = accountType.words.joinToString(" ") + passphrasePart
+            val combined = listOf(
+                accountType.words.joinToString(" "),
+                accountType.height.toString()
+            ).joinToString("@")
             combined.toByteArray(Charsets.UTF_8)
         }
 
@@ -150,7 +170,7 @@ object BackupLocalModule {
         is AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)
         is AccountType.ZCashUfvKey -> accountType.key.toByteArray(Charsets.UTF_8)
         is AccountType.HardwareCard -> {
-            (accountType.cardId + "@" +accountType.walletPublicKey).toByteArray(Charsets.UTF_8)
+            (accountType.cardId + "@" + accountType.walletPublicKey).toByteArray(Charsets.UTF_8)
         }
     }
 

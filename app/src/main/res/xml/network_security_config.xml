@@ -2,5 +2,16 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="false">nodex.monerujo.io</domain>
+        <domain includeSubdomains="false">xmr.agor.ist</domain>
+        <domain includeSubdomains="false">xmr-de.boldsuck.org</domain>
+        <domain includeSubdomains="false">xmr-node.cakewallet.com</domain>
+        <domain includeSubdomains="false">monero.ds-jetzt.de</domain>
+        <domain includeSubdomains="false">node.monerodevs.org</domain>
+        <domain includeSubdomains="false">node.sethforprivacy.com</domain>
+        <domain includeSubdomains="false">monero.stackwallet.com</domain>
+        <domain includeSubdomains="false">xmr.stormycloud.org</domain>
+        <domain includeSubdomains="false">monero.10z.com.ar</domain>
+        <domain includeSubdomains="false">node.xmr.rocks</domain>
+        <domain includeSubdomains="false">opennode.xmr-tw.org</domain>
     </domain-config>
 </network-security-config>

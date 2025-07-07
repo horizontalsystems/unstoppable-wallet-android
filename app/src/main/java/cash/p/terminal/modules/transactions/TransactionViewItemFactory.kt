@@ -14,6 +14,7 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
+import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -367,11 +368,11 @@ class TransactionViewItemFactory(
             is BitcoinTransactionRecord ->
                 createViewItemFromBitcoinTransactionRecord(
                     transactionItem = transactionItem,
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    lastBlockTimestamp,
-                    icon
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    lastBlockTimestamp = lastBlockTimestamp,
+                    icon = icon
                 )
 
             is SolanaTransactionRecord -> createViewItemFromSolanaTransactionRecord(
@@ -401,109 +402,6 @@ class TransactionViewItemFactory(
                 outgoingEvents = record.outgoingEvents,
                 icon = icon
             )
-            /*is TronApproveTransactionRecord ->
-                createViewItemFromApproveTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    spender = record.spender,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is TronContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
-                    record.incomingEvents,
-                    record.outgoingEvents
-                )
-                createViewItemFromContractCallTransactionRecord(
-                    uid = record.uid,
-                    incomingValues = incomingValues,
-                    outgoingValues = outgoingValues,
-                    method = record.method,
-                    contractAddress = record.contractAddress,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    spam = record.spam,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-            }
-
-            is TronExternalContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
-                    record.incomingEvents,
-                    record.outgoingEvents
-                )
-                createViewItemFromExternalContractCallTransactionRecord(
-                    uid = record.uid,
-                    incomingValues = incomingValues,
-                    outgoingValues = outgoingValues,
-                    incomingEvents = record.incomingEvents,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    spam = record.spam,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-            }
-
-            is TronIncomingTransactionRecord -> {
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = record.baseToken,
-                    isIncoming = true
-                ) ?: createViewItemFromEvmIncomingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    from = record.from,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is TronOutgoingTransactionRecord -> {
-                tryConvertToChangeNowViewItemSwap(
-                    transactionItem = transactionItem,
-                    token = record.baseToken,
-                    isIncoming = false
-                ) ?: createViewItemFromEvmOutgoingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    to = record.to,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    sentToSelf = record.sentToSelf,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    spam = record.spam,
-                    nftMetadata = transactionItem.nftMetadata
-                )
-            }
-
-            is TronTransactionRecord -> {
-                createViewItemFromTronTransactionRecord(
-                    uid = record.uid,
-                    timestamp = record.timestamp,
-                    contract = record.transaction.contract,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }*/
 
             is TonTransactionRecord -> {
                 tryConvertToChangeNowViewItemSwap(
@@ -517,8 +415,114 @@ class TransactionViewItemFactory(
                 )
             }
 
+            is MoneroTransactionRecord -> {
+                createViewItemFromMoneroTransactionRecord(
+                    record = record,
+                    transactionItem = transactionItem,
+                    progress = progress,
+                    icon = icon
+                )
+            }
+
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
+    }
+
+    private fun createViewItemFromMoneroTransactionRecord(
+        record: MoneroTransactionRecord,
+        transactionItem: TransactionItem,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        return when (record.transactionRecordType) {
+            TransactionRecordType.MONERO_INCOMING ->
+                createViewItemFromMoneroIncomingTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon
+                )
+
+            TransactionRecordType.MONERO_OUTGOING ->
+                createViewItemFromMoneroOutgoingTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon
+                )
+
+            else -> throw IllegalArgumentException("Undefined Monero record type ${record.transactionRecordType}")
+        }
+    }
+
+    private fun createViewItemFromMoneroIncomingTransactionRecord(
+        record: MoneroTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
+        val secondaryValue = currencyValue?.let {
+            getColoredValue(it, ColorName.Grey)
+        }
+
+        val subtitle = record.from?.let { from ->
+            Translator.getString(
+                R.string.Transactions_From,
+                mapped(from, record.blockchainType)
+            )
+        } ?: record.subaddressLabel ?: "---"
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Receive),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            spam = record.spam,
+            icon = icon ?: singleValueIconType(record.mainValue)
+        )
+    }
+
+    private fun createViewItemFromMoneroOutgoingTransactionRecord(
+        record: MoneroTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val primaryValue = if (record.sentToSelf) {
+            ColoredValue(getCoinString(record.mainValue, true), ColorName.Leah)
+        } else {
+            getColoredValue(record.mainValue, ColorName.Lucian)
+        }
+
+        val secondaryValue = currencyValue?.let {
+            getColoredValue(it, ColorName.Grey)
+        }
+
+        val subtitle = record.to?.let { to ->
+            Translator.getString(
+                R.string.Transactions_To,
+                mapped(to, record.blockchainType)
+            )
+        } ?: record.subaddressLabel ?: "---"
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Send),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = record.sentToSelf,
+            spam = record.spam,
+            icon = icon ?: singleValueIconType(record.mainValue)
+        )
     }
 
     private fun createViewItemFromTonTransactionRecord(

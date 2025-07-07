@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
@@ -35,6 +36,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(

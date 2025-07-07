@@ -266,7 +266,8 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.slideFromRight(R.id.receiveFragment)
+                                        val wallet = viewModel.getSingleWalletForReceive()
+                                        navController.slideFromRight(R.id.receiveFragment, wallet)
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
@@ -351,14 +352,15 @@ fun BalanceItems(
                         )
                         HSpacer(16.dp)
                     }
-
-                    ButtonSecondaryCircle(
-                        icon = R.drawable.ic_manage_2,
-                        contentDescription = stringResource(R.string.ManageCoins_title),
-                        onClick = {
-                            navController.slideFromRight(R.id.manageWalletsFragment)
-                        }
-                    )
+                    if (accountViewItem.isCoinManagerEnabled) {
+                        ButtonSecondaryCircle(
+                            icon = R.drawable.ic_manage_2,
+                            contentDescription = stringResource(R.string.ManageCoins_title),
+                            onClick = {
+                                navController.slideFromRight(R.id.manageWalletsFragment)
+                            }
+                        )
+                    }
 
                     HSpacer(16.dp)
                 }

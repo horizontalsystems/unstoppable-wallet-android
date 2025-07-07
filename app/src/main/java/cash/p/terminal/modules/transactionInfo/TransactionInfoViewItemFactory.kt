@@ -6,6 +6,7 @@ import cash.p.terminal.core.managers.TonHelper
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
@@ -451,6 +452,39 @@ class TransactionInfoViewItemFactory(
                 }
             }
 
+            is MoneroTransactionRecord -> {
+                when (transaction.transactionRecordType) {
+                    TransactionRecordType.MONERO_INCOMING -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transaction.mainValue,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+
+                    TransactionRecordType.MONERO_OUTGOING -> {
+                        sentToSelf = transaction.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transaction.mainValue,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transaction.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+
+                    else -> Unit
+                }
+            }
+
             else -> {}
         }
 
@@ -463,10 +497,10 @@ class TransactionInfoViewItemFactory(
 
         itemSections.add(
             TransactionViewItemFactoryHelper.getStatusSectionItems(
-                transaction,
-                status,
-                rates,
-                blockchainType
+                transaction = transaction,
+                status = status,
+                rates = rates,
+                blockchainType = blockchainType
             )
         )
         if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {

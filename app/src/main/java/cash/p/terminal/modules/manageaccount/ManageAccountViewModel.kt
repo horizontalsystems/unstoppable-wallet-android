@@ -13,6 +13,7 @@ import cash.p.terminal.tangem.domain.sdk.TangemSdkManager
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.IAccountManager
+import com.m2049r.xmrwallet.service.MoneroWalletService
 import com.tangem.common.card.Card
 import com.tangem.common.doOnSuccess
 import kotlinx.coroutines.channels.Channel
@@ -188,6 +189,18 @@ class ManageAccountViewModel(
 
             is AccountType.Cex -> listOf()
         }
+    }
+
+    fun getMoneroViewKey(): String {
+        // We have only one active Monero wallet, so MoneroWalletService is enough to get active wallet
+        val moneroWalletService: MoneroWalletService by inject(MoneroWalletService::class.java)
+        return moneroWalletService.wallet?.secretViewKey ?: ""
+    }
+
+    fun getMoneroSpendKey(): String {
+        // We have only one active Monero wallet, so MoneroWalletService is enough to get active wallet
+        val moneroWalletService: MoneroWalletService by inject(MoneroWalletService::class.java)
+        return moneroWalletService.wallet?.secretSpendKey ?: ""
     }
 
     private fun handleUpdatedAccounts(accounts: List<Account>) {

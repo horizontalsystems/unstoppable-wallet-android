@@ -193,7 +193,7 @@ abstract class BitcoinBaseAdapter(
         scope.cancel()
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         kit.refresh()
     }
 

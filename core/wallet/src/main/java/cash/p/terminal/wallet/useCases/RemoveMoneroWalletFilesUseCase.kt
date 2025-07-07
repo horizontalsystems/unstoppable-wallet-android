@@ -10,7 +10,7 @@ import java.io.File
 class RemoveMoneroWalletFilesUseCase(private val appContext: Context) {
 
     suspend operator fun invoke(walletInnerName: String): Boolean = withContext(Dispatchers.IO) {
-        val file = Helper.getWalletFile(appContext, walletInnerName);
+        val file = Helper.getWalletFile(appContext, walletInnerName)
         deleteWallet(file)
     }
 

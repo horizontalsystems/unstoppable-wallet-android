@@ -8,19 +8,23 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.modules.amount.AmountInputModeModule
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinModule
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinNavHost
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.evm.SendEvmScreen
+import cash.p.terminal.modules.send.monero.SendMoneroModule
+import cash.p.terminal.modules.send.monero.SendMoneroScreen
+import cash.p.terminal.modules.send.monero.SendMoneroViewModel
 import cash.p.terminal.modules.send.solana.SendSolanaModule
 import cash.p.terminal.modules.send.solana.SendSolanaScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
@@ -35,6 +39,7 @@ import cash.p.terminal.modules.send.zcash.SendZCashScreen
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.requireInput
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.parcelize.Parcelize
 
@@ -207,7 +212,41 @@ class SendFragment : BaseFragment() {
                         }
                     }
 
-                    else -> {}
+                    BlockchainType.Monero -> {
+                        setContent {
+                            val factory = SendMoneroModule.Factory(wallet, predefinedAddress)
+                            val sendMoneroViewModel by navGraphViewModels<SendMoneroViewModel>(R.id.sendXFragment) { factory }
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendMoneroScreen(
+                                    title = title,
+                                    navController = findNavController(),
+                                    viewModel = sendMoneroViewModel,
+                                    amountInputModeViewModel = amountInputModeViewModel,
+                                    sendEntryPointDestId = sendEntryPointDestId,
+                                    prefilledData = prefilledData,
+                                )
+                            }
+                        }
+                    }
+
+                    else -> {
+                        setContent {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                Text(
+                                    text = "Unsupported yet",
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    }
                 }
             } catch (t: Throwable) {
                 findNavController().popBackStack()

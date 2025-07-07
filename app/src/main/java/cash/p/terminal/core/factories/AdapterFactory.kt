@@ -17,6 +17,8 @@ import cash.p.terminal.core.adapters.EvmAdapter
 import cash.p.terminal.core.adapters.EvmTransactionsAdapter
 import cash.p.terminal.core.adapters.JettonAdapter
 import cash.p.terminal.core.adapters.LitecoinAdapter
+import cash.p.terminal.core.adapters.MoneroAdapter
+import cash.p.terminal.core.adapters.MoneroTransactionsAdapter
 import cash.p.terminal.core.adapters.PirateCashAdapter
 import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.SolanaTransactionConverter
@@ -35,6 +37,7 @@ import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
+import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.StackingManager
@@ -60,6 +63,7 @@ class AdapterFactory(
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
+    private val moneroKitManager: MoneroKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -67,7 +71,6 @@ class AdapterFactory(
     private val localStorage: ILocalStorage,
     private val masterNodesRepository: MasterNodesRepository
 ) {
-
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
 
@@ -129,14 +132,20 @@ class AdapterFactory(
         return JettonAdapter(tonKitWrapper, address, wallet)
     }
 
-    fun getAdapterOrNull(wallet: Wallet) = try {
+    private suspend fun getMoneroAdapter(wallet: Wallet): IAdapter {
+        val moneroKitWrapper = moneroKitManager.getMoneroKitWrapper(wallet.account)
+
+        return MoneroAdapter(moneroKitWrapper)
+    }
+
+    suspend fun getAdapterOrNull(wallet: Wallet) = try {
         getAdapter(wallet)
     } catch (e: Throwable) {
         Log.e("AAA", "get adapter error", e)
         null
     }
 
-    private fun getAdapter(wallet: Wallet) =
+    private suspend fun getAdapter(wallet: Wallet) =
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
                 when (wallet.token.blockchainType) {
@@ -306,7 +315,7 @@ class AdapterFactory(
                 }
 
                 BlockchainType.Monero -> {
-
+                    getMoneroAdapter(wallet)
                 }
 
                 else -> null
@@ -393,6 +402,11 @@ class AdapterFactory(
         return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
     }
 
+    suspend fun moneroTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val moneroKitWrapper = moneroKitManager.getMoneroKitWrapper(source.account)
+        return MoneroTransactionsAdapter(moneroKitWrapper, source)
+    }
+
     fun tonTransactionConverter(
         address: Address,
         source: TransactionSource,
@@ -407,7 +421,7 @@ class AdapterFactory(
         )
     }
 
-    fun unlinkAdapter(wallet: Wallet) {
+    suspend fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
@@ -432,11 +446,15 @@ class AdapterFactory(
                 tonKitManager.unlink(wallet.account)
             }
 
+            BlockchainType.Monero -> {
+                moneroKitManager.unlink(wallet.account)
+            }
+
             else -> Unit
         }
     }
 
-    fun unlinkAdapter(transactionSource: TransactionSource) {
+    suspend fun unlinkAdapter(transactionSource: TransactionSource) {
         when (val blockchainType = transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
@@ -459,6 +477,10 @@ class AdapterFactory(
 
             BlockchainType.Ton -> {
                 tonKitManager.unlink(transactionSource.account)
+            }
+
+            BlockchainType.Monero -> {
+                moneroKitManager.unlink(transactionSource.account)
             }
 
             else -> Unit

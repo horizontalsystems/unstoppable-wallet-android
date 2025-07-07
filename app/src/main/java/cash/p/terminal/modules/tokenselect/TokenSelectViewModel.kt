@@ -92,6 +92,7 @@ class TokenSelectViewModel(
                         currency = service.baseCurrency,
                         hideBalance = balanceHiddenManager.balanceHidden,
                         watchAccount = service.isWatchAccount,
+                        isSwipeToDeleteEnabled = true,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
                         networkAvailable = service.networkAvailable,
                         showStackingUnpaid = false

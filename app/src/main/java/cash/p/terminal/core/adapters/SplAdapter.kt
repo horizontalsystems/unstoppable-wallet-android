@@ -35,7 +35,7 @@ class SplAdapter(
         // stopped via EthereumKitManager
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         solanaKitWrapper.solanaKit.refresh()
     }
 

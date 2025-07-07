@@ -125,7 +125,7 @@ class ManageWalletsViewModel(
                 service.enable(it)
             }
 
-            if(errorMsg == null && closeAfterSuccess) {
+            if (errorMsg == null && closeAfterSuccess) {
                 closeScreen = true
             }
         }.doOnFailure {
@@ -167,6 +167,10 @@ class ManageWalletsViewModel(
 
     fun enable(token: Token) {
         if (!isHardwareCard() || tangemBlockchainTypeExistUseCase(token)) {
+            if (isMonero(token)) {
+                showError(App.instance.getString(R.string.monero_not_supported_for_wallet))
+                return
+            }
             service.enable(token)
         } else {
             if (TangemConfig.isExcludedForHardwareCard(token)) {
@@ -180,6 +184,10 @@ class ManageWalletsViewModel(
             sync(service.itemsFlow.value)
         }
     }
+
+    private fun isMonero(token: Token) =
+        (token.tokenQuery.blockchainType == BlockchainType.Monero &&
+                token.tokenQuery.tokenType == TokenType.Native)
 
     fun disable(token: Token) {
         service.disable(token)

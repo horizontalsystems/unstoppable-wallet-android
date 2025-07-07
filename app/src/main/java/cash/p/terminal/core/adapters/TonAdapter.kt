@@ -50,7 +50,7 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
         coroutineScope.cancel()
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
     }
 
     override val debugInfo: String

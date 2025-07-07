@@ -10,7 +10,7 @@ import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
-import cash.p.terminal.core.usecase.GenerateMoneroWalletUseCase
+import cash.p.terminal.core.usecase.MoneroWalletUseCase
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui_compose.entities.DataState
@@ -39,10 +39,13 @@ class CreateAdvancedAccountViewModel(
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
+    var loading by mutableStateOf(false)
+        private set
+
     val mnemonicKinds = CreateAccountModule.Kind.entries
 
-    private val generateMoneroWalletUseCase: GenerateMoneroWalletUseCase by inject(
-        GenerateMoneroWalletUseCase::class.java
+    private val moneroWalletUseCase: MoneroWalletUseCase by inject(
+        MoneroWalletUseCase::class.java
     )
 
     val defaultAccountName = accountFactory.getNextAccountName()
@@ -69,16 +72,23 @@ class CreateAdvancedAccountViewModel(
         private set
 
     fun createMnemonicAccount() = viewModelScope.launch {
-        if (showPassphraseBlock && passphraseEnabled && passphraseIsInvalid()) {
+        if (loading || (showPassphraseBlock && passphraseEnabled && passphraseIsInvalid())) {
             return@launch
         }
 
+        loading = true
+
         val accountType =
             if (selectedKind.wordsCount == CreateAccountModule.Kind.Mnemonic25.wordsCount) {
-                generateMoneroWalletUseCase()
+                moneroWalletUseCase.createNew()
             } else {
                 mnemonicAccountType(selectedKind.wordsCount)
-            } ?: return@launch
+            }
+
+        if (accountType == null) {
+            loading = false
+            return@launch
+        }
 
         val account = accountFactory.account(
             name = accountName,
@@ -97,6 +107,7 @@ class CreateAdvancedAccountViewModel(
         ) {
             predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
         }
+        loading = false
         success = accountType
     }
 

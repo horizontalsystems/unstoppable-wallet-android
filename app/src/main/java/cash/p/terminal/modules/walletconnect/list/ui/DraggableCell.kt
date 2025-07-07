@@ -29,6 +29,7 @@ fun DraggableCardSimple(
     cardOffset: Float,
     onReveal: () -> Unit,
     onConceal: () -> Unit,
+    enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val transitionState = remember {
@@ -51,10 +52,12 @@ fun DraggableCardSimple(
             .fillMaxSize()
             .offset { IntOffset(offsetTransition.roundToInt(), 0) }
             .pointerInput(key) {
-                detectHorizontalDragGestures { _, dragAmount ->
-                    when {
-                        dragAmount <= -MIN_DRAG_AMOUNT -> onReveal()
-                        dragAmount > MIN_DRAG_AMOUNT -> onConceal()
+                if (enabled) {
+                    detectHorizontalDragGestures { _, dragAmount ->
+                        when {
+                            dragAmount <= -MIN_DRAG_AMOUNT -> onReveal()
+                            dragAmount > MIN_DRAG_AMOUNT -> onConceal()
+                        }
                     }
                 }
             },

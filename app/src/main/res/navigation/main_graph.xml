@@ -62,6 +62,9 @@
         android:id="@+id/evmPrivateKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment"/>
     <fragment
+        android:id="@+id/generalPrivateKeyFragment"
+        android:name="cash.p.terminal.modules.manageaccount.generalprivatekey.GeneralPrivateKeyFragment"/>
+    <fragment
         android:id="@+id/showExtendedKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment"/>
     <fragment

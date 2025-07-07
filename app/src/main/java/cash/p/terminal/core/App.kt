@@ -51,6 +51,7 @@ import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
+import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.FeeRateProvider
@@ -116,7 +117,6 @@ import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -146,14 +146,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val blockchainSettingsStorage: BlockchainSettingsStorage by inject(BlockchainSettingsStorage::class.java)
         val evmSyncSourceStorage: EvmSyncSourceStorage by inject(EvmSyncSourceStorage::class.java)
         val btcBlockchainManager: BtcBlockchainManager by inject(BtcBlockchainManager::class.java)
-        lateinit var wordsManager: WordsManager
+        val wordsManager: WordsManager by inject(WordsManager::class.java)
         lateinit var networkManager: INetworkManager
         val appConfigProvider: AppConfigProvider by inject(AppConfigProvider::class.java)
         val adapterManager: IAdapterManager by inject(AdapterManager::class.java)
 
         val transactionAdapterManager: TransactionAdapterManager by inject(TransactionAdapterManager::class.java)
         val walletManager: IWalletManager by inject(IWalletManager::class.java)
-        lateinit var walletActivator: WalletActivator
+        val walletActivator: WalletActivator by inject(WalletActivator::class.java)
         val tokenAutoEnableManager: TokenAutoEnableManager by inject(TokenAutoEnableManager::class.java)
         val accountManager: IAccountManager by inject(IAccountManager::class.java)
         lateinit var userManager: UserManager
@@ -168,6 +168,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val solanaKitManager: SolanaKitManager by inject(SolanaKitManager::class.java)
         val tronKitManager: TronKitManager by inject(TronKitManager::class.java)
         val tonKitManager: TonKitManager by inject(TonKitManager::class.java)
+        val moneroKitManager: MoneroKitManager by inject(MoneroKitManager::class.java)
         val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var rateAppManager: IRateAppManager
@@ -207,6 +208,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         startKoin {
             androidContext(this@App)
             modules(appModule)
@@ -256,7 +262,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         proFeatureAuthorizationManager =
             ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
         accountFactory = AccountFactory(accountManager, userManager)
         backupManager = BackupManager(accountManager)
@@ -271,8 +276,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
 
         encryptionManager = EncryptionManager(keyProvider)
-
-        walletActivator = WalletActivator(walletManager, marketKit)
 
         val tronAccountManager = TronAccountManager(
             accountManager,
