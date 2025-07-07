@@ -2,8 +2,12 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.TronKit.SyncState
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.TriggerSmartContract
@@ -19,10 +23,14 @@ import java.math.BigInteger
 class Trc20Adapter(
     tronKitWrapper: TronKitWrapper,
     contractAddress: String,
-    wallet: Wallet
+    wallet: Wallet,
+    coinManager: ICoinManager,
+    baseToken: Token,
+    evmLabelManager: EvmLabelManager
 ) : BaseTronAdapter(tronKitWrapper, wallet.decimal) {
 
     private val contractAddress: Address = Address.fromBase58(contractAddress)
+    private val transactionConverter = TronTransactionConverter(coinManager, tronKitWrapper, wallet.transactionSource, baseToken, evmLabelManager)
 
     // IAdapter
 
@@ -95,5 +103,11 @@ class Trc20Adapter(
         val max = BigInteger.ONE.shiftLeft(256).subtract(BigInteger.ONE)
 
         return tronKit.approveTrc20TriggerSmartContract(contractAddress, tronAddress, max)
+    }
+
+    suspend fun getPendingTransactions(): List<TronTransactionRecord> {
+        return tronKit.getPendingTransactions(listOf(listOf(contractAddress.base58))).map {
+            transactionConverter.transactionRecord(it)
+        }
     }
 }

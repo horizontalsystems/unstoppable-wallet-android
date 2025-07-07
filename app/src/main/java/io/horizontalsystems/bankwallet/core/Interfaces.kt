@@ -428,7 +428,7 @@ interface ISendTronAdapter {
     suspend fun estimateFee(transaction: CreatedTransaction): List<Fee>
     suspend fun estimateFee(contract: Contract): List<Fee>
     suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
-    suspend fun send(contract: Contract)
+    suspend fun send(contract: Contract, feeLimit: Long?)
     suspend fun send(createdTransaction: CreatedTransaction)
     suspend fun isAddressActive(address: TronAddress): Boolean
     fun isOwnAddress(address: TronAddress): Boolean
