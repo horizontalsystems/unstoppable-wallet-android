@@ -111,7 +111,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     override suspend fun sendTransaction(): SendTransactionResult {
         when (val tmpSendTransactionData = sendTransactionData) {
             is SendTransactionData.Tron.WithContract -> {
-                adapter.send(tmpSendTransactionData.contract)
+                adapter.send(tmpSendTransactionData.contract, feeState.feeLimit)
             }
             is SendTransactionData.Tron.WithCreateTransaction -> {
                 adapter.send(tmpSendTransactionData.transaction)

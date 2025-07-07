@@ -87,10 +87,11 @@ class AdapterFactory(
         return SplAdapter(solanaKitWrapper, wallet, address)
     }
 
-    private fun getTrc20Adapter(wallet: Wallet, address: String): IAdapter {
+    private fun getTrc20Adapter(wallet: Wallet, address: String): Trc20Adapter? {
         val tronKitWrapper = tronKitManager.getTronKitWrapper(wallet.account)
+        val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
 
-        return Trc20Adapter(tronKitWrapper, address, wallet)
+        return Trc20Adapter(tronKitWrapper, address, wallet, coinManager, baseToken, evmLabelManager)
     }
 
     private fun getJettonAdapter(wallet: Wallet, address: String): IAdapter {

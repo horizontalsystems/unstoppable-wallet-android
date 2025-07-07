@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -59,23 +60,21 @@ object SwapHelper {
         }
     }
 
-    fun actionApproveTrc20(
+    suspend fun actionApproveTrc20(
         allowance: BigDecimal?,
         amountIn: BigDecimal,
         routerAddress: String,
         token: Token,
     ): ISwapProviderAction? {
         if (allowance == null || allowance >= amountIn) return null
-//        val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token) ?: return null
-//
-//        val approveTransaction = trc20Adapter.pendingTransactions
-//            .filterIsInstance<ApproveTransactionRecord>()
-//            .filter { it.spender.equals(routerAddress.eip55, true) }
-//            .maxByOrNull { it.timestamp }
-//
-//        val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue
+        val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token) ?: return null
 
-        val approveInProgress = false
+        val approveTransaction = trc20Adapter.getPendingTransactions()
+            .filterIsInstance<TronApproveTransactionRecord>()
+            .filter { it.spender.equals(routerAddress, true) }
+            .maxByOrNull { it.timestamp }
+
+        val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue
 
         return ActionApprove(
             amountIn,
