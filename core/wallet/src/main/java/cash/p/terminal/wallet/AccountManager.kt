@@ -56,7 +56,7 @@ class AccountManager(
     }
 
     override fun setActiveAccountId(activeAccountId: String?) {
-        if (activeAccount?.id != activeAccountId) {
+        if (activeAccount?.id != activeAccountId || (activeAccount == null && activeAccountId == null)) {
             storage.setActiveAccountId(currentLevel, activeAccountId)
             activeAccount = activeAccountId?.let { account(it) }
             _activeAccountStateFlow.update {
