@@ -63,8 +63,7 @@ class BalanceViewModel(
     private val localStorage: ILocalStorage,
     private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
-    private val priceManager: PriceManager,
-    val isSwapEnabled: Boolean
+    private val priceManager: PriceManager
 ) : ViewModelUiState<BalanceUiState>(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -88,12 +87,23 @@ class BalanceViewModel(
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     private var sortType = service.sortType
 
+    var isSwapEnabled by mutableStateOf(true)
+        private set
+    var isStackingEnabled by mutableStateOf(true)
+        private set
+
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
         private set
 
     private var refreshViewItemsJob: Job? = null
 
     init {
+        viewModelScope.launch(Dispatchers.Default) {
+            accountManager.activeAccountStateFlow.collect {
+                setupUI()
+            }
+        }
+
         viewModelScope.launch(Dispatchers.Default) {
             service.balanceItemsFlow
                 .collect { items ->
@@ -143,6 +153,12 @@ class BalanceViewModel(
         service.start()
 
         totalBalance.start(viewModelScope)
+    }
+
+    private fun setupUI() {
+        val isMoneroAccount = accountManager.activeAccount?.type is AccountType.MnemonicMonero
+        isStackingEnabled = !isMoneroAccount
+        isSwapEnabled = !isMoneroAccount && App.instance.isSwapEnabled
     }
 
     private fun addWalletsToHidden(items: List<Wallet>) {

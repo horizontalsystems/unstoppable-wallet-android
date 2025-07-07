@@ -296,13 +296,15 @@ fun BalanceItems(
                                 }
                             )
                         }
-                        ButtonPrimaryCircle(
-                            icon = R.drawable.ic_coins_stacking,
-                            contentDescription = stringResource(R.string.stacking),
-                            onClick = {
-                                navController.slideFromRight(R.id.stacking)
-                            }
-                        )
+                        if (viewModel.isStackingEnabled) {
+                            ButtonPrimaryCircle(
+                                icon = R.drawable.ic_coins_stacking,
+                                contentDescription = stringResource(R.string.stacking),
+                                onClick = {
+                                    navController.slideFromRight(R.id.stacking)
+                                }
+                            )
+                        }
                     }
                     VSpacer(12.dp)
                 }

@@ -36,8 +36,7 @@ object BalanceModule {
                 localStorage = App.localStorage,
                 wCManager = App.wcManager,
                 addressHandlerFactory = AddressHandlerFactory(App.appConfigProvider.udnApiKey),
-                priceManager = App.priceManager,
-                isSwapEnabled = App.instance.isSwapEnabled
+                priceManager = App.priceManager
             ) as T
         }
     }
