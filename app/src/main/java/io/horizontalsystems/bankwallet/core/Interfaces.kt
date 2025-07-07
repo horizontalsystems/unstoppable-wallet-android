@@ -418,6 +418,7 @@ interface ISendStellarAdapter {
     fun validate(address: String)
     suspend fun getMinimumSendAmount(address: String) : BigDecimal?
     suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    suspend fun send(transactionEnvelope: String)
 }
 
 interface ISendTronAdapter {

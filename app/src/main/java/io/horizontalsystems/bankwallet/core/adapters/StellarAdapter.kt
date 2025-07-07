@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.stellarkit.StellarKit
@@ -18,7 +17,7 @@ import java.math.BigDecimal
 
 class StellarAdapter(
     stellarKitWrapper: StellarKitWrapper
-) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
+) : BaseStellarAdapter(stellarKitWrapper) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var totalBalance: BigDecimal? = null
