@@ -434,6 +434,32 @@ fun AdvancedSearchContent(
                 )
             }
         )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedGold,
+            enabled = uiState.outperformedGoldOn,
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateOutperformedGoldOn(it)
+                }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedGold)
+                )
+            }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedSnp,
+            enabled = uiState.outperformedSnpOn,
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateOutperformedSnpOn(it)
+                }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedSp500)
+                )
+            }
+        )
     }
 
     VSpacer(24.dp)

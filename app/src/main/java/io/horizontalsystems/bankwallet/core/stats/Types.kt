@@ -659,6 +659,8 @@ enum class StatPremiumTrigger(val value: String) {
     OutperformedBtc("outperformed_btc"),
     OutperformedEth("outperformed_eth"),
     OutperformedBnb("outperformed_bnb"),
+    OutperformedGold("outperformed_gold"),
+    OutperformedSp500("outperformed_sp500"),
     GoodCexVolume("good_cex_volume"),
     GoodDexVolume("good_dex_volume"),
     GoodDistribution("good_distribution"),
