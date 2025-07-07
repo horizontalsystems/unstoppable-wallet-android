@@ -41,6 +41,7 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
     private var addressState = addressService.stateFlow.value
     private var minimumAmountState = minimumAmountService.stateFlow.value
     private var memo: String? = null
+    private var transactionEnvelope: String? = null
 
     private var networkFee: SendModule.AmountData? = getAmountData(CoinValue(feeToken, fee))
 
@@ -87,9 +88,17 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Stellar)
 
-        memo = data.memo
-        addressService.setAddress(Address(data.address))
-        amountService.setAmount(data.amount)
+        when (data) {
+            is SendTransactionData.Stellar.Regular -> {
+                memo = data.memo
+                addressService.setAddress(Address(data.address))
+                amountService.setAmount(data.amount)
+            }
+            is SendTransactionData.Stellar.WithTransactionEnvelope -> {
+                transactionEnvelope = data.transactionEnvelope
+                emitState()
+            }
+        }
     }
 
     @Composable
@@ -98,7 +107,12 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
     }
 
     override suspend fun sendTransaction(): SendTransactionResult {
-        adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+        val transactionEnvelope = transactionEnvelope
+        if (transactionEnvelope != null) {
+            adapter.send(transactionEnvelope)
+        } else {
+            adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+        }
 
         return SendTransactionResult.Stellar
     }
@@ -107,7 +121,7 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
         uuid = uuid,
         networkFee = networkFee,
         cautions = listOf(),
-        sendable = amountState.canBeSend && addressState.canBeSend && minimumAmountState.canBeSend,
+        sendable = transactionEnvelope != null || (amountState.canBeSend && addressState.canBeSend && minimumAmountState.canBeSend),
         loading = false,
         fields = listOf(),
         extraFees = extraFees

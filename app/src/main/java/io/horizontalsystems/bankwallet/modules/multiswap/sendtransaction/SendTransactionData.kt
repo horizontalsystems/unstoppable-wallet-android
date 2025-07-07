@@ -30,11 +30,16 @@ sealed class SendTransactionData {
         data class WithContract(val contract: Contract) : Tron()
         data class WithCreateTransaction(val transaction: CreatedTransaction) : Tron()
     }
-    data class Stellar(
-        val address: String,
-        val memo: String,
-        val amount: BigDecimal
-    ) : SendTransactionData()
+
+    sealed class Stellar : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val memo: String,
+            val amount: BigDecimal
+        ) : Stellar()
+
+        data class WithTransactionEnvelope(val transactionEnvelope: String) : Stellar()
+    }
 }
 
 enum class FeeType(val stringResId: Int) {

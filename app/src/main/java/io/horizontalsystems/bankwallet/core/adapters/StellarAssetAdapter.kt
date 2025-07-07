@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.managers.StellarKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.stellarkit.StellarKit
@@ -21,7 +20,7 @@ class StellarAssetAdapter(
     stellarKitWrapper: StellarKitWrapper,
     code: String,
     issuer: String
-) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
+) : BaseStellarAdapter(stellarKitWrapper) {
 
     private val stellarAsset = StellarAsset.Asset(code, issuer)
     private var assetBalance: BigDecimal? = null
