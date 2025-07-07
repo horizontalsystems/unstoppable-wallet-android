@@ -177,7 +177,7 @@ class AccountManager(
         accountsCache = storage.allAccounts(level).associateBy { it.id }.toMutableMap()
         val activeAccountIdForLevel = storage.getActiveAccountId(level)
 
-        if (activeAccountIdForLevel != null && accountsCache.isEmpty()) {
+        if (activeAccountIdForLevel != null && accountsCache.isEmpty() && currentLevel != Int.MAX_VALUE) {
             logger.info("Keystore problems, can't decode accounts, ignore account changing level")
             return // looks like we can't decode accounts due to Keystore problems(found on Android 11 Oppo devices)
         }
