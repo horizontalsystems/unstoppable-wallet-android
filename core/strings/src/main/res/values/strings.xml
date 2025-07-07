@@ -40,6 +40,8 @@
     <string name="Button_Create">Create</string>
     <string name="Button_Advanced">Advanced</string>
     <string name="hardware_wallet">Hardware wallet</string>
+    <string name="hardware_wallet_not_detected">Hardware wallet (no NFC detected)</string>
+    <string name="hardware_wallet_not_detected_error">No NFC reader detected, enable to use hardware cards</string>
     <string name="Button_Restore">Import</string>
     <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>

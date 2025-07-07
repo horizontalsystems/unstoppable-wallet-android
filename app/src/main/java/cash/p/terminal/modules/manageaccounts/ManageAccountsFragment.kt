@@ -33,6 +33,8 @@ import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
@@ -128,11 +130,21 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         ) {
                             navController.slideFromRight(R.id.watchAddressFragment, args)
                         })
-                    if (context.hasNFC()) {
-                        add(ActionViewItem(R.drawable.ic_card, R.string.hardware_wallet) {
-                            navController.slideFromRight(R.id.hardwareWalletFragment, args)
-                        })
-                    }
+                    add(
+                        ActionViewItem(
+                            icon = R.drawable.ic_card,
+                            title = if (context.hasNFC()) {
+                                R.string.hardware_wallet
+                            } else {
+                                R.string.hardware_wallet_not_detected
+                            },
+                            enabled = context.hasNFC(),
+                        ) {
+                            if (context.hasNFC()) {
+                                navController.slideFromRight(R.id.hardwareWalletFragment, args)
+                            }
+                        }
+                    )
                 }
 
                 CellUniversalLawrenceSection(actions) {
@@ -143,9 +155,17 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                             modifier = Modifier.padding(horizontal = 16.dp),
                             painter = painterResource(id = it.icon),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.jacob
+                            tint = if (it.enabled) {
+                                ComposeAppTheme.colors.jacob
+                            } else {
+                                ComposeAppTheme.colors.grey
+                            }
                         )
-                        body_jacob(text = stringResource(id = it.title))
+                        if (it.enabled) {
+                            body_jacob(text = stringResource(id = it.title))
+                        } else {
+                            body_grey(text = stringResource(id = it.title))
+                        }
                     }
                 }
 

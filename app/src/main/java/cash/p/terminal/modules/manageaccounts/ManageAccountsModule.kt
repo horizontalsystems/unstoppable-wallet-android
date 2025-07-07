@@ -32,9 +32,10 @@ object ManageAccountsModule {
     )
 
     data class ActionViewItem(
-            @DrawableRes val icon: Int,
-            @StringRes val title: Int,
-            val callback: () -> Unit
+        @DrawableRes val icon: Int,
+        @StringRes val title: Int,
+        val enabled: Boolean = true,
+        val callback: () -> Unit
     )
 
     @Parcelize

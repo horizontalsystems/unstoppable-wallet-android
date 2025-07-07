@@ -598,6 +598,7 @@ fun B2(
         color = ComposeAppTheme.colors.leah,
     )
 }
+
 @Composable
 fun body_leah(
     text: String,

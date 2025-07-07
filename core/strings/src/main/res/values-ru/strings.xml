@@ -33,6 +33,8 @@
     <string name="Button_Create">Создать</string>
     <string name="Button_Advanced">Доп. настройки</string>
     <string name="hardware_wallet">Аппаратный кошелёк</string>
+    <string name="hardware_wallet_not_detected">Аппаратный кошелёк(NFC не обнаружен)</string>
+    <string name="hardware_wallet_not_detected_error">NFC-считыватель не обнаружен, включите для использования аппаратного кошелька</string>
     <string name="Button_Restore">Импорт</string>
     <string name="Button_WatchAddress">Просмотр кошелька</string>
     <string name="Button_Reset">Сбросить</string>
