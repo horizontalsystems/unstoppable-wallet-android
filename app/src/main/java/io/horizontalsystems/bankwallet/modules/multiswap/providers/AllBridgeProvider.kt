@@ -156,7 +156,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-    ): AllBridgeAPI.Response.BridgeAmounts {
+    ): Response.BridgeAmounts {
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val tokenPairOut = tokenPairs.first { it.token == tokenOut }
 
@@ -223,112 +223,59 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         val amount = amountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
 
-        if (tokenIn.blockchainType.isEvm) {
-            val rawTransaction: AllBridgeAPI.Response.RawTransaction
-            if (tokenIn.blockchainType == tokenOut.blockchainType) {
-                val amountOutMinInt = amountOutMin.movePointRight(tokenPairOut.abToken.decimals).toBigInteger()
+        val rawTransactionStr = if (tokenIn.blockchainType == tokenOut.blockchainType) {
+            val amountOutMinInt = amountOutMin.movePointRight(tokenPairOut.abToken.decimals).toBigInteger()
 
-                rawTransaction = allBridgeAPI.rawSwap(
-                    amount = amount,
-                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
-                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
-                    sourceToken = tokenPairIn.abToken.tokenAddress,
-                    destinationToken = tokenPairOut.abToken.tokenAddress,
-                    minimumReceiveAmount = amountOutMinInt
-                )
-            } else {
-                rawTransaction = rawBridge<Response.RawTransaction>(
-                    amount = amount,
-                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
-                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
-                    sourceToken = tokenPairIn.abToken.tokenAddress,
-                    destinationToken = tokenPairOut.abToken.tokenAddress,
-                    feePaymentMethod = feePaymentMethod.value
-                )
-            }
-
-            return SendTransactionData.Evm(
-                transactionData = TransactionData(
-                    to = Address(rawTransaction.to),
-                    value = rawTransaction.value?.toBigInteger() ?: BigInteger.ZERO,
-                    input = rawTransaction.data.hexStringToByteArray(),
-                ),
-                gasLimit = null
+            allBridgeAPI.rawSwap(
+                amount = amount,
+                sender = SwapHelper.getReceiveAddressForToken(tokenIn),
+                recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
+                sourceToken = tokenPairIn.abToken.tokenAddress,
+                destinationToken = tokenPairOut.abToken.tokenAddress,
+                minimumReceiveAmount = amountOutMinInt
+            )
+        } else {
+            allBridgeAPI.rawBridge(
+                amount = amount,
+                sender = SwapHelper.getReceiveAddressForToken(tokenIn),
+                recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
+                sourceToken = tokenPairIn.abToken.tokenAddress,
+                destinationToken = tokenPairOut.abToken.tokenAddress,
+                feePaymentMethod = feePaymentMethod.value
             )
         }
 
-        if (tokenIn.blockchainType == BlockchainType.Tron) {
-            if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = rawBridge<CreatedTransaction>(
-                    amount = amount,
-                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
-                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
-                    sourceToken = tokenPairIn.abToken.tokenAddress,
-                    destinationToken = tokenPairOut.abToken.tokenAddress,
-                    feePaymentMethod = feePaymentMethod.value
+        return when {
+            tokenIn.blockchainType.isEvm -> {
+                val rawTransaction = APIClient.gson.fromJson(
+                    rawTransactionStr,
+                    Response.RawTransaction::class.java
                 )
 
-                return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
+                SendTransactionData.Evm(
+                    transactionData = TransactionData(
+                        to = Address(rawTransaction.to),
+                        value = rawTransaction.value?.toBigInteger() ?: BigInteger.ZERO,
+                        input = rawTransaction.data.hexStringToByteArray(),
+                    ),
+                    gasLimit = null
+                )
             }
-        }
 
-        if (tokenIn.blockchainType == BlockchainType.Stellar) {
-            if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = rawBridge<String>(
-                    amount = amount,
-                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
-                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
-                    sourceToken = tokenPairIn.abToken.tokenAddress,
-                    destinationToken = tokenPairOut.abToken.tokenAddress,
-                    feePaymentMethod = feePaymentMethod.value
+            tokenIn.blockchainType == BlockchainType.Tron -> {
+                val rawTransaction = APIClient.gson.fromJson(
+                    rawTransactionStr,
+                    CreatedTransaction::class.java
                 )
 
-                Log.e("AAA", "rawTransaction: $rawTransaction")
+                SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
+            }
 
-//                return SendTransactionData.Tron(rawTransaction)
+            else -> {
+                Log.e("AAA", "Not implemented for: ${tokenIn.blockchainType}, transaction: $rawTransactionStr")
+                TODO("Not yet implemented")
             }
         }
-
-        if (tokenIn.blockchainType == BlockchainType.Solana) {
-            if (tokenIn.blockchainType != tokenOut.blockchainType) {
-                val rawTransaction = rawBridge<String>(
-                    amount = amount,
-                    sender = SwapHelper.getReceiveAddressForToken(tokenIn),
-                    recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
-                    sourceToken = tokenPairIn.abToken.tokenAddress,
-                    destinationToken = tokenPairOut.abToken.tokenAddress,
-                    feePaymentMethod = feePaymentMethod.value
-                )
-
-                Log.e("AAA", "rawTransaction: $rawTransaction")
-
-//                return SendTransactionData.Tron(rawTransaction)
-            }
-        }
-
-        TODO("Not yet implemented")
-    }
-
-    private suspend inline fun <reified T> rawBridge(
-        amount: BigInteger,
-        sender: String,
-        recipient: String,
-        sourceToken: String,
-        destinationToken: String,
-        messenger: String = "ALLBRIDGE",
-        feePaymentMethod: String,
-    ): T {
-        val rawBridgeStr = allBridgeAPI.rawBridge(
-            amount,
-            sender,
-            recipient,
-            sourceToken,
-            destinationToken,
-            messenger,
-            feePaymentMethod
-        )
-
-        return APIClient.gson.fromJson(rawBridgeStr, T::class.java)
     }
 
     enum class FeePaymentMethod(val value: String) {
@@ -358,7 +305,7 @@ interface AllBridgeAPI {
         @Query("sourceToken") sourceToken: String,
         @Query("destinationToken") destinationToken: String,
         @Query("minimumReceiveAmount") minimumReceiveAmount: BigInteger,
-    ): Response.RawTransaction
+    ): String
 
     @GET("/raw/bridge")
     suspend fun rawBridge(
@@ -427,4 +374,4 @@ interface AllBridgeAPI {
     }
 }
 
-data class AllBridgeTokenPair(val abToken: AllBridgeAPI.Response.Token, val token: Token)
+data class AllBridgeTokenPair(val abToken: Response.Token, val token: Token)
