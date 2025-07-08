@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
@@ -23,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class SendTransactionServiceSolana(private val token: Token) : AbstractSendTransactionService() {
+class SendTransactionServiceSolana(private val token: Token) : AbstractSendTransactionService(false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
 
     private val adapter = App.adapterManager.getAdapterForToken<ISendSolanaAdapter>(token)!!
@@ -78,11 +76,6 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
     override suspend fun setSendTransactionData(data: SendTransactionData) {
 //        amountService.setAmount(amount)
 //        addressService.setAddress(address)
-    }
-
-    @Composable
-    override fun GetSettingsContent(navController: NavController) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun sendTransaction(): SendTransactionResult {

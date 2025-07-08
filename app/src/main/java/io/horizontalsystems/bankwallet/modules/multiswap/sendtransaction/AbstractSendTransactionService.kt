@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 
-abstract class AbstractSendTransactionService: ServiceState<SendTransactionServiceState>() {
+abstract class AbstractSendTransactionService(val hasSettings: Boolean): ServiceState<SendTransactionServiceState>() {
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
     protected var uuid = UUID.randomUUID().toString()
     protected var extraFees = mapOf<FeeType, SendModule.AmountData>()
@@ -24,7 +24,7 @@ abstract class AbstractSendTransactionService: ServiceState<SendTransactionServi
     abstract fun start(coroutineScope: CoroutineScope)
     abstract suspend fun setSendTransactionData(data: SendTransactionData)
     @Composable
-    abstract fun GetSettingsContent(navController: NavController)
+    open fun GetSettingsContent(navController: NavController) = Unit
     abstract suspend fun sendTransaction() : SendTransactionResult
 
     fun refreshUuid() {

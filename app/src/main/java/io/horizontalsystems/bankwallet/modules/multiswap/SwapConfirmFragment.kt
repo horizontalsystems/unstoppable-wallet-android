@@ -89,11 +89,17 @@ fun SwapConfirmScreen(navController: NavController) {
 
     val uiState = viewModel.uiState
 
+    val onClickSettings = if (uiState.hasSettings) {
+        {
+            navController.slideFromRight(R.id.swapTransactionSettings)
+        }
+    } else {
+        null
+    }
+
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
-        onClickSettings = {
-            navController.slideFromRight(R.id.swapTransactionSettings)
-        },
+        onClickSettings = onClickSettings,
         onClickClose = null,
         buttonsSlot = {
             if (uiState.loading) {
