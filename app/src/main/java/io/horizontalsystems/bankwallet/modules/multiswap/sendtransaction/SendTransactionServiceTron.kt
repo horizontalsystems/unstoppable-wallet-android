@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.isNative
@@ -20,7 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
-class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService() {
+class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
     private val adapter = App.adapterManager.getAdapterForToken<ISendTronAdapter>(token)!!
     private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
@@ -101,11 +99,6 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
 //        amountService.setAmount()
 
 //        addressService.setAddress()
-    }
-
-    @Composable
-    override fun GetSettingsContent(navController: NavController) {
-//        TODO("Not yet implemented")
     }
 
     override suspend fun sendTransaction(): SendTransactionResult {

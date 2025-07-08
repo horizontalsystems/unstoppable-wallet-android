@@ -170,6 +170,7 @@ class SwapConfirmViewModel(
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
+            hasSettings = sendTransactionService.hasSettings,
         )
     }
 
@@ -257,6 +258,7 @@ data class SwapConfirmUiState(
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
     val extraFees: Map<FeeType, SendModule.AmountData>,
+    val hasSettings: Boolean,
 ) {
     val totalFee by lazy {
         val networkFiatValue = networkFee?.secondary  ?: return@lazy null

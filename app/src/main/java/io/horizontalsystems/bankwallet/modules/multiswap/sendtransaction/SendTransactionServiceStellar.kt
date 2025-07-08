@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.isNative
@@ -9,7 +7,6 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarAddressService
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarMinimumAmountService
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -23,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionService() {
+class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionService(false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
 
     private val adapter = App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)!!
@@ -44,11 +41,6 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
     private var minimumAmountState = minimumAmountService.stateFlow.value
     private var memo: String? = null
     private var transactionEnvelope: String? = null
-
-    private val networkFee: SendModule.AmountData?
-        get() = fee?.let {
-            getAmountData(CoinValue(feeToken, it))
-        }
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch(Dispatchers.Default) {
@@ -108,11 +100,6 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
         }
     }
 
-    @Composable
-    override fun GetSettingsContent(navController: NavController) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun sendTransaction(): SendTransactionResult {
         val transactionEnvelope = transactionEnvelope
         if (transactionEnvelope != null) {
@@ -126,7 +113,9 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
 
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,
-        networkFee = networkFee,
+        networkFee = fee?.let {
+            getAmountData(CoinValue(feeToken, it))
+        },
         cautions = listOf(),
         sendable = transactionEnvelope != null || (amountState.canBeSend && addressState.canBeSend && minimumAmountState.canBeSend),
         loading = false,
