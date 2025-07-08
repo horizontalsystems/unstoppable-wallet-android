@@ -231,10 +231,10 @@ class MoneroKitWrapper(
 
     fun statusInfo(): Map<String, Any> {
         return mapOf(
-            "walletInnerName" to accountType.walletInnerName,
             "connectionStatus" to moneroWalletService.connectionStatus,
             "walletStatus" to moneroWalletService.wallet?.status?.toString().orEmpty(),
-            "isStarted" to isStarted
+            "isStarted" to isStarted,
+            "Birthday Height" to accountType.height,
         )
     }
 

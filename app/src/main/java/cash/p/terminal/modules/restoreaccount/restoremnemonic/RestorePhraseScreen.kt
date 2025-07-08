@@ -33,6 +33,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -162,11 +163,17 @@ fun RestorePhrase(
             )
         )
         Column {
+            val state = rememberScrollState()
+            LaunchedEffect(uiState.errorHeight) {
+                if(uiState.errorHeight != null) {
+                    state.animateScrollTo(state.maxValue)
+                }
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(state)
             ) {
                 Spacer(Modifier.height(12.dp))
 
