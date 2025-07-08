@@ -1,4 +1,4 @@
-Мощный мультикошелек, не связанный с хранением, для Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH и zCash (ZEC), поддерживающий NFT и широкий спектр других активов.
+Мощный мультикошелек, не связанный с хранением, для Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, Monero (XMR) и zCash (ZEC), поддерживающий NFT и широкий спектр других активов.
 
 Добавлена поддержка аппаратного кошелька Tangem, где приватные ключи генерируются и хранятся непосредственно на карте в условиях строгой безопасности. Отсутствие seed-фразы исключает возможность кражи активов злоумышленниками.
 

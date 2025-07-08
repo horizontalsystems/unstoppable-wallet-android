@@ -1,4 +1,4 @@
-Een krachtige niet-bewaarbare multi-wallet voor Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH en zCash (ZEC), die NFT's en een breed scala aan andere activa ondersteunt.
+Een krachtige niet-bewaarbare multi-wallet voor Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, Monero (XMR) en zCash (ZEC), die NFT's en een breed scala aan andere activa ondersteunt.
 
 Ondersteuning voor de Tangem hardware wallet is toegevoegd, waarbij privésleutels direct op de kaart worden gegenereerd en strikt geheim worden bewaard. Er is geen seed phrase die opgeslagen hoeft te worden, wat voorkomt dat kwaadwillenden toegang krijgen tot je activa.
 

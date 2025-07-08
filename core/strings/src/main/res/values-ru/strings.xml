@@ -97,6 +97,7 @@
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
+    <string name="CreateWallet_N_Words_monero">%s слов (только Monero)</string>
     <string name="CreateWallet_PassphraseConfirm">Подтвердить</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
@@ -123,6 +124,7 @@
     <string name="Restore_Mnemonic_Description">Введите фразу для восстановления (мнемоническая фраза), которая состоит из 12, 15, 18, 21 или 24 слов и может содержать дополнительный буквенно-цифровой пароль.</string>
     <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
+    <string name="monero_restore_error">Ошибка восстановления Monero</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
@@ -134,6 +136,7 @@
     <string name="Restore_PrivateKey">Приватный ключ</string>
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите фразу восстановления</string>
+    <string name="monero_restore_seed">Сид-фраза для восстановления Monero</string>
     <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей P.CASH с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях P.CASH 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
 \n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
@@ -1115,7 +1118,8 @@
     <string name="TestnetSettings_Description">Эта опция активирует тестовую сеть Goerli Ethereum только для токена GoerliETH и добавит его в менеджер монет.\n\nЭто действие влияет только на токен GoerliETH, в то время как все остальные токены EVM и Ethereum работают в основной сети. Другими словами, только транзакции в GoerliETH проходят через тестовую сеть Goerli, в то время как все остальные передачи токенов EVM, включая ETH, проходят через основную сеть.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Кошельки</string>
-    <string name="ManageAccounts_CreateNewWallet">Новый кошелек</string>
+    <string name="ManageAccounts_CreateNewWallet">Создать кошелёк</string>
+    <string name="new_monero_wallet">Создать кошелёк Monero</string>
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
@@ -1210,6 +1214,7 @@
     <string name="RecoveryPhrase_Verify">Подтвердить</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Риск копирования</string>
     <!-- Evm Private Key -->
+    <string name="spend_key">Ключ просмотра трат</string>
     <string name="EvmPrivateKey_Title">Приватный ключ EVM</string>
     <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
@@ -1881,7 +1886,13 @@
     <string name="app_settings_saved_access_codes_footer">Вместо кода доступа для взаимодействия с вашим аппаратным кошельком будет запрашиваться биометрическая аутентификация.</string>
     <string name="signed">Подписано</string>
     <string name="error_no_active_account">Активный аккаунт не найден</string>
+    <string name="monero_not_supported_for_wallet">Monero не поддерживается для этого кошелька. Пожалуйста, создайте новый с сид-фразой из 25 слов.</string>
     <string name="error_hardware_wallet_not_supported">Пока не поддерживается аппаратной картой</string>
     <string name="need_to_sign_times">Для создания транзакции вам потребуется подписать её %d раз(а)</string>
     <string name="scan_card">Сканируйте карту</string>
+    <string name="restoreheight_title">Начальный блок для восстановления</string>
+    <string name="restoreheight_hint">Укажите блок или дату (ГГГГ-ММ-ДД)</string>
+    <string name="Restore_Error_MnemonicWordCount_monero">Неверное количество слов. Должно быть 25. Вы ввели: %d</string>
+    <string name="inavlid_height">Неверное значение высоты</string>
+    <string name="view_key">Ключ просмотра</string>
 </resources>

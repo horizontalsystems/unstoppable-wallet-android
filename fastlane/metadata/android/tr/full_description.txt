@@ -1,4 +1,4 @@
-Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH ve zCash (ZEC) için NFT'leri ve çok çeşitli diğer varlıkları destekleyen, saklama gerektirmeyen güçlü bir çoklu cüzdan.
+Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, Monero (XMR) ve zCash (ZEC) için NFT'leri ve çok çeşitli diğer varlıkları destekleyen, saklama gerektirmeyen güçlü bir çoklu cüzdan.
 
 Tangem donanım cüzdanı desteği eklendi: özel anahtarlar kart üzerinde oluşturulur ve yüksek güvenlikle saklanır. Seed (yedek) ifadesi olmadığı için, kötü niyetli kişilerin varlıklarınızı çalması mümkün değildir.
 

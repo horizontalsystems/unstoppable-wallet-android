@@ -1,4 +1,4 @@
-Uma poderosa carteira múltipla sem custódia para Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH e zCash (ZEC), suportando NFTs e uma ampla gama de outros ativos.
+Uma poderosa carteira múltipla sem custódia para Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, Monero (XMR) e zCash (ZEC), suportando NFTs e uma ampla gama de outros ativos.
 
 Suporte adicionado para a carteira de hardware Tangem, onde as chaves privadas são geradas e armazenadas diretamente no cartão de forma totalmente segura. Não há frase-semente para registrar, o que impede que invasores roubem seus ativos.
 

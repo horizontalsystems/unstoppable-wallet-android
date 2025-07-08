@@ -1,4 +1,4 @@
-功能强大的非托管多钱包，适用于比特币 (BTC)、以太坊 (ETH)、币安智能链 (BNB)、狗狗币 (DOGE)、Toncoin (TON)、Solana (SOL)、Avalanche、DASH 和 zCash (ZEC)，支持 NFT 和各种其他资产。
+功能强大的非托管多钱包，适用于比特币 (BTC)、以太坊 (ETH)、币安智能链 (BNB)、狗狗币 (DOGE)、Toncoin (TON)、Solana (SOL)、Avalanche、DASH、 Monero (XMR) 和 zCash (ZEC)，支持 NFT 和各种其他资产。
 
 新增对 Tangem 硬件钱包的支持：私钥直接在卡片内生成并安全存储，绝不会泄露，完全没有助记词，极大地防止了恶意行为者窃取您的资产。
 

@@ -1,4 +1,4 @@
-NFT 및 다양한 기타 자산을 지원하는 비트코인(BTC), 이더리움(ETH), 바이낸스 스마트 체인(BNB), Dogecoin(DOGE), Toncoin(TON), Solana(SOL), Avalanche, DASH 및 zCash(ZEC)를 위한 강력한 비수탁형 다중 지갑입니다.
+NFT 및 다양한 기타 자산을 지원하는 비트코인(BTC), 이더리움(ETH), 바이낸스 스마트 체인(BNB), Dogecoin(DOGE), Toncoin(TON), Solana(SOL), Avalanche, DASH, Monero (XMR) 및 zCash(ZEC)를 위한 강력한 비수탁형 다중 지갑입니다.
 
 Tangem 하드웨어 지갑 지원이 추가되었으며, 개인 키는 카드 내에서 생성되고 철저히 비공개로 유지됩니다. 시드 문구를 기록할 필요가 없어, 해커가 자산을 탈취하는 것을 원천적으로 방지합니다.
 

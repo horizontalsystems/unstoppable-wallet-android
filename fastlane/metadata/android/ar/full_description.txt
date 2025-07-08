@@ -1,4 +1,4 @@
-A powerful non-custodial multi-wallet for Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, and zCash (ZEC), supporting NFTs and a wide range of other assets.
+A powerful non-custodial multi-wallet for Bitcoin (BTC), Ethereum (ETH), Binance Smart Chain (BNB), Dogecoin (DOGE), Toncoin (TON), Solana (SOL), Avalanche, DASH, Monero (XMR) and zCash (ZEC), supporting NFTs and a wide range of other assets.
 
 Now with Tangem hardware wallet support — private keys are securely generated and stored directly on the card, never exposed or saved anywhere. There is no seed phrase to write down or store, making it virtually impossible for attackers to steal your assets.
 
