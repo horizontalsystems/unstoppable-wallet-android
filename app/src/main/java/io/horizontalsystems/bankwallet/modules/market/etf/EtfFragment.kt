@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.market.etf
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -13,12 +11,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -69,6 +69,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversalFixedHeight
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
@@ -95,109 +97,141 @@ class EtfFragment : BaseComposeFragment() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EtfPage(
     viewModel: EtfViewModel,
-    navController: NavController,
+    navController: NavController
+) {
+    val tabs = EtfModule.EtfTab.entries
+    var selectedTab by remember { mutableStateOf(EtfModule.EtfTab.BtcTab) }
+    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
+
+    LaunchedEffect(key1 = selectedTab, block = {
+        pagerState.scrollToPage(selectedTab.ordinal)
+    })
+    val tabItems = tabs.map {
+        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+    }
+
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                )
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+        ) {
+            Tabs(tabItems, onClick = { selectedTab = it })
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false
+            ) { page ->
+                EtfByChain(tabs[page], viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun EtfByChain(
+    tab: EtfModule.EtfTab,
+    viewModel: EtfViewModel,
 ) {
     val uiState = viewModel.uiState
-    val title = stringResource(id = R.string.MarketEtf_Title)
-    val description = stringResource(id = R.string.MarketEtf_Description)
+    val description = stringResource(id = R.string.MarketEtf_EtfDescription, tab.chainName)
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        Modifier
-            .background(color = ComposeAppTheme.colors.tyler)
-            .navigationBarsPadding()
+    LaunchedEffect(tab.key) {
+        viewModel.loadData(tab.key)
+    }
+
+    HSSwipeRefresh(
+        refreshing = uiState.isRefreshing,
+        onRefresh = {
+            viewModel.refresh()
+        }
     ) {
-        AppBar(
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = {
-                        navController.popBackStack()
-                    }
-                )
-            )
-        )
+        Crossfade(uiState.viewState, label = "") { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
 
-        HSSwipeRefresh(
-            refreshing = uiState.isRefreshing,
-            onRefresh = {
-                viewModel.refresh()
-            }
-        ) {
-            Crossfade(uiState.viewState, label = "") { viewState ->
-                when (viewState) {
-                    ViewState.Loading -> {
-                        Loading()
-                    }
+                is ViewState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.SyncError),
+                        viewModel::onErrorClick
+                    )
+                }
 
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.SyncError),
-                            viewModel::onErrorClick
-                        )
-                    }
-
-                    ViewState.Success -> {
-                        val listState = hsRememberLazyListState(
-                            2,
-                            uiState.sortBy,
-                            uiState.timeDuration
-                        )
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            state = listState,
-                            contentPadding = PaddingValues(bottom = 32.dp),
-                        ) {
-                            item {
-                                DescriptionCard(
-                                    title,
-                                    description,
-                                    ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/ETF_bitcoin@3x.png")
+                ViewState.Success -> {
+                    val listState = hsRememberLazyListState(
+                        2,
+                        uiState.sortBy,
+                        uiState.timeDuration
+                    )
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = listState,
+                        contentPadding = PaddingValues(bottom = 32.dp),
+                    ) {
+                        item {
+                            DescriptionCard(
+                                null,
+                                description,
+                                ImageSource.Remote(tab.headerImage)
+                            )
+                        }
+                        item {
+                            ChartEtf(uiState.chartDataLoading, uiState.etfPoints, uiState.currency)
+                        }
+                        stickyHeader {
+                            HeaderSorting(borderBottom = true, borderTop = true) {
+                                HSpacer(width = 16.dp)
+                                ButtonSecondaryWithIcon(
+                                    modifier = Modifier.height(28.dp),
+                                    onClick = {
+                                        openSortingSelector = true
+                                    },
+                                    title = stringResource(uiState.sortBy.titleResId),
+                                    iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 )
-                            }
-                            item {
-                                ChartEtf(uiState.chartDataLoading, uiState.etfPoints, uiState.currency)
-                            }
-                            stickyHeader {
-                                HeaderSorting(borderBottom = true, borderTop = true) {
-                                    HSpacer(width = 16.dp)
-                                    ButtonSecondaryWithIcon(
-                                        modifier = Modifier.height(28.dp),
-                                        onClick = {
-                                            openSortingSelector = true
-                                        },
-                                        title = stringResource(uiState.sortBy.titleResId),
-                                        iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                                    )
-                                    HSpacer(width = 8.dp)
-                                    ButtonSecondaryWithIcon(
-                                        modifier = Modifier.height(28.dp),
-                                        onClick = {
-                                            openPeriodSelector = true
-                                        },
-                                        title = stringResource(uiState.timeDuration.titleResId),
-                                        iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                                    )
-                                    HSpacer(width = 16.dp)
-                                }
-                            }
-                            items(uiState.viewItems) { viewItem ->
-                                MarketCoinClear(
-                                    title = viewItem.title,
-                                    subtitle = viewItem.subtitle,
-                                    coinIconUrl = viewItem.iconUrl,
-                                    coinIconPlaceholder = R.drawable.ic_platform_placeholder_24,
-                                    value = viewItem.value,
-                                    marketDataValue = viewItem.subvalue,
-                                    label = viewItem.rank,
+                                HSpacer(width = 8.dp)
+                                ButtonSecondaryWithIcon(
+                                    modifier = Modifier.height(28.dp),
+                                    onClick = {
+                                        openPeriodSelector = true
+                                    },
+                                    title = stringResource(uiState.timeDuration.titleResId),
+                                    iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 )
+                                HSpacer(width = 16.dp)
                             }
+                        }
+                        items(uiState.viewItems) { viewItem ->
+                            MarketCoinClear(
+                                title = viewItem.title,
+                                subtitle = viewItem.subtitle,
+                                coinIconUrl = viewItem.iconUrl,
+                                coinIconPlaceholder = R.drawable.ic_platform_placeholder_24,
+                                value = viewItem.value,
+                                marketDataValue = viewItem.subvalue,
+                                label = viewItem.rank,
+                            )
                         }
                     }
                 }
@@ -516,7 +550,10 @@ private fun ChartHeader(
     tertiaryTitle: String,
     tertiaryValue: String?,
 ) {
-    CellUniversalFixedHeight(height = 64.dp) {
+    CellUniversalFixedHeight(
+        borderTop = false,
+        height = 64.dp
+    ) {
         Column {
             Row {
                 mainValue?.let {

@@ -250,6 +250,9 @@
     <string name="MarketEtf_Inflow">Inflow</string>
     <string name="MarketEtf_Outflow">Outflow</string>
     <string name="MarketEtf_TotalNetAssets">Total Net Assets</string>
+    <string name="MarketEtf_BitcoinEtf">Bitcoin ETF</string>
+    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
+    <string name="MarketEtf_EtfDescription">Net inflow of all %s ETFs, including spot and futures-based funds.</string>
 
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>

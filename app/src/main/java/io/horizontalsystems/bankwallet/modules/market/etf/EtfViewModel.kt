@@ -49,6 +49,7 @@ class EtfViewModel(
     private var cachedEtfs: List<RankedEtf> = listOf()
     private var chartDataLoading = true
     private var etfPoints = listOf<EtfPoint>()
+    private var tabKey: String = "btc"
 
     override fun createState() = EtfModule.UiState(
         viewItems = viewItems,
@@ -61,15 +62,17 @@ class EtfViewModel(
         currency = currencyManager.baseCurrency
     )
 
-    init {
-        syncItems()
+    fun loadData(tabKey: String) {
+        this.tabKey = tabKey
+        cachedEtfs = listOf() // Reset cached ETFs to ensure fresh data
         fetchChartData()
+        syncItems()
     }
 
     private fun fetchChartData() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await()
+                etfPoints = marketKit.etfPoints(tabKey).await()
                     .sortedBy { it.date }
                 chartDataLoading = false
 
@@ -94,9 +97,9 @@ class EtfViewModel(
         marketDataJob?.cancel()
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                cachedEtfs = marketKit.etfs(currencyManager.baseCurrency.code).await()
+                cachedEtfs = marketKit.etfs(tabKey).await()
                     .sortedByDescending { it.totalAssets }
-                    .mapIndexed{ index, etf -> RankedEtf(etf, index + 1) }
+                    .mapIndexed { index, etf -> RankedEtf(etf, index + 1) }
                 updateViewItems()
 
                 viewState = ViewState.Success
