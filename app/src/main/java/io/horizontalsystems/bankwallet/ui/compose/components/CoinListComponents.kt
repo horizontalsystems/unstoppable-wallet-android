@@ -379,26 +379,29 @@ fun TopCloseButton(
 }
 
 @Composable
-fun DescriptionCard(title: String, description: String, image: ImageSource) {
+fun DescriptionCard(title: String?, description: String, image: ImageSource) {
     Column {
         Row(
             modifier = Modifier
                 .height(108.dp)
-                .background(ComposeAppTheme.colors.tyler)
+                .background(ComposeAppTheme.colors.tyler),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier = Modifier
                     .padding(start = 16.dp, top = 12.dp, end = 8.dp)
                     .weight(1f)
             ) {
-                Text(
-                    text = title,
-                    style = ComposeAppTheme.typography.headline1,
-                    color = ComposeAppTheme.colors.leah,
-                )
+                title?.let {
+                    Text(
+                        text = it,
+                        style = ComposeAppTheme.typography.headline1,
+                        color = ComposeAppTheme.colors.leah,
+                    )
+                    VSpacer(6.dp)
+                }
                 subhead2_grey(
                     text = description,
-                    modifier = Modifier.padding(top = 6.dp),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )

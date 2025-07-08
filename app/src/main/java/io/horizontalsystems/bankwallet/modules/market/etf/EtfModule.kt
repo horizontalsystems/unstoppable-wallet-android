@@ -51,13 +51,33 @@ object EtfModule {
         val currency: Currency,
     )
 
-    enum class SortBy(@StringRes val titleResId: Int): WithTranslatableTitle {
+    enum class SortBy(@StringRes val titleResId: Int) : WithTranslatableTitle {
         HighestAssets(R.string.MarketEtf_HighestAssets),
         LowestAssets(R.string.MarketEtf_LowestAssets),
         Inflow(R.string.MarketEtf_Inflow),
         Outflow(R.string.MarketEtf_Outflow);
 
         override val title = TranslatableString.ResString(titleResId)
+    }
+
+    enum class EtfTab(
+        @StringRes val titleResId: Int,
+        val key: String,
+        val headerImage: String,
+        val chainName: String
+    ) {
+        BtcTab(
+            R.string.MarketEtf_BitcoinEtf,
+            "btc",
+            "https://cdn.blocksdecoded.com/header-images/ETF_bitcoin@3x.png",
+            "Bitcoin"
+        ),
+        EthTab(
+            R.string.MarketEtf_EthereumEtf,
+            "eth",
+            "https://cdn.blocksdecoded.com/header-images/ETF_ethereum@3x.png",
+            "Ethereum"
+        );
     }
 }
 
