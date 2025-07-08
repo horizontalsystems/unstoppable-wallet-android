@@ -16,16 +16,18 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionService() {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
 
     private val adapter = App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)!!
-    private val fee = adapter.fee
+    private var fee: BigDecimal? = adapter.fee
 
     private val amountService = SendAmountService(
         amountValidator = AmountValidator(),
@@ -43,7 +45,10 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
     private var memo: String? = null
     private var transactionEnvelope: String? = null
 
-    private var networkFee: SendModule.AmountData? = getAmountData(CoinValue(feeToken, fee))
+    private val networkFee: SendModule.AmountData?
+        get() = fee?.let {
+            getAmountData(CoinValue(feeToken, it))
+        }
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch(Dispatchers.Default) {
@@ -96,6 +101,8 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
             }
             is SendTransactionData.Stellar.WithTransactionEnvelope -> {
                 transactionEnvelope = data.transactionEnvelope
+                fee = StellarKit.estimateFee(data.transactionEnvelope)
+
                 emitState()
             }
         }
