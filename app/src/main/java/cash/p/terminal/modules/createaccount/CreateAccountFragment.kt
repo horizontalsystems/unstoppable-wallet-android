@@ -49,7 +49,7 @@ class CreateAccountFragment : BaseComposeFragment() {
         val input = navController.getInput<Input>()
         val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
         val inclusive = input?.popOffInclusive != false
-        val preselectMonero = input?.preselectMonero != false
+        val preselectMonero = input?.preselectMonero == true
         CreateAccountNavHost(navController, popUpToInclusiveId, inclusive, preselectMonero)
     }
 
