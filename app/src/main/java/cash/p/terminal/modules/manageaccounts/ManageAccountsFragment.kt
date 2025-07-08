@@ -22,6 +22,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.hasNFC
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.modules.backupalert.BackupAlert
+import cash.p.terminal.modules.createaccount.CreateAccountFragment
 import cash.p.terminal.modules.manageaccount.ManageAccountFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.ActionViewItem
@@ -34,7 +35,6 @@ import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.body_grey
-import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
@@ -113,7 +113,25 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                             R.string.ManageAccounts_CreateNewWallet
                         ) {
                             navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(R.id.createAccountFragment, args)
+                                navController.slideFromRight(R.id.createAccountFragment,
+                                    CreateAccountFragment.Input(
+                                        popOffOnSuccess = args.popOffOnSuccess,
+                                        popOffInclusive = args.popOffInclusive
+                                    ))
+                            }
+                        })
+                    add(
+                        ActionViewItem(
+                            R.drawable.ic_plus,
+                            R.string.new_monero_wallet
+                        ) {
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.createAccountFragment,
+                                    CreateAccountFragment.Input(
+                                        popOffOnSuccess = args.popOffOnSuccess,
+                                        popOffInclusive = args.popOffInclusive,
+                                        preselectMonero = true
+                                    ))
                             }
                         })
                     add(

@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.hasNFC
 import cash.p.terminal.core.navigateWithTermsAccepted
+import cash.p.terminal.modules.createaccount.CreateAccountFragment
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.SnackbarError
@@ -78,6 +79,23 @@ fun BalanceNoAccount(
             onClick = {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromRight(R.id.createAccountFragment)
+                }
+            }
+        )
+        Spacer(Modifier.height(32.dp))
+        ButtonPrimaryDefault(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp),
+            title = stringResource(R.string.new_monero_wallet),
+            onClick = {
+                navController.navigateWithTermsAccepted {
+                    navController.slideFromRight(R.id.createAccountFragment,
+                        CreateAccountFragment.Input(
+                            popOffOnSuccess = R.id.createAccountFragment,
+                            popOffInclusive = true,
+                            preselectMonero = true
+                        ))
                 }
             }
         )

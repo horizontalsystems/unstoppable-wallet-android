@@ -53,11 +53,18 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CreateAccountAdvancedScreen(
+    preselectMonero: Boolean,
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
     val viewModel =
         viewModel<CreateAdvancedAccountViewModel>(factory = CreateAccountModule.Factory())
+
+    LaunchedEffect(Unit) {
+        if(preselectMonero) {
+            viewModel.setMnemonicKind(CreateAccountModule.Kind.Mnemonic25)
+        }
+    }
     val view = LocalView.current
 
     LaunchedEffect(viewModel.success) {

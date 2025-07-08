@@ -1403,6 +1403,7 @@
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
+    <string name="new_monero_wallet">New Monero Wallet</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
     <string name="scan_card">Scan card</string>
