@@ -19,7 +19,7 @@ internal abstract class BaseEvmAdapter(
     override val debugInfo: String
         get() = evmTransactionRepository.debugInfo()
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() = evmTransactionRepository.statusInfo()
 
     // ISendEthereumAdapter

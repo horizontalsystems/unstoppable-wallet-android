@@ -23,7 +23,7 @@ abstract class BaseTronAdapter(
     override val debugInfo: String
         get() = ""
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() = tronKit.statusInfo()
 
     // IReceiveAdapter

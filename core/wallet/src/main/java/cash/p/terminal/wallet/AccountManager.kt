@@ -189,7 +189,7 @@ class AccountManager(
                 ActiveAccountState.ActiveAccount(activeAccount)
             }
         }
-        logger.info("setLevel: $level, activeAccount: ${activeAccount?.id}, activeAccountIdForLevel: $activeAccountIdForLevel, accounts: ${accounts.size}, accountsCache: ${accountsCache.size}")
+//        logger.info("setLevel: $level, activeAccount: ${activeAccount?.id}, activeAccountIdForLevel: $activeAccountIdForLevel, accounts: ${accounts.size}, accountsCache: ${accountsCache.size}")
         accountsSubject.onNext(accounts)
     }
 

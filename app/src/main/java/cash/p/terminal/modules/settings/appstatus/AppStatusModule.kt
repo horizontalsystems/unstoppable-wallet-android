@@ -1,31 +1,6 @@
 package cash.p.terminal.modules.settings.appstatus
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.core.App
-
 object AppStatusModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val viewModel = AppStatusViewModel(
-                App.systemInfoManager,
-                App.localStorage,
-                App.accountManager,
-                App.walletManager,
-                App.adapterManager,
-                App.marketKit,
-                App.evmBlockchainManager,
-                App.tronKitManager,
-                App.tonKitManager,
-                App.solanaKitManager,
-                App.btcBlockchainManager,
-            )
-            return viewModel as T
-        }
-    }
-
     sealed class BlockContent {
         data class Header(val title: String) : BlockContent()
         data class Text(val text: String) : BlockContent()
@@ -38,5 +13,4 @@ object AppStatusModule {
         val appStatusAsText: String?,
         val blockViewItems: List<BlockData>,
     )
-
 }

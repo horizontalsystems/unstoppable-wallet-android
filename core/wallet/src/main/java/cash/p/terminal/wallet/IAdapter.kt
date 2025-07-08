@@ -6,4 +6,5 @@ interface IAdapter {
     suspend fun refresh()
 
     val debugInfo: String
+    val statusInfo: Map<String, Any>
 }

@@ -23,6 +23,9 @@ class MoneroAdapter(
 
     override val isMainNet: Boolean = true
 
+    override val statusInfo: Map<String, Any>
+        get() = moneroKitWrapper.statusInfo()
+
     // IAdapter
 
     override fun start() {

@@ -17,7 +17,7 @@ abstract class BaseTonAdapter(
     override val debugInfo: String
         get() = ""
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() = tonKit.statusInfo()
 
     // IReceiveAdapter

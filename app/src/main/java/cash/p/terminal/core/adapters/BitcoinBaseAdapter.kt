@@ -514,7 +514,7 @@ abstract class BitcoinBaseAdapter(
 
     }
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() = kit.statusInfo()
 
     private fun satoshiToBTC(

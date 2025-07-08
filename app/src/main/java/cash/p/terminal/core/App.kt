@@ -168,7 +168,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val solanaKitManager: SolanaKitManager by inject(SolanaKitManager::class.java)
         val tronKitManager: TronKitManager by inject(TronKitManager::class.java)
         val tonKitManager: TonKitManager by inject(TonKitManager::class.java)
-        val moneroKitManager: MoneroKitManager by inject(MoneroKitManager::class.java)
         val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var rateAppManager: IRateAppManager

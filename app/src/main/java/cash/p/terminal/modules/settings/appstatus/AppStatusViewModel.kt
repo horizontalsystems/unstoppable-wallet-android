@@ -1,42 +1,46 @@
 package cash.p.terminal.modules.settings.appstatus
 
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.core.logger.AppLog
-import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
-import cash.p.terminal.core.adapters.TonAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
-import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
-import cash.p.terminal.wallet.IWalletManager
-import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.logger.AppLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
 
 class AppStatusViewModel(
-    private val systemInfoManager: ISystemInfoManager,
-    private val localStorage: ILocalStorage,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
-    private val walletManager: IWalletManager,
-    private val adapterManager: IAdapterManager,
-    private val marketKit: MarketKitWrapper,
-    private val evmBlockchainManager: EvmBlockchainManager,
-    private val tronKitManager: TronKitManager,
-    private val tonKitManager: TonKitManager,
-    private val solanaKitManager: SolanaKitManager,
-    private val btcBlockchainManager: BtcBlockchainManager,
+    private val moneroKitManager: MoneroKitManager
 ) : ViewModelUiState<AppStatusModule.UiState>() {
+
+    private val systemInfoManager: ISystemInfoManager = App.systemInfoManager
+    private val localStorage: ILocalStorage = App.localStorage
+    private val accountManager: IAccountManager = App.accountManager
+    private val walletManager: IWalletManager = App.walletManager
+    private val adapterManager: IAdapterManager = App.adapterManager
+    private val marketKit: MarketKitWrapper = App.marketKit
+    private val evmBlockchainManager: EvmBlockchainManager = App.evmBlockchainManager
+    private val tronKitManager: TronKitManager = App.tronKitManager
+    private val tonKitManager: TonKitManager = App.tonKitManager
+    private val solanaKitManager: SolanaKitManager = App.solanaKitManager
+    private val btcBlockchainManager: BtcBlockchainManager = App.btcBlockchainManager
 
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
     private var appStatusAsText: String? = null
@@ -218,6 +222,10 @@ class AppStatusViewModel(
                 }
             }
 
+        moneroKitManager.moneroKitWrapper?.statusInfo()?.let { statusInfo ->
+            blockchainStatus["Monero"] = statusInfo
+        }
+
         return blockchainStatus
     }
 
@@ -269,22 +277,21 @@ class AppStatusViewModel(
             blocks.add(block)
         }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
-            ?.let { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
-                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                    val block = getBlockchainInfoBlock(title, "Zcash", adapter.statusInfo)
-                    blocks.add(block)
+        walletManager.activeWallets
+            .mapNotNull { wallet ->
+                adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+                    if (adapter.statusInfo.isEmpty()) {
+                        return@mapNotNull null
+                    }
+                    getBlockchainInfoBlock(
+                        title = if (blocks.isEmpty()) "Blockchain Status" else null,
+                        blockchain = "${wallet.token.blockchain.type.stringRepresentation}",
+                        statusInfo = adapter.statusInfo
+                    )
                 }
             }
-
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
-            ?.let { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? TonAdapter)?.let { adapter ->
-                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                    val block = getBlockchainInfoBlock(title, "Ton", adapter.statusInfo)
-                    blocks.add(block)
-                }
+            .forEach {
+                blocks.add(it)
             }
 
         return blocks

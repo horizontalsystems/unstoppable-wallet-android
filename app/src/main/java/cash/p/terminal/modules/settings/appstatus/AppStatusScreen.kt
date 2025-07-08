@@ -17,11 +17,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-
-
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockData
 import cash.p.terminal.ui_compose.components.AppBar
@@ -38,13 +35,14 @@ import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun AppStatusScreen(
     navController: NavController
 ) {
-    val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
+    val viewModel = koinViewModel<AppStatusViewModel>()
     val uiState = viewModel.uiState
     val clipboardManager = LocalClipboardManager.current
     val localView = LocalView.current

@@ -17,7 +17,7 @@ abstract class BaseSolanaAdapter(
     override val debugInfo: String
         get() = solanaKit.debugInfo()
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() = solanaKit.statusInfo()
 
     // IReceiveAdapter

@@ -404,7 +404,7 @@ class ZcashAdapter(
     override val balanceData: BalanceData
         get() = BalanceData(balance, pending = balancePending)
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() {
             val statusInfo = LinkedHashMap<String, Any>()
             statusInfo["Last Block Info"] = lastBlockInfo ?: ""
