@@ -233,7 +233,7 @@ class RestoreMnemonicViewModel(
             name = accountName,
             type = accountType,
             origin = AccountOrigin.Restored,
-            backedUp = false,
+            backedUp = true,
             fileBackedUp = false,
         )
 
