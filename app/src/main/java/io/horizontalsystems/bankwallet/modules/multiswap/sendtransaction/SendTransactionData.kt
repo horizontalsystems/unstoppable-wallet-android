@@ -31,6 +31,10 @@ sealed class SendTransactionData {
         data class WithCreateTransaction(val transaction: CreatedTransaction) : Tron()
     }
 
+    sealed class Solana : SendTransactionData() {
+        data class WithRawTransaction(val rawTransactionStr: String) : Solana()
+    }
+
     sealed class Stellar : SendTransactionData() {
         data class Regular(
             val address: String,

@@ -275,6 +275,10 @@ object AllBridgeProvider : IMultiSwapProvider {
                 SendTransactionData.Stellar.WithTransactionEnvelope(rawTransactionStr)
             }
 
+            tokenIn.blockchainType == BlockchainType.Solana -> {
+                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr)
+            }
+
             else -> {
                 Log.e("AAA", "Not implemented for: ${tokenIn.blockchainType}, transaction: $rawTransactionStr")
                 TODO("Not yet implemented")
