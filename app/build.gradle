@@ -1,10 +1,3 @@
-// NB: Android Studio can't find the imports; this does not affect the
-// actual build since Gradle can find them just fine.
-// remove after upgrading to 'com.android.tools.build:gradle:8.1.0' (AGP 8.1)
-import com.android.tools.profgen.ArtProfileKt
-import com.android.tools.profgen.ArtProfileSerializer
-import com.android.tools.profgen.DexFile
-
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -315,7 +308,7 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:stellar-kit-android:35c4163'
+    implementation 'com.github.horizontalsystems:stellar-kit-android:64fa802'
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:7826bf5'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:b80a1429'
