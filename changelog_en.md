@@ -1,3 +1,18 @@
+## Version 0.43 Highlights
+
+### Monero native blockchain
+
+You can now store, send and receive Monero directly on its native blockchain.
+
+### Hardware wallet visibility without module
+
+The hardware wallet option is now visible even if the module is not available.
+Users will be warned when NFC is not supported on the device.
+
+### Fixed wallet creation screen issue
+
+Resolved an issue where the wallet creation menu did not appear after changing the system PIN.
+
 ## Version 0.42 Highlights
 
 ### Tangem hardware wallet

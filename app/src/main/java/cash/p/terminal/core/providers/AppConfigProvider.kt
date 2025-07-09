@@ -151,7 +151,8 @@ class AppConfigProvider {
             BlockchainType.Gnosis to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.Fantom to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.Ton to "UQCYTBH7n8OnQ6BgOfdkNRWF7socLJb9U-JMRcoz3UpL_0V6",
-            BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2"
+            BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2",
+            BlockchainType.Monero to "4B7tJ5W9QFY1quiV4yFWwSCmgyitq1k2xDUWSkoHo9o2aBimKmVPyPxf6b3LyQdxtMB2bkPbr7hAq2bFobhASrbHK4JyX57"
         ).toList().sortedBy { it.first.uid }.toMap()
     }
 }
