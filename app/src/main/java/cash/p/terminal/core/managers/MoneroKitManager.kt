@@ -20,6 +20,7 @@ import com.m2049r.xmrwallet.model.WalletManager
 import com.m2049r.xmrwallet.service.MoneroWalletService
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.core.SafeSuspendedCall
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -173,13 +174,11 @@ class MoneroKitWrapper(
         }
     }
 
-    suspend fun stop() = withContext(Dispatchers.IO) {
-        if (isStarted) {
-            try {
+    suspend fun stop() = SafeSuspendedCall.executeSuspendable {
+        withContext(Dispatchers.IO) {
+            if (isStarted) {
                 isStarted = false
                 moneroWalletService.stop()
-            } catch (e: Exception) {
-                Log.e("MoneroKitWrapper", "Failed to stop Monero wallet", e)
             }
         }
     }

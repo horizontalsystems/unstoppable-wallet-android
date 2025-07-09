@@ -51,7 +51,6 @@ import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
-import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.FeeRateProvider
