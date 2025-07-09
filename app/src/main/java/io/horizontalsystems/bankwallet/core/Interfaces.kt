@@ -404,6 +404,8 @@ interface IAdapter {
 interface ISendSolanaAdapter {
     val availableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
+    suspend fun send(rawTransaction: ByteArray): FullTransaction
+    fun estimateFee(rawTransaction: ByteArray): BigDecimal
 }
 
 interface ISendTonAdapter {

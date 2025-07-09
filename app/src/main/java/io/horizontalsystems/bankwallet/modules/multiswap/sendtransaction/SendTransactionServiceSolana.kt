@@ -4,11 +4,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
+import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaAddressService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -43,7 +43,8 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
 
-    private var networkFee: SendModule.AmountData? = null
+    private var fee = SolanaKit.fee
+    private var rawTransaction: ByteArray? = null
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -57,8 +58,6 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
                 handleUpdatedAddressState(it)
             }
         }
-
-        networkFee = getAmountData(CoinValue(solToken, SolanaKit.fee))
     }
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
@@ -74,26 +73,44 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
     }
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
+        check(data is SendTransactionData.Solana)
+
+        when (data) {
+            is SendTransactionData.Solana.WithRawTransaction -> {
+                val rawTransaction = data.rawTransactionStr.hexToByteArray()
+                this.rawTransaction = rawTransaction
+
+                fee = adapter.estimateFee(rawTransaction)
+
+                emitState()
+            }
+        }
 //        amountService.setAmount(amount)
 //        addressService.setAddress(address)
     }
 
     override suspend fun sendTransaction(): SendTransactionResult {
-        // todo checking amount should be in service
-        val totalSolAmount = (if (token.type == TokenType.Native) amountState.amount!! else BigDecimal.ZERO) + SolanaKit.fee
-        if (totalSolAmount > solBalance)
-            throw EvmError.InsufficientBalanceWithFee
+        val tmpRawTransaction = rawTransaction
 
-        adapter.send(amountState.amount!!, addressState.solanaAddress!!)
+        if (tmpRawTransaction != null) {
+            adapter.send(tmpRawTransaction)
+        } else {
+            // todo checking amount should be in service
+            val totalSolAmount = (if (token.type == TokenType.Native) amountState.amount!! else BigDecimal.ZERO) + SolanaKit.fee
+            if (totalSolAmount > solBalance)
+                throw EvmError.InsufficientBalanceWithFee
+
+            adapter.send(amountState.amount!!, addressState.solanaAddress!!)
+        }
 
         return SendTransactionResult.Solana
     }
 
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,
-        networkFee = networkFee,
+        networkFee = getAmountData(CoinValue(solToken, fee)),
         cautions = listOf(),
-        sendable = amountState.canBeSend && addressState.canBeSend,
+        sendable = rawTransaction != null || (amountState.canBeSend && addressState.canBeSend),
         loading = false,
         fields = listOf(),
         extraFees = extraFees
