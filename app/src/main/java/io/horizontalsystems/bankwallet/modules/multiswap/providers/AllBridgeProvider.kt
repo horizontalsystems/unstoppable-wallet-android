@@ -223,6 +223,14 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         val amount = amountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
 
+        var solanaTxFeeParams: String? = null
+        var solanaTxFeeValue: String? = null
+
+        if (tokenIn.blockchainType == BlockchainType.Solana) {
+            solanaTxFeeParams = "PRICE_PER_UNIT_IN_MICRO_LAMPORTS"
+            solanaTxFeeValue = "71428"
+        }
+
         val rawTransactionStr = if (tokenIn.blockchainType == tokenOut.blockchainType) {
             val amountOutMinInt = amountOutMin.movePointRight(tokenPairOut.abToken.decimals).toBigInteger()
 
@@ -232,7 +240,9 @@ object AllBridgeProvider : IMultiSwapProvider {
                 recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
                 sourceToken = tokenPairIn.abToken.tokenAddress,
                 destinationToken = tokenPairOut.abToken.tokenAddress,
-                minimumReceiveAmount = amountOutMinInt
+                minimumReceiveAmount = amountOutMinInt,
+                solanaTxFeeParams = solanaTxFeeParams,
+                solanaTxFeeValue = solanaTxFeeValue,
             )
         } else {
             allBridgeAPI.rawBridge(
@@ -241,7 +251,9 @@ object AllBridgeProvider : IMultiSwapProvider {
                 recipient = SwapHelper.getReceiveAddressForToken(tokenOut),
                 sourceToken = tokenPairIn.abToken.tokenAddress,
                 destinationToken = tokenPairOut.abToken.tokenAddress,
-                feePaymentMethod = feePaymentMethod.value
+                feePaymentMethod = feePaymentMethod.value,
+                solanaTxFeeParams = solanaTxFeeParams,
+                solanaTxFeeValue = solanaTxFeeValue,
             )
         }
 
@@ -276,7 +288,15 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
 
             tokenIn.blockchainType == BlockchainType.Solana -> {
-                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr)
+                // solana sdk doesn't include priority fee when estimating fee, so it is hardcoded here
+                // need to remove when sol sdk fixes fee estimation
+                val priorityFeeLamports = BigDecimal(71428)
+                    .multiply(BigDecimal(999999))
+                    .divide(BigDecimal(1000000))
+
+                val priorityFeeSol = priorityFeeLamports.movePointLeft(9)
+
+                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr, priorityFeeSol)
             }
 
             else -> {
@@ -313,6 +333,8 @@ interface AllBridgeAPI {
         @Query("sourceToken") sourceToken: String,
         @Query("destinationToken") destinationToken: String,
         @Query("minimumReceiveAmount") minimumReceiveAmount: BigInteger,
+        @Query("solanaTxFeeParams") solanaTxFeeParams: String?,
+        @Query("solanaTxFeeValue") solanaTxFeeValue: String?
     ): String
 
     @GET("/raw/bridge")
@@ -324,6 +346,8 @@ interface AllBridgeAPI {
         @Query("destinationToken") destinationToken: String,
         @Query("messenger") messenger: String = "ALLBRIDGE",
         @Query("feePaymentMethod") feePaymentMethod: String,
+        @Query("solanaTxFeeParams") solanaTxFeeParams: String?,
+        @Query("solanaTxFeeValue") solanaTxFeeValue: String?
     ): String
 
     @GET("/gas/fee")
