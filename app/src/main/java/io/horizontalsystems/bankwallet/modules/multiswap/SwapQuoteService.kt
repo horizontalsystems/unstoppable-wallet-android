@@ -63,7 +63,11 @@ class SwapQuoteService {
 
     suspend fun start() {
         allProviders.forEach {
-            it.start()
+            try {
+                it.start()
+            } catch (e: Throwable) {
+                Log.d("AAA", "error on starting ${it.id}, $e", e)
+            }
         }
     }
 
