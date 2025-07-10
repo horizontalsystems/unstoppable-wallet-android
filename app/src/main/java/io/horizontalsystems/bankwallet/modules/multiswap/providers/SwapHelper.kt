@@ -56,6 +56,9 @@ object SwapHelper {
             BlockchainType.Tron -> {
                 return App.tronKitManager.getAddress(account.type)
             }
+            BlockchainType.Stellar -> {
+                return App.stellarKitManager.getAddress(account.type)
+            }
             else -> throw SwapError.NoDestinationAddress()
         }
     }
