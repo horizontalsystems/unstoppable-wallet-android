@@ -109,6 +109,10 @@ class StellarKitManager(
             }
         }
     }
+
+    fun getAddress(accountType: AccountType): String {
+        return StellarKit.getAccountId(accountType.toStellarWallet())
+    }
 }
 
 class StellarKitWrapper(val stellarKit: StellarKit)
