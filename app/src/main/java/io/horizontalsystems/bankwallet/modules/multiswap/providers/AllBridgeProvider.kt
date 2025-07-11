@@ -299,10 +299,7 @@ object AllBridgeProvider : IMultiSwapProvider {
                 SendTransactionData.Solana.WithRawTransaction(rawTransactionStr, priorityFeeSol)
             }
 
-            else -> {
-                Log.e("AAA", "Not implemented for: ${tokenIn.blockchainType}, transaction: $rawTransactionStr")
-                TODO("Not yet implemented")
-            }
+            else -> throw IllegalArgumentException("Swapping ${tokenIn.blockchainType} not supported")
         }
     }
 
