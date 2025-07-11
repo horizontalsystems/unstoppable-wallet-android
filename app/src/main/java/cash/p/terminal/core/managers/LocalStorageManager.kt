@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
+import cash.p.terminal.core.utils.delegate
 import cash.p.terminal.core.valueOrDefault
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.LaunchPage
@@ -637,4 +638,10 @@ class LocalStorageManager(
     private fun setStackingUpdateTimestamp(wallet: Wallet, timestamp: Long) {
         preferences.edit().putLong(STACKING_UPDATE_TIME + wallet.getUniqueKey(), timestamp).apply()
     }
+
+    override var isSystemPinRequired by preferences.delegate(
+        key = "is_system_pin_required",
+        default = true,
+        commit = true
+    )
 }

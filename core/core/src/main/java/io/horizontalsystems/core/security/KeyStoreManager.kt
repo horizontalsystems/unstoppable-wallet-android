@@ -8,6 +8,8 @@ import android.security.keystore.UserNotAuthenticatedException
 import io.horizontalsystems.core.IKeyProvider
 import io.horizontalsystems.core.IKeyStoreCleaner
 import io.horizontalsystems.core.IKeyStoreManager
+import io.horizontalsystems.core.IPinSettingsStorage
+import org.koin.java.KoinJavaComponent.inject
 import java.security.InvalidKeyException
 import java.security.KeyStore
 import java.security.KeyStoreException
@@ -27,6 +29,7 @@ class KeyStoreManager(
     private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private val AUTH_DURATION_SEC = 86400 // 24 hours in seconds (24x60x60)
 
+    private val localStoreManager: IPinSettingsStorage by inject(IPinSettingsStorage::class.java)
     private val keyStore: KeyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
 
     interface Logger {
@@ -94,19 +97,21 @@ class KeyStoreManager(
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
             .setBlockModes(BLOCK_MODE)
-            .setUserAuthenticationRequired(true)
+            .setUserAuthenticationRequired(localStoreManager.isSystemPinRequired)
             .setRandomizedEncryptionRequired(false)
             .setEncryptionPaddings(PADDING)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            builder.setUserAuthenticationParameters(
-                AUTH_DURATION_SEC,
-                KeyProperties.AUTH_DEVICE_CREDENTIAL
-                        or KeyProperties.AUTH_BIOMETRIC_STRONG
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            builder.setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
+        if (localStoreManager.isSystemPinRequired) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                builder.setUserAuthenticationParameters(
+                    AUTH_DURATION_SEC,
+                    KeyProperties.AUTH_DEVICE_CREDENTIAL
+                            or KeyProperties.AUTH_BIOMETRIC_STRONG
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                builder.setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
+            }
         }
 
         keyGenerator.init(builder.build())

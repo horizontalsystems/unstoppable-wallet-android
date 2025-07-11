@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,26 +33,32 @@ import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.pin.SetPinFragment
+import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsUiState
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsModule
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
 import cash.p.terminal.modules.settings.security.ui.HardwareWalletBiometricBlock
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
+import cash.p.terminal.modules.settings.security.ui.SystemPinBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
 import cash.p.terminal.modules.settings.security.ui.TransactionAutoHideBlock
 import cash.p.terminal.modules.settings.security.ui.TransferPasscodeBlock
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui.extensions.ConfirmationDialog
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.SnackbarDuration
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.slideFromBottomForResult
+import io.horizontalsystems.core.ui.dialogs.ChecklistConfirmationDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.system.exitProcess
 
@@ -66,6 +74,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SecurityCenterScreen(
             securitySettingsViewModel = securitySettingsViewModel,
+            uiState = securitySettingsViewModel.uiState,
             torViewModel = torViewModel,
             navController = navController,
             onTransactionAutoHideEnabledChange = { enabled ->
@@ -163,7 +172,8 @@ class SecuritySettingsFragment : BaseComposeFragment() {
                     }
                 }
             },
-            onEnableSaveAccessCodeForHardwareWallet = securitySettingsViewModel::enableSaveAccessCodeForHardwareWallet
+            onEnableSaveAccessCodeForHardwareWallet = securitySettingsViewModel::enableSaveAccessCodeForHardwareWallet,
+            onSystemPinRequiredChange = securitySettingsViewModel::onSystemPinRequiredChange
         )
     }
 
@@ -215,6 +225,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
 @Composable
 private fun SecurityCenterScreen(
     securitySettingsViewModel: SecuritySettingsViewModel,
+    uiState: SecuritySettingsUiState,
     torViewModel: SecurityTorSettingsViewModel,
     navController: NavController,
     onTransactionAutoHideEnabledChange: (Boolean) -> Unit,
@@ -224,9 +235,12 @@ private fun SecurityCenterScreen(
     onTransferPasscodeEnabledChange: (Boolean) -> Unit,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
-    onEnableSaveAccessCodeForHardwareWallet:(Boolean) -> Unit,
+    onEnableSaveAccessCodeForHardwareWallet: (Boolean) -> Unit,
+    onSystemPinRequiredChange: (Boolean) -> Unit,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
+    val context = LocalContext.current
+    val view = LocalView.current
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
     }
@@ -322,9 +336,39 @@ private fun SecurityCenterScreen(
                 securitySettingsViewModel,
                 navController
             )
-            InfoText(text = stringResource(R.string.SettingsSecurity_DuressPinDescription))
+            InfoText(
+                text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
+                paddingBottom = 32.dp
+            )
 
-            VSpacer(height = 32.dp)
+            SystemPinBlock(
+                isPinRequired = uiState.isSystemPinRequired,
+                enabled = uiState.isSystemPinRequiredEnabled,
+                onPinRequiredChange = { checked ->
+                    if (!uiState.isSystemPinRequired) {
+                        if (!uiState.isDeviceSecure) {
+                            HudHelper.showWarningMessage(
+                                contentView = view,
+                                resId = R.string.need_setup_system_pin,
+                                duration = SnackbarDuration.LONG
+                            )
+                        } else
+                            navController.slideFromBottomForResult<ChecklistConfirmationDialog.Result>(
+                                resId = R.id.checklistConfirmationDialog,
+                                input = ChecklistConfirmationDialog.ChecklistConfirmationInput(
+                                    title = context.getString(R.string.SettingsSecurity_system_pin_enable),
+                                    confirmButtonText = context.getString(R.string.confirm),
+                                    items = context.resources.getStringArray(R.array.enable_system_pin_confirm)
+                                        .toList()
+                                )
+                            ) { result ->
+                                if (result.confirmed) {
+                                    onSystemPinRequiredChange(true)
+                                }
+                            }
+                    }
+                }
+            )
         }
     }
 }

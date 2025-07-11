@@ -355,6 +355,7 @@ class AppStatusViewModel(
                 BlockContent.TitleValue("App Version", systemInfoManager.appVersion),
                 BlockContent.TitleValue("Device Model", systemInfoManager.deviceModel),
                 BlockContent.TitleValue("OS Version", systemInfoManager.osVersion),
+                BlockContent.TitleValue("System pin required", if(localStorage.isSystemPinRequired) "Yes" else "No"),
             )
         )
     }

@@ -7,7 +7,7 @@ firebaseCrashlyticsGradle = "2.9.9"
 googleServices = "4.4.1"
 grpcApi = "1.63.0"
 kotlin = "2.0.21"
-koin-bom = "4.0.0"
+koin-bom = "4.1.0"
 compose-bom = "2024.12.01"
 leakcanaryAndroid = "2.14"
 material = "1.12.0"
@@ -59,6 +59,7 @@ google-play-core = "2.1.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationUiKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomRxjava2" }

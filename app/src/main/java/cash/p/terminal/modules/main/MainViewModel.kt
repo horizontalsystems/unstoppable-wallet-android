@@ -371,7 +371,7 @@ class MainViewModel(
     private fun updateSettingsBadge() {
         val showDotBadge =
             !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount ||
-                    updateAvailable.value
+                    updateAvailable.value || !localStorage.isSystemPinRequired
 
         settingsBadge = if (wcPendingRequestsCount > 0) {
             MainModule.BadgeType.BadgeNumber(wcPendingRequestsCount)

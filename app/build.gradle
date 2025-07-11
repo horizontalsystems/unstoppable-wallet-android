@@ -300,7 +300,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
 
     //Compose Navigation
-    implementation "androidx.navigation:navigation-compose:$navigation_ktx_version"
+    implementation libs.androidx.navigation.compose
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
 
     api 'com.journeyapps:zxing-android-embedded:4.3.0'

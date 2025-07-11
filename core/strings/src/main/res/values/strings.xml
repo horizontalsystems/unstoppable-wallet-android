@@ -1254,6 +1254,25 @@
     <string name="signed">Signed</string>
     <string name="details_row_subtitle_signed_hashes_format">%s hashes</string>
 
+    <string name="need_setup_system_pin">To use this feature you must set up an Android system PIN</string>    <string name="SettingsSecurity_system_pin_enable">Enable System PIN</string>
+    <string name="confirm">Confirm</string>
+    <string name="SettingsSecurity_system_pin">Require system PIN</string>
+    <string name="SettingsSecurity_system_pin_description">Require setting up a system PIN to use the application. This significantly improves application security.</string>
+    <string name="SettingsSecurity_system_pin_description_enabled">Can only be configured during initial setup. Disabling will reset all wallets.</string>
+    <string-array name="enable_system_pin_confirm">
+        <item>This action can\'t be undone.</item>
+        <item>To disable this feature you need to reinitialize the app.</item>
+    </string-array>
+
+    <string name="system_pin_terms">System PIN Terms</string>
+    <string-array name="system_pin_term_list">
+        <item>Wallet access key will be permanently available to the app, even when device is locked.\nThis means an attacker can access data without additional verification.</item>
+        <item>Protection will only be at Android Keystore level, without additional authentication (PIN, biometrics).\nAlthough Keystore uses hardware protection, it doesn\'t replace user authentication.</item>
+        <item>In case of device compromise or app breach, private key and/or seed phrase may be stolen.\nThe app won\'t be able to prevent third-party access if they gain physical or software control over the device.</item>
+        <item>Responsibility for fund security lies entirely with the user.\nDevelopers are not responsible for access loss or fund theft due to disabled authentication.</item>
+        <item>Disabling authentication is not recommended for storing significant amounts.\nThis feature is only for users who consciously and voluntarily accept increased risks.</item>
+    </string-array>
+
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
     <string name="EditDuressPin_Title">Edit Duress Passcode</string>

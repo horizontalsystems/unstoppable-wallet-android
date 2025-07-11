@@ -25,6 +25,7 @@ interface IEncryptionManager {
 
 interface ISystemInfoManager {
     val appVersion: String
+    val isDeviceSecure: Boolean
     val isSystemLockOff: Boolean
     val biometricAuthSupported: Boolean
     val deviceModel: String
@@ -62,6 +63,8 @@ interface ILockoutStorage {
 interface IPinSettingsStorage {
     var biometricAuthEnabled: Boolean
     var pin: String?
+
+    var isSystemPinRequired: Boolean
 }
 
 interface IThirdKeyboard {
