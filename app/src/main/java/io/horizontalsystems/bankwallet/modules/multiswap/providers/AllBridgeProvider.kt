@@ -116,7 +116,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
     ): ISwapQuote {
-        val bridgeAmounts = getQuote(tokenIn, tokenOut, amountIn)
+        val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
@@ -140,7 +140,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
 
         return object : ISwapQuote {
-            override val amountOut: BigDecimal = bridgeAmounts.amountReceivedInFloat
+            override val amountOut: BigDecimal = amountOut
             override val priceImpact: BigDecimal? = null
             override val fields: List<DataField> = listOf()
             override val settings: List<ISwapSetting> = listOf()
@@ -152,11 +152,11 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
     }
 
-    private suspend fun getQuote(
+    private suspend fun estimateAmountOut(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-    ): Response.BridgeAmounts {
+    ): BigDecimal {
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val tokenPairOut = tokenPairs.first { it.token == tokenOut }
 
@@ -179,12 +179,15 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
 
         val amount = resAmountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
-        val bridgeAmounts = allBridgeAPI.bridgeReceiveCalculate(
+
+        // to get the minimum expected receive amount used endpoint pendingInfo instead of bridgeReceiveCalculate
+        val pendingInfo = allBridgeAPI.pendingInfo(
             amount = amount,
             sourceToken = sourceToken,
-            destinationToken = destinationToken,
+            destinationToken = destinationToken
         )
-        return bridgeAmounts
+
+        return pendingInfo.estimatedAmount.min.float
     }
 
     override suspend fun fetchFinalQuote(
@@ -195,8 +198,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
-        val bridgeAmounts = getQuote(tokenIn, tokenOut, amountIn)
-        val amountOut = bridgeAmounts.amountReceivedInFloat
+        val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
         val sendTransactionData = getSendTransactionData(tokenIn, tokenOut, amountIn, amountOut)
 
         return object : ISwapFinalQuote {
@@ -314,6 +316,13 @@ interface AllBridgeAPI {
     @GET("/tokens")
     suspend fun tokens(): List<Response.Token>
 
+    @GET("/pending/info")
+    suspend fun pendingInfo(
+        @Query("amount") amount: BigInteger,
+        @Query("sourceToken") sourceToken: String,
+        @Query("destinationToken") destinationToken: String,
+    ): Response.PendingInfo
+
     @GET("/bridge/receive/calculate")
     suspend fun bridgeReceiveCalculate(
         @Query("amount") amount: BigInteger,
@@ -355,6 +364,16 @@ interface AllBridgeAPI {
     ): Response.GasFeeOptions
 
     object Response {
+        data class PendingInfo(
+            val pendingTxs: Long,
+            val estimatedAmount: EstimatedAmount
+        )
+
+        data class EstimatedAmount(
+            val min: Amount,
+            val max: Amount
+        )
+
         data class GasFeeOptions(
             val native: Amount,
             val stablecoin: Amount,
