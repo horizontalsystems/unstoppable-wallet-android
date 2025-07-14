@@ -12,14 +12,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -60,18 +62,24 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     val context = LocalContext.current
-    val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val modalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.handleScannedData(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.handleScannedData(
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                )
+            }
         }
-    }
 
     viewModel.uiState.errorMessage?.let { message ->
         val view = LocalView.current
@@ -84,7 +92,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             LaunchedEffect(viewModel.connectionResult) {
                 coroutineScope.launch {
                     delay(300)
-                    invalidUrlBottomSheetState.show()
+                    modalBottomSheetState.show()
+                    isBottomSheetVisible = true
                 }
             }
             viewModel.onHandleRoute()
@@ -95,10 +104,103 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
 
 
     BackupAlert(navController)
-    ModalBottomSheetLayout(
-        sheetState = invalidUrlBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = {
+                    BalanceTitleRow(navController, accountViewItem.name)
+                },
+                menuItems = buildList {
+                    if (accountViewItem.type.supportsWalletConnect) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
+                                icon = R.drawable.ic_qr_scan_20,
+                                onClick = {
+                                    when (val state =
+                                        viewModel.getWalletConnectSupportState()) {
+                                        WCManager.SupportState.Supported -> {
+                                            qrScannerLauncher.launch(
+                                                QRScannerActivity.getScanQrIntent(context, true)
+                                            )
+
+                                            stat(
+                                                page = StatPage.Balance,
+                                                event = StatEvent.Open(StatPage.ScanQrCode)
+                                            )
+                                        }
+
+                                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                                        }
+
+                                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                            val text =
+                                                Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+                                            navController.slideFromBottom(
+                                                R.id.backupRequiredDialog,
+                                                BackupRequiredDialog.Input(state.account, text)
+                                            )
+
+                                            stat(
+                                                page = StatPage.Balance,
+                                                event = StatEvent.Open(StatPage.BackupRequired)
+                                            )
+                                        }
+
+                                        is WCManager.SupportState.NotSupported -> {
+                                            navController.slideFromBottom(
+                                                R.id.wcAccountTypeNotSupportedDialog,
+                                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
+                                            )
+                                        }
+                                    }
+                                }
+                            )
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        val uiState = viewModel.uiState
+
+        Crossfade(
+            targetState = uiState.viewState,
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            label = ""
+        ) { viewState ->
+            when (viewState) {
+                ViewState.Success -> {
+                    val balanceViewItems = uiState.balanceViewItems
+                    BalanceItems(
+                        balanceViewItems,
+                        viewModel,
+                        accountViewItem,
+                        navController,
+                        uiState,
+                        viewModel.totalUiState,
+                    )
+                }
+
+                ViewState.Loading,
+                is ViewState.Error,
+                null -> {
+                }
+            }
+        }
+    }
+    if (isBottomSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                isBottomSheetVisible = false
+            },
+            sheetState = modalBottomSheetState,
+            containerColor = ComposeAppTheme.colors.transparent
+        ) {
             ConfirmationBottomSheet(
                 title = stringResource(R.string.WalletConnect_Title),
                 text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
@@ -109,104 +211,18 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                 cancelText = stringResource(R.string.Button_Cancel),
                 onConfirm = {
                     coroutineScope.launch {
-                        invalidUrlBottomSheetState.hide()
+                        modalBottomSheetState.hide()
+                        isBottomSheetVisible = false
                         qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                     }
                 },
                 onClose = {
-                    coroutineScope.launch { invalidUrlBottomSheetState.hide() }
+                    coroutineScope.launch {
+                        modalBottomSheetState.hide()
+                        isBottomSheetVisible = false
+                    }
                 }
             )
-        }
-    ) {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = {
-                        BalanceTitleRow(navController, accountViewItem.name)
-                    },
-                    menuItems = buildList {
-                        if (accountViewItem.type.supportsWalletConnect) {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
-                                    icon = R.drawable.ic_qr_scan_20,
-                                    onClick = {
-                                        when (val state =
-                                            viewModel.getWalletConnectSupportState()) {
-                                            WCManager.SupportState.Supported -> {
-                                                qrScannerLauncher.launch(
-                                                    QRScannerActivity.getScanQrIntent(context, true)
-                                                )
-
-                                                stat(
-                                                    page = StatPage.Balance,
-                                                    event = StatEvent.Open(StatPage.ScanQrCode)
-                                                )
-                                            }
-
-                                            WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                                                navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
-                                            }
-
-                                            is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                                                val text =
-                                                    Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                                                navController.slideFromBottom(
-                                                    R.id.backupRequiredDialog,
-                                                    BackupRequiredDialog.Input(state.account, text)
-                                                )
-
-                                                stat(
-                                                    page = StatPage.Balance,
-                                                    event = StatEvent.Open(StatPage.BackupRequired)
-                                                )
-                                            }
-
-                                            is WCManager.SupportState.NotSupported -> {
-                                                navController.slideFromBottom(
-                                                    R.id.wcAccountTypeNotSupportedDialog,
-                                                    WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
-                                                )
-                                            }
-                                        }
-                                    }
-                                )
-                            )
-                        }
-                    }
-                )
-            }
-        ) { paddingValues ->
-            val uiState = viewModel.uiState
-
-            Crossfade(
-                targetState = uiState.viewState,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
-                label = ""
-            ) { viewState ->
-                when (viewState) {
-                    ViewState.Success -> {
-                        val balanceViewItems = uiState.balanceViewItems
-                        BalanceItems(
-                            balanceViewItems,
-                            viewModel,
-                            accountViewItem,
-                            navController,
-                            uiState,
-                            viewModel.totalUiState,
-                        )
-                    }
-
-                    ViewState.Loading,
-                    is ViewState.Error,
-                    null -> {
-                    }
-                }
-            }
         }
     }
 }
