@@ -72,7 +72,7 @@ class VaultFragment : BaseComposeFragment() {
         val holders: String,
         val assetSymbol: String,
         val protocolName: String,
-        val protocolLogo: String,
+        val assetLogo: String?,
     ) : Parcelable
 
 }
@@ -115,7 +115,7 @@ private fun VaultScreen(
                     contentPadding = PaddingValues(bottom = 32.dp),
                 ) {
                     item {
-                        VaultCard(uiState.vaultViewItem.name, uiState.vaultViewItem.protocolLogo)
+                        VaultCard(uiState.vaultViewItem.name, uiState.vaultViewItem.assetLogo)
                     }
                     item {
                         Chart(chartViewModel)
@@ -199,7 +199,7 @@ fun DetailCell(title: String, value: String) {
 }
 
 @Composable
-fun VaultCard(title: String, image: String) {
+fun VaultCard(title: String, image: String?) {
     Column {
         HsDivider()
         Row(

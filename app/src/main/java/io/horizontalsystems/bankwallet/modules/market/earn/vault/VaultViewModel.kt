@@ -22,7 +22,7 @@ class VaultViewModel(
         holders = input.holders,
         assetSymbol = input.assetSymbol,
         protocolName = input.protocolName,
-        protocolLogo = input.protocolLogo
+        assetLogo = input.assetLogo
     )
     private var isRefreshing = false
 
@@ -65,7 +65,7 @@ object VaultModule {
         val holders: String,
         val assetSymbol: String,
         val protocolName: String,
-        val protocolLogo: String,
+        val assetLogo: String?,
     )
 
     data class UiState(
