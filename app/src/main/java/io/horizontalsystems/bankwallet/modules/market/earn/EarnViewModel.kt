@@ -17,6 +17,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Apy
 import io.horizontalsystems.marketkit.models.Vault
+import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -44,12 +46,19 @@ class MarketEarnViewModel(
     private var filterBy: EarnModule.FilterBy = EarnModule.FilterBy.AllAssets
     private var chainSelected: EarnModule.VaultChainOption =
         EarnModule.VaultChainOption.AllChains
+    private val hasPremium: Boolean
+        get() = UserSubscriptionManager.isActionAllowed(AdvancedSearch)
 
     private val usdCurrency: Currency by lazy {
         currencyManager.currencies.first { it.code == "USD" }
     }
 
     init {
+        viewModelScope.launch {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                updateViewItems()
+            }
+        }
         getVaults()
     }
 
@@ -134,7 +143,7 @@ class MarketEarnViewModel(
     private fun vaultViewItem(vault: Vault): EarnModule.VaultViewItem =
         EarnModule.VaultViewItem(
             address = vault.address,
-            name = vault.name,
+            name = if (hasPremium) vault.name else "***",
             apy = vault.apy.getByPeriod(apyPeriod),
             tvl = App.numberFormatter.formatFiatShort(
                 vault.tvl.toBigDecimal(),
@@ -146,7 +155,7 @@ class MarketEarnViewModel(
             holders = vault.holders?.toString() ?: "---",
             assetSymbol = vault.assetSymbol,
             protocolName = vault.protocolName.replaceFirstChar(Char::titlecase),
-            protocolLogo = vault.protocolLogo
+            assetLogo = vault.assetLogo
         )
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
@@ -198,8 +207,8 @@ object EarnModule {
         val url: String?,
         val holders: String,
         val assetSymbol: String,
+        val assetLogo: String?,
         val protocolName: String,
-        val protocolLogo: String,
     )
 
     enum class VaultChainOption(val uid: String) : WithTranslatableTitle {

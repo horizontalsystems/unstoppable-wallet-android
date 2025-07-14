@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -60,6 +60,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -73,7 +74,6 @@ fun MarketEarnScreen(
     var openApyPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openChainSelector by rememberSaveable { mutableStateOf(false) }
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
-    val context = LocalContext.current
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
@@ -121,9 +121,11 @@ fun MarketEarnScreen(
                                     viewItem.holders,
                                     viewItem.assetSymbol,
                                     viewItem.protocolName,
-                                    viewItem.protocolLogo
+                                    viewItem.assetLogo
                                 )
-                                navController.slideFromRight(R.id.vaultFragment, input)
+                                navController.paidAction(AdvancedSearch) {
+                                    navController.slideFromRight(R.id.vaultFragment, input)
+                                }
                             },
                             preItems = {
                                 stickyHeader {
@@ -134,14 +136,18 @@ fun MarketEarnScreen(
                                         OptionController(
                                             uiState.filterBy.titleResId,
                                             onOptionClick = {
-                                                openFilterSelector = true
+                                                navController.paidAction(AdvancedSearch) {
+                                                    openFilterSelector = true
+                                                }
                                             }
                                         )
                                         HSpacer(width = 12.dp)
                                         ButtonSecondaryWithIcon(
                                             modifier = Modifier.height(28.dp),
                                             onClick = {
-                                                openApyPeriodSelector = true
+                                                navController.paidAction(AdvancedSearch) {
+                                                    openApyPeriodSelector = true
+                                                }
                                             },
                                             title = "APY (" + stringResource(uiState.apyPeriod.titleResId) + ")",
                                             iconRight = painterResource(R.drawable.ic_down_arrow_20),
@@ -150,7 +156,9 @@ fun MarketEarnScreen(
                                         ButtonSecondaryWithIcon(
                                             modifier = Modifier.height(28.dp),
                                             onClick = {
-                                                openChainSelector = true
+                                                navController.paidAction(AdvancedSearch) {
+                                                    openChainSelector = true
+                                                }
                                             },
                                             title = uiState.chainSelected.title.text,
                                             iconRight = painterResource(R.drawable.ic_down_arrow_20),
@@ -229,7 +237,7 @@ fun VaultList(
             VaultItem(
                 title = item.assetSymbol,
                 subtitle = item.name,
-                coinIconUrl = item.protocolLogo,
+                coinIconUrl = item.assetLogo,
                 coinIconPlaceholder = R.drawable.coin_placeholder,
                 value = item.apy,
                 subvalue = "TVL:" + item.tvl,
@@ -254,7 +262,7 @@ fun VaultList(
 private fun VaultItem(
     title: String,
     subtitle: String,
-    coinIconUrl: String,
+    coinIconUrl: String?,
     alternativeCoinIconUrl: String? = null,
     coinIconPlaceholder: Int,
     value: BigDecimal,

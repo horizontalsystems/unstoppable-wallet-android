@@ -23,7 +23,15 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Orange
 
-data class TabItem<T>(val title: String, val selected: Boolean, val item: T, val icon: ImageSource? = null, val label: String? = null, val enabled: Boolean = true)
+data class TabItem<T>(
+    val title: String,
+    val selected: Boolean,
+    val item: T,
+    val icon: ImageSource? = null,
+    val label: String? = null,
+    val enabled: Boolean = true,
+    val premium: Boolean = false,
+)
 
 @Composable
 fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
@@ -101,6 +109,11 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
             }
         ) {
             tabs.forEach { tab ->
+                val textColor = when{
+                    tab.selected -> ComposeAppTheme.colors.leah
+                    tab.premium -> Orange
+                    else -> ComposeAppTheme.colors.grey
+                }
                 Tab(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -115,7 +128,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                         ) {
                             Text(
                                 text = tab.title,
-                                color = if (tab.selected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                                color = textColor,
                                 style = if (tab.selected) ComposeAppTheme.typography.subheadB else ComposeAppTheme.typography.subheadSB,
                             )
                         }
