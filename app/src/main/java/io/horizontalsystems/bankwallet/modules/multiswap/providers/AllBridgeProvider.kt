@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -35,8 +34,9 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val priority = 0
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
-    private val allBridgeAPI =
-        APIClient.retrofit("http://192.168.1.8:3000", 60).create(AllBridgeAPI::class.java)
+    private val allBridgeAPI = APIClient
+        .retrofit("https://allbridge.blocksdecoded.com", 60)
+        .create(AllBridgeAPI::class.java)
 
     private val blockchainTypes = mapOf(
         "ARB" to BlockchainType.ArbitrumOne,
