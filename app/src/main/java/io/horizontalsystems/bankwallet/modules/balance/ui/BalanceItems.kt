@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -66,18 +67,16 @@ import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFr
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryOrangeCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
@@ -181,7 +180,8 @@ fun BalanceItems(
     accountViewItem: AccountViewItem,
     navController: NavController,
     uiState: BalanceUiState,
-    totalState: TotalUIState
+    totalState: TotalUIState,
+    onScanClick: () -> Unit,
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
     DisposableEffect(true) {
@@ -262,27 +262,18 @@ fun BalanceItems(
             if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 item {
                     Row(
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(R.string.Balance_Send),
-                            onClick = {
-                                navController.slideFromRight(R.id.sendTokenSelectFragment)
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.SendTokenList)
-                                )
-                            }
-                        )
-                        HSpacer(8.dp)
-                        ButtonPrimaryDefault(
-                            modifier = Modifier.weight(1f),
+                        ActionOrangeButton(
+                            icon = R.drawable.ic_arrow_down_24,
                             title = stringResource(R.string.Balance_Receive),
                             onClick = {
-                                when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
+                                when (val receiveAllowedState =
+                                    viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
                                         navController.slideFromRight(R.id.receiveChooseCoinFragment)
 
@@ -313,11 +304,22 @@ fun BalanceItems(
                                 }
                             }
                         )
+                        ActionButton(
+                            icon = R.drawable.ic_arrow_up_24,
+                            title = stringResource(R.string.Balance_Send),
+                            onClick = {
+                                navController.slideFromRight(R.id.sendTokenSelectFragment)
+
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.SendTokenList)
+                                )
+                            }
+                        )
                         if (viewModel.isSwapEnabled) {
-                            HSpacer(8.dp)
-                            ButtonPrimaryCircle(
-                                icon = R.drawable.ic_swap_24,
-                                contentDescription = stringResource(R.string.Swap),
+                            ActionButton(
+                                icon = R.drawable.ic_swap_circle_24,
+                                title = stringResource(R.string.Swap),
                                 onClick = {
                                     navController.slideFromRight(R.id.multiswap)
 
@@ -328,17 +330,27 @@ fun BalanceItems(
                                 }
                             )
                         }
+                        if (accountViewItem.type.supportsWalletConnect) {
+                            ActionButton(
+                                icon = R.drawable.ic_scan_24,
+                                title = stringResource(R.string.Button_ScanQr),
+                                onClick = onScanClick
+                            )
+                        }
                     }
-                    VSpacer(12.dp)
+                    VSpacer(24.dp)
                 }
             }
 
-            item {
-                HsDivider()
-            }
-
             stickyHeader {
-                HeaderSorting {
+                Row(
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxWidth()
+                        .background(ComposeAppTheme.colors.lawrence),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    HSpacer(16.dp)
                     BalanceSortingSelector(
                         sortType = uiState.sortType,
                         sortTypes = uiState.sortTypes
@@ -346,18 +358,9 @@ fun BalanceItems(
                         viewModel.setSortType(it)
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    if (accountViewItem.isWatchAccount) {
-                        Image(
-                            painter = painterResource(R.drawable.icon_binocule_24),
-                            contentDescription = "binoculars icon"
-                        )
-                        HSpacer(16.dp)
-                    }
-
+                    HSpacer(8.dp)
                     ButtonSecondaryCircle(
-                        icon = R.drawable.ic_manage_2,
+                        icon = R.drawable.ic_manage_20,
                         contentDescription = stringResource(R.string.ManageCoins_title),
                         onClick = {
                             navController.slideFromRight(R.id.manageWalletsFragment)
@@ -369,6 +372,14 @@ fun BalanceItems(
                         }
                     )
 
+                    Spacer(modifier = Modifier.weight(1f))
+                    if (accountViewItem.isWatchAccount) {
+                        HSpacer(8.dp)
+                        Image(
+                            painter = painterResource(R.drawable.icon_binocule_20),
+                            contentDescription = "binoculars icon"
+                        )
+                    }
                     HSpacer(16.dp)
                 }
             }
@@ -458,6 +469,44 @@ fun BalanceItems(
 }
 
 @Composable
+private fun ActionButton(
+    @DrawableRes icon: Int,
+    title: String,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ButtonPrimaryCircle(
+            icon = icon,
+            contentDescription = title,
+            onClick = onClick
+        )
+        VSpacer(8.dp)
+        caption_grey(title)
+    }
+}
+
+@Composable
+private fun ActionOrangeButton(
+    @DrawableRes icon: Int,
+    title: String,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ButtonPrimaryOrangeCircle(
+            icon = icon,
+            contentDescription = title,
+            onClick = onClick
+        )
+        VSpacer(8.dp)
+        caption_grey(title)
+    }
+}
+
+@Composable
 private fun NoCoinsBlock() {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -499,9 +548,9 @@ fun BalanceSortingSelector(
 ) {
     var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
 
-    ButtonSecondaryTransparent(
+    ButtonSecondaryWithIcon(
         title = stringResource(sortType.getTitleRes()),
-        iconRight = R.drawable.ic_down_arrow_20,
+        iconRight = painterResource(R.drawable.ic_arrow_down_filled_16),
         onClick = {
             showSortTypeSelectorDialog = true
         }
@@ -530,8 +579,8 @@ fun TotalBalanceRow(
     when (totalState) {
         TotalUIState.Hidden -> {
             DoubleText(
-                title = "*****",
-                body = "*****",
+                title = "------",
+                body = "",
                 dimmed = false,
                 onClickTitle = onClickTitle,
                 onClickSubtitle = onClickSubtitle
@@ -556,10 +605,10 @@ fun <T> LazyListScope.wallets(
     itemContent: @Composable (LazyItemScope.(item: T) -> Unit),
 ) {
     item {
-        VSpacer(height = 8.dp)
+        VSpacer(height = 0.5.dp)
     }
     items(items = items, key = key, itemContent = {
-        Row(modifier = Modifier.padding(bottom = 8.dp)) {
+        Row(modifier = Modifier.padding(bottom = 0.5.dp)) {
             itemContent(it)
         }
     })

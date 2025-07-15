@@ -20,7 +20,7 @@
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
     <string name="Button_Disable">Disable</string>
-    <string name="Button_ScanQr">Scan QR Code</string>
+    <string name="Button_ScanQr">Scan</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Activate">Activate</string>

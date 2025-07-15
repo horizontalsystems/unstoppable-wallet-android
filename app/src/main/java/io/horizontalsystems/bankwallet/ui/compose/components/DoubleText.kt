@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -27,7 +26,6 @@ fun DoubleText(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             modifier = Modifier
@@ -37,7 +35,7 @@ fun DoubleText(
                     onClick = onClickTitle
                 ),
             text = title,
-            style = ComposeAppTheme.typography.title2R,
+            style = ComposeAppTheme.typography.title2М,
             color = if (dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
             maxLines = 1
         )
