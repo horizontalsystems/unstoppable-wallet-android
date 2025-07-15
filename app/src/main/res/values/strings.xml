@@ -705,6 +705,8 @@
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotApplicable_Title">Slippage is not applicable</string>
     <string name="SwapWarning_SlippageNotApplicable_Description">Minimum slippage applicable  for this quote is %s%%</string>
+    <string name="SwapWarning_SlippageNotAvailable_Title">Slippage is not available</string>
+    <string name="SwapWarning_SlippageNotAvailable_Description">Slippage is not available for this quote</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>

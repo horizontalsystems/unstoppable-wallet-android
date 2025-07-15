@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.ISwapSetting
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -122,6 +123,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
         var actionRequired: ISwapProviderAction? = null
+        val cautions = mutableListOf<HSCaution>()
 
         if (tokenIn.blockchainType.isEvm) {
             val bridgeAddressEvm = try {
@@ -139,6 +141,10 @@ object AllBridgeProvider : IMultiSwapProvider {
             actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
         }
 
+        if (tokenIn.blockchainType != tokenOut.blockchainType) {
+            cautions.add(SlippageNotAvailable())
+        }
+
         return object : ISwapQuote {
             override val amountOut: BigDecimal = amountOut
             override val priceImpact: BigDecimal? = null
@@ -148,7 +154,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             override val tokenOut: Token = tokenOut
             override val amountIn: BigDecimal = amountIn
             override val actionRequired: ISwapProviderAction? = actionRequired
-            override val cautions: List<HSCaution> = listOf()
+            override val cautions: List<HSCaution> = cautions
         }
     }
 
@@ -200,6 +206,10 @@ object AllBridgeProvider : IMultiSwapProvider {
     ): ISwapFinalQuote {
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
         val sendTransactionData = getSendTransactionData(tokenIn, tokenOut, amountIn, amountOut)
+        val cautions = mutableListOf<HSCaution>()
+        if (tokenIn.blockchainType != tokenOut.blockchainType) {
+            cautions.add(SlippageNotAvailable())
+        }
 
         return object : ISwapFinalQuote {
             override val tokenIn: Token = tokenIn
@@ -210,7 +220,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             override val sendTransactionData: SendTransactionData = sendTransactionData
             override val priceImpact: BigDecimal? = null
             override val fields: List<DataField> = listOf()
-            override val cautions: List<HSCaution> = listOf()
+            override val cautions: List<HSCaution> = cautions
         }
     }
 
@@ -415,3 +425,9 @@ interface AllBridgeAPI {
 }
 
 data class AllBridgeTokenPair(val abToken: Response.Token, val token: Token)
+
+class SlippageNotAvailable() : HSCaution(
+    TranslatableString.ResString(R.string.SwapWarning_SlippageNotAvailable_Title),
+    Type.Warning,
+    TranslatableString.ResString(R.string.SwapWarning_SlippageNotAvailable_Description),
+)
