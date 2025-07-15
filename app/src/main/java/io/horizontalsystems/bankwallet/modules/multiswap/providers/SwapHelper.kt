@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
+import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionApprove
@@ -36,30 +37,36 @@ object SwapHelper {
 
         val account = accountManager.activeAccount ?: throw NoActiveAccount()
 
-        when (blockchainType) {
-            BlockchainType.Avalanche,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Ethereum -> {
+        return when {
+            blockchainType.isEvm -> {
                 val chain = evmBlockchainManager.getChain(blockchainType)
                 val evmAddress = account.type.evmAddress(chain) ?: throw SwapError.NoDestinationAddress()
-                return evmAddress.eip55
+                evmAddress.eip55
             }
-            BlockchainType.Bitcoin -> {
-                return BitcoinAdapter.firstAddress(account.type, token.type)
+
+            else -> when (blockchainType) {
+                BlockchainType.Bitcoin -> {
+                    BitcoinAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.BitcoinCash -> {
+                    BitcoinCashAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.Litecoin -> {
+                    LitecoinAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.Tron -> {
+                    App.tronKitManager.getAddress(account.type)
+                }
+
+                BlockchainType.Stellar -> {
+                    App.stellarKitManager.getAddress(account.type)
+                }
+
+                else -> throw SwapError.NoDestinationAddress()
             }
-            BlockchainType.BitcoinCash -> {
-                return BitcoinCashAdapter.firstAddress(account.type, token.type)
-            }
-            BlockchainType.Litecoin -> {
-                return LitecoinAdapter.firstAddress(account.type, token.type)
-            }
-            BlockchainType.Tron -> {
-                return App.tronKitManager.getAddress(account.type)
-            }
-            BlockchainType.Stellar -> {
-                return App.stellarKitManager.getAddress(account.type)
-            }
-            else -> throw SwapError.NoDestinationAddress()
         }
     }
 
