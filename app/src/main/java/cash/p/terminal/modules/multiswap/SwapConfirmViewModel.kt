@@ -42,7 +42,7 @@ import java.math.BigDecimal
 
 class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
-    swapQuote: ISwapQuote,
+    private val swapQuote: ISwapQuote,
     private val swapSettings: Map<String, Any?>,
     currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
@@ -232,7 +232,8 @@ class SwapConfirmViewModel(
                     tokenOut = tokenOut,
                     amountIn = amountIn,
                     swapSettings = swapSettings,
-                    sendTransactionSettings = sendTransactionSettings
+                    sendTransactionSettings = sendTransactionSettings,
+                    swapQuote = swapQuote
                 )
 
                 amountOut = finalQuote.amountOut

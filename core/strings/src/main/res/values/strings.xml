@@ -824,10 +824,14 @@
     <string name="Swap_Confirm_Title">Confirm</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
+    <string name="SwapWarning_SlippageNotApplicable_Title">Slippage is not applicable</string>
+    <string name="SwapWarning_SlippageNotApplicable_Description">Minimum slippage applicable  for this quote is %s%%</string>
     <string name="unsupported_refund_address">Unsupported refund address</string>
     <string name="unsupported_address">Unsupported address</string>
     <string name="unexpected_error">Unexpected error</string>
     <string name="unsupported_token">Unsupported token</string>
+    <string name="Fee_OutboundFee">Outbound Fee</string>
+    <string name="Fee_LiquidityFee">Liquidity Fee</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>

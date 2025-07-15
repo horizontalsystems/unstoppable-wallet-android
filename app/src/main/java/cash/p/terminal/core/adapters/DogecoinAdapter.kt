@@ -87,9 +87,6 @@ class DogecoinAdapter(
         // ignored for now
     }
 
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
-
     override val blockchainType = BlockchainType.Dogecoin
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =

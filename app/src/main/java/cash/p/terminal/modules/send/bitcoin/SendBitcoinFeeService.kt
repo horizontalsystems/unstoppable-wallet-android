@@ -5,6 +5,7 @@ import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -23,6 +24,9 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
     private var pluginData: Map<Byte, IPluginData>? = null
 
     private var feeRate: Int? = null
+    private var dustThreshold: Int? = null
+    private var changeToFirstInput = false
+    private var utxoFilters = UtxoFilters()
 
     private fun refreshFeeInfo() {
         val tmpAmount = amount
@@ -31,7 +35,17 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
         bitcoinFeeInfo = when {
             tmpAmount == null -> null
             tmpFeeRate == null -> null
-            else -> adapter.bitcoinFeeInfo(tmpAmount, tmpFeeRate, validAddress?.hex, memo, customUnspentOutputs, pluginData)
+            else -> adapter.bitcoinFeeInfo(
+                tmpAmount,
+                tmpFeeRate,
+                validAddress?.hex,
+                memo,
+                customUnspentOutputs,
+                pluginData,
+                dustThreshold,
+                changeToFirstInput,
+                utxoFilters
+            )
         }
     }
 
@@ -75,6 +89,27 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
 
     fun setMemo(memo: String?) {
         this.memo = memo
+
+        refreshFeeInfo()
+        emitState()
+    }
+
+    fun setDustThreshold(dustThreshold: Int?) {
+        this.dustThreshold = dustThreshold
+
+        refreshFeeInfo()
+        emitState()
+    }
+
+    fun setChangeToFirstInput(changeToFirstInput: Boolean) {
+        this.changeToFirstInput = changeToFirstInput
+
+        refreshFeeInfo()
+        emitState()
+    }
+
+    fun setUtxoFilters(utxoFilters: UtxoFilters) {
+        this.utxoFilters = utxoFilters
 
         refreshFeeInfo()
         emitState()

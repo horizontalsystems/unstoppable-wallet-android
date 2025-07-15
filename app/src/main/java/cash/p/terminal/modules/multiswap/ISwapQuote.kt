@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.multiswap
 
+import cash.p.terminal.core.HSCaution
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.settings.ISwapSetting
 import cash.p.terminal.modules.multiswap.ui.DataField
@@ -17,6 +18,7 @@ interface ISwapQuote {
     val tokenOut: Token
     val amountIn: BigDecimal
     val actionRequired: ISwapProviderAction?
+    val cautions: List<HSCaution>
 }
 
 class SwapQuoteUniswap(
@@ -26,7 +28,8 @@ class SwapQuoteUniswap(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote {
     override val amountOut: BigDecimal = tradeData.amountOut!!
     override val priceImpact: BigDecimal? = tradeData.priceImpact
@@ -39,7 +42,8 @@ class SwapQuoteUniswapV3(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote {
     override val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
     override val priceImpact = tradeDataV3.priceImpact
@@ -53,7 +57,8 @@ class SwapQuoteOneInch(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote
 
 class SwapQuoteChangeNow(
@@ -64,5 +69,19 @@ class SwapQuoteChangeNow(
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution> = listOf()
+) : ISwapQuote
+
+class SwapQuoteThorChain(
+    override val amountOut: BigDecimal,
+    override val priceImpact: BigDecimal?,
+    override val fields: List<DataField>,
+    override val settings: List<ISwapSetting>,
+    override val tokenIn: Token,
+    override val tokenOut: Token,
+    override val amountIn: BigDecimal,
+    override val actionRequired: ISwapProviderAction?,
+    override val cautions: List<HSCaution>,
+    val slippageThreshold: BigDecimal,
 ) : ISwapQuote

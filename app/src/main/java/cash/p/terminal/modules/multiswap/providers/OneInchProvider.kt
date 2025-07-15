@@ -116,6 +116,7 @@ object OneInchProvider : EvmSwapProvider() {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 

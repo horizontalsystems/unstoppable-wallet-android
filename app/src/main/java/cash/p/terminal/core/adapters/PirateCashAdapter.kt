@@ -91,9 +91,6 @@ class PirateCashAdapter(
         // ignored for now
     }
 
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
-
     override val blockchainType = BlockchainType.PirateCash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =

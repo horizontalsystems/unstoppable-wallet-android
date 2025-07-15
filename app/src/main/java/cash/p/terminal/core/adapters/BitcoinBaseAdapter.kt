@@ -1,5 +1,6 @@
 package cash.p.terminal.core.adapters
 
+import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.entities.LastBlockInfo
@@ -35,6 +36,7 @@ import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.bitcoincore.storage.FullTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutput
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
@@ -50,7 +52,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -68,7 +69,7 @@ abstract class BitcoinBaseAdapter(
     val wallet: Wallet,
     private val confirmationsThreshold: Int,
     protected val decimal: Int = 8
-) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter {
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
@@ -107,6 +108,9 @@ abstract class BitcoinBaseAdapter(
     protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> =
         PublishSubject.create()
+
+    final override val unspentOutputs: List<UnspentOutputInfo>
+        get() = kit.getUnspentOutputs(UtxoFilters())
 
     override val balanceUpdatedFlow: Flow<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
@@ -309,7 +313,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    suspend fun send(
+    override suspend fun send(
         amount: BigDecimal,
         address: String,
         memo: String?,
@@ -318,6 +322,9 @@ abstract class BitcoinBaseAdapter(
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters,
         logger: AppLogger
     ): String {
         logger.info("call btc-kit.send")
@@ -331,22 +338,34 @@ abstract class BitcoinBaseAdapter(
             sortType = sortingType,
             unspentOutputs = unspentOutputs,
             pluginData = pluginData ?: mapOf(),
+            dustThreshold = dustThreshold,
+            changeToFirstInput = changeToFirstInput,
+            filters = utxoFilters,
             rbfEnabled = rbfEnabled
         )
         return sendData.header.uid
     }
 
-    fun availableBalance(
+    override fun availableBalance(
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters
     ): BigDecimal {
         return try {
             val maximumSpendableValue = kit.maximumSpendableValue(
-                address, memo, feeRate, unspentOutputs, pluginData
-                    ?: mapOf()
+                address = address,
+                memo = memo,
+                feeRate = feeRate,
+                unspentOutputInfos = unspentOutputs,
+                pluginData = pluginData ?: mapOf(),
+                dustThreshold = dustThreshold,
+                changeToFirstInput = changeToFirstInput,
+                filters = utxoFilters,
             )
             satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
@@ -354,21 +373,24 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun minimumSendAmount(address: String?): BigDecimal? {
+    override fun minimumSendAmount(address: String?, dustThreshold: Int?): BigDecimal? {
         return try {
-            satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
+            satoshiToBTC(kit.minimumSpendableValue(address, dustThreshold).toLong(), RoundingMode.CEILING)
         } catch (e: Exception) {
             null
         }
     }
 
-    fun bitcoinFeeInfo(
+    override fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        filters: UtxoFilters
     ): BitcoinFeeInfo? {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
@@ -379,7 +401,10 @@ abstract class BitcoinBaseAdapter(
                 senderPay = true,
                 feeRate = feeRate,
                 unspentOutputs = unspentOutputs,
-                pluginData = pluginData ?: mapOf()
+                pluginData = pluginData ?: mapOf(),
+                dustThreshold = dustThreshold,
+                changeToFirstInput = changeToFirstInput,
+                filters = filters
             ).let {
                 BitcoinFeeInfo(
                     unspentOutputs = it.unspentOutputs,
@@ -393,7 +418,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
+    override fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
         kit.validateAddress(address, pluginData ?: mapOf())
     }
 

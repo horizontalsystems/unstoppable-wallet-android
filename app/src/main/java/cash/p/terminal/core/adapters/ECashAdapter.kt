@@ -80,9 +80,6 @@ class ECashAdapter(
         // ignored for now
     }
 
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
-
     override val blockchainType = BlockchainType.ECash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =

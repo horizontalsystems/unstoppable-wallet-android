@@ -28,6 +28,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.tonkit.FriendlyAddress
@@ -141,17 +142,23 @@ interface ISendBitcoinAdapter {
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters
     ): BigDecimal
 
-    fun minimumSendAmount(address: String?): BigDecimal?
+    fun minimumSendAmount(address: String?, dustThreshold: Int?): BigDecimal?
     fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        filters: UtxoFilters
     ): BitcoinFeeInfo?
 
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
@@ -164,6 +171,9 @@ interface ISendBitcoinAdapter {
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
+        dustThreshold: Int?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters,
         logger: AppLogger
     ): String
 }

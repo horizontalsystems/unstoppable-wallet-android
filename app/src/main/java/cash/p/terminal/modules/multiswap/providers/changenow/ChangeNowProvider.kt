@@ -30,6 +30,7 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.p.terminal.wallet.entities.TokenType.AddressSpecTyped
 import cash.p.terminal.wallet.useCases.WalletUseCase
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -249,7 +250,8 @@ class ChangeNowProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
-        sendTransactionSettings: SendTransactionSettings?
+        sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote
     ): ISwapFinalQuote = withContext(coroutineScope.coroutineContext) {
         mutex.withLock {
             val transaction: NewTransactionResponse = try {
@@ -300,10 +302,16 @@ class ChangeNowProvider(
                         sendTransactionData = SendTransactionData.Common(
                             amount = amountIn,
                             address = "",
-                            token = tokenIn
-                        ),
-                        priceImpact = null,
-                        fields = emptyList()
+                            token = tokenIn,
+                            memo = null,
+                            dustThreshold = null,
+                            changeToFirstInput = false,
+                            utxoFilters = UtxoFilters(),
+                            recommendedGasRate = null,
+                            feesMap = null,
+                    ),
+                    priceImpact = null,
+                    fields = emptyList()
                     )
                 } else {
                     throw e
@@ -345,7 +353,13 @@ class ChangeNowProvider(
                 sendTransactionData = SendTransactionData.Common(
                     amount = amountIn,
                     address = transaction.payinAddress,
-                    token = tokenIn
+                    token = tokenIn,
+                    memo = null,
+                    dustThreshold = null,
+                    changeToFirstInput = false,
+                    utxoFilters = UtxoFilters(),
+                    recommendedGasRate = null,
+                    feesMap = null,
                 ),
                 priceImpact = null,
                 fields = fields

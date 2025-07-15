@@ -48,6 +48,10 @@ class SwapViewModel(
 
     init {
         viewModelScope.launch {
+            quoteService.start()
+        }
+
+        viewModelScope.launch {
             networkAvailabilityService.stateFlow.collect {
                 handleUpdatedNetworkState(it)
             }
