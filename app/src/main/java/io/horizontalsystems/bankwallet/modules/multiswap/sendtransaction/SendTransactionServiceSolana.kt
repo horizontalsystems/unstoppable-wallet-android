@@ -80,8 +80,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
                 val rawTransaction = data.rawTransactionStr.hexToByteArray()
                 this.rawTransaction = rawTransaction
 
-                val baseFee = adapter.estimateFee(rawTransaction)
-                fee = baseFee + (data.priorityFeeSol ?: BigDecimal.ZERO)
+                fee = adapter.estimateFee(rawTransaction)
 
                 emitState()
             }

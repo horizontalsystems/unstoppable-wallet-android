@@ -32,7 +32,7 @@ sealed class SendTransactionData {
     }
 
     sealed class Solana : SendTransactionData() {
-        data class WithRawTransaction(val rawTransactionStr: String, val priorityFeeSol: BigDecimal?) : Solana()
+        data class WithRawTransaction(val rawTransactionStr: String) : Solana()
     }
 
     sealed class Stellar : SendTransactionData() {

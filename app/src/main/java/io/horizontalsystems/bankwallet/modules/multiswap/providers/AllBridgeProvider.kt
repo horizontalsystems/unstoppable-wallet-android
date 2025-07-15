@@ -290,15 +290,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
 
             tokenIn.blockchainType == BlockchainType.Solana -> {
-                // solana sdk doesn't include priority fee when estimating fee, so it is hardcoded here
-                // need to remove when sol sdk fixes fee estimation
-                val priorityFeeLamports = BigDecimal(71428)
-                    .multiply(BigDecimal(999999))
-                    .divide(BigDecimal(1000000))
-
-                val priorityFeeSol = priorityFeeLamports.movePointLeft(9)
-
-                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr, priorityFeeSol)
+                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr)
             }
 
             else -> throw IllegalArgumentException("Swapping ${tokenIn.blockchainType} not supported")
