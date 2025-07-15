@@ -85,9 +85,9 @@ class TotalBalance(
         fullFormat: Boolean
     ) = totalState.coinValue?.let {
         if (fullFormat) {
-            "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
+            "≈" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
         } else {
-            "~" + App.numberFormatter.formatCoinShort(it.value, it.coin.code, it.decimal)
+            "≈" + App.numberFormatter.formatCoinShort(it.value, it.coin.code, it.decimal)
         }
     }
 }

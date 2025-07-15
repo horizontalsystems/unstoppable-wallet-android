@@ -21,6 +21,7 @@
     <color name="white">#ffffff</color>
     <color name="white_pressed">#e3e4e8</color>
     <color name="darkest">#0f1014</color>
+    <color name="smoke">#4B4B4B</color>
 
     <color name="steel">#B3B3B3</color>
     <color name="carbon">#232323</color>
@@ -51,7 +52,7 @@
     <color name="lawrence">@color/white</color>
     <color name="lawrence_pressed">@color/steel_light</color>
 
-    <color name="andy">@color/steel_20</color>
+    <color name="andy">@color/steel</color>
     <color name="raina">@color/white_50</color>
 
     <color name="tylerGradientStart">#fff0f0f0</color>
