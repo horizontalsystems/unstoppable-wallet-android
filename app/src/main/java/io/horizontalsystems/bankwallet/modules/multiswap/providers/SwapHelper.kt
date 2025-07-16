@@ -65,6 +65,10 @@ object SwapHelper {
                     App.stellarKitManager.getAddress(account.type)
                 }
 
+                BlockchainType.Solana -> {
+                    App.solanaKitManager.getAddress(account.type)
+                }
+
                 else -> throw SwapError.NoDestinationAddress()
             }
         }
