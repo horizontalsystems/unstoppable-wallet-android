@@ -2,10 +2,10 @@ package cash.p.terminal.ui.helpers
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import cash.p.terminal.R
 import java.net.MalformedURLException
 import java.net.URL
@@ -34,11 +34,11 @@ object LinkHelper {
             )
 
             val intent = builder.build()
-            intent.launchUrl(context, Uri.parse(urlString))
-        } catch (e: SecurityException) {
+            intent.launchUrl(context, urlString.toUri())
+        } catch (e: Exception) {
             // Fallback to standard intent if Custom Tabs fails
             try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+                val intent = Intent(Intent.ACTION_VIEW, urlString.toUri())
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
             } catch (e: Exception) {
