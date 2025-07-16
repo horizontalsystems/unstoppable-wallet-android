@@ -282,7 +282,7 @@ fun SendEvmFeeSettingsScreen(
             navigationIcon = {
                 HsIconButton(onClick = { navController.popBackStack() }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
+                        painter = painterResource(id = R.drawable.ic_arrow_left_24),
                         contentDescription = "back button",
                         tint = ComposeAppTheme.colors.grey
                     )
