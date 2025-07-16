@@ -25,12 +25,13 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
     fun fullCoins(filter: String, limit: Int): List<FullCoin> {
         val sql = """
             SELECT * FROM Coin
-            WHERE ${filterWhereStatement(filter)}
-            ORDER BY ${filterOrderByStatement(filter)}
-            LIMIT $limit
+            WHERE ${filterWhereStatement()}
+            ORDER BY ${filterOrderByStatement()}
+            LIMIT ?
         """.trimIndent()
 
-        return coinDao.getFullCoins(SimpleSQLiteQuery(sql)).map { it.fullCoin }
+        val args = filterArgs(filter) + limit.toString()
+        return coinDao.getFullCoins(SimpleSQLiteQuery(sql, args)).map { it.fullCoin }
     }
 
     fun fullCoin(uid: String): FullCoin? =
@@ -40,25 +41,33 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
         coinDao.getFullCoins(uids).map { it.fullCoin }
 
     fun getToken(query: TokenQuery): Token? {
-        val sql = "SELECT * FROM TokenEntity WHERE ${filterByTokenQuery(query)} LIMIT 1"
-
-        return coinDao.getToken(SimpleSQLiteQuery(sql))?.token
+        val (sql, args) = buildTokenQuerySql(query, limit = 1)
+        return coinDao.getToken(SimpleSQLiteQuery(sql, args))?.token
     }
 
     fun getTokens(queries: List<TokenQuery>): List<Token> {
         if (queries.isEmpty()) return listOf()
 
-        val queriesStr = queries.toSet().toList().map { filterByTokenQuery(it) }.joinToString(" OR ")
-        val sql = "SELECT * FROM TokenEntity WHERE $queriesStr"
+        val uniqueQueries = queries.toSet().toList()
+        val whereClauses = mutableListOf<String>()
+        val args = mutableListOf<Any>()
 
-        return coinDao.getTokens(SimpleSQLiteQuery(sql)).map { it.token }
+        uniqueQueries.forEach { query ->
+            val (clause, queryArgs) = buildTokenQueryClause(query)
+            whereClauses.add(clause)
+            args.addAll(queryArgs)
+        }
+
+        val sql = "SELECT * FROM TokenEntity WHERE ${whereClauses.joinToString(" OR ")}"
+
+        return coinDao.getTokens(SimpleSQLiteQuery(sql, args.toTypedArray())).map { it.token }
     }
 
     fun getTokens(reference: String): List<Token> {
-        val queriesStr = "`TokenEntity`.`reference` LIKE '%$reference'"
-        val sql = "SELECT * FROM TokenEntity WHERE $queriesStr"
+        val sql = "SELECT * FROM TokenEntity WHERE `TokenEntity`.`reference` LIKE ?"
+        val args = arrayOf("%$reference")
 
-        return coinDao.getTokens(SimpleSQLiteQuery(sql)).map { it.token }
+        return coinDao.getTokens(SimpleSQLiteQuery(sql, args)).map { it.token }
     }
 
     fun getTokens(blockchainType: BlockchainType, filter: String, limit: Int): List<Token> {
@@ -66,13 +75,14 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             SELECT * FROM TokenEntity
             JOIN Coin ON `Coin`.`uid` = `TokenEntity`.`coinUid`
             WHERE 
-              `TokenEntity`.`blockchainUid` = '${blockchainType.uid}'
-              AND (${filterWhereStatement(filter)})
-            ORDER BY ${filterOrderByStatement(filter)}
-            LIMIT $limit
+              `TokenEntity`.`blockchainUid` = ?
+              AND (${filterWhereStatement()})
+            ORDER BY ${filterOrderByStatement()}
+            LIMIT ?
         """.trimIndent()
 
-        return coinDao.getTokens(SimpleSQLiteQuery(sql)).map { it.token }
+        val args = arrayOf(blockchainType.uid) + filterArgs(filter) + limit.toString()
+        return coinDao.getTokens(SimpleSQLiteQuery(sql, args)).map { it.token }
     }
 
     fun getBlockchain(uid: String): Blockchain? =
@@ -84,30 +94,43 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
     fun getAllBlockchains(): List<Blockchain> =
         coinDao.getAllBlockchains().map { it.blockchain }
 
-    private fun filterByTokenQuery(query: TokenQuery): String {
-        val (type, reference) = query.tokenType.values
-
-        val conditions = mutableListOf(
-            "`TokenEntity`.`blockchainUid` = '${query.blockchainType.uid}'",
-            "`TokenEntity`.`type` = '$type'"
-        )
-
-        if (reference.isNotBlank()) {
-            conditions.add("`TokenEntity`.`reference` LIKE '%$reference'")
-        }
-
-        return conditions.joinToString(" AND ", "(", ")")
+    private fun buildTokenQuerySql(query: TokenQuery, limit: Int? = null): Pair<String, Array<Any>> {
+        val (clause, args) = buildTokenQueryClause(query)
+        val sql = "SELECT * FROM TokenEntity WHERE $clause" +
+                (if (limit != null) " LIMIT $limit" else "")
+        return Pair(sql, args.toTypedArray())
     }
 
-    private fun filterWhereStatement(filter: String) =
-        "`Coin`.`name` LIKE '%$filter%' OR `Coin`.`code` LIKE '%$filter%'"
+    private fun buildTokenQueryClause(query: TokenQuery): Pair<String, List<Any>> {
+        val (type, reference) = query.tokenType.values
 
-    private fun filterOrderByStatement(filter: String) = """
+        val conditions = mutableListOf<String>()
+        val args = mutableListOf<Any>()
+
+        conditions.add("`TokenEntity`.`blockchainUid` = ?")
+        args.add(query.blockchainType.uid)
+
+        conditions.add("`TokenEntity`.`type` = ?")
+        args.add(type)
+
+        if (reference.isNotBlank()) {
+            conditions.add("`TokenEntity`.`reference` LIKE ?")
+            args.add("%$reference")
+        }
+
+        val clause = conditions.joinToString(" AND ", "(", ")")
+        return Pair(clause, args)
+    }
+
+    private fun filterWhereStatement() =
+        "`Coin`.`name` LIKE ? OR `Coin`.`code` LIKE ?"
+
+    private fun filterOrderByStatement() = """
         priority ASC,
         CASE 
-            WHEN `Coin`.`code` LIKE '$filter' THEN 1 
-            WHEN `Coin`.`code` LIKE '$filter%' THEN 2 
-            WHEN `Coin`.`name` LIKE '$filter%' THEN 3 
+            WHEN `Coin`.`code` LIKE ? THEN 1 
+            WHEN `Coin`.`code` LIKE ? THEN 2 
+            WHEN `Coin`.`name` LIKE ? THEN 3 
             ELSE 4 
         END, 
         CASE 
@@ -117,6 +140,17 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
         `Coin`.`marketCapRank` ASC, 
         `Coin`.`name` ASC 
     """
+
+    private fun filterArgs(filter: String): Array<String> {
+        val filterParam = "%$filter%"
+        val filterStartParam = "$filter%"
+        return arrayOf(
+            // For WHERE conditions
+            filterParam, filterParam,
+            // For ORDER BY conditions
+            filter, filterStartParam, filterStartParam
+        )
+    }
 
     fun update(coins: List<Coin>, blockchainEntities: List<BlockchainEntity>, tokenEntities: List<TokenEntity>) {
         marketDatabase.runInTransaction {
@@ -129,5 +163,4 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             tokenEntities.forEach { coinDao.insert(it) }
         }
     }
-
 }
