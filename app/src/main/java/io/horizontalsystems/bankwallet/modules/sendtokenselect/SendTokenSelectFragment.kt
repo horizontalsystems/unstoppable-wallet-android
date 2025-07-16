@@ -31,8 +31,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
-            title = stringResource(R.string.Balance_Send),
-            searchHintText = stringResource(R.string.Balance_SendHint_CoinName),
+            title = stringResource(R.string.Balance_ChooseCoin),
             onClickItem = {
                 when {
                     it.sendEnabled -> {

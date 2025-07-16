@@ -165,6 +165,7 @@
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_All">All</string>
     <string name="Market_Search_Sections_RecentTitle">RECENT</string>
     <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
@@ -381,6 +382,7 @@
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
+    <string name="Balance_ChooseCoin">Choose Coin</string>
     <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_Address">Address</string>

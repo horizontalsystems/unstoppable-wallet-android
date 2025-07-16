@@ -202,7 +202,11 @@ fun BalanceCardInner(
                             }
 
                             BalanceCardSubtitleType.CoinName -> {
-                                subhead2_grey(text = viewItem.wallet.coin.name)
+                                subhead2_grey(
+                                    text = viewItem.wallet.coin.name,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
                         }
                     }

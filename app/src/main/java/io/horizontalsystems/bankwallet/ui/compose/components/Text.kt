@@ -73,6 +73,27 @@ fun body_bran(
 }
 
 @Composable
+fun body_andy(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.body,
+        color = ComposeAppTheme.colors.andy,
+    )
+}
+
+@Composable
 fun L2(
     text: String,
     modifier: Modifier = Modifier,
