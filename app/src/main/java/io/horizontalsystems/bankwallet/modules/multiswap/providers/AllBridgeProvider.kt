@@ -132,24 +132,19 @@ object AllBridgeProvider : IMultiSwapProvider {
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
-        var actionRequired: ISwapProviderAction? = null
         val cautions = mutableListOf<HSCaution>()
-        var allowance: BigDecimal? = null
+        val allowance: BigDecimal?
+        val actionRequired: ISwapProviderAction?
 
         if (tokenIn.blockchainType.isEvm) {
-            val bridgeAddressEvm = try {
-                Address(bridgeAddress)
-            } catch (_: Throwable) {
-                null
-            }
-
-            if (bridgeAddressEvm != null) {
-                allowance = EvmSwapHelper.getAllowance(tokenIn, bridgeAddressEvm)
-                actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, bridgeAddressEvm, tokenIn)
-            }
+            allowance = EvmSwapHelper.getAllowance(tokenIn, bridgeAddress)
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, bridgeAddress, tokenIn)
         } else if (tokenIn.blockchainType == BlockchainType.Tron) {
             allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
             actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
+        } else {
+            allowance = null
+            actionRequired = null
         }
 
         val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
