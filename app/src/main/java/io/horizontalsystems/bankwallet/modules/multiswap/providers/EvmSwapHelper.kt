@@ -87,4 +87,11 @@ object EvmSwapHelper {
             && tokenType.address.lowercase() == "0xdac17f958d2ee523a2206206994597c13d831ec7"
     }
 
+    fun getAllBridgeProxyFee(proxyAddress: String, amountIn: BigDecimal): BigDecimal {
+        // need to fetch it from contract
+        val feeBP = 100
+        val feeMultiplier = feeBP.toBigDecimal().movePointLeft(4).stripTrailingZeros()
+        return amountIn * feeMultiplier
+    }
+
 }

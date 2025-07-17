@@ -229,10 +229,8 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
-        getProxyAddress(bridgeAddress)?.let {
-            val feeBP = 100
-            val feeMultiplier = feeBP.toBigDecimal().movePointLeft(4)
-            val proxyFee = amountIn * feeMultiplier
+        getProxyAddress(bridgeAddress)?.let { proxyAddress ->
+            val proxyFee = EvmSwapHelper.getAllBridgeProxyFee(proxyAddress, amountIn)
 
             resAmountIn -= proxyFee
 
