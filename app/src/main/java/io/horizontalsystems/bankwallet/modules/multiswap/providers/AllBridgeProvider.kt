@@ -42,6 +42,33 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val priority = 0
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
+    private val proxies = mapOf(
+        //Ethereum
+        "0x609c690e8F7D68a59885c9132e812eEbDaAf0c9e" to null,
+        //BNB Chain
+        "0x3C4FA639c8D7E65c603145adaD8bD12F2358312f" to "0xdb7A84411507FA4cFE460ddAE0df8c411AB9DFa2",
+        //Tron
+        "TAuErcuAtU6BPt6YwL51JZ4RpDCPQASCU2" to null,
+        //Solana
+        "BrdgN2RPzEMWF96ZbnnJaUtQDQx7VRXYaHHbYCBvceWB" to null,
+        //Polygon
+        "0x7775d63836987f444E2F14AA0fA2602204D7D3E0" to null,
+        //Arbitrum
+        "0x9Ce3447B58D58e8602B7306316A5fF011B92d189" to null,
+        //Stellar
+        "CBQ6GW7QCFFE252QEVENUNG45KYHHBRO4IZIWFJOXEFANHPQUXX5NFWV" to null,
+        //Avalanche
+        "0x9068E1C28941D0A680197Cc03be8aFe27ccaeea9" to null,
+        //Base
+        "0x001E3f136c2f804854581Da55Ad7660a2b35DEf7" to null,
+        //OP Mainnet
+        "0x97E5BF5068eA6a9604Ee25851e6c9780Ff50d5ab" to null,
+        //Celo
+        "0x80858f5F8EFD2Ab6485Aba1A0B9557ED46C6ba0e" to null,
+        //Sui
+        "0x83d6f864a6b0f16898376b486699aa6321eb6466d1daf6a2e3764a51908fe99d" to null,
+    )
+
     private val allBridgeAPI = APIClient
         .retrofit("https://allbridge.blocksdecoded.com", 60)
         .create(AllBridgeAPI::class.java)
@@ -60,6 +87,8 @@ object AllBridgeProvider : IMultiSwapProvider {
     )
 
     private var tokenPairs = listOf<AllBridgeTokenPair>()
+
+    private fun getProxyAddress(bridgeAddress: String) = proxies[bridgeAddress]
 
     override suspend fun start() {
         val tokenPairs = mutableListOf<AllBridgeTokenPair>()
@@ -137,8 +166,11 @@ object AllBridgeProvider : IMultiSwapProvider {
         val actionRequired: ISwapProviderAction?
 
         if (tokenIn.blockchainType.isEvm) {
-            allowance = EvmSwapHelper.getAllowance(tokenIn, bridgeAddress)
-            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, bridgeAddress, tokenIn)
+            val proxyAddress = getProxyAddress(bridgeAddress)
+            val finalAddress = proxyAddress ?: bridgeAddress
+
+            allowance = EvmSwapHelper.getAllowance(tokenIn, finalAddress)
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, finalAddress, tokenIn)
         } else if (tokenIn.blockchainType == BlockchainType.Tron) {
             allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
             actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
@@ -195,13 +227,29 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         var resAmountIn = amountIn
 
+        val bridgeAddress = tokenPairIn.abToken.bridgeAddress
+
+        getProxyAddress(bridgeAddress)?.let {
+            val feeBP = 100
+            val feeMultiplier = feeBP.toBigDecimal().movePointLeft(4)
+            val proxyFee = amountIn * feeMultiplier
+
+            resAmountIn -= proxyFee
+
+            if (resAmountIn < BigDecimal.ZERO) {
+                throw Exception("Amount is less than required fee")
+            }
+        }
+
         if (feePaymentMethod == FeePaymentMethod.StableCoin) {
             val gasFee = allBridgeAPI.gasFee(
                 sourceToken = sourceToken,
                 destinationToken = destinationToken
             )
 
-            resAmountIn -= gasFee.stablecoin.float
+            val allbridgeFee = gasFee.stablecoin.float
+
+            resAmountIn -= allbridgeFee
 
             if (resAmountIn < BigDecimal.ZERO) {
                 throw Exception("Amount is less than required fee")
@@ -335,9 +383,13 @@ object AllBridgeProvider : IMultiSwapProvider {
                     Response.RawTransaction::class.java
                 )
 
+                val bridgeAddress = rawTransaction.to
+                val proxyAddress = getProxyAddress(bridgeAddress)
+                val finalAddress = proxyAddress ?: bridgeAddress
+
                 SendTransactionData.Evm(
                     transactionData = TransactionData(
-                        to = Address(rawTransaction.to),
+                        to = Address(finalAddress),
                         value = rawTransaction.value?.toBigInteger() ?: BigInteger.ZERO,
                         input = rawTransaction.data.hexStringToByteArray(),
                     ),
