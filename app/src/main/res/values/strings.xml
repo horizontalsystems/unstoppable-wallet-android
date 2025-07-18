@@ -425,6 +425,7 @@
     <string name="Balance_Receive_ActivationRequired">To receive an address you need to activate the token. This is required by the Stellar network.</string>
     <string name="Balance_Receive_Trustline">Trustline</string>
     <string name="Balance_Reserved_Title">Reserved</string>
+    <string name="Balance_WalletAddress">Wallet Address</string>
 
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>

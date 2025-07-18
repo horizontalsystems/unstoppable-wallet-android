@@ -564,6 +564,27 @@ fun subhead1_leah(
 }
 
 @Composable
+fun subheadSB_andy(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.subheadSB,
+        color = ComposeAppTheme.colors.andy,
+    )
+}
+
+@Composable
 fun C3(
     text: String,
     modifier: Modifier = Modifier,

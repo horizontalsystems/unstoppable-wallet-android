@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
@@ -30,13 +31,15 @@ class TokenBalanceViewModel(
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val adapterManager: IAdapterManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
+    private var addressForWatchAccount: String? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -74,7 +77,13 @@ class TokenBalanceViewModel(
         title = title,
         balanceViewItem = balanceViewItem,
         transactions = transactions,
+        receiveAddressForWatchAccount = addressForWatchAccount
     )
+
+    private fun setReceiveAddressForWatchAccount() {
+        addressForWatchAccount = adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress
+        emitState()
+    }
 
     private fun updateTransactions(items: List<TransactionItem>) {
         transactions = items
@@ -92,6 +101,10 @@ class TokenBalanceViewModel(
             wallet.account.isWatchAccount,
             BalanceViewType.CoinThenFiat
         )
+
+        if (wallet.account.isWatchAccount) {
+            setReceiveAddressForWatchAccount()
+        }
 
         this.balanceViewItem = balanceViewItem.copy(
             primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.wallet.coin.code)

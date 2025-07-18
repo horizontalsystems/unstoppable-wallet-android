@@ -268,9 +268,10 @@ fun BalanceItems(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        ActionOrangeButton(
+                        BalanceActionOrangeButton(
                             icon = R.drawable.ic_arrow_down_24,
                             title = stringResource(R.string.Balance_Receive),
+                            enabled = true,
                             onClick = {
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
@@ -304,7 +305,7 @@ fun BalanceItems(
                                 }
                             }
                         )
-                        ActionButton(
+                        BalanceActionButton(
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
@@ -317,7 +318,7 @@ fun BalanceItems(
                             }
                         )
                         if (viewModel.isSwapEnabled) {
-                            ActionButton(
+                            BalanceActionButton(
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
@@ -331,7 +332,7 @@ fun BalanceItems(
                             )
                         }
                         if (accountViewItem.type.supportsWalletConnect) {
-                            ActionButton(
+                            BalanceActionButton(
                                 icon = R.drawable.ic_scan_24,
                                 title = stringResource(R.string.Button_ScanQr),
                                 onClick = onScanClick
@@ -358,7 +359,7 @@ fun BalanceItems(
                         viewModel.setSortType(it)
                     }
 
-                    HSpacer(8.dp)
+                    HSpacer(12.dp)
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_20,
                         contentDescription = stringResource(R.string.ManageCoins_title),
@@ -374,7 +375,7 @@ fun BalanceItems(
 
                     Spacer(modifier = Modifier.weight(1f))
                     if (accountViewItem.isWatchAccount) {
-                        HSpacer(8.dp)
+                        HSpacer(12.dp)
                         Image(
                             painter = painterResource(R.drawable.icon_binocule_20),
                             contentDescription = "binoculars icon"
@@ -469,9 +470,10 @@ fun BalanceItems(
 }
 
 @Composable
-private fun ActionButton(
+fun BalanceActionButton(
     @DrawableRes icon: Int,
     title: String,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Column(
@@ -480,6 +482,7 @@ private fun ActionButton(
         ButtonPrimaryCircle(
             icon = icon,
             contentDescription = title,
+            enabled = enabled,
             onClick = onClick
         )
         VSpacer(8.dp)
@@ -488,9 +491,10 @@ private fun ActionButton(
 }
 
 @Composable
-private fun ActionOrangeButton(
+fun BalanceActionOrangeButton(
     @DrawableRes icon: Int,
     title: String,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Column(
@@ -499,6 +503,7 @@ private fun ActionOrangeButton(
         ButtonPrimaryOrangeCircle(
             icon = icon,
             contentDescription = title,
+            enabled = enabled,
             onClick = onClick
         )
         VSpacer(8.dp)
