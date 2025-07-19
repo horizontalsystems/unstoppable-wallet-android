@@ -47,6 +47,7 @@ import cash.p.terminal.core.storage.migrations.Migration_68_69
 import cash.p.terminal.core.storage.migrations.Migration_69_70
 import cash.p.terminal.core.storage.migrations.Migration_70_71
 import cash.p.terminal.core.storage.migrations.Migration_71_72
+import cash.p.terminal.core.storage.migrations.Migration_72_73
 import cash.p.terminal.core.storage.typeconverter.DatabaseConverters
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
@@ -55,7 +56,10 @@ import cash.p.terminal.entities.EnabledWalletCache
 import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.EvmSyncSourceRecord
+import cash.p.terminal.entities.RecentAddress
 import cash.p.terminal.entities.RestoreSettingRecord
+import cash.p.terminal.entities.SpamAddress
+import cash.p.terminal.entities.SpamScanState
 import cash.p.terminal.entities.SyncerState
 import cash.p.terminal.entities.TokenAutoEnabledBlockchain
 import cash.p.terminal.entities.nft.NftAssetBriefMetadataRecord
@@ -77,7 +81,7 @@ import io.horizontalsystems.core.storage.LogEntry
 import io.horizontalsystems.core.storage.LogsDao
 
 @Database(
-    version = 72,
+    version = 73,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -104,6 +108,9 @@ import io.horizontalsystems.core.storage.LogsDao
         Pin::class,
         ChangeNowTransaction::class,
         HardwarePublicKey::class,
+        RecentAddress::class,
+        SpamAddress::class,
+        SpamScanState::class,
     ]
 )
 @TypeConverters(DatabaseConverters::class)
@@ -126,9 +133,11 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao
     abstract fun syncerStateDao(): SyncerStateDao
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
+    abstract fun spamAddressDao(): SpamAddressDao
     abstract fun pinDao(): PinDao
     abstract fun changeNowTransactionsDao(): ChangeNowTransactionsDao
     abstract fun hardwarePublicKeyDao(): HardwarePublicKeyDao
+    abstract fun recentAddressDao(): RecentAddressDao
 
     companion object {
 
@@ -187,6 +196,7 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_69_70,
                     Migration_70_71,
                     Migration_71_72,
+                    Migration_72_73,
                 )
                 .build()
         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.factories.FeeRateProviderFactory
+import cash.p.terminal.entities.Address
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.xrate.XRateService
@@ -13,17 +14,18 @@ object SendBitcoinModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
-            (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
+            (App.adapterManager.getAdapterForWalletOld(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
             val feeService = SendBitcoinFeeService(adapter)
             val feeRateService = SendBitcoinFeeRateService(provider)
             val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
-            val addressService = SendBitcoinAddressService(adapter, predefinedAddress)
+            val addressService = SendBitcoinAddressService(adapter)
             val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
             return SendBitcoinViewModel(
                 adapter = adapter,
@@ -36,8 +38,9 @@ object SendBitcoinModule {
                 xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 btcBlockchainManager = App.btcBlockchainManager,
                 contactsRepo = App.contactsRepository,
-                showAddressInput = predefinedAddress == null,
-                localStorage = App.localStorage
+                showAddressInput = !hideAddress,
+                localStorage = App.localStorage,
+                address = address
             ) as T
         }
     }

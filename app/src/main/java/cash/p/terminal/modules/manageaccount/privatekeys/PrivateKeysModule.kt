@@ -9,7 +9,7 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 object PrivateKeysModule {
 
-    class Factory(private val account: cash.p.terminal.wallet.Account) : ViewModelProvider.Factory {
+    class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return PrivateKeysViewModel(account, App.evmBlockchainManager) as T
@@ -20,6 +20,7 @@ object PrivateKeysModule {
         val evmPrivateKey: String? = null,
         val bip32RootKey: ExtendedKey? = null,
         val accountExtendedPrivateKey: ExtendedKey? = null,
+        val stellarSecretKey: String? = null,
     )
 
     data class ExtendedKey(

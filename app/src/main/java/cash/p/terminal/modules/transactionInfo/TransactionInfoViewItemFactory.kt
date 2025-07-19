@@ -8,6 +8,7 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRec
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
+import cash.p.terminal.entities.transactionrecords.stellar.StellarTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
@@ -46,6 +47,83 @@ class TransactionInfoViewItemFactory(
         }
 
         when (transaction) {
+            is StellarTransactionRecord -> {
+                when (val transactionType = transaction.type) {
+                    is StellarTransactionRecord.Type.Receive -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transactionType.value,
+                                fromAddress = transactionType.from,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+
+                        if (transactionType.accountCreated) {
+                            itemSections.add(
+                                listOf(
+                                    TransactionInfoViewItem.Value(
+                                        Translator.getString(R.string.Transactions_OperationType),
+                                        Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                    is StellarTransactionRecord.Type.Send -> {
+                        sentToSelf = transactionType.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transactionType.value,
+                                toAddress = transactionType.to,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transactionType.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+
+                        if (transactionType.accountCreated) {
+                            itemSections.add(
+                                listOf(
+                                    TransactionInfoViewItem.Value(
+                                        Translator.getString(R.string.Transactions_OperationType),
+                                        Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                    is StellarTransactionRecord.Type.ChangeTrust -> {
+                        itemSections.add(
+                            listOf(
+                                TransactionInfoViewItem.Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    Translator.getString(R.string.Transactions_OperationType_ChangeTrust)
+                                )
+                            )
+                        )
+                    }
+
+                    is StellarTransactionRecord.Type.Unsupported -> {
+                        itemSections.add(
+                            listOf(
+                                TransactionInfoViewItem.Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    transactionType.type
+                                )
+                            )
+                        )
+                    }
+                }
+
+                addMemoItem(transaction.memo, miscItemsSection)
+            }
+
             is EvmTransactionRecord -> {
                 when (transaction.transactionRecordType) {
                     TransactionRecordType.EVM_CONTRACT_CREATION -> {

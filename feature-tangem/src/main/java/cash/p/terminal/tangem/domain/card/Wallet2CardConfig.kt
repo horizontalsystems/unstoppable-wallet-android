@@ -81,6 +81,7 @@ data object Wallet2CardConfig : CardConfig {
             BlockchainType.Base -> EllipticCurve.Secp256k1
             BlockchainType.Zcash,
             BlockchainType.Monero,
+            BlockchainType.Stellar,
             is BlockchainType.Unsupported -> null
         }
     }

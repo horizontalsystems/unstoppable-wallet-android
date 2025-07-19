@@ -7,7 +7,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.modules.send.SendFragment
+import cash.p.terminal.modules.send.address.EnterAddressFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import cash.p.terminal.navigation.slideFromRight
@@ -44,12 +44,13 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                             it.wallet.token.fullCoin.coin.code
                         )
                         navController.slideFromRight(
-                            R.id.sendXFragment,
-                            SendFragment.Input(
+                            R.id.enterAddressFragment,
+                            EnterAddressFragment.Input(
                                 wallet = it.wallet,
-                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 title = sendTitle,
-                                prefilledAddressData = prefilledData,
+                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                                address = input?.address,
+                                amount = input?.amount,
                             )
                         )
                     }

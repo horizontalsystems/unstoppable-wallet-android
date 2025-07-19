@@ -320,12 +320,13 @@ class SwapConfirmViewModel(
 
                         override fun createState(): SendTransactionServiceState =
                             SendTransactionServiceState(
-                                null,
-                                null,
-                                listOf(),
-                                false,
-                                false,
-                                listOf()
+                                availableBalance = null,
+                                networkFee = null,
+                                cautions = listOf(),
+                                sendable = false,
+                                loading = false,
+                                fields = listOf(),
+                                extraFees = mapOf()
                             )
                     }
                 }

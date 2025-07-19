@@ -18,7 +18,7 @@ class LegacyGasPriceService(
     private val gasPriceProvider: LegacyGasPriceProvider,
     private val minRecommendedGasPrice: Long? = null,
     private val initialGasPrice: Long? = null,
-) : IEvmGasPriceService<DataState<GasPriceInfo>>() {
+) : IEvmGasPriceService() {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var setGasPriceJob: Job? = null
     private var recommendedGasPrice: Long? = null

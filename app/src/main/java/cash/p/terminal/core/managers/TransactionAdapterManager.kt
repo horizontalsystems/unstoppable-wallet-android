@@ -109,6 +109,10 @@ class TransactionAdapterManager(
                 adapterFactory.moneroTransactionsAdapter(source)
             }
 
+            BlockchainType.Stellar -> {
+                adapterFactory.stellarTransactionsAdapter(source)
+            }
+
             else -> adapter as? ITransactionsAdapter
         }
     }

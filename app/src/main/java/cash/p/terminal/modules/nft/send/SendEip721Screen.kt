@@ -21,11 +21,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.AddressViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -39,6 +39,7 @@ fun SendEip721Screen(
     viewModel: SendEip721ViewModel,
     addressViewModel: AddressViewModel,
     addressParserViewModel: AddressParserViewModel,
+    sendEntryPointDestId: Int,
 ) {
 
     Scaffold(
@@ -99,19 +100,17 @@ fun SendEip721Screen(
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        viewModel.getSendData()?.let { sendData ->
-                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
-                                R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationFragment.Input(
-                                    sendData = sendData,
-                                    blockchainType = viewModel.getBlockchainType()
-                                )
-                            ) {
-                                if (it.success) {
-                                    navController.popBackStack()
-                                }
-                            }
-                        }
+                        val sendData = viewModel.getSendData() ?: return@ButtonPrimaryYellow
+
+                        navController.slideFromRight(
+                            R.id.sendEvmConfirmationFragment,
+                            SendEvmConfirmationFragment.Input(
+                                sendData = sendData,
+                                blockchainType = viewModel.getBlockchainType(),
+                                sendEntryPointDestId = sendEntryPointDestId
+
+                            )
+                        )
                     },
                     enabled = viewModel.uiState.canBeSend
                 )

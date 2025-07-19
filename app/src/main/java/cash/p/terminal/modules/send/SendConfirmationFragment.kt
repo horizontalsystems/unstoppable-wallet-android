@@ -14,6 +14,8 @@ import cash.p.terminal.modules.send.monero.SendMoneroConfirmationScreen
 import cash.p.terminal.modules.send.monero.SendMoneroViewModel
 import cash.p.terminal.modules.send.solana.SendSolanaConfirmationScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
+import cash.p.terminal.modules.send.stellar.SendStellarConfirmationScreen
+import cash.p.terminal.modules.send.stellar.SendStellarViewModel
 import cash.p.terminal.modules.send.ton.SendTonConfirmationScreen
 import cash.p.terminal.modules.send.ton.SendTonViewModel
 import cash.p.terminal.modules.send.tron.SendTronConfirmationScreen
@@ -90,13 +92,23 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     sendEntryPointDestId = sendEntryPointDestId
                 )
             }
+            Type.Stellar -> {
+                val sendStellarViewModel by navGraphViewModels<SendStellarViewModel>(R.id.sendXFragment)
+
+                SendStellarConfirmationScreen(
+                    navController,
+                    sendStellarViewModel,
+                    amountInputModeViewModel,
+                    input.sendEntryPointDestId
+                )
+            }
             null -> Unit
         }
     }
 
     @Parcelize
     enum class Type : Parcelable {
-        Bitcoin, ZCash, Solana, Tron, Ton, Monero
+        Bitcoin, ZCash, Solana, Tron, Ton, Monero, Stellar
     }
 
     @Parcelize

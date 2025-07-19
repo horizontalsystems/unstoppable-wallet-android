@@ -17,10 +17,9 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
-import cash.p.terminal.modules.address.HSAddressInput
+import cash.p.terminal.modules.address.HSAddressCell
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
@@ -30,6 +29,7 @@ import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -70,18 +70,13 @@ fun SendTronScreen(
         ) {
 
             if (uiState.showAddressInput) {
-                HSAddressInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
-                    textPreprocessor = paymentAddressViewModel,
-                    navController = navController
+                HSAddressCell(
+                    title = stringResource(R.string.Send_Confirmation_To),
+                    value = uiState.address.hex,
                 ) {
-                    viewModel.onEnterAddress(it)
+                    navController.popBackStack()
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+                VSpacer(16.dp)
             }
 
             HSAmountInput(

@@ -12,6 +12,7 @@ import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
+import cash.p.terminal.entities.transactionrecords.stellar.StellarTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.NftMetadataService
@@ -71,6 +72,7 @@ class TransactionInfoService(
             val coinUids = mutableListOf<String?>()
 
             val txCoinTypes = when (val tx = transactionRecord) {
+                is StellarTransactionRecord -> listOf(tx.mainValue?.coinUid, tx.fee?.coinUid)
                 is TonTransactionRecord -> buildList {
                     add(tx.mainValue?.coinUid)
                     add(tx.fee.coinUid)

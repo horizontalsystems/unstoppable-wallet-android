@@ -31,7 +31,7 @@ object EvmFeeModule {
 
     class Factory(
         private val feeService: IEvmFeeService,
-        private val gasPriceService: IEvmGasPriceService<DataState<GasPriceInfo>>,
+        private val gasPriceService: IEvmGasPriceService,
         private val evmCoinService: EvmCoinService
     ) : ViewModelProvider.Factory {
 
@@ -63,7 +63,7 @@ interface IEvmFeeService {
     fun reset()
 }
 
-abstract class IEvmGasPriceService<T> : ServiceState<T>() {
+abstract class IEvmGasPriceService : ServiceState<DataState<GasPriceInfo>>() {
     abstract fun setRecommended()
     abstract fun start()
 }

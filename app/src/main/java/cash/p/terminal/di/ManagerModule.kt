@@ -12,11 +12,13 @@ import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.LocalStorageManager
 import cash.p.terminal.core.managers.MoneroKitManager
+import cash.p.terminal.core.managers.RecentAddressManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SolanaWalletManager
 import cash.p.terminal.core.managers.StackingManager
+import cash.p.terminal.core.managers.StellarKitManager
 import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonKitManager
@@ -59,12 +61,14 @@ val managerModule = module {
     singleOf(::BtcBlockchainManager)
     singleOf(::BalanceHiddenManager)
     singleOf(::SolanaKitManager)
+    singleOf(::StellarKitManager)
     singleOf(::TonKitManager)
     singleOf(::TronKitManager)
     factoryOf(::StackingManager)
     singleOf(::RestoreSettingsManager)
     singleOf(::EvmLabelManager)
     factoryOf(::SolanaWalletManager)
+    singleOf(::RecentAddressManager)
     factoryOf(::WalletActivator)
 
     singleOf(::Mnemonic)

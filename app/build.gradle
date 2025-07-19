@@ -324,6 +324,7 @@ dependencies {
     implementation libs.bitcoin.kit
     implementation libs.ethereum.kit
     implementation libs.solana.kit
+    implementation libs.stellar.kit
 
     implementation libs.monero.kit
     implementation libs.netcipher
@@ -338,6 +339,12 @@ dependencies {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
 
+    // Exclude old version from wherever it's coming
+    configurations.configureEach {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+        exclude group: "org.bouncycastle", module: "bcutil-jdk18on"
+    }
+
     // WalletConnect V2
     implementation(platform("com.walletconnect:android-bom:1.15.0"))
     implementation 'com.walletconnect:web3wallet'
@@ -347,7 +354,7 @@ dependencies {
     implementation 'com.github.unstoppabledomains:resolution-java:v7.1.0'
 
     // Ethereum Name Service
-    implementation "org.web3j:core:4.9.0"
+    implementation libs.web3j.core
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
@@ -404,6 +411,9 @@ dependencies {
     testImplementation libs.mockito.kotlin.kt1.x
     testImplementation libs.powermock.api.mockito2
     testImplementation libs.powermock.module.junit4
+    testImplementation libs.koin.test.junit4
+    implementation libs.ktor.client.core
+    implementation libs.ktor.client.okhttp
 
     // Spek
     testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.9"

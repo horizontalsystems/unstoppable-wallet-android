@@ -8,6 +8,7 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.contacts.ContactsModule.ContactValidationException
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
+import cash.p.terminal.modules.contacts.model.ContactNameAddress
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -74,6 +75,16 @@ class ContactsRepository(
                 it.invoke(contact)
             }
         }
+    }
+
+    fun getContactAddressesByBlockchain(blockchainType: BlockchainType): List<ContactNameAddress> {
+        return contacts.flatMap { contact ->
+            contact.addresses.map {
+                ContactNameAddress(contact.name, it)
+            }
+        }
+            .filter { it.contactAddress.blockchain.type == blockchainType }
+            .sortedBy { it.name }
     }
 
     fun initialize() {

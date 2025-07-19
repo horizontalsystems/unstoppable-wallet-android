@@ -11,6 +11,7 @@ import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.receive.ReceiveModule
 import cash.p.terminal.modules.receive.ReceiveModule.AdditionalData
 import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
@@ -21,7 +22,7 @@ import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
-    private val wallet: cash.p.terminal.wallet.Wallet,
+    private val wallet: Wallet,
     private val adapterManager: IAdapterManager
 ) : ViewModelUiState<ReceiveModule.UiState>() {
 
@@ -32,7 +33,8 @@ class ReceiveAddressViewModel(
     private var uri = ""
     private var amount: BigDecimal? = null
     private var accountActive = true
-    private var networkName = ""
+    private var blockchainName: String? = null
+    private var addressFormat: String? = null
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
     private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
@@ -55,33 +57,30 @@ class ReceiveAddressViewModel(
         address = address,
         usedAddresses = usedAddresses,
         usedChangeAddresses = usedChangeAddresses,
+        showTronAlert = !accountActive,
         uri = uri,
-        networkName = networkName,
         watchAccount = watchAccount,
         additionalItems = getAdditionalData(),
         amount = amount,
         alertText = alertText,
+        mainNet = mainNet,
+        blockchainName = blockchainName,
+        addressFormat = addressFormat,
     )
 
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
-                networkName = Translator.getString(R.string.Balance_Format) + ": "
-                networkName += "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
+                addressFormat = "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
             }
 
             is TokenType.AddressTyped -> {
-                networkName = Translator.getString(R.string.Balance_Format) + ": "
-                networkName += tokenType.type.bitcoinCashCoinType.title
+                addressFormat = tokenType.type.bitcoinCashCoinType.title
             }
 
             else -> {
-                networkName = Translator.getString(R.string.Balance_Network) + ": "
-                networkName += wallet.token.blockchain.name
+                blockchainName = wallet.token.blockchain.name
             }
-        }
-        if (!mainNet) {
-            networkName += " (TestNet)"
         }
         emitState()
     }

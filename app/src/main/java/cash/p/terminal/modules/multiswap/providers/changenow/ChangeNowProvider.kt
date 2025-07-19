@@ -2,6 +2,7 @@ package cash.p.terminal.modules.multiswap.providers.changenow
 
 import androidx.collection.LruCache
 import cash.p.terminal.R
+import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.extractBigDecimal
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.entities.ChangeNowTransaction
@@ -24,6 +25,7 @@ import cash.p.terminal.network.changenow.domain.entity.NewTransactionResponse
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.changenow.domain.repository.ChangeNowRepository
 import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -32,6 +34,7 @@ import cash.p.terminal.wallet.entities.TokenType.AddressSpecTyped
 import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.ethereumkit.models.Address
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,7 +108,7 @@ class ChangeNowProvider(
         }
 
     private suspend fun getChangeNowTicker(token: Token): String? =
-        getChangeNowAssociatedCoinTickerUseCase.invoke(
+        getChangeNowAssociatedCoinTickerUseCase(
             token.coin.uid,
             token.blockchainType.uid
         )
@@ -309,9 +312,9 @@ class ChangeNowProvider(
                             utxoFilters = UtxoFilters(),
                             recommendedGasRate = null,
                             feesMap = null,
-                    ),
-                    priceImpact = null,
-                    fields = emptyList()
+                        ),
+                        priceImpact = null,
+                        fields = emptyList()
                     )
                 } else {
                     throw e
@@ -350,7 +353,55 @@ class ChangeNowProvider(
                 amountIn = amountIn,
                 amountOut = transaction.amount,
                 amountOutMin = transaction.amount,
-                sendTransactionData = SendTransactionData.Common(
+                sendTransactionData = buildTransactionData(
+                    tokenIn = tokenIn,
+                    amountIn = amountIn,
+                    transaction = transaction
+                ),
+                priceImpact = null,
+                fields = fields
+            )
+        }
+    }
+
+    private fun buildTransactionData(
+        tokenIn: Token,
+        amountIn: BigDecimal,
+        transaction: NewTransactionResponse
+    ): SendTransactionData {
+        return when (tokenIn.blockchainType) {
+            BlockchainType.Avalanche,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Ethereum,
+            BlockchainType.ArbitrumOne,
+            BlockchainType.Base,
+            BlockchainType.Fantom,
+            BlockchainType.Gnosis,
+            BlockchainType.Optimism,
+            BlockchainType.Polygon,
+            BlockchainType.ZkSync -> {
+                val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
+                val adapter = adapterManager.getAdapterForToken<ISendEthereumAdapter>(tokenIn) ?: throw IllegalStateException("Ethereum adapter not found")
+
+                val transactionData = adapter.getTransactionData(amountIn, Address(transaction.payinAddress))
+                SendTransactionData.Evm(transactionData, null)
+            }
+
+            BlockchainType.BitcoinCash,
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin,
+            BlockchainType.Dash,
+            BlockchainType.Dogecoin,
+            BlockchainType.ECash,
+            BlockchainType.PirateCash,
+            BlockchainType.Zcash,
+            BlockchainType.Solana,
+            BlockchainType.Stellar,
+            BlockchainType.Ton,
+            BlockchainType.Tron,
+            BlockchainType.Monero,
+            BlockchainType.Cosanta -> {
+                SendTransactionData.Common(
                     amount = amountIn,
                     address = transaction.payinAddress,
                     token = tokenIn,
@@ -360,10 +411,22 @@ class ChangeNowProvider(
                     utxoFilters = UtxoFilters(),
                     recommendedGasRate = null,
                     feesMap = null,
-                ),
-                priceImpact = null,
-                fields = fields
-            )
+                )
+            }
+
+            is BlockchainType.Unsupported -> {
+                SendTransactionData.Common(
+                    amount = amountIn,
+                    address = transaction.payinAddress,
+                    token = tokenIn,
+                    memo = null,
+                    dustThreshold = null,
+                    changeToFirstInput = false,
+                    utxoFilters = UtxoFilters(),
+                    recommendedGasRate = null,
+                    feesMap = null,
+                )
+            }
         }
     }
 

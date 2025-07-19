@@ -3,12 +3,14 @@ package cash.p.terminal.modules.configuredtoken
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.assetUrl
 import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.managers.RestoreSettingsManager
+import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoType.*
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
@@ -26,16 +28,19 @@ class ConfiguredTokenInfoViewModel(
     init {
         val type = when (val type = token.type) {
             is TokenType.Eip20 -> {
-                ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
+                Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
             }
             is TokenType.Spl -> {
-                ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
+                Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
             }
             is TokenType.Jetton -> {
-                ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.jettonUrl(type.address))
+                Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.jettonUrl(type.address))
+            }
+            is TokenType.Asset -> {
+                Contract("${type.code}:${type.issuer}", token.blockchain.type.imageUrl, token.blockchain.assetUrl(type.code, type.issuer))
             }
             is TokenType.Derived -> {
-                ConfiguredTokenInfoType.Bips(token.blockchain.name)
+                Bips(token.blockchain.name)
             }
             is TokenType.AddressTyped -> {
                 ConfiguredTokenInfoType.Bch
@@ -43,7 +48,7 @@ class ConfiguredTokenInfoViewModel(
             TokenType.Native -> null
             is TokenType.AddressSpecTyped -> when (token.blockchainType) {
                 BlockchainType.Zcash -> {
-                    ConfiguredTokenInfoType.BirthdayHeight(getBirthdayHeight(token))
+                    BirthdayHeight(getBirthdayHeight(token))
                 }
                 else -> null
             }

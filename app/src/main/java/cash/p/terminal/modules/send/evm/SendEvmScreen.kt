@@ -16,12 +16,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
-import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.entities.Address
-import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
-import cash.p.terminal.modules.address.HSAddressInput
+import cash.p.terminal.modules.address.HSAddressCell
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
@@ -29,30 +27,35 @@ import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import cash.p.terminal.modules.sendtokenselect.PrefilledData
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.helpers.HudHelper
+import java.math.BigDecimal
 
 @Composable
 fun SendEvmScreen(
     title: String,
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
-    prefilledData: PrefilledData?,
+    address: Address,
     wallet: Wallet,
-    predefinedAddress: String?,
+    amount: BigDecimal?,
+    hideAddress: Boolean,
+    sendEntryPointDestId: Int,
 ) {
-    val viewModel = viewModel<SendEvmViewModel>(factory = SendEvmModule.Factory(wallet, predefinedAddress))
+    val viewModel =
+        viewModel<SendEvmViewModel>(factory = SendEvmModule.Factory(wallet, address, hideAddress))
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
+        factory = AddressParserModule.Factory(wallet.token, amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current
@@ -69,18 +72,13 @@ fun SendEvmScreen(
             onCloseClick = { navController.popBackStack() }
         ) {
             if (uiState.showAddressInput) {
-                HSAddressInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
-                    textPreprocessor = paymentAddressViewModel,
-                    navController = navController
+                HSAddressCell(
+                    title = stringResource(R.string.Send_Confirmation_To),
+                    value = uiState.address.hex
                 ) {
-                    viewModel.onEnterAddress(it)
+                    navController.popBackStack()
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+                VSpacer(16.dp)
             }
 
             HSAmountInput(
@@ -119,6 +117,8 @@ fun SendEvmScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
+                    val sendData = viewModel.getSendData() ?: return@ButtonPrimaryYellow
+
                     if (viewModel.hasConnection()) {
                         navController.authorizedAction(
                             ConfirmPinFragment.InputConfirm(
@@ -126,19 +126,15 @@ fun SendEvmScreen(
                                 pinType = PinType.TRANSFER
                             )
                         ) {
-                            viewModel.getSendData()?.let {
-                                navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
-                                    R.id.sendEvmConfirmationFragment,
-                                    SendEvmConfirmationFragment.Input(
-                                        sendData = it,
-                                        blockchainType = viewModel.wallet.token.blockchainType
-                                    )
-                                ) {
-                                    if (it.success) {
-                                        navController.popBackStack()
-                                    }
-                                }
-                            }
+                            navController.slideFromRight(
+                                R.id.sendEvmConfirmationFragment,
+                                SendEvmConfirmationFragment.Input(
+                                    sendData = sendData,
+                                    blockchainType = viewModel.wallet.token.blockchainType,
+                                    sendEntryPointDestId = sendEntryPointDestId
+
+                                )
+                            )
                         }
                     } else {
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)

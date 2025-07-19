@@ -45,10 +45,11 @@ class SendNftFragment : BaseComposeFragment() {
                 }
                 val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                 SendEip721Screen(
-                    navController,
-                    eip721ViewModel,
-                    addressViewModel,
-                    addressParserViewModel,
+                    navController = navController,
+                    viewModel = eip721ViewModel,
+                    addressViewModel = addressViewModel,
+                    addressParserViewModel = addressParserViewModel,
+                    sendEntryPointDestId = R.id.nftSendFragment
                 )
             }
 
@@ -59,10 +60,11 @@ class SendNftFragment : BaseComposeFragment() {
                 }
                 val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                 SendEip1155Screen(
-                    navController,
-                    eip1155ViewModel,
-                    addressViewModel,
-                    addressParserViewModel,
+                    navController = navController,
+                    viewModel = eip1155ViewModel,
+                    addressViewModel = addressViewModel,
+                    addressParserViewModel = addressParserViewModel,
+                    sendEntryPointDestId = R.id.nftSendFragment
                 )
             }
 

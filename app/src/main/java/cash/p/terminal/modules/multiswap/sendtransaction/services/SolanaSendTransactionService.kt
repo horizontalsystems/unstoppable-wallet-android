@@ -61,7 +61,7 @@ class SolanaSendTransactionService(
     private val balance = App.solanaKitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
     private val solBalance =
         SolanaAdapter.balanceInBigDecimal(balance, solToken.decimals) - SolanaKit.accountRentAmount
-    private val addressService = SendSolanaAddressService(null)
+    private val addressService = SendSolanaAddressService()
     private val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
 

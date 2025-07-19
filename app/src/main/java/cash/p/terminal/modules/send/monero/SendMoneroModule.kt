@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendMoneroAdapter
 import cash.p.terminal.core.isNative
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.xrate.XRateService
@@ -15,9 +16,10 @@ object SendMoneroModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendMoneroAdapter) ?: throw IllegalStateException("SendMoneroAdapter is null")
+        val adapter = (App.adapterManager.getAdapterForWalletOld(wallet) as? ISendMoneroAdapter) ?: throw IllegalStateException("SendMoneroAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -32,7 +34,7 @@ object SendMoneroModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative,
                     )
-                    val addressService = SendMoneroAddressService(predefinedAddress)
+                    val addressService = SendMoneroAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendMoneroViewModel(
@@ -43,9 +45,10 @@ object SendMoneroModule {
                         amountService = amountService,
                         addressService = addressService,
                         coinMaxAllowedDecimals = coinMaxAllowedDecimals,
-                        showAddressInput = predefinedAddress == null,
+                        showAddressInput = !hideAddress,
                         contactsRepo = App.contactsRepository,
                         connectivityManager = App.connectivityManager,
+                        address = address,
                     ) as T
                 }
 

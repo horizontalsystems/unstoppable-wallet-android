@@ -9,6 +9,7 @@ import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.StellarKitManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
@@ -27,7 +28,8 @@ import kotlinx.coroutines.withContext
 import java.util.Date
 
 class AppStatusViewModel(
-    private val moneroKitManager: MoneroKitManager
+    private val moneroKitManager: MoneroKitManager,
+    private val stellarKitManager: StellarKitManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
 
     private val systemInfoManager: ISystemInfoManager = App.systemInfoManager
@@ -186,7 +188,7 @@ class AppStatusViewModel(
             .filter { bitcoinLikeChains.contains(it.token.blockchainType) }
             .sortedBy { it.token.coin.name }
             .forEach { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
+                (adapterManager.getAdapterForWalletOld(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
                     val statusTitle =
                         "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}"
                     val restoreMode = btcBlockchainManager.restoreMode(wallet.token.blockchainType)
@@ -211,13 +213,17 @@ class AppStatusViewModel(
             blockchainStatus["Ton"] = statusInfo
         }
 
+        stellarKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Stellar"] = statusInfo
+        }
+
         solanaKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Solana"] = statusInfo
         }
 
         walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
             ?.let { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
+                (adapterManager.getAdapterForWalletOld(wallet) as? ZcashAdapter)?.let { adapter ->
                     blockchainStatus["Zcash"] = adapter.statusInfo
                 }
             }
@@ -238,7 +244,7 @@ class AppStatusViewModel(
             .forEach {
                 val wallet = it
                 val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                val block = when (val adapter = adapterManager.getAdapterForWallet(wallet)) {
+                val block = when (val adapter = adapterManager.getAdapterForWalletOld(wallet)) {
                     is BitcoinBaseAdapter -> {
                         val restoreMode =
                             btcBlockchainManager.restoreMode(wallet.token.blockchainType)
@@ -279,7 +285,7 @@ class AppStatusViewModel(
 
         walletManager.activeWallets
             .mapNotNull { wallet ->
-                adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+                adapterManager.getAdapterForWalletOld(wallet)?.let { adapter ->
                     if (adapter.statusInfo.isEmpty()) {
                         return@mapNotNull null
                     }

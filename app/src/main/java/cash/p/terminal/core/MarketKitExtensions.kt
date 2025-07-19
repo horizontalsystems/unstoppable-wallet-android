@@ -106,6 +106,10 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.Native || tokenType is TokenType.Jetton
         }
 
+        BlockchainType.Stellar -> {
+            tokenType is TokenType.Native || tokenType is TokenType.Asset
+        }
+
         is BlockchainType.Unsupported -> false
     }
 
@@ -130,12 +134,14 @@ val Blockchain.description: String
         BlockchainType.Fantom -> "FTM, ERC20 tokens"
         BlockchainType.Tron -> "TRX, TRC20 tokens"
         BlockchainType.Ton -> "TON"
+        BlockchainType.Stellar -> "XLM, Stellar assets"
         else -> ""
     }
 
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
 fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
+fun Blockchain.assetUrl(code: String, issuer: String) = "https://stellarchain.io/assets/$code-$issuer"
 
 val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
     get() = when (this) {
@@ -153,6 +159,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Ton,
         BlockchainType.Solana,
         BlockchainType.Polygon,
+        BlockchainType.Stellar,
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.Avalanche,
@@ -188,6 +195,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Fantom -> R.drawable.fantom_erc20
         BlockchainType.Tron -> R.drawable.tron_trc20
         BlockchainType.Ton -> R.drawable.the_open_network_jetton
+        BlockchainType.Stellar -> R.drawable.stellar_asset
         else -> R.drawable.coin_placeholder
     }
 
@@ -281,6 +289,12 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.TonAddress ->
             this == BlockchainType.Ton
+
+        is AccountType.StellarAddress ->
+            this == BlockchainType.Stellar
+
+        is AccountType.StellarSecretKey ->
+            this == BlockchainType.Stellar
 
         is AccountType.Cex -> false
     }
@@ -503,6 +517,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ECash,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Stellar,
     )
 
 val CoinPrice.diff: BigDecimal?

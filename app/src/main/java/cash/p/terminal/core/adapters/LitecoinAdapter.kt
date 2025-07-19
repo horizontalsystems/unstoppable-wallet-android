@@ -205,6 +205,8 @@ class LitecoinAdapter(
                 is AccountType.SolanaAddress,
                 is AccountType.TonAddress,
                 is AccountType.TronAddress,
+                is AccountType.StellarAddress,
+                is AccountType.StellarSecretKey,
                 is AccountType.ZCashUfvKey -> throw UnsupportedAccountException()
             }
         }

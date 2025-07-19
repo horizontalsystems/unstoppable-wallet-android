@@ -362,7 +362,7 @@ object ThorChainProvider : IMultiSwapProvider {
                         )
                     }
 
-                    else -> throw kotlin.IllegalArgumentException()
+                    else -> throw IllegalArgumentException()
                 }
 
                 SendTransactionData.Evm(
@@ -396,7 +396,7 @@ object ThorChainProvider : IMultiSwapProvider {
                 )
             }
 
-            else -> throw kotlin.IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
     }
 

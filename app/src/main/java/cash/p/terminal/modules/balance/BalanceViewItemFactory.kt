@@ -24,6 +24,8 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import java.math.BigDecimal
+import kotlin.collections.forEach
+import kotlin.toString
 
 @Immutable
 data class BalanceViewItem(
@@ -125,6 +127,7 @@ class BalanceViewItemFactory {
         BlockchainType.ArbitrumOne,
         BlockchainType.Solana,
         BlockchainType.Tron,
+        BlockchainType.Stellar,
         BlockchainType.Ton -> 50
 
         is BlockchainType.Unsupported -> 0
@@ -277,6 +280,32 @@ class BalanceViewItemFactory {
                         title = TranslatableString.ResString(R.string.Balance_NotRelayedAmount_Title),
                         infoTitle = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
                         info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
+                        coinValue = it
+                    )
+                )
+            }
+
+            lockedCoinValue(
+                state,
+                item.balanceData.minimumBalance,
+                hideBalance,
+                wallet.decimal,
+                wallet.token
+            )?.let {
+                var info = TranslatableString.ResString(R.string.Info_Reserved_Description).toString()
+                info += "\n\n"
+                info += TranslatableString.ResString(R.string.Info_Reserved_CurrentlyLocked).toString()
+
+                info += "\n1 XLM - " + TranslatableString.ResString(R.string.Info_Reserved_WalletAction).toString()
+                item.balanceData.stellarAssets.forEach {
+                    info += "\n0.5 XLM - ${it.code}"
+                }
+
+                add(
+                    LockedValue(
+                        title = TranslatableString.ResString(R.string.Balance_Reserved_Title),
+                        infoTitle = TranslatableString.ResString(R.string.Info_Reserved_Title),
+                        info = TranslatableString.PlainString(info),
                         coinValue = it
                     )
                 )

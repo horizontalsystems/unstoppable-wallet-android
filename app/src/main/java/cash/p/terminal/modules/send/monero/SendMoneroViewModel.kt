@@ -41,6 +41,7 @@ class SendMoneroViewModel(
     private val showAddressInput: Boolean,
     private val contactsRepo: ContactsRepository,
     private val connectivityManager: ConnectivityManager,
+    private val address: Address,
 ) : ViewModelUiState<SendUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = sendToken.decimals
@@ -81,14 +82,17 @@ class SendMoneroViewModel(
         xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
             feeCoinRate = it
         }
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     override fun createState() = SendUiState(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput
+        showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {

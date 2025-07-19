@@ -31,6 +31,9 @@ import cash.p.terminal.core.adapters.Trc20Adapter
 import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.TronTransactionConverter
 import cash.p.terminal.core.adapters.TronTransactionsAdapter
+import cash.p.terminal.core.adapters.stellar.StellarAdapter
+import cash.p.terminal.core.adapters.stellar.StellarAssetAdapter
+import cash.p.terminal.core.adapters.stellar.StellarTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BtcBlockchainManager
@@ -41,6 +44,7 @@ import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.StackingManager
+import cash.p.terminal.core.managers.StellarKitManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.data.repository.EvmTransactionRepository
@@ -63,6 +67,7 @@ class AdapterFactory(
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
+    private val stellarKitManager: StellarKitManager,
     private val moneroKitManager: MoneroKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
@@ -130,6 +135,12 @@ class AdapterFactory(
         )
 
         return JettonAdapter(tonKitWrapper, address, wallet)
+    }
+
+    private fun getStellarAssetAdapter(wallet: Wallet, code: String, issuer: String): IAdapter {
+        val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(wallet.account)
+
+        return StellarAssetAdapter(stellarKitWrapper, code, issuer)
     }
 
     private suspend fun getMoneroAdapter(wallet: Wallet): IAdapter {
@@ -314,6 +325,10 @@ class AdapterFactory(
                     )
                 }
 
+                BlockchainType.Stellar -> {
+                    StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
+                }
+
                 BlockchainType.Monero -> {
                     getMoneroAdapter(wallet)
                 }
@@ -331,6 +346,7 @@ class AdapterFactory(
 
             is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
             is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
+            is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
             is TokenType.Unsupported -> null
         }
 
@@ -402,6 +418,22 @@ class AdapterFactory(
         return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
     }
 
+    fun stellarTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(source.account)
+
+        val tokenQuery = TokenQuery(BlockchainType.Stellar, TokenType.Native)
+        val baseToken = coinManager.getToken(tokenQuery) ?: return null
+
+        val transactionConverter = StellarTransactionConverter(
+            source,
+            stellarKitWrapper.stellarKit.receiveAddress,
+            coinManager,
+            baseToken
+        )
+
+        return StellarTransactionsAdapter(stellarKitWrapper, transactionConverter)
+    }
+
     suspend fun moneroTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val moneroKitWrapper = moneroKitManager.getMoneroKitWrapper(source.account)
         return MoneroTransactionsAdapter(moneroKitWrapper, source)
@@ -450,6 +482,10 @@ class AdapterFactory(
                 moneroKitManager.unlink(wallet.account)
             }
 
+            BlockchainType.Stellar -> {
+                stellarKitManager.unlink(wallet.account)
+            }
+
             else -> Unit
         }
     }
@@ -481,6 +517,10 @@ class AdapterFactory(
 
             BlockchainType.Monero -> {
                 moneroKitManager.unlink(transactionSource.account)
+            }
+
+            BlockchainType.Stellar -> {
+                stellarKitManager.unlink(transactionSource.account)
             }
 
             else -> Unit

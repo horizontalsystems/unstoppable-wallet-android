@@ -2,7 +2,6 @@ package cash.p.terminal.core.providers
 
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
-import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.entities.BlockchainType
@@ -26,6 +25,15 @@ class AppConfigProvider {
     val walletConnectAppMetaDataUrl by lazy { Translator.getString(R.string.walletConnectAppMetaDataUrl) }
     val walletConnectAppMetaDataIcon by lazy { Translator.getString(R.string.walletConnectAppMetaDataIcon) }
     val accountsBackupFileSalt by lazy { Translator.getString(R.string.accountsBackupFileSalt) }
+
+    val spamCoinValueLimits: Map<String, Double> = mapOf(
+        "tether" to 0.01,
+        "usd-coin" to 0.01,
+        "dai" to 0.01,
+        "binance-usd" to 0.01,
+        "binance-peg-busd" to 0.01,
+        "stasis-eurs" to 0.01,
+    )
 
     val blocksDecodedEthereumRpc by lazy {
         Translator.getString(R.string.blocksDecodedEthereumRpc)

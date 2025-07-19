@@ -10,6 +10,7 @@ import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.managers.RecentAddressManager
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -19,11 +20,14 @@ import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import kotlin.getValue
 import kotlin.math.abs
 
 class SendTonViewModel(
@@ -38,10 +42,13 @@ class SendTonViewModel(
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
+    private val address: Address,
 ): ViewModelUiState<SendTonUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+
+    private val recentAddressManager: RecentAddressManager by inject(RecentAddressManager::class.java)
 
     // Calculate the decimal rate between the send token and the fee token
     private val decimalDiff = sendToken.decimals - feeToken.decimals
@@ -93,6 +100,8 @@ class SendTonViewModel(
                 feeCoinRate = it
             }
         }
+
+        addressService.setAddress(address)
     }
 
     override fun createState() = SendTonUiState(
@@ -107,6 +116,7 @@ class SendTonViewModel(
         showAddressInput = showAddressInput,
         fee = (feeState.feeStatus as? FeeStatus.Success)?.fee?.multiply(decimalRate),
         feeInProgress = feeState.inProgress,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -158,6 +168,8 @@ class SendTonViewModel(
 
             sendResult = SendResult.Sent()
             logger.info("success")
+
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
@@ -202,4 +214,5 @@ data class SendTonUiState(
     val showAddressInput: Boolean,
     val fee: BigDecimal?,
     val feeInProgress: Boolean,
+    val address: Address,
 )

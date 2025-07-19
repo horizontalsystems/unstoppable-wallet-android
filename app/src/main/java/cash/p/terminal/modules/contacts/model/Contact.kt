@@ -25,3 +25,8 @@ data class ContactAddress(
         return Objects.hash(blockchain, address.lowercase())
     }
 }
+
+data class ContactNameAddress(
+    val name: String,
+    val contactAddress: ContactAddress
+)

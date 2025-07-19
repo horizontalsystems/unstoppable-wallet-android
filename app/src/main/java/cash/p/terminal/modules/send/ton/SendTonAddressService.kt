@@ -1,17 +1,16 @@
 package cash.p.terminal.modules.send.ton
 
 import cash.p.terminal.R
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendTonAddressService(prefilledAddress: String?) {
-    private var address: Address? = prefilledAddress?.let { Address(it) }
+class SendTonAddressService {
+    private var address: Address? = null
     private var addressError: Throwable? = null
-    private var tonAddress: FriendlyAddress? = prefilledAddress?.let { FriendlyAddress.parse(it) }
+    private var tonAddress: FriendlyAddress? = null
 
     private val _stateFlow = MutableStateFlow(
         State(

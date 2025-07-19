@@ -14,6 +14,7 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.TransactionLockState
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
+import cash.p.terminal.entities.transactionrecords.stellar.StellarTransactionRecord
 import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
@@ -631,6 +632,12 @@ object TransactionViewItemFactoryHelper {
             is TronTransactionRecord -> {
                 if (!transaction.foreignTransaction && transaction.fee != null) {
                     items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
+            is StellarTransactionRecord -> {
+                transaction.fee?.let { fee ->
+                    items.add(getFeeItem(fee, rates[fee.coinUid], status))
                 }
             }
 

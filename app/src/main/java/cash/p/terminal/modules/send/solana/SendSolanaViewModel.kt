@@ -13,24 +13,27 @@ import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.LocalizedException
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.RecentAddressManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendErrorInsufficientBalance
 import cash.p.terminal.modules.send.SendResult
-import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.solanakit.SolanaKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import kotlin.getValue
 
 class SendSolanaViewModel(
     val wallet: Wallet,
@@ -45,10 +48,13 @@ class SendSolanaViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
-) : ViewModelUiState<SendUiState>() {
+    private val address: Address,
+) : ViewModelUiState<SendSolanaModule.SendUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+
+    private val recentAddressManager: RecentAddressManager by inject(RecentAddressManager::class.java)
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
@@ -75,14 +81,17 @@ class SendSolanaViewModel(
         xRateService.getRateFlow(feeToken.coin.uid).collectWith(viewModelScope) {
             feeCoinRate = it
         }
+
+        addressService.setAddress(address)
     }
 
-    override fun createState() = SendUiState(
+    override fun createState() = SendSolanaModule.SendUiState(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
         addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        address = address,
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -137,6 +146,8 @@ class SendSolanaViewModel(
             adapter.send(decimalAmount, addressState.evmAddress!!)
 
             sendResult = SendResult.Sent()
+
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Solana)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
         }

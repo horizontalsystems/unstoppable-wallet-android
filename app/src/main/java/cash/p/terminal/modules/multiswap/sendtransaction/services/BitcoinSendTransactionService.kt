@@ -1,14 +1,27 @@
 package cash.p.terminal.modules.multiswap.sendtransaction.services
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import cash.p.terminal.R
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
@@ -17,8 +30,10 @@ import cash.p.terminal.core.factories.FeeRateProviderFactory
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.modules.amount.AmountInputModeViewModel
+import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.amount.AmountValidator
+import cash.p.terminal.modules.evmfee.EvmSettingsInput
+import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionResult
@@ -33,14 +48,23 @@ import cash.p.terminal.modules.send.bitcoin.SendBitcoinFeeRateService
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinFeeService
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinModule
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinPluginService
-import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
-import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
+import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
+import cash.p.terminal.modules.send.bitcoin.settings.SendBtcSettingsViewModel
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.InfoText
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.core.logger.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,7 +85,7 @@ class BitcoinSendTransactionService(
     private var bitcoinFeeInfo = feeService.bitcoinFeeInfoFlow.value
     private val amountService =
         SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
-    private val addressService = SendBitcoinAddressService(adapter, null)
+    private val addressService = SendBitcoinAddressService(adapter)
     private val localStorage: ILocalStorage by inject(ILocalStorage::class.java)
     private val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
@@ -79,7 +103,7 @@ class BitcoinSendTransactionService(
     override val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings> =
         _sendTransactionSettingsFlow.asStateFlow()
 
-//    private var feeAmountData: SendModule.AmountData? = null
+    //    private var feeAmountData: SendModule.AmountData? = null
     private var cautions: List<CautionViewItem> = listOf()
     private var sendable = false
     private var loading = true
@@ -91,7 +115,8 @@ class BitcoinSendTransactionService(
         sendable = sendable,
         loading = loading,
         fields = fields,
-        availableBalance = calculateAvailableBalance()
+        availableBalance = calculateAvailableBalance(),
+        extraFees = extraFees
     )
 
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -249,32 +274,11 @@ class BitcoinSendTransactionService(
 
     @Composable
     override fun GetSettingsContent(navController: NavController) {
-        val navHostController = navController as? NavHostController ?: return
-        val sendBitcoinViewModel = SendBitcoinViewModel(
-            adapter = adapter,
-            wallet = wallet,
-            feeRateService = feeRateService,
-            feeService = feeService,
-            amountService = amountService,
-            addressService = addressService,
-            pluginService = pluginService,
-            xRateService = xRateService,
-            btcBlockchainManager = btcBlockchainManager,
-            contactsRepo = App.contactsRepository,
-            showAddressInput = true,
-            localStorage = localStorage
+        val sendSettingsViewModel = viewModel<SendBtcSettingsViewModel>(
+            factory = SendBtcSettingsViewModel.Factory(feeRateService, feeService, token)
         )
-        val amountInputModeViewModel = AmountInputModeViewModel(
-            localStorage = localStorage,
-            xRateService = xRateService,
-            coinUid = wallet.coin.uid
-        )
-        SendBtcAdvancedSettingsScreen(
-            fragmentNavController = navController,
-            navController = navHostController,
-            sendBitcoinViewModel = sendBitcoinViewModel,
-            amountInputType = amountInputModeViewModel.inputType,
-        )
+
+        SendBtcFeeSettingsScreen(navController, sendSettingsViewModel)
     }
 
     @SuppressLint("CheckResult")
@@ -292,7 +296,6 @@ class BitcoinSendTransactionService(
                 dustThreshold = dustThreshold,
                 changeToFirstInput = changeToFirstInput,
                 utxoFilters = utxoFilters,
-                logger = logger
             )
             SendTransactionResult.Common(SendResult.Sent(recordUid))
         } catch (e: Throwable) {
@@ -301,4 +304,94 @@ class BitcoinSendTransactionService(
             throw e
         }
     }
+}
+
+@Composable
+fun SendBtcFeeSettingsScreen(
+    navController: NavController,
+    viewModel: SendBtcSettingsViewModel
+) {
+    val uiState = viewModel.uiState
+
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
+            .background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.SendEvmSettings_Title),
+            navigationIcon = {
+                HsIconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "back button",
+                        tint = ComposeAppTheme.colors.jacob
+                    )
+                }
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Reset),
+                    enabled = uiState.resetEnabled,
+                    tint = ComposeAppTheme.colors.jacob,
+                    onClick = {
+                        viewModel.reset()
+                    }
+                )
+            )
+        )
+
+        VSpacer(12.dp)
+        CellUniversalLawrenceSection(
+            listOf {
+                HSFeeRaw(
+                    coinCode = viewModel.token.coin.code,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    fee = uiState.fee,
+                    amountInputType = AmountInputType.COIN,
+                    rate = uiState.rate,
+                    navController = navController
+                )
+            }
+        )
+
+        if (viewModel.feeRateChangeable) {
+            VSpacer(24.dp)
+            EvmSettingsInput(
+                title = stringResource(R.string.FeeSettings_FeeRate),
+                info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                decimals = 0,
+                caution = uiState.feeRateCaution,
+                navController = navController,
+                onValueChange = {
+                    viewModel.updateFeeRate(it.toInt())
+                },
+                onClickIncrement = {
+                    viewModel.incrementFeeRate()
+                },
+                onClickDecrement = {
+                    viewModel.decrementFeeRate()
+                }
+            )
+            InfoText(
+                text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
+            )
+        }
+
+        uiState.feeRateCaution?.let {
+            FeeRateCaution(
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 12.dp
+                ),
+                feeRateCaution = it
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+
 }

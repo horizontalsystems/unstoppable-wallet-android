@@ -45,6 +45,9 @@ sealed class TokenType : Parcelable {
     data class Jetton(val address: String) : TokenType()
 
     @Parcelize
+    data class Asset(val code: String, val issuer: String) : TokenType()
+
+    @Parcelize
     data class Unsupported(val type: String, val reference: String) : TokenType()
 
     val id: String
@@ -54,6 +57,7 @@ sealed class TokenType : Parcelable {
                 is Eip20 -> listOf("eip20", address)
                 is Spl -> listOf("spl", address)
                 is Jetton -> listOf("the-open-network", address)
+                is Asset -> listOf("stellar", "$code-$issuer")
                 is AddressTyped -> listOf("address_type", type.name.lowercase())
                 is AddressSpecTyped -> listOf("address_spec_type", type.name.lowercase())
                 is Derived -> listOf("derived", derivation.name.lowercase())
@@ -72,6 +76,7 @@ sealed class TokenType : Parcelable {
             is Eip20 -> Value("eip20", address)
             is Spl -> Value("spl", address)
             is Jetton -> Value("the-open-network", address)
+            is Asset -> Value("stellar", "$code-$issuer")
             is AddressTyped -> Value("address_type", type.name)
             is AddressSpecTyped -> Value("address_spec_type", type.name)
             is Derived -> Value("derived", derivation.name)

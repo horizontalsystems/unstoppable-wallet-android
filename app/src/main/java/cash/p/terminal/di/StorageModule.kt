@@ -73,5 +73,7 @@ val storageModule = module {
     factory { get<AppDatabase>().evmAddressLabelDao() }
     factory { get<AppDatabase>().evmMethodLabelDao() }
     factory { get<AppDatabase>().syncerStateDao() }
+    factory { get<AppDatabase>().recentAddressDao() }
     factory { get<AppDatabase>().tokenAutoEnabledBlockchainDao() }
+    single { get<AppDatabase>().spamAddressDao() }
 }

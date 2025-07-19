@@ -80,7 +80,9 @@ fun HSAddressInput(
         navController = navController,
         chooseContactEnable = viewModel.hasContacts(),
         blockchainType = viewModel.blockchainType,
-    ) {
-        viewModel.parseText(it)
-    }
+        onValueChange = {
+            viewModel.parseText(it)
+        },
+        onAmountChange = {}
+    )
 }

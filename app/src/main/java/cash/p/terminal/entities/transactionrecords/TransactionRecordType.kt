@@ -31,4 +31,7 @@ enum class TransactionRecordType {
 
     MONERO_INCOMING,
     MONERO_OUTGOING,
+
+    STELLAR_INCOMING,
+    STELLAR_OUTGOING,
 }

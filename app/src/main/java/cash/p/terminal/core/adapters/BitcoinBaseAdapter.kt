@@ -40,7 +40,6 @@ import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.BackpressureStrategy
@@ -324,11 +323,13 @@ abstract class BitcoinBaseAdapter(
         rbfEnabled: Boolean,
         dustThreshold: Int?,
         changeToFirstInput: Boolean,
-        utxoFilters: UtxoFilters,
-        logger: AppLogger
+        utxoFilters: UtxoFilters
     ): String {
-        logger.info("call btc-kit.send")
-        val sortingType = getTransactionSortingType(transactionSorting)
+        val sortingType =
+            getTransactionSortingType(
+                transactionSorting
+            )
+
         val sendData = kit.send(
             address = address,
             memo = memo,
@@ -338,10 +339,10 @@ abstract class BitcoinBaseAdapter(
             sortType = sortingType,
             unspentOutputs = unspentOutputs,
             pluginData = pluginData ?: mapOf(),
+            rbfEnabled = rbfEnabled,
             dustThreshold = dustThreshold,
             changeToFirstInput = changeToFirstInput,
             filters = utxoFilters,
-            rbfEnabled = rbfEnabled
         )
         return sendData.header.uid
     }

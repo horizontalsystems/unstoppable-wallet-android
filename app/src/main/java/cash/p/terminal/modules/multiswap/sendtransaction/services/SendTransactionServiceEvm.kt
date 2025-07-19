@@ -23,14 +23,12 @@ import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.tryOrNull
-import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.evmfee.Eip1559FeeSettings
 import cash.p.terminal.modules.evmfee.EvmCommonGasDataService
 import cash.p.terminal.modules.evmfee.EvmFeeModule
 import cash.p.terminal.modules.evmfee.EvmFeeService
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
-import cash.p.terminal.modules.evmfee.GasPriceInfo
 import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.LegacyFeeSettings
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
@@ -54,12 +52,12 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
-import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
@@ -69,7 +67,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 internal class SendTransactionServiceEvm(
@@ -77,9 +74,8 @@ internal class SendTransactionServiceEvm(
     initialGasPrice: GasPrice? = null,
     initialNonce: Long? = null
 ) : ISendTransactionService<BaseEvmAdapter>(token) {
-
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(token.blockchainType).evmKitWrapper!! }
-    private val gasPriceService: IEvmGasPriceService<DataState<GasPriceInfo>> by lazy {
+    private val gasPriceService: IEvmGasPriceService by lazy {
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
             val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
@@ -103,13 +99,12 @@ internal class SendTransactionServiceEvm(
         )
         EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService)
     }
-    private val feeToken = App.evmBlockchainManager.getBaseToken(token.blockchainType)!!
     private val coinServiceFactory by lazy {
         EvmCoinServiceFactory(
-            baseToken = feeToken,
-            marketKit = App.marketKit,
-            currencyManager = App.currencyManager,
-            coinManager = App.coinManager
+            token,
+            App.marketKit,
+            App.currencyManager,
+            App.coinManager
         )
     }
     private val nonceService by lazy {
@@ -138,7 +133,8 @@ internal class SendTransactionServiceEvm(
         cautions = cautions,
         sendable = sendable,
         loading = loading,
-        fields = fields
+        fields = fields,
+        extraFees = extraFees
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -221,19 +217,12 @@ internal class SendTransactionServiceEvm(
     }
 
     override fun setSendTransactionData(data: SendTransactionData) {
-        val convertedData = convertTransactionData(data)
-        checkNotNull(convertedData)
-        feeService.setGasLimit(convertedData.gasLimit)
-        feeService.setTransactionData(convertedData.transactionData)
-    }
+        check(data is SendTransactionData.Evm)
 
-    private fun convertTransactionData(data: SendTransactionData): SendTransactionData.Evm? {
-        if (data is SendTransactionData.Evm) return data
-        if (data is SendTransactionData.Common) {
-            val transactionData = adapter.getTransactionData(data.amount, Address(data.address))
-            return SendTransactionData.Evm(transactionData, null)
-        }
-        return null
+        feeService.setGasLimit(data.gasLimit)
+        feeService.setTransactionData(data.transactionData)
+
+        setExtraFeesMap(data.feesMap)
     }
 
     override suspend fun sendTransaction(): SendTransactionResult.Evm {
@@ -245,8 +234,7 @@ internal class SendTransactionServiceEvm(
         val gasLimit = transaction.gasData.gasLimit
         val nonce = transaction.nonce
 
-        val fullTransaction = evmKitWrapper
-            .sendSingle(transactionData, gasPrice, gasLimit, nonce)
+        val fullTransaction = evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce)
         return SendTransactionResult.Evm(fullTransaction)
     }
 

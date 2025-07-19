@@ -57,13 +57,14 @@ dependencies {
     implementation(libs.blockchain.fee.kit)
     implementation(libs.tron.kit)
     implementation(libs.monero.kit)
-    implementation(libs.gson)
+    implementation(libs.stellar.kit)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit.rxjava2)
     implementation(libs.retrofit.scalars)
+    implementation(libs.gson)
 
     //room
     implementation(libs.room.runtime)

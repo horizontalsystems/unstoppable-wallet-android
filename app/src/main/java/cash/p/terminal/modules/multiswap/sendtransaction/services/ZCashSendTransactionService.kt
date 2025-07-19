@@ -45,7 +45,7 @@ class ZCashSendTransactionService(
         availableBalance = adapter.availableBalance,
         leaveSomeBalanceForFee = wallet.token.type.isNative
     )
-    private val addressService = SendZCashAddressService(adapter, null)
+    private val addressService = SendZCashAddressService(adapter)
 
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals

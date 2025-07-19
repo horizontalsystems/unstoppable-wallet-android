@@ -13,6 +13,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import com.m2049r.xmrwallet.model.Wallet
+import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
@@ -128,6 +129,7 @@ class AddressHandlerUdn(
             BlockchainType.Cosanta -> "COSA"
             BlockchainType.PirateCash -> "PIRATECASH"
             BlockchainType.Monero -> "XMR"
+            BlockchainType.Stellar -> "XLM"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
@@ -304,6 +306,22 @@ class AddressHandlerTon : IAddressHandler {
         return Address(value, blockchainType = blockchainType)
     }
 }
+
+class AddressHandlerStellar : IAddressHandler {
+    override val blockchainType = BlockchainType.Stellar
+
+    override fun isSupported(value: String) = try {
+        StellarKit.validateAddress(value)
+        true
+    } catch (e: Exception) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(value, blockchainType = blockchainType)
+    }
+}
+
 
 class AddressHandlerPure(override val blockchainType: BlockchainType) : IAddressHandler {
 

@@ -39,15 +39,18 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.Address
+import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.contacts.ChooseContactFragment
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.entities.BlockchainType
+import java.math.BigDecimal
 
 @Composable
 fun FormsInputAddress(
@@ -55,11 +58,13 @@ fun FormsInputAddress(
     value: String,
     hint: String,
     state: DataState<Address>? = null,
+    showStateIcon: Boolean = true,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     navController: NavController,
     chooseContactEnable: Boolean,
     blockchainType: BlockchainType?,
     onValueChange: (String) -> Unit,
+    onAmountChange: (BigDecimal) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
@@ -130,20 +135,28 @@ fun FormsInputAddress(
                     HSCircularProgressIndicator()
                 }
                 is DataState.Error -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_20),
-                        contentDescription = null,
-                        tint = cautionColor
-                    )
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_20),
+                            contentDescription = null,
+                            tint = cautionColor
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
                 }
                 is DataState.Success -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_check_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.remus
-                    )
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_check_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.remus
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
                 }
                 else -> {
                     Spacer(modifier = Modifier.width(28.dp))
@@ -183,6 +196,9 @@ fun FormsInputAddress(
                                 result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
                             val textProcessed = textPreprocessor.process(scannedText)
+                            (textPreprocessor as? AddressParserViewModel)?.amountUnique?.amount?.let {
+                                onAmountChange(it)
+                            }
                             onValueChange.invoke(textProcessed)
                         }
                     }
@@ -204,6 +220,9 @@ fun FormsInputAddress(
                     onClick = {
                         clipboardManager.getText()?.text?.let { textInClipboard ->
                             val textProcessed = textPreprocessor.process(textInClipboard)
+                            (textPreprocessor as? AddressParserViewModel)?.amountUnique?.amount?.let {
+                                    onAmountChange(it)
+                            }
                             onValueChange.invoke(textProcessed)
                         }
                     },

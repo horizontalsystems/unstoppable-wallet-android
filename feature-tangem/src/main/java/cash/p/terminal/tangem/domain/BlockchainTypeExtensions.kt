@@ -2,13 +2,13 @@ package cash.p.terminal.tangem.domain
 
 import com.tangem.common.card.EllipticCurve
 import com.tangem.common.extensions.toCompressedPublicKey
-import com.tangem.common.extensions.toDecompressedPublicKey
 import io.horizontalsystems.core.entities.BlockchainType
 
 fun BlockchainType.getSupportedCurves(): List<EllipticCurve> {
     return when (this) {
         BlockchainType.Zcash,
         BlockchainType.Monero,
+        BlockchainType.Stellar,
         is BlockchainType.Unsupported -> emptyList()
         /*Tezos,
             -> listOf(

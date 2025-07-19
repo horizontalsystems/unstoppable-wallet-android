@@ -2,10 +2,10 @@ package cash.p.terminal.modules.transactions
 
 import androidx.lifecycle.viewmodel.CreationExtras
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
+import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
 
 class SelectContactViewModel(
@@ -46,10 +46,14 @@ class SelectContactViewModel(
     companion object {
         val supportedBlockchainTypes =
             EvmBlockchainManager.blockchainTypes +
-                BlockchainType.Tron +
-                BlockchainType.Ton
+                    BlockchainType.Tron +
+                    BlockchainType.Ton +
+                    BlockchainType.Stellar
 
-        fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
+        fun init(
+            selected: Contact?,
+            blockchainType: BlockchainType?
+        ): CreationExtras.() -> SelectContactViewModel = {
             SelectContactViewModel(App.contactsRepository, selected, blockchainType)
         }
     }

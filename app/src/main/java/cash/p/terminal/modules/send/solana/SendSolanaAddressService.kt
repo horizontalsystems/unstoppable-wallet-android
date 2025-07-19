@@ -1,17 +1,16 @@
 package cash.p.terminal.modules.send.solana
 
 import cash.p.terminal.R
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.Address
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
-class SendSolanaAddressService(prefilledAddress: String?) {
-    private var address: Address? = prefilledAddress?.let { Address(it) }
+class SendSolanaAddressService {
+    private var address: Address? = null
     private var addressError: Throwable? = null
-    var solanaAddress: SolanaAddress? = prefilledAddress?.let { SolanaAddress(it) }
+    var solanaAddress: SolanaAddress? = null
         private set
 
     private val _stateFlow = MutableStateFlow(

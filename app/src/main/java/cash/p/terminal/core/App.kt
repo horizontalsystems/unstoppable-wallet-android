@@ -37,6 +37,7 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SpamManager
+import cash.p.terminal.core.managers.StellarAccountManager
 import cash.p.terminal.core.managers.TermsManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonAccountManager
@@ -53,7 +54,6 @@ import cash.p.terminal.core.managers.ZcashBirthdayProvider
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.FeeRateProvider
-import cash.p.terminal.core.providers.FeeTokenProvider
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
@@ -167,7 +167,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val tronKitManager: TronKitManager by inject(TronKitManager::class.java)
         val tonKitManager: TonKitManager by inject(TonKitManager::class.java)
         val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
-        lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var rateAppManager: IRateAppManager
         val coinManager: ICoinManager by inject(ICoinManager::class.java)
         lateinit var wcSessionManager: WCSessionManager
@@ -287,11 +286,17 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
         tonAccountManager.start()
 
+        val stellarAccountManager = StellarAccountManager(
+            accountManager = accountManager,
+            walletManager = walletManager,
+            stellarKitManager = get(),
+            tokenAutoEnableManager = tokenAutoEnableManager
+        )
+        stellarAccountManager.start()
+
         systemInfoManager = get()
         connectivityManager = ConnectivityManager(backgroundManager)
         val adapterFactory: AdapterFactory = get()
-
-        feeCoinProvider = FeeTokenProvider(marketKit)
 
         pinComponent = PinComponent(
             pinSettingsStorage = pinSettingsStorage,

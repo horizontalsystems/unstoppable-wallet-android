@@ -12,6 +12,7 @@ import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.LocalizedException
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.RecentAddressManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.amount.SendAmountService
@@ -21,12 +22,15 @@ import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import kotlin.getValue
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 class SendTronViewModel(
@@ -41,9 +45,11 @@ class SendTronViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
+    private val address: Address,
 ) : ViewModelUiState<SendUiState>() {
     val logger: AppLogger = AppLogger("send-tron")
 
+    private val recentAddressManager: RecentAddressManager by inject(RecentAddressManager::class.java)
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -83,6 +89,9 @@ class SendTronViewModel(
                 feeCoinRate = it
             }
         }
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     override fun createState() = SendUiState(
@@ -94,6 +103,7 @@ class SendTronViewModel(
         feeViewState = feeState.viewState,
         cautions = cautions,
         showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -249,6 +259,8 @@ class SendTronViewModel(
 
             sendResult = SendResult.Sent()
             logger.info("success")
+
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
