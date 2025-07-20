@@ -25,6 +25,7 @@ import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.fee.HSFee
 import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
+import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import java.math.BigDecimal
@@ -46,10 +47,11 @@ fun SendStellarScreen(
     val proceedEnabled = uiState.canBeSend
     val fee = uiState.fee
     val amountInputType = amountInputModeViewModel.inputType
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
+        factory = AddressParserModule.Factory(wallet.token,
+            PrefilledData(uiState.address.hex, amount)
+        )
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 

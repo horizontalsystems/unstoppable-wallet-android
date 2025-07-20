@@ -22,6 +22,7 @@ coil-compose = "2.5.0"
 annotation = "1.9.1"
 lifecycle-viewmodel-compose = "2.8.7"
 roomRxjava2 = "2.6.1"
+stellarSdk = "1.0.0"
 uiTooling = "1.7.6"
 androidx-fragment-ktx = "1.8.5"
 navigationRuntimeKtx = "2.8.5"
@@ -35,7 +36,7 @@ appcompat = "1.7.0"
 tonKotlin = "0.2.15" # same version like in ton-kit
 piratecash-ton = "acae5a0"
 piratecash-bitcoin = "403053c"
-stellar-kit = "f7ff7d2"
+stellar-kit = "a885bce"
 piratecash-ethereum = "553d40b"
 horizontalsystems-blockchain-fee = "1d3bd49"
 piratecash-solana = "a009bcf"
@@ -104,6 +105,7 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+stellar-sdk = { module = "network.lightsail:stellar-sdk", version.ref = "stellarSdk" }
 ton-kotlin-contract = { module = "org.ton:ton-kotlin-contract", version.ref = "tonKotlin" }
 ton-kit = { group = "com.github.piratecash", name = "ton-kit-android", version.ref = "piratecash-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }

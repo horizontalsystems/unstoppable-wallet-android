@@ -28,7 +28,8 @@ class HardwarePublicKey(
     val tokenType: TokenType,
     val key: SecretString,
     val derivationPath: String,
-    val publicKey: ByteArray
+    val publicKey: ByteArray,
+    val derivedPublicKey: ByteArray
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,6 +45,7 @@ class HardwarePublicKey(
         if (key != other.key) return false
         if (derivationPath != other.derivationPath) return false
         if (!publicKey.contentEquals(other.publicKey)) return false
+        if (!derivedPublicKey.contentEquals(other.derivedPublicKey)) return false
 
         return true
     }
@@ -57,6 +59,7 @@ class HardwarePublicKey(
         result = 31 * result + key.hashCode()
         result = 31 * result + derivationPath.hashCode()
         result = 31 * result + publicKey.contentHashCode()
+        result = 31 * result + derivedPublicKey.contentHashCode()
         return result
     }
 }

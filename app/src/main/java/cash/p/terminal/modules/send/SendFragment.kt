@@ -67,7 +67,7 @@ class SendFragment : BaseFragment() {
                 val title = input.title
                 val sendEntryPointDestId = input.sendEntryPointDestId
                 val address = input.address
-                val prefilledData = input.prefilledAddressData
+                val prefilledData = PrefilledData(address.hex, input.amount)
                 val hideAddress = input.hideAddress
                 val amount = input.amount
 
@@ -284,8 +284,6 @@ class SendFragment : BaseFragment() {
         val wallet: Wallet,
         val title: String,
         val sendEntryPointDestId: Int = 0,
-        val prefilledAddressData: PrefilledData? = null,
-
         val address: Address,
         val amount: BigDecimal? = null,
         val hideAddress: Boolean = false

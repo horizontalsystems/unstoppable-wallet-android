@@ -38,12 +38,12 @@ class ManageWalletsViewModel(
     private val service: ManageWalletsService,
     private val clearables: List<Clearable>
 ) : ViewModel() {
-    private val accountManager: IAccountManager by inject<IAccountManager>(IAccountManager::class.java)
+    private val accountManager: IAccountManager by inject(IAccountManager::class.java)
     private val tangemBlockchainTypeExistUseCase: TangemBlockchainTypeExistUseCase by inject<TangemBlockchainTypeExistUseCase>(
         TangemBlockchainTypeExistUseCase::class.java
     )
-    private val tangemScanUseCase: TangemScanUseCase by inject<TangemScanUseCase>(TangemScanUseCase::class.java)
-    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage by inject<HardwarePublicKeyStorage>(
+    private val tangemScanUseCase: TangemScanUseCase by inject(TangemScanUseCase::class.java)
+    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage by inject(
         HardwarePublicKeyStorage::class.java
     )
 
@@ -113,10 +113,10 @@ class ManageWalletsViewModel(
             }
             updateNeedToShowScanToAddButton()
 
-            if (notFoundedTokens.isNotEmpty()) {
-                errorMsg = "Some tokens were not found"
+            errorMsg = if (notFoundedTokens.isNotEmpty()) {
+                "Some tokens were not found"
             } else {
-                errorMsg = null
+                null
             }
 
             hardwarePublicKeyStorage.save(publicKeys)

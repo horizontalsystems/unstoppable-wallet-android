@@ -564,7 +564,6 @@ abstract class BitcoinBaseAdapter(
         @JvmStatic
         protected fun buildHardwareWalletEcdaBitcoinSigner(
             accountId: String,
-            cardId: String,
             blockchainType: BlockchainType,
             tokenType: TokenType
         ): HardwareWalletEcdaSigner {
@@ -580,15 +579,13 @@ abstract class BitcoinBaseAdapter(
                 )
             }
             return HardwareWalletEcdaSigner(
-                hardwarePublicKey = hardwarePublicKey,
-                cardId = cardId
+                hardwarePublicKey = hardwarePublicKey
             )
         }
 
         @JvmStatic
         protected fun buildHardwareWalletSchnorrBitcoinSigner(
             accountId: String,
-            cardId: String,
             blockchainType: BlockchainType,
             tokenType: TokenType
         ): HardwareWalletSchnorrSigner {
@@ -604,8 +601,7 @@ abstract class BitcoinBaseAdapter(
                 )
             }
             return HardwareWalletSchnorrSigner(
-                hardwarePublicKey = hardwarePublicKey,
-                cardId = cardId
+                hardwarePublicKey = hardwarePublicKey
             )
         }
     }

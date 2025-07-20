@@ -31,6 +31,7 @@ import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.send.SendFragment
+import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.FormsInputAddress
 import cash.p.terminal.ui_compose.BaseComposeFragment
@@ -77,7 +78,9 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
     val wallet = input.wallet
     var amount by remember { mutableStateOf<BigDecimal?>(null) }
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
+        factory = AddressParserModule.Factory(wallet.token,
+            PrefilledData(input.address.orEmpty(), amount)
+        )
     )
 
     val uiState = viewModel.uiState

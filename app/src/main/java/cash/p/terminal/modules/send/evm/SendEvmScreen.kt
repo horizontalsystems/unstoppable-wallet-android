@@ -27,6 +27,7 @@ import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
+import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.VSpacer
@@ -55,7 +56,9 @@ fun SendEvmScreen(
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
+        factory = AddressParserModule.Factory(wallet.token,
+            PrefilledData(uiState.address.hex, amount)
+        )
     )
     val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current

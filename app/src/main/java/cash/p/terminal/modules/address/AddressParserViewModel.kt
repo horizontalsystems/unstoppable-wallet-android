@@ -6,14 +6,19 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.IAddressParser
 import cash.p.terminal.core.utils.AddressUriResult
+import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import java.math.BigDecimal
 import java.util.UUID
 
-class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount: BigDecimal?) : ViewModel(), TextPreprocessor {
+class AddressParserViewModel(
+    private val parser: IAddressParser,
+    prefilledData: PrefilledData?
+) :
+    ViewModel(), TextPreprocessor {
     private var lastEnteredText: String? = null
 
-    var amountUnique by mutableStateOf<AmountUnique?>(prefilledAmount?.let { AmountUnique(it) })
+    var amountUnique by mutableStateOf<AmountUnique?>(prefilledData?.amount?.let { AmountUnique(it) })
         private set
 
     override fun process(text: String): String {
@@ -35,4 +40,7 @@ class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount
 
 }
 
-data class AmountUnique(val amount: BigDecimal, val id: Long = UUID.randomUUID().leastSignificantBits)
+data class AmountUnique(
+    val amount: BigDecimal,
+    val id: Long = UUID.randomUUID().leastSignificantBits
+)

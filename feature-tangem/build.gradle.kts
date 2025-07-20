@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.ton.kotlin.contract)
     implementation(libs.ton.kit)
     implementation(libs.tron.kit)
+    implementation(libs.stellar.kit)
+    implementation(libs.stellar.sdk)
 
     implementation(libs.androidx.navigation.runtime.ktx)
     debugImplementation(libs.androidx.ui.tooling)

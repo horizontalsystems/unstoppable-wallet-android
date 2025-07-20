@@ -31,6 +31,7 @@ object DerivationConfigV2 : DerivationConfig() {
                 AddressType.Legacy to DerivationPath("m/44'/2'/0'"),
                 AddressType.Default to DerivationPath("m/44'/2'/0'"),
             )
+            BlockchainType.Stellar -> mapOf(AddressType.Default to DerivationPath("m/44'/148'/0'"))
 
             BlockchainType.Solana -> mapOf(AddressType.Default to DerivationPath("m/44'/501'/0'"))
 
@@ -61,7 +62,6 @@ object DerivationConfigV2 : DerivationConfig() {
             BlockchainType.ECash,
             BlockchainType.Zcash,
             BlockchainType.Monero,
-            BlockchainType.Stellar,
             is BlockchainType.Unsupported ->
                 throw IllegalArgumentException("Unsupported blockchain type: $blockchainType")
         }.mapValues {

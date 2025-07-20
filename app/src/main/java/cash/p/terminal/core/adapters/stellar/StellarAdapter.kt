@@ -71,7 +71,9 @@ class StellarAdapter(
         coroutineScope.cancel()
     }
 
-    override suspend fun refresh()  = Unit
+    override suspend fun refresh() {
+        stellarKit.refresh()
+    }
 
     override val debugInfo = "debugInfo"
     override val statusInfo: Map<String, Any>

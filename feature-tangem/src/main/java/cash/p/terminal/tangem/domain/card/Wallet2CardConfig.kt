@@ -23,27 +23,6 @@ data object Wallet2CardConfig : CardConfig {
      * Order is important here
      */
     override fun primaryCurve(blockchain: BlockchainType): EllipticCurve? {
-        // order is important, new curve is preferred for wallet 2
-        // TODO Comment old logic without direct mapping until tests and release
-        // return when {
-        //     blockchain.getSupportedCurves().contains(EllipticCurve.Ed25519Slip0010) -> {
-        //         EllipticCurve.Ed25519Slip0010
-        //     }
-        //     blockchain.getSupportedCurves().contains(EllipticCurve.Secp256k1) -> {
-        //         EllipticCurve.Secp256k1
-        //     }
-        //     blockchain.getSupportedCurves().contains(EllipticCurve.Bls12381G2Aug) -> {
-        //         EllipticCurve.Bls12381G2Aug
-        //     }
-        //     // only for support cardano on Wallet2
-        //     blockchain.getSupportedCurves().contains(EllipticCurve.Ed25519) -> {
-        //         EllipticCurve.Ed25519
-        //     }
-        //     else -> {
-        //         Timber.e("Unsupported blockchain, curve not found")
-        //         null
-        //     }
-        // }
         val curve = getPrimaryCurveForBlockchain(blockchain)
         // check curve supports
         if (!blockchain.getSupportedCurves().contains(curve)) {
@@ -69,6 +48,7 @@ data object Wallet2CardConfig : CardConfig {
             BlockchainType.Fantom -> EllipticCurve.Secp256k1
             BlockchainType.Litecoin -> EllipticCurve.Secp256k1
             BlockchainType.Polygon -> EllipticCurve.Secp256k1
+            BlockchainType.Stellar,
             BlockchainType.Solana -> EllipticCurve.Ed25519Slip0010
             BlockchainType.Tron -> EllipticCurve.Secp256k1
             BlockchainType.Gnosis -> EllipticCurve.Secp256k1

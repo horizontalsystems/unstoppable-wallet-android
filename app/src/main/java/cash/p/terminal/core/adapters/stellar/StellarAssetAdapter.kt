@@ -91,7 +91,7 @@ class StellarAssetAdapter(
         assetBalance != null || stellarKit.isAssetEnabled(stellarAsset)
     }
 
-    fun activate() {
+    suspend fun activate() {
         stellarKit.enableAsset(stellarAsset.id, null)
     }
 

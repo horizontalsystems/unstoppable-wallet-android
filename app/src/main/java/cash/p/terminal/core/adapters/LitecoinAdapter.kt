@@ -139,13 +139,11 @@ class LitecoinAdapter(
                 is AccountType.HardwareCard -> {
                     val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
                         accountId = account.id,
-                        cardId = accountType.cardId,
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )
                     val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
                         accountId = account.id,
-                        cardId = accountType.cardId,
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )
