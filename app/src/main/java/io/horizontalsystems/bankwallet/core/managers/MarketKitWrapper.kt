@@ -292,7 +292,7 @@ class MarketKitWrapper(
     fun requestVipSupport(subscriptionId: String): Single<Map<String, String>> =
         requestWithAuthToken { marketKit.requestVipSupport(it, subscriptionId) }
 
-    fun getStocks(): Single<List<Stock>> = marketKit.getStocks()
+    fun getStocks(currencyCode: String): Single<List<Stock>> = marketKit.getStocks(currencyCode)
 
     // Stats
 
@@ -302,9 +302,9 @@ class MarketKitWrapper(
 
     // Etf
 
-    fun etfs(category: String) = marketKit.etfSingle(category)
+    fun etfs(category: String, currencyCode: String) = marketKit.etfSingle(category, currencyCode)
 
-    fun etfPoints(category: String) = marketKit.etfPointSingle(category)
+    fun etfPoints(category: String, currencyCode: String) = marketKit.etfPointSingle(category, currencyCode)
 
     // Vaults
 
