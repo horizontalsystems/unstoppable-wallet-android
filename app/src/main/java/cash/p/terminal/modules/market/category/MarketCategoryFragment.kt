@@ -118,12 +118,12 @@ fun CategoryScreen(
                                                 getSelectedPointCallback = chartViewModel::getSelectedPoint,
                                                 onSelectChartInterval = chartViewModel::onSelectChartInterval)
                                         }
-                                        menu?.let {
+                                        menu?.let { menu ->
                                             stickyHeader {
                                                 HeaderSorting(borderTop = true, borderBottom = true) {
                                                     Box(modifier = Modifier.weight(1f)) {
                                                         SortMenu(
-                                                            it.sortingFieldSelect.selected.titleResId,
+                                                            menu.sortingFieldSelect.selected.titleResId,
                                                             viewModel::showSelectorMenu
                                                         )
                                                     }
@@ -134,7 +134,7 @@ fun CategoryScreen(
                                                         )
                                                     ) {
                                                         ButtonSecondaryToggle(
-                                                            select = it.marketFieldSelect,
+                                                            select = menu.marketFieldSelect,
                                                             onSelect = viewModel::onSelectMarketField
                                                         )
                                                     }

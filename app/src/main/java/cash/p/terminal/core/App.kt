@@ -37,7 +37,6 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SpamManager
-import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonAccountManager
@@ -51,7 +50,6 @@ import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
-import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.FeeRateProvider
@@ -289,7 +287,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
         tonAccountManager.start()
 
-        systemInfoManager = SystemInfoManager(appConfigProvider)
+        systemInfoManager = get()
         connectivityManager = ConnectivityManager(backgroundManager)
         val adapterFactory: AdapterFactory = get()
 

@@ -45,6 +45,16 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         emitState()
     }
 
+    fun setRecommendedAndMin(recommended: Int, minimum: Int) {
+        recommendedFeeRate = recommended
+        minimumFeeRate = minimum
+
+        feeRate = recommendedFeeRate
+
+        validateFeeRate()
+        emitState()
+    }
+
     fun setFeeRate(v: Int) {
         feeRate = v
 

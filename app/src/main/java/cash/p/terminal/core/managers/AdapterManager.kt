@@ -211,10 +211,11 @@ class AdapterManager(
         return adaptersMap[wallet]
     }
 
-    override fun getAdapterForToken(token: Token): IAdapter? {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : IAdapter> getAdapterForToken(token: Token): T? {
         return walletManager.activeWallets.firstOrNull { it.token == token }
             ?.let { wallet ->
-                adaptersMap[wallet]
+                adaptersMap[wallet] as? T
             }
     }
 

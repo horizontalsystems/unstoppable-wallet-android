@@ -48,6 +48,7 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
+    implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
 
     implementation(platform(libs.koin.bom))

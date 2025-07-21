@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.derivation
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.purpose
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -12,7 +13,6 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.horizontalsystems.core.BackgroundManager
@@ -89,9 +89,6 @@ class BitcoinAdapter(
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
     }
-
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
 
     override val blockchainType = BlockchainType.Bitcoin
 
@@ -174,6 +171,47 @@ class BitcoinAdapter(
 
         fun clear(walletId: String) {
             BitcoinKit.clear(App.instance, NetworkType.MainNet, walletId)
+        }
+
+        fun firstAddress(accountType: AccountType, tokenType: TokenType): String {
+            when (accountType) {
+                is AccountType.Mnemonic -> {
+                    val seed = accountType.seed
+                    val derivation = tokenType.derivation ?: throw IllegalArgumentException()
+
+                    val address = BitcoinKit.firstAddress(
+                        seed,
+                        derivation.purpose,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.HdExtendedKey -> {
+                    val key = accountType.hdExtendedKey
+                    val derivation = tokenType.derivation ?: throw IllegalArgumentException()
+                    val address = BitcoinKit.firstAddress(
+                        key,
+                        derivation.purpose,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.BitcoinAddress -> {
+                    return accountType.address
+                }
+                is AccountType.HardwareCard,
+                is AccountType.Cex,
+                is AccountType.EvmAddress,
+                is AccountType.EvmPrivateKey,
+                is AccountType.MnemonicMonero,
+                is AccountType.SolanaAddress,
+                is AccountType.TonAddress,
+                is AccountType.TronAddress,
+                is AccountType.ZCashUfvKey -> throw UnsupportedAccountException()
+            }
+
         }
     }
 }

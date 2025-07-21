@@ -33,6 +33,7 @@ import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.body_grey
 import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 
 class IntroActivity : BaseActivity() {
@@ -66,7 +67,7 @@ class IntroActivity : BaseActivity() {
 private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
     val pageCount = 3
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         Box {
             Image(
                 painter = painterResource(if (nightMode) R.drawable.ic_intro_background else R.drawable.ic_intro_background_light),
@@ -174,7 +175,7 @@ private fun SliderCell(highlighted: Boolean) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(2.dp))
-            .background(if (highlighted) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20)
+            .background(if (highlighted) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20)
             .size(width = 20.dp, height = 4.dp),
     )
 }

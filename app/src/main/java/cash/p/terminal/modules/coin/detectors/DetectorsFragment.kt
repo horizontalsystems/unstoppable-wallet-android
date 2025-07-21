@@ -71,7 +71,6 @@ class DetectorsFragment : BaseComposeFragment() {
 
     @Parcelize
     data class Input(val title: String, val issues: List<IssueParcelable>) : Parcelable
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)

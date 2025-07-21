@@ -40,7 +40,7 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
-import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,16 +55,23 @@ class BitcoinSendTransactionService(
     token: Token
 ) : ISendTransactionService<ISendBitcoinAdapter>(token) {
 
+    private val feeService = SendBitcoinFeeService(adapter)
     private val provider = FeeRateProviderFactory.provider(token.blockchainType)!!
     private val feeRateService = SendBitcoinFeeRateService(provider)
+    private var bitcoinFeeInfo = feeService.bitcoinFeeInfoFlow.value
     private val amountService =
         SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
     private val addressService = SendBitcoinAddressService(adapter, null)
-    private val feeService = SendBitcoinFeeService(adapter)
     private val localStorage: ILocalStorage by inject(ILocalStorage::class.java)
     private val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val xRateService = XRateService(marketKit, App.currencyManager.baseCurrency)
+
+    private var memo: String? = null
+    private var dustThreshold: Int? = null
+    private var changeToFirstInput: Boolean = false
+    private var utxoFilters: UtxoFilters = UtxoFilters()
+    private var networkFee: SendModule.AmountData? = null
 
     private val _sendTransactionSettingsFlow = MutableStateFlow(
         SendTransactionSettings.Common
@@ -72,14 +79,14 @@ class BitcoinSendTransactionService(
     override val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings> =
         _sendTransactionSettingsFlow.asStateFlow()
 
-    private var feeAmountData: SendModule.AmountData? = null
+//    private var feeAmountData: SendModule.AmountData? = null
     private var cautions: List<CautionViewItem> = listOf()
     private var sendable = false
     private var loading = true
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
-        networkFee = feeAmountData,
+        networkFee = networkFee,
         cautions = cautions,
         sendable = sendable,
         loading = loading,
@@ -140,7 +147,10 @@ class BitcoinSendTransactionService(
             address = addressState.validAddress?.hex,
             unspentOutputs = customUnspentOutputs,
             pluginData = pluginState.pluginData,
-            memo = null
+            memo = memo,
+            dustThreshold = dustThreshold,
+            changeToFirstInput = changeToFirstInput,
+            utxoFilters = utxoFilters
         )
     }
 
@@ -190,22 +200,17 @@ class BitcoinSendTransactionService(
     }
 
     private fun handleUpdatedFeeInfo(info: BitcoinFeeInfo?) {
-        info?.fee?.let { fee ->
-            val coinValue = CoinValue(token, fee)
-            val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
-            val secondaryAmountInfo = rate?.let {
-                SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * fee))
-            }
-            feeAmountData = SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
-        }
+        bitcoinFeeInfo = info
 
-        if (info == null && customUnspentOutputs == null) {
-            utxoData = SendBitcoinModule.UtxoData()
-        } else if (customUnspentOutputs == null) {
-            //set unspent outputs as auto
-            updateUtxoData(info?.unspentOutputs?.size ?: 0)
-        }
+        refreshNetworkFee()
+
         emitState()
+    }
+
+    private fun refreshNetworkFee() {
+        networkFee = bitcoinFeeInfo?.fee?.let { fee ->
+            getAmountData(CoinValue(token, fee))
+        }
     }
 
     override fun setSendTransactionData(data: SendTransactionData) {
@@ -216,7 +221,30 @@ class BitcoinSendTransactionService(
                 blockchainType = adapter.blockchainType
             )
         )
+
+        memo = data.memo
+        dustThreshold = data.dustThreshold
+        changeToFirstInput = data.changeToFirstInput
+        utxoFilters = data.utxoFilters
+
+        data.recommendedGasRate?.let {
+            feeRateService.setRecommendedAndMin(it, it)
+        }
+
+        feeService.setMemo(memo)
+        feeService.setDustThreshold(dustThreshold)
+        feeService.setChangeToFirstInput(changeToFirstInput)
+        feeService.setUtxoFilters(utxoFilters)
+
+        amountService.setMemo(memo)
+        amountService.setDustThreshold(dustThreshold)
+        amountService.setChangeToFirstInput(changeToFirstInput)
+        amountService.setUtxoFilters(utxoFilters)
         amountService.setAmount(data.amount)
+
+        addressService.setAddress(Address(data.address))
+
+        data.feesMap?.let(::setExtraFeesMap)
     }
 
     @Composable
@@ -255,12 +283,15 @@ class BitcoinSendTransactionService(
             val recordUid = adapter.send(
                 amount = amountState.amount!!,
                 address = addressState.validAddress!!.hex,
-                memo = null,
+                memo = memo,
                 feeRate = feeRateState.feeRate!!,
                 unspentOutputs = customUnspentOutputs,
                 pluginData = pluginState.pluginData,
                 transactionSorting = btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 rbfEnabled = localStorage.rbfEnabled,
+                dustThreshold = dustThreshold,
+                changeToFirstInput = changeToFirstInput,
+                utxoFilters = utxoFilters,
                 logger = logger
             )
             SendTransactionResult.Common(SendResult.Sent(recordUid))

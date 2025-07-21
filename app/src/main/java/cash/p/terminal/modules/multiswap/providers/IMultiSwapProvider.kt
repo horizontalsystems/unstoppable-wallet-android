@@ -13,6 +13,8 @@ interface IMultiSwapProvider {
     val icon: Int
     val priority: Int
 
+    suspend fun start() = Unit
+
     suspend fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
         return (tokenFrom.blockchainType == tokenTo.blockchainType) &&
             supports(tokenFrom)
@@ -31,6 +33,7 @@ interface IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
-        sendTransactionSettings: SendTransactionSettings?
+        sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote
     ) : ISwapFinalQuote
 }

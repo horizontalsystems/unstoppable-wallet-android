@@ -52,7 +52,10 @@ class SecuritySettingsViewModel(
             transactionHiddenManager.transactionHiddenFlow.value.transactionAutoHidePinExists,
         autoLockIntervalName = localStorage.autoLockInterval.title,
         transferPasscodeEnabled = localStorage.transferPasscodeEnabled,
-        isSaveAccessCodeForHardwareWalletEnabled = cardSdkConfigRepository.isBiometricsRequestPolicy
+        isSaveAccessCodeForHardwareWalletEnabled = cardSdkConfigRepository.isBiometricsRequestPolicy,
+        isSystemPinRequired = localStorage.isSystemPinRequired,
+        isDeviceSecure = systemInfoManager.isDeviceSecure,
+        isSystemPinRequiredEnabled = !localStorage.isSystemPinRequired
     )
 
     fun enableBiometrics() {
@@ -119,6 +122,11 @@ class SecuritySettingsViewModel(
         cardSdkConfigRepository.isBiometricsRequestPolicy = enabled
         emitState()
     }
+
+    fun onSystemPinRequiredChange(enabled: Boolean) {
+        localStorage.isSystemPinRequired = enabled
+        emitState()
+    }
 }
 
 data class SecuritySettingsUiState(
@@ -131,5 +139,8 @@ data class SecuritySettingsUiState(
     val transactionAutoHideSeparatePinExists: Boolean,
     val transferPasscodeEnabled: Boolean,
     val autoLockIntervalName: Int,
-    val isSaveAccessCodeForHardwareWalletEnabled: Boolean
+    val isSaveAccessCodeForHardwareWalletEnabled: Boolean,
+    val isSystemPinRequired: Boolean,
+    val isDeviceSecure: Boolean,
+    val isSystemPinRequiredEnabled: Boolean,
 )

@@ -10,7 +10,7 @@ interface IAdapterManager {
     fun startAdapterManager()
     suspend fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
-    fun getAdapterForToken(token: Token): IAdapter?
+    fun <T : IAdapter> getAdapterForToken(token: Token): T?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)

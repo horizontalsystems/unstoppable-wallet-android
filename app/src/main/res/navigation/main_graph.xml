@@ -366,6 +366,9 @@
         android:id="@+id/resetToFactorySettingsFragment"
         android:name="cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsFragment" />
     <dialog
+        android:id="@+id/checklistConfirmationDialog"
+        android:name="io.horizontalsystems.core.ui.dialogs.ChecklistConfirmationDialog"/>
+    <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />
     <dialog

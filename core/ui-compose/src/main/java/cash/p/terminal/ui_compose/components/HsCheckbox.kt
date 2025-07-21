@@ -17,11 +17,12 @@ import cash.p.terminal.ui_compose.R
 fun HsCheckbox(
     checked: Boolean,
     enabled: Boolean = true,
+    modifier: Modifier = Modifier,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
             .clickable(
                 enabled = enabled,
                 interactionSource = remember { MutableInteractionSource() },

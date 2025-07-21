@@ -91,9 +91,6 @@ class CosantaAdapter(
         // ignored for now
     }
 
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
-
     override val blockchainType = BlockchainType.Cosanta
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =

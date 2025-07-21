@@ -103,10 +103,11 @@ class PublicKeysViewModel(
                 BlockchainType.Zcash,
                 TokenType.AddressSpecTyped(type)
             )
-            (marketKitWrapper.token(tokenQuery)
-                ?.let(adapterManager::getAdapterForToken) as? ZcashAdapter)?.getFirstAccount()?.ufvk?.let { zcashUfvk ->
-                return zcashUfvk
-            }
+            marketKitWrapper.token(tokenQuery)
+                ?.let { adapterManager.getAdapterForToken<ZcashAdapter>(it) }
+                ?.getFirstAccount()?.ufvk?.let { zcashUfvk ->
+                    return zcashUfvk
+                }
         }
 
         return null

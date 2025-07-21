@@ -3,6 +3,7 @@ package cash.p.terminal.modules.settings.main
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IBackupManager
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.providers.AppConfigProvider
@@ -42,6 +43,8 @@ class MainSettingsViewModel(
     private val checkGooglePlayUpdateUseCase: CheckGooglePlayUpdateUseCase by inject(
         CheckGooglePlayUpdateUseCase::class.java
     )
+
+    private val localStorage: ILocalStorage by inject(ILocalStorage::class.java)
 
     val appVersion: String
         get() {
@@ -145,7 +148,7 @@ class MainSettingsViewModel(
             pendingRequestCount = wcPendingRequestCount,
             walletConnectSessionCount = wcSessionsCount,
             manageWalletShowAlert = !allBackedUp || hasNonStandardAccount,
-            securityCenterShowAlert = !isPinSet,
+            securityCenterShowAlert = !isPinSet || !localStorage.isSystemPinRequired,
             aboutAppShowAlert = !termsManager.allTermsAccepted,
             wcCounterType = wcCounterType
         )

@@ -17,6 +17,7 @@ import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SolanaWalletManager
 import cash.p.terminal.core.managers.StackingManager
+import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -31,18 +32,25 @@ import cash.p.terminal.wallet.managers.ITransactionHiddenManager
 import com.m2049r.xmrwallet.service.MoneroWalletService
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.core.IPinSettingsStorage
+import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val managerModule = module {
+    singleOf(::SystemInfoManager) bind ISystemInfoManager::class
     singleOf(::LanguageManager)
     singleOf(::DefaultCurrencyManager) bind CurrencyManager::class
     singleOf(::SolanaRpcSourceManager)
     singleOf(::AdapterManager) bind IAdapterManager::class
-    singleOf(::LocalStorageManager) bind ILocalStorage::class
+    singleOf(::LocalStorageManager) {
+        bind<ILocalStorage>()
+        bind<IPinSettingsStorage>()
+    }
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
     singleOf(::BackgroundManager)
     singleOf(::EvmSyncSourceManager)

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +34,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseActivity
+import cash.p.terminal.modules.main.MainActivity
 import cash.p.terminal.modules.main.MainModule
+import cash.p.terminal.modules.settings.checklistterms.GeneralTermsDialog
+import cash.p.terminal.modules.settings.security.ui.SystemPinBlock
 import cash.p.terminal.ui.compose.components.BottomSheetsElementsButtons
 import cash.p.terminal.ui.compose.components.BottomSheetsElementsHeader
 import cash.p.terminal.ui.compose.components.BottomSheetsElementsText
@@ -57,7 +61,17 @@ class KeyStoreActivity : BaseActivity() {
             KeyStoreScreen(
                 viewModel = viewModel,
                 showBiometricPrompt = { showBiometricPrompt() },
-                closeApp = { finish() }
+                closeApp = { finish() },
+                onTermsAccepted = {
+                    viewModel.onTermsAccepted()
+
+                    val intent = Intent(this, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    this.startActivity(intent)
+                    finish()
+                }
             )
         }
     }
@@ -131,6 +145,7 @@ private fun KeyStoreScreen(
     viewModel: KeyStoreViewModel,
     showBiometricPrompt: () -> Unit,
     closeApp: () -> Unit,
+    onTermsAccepted: () -> Unit
 ) {
     if (viewModel.openMainModule) {
         viewModel.openMainModuleCalled()
@@ -148,30 +163,53 @@ private fun KeyStoreScreen(
 
     ComposeAppTheme {
         if (viewModel.showSystemLockWarning) {
-            Column(
-                modifier = Modifier
-                    .background(color = ComposeAppTheme.colors.tyler)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                NoSystemLockWarning()
+            Scaffold(
+                containerColor = ComposeAppTheme.colors.tyler,
+            ) { innerPaddings ->
+                Column(
+                    modifier = Modifier
+                        .padding(innerPaddings)
+                        .background(color = ComposeAppTheme.colors.tyler)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    NoSystemLockWarning(viewModel.isSystemPinRequired) {
+                        viewModel.onShowTermsDialog()
+                    }
+                }
             }
         }
 
         if (viewModel.showInvalidKeyWarning) {
             KeysInvalidatedDialog { viewModel.onCloseInvalidKeyWarning() }
         }
+
+        if (viewModel.showTermsDialog) {
+            val context = LocalContext.current
+            GeneralTermsDialog(
+                terms = context.resources.getStringArray(R.array.system_pin_term_list).toList(),
+                title = context.getString(R.string.system_pin_terms),
+                confirmButtonText = context.getString(R.string.confirm),
+                onClose = viewModel::onCloseTermsDialog,
+                onConfirm = onTermsAccepted
+            )
+        }
     }
 }
 
 @Composable
-private fun NoSystemLockWarning() {
-    Column() {
-        Spacer(Modifier.height(12.dp))
+private fun NoSystemLockWarning(
+    isSystemPinRequired: Boolean,
+    onShowTerms: () -> Unit
+) {
+    Column {
+        Spacer(Modifier.weight(1f))
         Image(
             painter = painterResource(id = R.drawable.ic_attention_24),
             contentDescription = null,
-            modifier = Modifier.size(48.dp).align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .size(48.dp)
+                .align(Alignment.CenterHorizontally)
         )
         Spacer(Modifier.height(32.dp))
         subhead2_grey(
@@ -179,6 +217,14 @@ private fun NoSystemLockWarning() {
             text = stringResource(R.string.OSPin_Confirm_Desciption),
             textAlign = TextAlign.Center
         )
+        Spacer(Modifier.weight(1f))
+        SystemPinBlock(
+            isPinRequired = isSystemPinRequired,
+            showInfoBlock = false,
+            enabled = true
+        ) {
+            onShowTerms()
+        }
         Spacer(Modifier.height(12.dp))
     }
 }
@@ -209,7 +255,7 @@ private fun KeysInvalidatedDialog(onClick: () -> Unit) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun Preview_KeysInvalidatedDialog() {
     ComposeAppTheme {
@@ -221,6 +267,6 @@ private fun Preview_KeysInvalidatedDialog() {
 @Composable
 private fun Preview_NoSystemWarning() {
     ComposeAppTheme {
-        NoSystemLockWarning()
+        NoSystemLockWarning(true) {}
     }
 }

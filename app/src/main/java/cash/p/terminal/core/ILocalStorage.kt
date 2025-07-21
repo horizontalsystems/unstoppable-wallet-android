@@ -96,5 +96,7 @@ interface ILocalStorage {
     fun setStackingUnpaid(wallet: Wallet, unpaid: BigDecimal)
     fun getStackingUnpaid(wallet: Wallet): BigDecimal?
 
+    var isSystemPinRequired: Boolean
+
     fun clear()
 }

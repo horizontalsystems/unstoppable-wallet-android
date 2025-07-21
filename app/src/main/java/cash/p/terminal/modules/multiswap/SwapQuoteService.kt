@@ -6,6 +6,7 @@ import cash.p.terminal.modules.multiswap.providers.OneInchProvider
 import cash.p.terminal.modules.multiswap.providers.PancakeSwapProvider
 import cash.p.terminal.modules.multiswap.providers.PancakeSwapV3Provider
 import cash.p.terminal.modules.multiswap.providers.QuickSwapProvider
+import cash.p.terminal.modules.multiswap.providers.ThorChainProvider
 import cash.p.terminal.modules.multiswap.providers.UniswapProvider
 import cash.p.terminal.modules.multiswap.providers.UniswapV3Provider
 import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
@@ -40,7 +42,8 @@ class SwapQuoteService {
         QuickSwapProvider,
         UniswapProvider,
         UniswapV3Provider,
-        changeNowProvider
+        changeNowProvider,
+        ThorChainProvider
     )
 
     private var amountIn: BigDecimal? = null
@@ -84,6 +87,16 @@ class SwapQuoteService {
                 quote = quote,
                 error = error,
             )
+        }
+    }
+
+    suspend fun start() = withContext(Dispatchers.IO) {
+        allProviders.forEach {
+            try {
+                it.start()
+            } catch (e: Throwable) {
+                Log.d("AAA", "error on starting ${it.id}, $e", e)
+            }
         }
     }
 

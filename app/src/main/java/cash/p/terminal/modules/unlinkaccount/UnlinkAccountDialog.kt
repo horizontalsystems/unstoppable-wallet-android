@@ -36,9 +36,8 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Account
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
+internal class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -22,6 +22,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.z.ecc.android.sdk.ext.collectWith
 import com.tangem.common.core.TangemSdkError
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLogger
@@ -272,8 +273,8 @@ class SendBitcoinViewModel(
 
         try {
             sendResult = SendResult.Sending
-
-            val send = adapter.send(
+            logger.info("sending tx")
+            val transactionRecord = adapter.send(
                 amount = amountState.amount!!,
                 address = addressState.validAddress!!.hex,
                 memo = memo,
@@ -282,11 +283,14 @@ class SendBitcoinViewModel(
                 pluginData = pluginState.pluginData,
                 transactionSorting = btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 rbfEnabled = localStorage.rbfEnabled,
+                dustThreshold = null,
+                changeToFirstInput = false,
+                utxoFilters = UtxoFilters(),
                 logger = logger
             )
 
             logger.info("success")
-            sendResult = SendResult.Sent()
+            sendResult = SendResult.Sent(transactionRecord)
         } catch (e: TangemSdkError.UserCancelled) {
             sendResult = null
             logger.info("user cancelled")
