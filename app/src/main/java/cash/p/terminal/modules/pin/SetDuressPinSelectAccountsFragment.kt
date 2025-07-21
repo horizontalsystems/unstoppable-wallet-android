@@ -16,9 +16,11 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.navigation.slideFromRight
@@ -37,20 +39,32 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_lucian
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
 
 class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SetDuressPinSelectAccountsScreen(navController)
+        val viewModel =
+            viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
+        val regularAccounts = viewModel.regularAccounts
+        val watchAccounts = viewModel.watchAccounts
+
+        SetDuressPinSelectAccountsScreen(
+            regularAccounts = regularAccounts,
+            watchAccounts = watchAccounts,
+            navController = navController
+        )
     }
 }
 
 @Composable
-fun SetDuressPinSelectAccountsScreen(navController: NavController) {
-    val viewModel =
-        viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
-    val regularAccounts = viewModel.regularAccounts
-    val watchAccounts = viewModel.watchAccounts
+fun SetDuressPinSelectAccountsScreen(
+    regularAccounts: List<Account>,
+    watchAccounts: List<Account>,
+    navController: NavController
+) {
     val selected = remember { mutableStateListOf<String>() }
 
     Scaffold(
@@ -59,7 +73,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
             AppBar(
                 title = stringResource(R.string.DuressPinSelectAccounts_Title),
                 navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
+                    HsBackButton(onClick = navController::popBackStack )
                 },
             )
         }
@@ -71,6 +85,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
         ) {
             Column(
                 modifier = Modifier
+                    .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
                 InfoText(
@@ -108,12 +123,11 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                     VSpacer(height = 32.dp)
                 }
             }
-            Spacer(Modifier.weight(1f))
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         navController.slideFromRight(
@@ -131,9 +145,9 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
 @Composable
 private fun ItemsSection(
     title: String,
-    items: List<cash.p.terminal.wallet.Account>,
+    items: List<Account>,
     selected: SnapshotStateList<String>,
-    onToggle: (cash.p.terminal.wallet.Account, Boolean) -> Unit,
+    onToggle: (Account, Boolean) -> Unit,
 ) {
     HeaderText(text = title)
     CellUniversalLawrenceSection(items) { account ->
@@ -166,5 +180,31 @@ private fun ItemsSection(
                 },
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SetDuressPinSelectAccountsScreenPreview() {
+    val mockAccount = Account(
+        id = "1",
+        name = "Main Wallet",
+        type = AccountType.Mnemonic(emptyList(),""),
+        origin = AccountOrigin.Created,
+        level = 0
+    )
+    val regularAccounts = List(5) {
+        mockAccount.copy(id = it.toString())
+    }
+    val watchAccounts = List(5) {
+        mockAccount.copy(id = it.toString())
+    }
+
+    ComposeAppTheme {
+        SetDuressPinSelectAccountsScreen(
+            regularAccounts = regularAccounts,
+            watchAccounts = watchAccounts,
+            navController = rememberNavController()
+        )
     }
 }

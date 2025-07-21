@@ -6,10 +6,10 @@ import cash.p.terminal.core.App
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.Account
 
-class SetDuressPinSelectAccountsViewModel(accountManager: cash.p.terminal.wallet.IAccountManager) : ViewModel() {
+class SetDuressPinSelectAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
-    val watchAccounts: List<cash.p.terminal.wallet.Account>
-    val regularAccounts: List<cash.p.terminal.wallet.Account>
+    val watchAccounts: List<Account>
+    val regularAccounts: List<Account>
 
     init {
         val (watch, regular) = accountManager.accounts.partition { it.isWatchAccount }
