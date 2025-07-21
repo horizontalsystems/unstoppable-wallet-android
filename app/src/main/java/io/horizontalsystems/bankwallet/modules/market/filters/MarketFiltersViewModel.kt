@@ -317,7 +317,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
                 service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
 
                 if (outperformedSnpOn && service.sp500PriceChanges == null) {
-                    service.setSp500PriceChanges()
+                    service.setStockPriceChanges()
                 }
 
                 val numberOfItems = service.fetchNumberOfItems()

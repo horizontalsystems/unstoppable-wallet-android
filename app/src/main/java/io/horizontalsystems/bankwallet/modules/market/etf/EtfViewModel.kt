@@ -72,7 +72,7 @@ class EtfViewModel(
     private fun fetchChartData() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                etfPoints = marketKit.etfPoints(tabKey).await()
+                etfPoints = marketKit.etfPoints(tabKey, currencyManager.baseCurrency.code).await()
                     .sortedBy { it.date }
                 chartDataLoading = false
 
@@ -97,7 +97,7 @@ class EtfViewModel(
         marketDataJob?.cancel()
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                cachedEtfs = marketKit.etfs(tabKey).await()
+                cachedEtfs = marketKit.etfs(tabKey, currencyManager.baseCurrency.code).await()
                     .sortedByDescending { it.totalAssets }
                     .mapIndexed { index, etf -> RankedEtf(etf, index + 1) }
                 updateViewItems()
