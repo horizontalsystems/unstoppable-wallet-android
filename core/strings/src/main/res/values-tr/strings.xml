@@ -1193,7 +1193,9 @@
     <string name="LocalBackup_BackupSaved">Yedek Kaydedildi</string>
     <string name="LocalBackup_PasswordInvalid">Bir büyük harf, bir küçük harf, bir rakam ve bir sembol dahil olmak üzere en az 8 karakter.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">Bu şifre, cüzdanınızın yedek dosyasını şifrelemek için kullanılır. Kaybolur veya unutulursa kurtarılamaz veya sıfırlanamaz.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Yedeklemeniz için kilit açma parolasını ayarlayın. En az 8 sembolden oluşmalı ve en az bir küçük harf, büyük harf, sayı ve özel karakter içermelidir.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Veri güvenliğini sağlamak için, yedeklemeniz için harfler, sayılar ve özel karakterlerden oluşan güçlü bir şifre kullanmanızı öneririz.
+Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza izin verir, ancak basit bir şifre kullanmanız durumunda yedeğin tehlikeye girebileceğini kabul edersiniz.
+</string>
     <string name="LocalBackup_TermsWarningText">Depolama cihazları, yani sabit sürücüler, USB sürücüler , akıllı telefondaki depolama vb. fiziksel hasar, hırsızlık veya diğer öngörülemeyen durumlar nedeniyle kayba karşı savunmasızdır.</string>
     <string name="LocalBackup_Term1">Bir yedekleme cihazının çalınmasının veya hasar görmesinin, ilgili cüzdanın yedeğinin kaybolmasına neden olacağını anlıyorum.</string>
     <!-- Recovery Phrase -->

@@ -1184,7 +1184,9 @@
     <string name="LocalBackup_BackupSaved">Guardado de seguridad</string>
     <string name="LocalBackup_PasswordInvalid">Al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">Esta contraseña se utiliza para cifrar el archivo de copia de seguridad de su cartera. No se puede recuperar o reiniciar si se pierde u olvida.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Establezca la contraseña de desbloqueo para su copia de seguridad. La contraseña debe contener al menos 8 caracteres, incluyendo una letra minúscula, una letra mayúscula, un número y un carácter especial.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Para garantizar la seguridad de los datos, recomendamos usar una contraseña segura para su copia de seguridad — que combine letras, números y caracteres especiales.
+La aplicación le permite crear una copia de seguridad con una contraseña sencilla para su conveniencia, pero usted acepta que la copia de seguridad puede verse comprometida si se utiliza una contraseña sencilla.
+</string>
     <string name="LocalBackup_TermsWarningText">Los dispositivos de almacenamiento, como los discos duros, los discos USB y el almacenamiento en smartphones, son todos vulnerables a pérdidas debido a daños físicos, robos u otras circunstancias imprevisibles.</string>
     <string name="LocalBackup_Term1">Entiendo que el robo o daño de un dispositivo de copia de seguridad resultará en la pérdida de una copia de seguridad a una cartera respectiva.</string>
     <!-- Recovery Phrase -->

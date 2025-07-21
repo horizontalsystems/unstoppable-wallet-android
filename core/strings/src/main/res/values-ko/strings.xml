@@ -1192,7 +1192,9 @@
     <string name="LocalBackup_BackupSaved">백업이 저장되었습니다</string>
     <string name="LocalBackup_PasswordInvalid">대문자 1개, 소문자 1개, 숫자 1개, 기호 1개를 포함하여 8자 이상.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">이 암호는 지갑의 백업 파일을 암호화하는 데 사용됩니다. 암호를 분실하거나 잊어버리면 복구하거나 재설정할 수 없습니다.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">백업에 대한 잠금 해제 암호를 설정하십시오. 최소 8개의 기호로 구성되어야 하며 소문자, 대문자, 숫자 및 특수 문자가 하나 이상 포함되어야 합니다.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">데이터 보안을 위해, 백업에 대해 문자, 숫자 및 특수 문자가 조합된 강력한 비밀번호 사용을 권장합니다.
+앱에서는 사용자의 편의를 위해 간단한 비밀번호로 백업을 생성할 수 있지만, 간단한 비밀번호를 사용할 경우 백업이 위험에 노출될 수 있음을 동의하는 것으로 간주합니다.
+</string>
     <string name="LocalBackup_TermsWarningText">하드 드라이브, USB 드라이브, 스마트폰 저장소 등의 저장 장치는 물리적인 손상, 도난 또는 예기치 않은 사건으로 인해 모두 손실의 위험이 있습니다.</string>
     <string name="LocalBackup_Term1">백업 장치의 도난 또는 손상은 해당 지갑의 백업을 손실할 수 있음을 이해합니다.</string>
     <!-- Recovery Phrase -->

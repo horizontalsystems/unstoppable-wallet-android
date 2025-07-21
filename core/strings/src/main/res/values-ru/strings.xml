@@ -53,6 +53,7 @@
     <string name="Button_Delete">Удалить</string>
     <string name="Button_LearnMore">Узнать больше</string>
     <string name="Button_Activate">Активировать</string>
+    <string name="Button_Later">Позже</string>
     <string name="Button_Sign">Подписать</string>
     <string name="Button_Activating">Активация</string>
     <string name="Button_GetApiKeys">Получить API ключ</string>
@@ -64,6 +65,7 @@
     <string name="Button_Apply">Применить</string>
     <string name="Button_SetAmount">Установить сумму</string>
     <string name="not_enough_ton_for_fee">Недостаточно TON для оплаты комиссии</string>
+    <string name="Error_AssetNotEnabled">Получатель не включил %s, поэтому не может получить.</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -388,15 +390,17 @@
     <string name="Balance_Receive_WatchAddressAlert">Этот адрес является адресом наблюдаемого аккаунта</string>
     <string name="Balance_Receive_AddressMemoAlert">Укажите необходимое мемо (тэг) и отправьте только токены, совместимые с сетью. Другие токены будут потеряны.</string>
     <string name="Balance_Receive_UsedAddresses">Использованные адреса</string>
-    <string name="Balance_Receive_UsedAddressesDescriptoin">%s адресов изменены для повышения конфиденциальности и безопасности. Ниже приведен список использованных адресов в этом кошельке.</string>
+    <string name="Balance_Receive_UsedAddressesDescriptoin">%s адреса изменяються для повышения конфиденциальности и безопасности. Ниже приведен список использованных адресов в этом кошельке.</string>
     <string name="Balance_Receive_ReceiveAddresses">Адреса для получения</string>
     <string name="Balance_Receive_ChangeAddresses">Адрес-сдача</string>
     <string name="Balance_SendHint_CoinName">Название токена</string>
     <string name="Balance_ReceiveHint_Search">Поиск</string>
     <!--Send NFT-->
+    <string name="Info_Reserved_Title">Зарезервировано</string>
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
     <!--Send-->
+    <string name="Send_EnterAddress">Укажите адрес</string>
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
     <string name="Send_Fee">Комиссия</string>
@@ -427,6 +431,7 @@
     <string name="Send_Confirmation_EstimateTime">Продолжительность</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Confirmation_Action">Действие</string>
+    <string name="Send_RiskyAddress_AlertText">Вы собираетесь отправить средства на адрес с высоким уровнем риска. Продолжение может привести к потере средств или другим угрозам безопасности. Продолжая, вы принимаете возможные риски. Вы уверены, что хотите продолжить?</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_CameraPermission_Title">Разрешение камеры</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
@@ -661,11 +666,13 @@
     <string name="Swap_Confirm_Title">Подтвердить</string>
     <string name="SwapConfirm_QuoteExpired">Котировка истекла</string>
     <string name="SwapConfirm_FetchingFinalQuote">Получение котировки</string>
+    <string name="SwapWarning_SlippageNotApplicable_Description">Минимальное допустимое проскальзывание для этой котировки составляет %s%%.</string>
     <string name="unsupported_refund_address">Адрес для возврата не поддерживается.</string>
     <string name="unsupported_address">Адрес не поддерживается</string>
     <string name="unexpected_error">Непредвиденная ошибка</string>
     <string name="unsupported_token">Токен не поддерживается</string>
     <!-- Swap Settings -->
+    <string name="Fee_LiquidityFee">Комиссия за ликвидность</string>
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_Service">Сервис</string>
     <string name="SwapSettings_SlippageTitle">Допустимость отклонений</string>
@@ -687,6 +694,7 @@
     <string name="SwapSettings_Error_InvalidDeadline">Недопустимый срок</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
     <!-- Swap Confirmation -->
+    <string name="Activate_InsufficientBalance_Description">У вас недостаточно баланса XLM для активации этого токена.</string>
     <string name="Swap_Confirmation">Подтверждение</string>
     <string name="Swap_Confirmation_Guaranteed">Гарантировано</string>
     <string name="Swap_Confirmation_Maximum">Максимум</string>
@@ -727,6 +735,7 @@
     <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
     <string name="Transactions_Pending">В обработке</string>
     <string name="Transactions_Receive">Получено</string>
+    <string name="Transactions_ChangeTrust">Изменить доверительную линию</string>
     <string name="Transactions_Completed">Завершено</string>
     <string name="Transactions_Processing">В процессе</string>
     <string name="Transactions_Send">Отправлено</string>
@@ -765,7 +774,9 @@
     <string name="Transactions_Swaps">Обмены</string>
     <string name="Transactions_Approvals">Разрешения</string>
     <string name="Transactions_Unknown">Неизвестная транзакция</string>
+    <string name="Transactions_OperationType_CreateAccount">Создать аккаунт</string>
     <string name="Transactions_TonTransaction">Ton транзакция</string>
+    <string name="Transactions_StellarTransaction">Транзакция Stellar</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
@@ -834,6 +845,7 @@
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_LockTime_Description_Static">Эти средства были отправлены с временной блокировкой, которая истекает в указанную дату.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете их потратить в сети Bitcoin.</string>
+    <string name="Info_Reserved_WalletAction">Активация кошелька</string>
     <string name="Info_NotRelayed_Title">Передача</string>
     <string name="Info_NotRelayed_Description">Транзакция, содержащая эту сумму, транслирована, но еще не принята сетью.</string>
     <string name="Info_ProcessingBalance_Title">Обработка суммы</string>
@@ -902,6 +914,7 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 минут</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 минут</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
+    <string name="SettingsAddressChecker_InvalidAddress">Введённый вами адрес недействителен. Пожалуйста, проверьте его на наличие опечаток или ошибок в формате и попробуйте снова.</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКОВ</string>
@@ -1214,7 +1227,7 @@
     <string name="LocalBackup_BackupSaved">Резервная копия сохранена</string>
     <string name="LocalBackup_PasswordInvalid">Не менее 8 символов, включая одну заглавную букву, одну строчную букву, одну цифру и один символ.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">Этот пароль используется для шифрования файла резервной копии вашего кошелька. Если он утерян или забыт, его нельзя будет восстановить или сбросить.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Установите пароль разблокировки для своей резервной копии. Пароль должен содержать не менее 8 символов и включать как минимум одну строчную букву, заглавную букву, цифру и специальный символ.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Для обеспечения безопасности данных рекомендуем использовать надёжный пароль для резервной копии — с сочетанием букв, цифр и специальных символов.\nПриложение позволяет создать резервную копию с простым паролем для вашего удобства, но вы соглашаетесь с тем, что резервная копия может быть скомпрометирована при использовании простого пароля.</string>
     <string name="LocalBackup_TermsWarningText">Устройства хранения, такие как жесткие диски, USB-накопители, накопители на смартфоне и т.д., все они подвержены потерям вследствие физических повреждений, кражи или других непредвиденных обстоятельств.</string>
     <string name="LocalBackup_Term1">Я понимаю, что кража или повреждение устройства резервного копирования приведет к потере резервной копии в соответствующем кошельке.</string>
     <!-- Recovery Phrase -->
@@ -1229,6 +1242,7 @@
     <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Bip32 Root Key -->
+    <string name="StellarSecretKey_ShowSecretKey">Нажмите, чтобы показать секретный ключ</string>
     <string name="Bip32RootKey">Корневой ключ BIP32</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
@@ -1905,4 +1919,76 @@
     <string name="Restore_Error_MnemonicWordCount_monero">Неверное количество слов. Должно быть 25. Вы ввели: %d</string>
     <string name="inavlid_height">Неверное значение высоты</string>
     <string name="view_key">Ключ просмотра</string>
+    <string name="Balance_Receive_ActivationRequired">Чтобы получить адрес, необходимо активировать токен. Это требование сети Stellar.</string>
+    <string name="Balance_Receive_Trustline">Доверительная линия</string>
+    <string name="Balance_Reserved_Title">Зарезервировано</string>
+    <string name="Send_Processing">Обработка!</string>
+    <string name="Send_Processing_Description">Транзакция успешно отправлена. Проверьте её статус для получения деталей.</string>
+    <string name="Send_Address_Recent">Недавние</string>
+    <string name="Send_Address_Error_CheckLocked">Заблокировано</string>
+    <string name="Send_Address_Error_Incorrect">Недопустимо</string>
+    <string name="Send_Address_Error_InvalidAddress">Недопустимый адрес</string>
+    <string name="Send_Address_Error_Correct">Правильный</string>
+    <string name="Send_Address_Error_Detected">Обнаружен</string>
+    <string name="Send_Address_Error_Clear">Чистый</string>
+    <string name="Send_Address_AddressCheck">Проверка адреса</string>
+    <string name="Send_Address_PhishingCheck">Проверка на фишинг</string>
+    <string name="Send_Address_PhishingCheck_Info1">Анализирует указанный адрес назначения на потенциальные фишинговые риски.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Чисто: подозрительная активность не обнаружена.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Обнаружено: Похоже, кто-то пытается обманом заставить вас отправить средства на неверный адрес. Не продолжайте, если вы не полностью уверены в правильности адреса. Рекомендуется сначала отправить небольшую тестовую транзакцию.</string>
+    <string name="Send_Address_BlacklistCheck">Проверка по чёрному списку</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Проверяет, указан ли адрес назначения в официальных или неофициальных чёрных списках.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Чисто: адрес не найден в чёрных списках.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Обнаружено: Адрес находится в чёрном списке и может быть связан с юридическими или безопасностными рисками. Действуйте с осторожностью. Многие криптовалютные биржи ограничивают пользователей, которые переводят средства с кошельков, взаимодействовавших с адресами из чёрных списков. Имейте это в виду.</string>
+    <string name="Send_Address_SanctionCheck">Проверка на санкции</string>
+    <string name="Send_Address_SanctionCheck_Info1">Проверяет, подпадает ли адрес получателя под международные санкции, используя данные с Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Чисто: санкции не обнаружены.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Обнаружено: Возможный юридический риск. Транзакции с этим адресом могут быть ограничены или незаконны в некоторых юрисдикциях.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Обнаружен фишинговый адрес!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Обнаружен адрес из чёрного списка!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Обнаружен санкционный адрес!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Введённый адрес может быть мошенническим. Мошенники часто подменяют первые и последние символы. Тщательно проверьте весь адрес перед продолжением, чтобы избежать потери средств.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Введённый вами адрес помечен как находящийся в чёрном списке. Транзакции на этот адрес могут привести к потере средств или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Введённый вами адрес помечен как подпадающий под санкции. Транзакции на этот адрес могут привести к потере средств или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
+    <string name="Send_RiskyAddress">Рискованный адрес!</string>
+    <string name="SwapWarning_SlippageNotApplicable_Title">Проскальзывание не применяется.</string>
+    <string name="Fee_OutboundFee">Комиссия за вывод</string>
+    <string name="ActivationRequired_DialogTitle">Активировать токен</string>
+    <string name="ActivationRequired_DialogDescription">Чтобы получить %s, необходимо активировать токен. Сеть Stellar требует установку доверительной линии (trustline) для каждого токена. Без неё ваш кошелёк не сможет принять %s — транзакция будет отклонена, и средства не будут доставлены.</string>
+    <string name="Activate_YouActivate">Вы активируете</string>
+    <string name="Activate_Activating">Активация</string>
+    <string name="Activate_AlreadyActive_Title">Уже активирован</string>
+    <string name="Activate_AlreadyActive_Description">Токен уже активирован.</string>
+    <string name="Activate_InsufficientBalance_Title">Недостаточно средств</string>
+    <string name="Transactions_OperationType">Тип операции</string>
+    <string name="Transactions_OperationType_ChangeTrust">Изменение доверительной линии</string>
+    <string name="Info_Reserved_Description">Сеть Stellar блокирует 1 XLM для активации кошелька и 0.5 XLM в качестве резерва за каждый токен, активированный в вашем кошельке.</string>
+    <string name="Info_Reserved_CurrentlyLocked">В данный момент заблокировано:</string>
+    <string name="SettingsAddressChecker_Title">Проверка адреса</string>
+    <string name="SettingsAddressChecker_RecipientCheck">Проверка получателя</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Проверяет адрес получателя на риски перед отправкой.</string>
+    <string name="SettingsAddressChecker_CheckAddress">Проверить адрес</string>
+    <string name="SettingsAddressChecker_SelectBlockchain">Выберите блокчейн</string>
+    <string name="SettingsAddressChecker_SelectCoin">Выберите монету</string>
+    <string name="SettingsAddressChecker_OnSubject">для %s</string>
+    <string name="SettingsAddressChecker_SanctionsCheck">Проверка на санкции</string>
+    <string name="SettingsAddressChecker_TokenBlacklistCheck">Проверка %s по чёрному списку</string>
+    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis - это платформа для анализа блокчейнов, которая предоставляет инструменты для отслеживания, расследования и оценки рисков криптовалютных адресов. Она помогает выявлять адреса, связанные с санкциями, мошенничеством и другой незаконной деятельностью.</string>
+    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit - это платформа безопасности, которая позволяет пользователям проверять адреса кошельков на наличие рисков, таких как санкции и статус в чёрных списках. Она помогает избегать взаимодействия с потенциально вредоносными или заблокированными адресами.</string>
+    <string name="SettingsAddressChecker_TetherBlacklistDescription">Позволяет проверить, внесён ли адрес кошелька в чёрный список Tether (USDT). Если адрес находится в чёрном списке, связанные с ним токены USDT могут быть заморожены, что делает их недоступными и непереводимыми. Эта проверка помогает пользователям избегать взаимодействия с адресами с высоким уровнем риска или ограничениями.</string>
+    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Позволяет проверить, внесён ли адрес кошелька в чёрный список эмитента USDC (Circle). Адреса в чёрном списке могут иметь замороженные балансы USDC по причинам, связанным с соблюдением нормативных требований, мошенничеством или регуляторными ограничениями. Эта проверка снижает риск отправки средств на заблокированные или подозрительные кошельки.</string>
+    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Позволяет проверить, внесён ли адрес кошелька в чёрный список PYUSD, выпущенного PayPal. Средства на таких адресах могут быть заморожены и недоступны для использования, как правило, по юридическим или причинам безопасности. Этот инструмент помогает обеспечить более безопасные и соответствующие требованиям транзакции с PYUSD.</string>
+    <string name="need_setup_system_pin">Чтобы использовать эту функцию, необходимо установить PIN-код системы Android.</string>
+    <string name="SettingsSecurity_system_pin_enable">Включить системный PIN-код</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="SettingsSecurity_system_pin">Требовать системный PIN-код</string>
+    <string name="SettingsSecurity_system_pin_description">Для использования приложения необходимо настроить системный PIN-код. Это значительно повышает безопасность приложения.</string>
+    <string name="SettingsSecurity_system_pin_description_enabled">Можно настроить только при первоначальной настройке. Отключение приведёт к сбросу всех кошельков.</string>
+    <string-array name="enable_system_pin_confirm">
+        <item>Это действие нельзя отменить.</item>
+        <item>Для отключения этой функции необходимо переинициализировать приложение.</item>
+    </string-array>
+    <string name="StellarSecretKey_Title">Секретный ключ Stellar</string>
+    <string name="PrivateKeys_StellarSecretKey">Секретный ключ Stellar</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Предоставляет полный контроль над аккаунтом Stellar в соответствующем кошельке.</string>
 </resources>

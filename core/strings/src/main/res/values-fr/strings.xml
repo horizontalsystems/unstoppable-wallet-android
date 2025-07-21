@@ -1189,7 +1189,9 @@
     <string name="LocalBackup_BackupSaved">Sauvegarde enregistrée</string>
     <string name="LocalBackup_PasswordInvalid">Votre mot de passe doit contenir au moins 8 caractères, y compris une lettre majuscule, une lettre minuscule, un chiffre et un symbole.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">Ce mot de passe est utilisé pour chiffrer le fichier de sauvegarde de votre portefeuille. Si vous le perdez ou l\'oubliez, il ne pourra pas être récupéré ou réinitialisé.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Définissez le mot de passe de déverrouillage de votre sauvegarde. Il doit contenir au moins 8 symboles, y compris une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Para garantizar la seguridad de los datos, recomendamos usar una contraseña fuerte para su copia de seguridad — que combine letras, números y caracteres especiales.
+La aplicación permite crear una copia de seguridad con una contraseña sencilla para su comodidad, pero usted acepta que la copia de seguridad puede estar comprometida si usa una contraseña sencilla.
+</string>
     <string name="LocalBackup_TermsWarningText">Les dispositifs de stockage tels que les disques durs, les disques USB et le stockage sur smartphone sont tous vulnérables aux pertes dues à des dommages physiques, des vols ou d\'autres circonstances imprévues.</string>
     <string name="LocalBackup_Term1">Je comprends que la perte ou l\'endommagement d\'un périphérique de sauvegarde entraînera la perte des données de sauvegarde correspondantes.</string>
     <!-- Recovery Phrase -->
