@@ -39,7 +39,7 @@ class BackupLocalPasswordViewModel(
 
     private var backupJson: String? = null
 
-    var backupFileName: String = "UW_Backup.json"
+    var backupFileName: String = "PCash_wallet_backup.json"
         private set
 
     init {
@@ -54,12 +54,12 @@ class BackupLocalPasswordViewModel(
 
                 } else {
                     val walletName = account.name.replace(" ", "_")
-                    backupFileName = "UW_Backup_${walletName}_${currentDateTime}.json"
+                    backupFileName = "PCash_wallet_backup_${walletName}_${currentDateTime}.json"
                 }
             }
 
             is BackupType.FullBackup -> {
-                backupFileName = "UW_App_Backup_${currentDateTime}.json"
+                backupFileName = "PCash_all_wallets_backup_${currentDateTime}.json"
             }
         }
 
