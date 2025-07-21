@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -228,7 +229,9 @@ fun BalanceItems(
         onRefresh = viewModel::onRefresh
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ComposeAppTheme.colors.lawrence),
             state = rememberSaveable(
                 accountViewItem.id,
                 uiState.sortType,
@@ -264,7 +267,9 @@ fun BalanceItems(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                            .background(ComposeAppTheme.colors.tyler)
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -339,49 +344,54 @@ fun BalanceItems(
                             )
                         }
                     }
-                    VSpacer(24.dp)
                 }
             }
 
             stickyHeader {
-                Row(
-                    modifier = Modifier
-                        .height(48.dp)
-                        .fillMaxWidth()
-                        .background(ComposeAppTheme.colors.lawrence),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    HSpacer(16.dp)
-                    BalanceSortingSelector(
-                        sortType = uiState.sortType,
-                        sortTypes = uiState.sortTypes
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .height(48.dp)
+                            .fillMaxWidth()
+                            .background(ComposeAppTheme.colors.lawrence),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        viewModel.setSortType(it)
-                    }
+                        HSpacer(16.dp)
+                        BalanceSortingSelector(
+                            sortType = uiState.sortType,
+                            sortTypes = uiState.sortTypes
+                        ) {
+                            viewModel.setSortType(it)
+                        }
 
-                    HSpacer(12.dp)
-                    ButtonSecondaryCircle(
-                        icon = R.drawable.ic_manage_20,
-                        contentDescription = stringResource(R.string.ManageCoins_title),
-                        onClick = {
-                            navController.slideFromRight(R.id.manageWalletsFragment)
+                        HSpacer(12.dp)
+                        ButtonSecondaryCircle(
+                            icon = R.drawable.ic_manage_20,
+                            contentDescription = stringResource(R.string.ManageCoins_title),
+                            onClick = {
+                                navController.slideFromRight(R.id.manageWalletsFragment)
 
-                            stat(
-                                page = StatPage.Balance,
-                                event = StatEvent.Open(StatPage.CoinManager)
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.CoinManager)
+                                )
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+                        if (accountViewItem.isWatchAccount) {
+                            HSpacer(12.dp)
+                            Image(
+                                painter = painterResource(R.drawable.icon_binocule_20),
+                                contentDescription = "binoculars icon"
                             )
                         }
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-                    if (accountViewItem.isWatchAccount) {
-                        HSpacer(12.dp)
-                        Image(
-                            painter = painterResource(R.drawable.icon_binocule_20),
-                            contentDescription = "binoculars icon"
-                        )
+                        HSpacer(16.dp)
                     }
-                    HSpacer(16.dp)
+                    Divider(
+                        thickness = 0.5.dp,
+                        color = ComposeAppTheme.colors.tyler,
+                    )
                 }
             }
 
@@ -609,12 +619,15 @@ fun <T> LazyListScope.wallets(
     key: ((item: T) -> Any)? = null,
     itemContent: @Composable (LazyItemScope.(item: T) -> Unit),
 ) {
-    item {
-        VSpacer(height = 0.5.dp)
-    }
     items(items = items, key = key, itemContent = {
-        Row(modifier = Modifier.padding(bottom = 0.5.dp)) {
-            itemContent(it)
+        Column {
+            Row {
+                itemContent(it)
+            }
+            Divider(
+                thickness = 0.5.dp,
+                color = ComposeAppTheme.colors.tyler,
+            )
         }
     })
     item {
