@@ -2,8 +2,6 @@ package cash.p.terminal.core.storage.typeconverter
 
 import androidx.room.TypeConverter
 import cash.p.terminal.core.App
-import cash.p.terminal.core.providers.CexDepositNetworkRaw
-import cash.p.terminal.core.providers.CexWithdrawNetworkRaw
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.wallet.entities.HardwarePublicKeyType
 import cash.p.terminal.wallet.entities.SecretList
@@ -26,7 +24,7 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun toTokenType(value:TokenType?): String? {
+    fun toTokenType(value: TokenType?): String? {
         return value?.id
     }
 
@@ -121,32 +119,6 @@ class DatabaseConverters {
     @TypeConverter
     fun toNftUid(string: String): NftUid {
         return NftUid.Companion.fromUid(string)
-    }
-
-    @TypeConverter
-    fun fromCexDepositNetworkList(networks: List<CexDepositNetworkRaw>): String {
-        return gson.toJson(networks)
-    }
-
-    @TypeConverter
-    fun toCexDepositNetworkList(json: String): List<CexDepositNetworkRaw>? {
-        return gson.fromJson(
-            json,
-            object : TypeToken<List<CexDepositNetworkRaw>>() {}.type
-        )
-    }
-
-    @TypeConverter
-    fun fromCexWithdrawNetworkList(networks: List<CexWithdrawNetworkRaw>): String {
-        return gson.toJson(networks)
-    }
-
-    @TypeConverter
-    fun toCexWithdrawNetworkList(json: String): List<CexWithdrawNetworkRaw>? {
-        return gson.fromJson(
-            json,
-            object : TypeToken<List<CexWithdrawNetworkRaw>>() {}.type
-        )
     }
 
     @TypeConverter

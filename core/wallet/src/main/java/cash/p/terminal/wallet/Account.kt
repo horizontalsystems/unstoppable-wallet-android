@@ -90,46 +90,7 @@ data class Account(
 }
 
 @Parcelize
-sealed class CexType : Parcelable {
-    @Parcelize
-    class Binance(val apiKey: String, val secretKey: String) : CexType()
-
-    fun serialized() = when (this) {
-        is Binance -> listOf("binance", apiKey, secretKey).joinToString(dataSeparator)
-    }
-
-    fun sameType(other: CexType): Boolean {
-        return when (this) {
-            is Binance -> other is Binance
-        }
-    }
-
-    fun name(): String {
-        return when (this) {
-            is Binance -> "Binance"
-        }
-    }
-
-    companion object {
-        fun deserialize(value: String): CexType? {
-            val parts = value.split(dataSeparator)
-
-            return when (parts[0]) {
-                "binance" -> Binance(parts[1], parts[2])
-                else -> null
-            }
-
-        }
-
-        private val dataSeparator = "@"
-    }
-}
-
-@Parcelize
 sealed class AccountType : Parcelable {
-    @Parcelize
-    data class Cex(val cexType: CexType) : AccountType()
-
     @Parcelize
     data class EvmAddress(val address: String) : AccountType()
 
@@ -301,8 +262,6 @@ sealed class AccountType : Parcelable {
                     else -> ""
                 }
             }
-
-            is Cex -> "Cex"
         }
 
     val supportedDerivations: List<Derivation>

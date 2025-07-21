@@ -5,7 +5,6 @@ import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.usecase.MoneroWalletUseCase
 import cash.p.terminal.wallet.AccountType
-import cash.p.terminal.wallet.CexType
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.tronkit.toBigInteger
@@ -24,7 +23,6 @@ object BackupLocalModule {
     private const val HD_EXTENDED_KEY = "hd_extended_key"
     private const val UFVK = "ufvk"
     private const val HARDWARE_CARD = "hardware_card"
-    private const val CEX = "cex"
 
     //Backup Json file data structure
 
@@ -87,7 +85,6 @@ object BackupLocalModule {
         is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
         is AccountType.HdExtendedKey -> HD_EXTENDED_KEY
         is AccountType.ZCashUfvKey -> UFVK
-        is AccountType.Cex -> CEX
         is AccountType.HardwareCard -> HARDWARE_CARD
     }
 
@@ -106,7 +103,7 @@ object BackupLocalModule {
 
             MNEMONIC_MONERO -> {
                 val parts = String(data, Charsets.UTF_8).split("@", limit = 3)
-                if(parts.size != 2) {
+                if (parts.size != 2) {
                     throw IllegalStateException("Wrong monero backup format")
                 }
                 val words = parts[0].split(" ")
@@ -134,14 +131,6 @@ object BackupLocalModule {
 
             HD_EXTENDED_KEY -> AccountType.HdExtendedKey(Base58.encode(data))
             UFVK -> AccountType.ZCashUfvKey(String(data, Charsets.UTF_8))
-            CEX -> {
-                val cexType = CexType.deserialize(String(data, Charsets.UTF_8))
-                if (cexType != null) {
-                    AccountType.Cex(cexType)
-                } else {
-                    throw IllegalStateException("Unknown Cex account type")
-                }
-            }
 
             else -> throw IllegalStateException("Unknown account type")
         }
@@ -175,7 +164,6 @@ object BackupLocalModule {
         is AccountType.StellarAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
-        is AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)
         is AccountType.ZCashUfvKey -> accountType.key.toByteArray(Charsets.UTF_8)
         is AccountType.HardwareCard -> {
             (accountType.cardId + "@" + accountType.walletPublicKey).toByteArray(Charsets.UTF_8)

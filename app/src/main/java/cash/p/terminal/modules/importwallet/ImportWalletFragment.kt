@@ -167,18 +167,6 @@ private fun ImportWalletScreen(
                     }
                 )
                 VSpacer(12.dp)
-                ImportOption(
-                    title = stringResource(R.string.ImportWallet_ExchangeWallet),
-                    description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
-                    icon = R.drawable.icon_link_24,
-                    onClick = {
-                        navController.slideFromBottom(
-                            R.id.importCexAccountFragment,
-                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
-                        )
-                    }
-                )
-                VSpacer(12.dp)
             }
         }
     }

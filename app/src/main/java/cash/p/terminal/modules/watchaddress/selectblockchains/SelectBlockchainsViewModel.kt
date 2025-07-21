@@ -35,7 +35,6 @@ class SelectBlockchainsViewModel(
             is AccountType.BitcoinAddress,
             is AccountType.TonAddress,
             is AccountType.StellarAddress,
-            is AccountType.Cex,
             is AccountType.Mnemonic,
             is AccountType.HardwareCard,
             is AccountType.MnemonicMonero,

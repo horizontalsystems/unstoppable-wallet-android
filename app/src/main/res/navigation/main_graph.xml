@@ -8,9 +8,6 @@
         android:id="@+id/mainFragment"
         android:name="cash.p.terminal.modules.main.MainFragment"/>
     <fragment
-        android:id="@+id/depositCexFragment"
-        android:name="cash.p.terminal.modules.depositcex.DepositCexFragment"/>
-    <fragment
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
@@ -257,9 +254,6 @@
         android:id="@+id/restoreAccountFragment"
         android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
-        android:id="@+id/importCexAccountFragment"
-        android:name="cash.p.terminal.modules.importcexaccount.ImportCexAccountFragment" />
-    <fragment
         android:id="@+id/importWalletFragment"
         android:name="cash.p.terminal.modules.importwallet.ImportWalletFragment" />
     <fragment
@@ -369,9 +363,6 @@
     <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="cash.p.terminal.modules.balance.token.TokenBalanceFragment" />
-    <fragment
-        android:id="@+id/cexAssetFragment"
-        android:name="cash.p.terminal.modules.balance.cex.asset.CexAssetFragment" />
     <fragment
         android:id="@+id/кeyAccountInfoFragment"
         android:name="cash.p.terminal.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />

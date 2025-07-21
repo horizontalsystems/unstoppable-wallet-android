@@ -147,11 +147,6 @@
     <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
     <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
-    <string name="ImportCexAccount_SelectCex">CEX\'i seçin</string>
-    <string name="ImportCexAccount_SelectCexDescription">Bağlanmak istediğiniz merkezi santrali seçin.</string>
-    <string name="ImportCexAccountBinance_Description">Lütfen değiş tokuşunuzu bağlamak için API Anahtarlarını ve API Sırrını sağlayın.</string>
-    <string name="ImportCexAccountBinance_ApiKey">API Anahtarı</string>
-    <string name="ImportCexAccountBinance_SecretKey">Gizli Anahtar</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <!--Market-->
@@ -1118,8 +1113,6 @@
     <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar.</string>
     <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Kurtarma ifadesini veya özel anahtarı kullanarak içe aktarın.</string>
-    <string name="ImportWallet_ExchangeWallet">Exchange Wallet\'tan</string>
-    <string name="ImportWallet_ExchangeWallet_Description">Merkezi borsada bir cüzdana bağlanın.</string>
     <string name="ImportWallet_WatchAddress">Adresi İzle</string>
     <string name="ImportWallet_WatchAddress_Description">EVM-Chain ve BTC, LTC, DASH adreslerinin gözlem modu</string>
     <string name="ImportWallet_WarningInvalidJson">Geçersiz Json Dosyası</string>

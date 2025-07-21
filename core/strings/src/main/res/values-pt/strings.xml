@@ -147,11 +147,6 @@
     <string name="Restore_ZCash_OldWallet">Carteira existente</string>
     <string name="Restore_ZCash_OldWallet_Description">Tem transações</string>
     <string name="Restore_ZCash_SlowSyncWarningText">A sincronização inicial com o blockchain pode consumir muito tráfego na internet.</string>
-    <string name="ImportCexAccount_SelectCex">Select CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">Select the centralized exchange to which you want to connect.</string>
-    <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
-    <string name="ImportCexAccountBinance_ApiKey">API Key</string>
-    <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Verificar…</string>
     <!--Market-->
@@ -1121,8 +1116,6 @@
     <string name="ImportWallet_BackupFile_Description">Import from a backup file.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
-    <string name="ImportWallet_ExchangeWallet">from Exchange Wallet</string>
-    <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange.</string>
     <string name="ImportWallet_WatchAddress">Watch Address</string>
     <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>

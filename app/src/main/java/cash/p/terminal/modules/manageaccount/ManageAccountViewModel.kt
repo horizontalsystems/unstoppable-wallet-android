@@ -117,7 +117,6 @@ class ManageAccountViewModel(
         }
         if (account.type is AccountType.HdExtendedKey
             || account.type is AccountType.EvmPrivateKey
-            || account.type is AccountType.Cex
             || account.type is AccountType.StellarSecretKey
         ) {
             return listOf(BackupItem.LocalBackup(false))
@@ -192,8 +191,6 @@ class ManageAccountViewModel(
                     listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)
                 }
             }
-
-            is AccountType.Cex -> listOf()
         }
     }
 

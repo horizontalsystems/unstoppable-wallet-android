@@ -298,8 +298,6 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.StellarSecretKey ->
             this == BlockchainType.Stellar
-
-        is AccountType.Cex -> false
     }
 }
 

@@ -345,8 +345,6 @@ class BackupProvider(
 
             val account = if (type.isWatchAccountType) {
                 accountFactory.watchAccount(name, type)
-            } else if (type is AccountType.Cex) {
-                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
             } else {
                 accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
             }

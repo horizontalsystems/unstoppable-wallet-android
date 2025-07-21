@@ -176,10 +176,7 @@ class RestoreLocalViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val type = backupProvider.accountType(backup, passphrase)
-                if (type is cash.p.terminal.wallet.AccountType.Cex) {
-                    backupProvider.restoreCexAccount(type, accountName)
-                    restored = true
-                } else if (backup.enabledWallets.isNullOrEmpty()) {
+                if (backup.enabledWallets.isNullOrEmpty()) {
                     showSelectCoins = type
                 } else {
                     backupProvider.restoreSingleWalletBackup(type, accountName, backup)

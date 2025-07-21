@@ -200,7 +200,6 @@ class BitcoinAdapter(
                     return accountType.address
                 }
                 is AccountType.HardwareCard,
-                is AccountType.Cex,
                 is AccountType.EvmAddress,
                 is AccountType.EvmPrivateKey,
                 is AccountType.MnemonicMonero,

@@ -147,11 +147,6 @@
     <string name="Restore_ZCash_OldWallet">现有钱包</string>
     <string name="Restore_ZCash_OldWallet_Description">有交易</string>
     <string name="Restore_ZCash_SlowSyncWarningText">初始化与区块链的同步可以消耗大量的网络流量。</string>
-    <string name="ImportCexAccount_SelectCex">选择CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">选择您想要连接的中央交易所。</string>
-    <string name="ImportCexAccountBinance_Description">请提供 API 密钥和 API 密钥链接您的交换。</string>
-    <string name="ImportCexAccountBinance_ApiKey">API 密钥</string>
-    <string name="ImportCexAccountBinance_SecretKey">密钥</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <!--Market-->
@@ -1115,8 +1110,6 @@
     <string name="ImportWallet_BackupFile_Description">从备份文件导入.</string>
     <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
     <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入。</string>
-    <string name="ImportWallet_ExchangeWallet">来自Exchange 钱包</string>
-    <string name="ImportWallet_ExchangeWallet_Description">在集中交易所上连接到钱包。</string>
     <string name="ImportWallet_WatchAddress">观察地址</string>
     <string name="ImportWallet_WatchAddress_Description">观测 EVM-Chain、BTC、LTC 和 DASH 地址的模式</string>
     <string name="ImportWallet_WarningInvalidJson">无效的 Json 文件</string>

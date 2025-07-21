@@ -190,7 +190,7 @@ class MainViewModel(
     )
 
     private fun isTransactionsTabEnabled(): Boolean =
-        !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
+        !accountManager.isAccountsEmpty
 
 
     fun whatsNewShown() {

@@ -5,9 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.address.AddressHandlerFactory
-import cash.p.terminal.modules.balance.cex.BalanceCexRepositoryWrapper
-import cash.p.terminal.modules.balance.cex.BalanceCexSorter
-import cash.p.terminal.modules.balance.cex.BalanceCexViewModel
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.balance.BalanceWarning
 
@@ -37,30 +34,6 @@ object BalanceModule {
                 wCManager = App.wcManager,
                 addressHandlerFactory = AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 priceManager = App.priceManager
-            ) as T
-        }
-    }
-
-    class FactoryCex : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val totalService = TotalService(
-                App.currencyManager,
-                App.marketKit,
-                App.baseTokenManager,
-                App.balanceHiddenManager
-            )
-
-            return BalanceCexViewModel(
-                TotalBalance(totalService, App.balanceHiddenManager),
-                App.localStorage,
-                App.balanceViewTypeManager,
-                BalanceViewItemFactory(),
-                BalanceCexRepositoryWrapper(App.cexAssetManager, App.connectivityManager),
-                DefaultBalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
-                BalanceCexSorter(),
-                App.cexProviderManager,
             ) as T
         }
     }

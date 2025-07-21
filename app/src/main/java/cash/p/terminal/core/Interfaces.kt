@@ -23,7 +23,6 @@ import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.core.entities.BlockchainType
-import cash.p.terminal.wallet.CexType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -69,7 +68,6 @@ interface IAccountFactory {
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
     fun getNextHardwareAccountName(): String
-    fun getNextCexAccountName(cexType: CexType): String
 }
 
 interface IRandomProvider {

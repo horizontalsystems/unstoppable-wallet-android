@@ -4,7 +4,6 @@ import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
-import cash.p.terminal.wallet.CexType
 import cash.p.terminal.wallet.IAccountsStorage
 import cash.p.terminal.wallet.entities.AccountRecord
 import cash.p.terminal.wallet.entities.SecretList
@@ -31,7 +30,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val HD_EXTENDED_KEY = "hd_extended_key"
         private const val UFVK = "ufvk"
         private const val HARDWARE_CARD = "hardware_card"
-        private const val CEX = "cex"
         private const val STELLAR_ADDRESS = "stellar_address"
     }
 
@@ -95,12 +93,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         walletPublicKey = record.passphrase!!.value,
                         signedHashes = parts.getOrNull(2)?.toIntOrNull() ?: 0
                     )
-                }
-
-                CEX -> {
-                    CexType.deserialize(record.key!!.value)?.let {
-                        AccountType.Cex(it)
-                    }
                 }
 
                 else -> null
@@ -174,7 +166,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 val mnemonicMonero = (account.type as AccountType.MnemonicMonero)
                 words = SecretList(mnemonicMonero.words)
                 passphrase = SecretString(mnemonicMonero.password)
-                key = SecretString(mnemonicMonero.walletInnerName+"@"+mnemonicMonero.height)
+                key = SecretString(mnemonicMonero.walletInnerName + "@" + mnemonicMonero.height)
                 accountType = MNEMONIC_MONERO
             }
 
@@ -221,11 +213,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.HdExtendedKey -> {
                 key = SecretString((account.type as AccountType.HdExtendedKey).keySerialized)
                 accountType = HD_EXTENDED_KEY
-            }
-
-            is AccountType.Cex -> {
-                key = SecretString((account.type as AccountType.Cex).cexType.serialized())
-                accountType = CEX
             }
 
             is AccountType.ZCashUfvKey -> {

@@ -5,7 +5,6 @@ import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
-import cash.p.terminal.wallet.CexType
 import cash.p.terminal.wallet.IAccountManager
 import java.util.UUID
 
@@ -64,13 +63,5 @@ class AccountFactory(
             accountManager.accounts.count { it.type is AccountType.HardwareCard }
 
         return "Hardware Wallet ${hardWalletAccountsCount + 1}"
-    }
-
-    override fun getNextCexAccountName(cexType: CexType): String {
-        val cexAccountsCount = accountManager.accounts.count {
-            it.type is AccountType.Cex && cexType.sameType((it.type as AccountType.Cex).cexType)
-        }
-
-        return "${cexType.name()} Wallet ${cexAccountsCount + 1}"
     }
 }

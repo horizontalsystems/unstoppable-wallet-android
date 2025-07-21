@@ -28,7 +28,6 @@ class WatchAddressService(
     fun tokens(accountType: AccountType): List<Token> {
         val tokenQueries = buildList {
             when (accountType) {
-                is AccountType.Cex,
                 is AccountType.Mnemonic,
                 is AccountType.MnemonicMonero,
                 is AccountType.HardwareCard,

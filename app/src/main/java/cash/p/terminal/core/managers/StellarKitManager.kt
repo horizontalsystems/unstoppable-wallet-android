@@ -67,7 +67,6 @@ class StellarKitManager(
                 }
 
                 is AccountType.BitcoinAddress,
-                is AccountType.Cex,
                 is AccountType.EvmAddress,
                 is AccountType.EvmPrivateKey,
                 is AccountType.HdExtendedKey,

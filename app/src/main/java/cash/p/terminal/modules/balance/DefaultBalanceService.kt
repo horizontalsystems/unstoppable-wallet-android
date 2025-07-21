@@ -106,11 +106,7 @@ class DefaultBalanceService private constructor(
         allBalanceItems.addAll(sorted)
 
         _balanceItemsFlow.update {
-            if (accountManager.activeAccount?.type is AccountType.Cex) {
-                null
-            } else {
-                getBalanceItems()
-            }
+            getBalanceItems()
         }
     }
 

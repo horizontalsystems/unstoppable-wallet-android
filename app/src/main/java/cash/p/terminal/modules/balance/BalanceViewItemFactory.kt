@@ -5,9 +5,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.diff
-import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.balance.BalanceModule.warningText
-import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.AdapterState
@@ -19,7 +17,6 @@ import cash.p.terminal.wallet.balance.BalanceViewHelper.coinValue
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.entities.TokenType
-import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -409,79 +406,4 @@ class BalanceViewItemFactory {
             stackingUnpaid = stackingUnpaid
         )
     }
-
-    fun cexViewItem(
-        cexAsset: CexAsset,
-        currency: Currency,
-        latestRate: CoinPrice?,
-        hideBalance: Boolean,
-        balanceViewType: BalanceViewType,
-        fullFormat: Boolean,
-        adapterState: AdapterState
-    ): BalanceCexViewItem {
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
-            balance = cexAsset.freeBalance + cexAsset.lockedBalance,
-            visible = !hideBalance,
-            fullFormat = fullFormat,
-            coinDecimals = cexAsset.decimals,
-            dimmed = false,
-            coinPrice = latestRate,
-            currency = currency,
-            balanceViewType = balanceViewType
-        )
-        val fiatLockedVisibility = !hideBalance && cexAsset.lockedBalance > BigDecimal.ZERO
-        val errorMessage = (adapterState as? AdapterState.NotSynced)?.error?.message
-
-        return BalanceCexViewItem(
-            coin = cexAsset.coin,
-            coinCode = cexAsset.id,
-            badge = null,
-            primaryValue = primaryValue,
-            exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
-            diff = latestRate?.diff,
-            secondaryValue = secondaryValue,
-            coinValueLocked = lockedCoinValue(
-                balance = cexAsset.lockedBalance,
-                hideBalance = hideBalance,
-                coinDecimals = cexAsset.decimals,
-                coinCode = cexAsset.id
-            ),
-            fiatValueLocked = BalanceViewHelper.currencyValue(
-                balance = cexAsset.lockedBalance,
-                coinPrice = latestRate,
-                visible = fiatLockedVisibility,
-                fullFormat = fullFormat,
-                currency = currency,
-                dimmed = false
-            ),
-            assetId = cexAsset.id,
-            cexAsset = cexAsset,
-            coinPrice = latestRate,
-            depositEnabled = cexAsset.depositEnabled,
-            withdrawEnabled = cexAsset.withdrawEnabled,
-            syncingProgress = when (adapterState) {
-                is AdapterState.Syncing -> SyncingProgress(50)
-                else -> SyncingProgress(null)
-            },
-            failedIconVisible = adapterState is AdapterState.NotSynced,
-            errorMessage = errorMessage,
-            adapterState = adapterState
-        )
-    }
-
-    private fun lockedCoinValue(
-        balance: BigDecimal,
-        hideBalance: Boolean,
-        coinDecimals: Int,
-        coinCode: String
-    ): DeemedValue<String?> {
-        if (balance <= BigDecimal.ZERO) {
-            return DeemedValue(null, false, false)
-        }
-        val visible = !hideBalance
-        val value = App.numberFormatter.formatCoinFull(balance, coinCode, coinDecimals)
-
-        return DeemedValue(value, false, visible)
-    }
-
 }

@@ -195,7 +195,6 @@ class LitecoinAdapter(
                 is AccountType.BitcoinAddress -> {
                     return accountType.address
                 }
-                is AccountType.Cex,
                 is AccountType.EvmAddress,
                 is AccountType.EvmPrivateKey,
                 is AccountType.HardwareCard,

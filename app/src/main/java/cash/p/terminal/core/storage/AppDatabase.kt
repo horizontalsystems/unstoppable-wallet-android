@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import cash.p.terminal.core.providers.CexAssetRaw
 import cash.p.terminal.core.storage.migrations.Migration_31_32
 import cash.p.terminal.core.storage.migrations.Migration_32_33
 import cash.p.terminal.core.storage.migrations.Migration_33_34
@@ -49,6 +48,7 @@ import cash.p.terminal.core.storage.migrations.Migration_70_71
 import cash.p.terminal.core.storage.migrations.Migration_71_72
 import cash.p.terminal.core.storage.migrations.Migration_72_73
 import cash.p.terminal.core.storage.migrations.Migration_73_74
+import cash.p.terminal.core.storage.migrations.Migration_74_75
 import cash.p.terminal.core.storage.typeconverter.DatabaseConverters
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
@@ -82,7 +82,7 @@ import io.horizontalsystems.core.storage.LogEntry
 import io.horizontalsystems.core.storage.LogsDao
 
 @Database(
-    version = 74,
+    version = 75,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -104,7 +104,6 @@ import io.horizontalsystems.core.storage.LogsDao
         EvmMethodLabel::class,
         SyncerState::class,
         TokenAutoEnabledBlockchain::class,
-        CexAssetRaw::class,
         ChartIndicatorSetting::class,
         Pin::class,
         ChangeNowTransaction::class,
@@ -118,7 +117,6 @@ import io.horizontalsystems.core.storage.LogsDao
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun chartIndicatorSettingsDao(): ChartIndicatorSettingsDao
-    abstract fun cexAssetsDao(): CexAssetsDao
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun enabledWalletsCacheDao(): EnabledWalletsCacheDao
     abstract fun accountsDao(): AccountsDao
@@ -199,6 +197,7 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_71_72,
                     Migration_72_73,
                     Migration_73_74,
+                    Migration_74_75,
                 )
                 .build()
         }
