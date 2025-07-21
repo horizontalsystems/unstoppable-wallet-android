@@ -21,11 +21,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import io.horizontalsystems.core.setNavigationResultX
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
+import cash.p.terminal.modules.multiswap.ui.SwapProviderField
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.BaseComposeFragment
@@ -51,6 +51,7 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.setNavigationResultX
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -89,7 +90,7 @@ fun SwapConfirmScreen(navController: NavController) {
 
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
-        onClickSettings = if(uiState.isAdvancedSettingsAvailable) {
+        onClickSettings = if (uiState.isAdvancedSettingsAvailable) {
             {
                 navController.slideFromRight(R.id.swapTransactionSettings)
             }
@@ -125,7 +126,7 @@ fun SwapConfirmScreen(navController: NavController) {
                     },
                 )
                 VSpacer(height = 12.dp)
-                subhead1_leah(text = "Quote is invalid")
+                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteIsInvalid))
             } else if (uiState.expired) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
@@ -222,6 +223,12 @@ fun SwapConfirmScreen(navController: NavController) {
                         title = stringResource(id = R.string.Swap_MinimumReceived),
                         value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
                         subvalue = subvalue
+                    )
+                }
+                swapViewModel.uiState.quote?.provider?.let { provider ->
+                    SwapProviderField(
+                        title = provider.title,
+                        iconId = provider.icon
                     )
                 }
                 uiState.quoteFields.forEach {

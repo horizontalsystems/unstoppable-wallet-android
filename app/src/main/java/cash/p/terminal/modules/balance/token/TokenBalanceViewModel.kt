@@ -10,6 +10,7 @@ import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
+import cash.p.terminal.core.swappable
 import cash.p.terminal.core.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
@@ -156,12 +157,9 @@ class TokenBalanceViewModel(
         }
     }
 
-    private fun isBep20(token: Token) =
-        token.type is TokenType.Eip20 && token.blockchainType == BlockchainType.BinanceSmartChain
-
     private suspend fun isSwappable(token: Token) =
         App.instance.isSwapEnabled && (
-                isBep20(token) ||
+                token.swappable ||
                         getChangeNowAssociatedCoinTickerUseCase(
                             token.coin.uid,
                             token.blockchainType.uid

@@ -12,7 +12,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ethereum.CautionViewItem
-
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
@@ -33,12 +32,15 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.math.BigDecimal
+import kotlin.coroutines.cancellation.CancellationException
 
 class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
@@ -71,7 +73,9 @@ class SwapConfirmViewModel(
     private var amountOutMin: BigDecimal? = null
     private var quoteFields: List<DataField> = listOf()
     private var criticalError: String? = null
-    private var isAdvancedSettingsAvailable: Boolean = tokenIn.blockchainType != BlockchainType.Dogecoin
+    private var isAdvancedSettingsAvailable: Boolean =
+        tokenIn.blockchainType != BlockchainType.Dogecoin
+    private var fetchJob: Job? = null
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -225,7 +229,8 @@ class SwapConfirmViewModel(
     }
 
     private fun fetchFinalQuote() {
-        viewModelScope.launch(Dispatchers.IO) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val finalQuote = swapProvider.fetchFinalQuote(
                     tokenIn = tokenIn,
@@ -239,7 +244,6 @@ class SwapConfirmViewModel(
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 quoteFields = finalQuote.fields
-                loading = false
                 criticalError = null
 
                 fiatServiceOut.setAmount(amountOut)
@@ -265,6 +269,8 @@ class SwapConfirmViewModel(
                     }
                 }
                 emitState()
+            } catch (_: CancellationException) {
+                Timber.w("fetchFinalQuote was cancelled")
             } catch (t: Throwable) {
                 Log.e("AAA", "fetchFinalQuote error", t)
                 loading = false

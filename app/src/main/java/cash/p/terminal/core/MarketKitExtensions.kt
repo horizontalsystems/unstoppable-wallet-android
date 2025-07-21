@@ -52,7 +52,10 @@ val Token.swappable: Boolean
         BlockchainType.ZkSync,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne -> true
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin -> true
 
         else -> false
     }
