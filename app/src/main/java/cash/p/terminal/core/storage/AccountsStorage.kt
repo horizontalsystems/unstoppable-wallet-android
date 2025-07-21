@@ -22,6 +22,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val MNEMONIC = "mnemonic"
         private const val MNEMONIC_MONERO = "mnemonic_monero"
         private const val PRIVATE_KEY = "private_key"
+        private const val SECRET_KEY = "secret_key"
         private const val ADDRESS = "address"
         private const val SOLANA_ADDRESS = "solana_address"
         private const val TRON_ADDRESS = "tron_address"
@@ -31,6 +32,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val UFVK = "ufvk"
         private const val HARDWARE_CARD = "hardware_card"
         private const val CEX = "cex"
+        private const val STELLAR_ADDRESS = "stellar_address"
     }
 
     override fun getActiveAccountId(level: Int): String? {
@@ -76,10 +78,12 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 }
 
                 PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
+                SECRET_KEY -> AccountType.StellarSecretKey(record.key!!.value)
                 ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                 SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                 TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
                 TON_ADDRESS -> AccountType.TonAddress(record.key!!.value)
+                STELLAR_ADDRESS -> AccountType.StellarAddress(record.key!!.value)
                 BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                 HD_EXTENDED_KEY -> AccountType.HdExtendedKey(record.key!!.value)
                 UFVK -> AccountType.ZCashUfvKey(record.key!!.value)
@@ -179,6 +183,11 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 accountType = PRIVATE_KEY
             }
 
+            is AccountType.StellarSecretKey -> {
+                key = SecretString((account.type as AccountType.StellarSecretKey).key)
+                accountType = SECRET_KEY
+            }
+
             is AccountType.EvmAddress -> {
                 key = SecretString((account.type as AccountType.EvmAddress).address)
                 accountType = ADDRESS
@@ -197,6 +206,11 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.TonAddress -> {
                 key = SecretString((account.type as AccountType.TonAddress).address)
                 accountType = TON_ADDRESS
+            }
+
+            is AccountType.StellarAddress -> {
+                key = SecretString((account.type as AccountType.StellarAddress).address)
+                accountType = STELLAR_ADDRESS
             }
 
             is AccountType.BitcoinAddress -> {

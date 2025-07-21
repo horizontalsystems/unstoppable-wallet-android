@@ -20,7 +20,6 @@ import org.koin.java.KoinJavaComponent.inject
 
 class HardwareWalletSchnorrSigner(
     private val hardwarePublicKey: HardwarePublicKey,
-    private val cardId: String,
 ) : ISchnorrInputSigner, ISchnorrInputBatchSigner {
 
     private val signHashesTransactionUseCase: SignHashesTransactionUseCase by inject(

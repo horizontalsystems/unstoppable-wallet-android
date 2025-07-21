@@ -80,7 +80,7 @@ class SolanaKitManager(
                 }
 
                 is AccountType.HardwareCard -> {
-                    createKitInstance(account.id, accountType)
+                    createKitInstance(account.id)
                 }
 
                 else -> throw UnsupportedAccountException()
@@ -130,8 +130,7 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-        accountId: String,
-        accountType: AccountType.HardwareCard,
+        accountId: String
     ): SolanaKitWrapper {
         val hardwarePublicKey = runBlocking {
             hardwarePublicKeyStorage.getKey(accountId, BlockchainType.Solana, TokenType.Native)
@@ -139,8 +138,7 @@ class SolanaKitManager(
         val signer = Signer(
             HardwareWalletSolanaAccountSigner(
                 publicKey = PublicKey(hardwarePublicKey.key.value.fromHex()),
-                hardwarePublicKey = hardwarePublicKey,
-                cardId = accountType.cardId
+                hardwarePublicKey = hardwarePublicKey
             )
         )
 

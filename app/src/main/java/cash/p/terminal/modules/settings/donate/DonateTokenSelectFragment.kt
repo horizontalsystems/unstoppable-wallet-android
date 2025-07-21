@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
@@ -38,22 +39,25 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),
-            onClickItem = {
+            onClickItem = { viewItem ->
                 val donateAddress: String? =
-                    App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
-                val sendTitle = Translator.getString(
-                    R.string.Settings_DonateToken,
-                    it.wallet.token.fullCoin.coin.code
-                )
-                navController.slideFromRight(
-                    R.id.sendXFragment,
-                    SendFragment.Input(
-                        it.wallet,
-                        sendTitle,
-                        R.id.sendTokenSelectFragment,
-                        donateAddress,
+                    App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
+                donateAddress?.let {
+                    val sendTitle = Translator.getString(
+                        R.string.Settings_DonateToken,
+                        viewItem.wallet.token.fullCoin.coin.code
                     )
-                )
+                    navController.slideFromRight(
+                        R.id.sendXFragment,
+                        SendFragment.Input(
+                            wallet = viewItem.wallet,
+                            title = sendTitle,
+                            sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                            address = Address(donateAddress),
+                            hideAddress = true
+                        )
+                    )
+                }
             },
             uiState = viewModel.uiState,
             updateFilter = viewModel::updateFilter,

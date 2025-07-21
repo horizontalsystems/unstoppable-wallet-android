@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendZcashAdapter
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.xrate.XRateService
@@ -13,10 +14,11 @@ object SendZCashModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
-            (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
+            (App.adapterManager.getAdapterForWalletOld(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -26,7 +28,7 @@ object SendZCashModule {
                 coinCode = wallet.coin.code,
                 availableBalance = adapter.availableBalance
             )
-            val addressService = SendZCashAddressService(adapter, predefinedAddress)
+            val addressService = SendZCashAddressService(adapter)
             val memoService = SendZCashMemoService()
 
             return SendZCashViewModel(
@@ -37,7 +39,8 @@ object SendZCashModule {
                 addressService = addressService,
                 memoService = memoService,
                 contactsRepo = App.contactsRepository,
-                showAddressInput = predefinedAddress == null
+                showAddressInput = !hideAddress,
+                address = address
             ) as T
         }
     }

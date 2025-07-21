@@ -15,10 +15,9 @@ import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
-import cash.p.terminal.modules.address.HSAddressInput
+import cash.p.terminal.modules.address.HSAddressCell
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
@@ -47,7 +46,6 @@ fun SendTonScreen(
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val fee = uiState.fee
@@ -55,7 +53,7 @@ fun SendTonScreen(
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
+        factory = AddressParserModule.Factory(wallet.token, prefilledData)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
@@ -72,18 +70,13 @@ fun SendTonScreen(
             onCloseClick = { navController.popBackStack() }
         ) {
             if (uiState.showAddressInput) {
-                HSAddressInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
-                    textPreprocessor = paymentAddressViewModel,
-                    navController = navController
+                HSAddressCell(
+                    title = stringResource(R.string.Send_Confirmation_To),
+                    value = uiState.address.hex
                 ) {
-                    viewModel.onEnterAddress(it)
+                    navController.popBackStack()
                 }
-                VSpacer(12.dp)
+                VSpacer(16.dp)
             }
 
             HSAmountInput(

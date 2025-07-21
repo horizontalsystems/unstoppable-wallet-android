@@ -29,6 +29,7 @@ object DerivationConfigV3 : DerivationConfig() {
         return when (blockchainType) {
             BlockchainType.Bitcoin -> mapOf(AddressType.Default to DerivationPath("m/84'/0'/0'"))
             BlockchainType.Litecoin -> mapOf(AddressType.Default to DerivationPath("m/84'/2'/0'"))
+            BlockchainType.Stellar -> mapOf(AddressType.Default to DerivationPath("m/44'/148'/0'"))
             BlockchainType.Solana -> mapOf(AddressType.Default to DerivationPath("m/44'/501'/0'"))
             BlockchainType.BitcoinCash -> mapOf(AddressType.Default to DerivationPath("m/44'/145'/0'"))
 

@@ -81,7 +81,7 @@ internal class Eip20RevokeConfirmViewModel(
 
         val eip20Adapter =
             walletManager.activeWallets.firstOrNull { it.token == token }?.let { wallet ->
-                adapterManager.getAdapterForWallet(wallet) as? Eip20Adapter
+                adapterManager.getAdapterForWalletOld(wallet) as? Eip20Adapter
             }
 
         checkNotNull(eip20Adapter)

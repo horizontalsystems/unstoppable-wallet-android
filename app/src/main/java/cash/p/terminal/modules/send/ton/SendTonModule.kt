@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.isNative
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.Wallet
@@ -15,9 +16,10 @@ import cash.p.terminal.wallet.entities.TokenType
 object SendTonModule {
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
+        val adapter = (App.adapterManager.getAdapterForWalletOld(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -32,7 +34,7 @@ object SendTonModule {
                         availableBalance = adapter.availableBalance,
                         leaveSomeBalanceForFee = wallet.token.type.isNative
                     )
-                    val addressService = SendTonAddressService(predefinedAddress)
+                    val addressService = SendTonAddressService()
                     val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
@@ -48,7 +50,8 @@ object SendTonModule {
                         feeService = feeService,
                         coinMaxAllowedDecimals = coinMaxAllowedDecimals,
                         contactsRepo = App.contactsRepository,
-                        showAddressInput = predefinedAddress == null
+                        showAddressInput = !hideAddress,
+                        address = address,
                     ) as T
                 }
 

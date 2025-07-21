@@ -11,8 +11,7 @@ import org.koin.java.KoinJavaComponent.inject
 
 class HardwareWalletSolanaAccountSigner(
     override val publicKey: PublicKey,
-    private val hardwarePublicKey: HardwarePublicKey,
-    private val cardId: String,
+    private val hardwarePublicKey: HardwarePublicKey
 ) : Account {
     private val signOneHashTransactionUseCase: SignOneHashTransactionUseCase by inject(
         SignOneHashTransactionUseCase::class.java

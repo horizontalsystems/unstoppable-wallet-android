@@ -48,7 +48,7 @@ class TonSendTransactionService(
         availableBalance = adapter.availableBalance,
         leaveSomeBalanceForFee = wallet.token.type.isNative
     )
-    private val addressService = SendTonAddressService(null)
+    private val addressService = SendTonAddressService()
     private val addressHandlerTon = AddressHandlerTon()
     private val feeService = SendTonFeeService(adapter)
     private val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)

@@ -267,7 +267,7 @@ fun BalanceItems(
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
                                         val wallet = viewModel.getSingleWalletForReceive()
-                                        navController.slideFromRight(R.id.receiveFragment, wallet)
+                                        navController.slideFromRight(R.id.receiveChooseCoinFragment)
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {

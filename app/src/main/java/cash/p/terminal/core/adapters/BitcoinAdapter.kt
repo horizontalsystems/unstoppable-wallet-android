@@ -142,13 +142,11 @@ class BitcoinAdapter(
                 is AccountType.HardwareCard -> {
                     val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
                         accountId = account.id,
-                        cardId = accountType.cardId,
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )
                     val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
                         accountId = account.id,
-                        cardId = accountType.cardId,
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )
@@ -209,6 +207,8 @@ class BitcoinAdapter(
                 is AccountType.SolanaAddress,
                 is AccountType.TonAddress,
                 is AccountType.TronAddress,
+                is AccountType.StellarAddress,
+                is AccountType.StellarSecretKey,
                 is AccountType.ZCashUfvKey -> throw UnsupportedAccountException()
             }
 

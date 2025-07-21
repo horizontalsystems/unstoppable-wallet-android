@@ -76,7 +76,7 @@ fun HidableContent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
             .clickable(enabled = hideScreenText != null, onClick = {
                 hidden = !hidden
                 onToggleHidden?.invoke()

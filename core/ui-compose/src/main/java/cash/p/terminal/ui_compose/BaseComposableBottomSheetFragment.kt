@@ -10,10 +10,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -27,7 +29,6 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.body_grey
 import cash.p.terminal.ui_compose.components.body_leah
-import cash.p.terminal.ui_compose.components.headline2_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 
 open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
@@ -61,19 +62,22 @@ fun BottomSheetHeader(
     iconPainter: Painter,
     title: String,
     onCloseClick: () -> Unit,
+    titleColor: Color = ComposeAppTheme.colors.leah,
     iconTint: ColorFilter? = null,
     content: @Composable() (ColumnScope.() -> Unit),
 ) {
     BottomSheetHeader(
         iconPainter = iconPainter,
         titleContent = {
-            headline2_leah(
+            Text(
+                text = title,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .weight(1f)
                     .align(Alignment.CenterVertically),
-                text = title,
                 maxLines = 1,
+                style = ComposeAppTheme.typography.headline2,
+                color = titleColor,
             )
         },
         onCloseClick = onCloseClick,

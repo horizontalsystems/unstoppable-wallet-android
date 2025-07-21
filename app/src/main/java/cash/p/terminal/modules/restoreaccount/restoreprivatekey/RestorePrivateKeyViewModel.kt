@@ -13,8 +13,10 @@ import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKe
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NonPrivateKey
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NotSupportedDerivedType
 import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
+import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
 class RestorePrivateKeyViewModel(
@@ -40,7 +42,7 @@ class RestorePrivateKeyViewModel(
         text = input
     }
 
-    fun resolveAccountType(): cash.p.terminal.wallet.AccountType? {
+    fun resolveAccountType(): AccountType? {
         inputState = null
         return try {
             accountType(text)
@@ -53,7 +55,7 @@ class RestorePrivateKeyViewModel(
     }
 
     @Throws(Exception::class)
-    private fun accountType(text: String): cash.p.terminal.wallet.AccountType {
+    private fun accountType(text: String): AccountType {
         val textCleaned = text.trim()
 
         if (textCleaned.isEmpty()) {
@@ -62,7 +64,11 @@ class RestorePrivateKeyViewModel(
 
         if (isValidEthereumPrivateKey(textCleaned)) {
             val privateKey = Signer.privateKey(textCleaned)
-            return cash.p.terminal.wallet.AccountType.EvmPrivateKey(privateKey)
+            return AccountType.EvmPrivateKey(privateKey)
+        }
+
+        if (StellarKit.isValidSecretKey(textCleaned)) {
+            return AccountType.StellarSecretKey(textCleaned)
         }
 
         try {
@@ -73,7 +79,7 @@ class RestorePrivateKeyViewModel(
             when (extendedKey.derivedType) {
                 HDExtendedKey.DerivedType.Master,
                 HDExtendedKey.DerivedType.Account -> {
-                    return cash.p.terminal.wallet.AccountType.HdExtendedKey(extendedKey.serializePrivate())
+                    return AccountType.HdExtendedKey(extendedKey.serializePrivate())
                 }
 
                 else -> throw NotSupportedDerivedType

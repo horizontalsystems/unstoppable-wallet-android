@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.assetUrl
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.jettonUrl
@@ -169,6 +170,24 @@ class CoinOverviewViewModel(
                         && token.blockchainType.supports(accountTypeNotWatch)
 
                 when (val tokenType = token.type) {
+                    is TokenType.Asset -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        val id = "${tokenType.code}:${tokenType.issuer}"
+
+                        items.add(
+                            TokenVariant(
+                                value = id.shorten(),
+                                copyValue = id,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.assetUrl(tokenType.code, tokenType.issuer),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
                     is TokenType.Jetton -> {
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.token == token }

@@ -18,8 +18,7 @@ sealed class SendTransactionData {
         val recommendedGasRate: Int?,
         val feesMap: Map<FeeType, CoinValue>?,
         val token: Token
-    ) :
-        SendTransactionData()
+    ) : SendTransactionData()
 
     data class Evm(
         val transactionData: TransactionData,

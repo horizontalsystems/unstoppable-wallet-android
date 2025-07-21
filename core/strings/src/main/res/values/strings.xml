@@ -60,6 +60,7 @@
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
     <string name="Button_Activate">Activate</string>
+    <string name="Button_Later">Later</string>
     <string name="Button_Sign">Sign</string>
     <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">Get API Keys</string>
@@ -71,6 +72,7 @@
     <string name="Button_Apply">Apply</string>
     <string name="Button_SetAmount">Set Amount</string>
     <string name="not_enough_ton_for_fee">Not enough TON for fee</string>
+    <string name="Error_AssetNotEnabled">The recipient hasn\'t enabled %s, therefore they are unable to receive it.</string>
 
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
@@ -162,7 +164,7 @@
     <string name="Restore_RestoreBy">Import By</string>
     <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
     <string name="Restore_PrivateKey">Private Key</string>
-    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key, Stellar Secret Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter Recovery Phrase</string>
     <string name="monero_restore_seed">Monero restore seed</string>
     <string name="Restore_NonStandardRestore">Non-Standard Import</string>
@@ -459,13 +461,17 @@
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
+    <string name="Balance_Receive_ActivationRequired">To receive an address you need to activate the token. This is required by the Stellar network.</string>
+    <string name="Balance_Receive_Trustline">Trustline</string>
+    <string name="Balance_Reserved_Title">Reserved</string>
+    <string name="Info_Reserved_Title">Reserved</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
     <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
 
     <!--Send-->
-
+    <string name="Send_EnterAddress">Enter Address</string>
     <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_Address">Address or Domain</string>
@@ -503,6 +509,39 @@
     <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_Confirmation_Action">Action</string>
+    <string name="Send_Processing">Processing!</string>
+    <string name="Send_Processing_Description">Transaction sent successfully. Check its status for details.</string>
+
+    <string name="Send_Address_Recent">Recent</string>
+    <string name="Send_Address_Error_CheckLocked">Locked</string>
+    <string name="Send_Address_Error_Incorrect">Invalid</string>
+    <string name="Send_Address_Error_InvalidAddress">Invalid Address</string>
+    <string name="Send_Address_Error_Correct">Correct</string>
+    <string name="Send_Address_Error_Detected">Detected</string>
+    <string name="Send_Address_Error_Clear">Clear</string>
+    <string name="Send_Address_AddressCheck">Address Check</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">Analyzes the provided destination address for potential phishing risks.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Clear: No suspicious activity detected.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Detected: It appears that someone may be trying to trick you into sending funds to an incorrect address. Do not proceed unless absolutely certain that the address is correct. Consider sending a small test transaction first.</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Checks if the destination address is listed on official or unofficial blacklists.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Clear: No blacklist flags.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Detected: The address is blacklisted and may be associated with legal or security risks. Proceed with caution. Many crypto exchanges restrict users who deposit or withdraw funds from wallets that have interacted with blacklisted addresses. Keep that in mind.</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">Verifies whether the recipient’s address is subject to international sanctions, using data from Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Clear: No sanctions detected.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Detected: Potential legal risk. Transactions with this address may be restricted or illegal in certain jurisdictions.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address Detected!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address Detected!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">The address you entered may be fraudulent. Scammers often alter the first and last characters. Verify the full address carefully before proceeding to avoid loss.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">The address you entered is flagged as blacklisted. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">The address you entered is marked as being under sanctions. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
+
+    <string name="Send_RiskyAddress">Risky Address!</string>
+    <string name="Send_RiskyAddress_AlertText">You are about to send funds to a high-risk address. Proceeding may result in loss or other security risks. By continuing, you accept the potential dangers. Are you sure you want to proceed?</string>
+
 
     <string name="Send_Success">\u2713 Sent</string>
 
@@ -517,9 +556,9 @@
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
+    <string name="Send_Error_SendToSelf">Sending %s to your own address is not allowed. Please enter a different recipient address.</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
     <string name="Send_Error_TransparentAddress">P.CASH doesn\'t support payments to a transparent address</string>
-    <string name="Send_Error_SendToSelf">Sending to yourself is not supported</string>
 
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
@@ -857,6 +896,17 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
     <!-- Swap Confirmation -->
+
+    <string name="ActivationRequired_DialogTitle">Activate Token</string>
+    <string name="ActivationRequired_DialogDescription">To receive %s, you need to activate the token. The Stellar network requires a trustline to be established for each token. Without it, your wallet cannot receive %s — the transaction will be rejected and the funds will not be delivered.</string>
+
+    <string name="Activate_YouActivate">You Activate</string>
+    <string name="Activate_Activating">Activating</string>
+    <string name="Activate_AlreadyActive_Title">Already Active</string>
+    <string name="Activate_AlreadyActive_Description">The token is already active.</string>
+    <string name="Activate_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="Activate_InsufficientBalance_Description">You don\’t have enough XLM balance to activate this token.</string>
+
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
@@ -908,6 +958,7 @@
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
+    <string name="Transactions_ChangeTrust">Change Trust</string>
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Sent</string>
@@ -946,7 +997,11 @@
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Approvals</string>
     <string name="Transactions_Unknown">Unknown Transaction</string>
+    <string name="Transactions_OperationType">Operation Type</string>
+    <string name="Transactions_OperationType_ChangeTrust">Change Trust</string>
+    <string name="Transactions_OperationType_CreateAccount">Create Account</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
+    <string name="Transactions_StellarTransaction">Stellar Transaction</string>
     <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
     <string name="Transactions_Multiple">Multiple</string>
     <string name="Transactions_Filter">Filter</string>
@@ -1026,6 +1081,10 @@
     <string name="Info_LockTime_Title" translatable="false">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <string name="Info_LockTime_Description_Static">The sender sent these funds with a spending lock that will expire on the shown date. \n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you cannot spend them on the Bitcoin network.</string>
+
+    <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
+    <string name="Info_Reserved_CurrentlyLocked">Currently locked:</string>
+    <string name="Info_Reserved_WalletAction">Wallet activation</string>
 
     <string name="Info_NotRelayed_Title">Broadcast</string>
     <string name="Info_NotRelayed_Description">The transaction holding this amount is broadcasted but not yet accepted by the network.</string>
@@ -1115,6 +1174,25 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
+
+    <!--Address Checker-->
+    <string name="SettingsAddressChecker_Title">Address Checker</string>
+    <string name="SettingsAddressChecker_RecipientCheck">Recipient Check</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Checks the recipient address for risks before sending.</string>
+    <string name="SettingsAddressChecker_CheckAddress">Check Address</string>
+    <string name="SettingsAddressChecker_SelectBlockchain">Select Blockchain</string>
+    <string name="SettingsAddressChecker_SelectCoin">Select Coin</string>
+    <string name="SettingsAddressChecker_OnSubject">on %s</string>
+    <string name="SettingsAddressChecker_SanctionsCheck">Sanctions Check</string>
+    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
+    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
+    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis is a blockchain analysis platform that provides tools for tracking, investigating, and assessing the risk of cryptocurrency addresses. It helps identify addresses associated with sanctions, fraud, and other illicit activities.</string>
+    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
+    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit is a security platform that allows users to check wallet addresses for risks such as sanctions and blacklist status. It helps users avoid interacting with potentially malicious or blocked addresses.</string>
+    <string name="SettingsAddressChecker_TetherBlacklistDescription">Allows you to verify whether a wallet address is blacklisted by Tether (USDT). If an address is blacklisted, any USDT tokens associated with it may be frozen, making them inaccessible and non-transferable. This check helps users avoid interacting with high-risk or restricted addresses.</string>
+    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Enables you to check if a wallet address is blacklisted by the USDC issuer (Circle). Addresses on the blacklist may have their USDC holdings frozen due to compliance, fraud, or regulatory reasons. Using this check reduces the risk of sending funds to blocked or suspicious wallets.</string>
+    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Provides a way to verify if a wallet address is blacklisted by PYUSD, issued by PayPal. Funds held at blacklisted addresses may be frozen and unusable, typically due to legal or security concerns. This tool helps ensure safer and compliant transactions with PYUSD.</string>
+    <string name="SettingsAddressChecker_InvalidAddress">The address you entered appears to be invalid. Please double-check for typos or formatting issues and try again.</string>
 
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
@@ -1543,6 +1621,10 @@
     <string name="EvmPrivateKey_Warning">This key is for all EVM-compatible blockchains. Do not share it with anyone.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tap to show private key</string>
 
+    <!-- Stellar Secret Key -->
+    <string name="StellarSecretKey_Title">Stellar Secret Key</string>
+    <string name="StellarSecretKey_ShowSecretKey">Tap to show secret key</string>
+
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
 
@@ -1563,6 +1645,8 @@
     <string name="PrivateKeys_Title">Private Keys</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_StellarSecretKey">Stellar Secret Key</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Grants full control over Stellar account within respective wallet.</string>
     <string name="PrivateKeys_Bip32RootKey" translatable="false">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>

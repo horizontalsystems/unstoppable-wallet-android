@@ -143,6 +143,9 @@ sealed class AccountType : Parcelable {
     data class TonAddress(val address: String) : AccountType()
 
     @Parcelize
+    data class StellarAddress(val address: String) : AccountType()
+
+    @Parcelize
     data class BitcoinAddress(
         val address: String,
         val blockchainType: BlockchainType,
@@ -177,6 +180,17 @@ sealed class AccountType : Parcelable {
 
         override fun hashCode(): Int {
             return words.toTypedArray().contentHashCode() + passphrase.hashCode()
+        }
+    }
+
+    @Parcelize
+    data class StellarSecretKey(val key: String) : AccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is StellarSecretKey && key == other.key
+        }
+
+        override fun hashCode(): Int {
+            return key.hashCode()
         }
     }
 
@@ -267,6 +281,8 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> "Solana Address"
             is TronAddress -> "Tron Address"
             is TonAddress -> "Ton Address"
+            is StellarAddress -> "Stellar Address"
+            is StellarSecretKey -> "Stellar Secret Key"
             is EvmPrivateKey -> "EVM Private Key"
             is ZCashUfvKey -> "ZCash UFV Key"
             is HardwareCard -> "Hardware card"
@@ -311,6 +327,7 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> this.address.shorten()
             is TronAddress -> this.address.shorten()
             is TonAddress -> this.address.shorten()
+            is StellarAddress -> this.address.shorten()
             is BitcoinAddress -> this.address.shorten()
             else -> this.description
         }
@@ -336,6 +353,7 @@ sealed class AccountType : Parcelable {
             is SolanaAddress,
             is TronAddress,
             is TonAddress,
+            is StellarAddress,
             is BitcoinAddress -> true
 
             is HdExtendedKey -> hdExtendedKey.isPublic

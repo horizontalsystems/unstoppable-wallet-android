@@ -99,6 +99,7 @@ val BlockchainType.title: String
         BlockchainType.Fantom -> "Fantom"
         BlockchainType.Tron -> "Tron"
         BlockchainType.Ton -> "Ton"
+        BlockchainType.Stellar -> "Stellar"
         BlockchainType.Cosanta -> "Cosanta"
         BlockchainType.PirateCash -> "PirateCash"
         BlockchainType.Monero -> "Monero"

@@ -294,7 +294,7 @@ class TokenBalanceViewModel(
         viewModelScope.launch {
             try {
                 sendResult = SendResult.Sending
-                (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter?)?.let { adapter ->
+                (adapterManager.getAdapterForWalletOld(wallet) as? ZcashAdapter?)?.let { adapter ->
                     adapter.proposeShielding()
                 }
                 sendResult = SendResult.Sent()

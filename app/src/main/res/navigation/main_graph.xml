@@ -62,6 +62,10 @@
         android:id="@+id/evmPrivateKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment"/>
     <fragment
+        android:id="@+id/stellarSecretKeyFragment"
+        android:name="cash.p.terminal.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment"/>
+
+    <fragment
         android:id="@+id/generalPrivateKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.generalprivatekey.GeneralPrivateKeyFragment"/>
     <fragment
@@ -277,6 +281,15 @@
         android:id="@+id/receiveFragment"
         android:name="cash.p.terminal.modules.receive.ReceiveFragment" />
     <fragment
+        android:id="@+id/activateTokenFragment"
+        android:name="cash.p.terminal.modules.activatetoken.ActivateTokenFragment"/>
+    <fragment
+        android:id="@+id/btcUsedAddressesFragment"
+        android:name="cash.p.terminal.modules.receive.BtcUsedAddressesFragment" />
+    <fragment
+        android:id="@+id/receiveChooseCoinFragment"
+        android:name="cash.p.terminal.modules.receive.ui.ReceiveChooseCoinFragment" />
+    <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="cash.p.terminal.modules.evmnetwork.EvmNetworkFragment"
         android:label="EvmNetworkFragment" />
@@ -293,6 +306,9 @@
     <fragment
         android:id="@+id/etfFragment"
         android:name="cash.p.terminal.modules.market.etf.EtfFragment" />
+    <fragment
+        android:id="@+id/enterAddressFragment"
+        android:name="cash.p.terminal.modules.send.address.EnterAddressFragment"/>
     <fragment
         android:id="@+id/nftsFragment"
         android:name="cash.p.terminal.modules.nft.holdings.NftHoldingsFragment" />

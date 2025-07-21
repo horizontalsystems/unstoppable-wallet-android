@@ -132,7 +132,6 @@ class TonKitManager(
                     }
                     TonWallet.FullAccess(
                         TonPrivateKeyEd25519(
-                            accountType.cardId,
                             hardwarePublicKey
                         )
                     )

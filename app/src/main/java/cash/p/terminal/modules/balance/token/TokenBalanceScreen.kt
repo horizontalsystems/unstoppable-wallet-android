@@ -42,7 +42,7 @@ import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
-import cash.p.terminal.modules.send.SendFragment
+import cash.p.terminal.modules.receive.ReceiveFragment
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
@@ -73,6 +73,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
+import cash.p.terminal.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -447,7 +448,7 @@ private fun ButtonsRow(
     val onClickReceive = {
         try {
             val wallet = viewModel.getWalletForReceive()
-            navController.slideFromRight(R.id.receiveFragment, wallet)
+            navController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet))
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
@@ -486,13 +487,13 @@ private fun ButtonsRow(
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.Balance_Send),
                     onClick = {
-                        val sendTitle = Translator.getString(
-                            R.string.Send_Title,
-                            viewItem.wallet.token.fullCoin.coin.code
-                        )
+                        val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
                         navController.slideFromRight(
-                            R.id.sendXFragment,
-                            SendFragment.Input(viewItem.wallet, sendTitle)
+                            R.id.enterAddressFragment,
+                            EnterAddressFragment.Input(
+                                wallet = viewItem.wallet,
+                                title = sendTitle
+                            )
                         )
                     },
                     enabled = viewItem.sendEnabled

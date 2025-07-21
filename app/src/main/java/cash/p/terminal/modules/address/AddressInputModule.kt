@@ -53,6 +53,11 @@ object AddressInputModule {
                 BlockchainType.Ton -> {
                     addressParserChain.addHandler(AddressHandlerTon())
                 }
+
+                BlockchainType.Stellar -> {
+                    addressParserChain.addHandler(AddressHandlerStellar())
+                }
+
                 is BlockchainType.Unsupported -> Unit
             }
 
@@ -103,7 +108,9 @@ object AddressInputModule {
                 BlockchainType.Tron,
                 BlockchainType.Ton,
                 BlockchainType.Monero,
+                BlockchainType.Stellar,
                 is BlockchainType.Unsupported -> Unit
+
             }
 
             val addressUriParser = AddressUriParser(blockchainType, null)

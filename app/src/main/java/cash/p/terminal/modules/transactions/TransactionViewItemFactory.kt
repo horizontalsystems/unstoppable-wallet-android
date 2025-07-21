@@ -16,6 +16,7 @@ import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
+import cash.p.terminal.entities.transactionrecords.stellar.StellarTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
@@ -38,6 +39,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
 import java.util.Date
+import kotlin.times
+import kotlin.to
 
 class TransactionViewItemFactory(
     private val evmLabelManager: EvmLabelManager,
@@ -415,6 +418,18 @@ class TransactionViewItemFactory(
                 )
             }
 
+            is StellarTransactionRecord -> {
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.token,
+                    isIncoming = record.type is StellarTransactionRecord.Type.Receive
+                ) ?: createViewItemFromStellarTransactionRecord(
+                    icon = icon,
+                    record = record,
+                    currencyValue = transactionItem.currencyValue
+                )
+            }
+
             is MoneroTransactionRecord -> {
                 createViewItemFromMoneroTransactionRecord(
                     record = record,
@@ -620,6 +635,79 @@ class TransactionViewItemFactory(
             title = Translator.getString(R.string.Transactions_TonTransaction)
             subtitle = Translator.getString(R.string.Transactions_Multiple)
             primaryValue = null
+        }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = null,
+            title = title,
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            sentToSelf = sentToSelf,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: iconX
+        )
+    }
+
+    private fun createViewItemFromStellarTransactionRecord(
+        icon: TransactionViewItem.Icon.Failed?,
+        record: StellarTransactionRecord,
+        currencyValue: CurrencyValue?,
+    ): TransactionViewItem {
+
+        val iconX: TransactionViewItem.Icon
+        val title: String
+        val subtitle: String
+        val primaryValue: ColoredValue?
+        var secondaryValue = currencyValue?.let {
+            getColoredValue(it, ColorName.Grey)
+        }
+        var sentToSelf = false
+
+        when (val recordType = record.type) {
+            is StellarTransactionRecord.Type.Send -> {
+                title = Translator.getString(R.string.Transactions_Send)
+                subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
+
+                sentToSelf = recordType.sentToSelf
+
+                primaryValue = if (sentToSelf) {
+                    ColoredValue(getCoinString(recordType.value, true), ColorName.Grey)
+                } else {
+                    getColoredValue(recordType.value, getAmountColorForSend(icon))
+                }
+
+                iconX = singleValueIconType(recordType.value)
+
+            }
+
+            is StellarTransactionRecord.Type.Receive -> {
+                title = Translator.getString(R.string.Transactions_Receive)
+                subtitle = Translator.getString(
+                    R.string.Transactions_From,
+                    mapped(recordType.from, record.blockchainType)
+                )
+
+                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
+                iconX = singleValueIconType(recordType.value)
+            }
+
+            is StellarTransactionRecord.Type.ChangeTrust -> {
+                title = Translator.getString(R.string.Transactions_ChangeTrust)
+                subtitle = recordType.trustee.shorten()
+                primaryValue = getColoredValue(recordType.value, ColorName.Leah, true)
+                iconX = singleValueIconType(recordType.value)
+            }
+
+            is StellarTransactionRecord.Type.Unsupported -> {
+                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                title = Translator.getString(R.string.Transactions_StellarTransaction)
+                subtitle = recordType.type
+                primaryValue = null
+                secondaryValue = null
+            }
         }
 
         return TransactionViewItem(
@@ -916,10 +1004,17 @@ class TransactionViewItemFactory(
         )
     }
 
-    private fun getColoredValue(value: Any, color: ColorName): ColoredValue =
+    private fun getAmountColorForSend(icon: TransactionViewItem.Icon?): ColorName {
+        return when (icon) {
+            is TransactionViewItem.Icon.Failed -> ColorName.Grey
+            else -> ColorName.Leah
+        }
+    }
+
+    private fun getColoredValue(value: Any, color: ColorName, hideSign: Boolean = false): ColoredValue =
         when (value) {
             is TransactionValue -> ColoredValue(
-                value = getCoinString(value),
+                value = getCoinString(value, hideSign),
                 color = if (value.zeroValue) ColorName.Leah else color
             )
 

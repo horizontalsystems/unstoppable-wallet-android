@@ -3,6 +3,7 @@ package cash.p.terminal.ui_compose.theme
 import androidx.compose.ui.graphics.Color
 
 val Dark = Color(0xFF13151A)
+val Carbon = Color(0xFF232323)
 val Light = Color(0xFFF0F0F0)
 val LightGrey = Color(0xFFC8C7CC)
 val SteelLight = Color(0xFFE1E1E5)

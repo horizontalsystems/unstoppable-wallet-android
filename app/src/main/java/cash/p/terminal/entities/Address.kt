@@ -60,6 +60,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Fantom,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Stellar,
         is BlockchainType.Unsupported,
         null -> TokenType.Unsupported("", "")
     }

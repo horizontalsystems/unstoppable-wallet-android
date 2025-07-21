@@ -20,7 +20,6 @@ import cash.p.terminal.core.App
 import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.requireInput
-import io.horizontalsystems.core.setNavigationResultX
 import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.send.evm.SendEvmData
@@ -54,7 +53,8 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
     data class Input(
         val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
         val additionalInfo: SendEvmData.AdditionalInfo?,
-        val blockchainType: BlockchainType
+        val blockchainType: BlockchainType,
+        val sendEntryPointDestId: Int
     ) : Parcelable {
         val transactionData: TransactionData
             get() = TransactionData(
@@ -65,16 +65,15 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
 
         constructor(
             sendData: SendEvmData,
-            blockchainType: BlockchainType
+            blockchainType: BlockchainType,
+            sendEntryPointDestId: Int
         ) : this(
             SendEvmModule.TransactionDataParcelable(sendData.transactionData),
             sendData.additionalInfo,
-            blockchainType
+            blockchainType,
+            sendEntryPointDestId
         )
     }
-
-    @Parcelize
-    data class Result(val success: Boolean) : Parcelable
 }
 
 @Composable
@@ -90,9 +89,9 @@ private fun SendEvmConfirmationScreen(
     val viewModel = viewModel<SendEvmConfirmationViewModel>(
         viewModelStoreOwner = currentBackStackEntry,
         factory = SendEvmConfirmationViewModel.Factory(
-            input.transactionData,
-            input.additionalInfo,
-            input.blockchainType,
+            transactionData = input.transactionData,
+            additionalInfo = input.additionalInfo,
+            blockchainType = input.blockchainType,
         )
     )
     val uiState = viewModel.uiState
@@ -121,14 +120,15 @@ private fun SendEvmConfirmationScreen(
                         buttonEnabled = false
                         HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
 
-                        val result = try {
+                        try {
                             logger.info("sending tx")
                             viewModel.send()
                             logger.info("success")
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            SendEvmConfirmationFragment.Result(true)
+
+                            navController.popBackStack(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             val errorMsg = if(t is JsonRpc.ResponseError.RpcError) {
@@ -137,12 +137,9 @@ private fun SendEvmConfirmationScreen(
                                 t.message ?: App.instance.getString(R.string.unknown_send_error)
                             }
                             HudHelper.showErrorMessage(view, errorMsg)
-                            SendEvmConfirmationFragment.Result(false)
                         }
 
                         buttonEnabled = true
-                        navController.setNavigationResultX(result)
-                        navController.popBackStack()
                     }
                 },
                 enabled = uiState.sendEnabled && buttonEnabled

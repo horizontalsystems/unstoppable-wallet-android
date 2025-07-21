@@ -14,10 +14,12 @@ object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
     private const val MNEMONIC_MONERO = "mnemonic_monero"
     private const val PRIVATE_KEY = "private_key"
+    private const val SECRET_KEY = "secret_key"
     private const val ADDRESS = "evm_address"
     private const val SOLANA_ADDRESS = "solana_address"
     private const val TRON_ADDRESS = "tron_address"
     private const val TON_ADDRESS = "ton_address"
+    private const val STELLAR_ADDRESS = "stellar_address"
     private const val BITCOIN_ADDRESS = "bitcoin_address"
     private const val HD_EXTENDED_KEY = "hd_extended_key"
     private const val UFVK = "ufvk"
@@ -76,10 +78,12 @@ object BackupLocalModule {
         is AccountType.Mnemonic -> MNEMONIC
         is AccountType.MnemonicMonero -> MNEMONIC_MONERO
         is AccountType.EvmPrivateKey -> PRIVATE_KEY
+        is AccountType.StellarSecretKey -> SECRET_KEY
         is AccountType.EvmAddress -> ADDRESS
         is AccountType.SolanaAddress -> SOLANA_ADDRESS
         is AccountType.TronAddress -> TRON_ADDRESS
         is AccountType.TonAddress -> TON_ADDRESS
+        is AccountType.StellarAddress -> STELLAR_ADDRESS
         is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
         is AccountType.HdExtendedKey -> HD_EXTENDED_KEY
         is AccountType.ZCashUfvKey -> UFVK
@@ -115,10 +119,12 @@ object BackupLocalModule {
             }
 
             PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
+            SECRET_KEY -> AccountType.StellarSecretKey(String(data, Charsets.UTF_8))
             ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
             TON_ADDRESS -> AccountType.TonAddress(String(data, Charsets.UTF_8))
+            STELLAR_ADDRESS -> AccountType.StellarAddress(String(data, Charsets.UTF_8))
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(
                 String(
                     data,
@@ -161,10 +167,12 @@ object BackupLocalModule {
         }
 
         is AccountType.EvmPrivateKey -> accountType.key.toByteArray()
+        is AccountType.StellarSecretKey -> accountType.key.toByteArray(Charsets.UTF_8)
         is AccountType.EvmAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.TonAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.StellarAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
         is AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)

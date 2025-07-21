@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.receive.ui
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -41,12 +42,14 @@ import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UsedAddressesParams(
     val coinName: String,
     val usedAddresses: List<UsedAddress>,
     val usedChangeAddresses: List<UsedAddress>
-)
+) : Parcelable
 
 enum class UsedAddressTab(@StringRes val titleResId: Int) {
     ReceiveAddress(R.string.Balance_Receive_ReceiveAddresses),

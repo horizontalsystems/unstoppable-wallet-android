@@ -12,6 +12,7 @@ import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.core.managers.BtcBlockchainManager
+import cash.p.terminal.core.managers.RecentAddressManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
@@ -30,8 +31,10 @@ import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import kotlin.getValue
 
 class SendBitcoinViewModel(
     val adapter: ISendBitcoinAdapter,
@@ -46,6 +49,7 @@ class SendBitcoinViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
+    private val address: Address
 ) : ViewModelUiState<SendBitcoinUiState>() {
     private companion object {
         val BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS = listOf(
@@ -54,6 +58,8 @@ class SendBitcoinViewModel(
             BlockchainType.PirateCash
         )
     }
+
+    private val recentAddressManager: RecentAddressManager by inject(RecentAddressManager::class.java)
 
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -113,6 +119,8 @@ class SendBitcoinViewModel(
         viewModelScope.launch {
             feeRateService.start()
         }
+
+        addressService.setAddress(address)
     }
 
     override fun createState() = SendBitcoinUiState(
@@ -285,12 +293,13 @@ class SendBitcoinViewModel(
                 rbfEnabled = localStorage.rbfEnabled,
                 dustThreshold = null,
                 changeToFirstInput = false,
-                utxoFilters = UtxoFilters(),
-                logger = logger
+                utxoFilters = UtxoFilters()
             )
 
             logger.info("success")
             sendResult = SendResult.Sent(transactionRecord)
+
+            recentAddressManager.setRecentAddress(address, blockchainType)
         } catch (e: TangemSdkError.UserCancelled) {
             sendResult = null
             logger.info("user cancelled")

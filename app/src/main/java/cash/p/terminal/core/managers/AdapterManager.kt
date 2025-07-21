@@ -32,7 +32,8 @@ class AdapterManager(
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
-    private val moneroKitManager: MoneroKitManager
+    private val moneroKitManager: MoneroKitManager,
+    private val stellarKitManager: StellarKitManager
 ) : IAdapterManager, HandlerThread("A") {
 
     private val mutex = Mutex()
@@ -125,6 +126,7 @@ class AdapterManager(
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
         tonKitManager.tonKitWrapper?.tonKit?.refresh()
         moneroKitManager.moneroKitWrapper?.refresh()
+        stellarKitManager.stellarKitWrapper?.stellarKit?.refresh()
     }
 
     private fun initAdapters(wallets: List<Wallet>) = coroutineScope.launch {
@@ -207,16 +209,19 @@ class AdapterManager(
         }
     }
 
-    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getAdapterForWallet(wallet: Wallet): T? {
+        return adaptersMap[wallet] as? T
+    }
+
+    override fun getAdapterForWalletOld(wallet: Wallet): IAdapter? {
         return adaptersMap[wallet]
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : IAdapter> getAdapterForToken(token: Token): T? {
+    override fun <T> getAdapterForToken(token: Token): T? {
         return walletManager.activeWallets.firstOrNull { it.token == token }
-            ?.let { wallet ->
-                adaptersMap[wallet] as? T
-            }
+            ?.let(::getAdapterForWallet)
     }
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {

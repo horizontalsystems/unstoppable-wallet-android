@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendMoneroAddressService(prefilledAddress: String?) {
-    private var address: Address? = prefilledAddress?.let { Address(it) }
+class SendMoneroAddressService {
+    private var address: Address? = null
     private var addressError: Throwable? = null
 
     private val _stateFlow = MutableStateFlow(

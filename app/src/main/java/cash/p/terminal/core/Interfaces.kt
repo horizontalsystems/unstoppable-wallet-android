@@ -173,8 +173,7 @@ interface ISendBitcoinAdapter {
         rbfEnabled: Boolean,
         dustThreshold: Int?,
         changeToFirstInput: Boolean,
-        utxoFilters: UtxoFilters,
-        logger: AppLogger
+        utxoFilters: UtxoFilters
     ): String
 }
 
@@ -208,6 +207,14 @@ interface ISendTonAdapter {
     val availableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?)
     suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?) : BigDecimal
+}
+
+interface ISendStellarAdapter {
+    val maxSendableBalance: BigDecimal
+    val fee: BigDecimal
+    fun validate(address: String)
+    suspend fun getMinimumSendAmount(address: String) : BigDecimal?
+    suspend fun send(amount: BigDecimal, address: String, memo: String?)
 }
 
 interface ISendTronAdapter {

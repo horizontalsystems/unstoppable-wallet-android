@@ -70,6 +70,10 @@ class AddressParserChain(
                     addressParserChain.addHandler(AddressHandlerTon())
                 }
 
+                BlockchainType.Stellar -> {
+                    addressParserChain.addHandler(AddressHandlerStellar())
+                }
+
                 is BlockchainType.Unsupported -> Unit
             }
 

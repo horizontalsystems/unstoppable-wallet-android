@@ -12,7 +12,6 @@ import org.ton.api.pub.PublicKeyEd25519
 import org.ton.bitstring.Bits256
 
 class TonPrivateKeyEd25519(
-    private val cardId: String,
     private val hardwarePublicKey: HardwarePublicKey
 ) : PrivateKeyEd25519 {
     private val pubKey = PublicKeyEd25519(hardwarePublicKey.key.value.hexStringToByteArray())

@@ -11,7 +11,6 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.piratecashkit.PirateCashKit
@@ -149,13 +148,11 @@ class PirateCashAdapter(
                 is AccountType.HardwareCard -> {
                     val hardwareWalletEcdaBitcoinSigner = buildHardwareWalletEcdaBitcoinSigner(
                         accountId = account.id,
-                        cardId = accountType.cardId,
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )
                     val hardwareWalletSchnorrSigner = buildHardwareWalletSchnorrBitcoinSigner(
                         accountId = account.id,
-                        cardId = accountType.cardId,
                         blockchainType = wallet.token.blockchainType,
                         tokenType = wallet.token.type,
                     )

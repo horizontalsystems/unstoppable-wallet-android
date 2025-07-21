@@ -27,7 +27,7 @@ class Eip1559GasPriceService(
     private val refreshSignalFlowable: Flowable<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
     initialGasPrice: GasPrice.Eip1559? = null
-) : IEvmGasPriceService<DataState<GasPriceInfo>>() {
+) : IEvmGasPriceService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val blocksCount: Long = 10

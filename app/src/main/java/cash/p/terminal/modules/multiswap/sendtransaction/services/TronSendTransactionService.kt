@@ -53,7 +53,7 @@ class TronSendTransactionService(
         availableBalance = adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
         leaveSomeBalanceForFee = wallet.token.type.isNative
     )
-    val addressService = SendTronAddressService(adapter, wallet.token, null)
+    val addressService = SendTronAddressService(adapter, wallet.token)
     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native))
         ?: throw IllegalArgumentException()

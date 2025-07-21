@@ -32,8 +32,7 @@ import java.math.BigInteger
  * @param onBatchSubscribeAmountReceived to show warning notification how many time to use card for signing
  */
 class HardwareWalletEcdaSigner(
-    private val hardwarePublicKey: HardwarePublicKey,
-    private val cardId: String
+    private val hardwarePublicKey: HardwarePublicKey
 ) : IInputSigner, IEcdsaInputBatchSigner {
 
     private val signHashesTransactionUseCase: SignHashesTransactionUseCase by inject(

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.toStellarWallet
 import cash.p.terminal.core.toRawHexString
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
 import cash.p.terminal.wallet.Account
@@ -14,6 +15,7 @@ import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
 class PrivateKeysViewModel(
@@ -55,6 +57,13 @@ class PrivateKeysViewModel(
                 null
             }
 
+        val stellarSecretKey = try {
+            val stellarWallet = account.type.toStellarWallet()
+            StellarKit.getSecretSeed(stellarWallet)
+        } catch (e: Throwable) {
+            null
+        }
+
         viewState = PrivateKeysModule.ViewState(
             evmPrivateKey = ethereumPrivateKey,
             bip32RootKey = bip32RootKey?.let {
@@ -62,7 +71,8 @@ class PrivateKeysViewModel(
             },
             accountExtendedPrivateKey = accountExtendedPrivateKey?.let {
                 PrivateKeysModule.ExtendedKey(it, accountExtendedDisplayType)
-            }
+            },
+            stellarSecretKey = stellarSecretKey
         )
     }
 

@@ -25,7 +25,8 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         State(
             feeRate = feeRate,
             feeRateCaution = feeRateCaution,
-            canBeSend = canBeSend
+            canBeSend = canBeSend,
+            isRecommended = feeRate == recommendedFeeRate
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -34,15 +35,11 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         try {
             val feeRates = feeRateProvider.getFeeRates()
 
-            recommendedFeeRate = feeRates.recommended
-            minimumFeeRate = feeRates.minimum
-            feeRate = recommendedFeeRate
-        } catch (e: Throwable) {
-            e.printStackTrace()
+            if (recommendedFeeRate == null) {
+                setRecommendedAndMin(feeRates.recommended, feeRates.minimum)
+            }
+        } catch (_: Throwable) {
         }
-
-        validateFeeRate()
-        emitState()
     }
 
     fun setRecommendedAndMin(recommended: Int, minimum: Int) {
@@ -74,7 +71,8 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
             State(
                 feeRate = feeRate,
                 feeRateCaution = feeRateCaution,
-                canBeSend = canBeSend
+                canBeSend = canBeSend,
+                isRecommended = feeRate == recommendedFeeRate
             )
         }
     }
@@ -107,5 +105,6 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         val feeRate: Int?,
         val feeRateCaution: HSCaution?,
         val canBeSend: Boolean,
+        val isRecommended: Boolean,
     )
 }

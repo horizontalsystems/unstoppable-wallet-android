@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.isNative
+import cash.p.terminal.entities.Address
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
@@ -56,8 +57,12 @@ object SendEvmModule {
     }
 
 
-    internal class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
+    internal class Factory(
+        private val wallet: Wallet,
+        private val address: Address,
+        private val hideAddress: Boolean,
+    ) : ViewModelProvider.Factory {
+        val adapter = (App.adapterManager.getAdapterForWalletOld(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -72,19 +77,20 @@ object SendEvmModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative
                     )
-                    val addressService = SendEvmAddressService(predefinedAddress)
+                    val addressService = SendEvmAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendEvmViewModel(
-                        wallet,
-                        wallet.token,
-                        adapter,
-                        xRateService,
-                        amountService,
-                        addressService,
-                        coinMaxAllowedDecimals,
-                        predefinedAddress == null,
-                        App.connectivityManager,
+                        wallet = wallet,
+                        sendToken = wallet.token,
+                        adapter = adapter,
+                        xRateService = xRateService,
+                        amountService = amountService,
+                        addressService = addressService,
+                        coinMaxAllowedDecimals = coinMaxAllowedDecimals,
+                        showAddressInput = !hideAddress,
+                        connectivityManager = App.connectivityManager,
+                        address = address,
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

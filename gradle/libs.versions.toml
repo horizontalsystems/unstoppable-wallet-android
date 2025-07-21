@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.10.0"
 androidGradlePlugin = "8.6.1"
+coreVersion = "4.9.0"
 desugar_jdk_libs = "2.1.5"
 firebaseBom = "33.12.0"
 firebaseCrashlyticsGradle = "2.9.9"
@@ -21,6 +22,7 @@ coil-compose = "2.5.0"
 annotation = "1.9.1"
 lifecycle-viewmodel-compose = "2.8.7"
 roomRxjava2 = "2.6.1"
+stellarSdk = "1.0.0"
 uiTooling = "1.7.6"
 androidx-fragment-ktx = "1.8.5"
 navigationRuntimeKtx = "2.8.5"
@@ -34,6 +36,7 @@ appcompat = "1.7.0"
 tonKotlin = "0.2.15" # same version like in ton-kit
 piratecash-ton = "acae5a0"
 piratecash-bitcoin = "403053c"
+stellar-kit = "a885bce"
 piratecash-ethereum = "553d40b"
 horizontalsystems-blockchain-fee = "1d3bd49"
 piratecash-solana = "a009bcf"
@@ -74,6 +77,7 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4"}
 
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-material = { module = "androidx.compose.material:material" }
@@ -101,9 +105,11 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+stellar-sdk = { module = "network.lightsail:stellar-sdk", version.ref = "stellarSdk" }
 ton-kotlin-contract = { module = "org.ton:ton-kotlin-contract", version.ref = "tonKotlin" }
 ton-kit = { group = "com.github.piratecash", name = "ton-kit-android", version.ref = "piratecash-ton" }
 bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
+stellar-kit = { group = "com.github.piratecash", name = "stellar-kit-android", version.ref = "stellar-kit" }
 solana-kit = { group = "com.github.piratecash", name = "solana-kit-android", version.ref = "piratecash-solana" }
 monero-kit = { group = "com.github.piratecash", name = "monero-kit-android", version.ref = "monero-kit-android" }
 netcipher = { group = "info.guardianproject.netcipher", name = "netcipher", version.ref = "netcipher" }
@@ -131,6 +137,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 ktor-kotlinx-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+web3j-core = { module = "org.web3j:core", version.ref = "coreVersion" }
 zcash-android-sdk = { module = "cash.z.ecc.android:zcash-android-sdk", version.ref = "zcashAndroidSdk" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 google-play-app-update = { group = "com.google.android.play", name = "app-update", version.ref = "google-play-core" }

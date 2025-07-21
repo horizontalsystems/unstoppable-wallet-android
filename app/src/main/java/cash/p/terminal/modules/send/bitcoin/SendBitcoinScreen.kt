@@ -139,7 +139,10 @@ fun SendBitcoinScreen(
     val rate = viewModel.coinRate
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
+        factory = AddressParserModule.Factory(
+            wallet.token,
+            PrefilledData(uiState.address?.hex.orEmpty(), uiState.amount)
+        )
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 

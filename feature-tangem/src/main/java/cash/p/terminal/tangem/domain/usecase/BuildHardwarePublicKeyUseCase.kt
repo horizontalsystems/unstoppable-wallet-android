@@ -34,6 +34,7 @@ class BuildHardwarePublicKeyUseCase {
                 tokenType = tokenType,
                 key = SecretString(walletPublicKey.externalPublicKey),
                 publicKey = walletPublicKey.bytes,
+                derivedPublicKey = walletPublicKey.derivedPublicKey,
                 derivationPath = derivationPath.rawPath,
             )
         }
@@ -46,6 +47,7 @@ class BuildHardwarePublicKeyUseCase {
     ): Pair<HardwarePublicKeyType, WalletPublicKey>? =
         when (blockchainType) {
             BlockchainType.Solana,
+            BlockchainType.Stellar,
             BlockchainType.Ton -> getAddress(
                 scanResponse,
                 blockchainType,
@@ -69,10 +71,11 @@ class BuildHardwarePublicKeyUseCase {
             ?: return null
 
         for ((publicKey, extendedPublicKeyMap) in scanResponse.derivedKeys) {
-            extendedPublicKeyMap[derivationPath]?.let {
+            extendedPublicKeyMap[derivationPath]?.let { extendedPublicKey ->
                 return WalletPublicKey(
                     bytes = publicKey.bytes,
-                    externalPublicKey = it.publicKey.toHexString()
+                    derivedPublicKey = extendedPublicKey.publicKey,
+                    externalPublicKey = extendedPublicKey.publicKey.toHexString()
                 )
             }
         }
@@ -89,8 +92,6 @@ class BuildHardwarePublicKeyUseCase {
             ?: return null
         for ((publicKey, extendedPublicKeyMap) in scanResponse.derivedKeys) {
             extendedPublicKeyMap[derivationPath]?.let { extendedPublicKey ->
-//                val derivedKeyData = scanResponse.derivedKeys.values.first().values.first()
-
                 val tangemDepth = derivationPath.nodes.size
                 val tangemParentFingerprint = 0
                 val tangemChildNumber = extendedPublicKey.childNumber.toInt()
@@ -126,6 +127,7 @@ class BuildHardwarePublicKeyUseCase {
 
                 return WalletPublicKey(
                     bytes = publicKey.bytes,
+                    derivedPublicKey = extendedPublicKey.publicKey,
                     externalPublicKey = HDExtendedKey(hdKeyInstance, hdKeyVersion).serialize()
                 )
             }
@@ -137,5 +139,6 @@ class BuildHardwarePublicKeyUseCase {
 
 private class WalletPublicKey(
     val bytes: ByteArray,
+    val derivedPublicKey: ByteArray,
     val externalPublicKey: String
 )

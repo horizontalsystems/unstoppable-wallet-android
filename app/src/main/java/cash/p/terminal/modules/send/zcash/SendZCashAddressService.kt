@@ -3,17 +3,15 @@ package cash.p.terminal.modules.send.zcash
 import cash.p.terminal.R
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.Address
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class SendZCashAddressService(
-    private val adapter: ISendZcashAdapter,
-    prefilledAddress: String?
+    private val adapter: ISendZcashAdapter
 ) {
-    var address: Address? = prefilledAddress?.let { Address(it) }
+    var address: Address? = null
         private set
     private var addressType: ZcashAdapter.ZCashAddressType? = null
     private var addressError: Throwable? = null

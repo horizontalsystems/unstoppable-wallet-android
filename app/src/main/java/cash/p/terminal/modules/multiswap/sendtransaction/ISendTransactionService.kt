@@ -26,6 +26,7 @@ import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import java.util.UUID
 
 abstract class ISendTransactionService<T>(protected val token: Token) :
     ServiceState<SendTransactionServiceState>() {
@@ -34,8 +35,9 @@ abstract class ISendTransactionService<T>(protected val token: Token) :
     private val walletUseCase: WalletUseCase by inject(WalletUseCase::class.java)
     protected val wallet: Wallet by lazy { runBlocking { walletUseCase.createWalletIfNotExists(token)!! } }
     protected val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
-    protected val adapter = (adapterManager.getAdapterForWallet(wallet) as T)
+    protected val adapter = (adapterManager.getAdapterForWalletOld(wallet) as T)
     private val baseCurrency = App.currencyManager.baseCurrency
+    protected var uuid = UUID.randomUUID().toString()
 
     protected val rate: CurrencyValue?
         get() {
@@ -108,5 +110,6 @@ data class SendTransactionServiceState(
     val cautions: List<CautionViewItem>,
     val sendable: Boolean,
     val loading: Boolean,
-    val fields: List<DataField>
+    val fields: List<DataField>,
+    val extraFees: Map<FeeType, SendModule.AmountData> = emptyMap()
 )

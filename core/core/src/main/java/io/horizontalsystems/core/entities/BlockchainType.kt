@@ -53,6 +53,12 @@ sealed class BlockchainType : Parcelable {
     }
 
     @Parcelize
+    object Stellar : BlockchainType() {
+        @IgnoredOnParcel
+        override val uid = "stellar"
+    }
+
+    @Parcelize
     object Ethereum : BlockchainType() {
         @IgnoredOnParcel
         override val uid = "ethereum"
@@ -199,6 +205,7 @@ sealed class BlockchainType : Parcelable {
             "piratecash" -> PirateCash
             "zksync" -> ZkSync
             "monero" -> Monero
+            "stellar" -> Stellar
             else -> Unsupported(uid)
         }
     }

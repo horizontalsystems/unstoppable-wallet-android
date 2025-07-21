@@ -24,6 +24,7 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
+import cash.p.terminal.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
 import cash.p.terminal.modules.manageaccount.ui.KeyActionItem
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
@@ -74,6 +75,19 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         navController.slideFromRight(
                             R.id.evmPrivateKeyFragment,
                             EvmPrivateKeyFragment.Input(key)
+                        )
+                    }
+                }
+            }
+            viewModel.viewState.stellarSecretKey?.let { key ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
+                    description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription)
+                ) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.stellarSecretKeyFragment,
+                            StellarSecretKeyFragment.Input(key)
                         )
                     }
                 }
