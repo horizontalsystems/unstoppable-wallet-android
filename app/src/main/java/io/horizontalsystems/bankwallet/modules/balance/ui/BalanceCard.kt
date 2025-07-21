@@ -57,7 +57,9 @@ fun BalanceCardSwipable(
 ) {
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(ComposeAppTheme.colors.tyler),
         contentAlignment = Alignment.Center
     ) {
         HsIconButton(
@@ -101,7 +103,6 @@ fun BalanceCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -127,7 +128,9 @@ fun BalanceCardInner(
     onClickSyncError: (() -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier.height(72.dp),
+        modifier = Modifier
+            .height(72.dp)
+            .background(ComposeAppTheme.colors.lawrence),
         verticalAlignment = Alignment.CenterVertically
     ) {
         WalletIcon(viewItem, onClickSyncError)

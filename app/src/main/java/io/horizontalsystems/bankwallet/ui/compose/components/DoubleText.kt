@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ fun DoubleText(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(ComposeAppTheme.colors.tyler)
             .padding(horizontal = 16.dp, vertical = 24.dp),
     ) {
         Text(
