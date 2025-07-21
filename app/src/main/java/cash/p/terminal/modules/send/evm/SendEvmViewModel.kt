@@ -47,6 +47,8 @@ internal class SendEvmViewModel(
         xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
+
+        addressService.setAddress(address)
     }
 
     override fun createState() = SendUiState(
