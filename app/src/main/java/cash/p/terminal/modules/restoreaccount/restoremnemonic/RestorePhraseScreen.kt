@@ -32,6 +32,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +46,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -147,25 +149,28 @@ fun RestorePhrase(
     }
 
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(
-                R.string.ManageAccounts_ImportWallet
-            ),
-            navigationIcon = {
-                HsBackButton(onClick = onBackClick)
-            },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Next),
-                    onClick = viewModel::onProceed
+    Scaffold(
+        containerColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(
+                    R.string.ManageAccounts_ImportWallet
+                ),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Next),
+                        onClick = viewModel::onProceed
+                    )
                 )
             )
-        )
-        Column {
+        }) { paddingValues ->
+        Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val state = rememberScrollState()
             LaunchedEffect(uiState.errorHeight) {
-                if(uiState.errorHeight != null) {
+                if (uiState.errorHeight != null) {
                     state.animateScrollTo(state.maxValue)
                 }
             }
@@ -330,7 +335,7 @@ fun RestorePhrase(
                             pasteEnabled = false,
                             singleLine = true,
                             hint = stringResource(R.string.restoreheight_hint),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             onValueChange = viewModel::onChangeHeightText
                         )
                         uiState.errorHeight?.let { errorText ->
@@ -378,61 +383,62 @@ fun RestorePhrase(
                 }
             }
 
-            Column {
-                if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
-                    SuggestionsBar(
-                        modifier = Modifier.imePadding(),
-                        wordSuggestions = uiState.wordSuggestions
-                    ) { wordItem, suggestion ->
-                        HudHelper.vibrate(context)
+            if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
+                SuggestionsBar(
+                    modifier = Modifier
+                        .imePadding()
+                        .background(Color.Green),
+                    wordSuggestions = uiState.wordSuggestions
+                ) { wordItem, suggestion ->
+                    HudHelper.vibrate(context)
 
-                        val cursorIndex = wordItem.range.first + suggestion.length + 1
-                        var text = textState.text.replaceRange(wordItem.range, suggestion)
+                    val cursorIndex = wordItem.range.first + suggestion.length + 1
+                    var text = textState.text.replaceRange(wordItem.range, suggestion)
 
-                        if (text.length < cursorIndex) {
-                            text = "$text "
-                        }
-
-                        textState = TextFieldValue(
-                            text = text,
-                            selection = TextRange(cursorIndex)
-                        )
-
-                        viewModel.onEnterMnemonicPhrase(text, cursorIndex)
+                    if (text.length < cursorIndex) {
+                        text = "$text "
                     }
+
+                    textState = TextFieldValue(
+                        text = text,
+                        selection = TextRange(cursorIndex)
+                    )
+
+                    viewModel.onEnterMnemonicPhrase(text, cursorIndex)
                 }
+            } else {
+                Spacer(modifier = Modifier.imePadding())
             }
         }
-    }
 
-    uiState.accountType?.let { accountType ->
-        if (accountType is AccountType.MnemonicMonero) {
-            onFinish()
-        } else {
-            mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
-            openSelectCoins.invoke()
-            viewModel.onSelectCoinsShown()
+        uiState.accountType?.let { accountType ->
+            if (accountType is AccountType.MnemonicMonero) {
+                onFinish()
+            } else {
+                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
+                openSelectCoins.invoke()
+                viewModel.onSelectCoinsShown()
+            }
+        }
+
+        if (showCustomKeyboardDialog) {
+            CustomKeyboardWarningDialog(
+                onSelect = {
+                    val imeManager =
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imeManager.showInputMethodPicker()
+                    showCustomKeyboardDialog = false
+                },
+                onSkip = {
+                    viewModel.onAllowThirdPartyKeyboard()
+                    showCustomKeyboardDialog = false
+                },
+                onCancel = {
+                    showCustomKeyboardDialog = false
+                }
+            )
         }
     }
-
-    if (showCustomKeyboardDialog) {
-        CustomKeyboardWarningDialog(
-            onSelect = {
-                val imeManager =
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imeManager.showInputMethodPicker()
-                showCustomKeyboardDialog = false
-            },
-            onSkip = {
-                viewModel.onAllowThirdPartyKeyboard()
-                showCustomKeyboardDialog = false
-            },
-            onCancel = {
-                showCustomKeyboardDialog = false
-            }
-        )
-    }
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
