@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.material)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
 
     implementation(project(":core:strings"))
     implementation(project(":core:resources"))

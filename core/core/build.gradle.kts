@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
