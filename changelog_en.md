@@ -1,3 +1,14 @@
+## Version 0.44 Highlights
+
+
+## THORCHAIN SWAP INTEGRATION
+
+Experience seamless cross-chain swaps! Trade BTC ↔ ETH and more directly within your wallet. No KYC required. No centralized exchanges involved. Your privacy stays intact.
+
+## STELLAR BLOCKCHAIN SUPPORT
+
+Complete Stellar blockchain compatibility and access to its full asset ecosystem — all integrated right inside your wallet.
+
 ## Version 0.43 Highlights
 
 ### Monero native blockchain
@@ -13,7 +24,10 @@ Users will be warned when NFC is not supported on the device.
 
 Resolved an issue where the wallet creation menu did not appear after changing the system PIN.
 
+
+
 ## Version 0.42 Highlights
+
 
 ### Tangem hardware wallet
 
