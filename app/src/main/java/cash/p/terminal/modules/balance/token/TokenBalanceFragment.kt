@@ -15,9 +15,10 @@ import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.isPirateCash
-import cash.p.terminal.ui_compose.getInput
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TokenBalanceFragment : BaseComposeFragment() {
@@ -42,7 +43,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             onStackingClicked = {
                 navController.slideFromRight(
                     resId = R.id.stacking,
-                    input = if(wallet.isPirateCash()) StackingType.PCASH else StackingType.COSANTA
+                    input = if (wallet.isPirateCash()) StackingType.PCASH else StackingType.COSANTA
                 )
             },
             onShowAllTransactionsClicked = {
@@ -72,6 +73,17 @@ class TokenBalanceFragment : BaseComposeFragment() {
     override fun onPause() {
         viewModel?.stopStatusChecker()
         super.onPause()
-        viewModel?.showAllTransactions(false)
+
+
+        if (!skipHideTransactions()) {
+            viewModel?.showAllTransactions(false)
+        }
+    }
+
+    private fun skipHideTransactions(): Boolean {
+        val previousBackStackEntry = findNavController().previousBackStackEntry?.destination?.id
+        // No need to hide transactions when user goes to next screen
+        // But hides when they go to background on back
+        return previousBackStackEntry == R.id.tokenBalanceFragment
     }
 }

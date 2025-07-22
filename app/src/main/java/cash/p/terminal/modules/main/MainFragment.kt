@@ -4,9 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -30,7 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
@@ -45,7 +41,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.RateAppManager
-import io.horizontalsystems.core.slideFromBottom
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -70,7 +65,9 @@ import cash.p.terminal.ui.compose.components.HsBottomNavigation
 import cash.p.terminal.ui.compose.components.HsBottomNavigationItem
 import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
 import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.slideFromBottom
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
@@ -119,9 +116,18 @@ class MainFragment : BaseComposeFragment() {
 
     override fun onPause() {
         super.onPause()
-        transactionsViewModelRef?.get()?.showAllTransactions(false)
+        if (!skipHideTransactions()) {
+            transactionsViewModelRef?.get()?.showAllTransactions(false)
+        }
     }
 
+    private fun skipHideTransactions(): Boolean {
+        // No need to hide transactions when user goes to next screen
+        // But hides when they go to background on back
+        val currentDestination = findNavController().currentDestination?.id
+        return currentDestination == R.id.transactionInfoFragment ||
+                currentDestination == R.id.transactionFilterFragment
+    }
 }
 
 @Composable
