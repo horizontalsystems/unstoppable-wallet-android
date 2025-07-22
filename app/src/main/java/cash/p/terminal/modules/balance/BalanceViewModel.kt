@@ -150,6 +150,13 @@ class BalanceViewModel(
             }
         }
 
+        // To hide balance for Samsung devices with hide balance feature enabled
+        viewModelScope.launch {
+            balanceHiddenFlow.collect {
+                refreshViewItems(service.balanceItemsFlow.value)
+            }
+        }
+
         service.start()
 
         totalBalance.start(viewModelScope)

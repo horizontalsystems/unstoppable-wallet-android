@@ -9,7 +9,6 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
-
 import cash.p.terminal.core.usecase.CheckGooglePlayUpdateUseCase
 import cash.p.terminal.core.usecase.UpdateResult
 import cash.p.terminal.entities.LaunchPage
@@ -21,7 +20,6 @@ import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.list.WCListFragment
 import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.wallet.Account
-import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.ActiveAccountState
 import cash.p.terminal.wallet.IAccountManager
 import cash.z.ecc.android.sdk.ext.collectWith

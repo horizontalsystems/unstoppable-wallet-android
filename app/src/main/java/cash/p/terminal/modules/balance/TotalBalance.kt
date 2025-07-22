@@ -14,6 +14,7 @@ interface ITotalBalance {
     val balanceHidden: Boolean
     val totalUiState: TotalUIState
     val stateFlow: StateFlow<TotalService.State>
+    val balanceHiddenFlow: StateFlow<Boolean>
 
     fun toggleBalanceVisibility()
     fun toggleTotalType()
@@ -27,6 +28,7 @@ class TotalBalance(
     private var totalState = totalService.stateFlow.value
 
     override val balanceHidden by balanceHiddenManager::balanceHidden
+    override val balanceHiddenFlow = balanceHiddenManager.balanceHiddenFlow
 
     override var totalUiState by mutableStateOf(createTotalUIState())
         private set
