@@ -9,6 +9,16 @@ Experience seamless cross-chain swaps! Trade BTC ↔ ETH and more directly withi
 
 Complete Stellar blockchain compatibility and access to its full asset ecosystem — all integrated right inside your wallet.
 
+## App Improvements
+
+- 🔐 **Improved auto-hide transaction behavior**: the PIN is now only requested when changing an asset, changing a category, or after the device was locked.
+- 🌐 **Translation refinements**: corrected inaccuracies and improved overall localization.
+- 🚫 **Option to launch without system PIN**: the app can now be launched without entering the system PIN if the user accepts the associated risks.
+- 🧷 **Fixed duress mode configuration issue**: resolved a bug that occurred when setting up duress mode with many wallets (scroll was required).
+- 🛠️ **Fixed crashes**: resolved several issues that caused the app to crash in specific situations.
+
+
+
 ## Version 0.43 Highlights
 
 ### Monero native blockchain

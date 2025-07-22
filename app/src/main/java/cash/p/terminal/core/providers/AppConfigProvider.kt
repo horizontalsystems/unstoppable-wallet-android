@@ -161,7 +161,7 @@ class AppConfigProvider {
             BlockchainType.Ton to "UQCYTBH7n8OnQ6BgOfdkNRWF7socLJb9U-JMRcoz3UpL_0V6",
             BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2",
             BlockchainType.Monero to "4B7tJ5W9QFY1quiV4yFWwSCmgyitq1k2xDUWSkoHo9o2aBimKmVPyPxf6b3LyQdxtMB2bkPbr7hAq2bFobhASrbHK4JyX57",
-            BlockchainType.Stellar to "GD3JFVTZZZPG75IZYKX32KJJFOYM3XKNLV7QXT3VA7IGEH5Z4AAN5O3O"
+            BlockchainType.Stellar to "GAZXDMWYHMPM2WF6FCWEBIMJITKKTU6MLHYLCFRVB3WMXTNPVEHBOXRE"
         ).toList().sortedBy { it.first.uid }.toMap()
     }
 }
