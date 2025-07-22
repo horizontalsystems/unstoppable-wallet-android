@@ -1,12 +1,17 @@
 package cash.p.terminal.modules.settings.security.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,27 +44,34 @@ fun SystemPinBlock(
                 )
             },
             center = {
-                if (enabled) {
-                    body_leah(
+                Row(
+                    modifier = Modifier.padding(end = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (enabled) {
+                        body_leah(
                         text = stringResource(R.string.SettingsSecurity_system_pin),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                } else {
-                    body_grey(
-                        text = stringResource(R.string.SettingsSecurity_system_pin),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                if (!isPinRequired) {
-                    Image(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_red_20),
-                        contentDescription = null,
-                    )
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .background(Color.LightGray)
+                        )
+                    } else {
+                        body_grey(
+                            text = stringResource(R.string.SettingsSecurity_system_pin),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    if (!isPinRequired) {
+                        Image(
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .requiredSize(20.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_red_20),
+                            contentDescription = null,
+                        )
+                    }
                 }
             },
             end = {
