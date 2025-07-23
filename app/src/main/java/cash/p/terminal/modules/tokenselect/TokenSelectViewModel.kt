@@ -162,7 +162,9 @@ class TokenSelectViewModel(
                 service = DefaultBalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
-                itemsFilter = null,
+                itemsFilter = {
+                    !it.wallet.account.isWatchAccount
+                },
                 balanceSorter = BalanceSorter(),
                 balanceHiddenManager = App.balanceHiddenManager,
                 blockchainTypes = blockchainTypes,
