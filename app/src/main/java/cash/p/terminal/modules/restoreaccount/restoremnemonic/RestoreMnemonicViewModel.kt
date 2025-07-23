@@ -155,7 +155,6 @@ class RestoreMnemonicViewModel(
     fun onChangeHeightText(text: String) {
         error = null
         this.height = text
-//        processText()
 
         emitState()
     }
