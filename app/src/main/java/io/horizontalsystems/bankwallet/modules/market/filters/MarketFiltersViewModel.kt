@@ -17,7 +17,7 @@ import java.net.UnknownHostException
 class MarketFiltersViewModel(val service: MarketFiltersService) :
     ViewModelUiState<MarketFiltersUiState>() {
 
-    private var coinListSet: CoinList = CoinList.Top200
+    private var coinListSet: CoinList = CoinList.Top100
     private var period = FilterViewItemWrapper(
         Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
         TimePeriod.TimePeriod_1D,
