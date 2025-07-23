@@ -13,7 +13,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 138
+        versionCode 139
         versionName "0.44.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh"
@@ -311,7 +311,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:stellar-kit-android:f7ff7d2'
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:7826bf5'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:b80a1429'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:1.2.0'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:market-kit-android:61afb18'
     implementation 'com.github.horizontalsystems:solana-kit-android:eae6858'
