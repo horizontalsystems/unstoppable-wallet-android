@@ -1,6 +1,7 @@
 package cash.p.terminal.core.adapters.zcash
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
@@ -74,6 +75,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.math.BigDecimal
 import java.util.regex.Pattern
 import kotlin.math.max
@@ -333,11 +335,12 @@ class ZcashAdapter(
                 importWatchAccount()
             }
 
-        } catch (ex: IllegalStateException) {
+        } catch (ex: Exception) {
             // To prevent crash with synchronizer creation in some situations
             // when java.lang.IllegalStateException: Another synchronizer with SynchronizerKey
-            Log.d("ZcashAdapter", "Failed to create synchronizer: ${ex.message}")
-            delay(1000)
+            Timber.d("Synchronizer creation failed: ${ex.message}")
+            stop()
+            delay(3000)
             createNewSynchronizer()
             return
         }
@@ -629,8 +632,7 @@ class ZcashAdapter(
         return true
     }
 
-    private fun onChainError(errorHeight: BlockHeight, rewindHeight: BlockHeight) {
-    }
+    private fun onChainError(errorHeight: BlockHeight, rewindHeight: BlockHeight) = Unit
 
     private fun onStatus(status: Synchronizer.Status) {
         syncState = when (status) {
