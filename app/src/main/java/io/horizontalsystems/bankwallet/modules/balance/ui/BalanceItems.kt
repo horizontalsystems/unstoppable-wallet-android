@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -175,7 +174,6 @@ fun Note(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
