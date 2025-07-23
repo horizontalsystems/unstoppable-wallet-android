@@ -34,6 +34,7 @@ internal fun TokenSelectScreen(
     uiState: TokenSelectUiState,
     searchHintText: String = "",
     onClickItem: (BalanceViewItem2) -> Unit,
+    onBalanceClick: (BalanceViewItem2) -> Unit,
     updateFilter: (String) -> Unit,
     emptyItemsText: String,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
@@ -88,7 +89,10 @@ internal fun TokenSelectScreen(
                         ) {
                             BalanceCardInner(
                                 viewItem = item,
-                                type = BalanceCardSubtitleType.CoinName
+                                type = BalanceCardSubtitleType.CoinName,
+                                onBalanceClick = {
+                                    onBalanceClick(item)
+                                }
                             )
                         }
                     }
