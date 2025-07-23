@@ -47,8 +47,8 @@ class TotalBalance(
     private fun createTotalUIState() = when (val state = totalState) {
         TotalService.State.Hidden -> TotalUIState.Hidden
         is TotalService.State.Visible -> TotalUIState.Visible(
-            primaryAmountStr = getPrimaryAmount(state) ?: "---",
-            secondaryAmountStr = getSecondaryAmount(state) ?: "---",
+            primaryAmountStr = getPrimaryAmount(state, state.showFullAmount) ?: "---",
+            secondaryAmountStr = getSecondaryAmount(state, state.showFullAmount) ?: "---",
             dimmed = state.dimmed
         )
     }
@@ -70,14 +70,24 @@ class TotalBalance(
     }
 
     private fun getPrimaryAmount(
-        totalState: TotalService.State.Visible
+        totalState: TotalService.State.Visible,
+        fullFormat: Boolean
     ) = totalState.currencyValue?.let {
-        App.numberFormatter.formatFiatShort(it.value, it.currency.symbol, 2)
+        if (fullFormat) {
+            App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
+        } else {
+            App.numberFormatter.formatFiatShort(it.value, it.currency.symbol, 8)
+        }
     }
 
     private fun getSecondaryAmount(
-        totalState: TotalService.State.Visible
+        totalState: TotalService.State.Visible,
+        fullFormat: Boolean
     ) = totalState.coinValue?.let {
-        "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
+        if (fullFormat) {
+            "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
+        } else {
+            "~" + App.numberFormatter.formatCoinShort(it.value, it.coin.code, it.decimal)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -24,7 +25,8 @@ class TotalService(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val baseTokenManager: BaseTokenManager,
-    private val balanceHiddenManager: BalanceHiddenManager
+    private val balanceHiddenManager: BalanceHiddenManager,
+    private val localStorage: ILocalStorage,
 ) {
     private var balanceHidden = balanceHiddenManager.balanceHidden
     private var totalCurrencyValue: CurrencyValue? = null
@@ -35,7 +37,8 @@ class TotalService(
         State.Visible(
             currencyValue = totalCurrencyValue,
             coinValue = totalCoinValue,
-            dimmed = dimmed
+            dimmed = dimmed,
+            showFullAmount = !localStorage.amountRoundingEnabled
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -64,6 +67,12 @@ class TotalService(
         coroutineScope.launch {
             balanceHiddenManager.balanceHiddenFlow.collect {
                 setBalanceHidden(it)
+            }
+        }
+
+        coroutineScope.launch {
+            localStorage.amountRoundingEnabledFlow.collect{
+                emitState()
             }
         }
     }
@@ -180,7 +189,8 @@ class TotalService(
                 State.Visible(
                     currencyValue = totalCurrencyValue,
                     coinValue = totalCoinValue,
-                    dimmed = dimmed
+                    dimmed = dimmed,
+                    showFullAmount = !localStorage.amountRoundingEnabled
                 )
             }
         }
@@ -196,7 +206,8 @@ class TotalService(
         data class Visible(
             val currencyValue: CurrencyValue?,
             val coinValue: CoinValue?,
-            val dimmed: Boolean
+            val dimmed: Boolean,
+            val showFullAmount: Boolean,
         ) : State()
 
         object Hidden : State()
