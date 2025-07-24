@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.BalanceHiddenManager
-import cash.p.terminal.core.swappable
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.modules.balance.DefaultBalanceService
 import cash.p.terminal.wallet.BalanceSortType
@@ -16,12 +15,18 @@ import cash.p.terminal.modules.balance.BalanceSorter
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
+import cash.p.terminal.modules.balance.ITotalBalance
+import cash.p.terminal.modules.balance.TotalBalance
+import cash.p.terminal.modules.balance.TotalService
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import kotlin.getValue
 
 class TokenSelectViewModel(
     private val service: DefaultBalanceService,
@@ -31,12 +36,15 @@ class TokenSelectViewModel(
     private val balanceSorter: BalanceSorter,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val blockchainTypes: List<BlockchainType>?,
-    private val tokenTypes: List<TokenType>?
-) : ViewModel() {
+    private val tokenTypes: List<TokenType>?,
+    private val totalBalance: TotalBalance,
+) : ViewModel(), ITotalBalance by totalBalance {
 
     private var noItems = false
     private var query: String? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
+    private val itemsBalanceHidden by lazy { mutableMapOf<Wallet, Boolean>() }
+
     var uiState by mutableStateOf(
         TokenSelectUiState(
             items = balanceViewItems,
@@ -51,6 +59,16 @@ class TokenSelectViewModel(
         viewModelScope.launch {
             service.balanceItemsFlow.collect { items ->
                 refreshViewItems(items)
+            }
+        }
+    }
+
+    fun onBalanceClick(item: BalanceViewItem2) {
+        if (balanceHidden) {
+            HudHelper.vibrate(App.instance)
+            itemsBalanceHidden[item.wallet] = !itemsBalanceHidden.getOrDefault(item.wallet, true)
+            viewModelScope.launch {
+                refreshViewItems(service.balanceItemsFlow.value)
             }
         }
     }
@@ -90,7 +108,8 @@ class TokenSelectViewModel(
                     balanceViewItemFactory.viewItem2(
                         item = balanceItem,
                         currency = service.baseCurrency,
-                        hideBalance = balanceHiddenManager.balanceHidden,
+                        hideBalance = balanceHiddenManager.balanceHidden &&
+                                itemsBalanceHidden.getOrDefault(balanceItem.wallet, true),
                         watchAccount = service.isWatchAccount,
                         isSwipeToDeleteEnabled = true,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
@@ -132,33 +151,25 @@ class TokenSelectViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TokenSelectViewModel(
-                service = DefaultBalanceService.getInstance("wallet"),
-                balanceViewItemFactory = BalanceViewItemFactory(),
-                balanceViewTypeManager = App.balanceViewTypeManager,
-                itemsFilter = null,
-                balanceSorter = BalanceSorter(),
-                balanceHiddenManager = App.balanceHiddenManager,
-                blockchainTypes = blockchainTypes,
-                tokenTypes = tokenTypes,
-            ) as T
-        }
-    }
+            val totalService = TotalService(
+                currencyManager = App.currencyManager,
+                marketKit = App.marketKit,
+                baseTokenManager = App.baseTokenManager,
+                balanceHiddenManager = App.balanceHiddenManager
+            )
 
-    class FactoryForSwap : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
                 service = DefaultBalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = {
-                    it.wallet.token.swappable
+                    !it.wallet.account.isWatchAccount
                 },
                 balanceSorter = BalanceSorter(),
                 balanceHiddenManager = App.balanceHiddenManager,
-                blockchainTypes = null,
-                tokenTypes = null,
+                blockchainTypes = blockchainTypes,
+                tokenTypes = tokenTypes,
+                totalBalance = TotalBalance(totalService, App.balanceHiddenManager),
             ) as T
         }
     }

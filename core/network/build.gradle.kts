@@ -9,13 +9,9 @@ plugins {
 }
 
 kotlin {
-    androidTarget()
-
-    android {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11" // Use the same JVM target as Java
-            }
+    androidTarget {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
@@ -65,6 +61,7 @@ android {
         buildConfig = true
     }
 }
+
 tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)

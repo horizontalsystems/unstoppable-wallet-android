@@ -38,7 +38,6 @@ class MarketPostService(
     }
 
     fun start() {
-        fetchPosts()
         coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {

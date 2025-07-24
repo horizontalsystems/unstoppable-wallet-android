@@ -162,7 +162,7 @@ private fun ItemsSection(
             Column {
                 body_leah(text = account.name)
                 VSpacer(height = 1.dp)
-                if (!account.hasAnyBackup) {
+                if (account.accountSupportsBackup && !account.hasAnyBackup) {
                     subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
                 } else {
                     subhead2_grey(

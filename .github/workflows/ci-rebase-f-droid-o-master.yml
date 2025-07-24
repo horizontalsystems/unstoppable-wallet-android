@@ -1,11 +1,14 @@
 name: F-Droid Branch Sync and Build
+
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+  workflow_dispatch:
+
 jobs:
   sync-and-build-fdroid:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,30 +20,131 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "github-actions-bot@users.noreply.github.com"
 
-      - name: Update f-droid branch locally
+      - name: Smart F-Droid branch update
+        id: sync
         run: |
-          git checkout f-droid 2>/dev/null || git checkout -b f-droid
-          
-          git fetch origin master
-          
-          git rebase origin/master
+          set -e
+
+          git fetch origin
+
+          if git show-ref --quiet refs/remotes/origin/f-droid; then
+            git checkout f-droid
+          else
+            echo "Creating f-droid branch for the first time"
+            git checkout -b f-droid origin/master
+
+            echo "Removing non-F-Droid dependencies..."
+            sed -i '/apply plugin.*google-services/d; /apply plugin.*crashlytics/d; /implementation.*firebase/d; /implementation.*crashlytics/d; /implementation.*play-services/d' app/build.gradle || true
+            sed -i '/google-services/d; /firebase/d; /crashlytics/d; /play-services/d' gradle/libs.versions.toml || true
+            find app/src -type f \( -name "*.kt" -o -name "*.java" \) -exec sed -i '/import.*firebase/d; /import.*crashlytics/d; /Firebase/d; /Crashlytics/d' {} +
+
+            git add .
+            git commit -m "Initial F-Droid setup: Remove Google Services"
+            echo "CHANGES_MADE=true" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          COMMITS_TO_PICK=$(git log --oneline f-droid..origin/master --reverse | cut -d' ' -f1)
+
+          if [ -z "$COMMITS_TO_PICK" ]; then
+            echo "No new commits to sync"
+            echo "CHANGES_MADE=false" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          echo "Cherry-picking commits: $COMMITS_TO_PICK"
+          CHANGES_APPLIED=false
+
+          for commit in $COMMITS_TO_PICK; do
+            if git cherry-pick $commit; then
+              echo "✅ Successfully cherry-picked $commit"
+              CHANGES_APPLIED=true
+            else
+              echo "⚠️ Resolving conflicts for $commit..."
+
+              git status --porcelain | grep "^UU" | while read -r line; do
+                file=$(echo $line | cut -d' ' -f2)
+                echo "Resolving: $file"
+
+                if git show "$commit:$file" &>/dev/null; then
+                  git show "$commit:$file" > temp_file
+
+                  case "$file" in
+                    "app/build.gradle"|"*/build.gradle")
+                      sed -i '/apply plugin.*google-services/d; /apply plugin.*crashlytics/d; /implementation.*firebase/d; /implementation.*crashlytics/d; /implementation.*play-services/d' temp_file
+                      ;;
+                    "gradle/libs.versions.toml")
+                      sed -i '/google-services/d; /firebase/d; /crashlytics/d; /play-services/d' temp_file
+                      ;;
+                    *.kt|*.java)
+                      sed -i '/import.*firebase/d; /import.*crashlytics/d; /Firebase/d; /Crashlytics/d' temp_file
+                      ;;
+                  esac
+
+                  mv temp_file "$file"
+                  git add "$file"
+                else
+                  echo "File $file not found in commit $commit — skipping"
+                  git add "$file"
+                fi
+              done
+
+              if git status --porcelain | grep -q "^UU"; then
+                echo "❌ Could not resolve all conflicts"
+                git cherry-pick --abort
+                exit 1
+              fi
+
+              git cherry-pick --continue
+              echo "✅ Resolved and applied $commit"
+              CHANGES_APPLIED=true
+            fi
+          done
+
+          if [ "$CHANGES_APPLIED" = true ]; then
+            echo "CHANGES_MADE=true" >> $GITHUB_ENV
+          else
+            echo "CHANGES_MADE=false" >> $GITHUB_ENV
+          fi
 
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        if: env.CHANGES_MADE == 'true'
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: gradle
 
       - name: Grant execute permission for gradlew
+        if: env.CHANGES_MADE == 'true'
         run: chmod +x gradlew
 
       - name: Run Unit tests
-        run: ./gradlew :app:testDebugUnitTest
+        if: env.CHANGES_MADE == 'true'
+        run: ./gradlew :app:testDebugUnitTest --no-daemon
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug
+        if: env.CHANGES_MADE == 'true'
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Final validation
+        if: env.CHANGES_MADE == 'true'
+        run: |
+          if grep -r "google-services\|firebase\|crashlytics" app/build.gradle gradle/libs.versions.toml 2>/dev/null; then
+            echo "❌ Found Google Services in F-Droid branch"
+            exit 1
+          fi
+          echo "✅ Validation passed"
 
       - name: Push changes to f-droid branch
+        if: env.CHANGES_MADE == 'true'
         run: |
           git push --force-with-lease origin f-droid
+
+      - name: Debug Info on Failure
+        if: failure()
+        run: |
+          echo "‼️ Dumping recent git logs and status..."
+          git status
+          git log -5 --oneline
+          ls -la

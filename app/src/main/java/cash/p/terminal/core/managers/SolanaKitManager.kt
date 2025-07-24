@@ -165,7 +165,11 @@ class SolanaKitManager(
 
     private fun stopKit() {
         solanaKitWrapper?.solanaKit?.stop()
+        solanaKitWrapper = null
+        currentAccount = null
         tokenAccountJob?.cancel()
+        backgroundEventListenerJob?.cancel()
+        rpcUpdatedJob?.cancel()
     }
 
     private fun startKit() {

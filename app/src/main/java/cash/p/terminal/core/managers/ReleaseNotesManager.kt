@@ -39,10 +39,6 @@ class Version(private val value: String) : Comparable<Version> {
     override fun compareTo(other: Version): Int {
         val maxSize = maxOf(splitted.size, other.splitted.size)
         for (i in 0 until maxSize) {
-            if (i > 1) {
-                // ignore last number, which stands for patch version
-                return 0
-            }
             val compare = splitted.getOrElse(i) { 0 }.compareTo(other.splitted.getOrElse(i) { 0 })
             if (compare != 0)
                 return compare

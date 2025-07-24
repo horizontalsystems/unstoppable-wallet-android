@@ -50,9 +50,6 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import io.horizontalsystems.core.slideFromBottom
-import io.horizontalsystems.core.slideFromBottomForResult
-import io.horizontalsystems.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.multiswap.action.ActionCreate
@@ -90,6 +87,9 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.badge
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.slideFromBottom
+import io.horizontalsystems.core.slideFromBottomForResult
+import io.horizontalsystems.core.slideFromRightForResult
 import io.horizontalsystems.core.toBigDecimalOrNullExt
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -331,7 +331,7 @@ private fun SwapScreenInner(
                             enabled = !action.inProgress,
                             onClick = {
                                 onActionStarted.invoke()
-                                if(action is ActionCreate) {
+                                if (action is ActionCreate) {
                                     onCreateMissingTokens(action.tokensToAdd)
                                 } else {
                                     action.execute(navController, onActionCompleted)
@@ -352,6 +352,16 @@ private fun SwapScreenInner(
                 }
 
                 VSpacer(height = 12.dp)
+                CardsSwapInfo {
+                    AvailableBalanceField(
+                        tokenIn = uiState.tokenIn,
+                        availableBalance = uiState.availableBalance,
+                        balanceHidden = uiState.balanceHidden,
+                        toggleHideBalance = onBalanceClicked
+                    )
+                }
+
+                VSpacer(height = 12.dp)
                 if (quote != null) {
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
@@ -364,15 +374,6 @@ private fun SwapScreenInner(
                         quote.fields.forEach {
                             it.GetContent(navController, false)
                         }
-                    }
-                } else {
-                    CardsSwapInfo {
-                        AvailableBalanceField(
-                            tokenIn = uiState.tokenIn,
-                            availableBalance = uiState.availableBalance,
-                            balanceHidden = uiState.balanceHidden,
-                            toggleHideBalance = onBalanceClicked
-                        )
                     }
                 }
 
