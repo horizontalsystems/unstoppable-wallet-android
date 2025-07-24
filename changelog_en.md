@@ -1,3 +1,24 @@
+## Version 0.44.1 Highlights
+
+
+### 💰 **Exchange Interface Improvements**
+- The **available balance is now always visible during amount input**, not just before it 🧮
+
+### 🛠 **Stability & Fixes**
+- Fixed **crashes that caused the app to close unexpectedly** 📱💥  
+- Improved price chart — **currency is now displayed correctly** 📊💸
+
+### 📱 **Monero & Samsung Support**
+- Fixed an issue where the **keyboard on Samsung devices** overlapped important information during Monero recovery 🛡️🔑
+
+### 👀 **WatchOnly Addresses**
+- Enhanced logic for **WatchOnly addresses** — now more stable and reliable 🔍🔐
+
+### 🔒 **Auto-Hide Balance Logic**
+- Fixed cases where **numbers were hidden with asterisks**, even when they should have been shown ⭐➡️123
+
+
+
 ## Version 0.44 Highlights
 
 
@@ -20,6 +41,7 @@ Complete Stellar blockchain compatibility and access to its full asset ecosystem
 
 
 ## Version 0.43 Highlights
+
 
 ### Monero native blockchain
 
