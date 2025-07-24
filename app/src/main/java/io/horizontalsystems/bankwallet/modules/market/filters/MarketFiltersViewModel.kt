@@ -316,7 +316,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
                 service.filterBlockchains = selectedBlockchains
                 service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
 
-                if (outperformedSnpOn && service.sp500PriceChanges == null) {
+                if (outperformedSnpOn && service.sp500PriceChanges == null || service.goldPriceChanges == null) {
                     service.setStockPriceChanges()
                 }
 
