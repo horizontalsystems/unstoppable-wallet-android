@@ -8,15 +8,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Clean Gradle wrapper cache (if verification fails)
+        run: |
+          # Extract Gradle version from wrapper properties
+          GRADLE_VERSION=$(grep distributionUrl gradle/wrapper/gradle-wrapper.properties | sed -n 's/.*gradle-\([0-9.]*\)-.*/\1/p')
+          if [ -d "$HOME/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-bin" ]; then
+            rm -rf $HOME/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-bin/
+          fi
+        continue-on-error: true
+
       - name: Run Unit tests
         run: ./gradlew :app:testDebugUnitTest
+
       - name: Build with Gradle
         run: ./gradlew assembleDebug
