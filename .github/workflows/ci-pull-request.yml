@@ -19,14 +19,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Clean Gradle wrapper cache (if verification fails)
+      - name: Clean Gradle wrapper cache
         run: |
-          # Extract Gradle version from wrapper properties
-          GRADLE_VERSION=$(grep distributionUrl gradle/wrapper/gradle-wrapper.properties | sed -n 's/.*gradle-\([0-9.]*\)-.*/\1/p')
-          if [ -d "$HOME/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-bin" ]; then
-            rm -rf $HOME/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-bin/
-          fi
+          # Remove any existing Gradle wrapper cache
+          rm -rf $HOME/.gradle/wrapper/dists/
+          # Also clean the downloads cache
+          rm -rf $HOME/.gradle/caches/
         continue-on-error: true
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Run Unit tests
         run: ./gradlew :app:testDebugUnitTest
