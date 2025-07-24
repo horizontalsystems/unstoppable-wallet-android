@@ -53,7 +53,7 @@ class VaultChartService(
         periodType: HsTimePeriod,
     ): Single<ChartPointsWrapper> {
         return try {
-            marketKit.vault(vaultAddress, periodType)
+            marketKit.vault(vaultAddress, currencyManager.baseCurrency.code, periodType)
                 .map { vault ->
                     vault.apyChart.map {
                         ChartPoint(it.apy.toFloat() * 100, it.timestamp.toLong())

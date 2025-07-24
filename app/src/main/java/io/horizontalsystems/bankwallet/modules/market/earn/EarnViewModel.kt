@@ -13,9 +13,11 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.earn.EarnModule.ApyPeriod
+import io.horizontalsystems.bankwallet.modules.market.earn.EarnModule.VaultSorting
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Apy
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Vault
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -23,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -33,48 +36,76 @@ class MarketEarnViewModel(
 
     val filterOptions = EarnModule.FilterBy.entries
     val apyPeriods = ApyPeriod.entries
-    var chainOptions =
-        listOf<EarnModule.VaultChainOption>() // Will be populated based on available vaults
-        private set
+    val sortingOptions = VaultSorting.entries
 
+    private companion object {
+        const val VISIBLE_ITEMS_NO_PREMIUM = 7
+        const val BLURRED_ITEMS_NO_PREMIUM = 5
+        const val TOTAL_ITEMS_NO_PREMIUM = VISIBLE_ITEMS_NO_PREMIUM + BLURRED_ITEMS_NO_PREMIUM
+        const val REFRESH_SPINNER_MIN_DURATION_MS = 1000L
+    }
+
+    private var blockchains: List<Blockchain> = emptyList()
+    private var selectedBlockchains: List<Blockchain> = emptyList()
     private var isRefreshing = false
     private var viewState: ViewState = ViewState.Loading
-    private var vaultViewItems: List<EarnModule.VaultViewItem> = listOf()
     private var cache: List<Vault> = listOf() // Cache for vaults to avoid unnecessary API calls
-    private var apyPeriod: ApyPeriod = ApyPeriod.SEVEN_DAY // Default period
+    private var apyPeriod: ApyPeriod = ApyPeriod.SEVEN_DAY
+    private var sortingBy: VaultSorting = VaultSorting.APY
     private var marketDataJob: Job? = null
     private var filterBy: EarnModule.FilterBy = EarnModule.FilterBy.AllAssets
-    private var chainSelected: EarnModule.VaultChainOption =
-        EarnModule.VaultChainOption.AllChains
     private val hasPremium: Boolean
         get() = UserSubscriptionManager.isActionAllowed(AdvancedSearch)
 
-    private val usdCurrency: Currency by lazy {
-        currencyManager.currencies.first { it.code == "USD" }
-    }
+    private var baseCurrency = currencyManager.baseCurrency
+
+    // Cached processed items - only recalculate when filters/sorting change
+    private var cachedViewItems: List<EarnModule.VaultViewItem> = emptyList()
+    private var lastCacheKey: CacheKey? = null
+
+    // Cache key to track when we need to recalculate view items
+    private data class CacheKey(
+        val vaultCount: Int,
+        val filterBy: EarnModule.FilterBy,
+        val apyPeriod: ApyPeriod,
+        val sortingBy: VaultSorting,
+        val selectedBlockchainUids: Set<String>,
+        val baseCurrencyCode: String
+    )
 
     init {
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                updateViewItems()
+                resetMenu()
+                fetchVaults(forceRefresh = true)
             }
         }
-        getVaults()
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                baseCurrency = currencyManager.baseCurrency
+                invalidateCache() // Currency change requires recalculation
+                fetchVaults(forceRefresh = true)
+            }
+        }
+        fetchVaults()
     }
 
     fun onFilterBySelected(filterBy: EarnModule.FilterBy) {
         this.filterBy = filterBy
-        updateViewItems()
+        invalidateCache()
+        emitState()
     }
 
     fun onApyPeriodSelected(apyPeriod: ApyPeriod) {
         this.apyPeriod = apyPeriod
-        updateViewItems()
+        invalidateCache()
+        emitState()
     }
 
-    fun onChainSelected(chainOption: EarnModule.VaultChainOption) {
-        chainSelected = chainOption
-        updateViewItems()
+    fun onSortingSelected(option: VaultSorting) {
+        this.sortingBy = option
+        invalidateCache()
+        emitState()
     }
 
     fun refresh() {
@@ -85,87 +116,192 @@ class MarketEarnViewModel(
         refreshWithMinLoadingSpinnerPeriod()
     }
 
-    private fun getVaults() {
+    fun onBlockchainsSelected(blockchains: List<Blockchain>) {
+        selectedBlockchains = blockchains
+        invalidateCache()
+        emitState()
+    }
+
+    private fun invalidateCache() {
+        lastCacheKey = null
+        cachedViewItems = emptyList()
+    }
+
+    private fun getCurrentCacheKey(): CacheKey {
+        return CacheKey(
+            vaultCount = cache.size,
+            filterBy = filterBy,
+            apyPeriod = apyPeriod,
+            sortingBy = sortingBy,
+            selectedBlockchainUids = selectedBlockchains.map { it.uid }.toSet(),
+            baseCurrencyCode = baseCurrency.code
+        )
+    }
+
+    private fun getProcessedViewItems(): List<EarnModule.VaultViewItem> {
+        val currentCacheKey = getCurrentCacheKey()
+
+        if (lastCacheKey == currentCacheKey && cachedViewItems.isNotEmpty()) {
+            return cachedViewItems
+        }
+
+        cachedViewItems = calculateViewItems()
+        lastCacheKey = currentCacheKey
+        return cachedViewItems
+    }
+
+    private fun fetchVaults(forceRefresh: Boolean = false) {
+        if (marketDataJob?.isActive == true && !forceRefresh) {
+            return
+        }
         marketDataJob?.cancel()
+        viewState = ViewState.Loading
+        emitState()
+
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                cache = marketKit.vaults().blockingGet()
+                val newVaults = marketKit.vaults(currencyManager.baseCurrency.code).await()
+                cache = newVaults
                 updateVaultChains()
-                updateViewItems()
+                invalidateCache() // New data requires recalculation
                 viewState = ViewState.Success
+                emitState()
             } catch (e: CancellationException) {
                 // no-op
             } catch (e: Throwable) {
                 viewState = ViewState.Error(e)
+                emitState()
             }
-            emitState()
         }
     }
 
     private fun updateVaultChains() {
-        val chains = cache.map { it.chain }.distinct().sortedBy { it }
-        chainOptions = listOf(EarnModule.VaultChainOption.AllChains) +
-                chains.mapNotNull { EarnModule.VaultChainOption.fromString(it) }
-
-        chainSelected = EarnModule.VaultChainOption.AllChains
-        emitState()
+        val chainUids = cache.map { it.chain }.distinct().sortedBy { it }
+        blockchains = marketKit.blockchains(chainUids)
     }
 
     override fun createState(): EarnModule.UiState {
+        val processedViewItems = getProcessedViewItems()
+
+        val (vaults, blurredVaults) = getVaultsAndBlurredItems(processedViewItems)
+
         return EarnModule.UiState(
             isRefreshing = isRefreshing,
             viewState = viewState,
-            items = vaultViewItems,
+            items = vaults,
+            blurredItems = blurredVaults,
             filterBy = filterBy,
             apyPeriod = apyPeriod,
-            chainSelected = chainSelected,
+            sortingBy = sortingBy,
+            noPremium = !hasPremium,
+            blockchains = blockchains,
+            chainSelectorMenuTitle = getChainsMenuTitle(selectedBlockchains),
+            selectedBlockchains = selectedBlockchains,
         )
     }
 
-    private fun updateViewItems() {
-        vaultViewItems = cache.filter { vault ->
-            when (filterBy) {
-                EarnModule.FilterBy.AllAssets -> true
-                EarnModule.FilterBy.EthYield -> vault.assetSymbol.contains("ETH")
-                EarnModule.FilterBy.UsdYield -> !vault.assetSymbol.contains("ETH")
+    private fun getVaultsAndBlurredItems(processedViewItems: List<EarnModule.VaultViewItem>) =
+        if (hasPremium) {
+            processedViewItems to emptyList()
+        } else {
+            if (processedViewItems.size > TOTAL_ITEMS_NO_PREMIUM) {
+                val visible = processedViewItems.take(VISIBLE_ITEMS_NO_PREMIUM)
+                val blurred =
+                    processedViewItems.drop(VISIBLE_ITEMS_NO_PREMIUM).take(BLURRED_ITEMS_NO_PREMIUM)
+                visible to blurred
+            } else {
+                processedViewItems to emptyList()
             }
         }
-            .filter { vault ->
-                chainSelected == EarnModule.VaultChainOption.AllChains ||
-                        vault.chain.equals(chainSelected.uid, ignoreCase = true)
-            }
-            .map { vaultViewItem(it) }
-            .sortedByDescending { it.apy }
 
-        emitState()
+    private fun getChainsMenuTitle(selectedBlockchains: List<Blockchain>): String {
+        return when (selectedBlockchains.size) {
+            0 -> Translator.getString(R.string.Market_Vaults_Filter_AllChains)
+            1 -> selectedBlockchains.first().name
+            else -> Translator.getString(
+                R.string.Market_Vaults_Filter_MultipleChains,
+                selectedBlockchains.size
+            )
+        }
     }
 
-    private fun vaultViewItem(vault: Vault): EarnModule.VaultViewItem =
-        EarnModule.VaultViewItem(
+    private fun calculateViewItems(): List<EarnModule.VaultViewItem> {
+        val selectedBlockchainsUids = selectedBlockchains.map { it.uid }.toSet()
+        return cache
+            .filter { vault ->
+                when (filterBy) {
+                    EarnModule.FilterBy.AllAssets -> true
+                    EarnModule.FilterBy.EthYield -> vault.assetSymbol.contains(
+                        "ETH",
+                        ignoreCase = true
+                    )
+                    EarnModule.FilterBy.UsdYield -> vault.assetSymbol.contains(
+                        "USD",
+                        ignoreCase = true
+                    )
+                }
+            }
+            .filter { vault ->
+                if (selectedBlockchainsUids.isEmpty()) {
+                    true
+                } else {
+                    selectedBlockchainsUids.contains(vault.chain)
+                }
+            }
+            .map { vaultToViewItem(it, apyPeriod, blockchains, baseCurrency) }
+            .sortedByDescending { vault ->
+                if (sortingBy == VaultSorting.APY)
+                    vault.apy
+                else
+                    vault.tvlRaw
+            }
+    }
+
+    private fun vaultToViewItem(
+        vault: Vault,
+        apyPeriod: ApyPeriod,
+        allBlockchains: List<Blockchain>,
+        baseCurrency: Currency
+    ): EarnModule.VaultViewItem {
+        val tvlRaw = vault.tvl.toBigDecimalOrNull() ?: BigDecimal.ZERO
+        return EarnModule.VaultViewItem(
+            rank = vault.rank,
             address = vault.address,
-            name = if (hasPremium) vault.name else "***",
+            name = vault.name,
             apy = vault.apy.getByPeriod(apyPeriod),
             tvl = App.numberFormatter.formatFiatShort(
-                vault.tvl.toBigDecimal(),
-                usdCurrency.symbol,
-                usdCurrency.decimal
+                tvlRaw,
+                baseCurrency.symbol,
+                baseCurrency.decimal
             ),
-            chain = vault.chain.replaceFirstChar(Char::uppercase),
+            tvlRaw = tvlRaw,
+            blockchainName = allBlockchains.firstOrNull { it.uid == vault.chain }?.name
+                ?: vault.chain.uppercase(),
             url = vault.url,
             holders = vault.holders?.toString() ?: "---",
             assetSymbol = vault.assetSymbol,
             protocolName = vault.protocolName.replaceFirstChar(Char::titlecase),
-            assetLogo = vault.assetLogo
+            assetLogo = vault.protocolLogo,
         )
+    }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
-        isRefreshing = true
-        emitState()
         viewModelScope.launch {
-            delay(1000)
+            isRefreshing = true
+            emitState()
+            fetchVaults(forceRefresh = true)
+            delay(REFRESH_SPINNER_MIN_DURATION_MS)
             isRefreshing = false
             emitState()
         }
+    }
+
+    private fun resetMenu() {
+        selectedBlockchains = emptyList()
+        sortingBy = VaultSorting.APY
+        apyPeriod = ApyPeriod.SEVEN_DAY
+        filterBy = EarnModule.FilterBy.AllAssets
+        invalidateCache()
     }
 }
 
@@ -189,48 +325,46 @@ object EarnModule {
         override val title = TranslatableString.ResString(titleResId)
     }
 
+    enum class VaultSorting(@StringRes val titleResId: Int) : WithTranslatableTitle {
+        APY(R.string.Market_Vaults_Sorting_APY),
+        TVL(R.string.Market_Vaults_Sorting_TVL);
+
+        override val title = TranslatableString.ResString(titleResId)
+    }
+
     data class UiState(
         val isRefreshing: Boolean,
         val viewState: ViewState = ViewState.Loading,
         val items: List<VaultViewItem> = listOf(),
+        val blurredItems: List<VaultViewItem> = listOf(),
         val filterBy: FilterBy,
         val apyPeriod: ApyPeriod,
-        val chainSelected: VaultChainOption,
+        val sortingBy: VaultSorting,
+        val noPremium: Boolean,
+        val chainSelectorMenuTitle: String,
+        val selectedBlockchains: List<Blockchain>,
+        val blockchains: List<Blockchain>,
     )
 
     data class VaultViewItem(
+        val rank: Int,
         val address: String,
         val name: String,
         val apy: BigDecimal,
         val tvl: String,
-        val chain: String,
+        val tvlRaw: BigDecimal,
         val url: String?,
         val holders: String,
         val assetSymbol: String,
         val assetLogo: String?,
         val protocolName: String,
+        val blockchainName: String,
     )
 
-    enum class VaultChainOption(val uid: String) : WithTranslatableTitle {
-        AllChains(Translator.getString(R.string.MarketEarn_Filter_AllChains)),
-        Ethereum("Ethereum"),
-        Arbitrum("Arbitrum"),
-        Base("Base"),
-        Optimism("Optimism");
-
-        override val title = TranslatableString.PlainString(uid)
-
-        companion object {
-            fun fromString(chain: String): VaultChainOption? {
-                return entries.firstOrNull { it.uid.equals(chain, ignoreCase = true) }
-            }
-        }
-    }
-
     enum class FilterBy(@StringRes val titleResId: Int) : WithTranslatableTitle {
-        AllAssets(R.string.MarketEarn_Filter_AllAssets),
-        EthYield(R.string.MarketEarn_Filter_ETHYield),
-        UsdYield(R.string.MarketEarn_Filter_USDYield);
+        AllAssets(R.string.Market_Vaults_Filter_AllAssets),
+        EthYield(R.string.Market_Vaults_Filter_ETHYield),
+        UsdYield(R.string.Market_Vaults_Filter_USDYield);
 
         override val title = TranslatableString.ResString(titleResId)
     }

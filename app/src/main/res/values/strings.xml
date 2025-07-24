@@ -204,18 +204,6 @@
     <string name="Market_Signal_Warning">Always remember to apply risk management, and note that this is not financial advice.</string>
     <string name="Market_Signal_TurnOn">Turn on</string>
 
-    <string name="MarketEarn_Filter_AllAssets">All assets</string>
-    <string name="MarketEarn_Filter_AllChains">All chains</string>
-    <string name="MarketEarn_Filter_ETHYield">ETH yield</string>
-    <string name="MarketEarn_Filter_USDYield">USD yield</string>
-    <string name="MarketEarn_OpenDapp">Open dapp</string>
-
-    <string name="MarketEarn_Vault_TVL">TVL</string>
-    <string name="MarketEarn_Vault_Network">Network</string>
-    <string name="MarketEarn_Vault_Protocol">Protocol</string>
-    <string name="MarketEarn_Vault_UnderlyingToken">Underlying token</string>
-    <string name="MarketEarn_Vault_Holders">Holders</string>
-
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
@@ -371,6 +359,25 @@
     <string name="Market_Sorting_LowestCap">Lowest Cap</string>
 
     <string name="Market_Filters_Select">Select %d</string>
+
+    <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">Want to unlock more earning opportunities?</string>
+    <string name="Market_Vaults_UnlockPremium">Unlock Premium</string>
+    <string name="Market_Vaults_Sorting_APY">Highest APY</string>
+    <string name="Market_Vaults_Sorting_TVL">Highest TVL</string>
+
+    <string name="Market_Vaults_Filter_AllAssets">All assets</string>
+    <string name="Market_Vaults_Filter_AllChains">All chains</string>
+    <string name="Market_Vaults_Filter_ETHYield">ETH yield</string>
+    <string name="Market_Vaults_Filter_USDYield">USD yield</string>
+    <string name="Market_Vaults_OpenDapp">Open dapp</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d Chains</string>
+
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
+    <string name="Market_Vaults_Vault_Network">Network</string>
+    <string name="Market_Vaults_Vault_Protocol">Protocol</string>
+    <string name="Market_Vaults_Vault_UnderlyingToken">Underlying token</string>
+    <string name="Market_Vaults_Vault_Holders">Holders</string>
 
     <!--Coin Markets-->
 
