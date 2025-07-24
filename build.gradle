@@ -7,7 +7,7 @@ buildscript {
         lifecycle_version = '2.8.7'
 
         compose_version = '1.7.6'
-        kotlin_version = '2.0.21'
+        kotlin_version = '2.2.0'
         material_version = "1.12.0"
         appcompat_version = "1.7.0"
         constraint_version = "2.2.0"
@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.10.0'
+        classpath 'com.android.tools.build:gradle:8.11.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath libs.google.services
@@ -37,7 +37,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.google.devtools.ksp' version '2.0.21-1.0.27' apply false
+    id 'com.google.devtools.ksp' version '2.2.0-2.0.2' apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
 }
 
