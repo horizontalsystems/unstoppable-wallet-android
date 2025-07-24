@@ -14,6 +14,7 @@ class VaultViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var vaultViewItem: VaultModule.VaultViewItem = VaultModule.VaultViewItem(
+        rank = "#" + input.rank.toString(),
         address = input.address,
         name = input.name,
         tvl = input.tvl,
@@ -42,7 +43,7 @@ object VaultModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 VaultViewModel::class.java -> {
-                    VaultViewModel(input)  as T
+                    VaultViewModel(input) as T
                 }
 
                 ChartViewModel::class.java -> {
@@ -51,12 +52,14 @@ object VaultModule {
                     val chartNumberFormatter = VaultChartFormatter()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
         }
     }
 
     data class VaultViewItem(
+        val rank: String,
         val address: String,
         val name: String,
         val tvl: String,

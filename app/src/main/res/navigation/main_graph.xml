@@ -430,4 +430,7 @@
     <fragment
         android:id="@+id/vaultFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultFragment" />
+    <fragment
+        android:id="@+id/vaultsBlockchainsSelectorFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.earn.VaultBlockchainsSelectorFragment"/>
 </navigation>

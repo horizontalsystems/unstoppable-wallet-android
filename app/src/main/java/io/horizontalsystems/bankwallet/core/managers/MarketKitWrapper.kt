@@ -308,12 +308,12 @@ class MarketKitWrapper(
 
     // Vaults
 
-    fun vaults(): Single<List<Vault>> {
-        return requestWithAuthToken { marketKit.vaultsSingle() }
+    fun vaults(currencyCode: String): Single<List<Vault>> {
+        return requestWithAuthToken { marketKit.vaultsSingle(currencyCode) }
     }
 
-    fun vault(address: String, periodType: HsTimePeriod): Single<Vault> {
-        return requestWithAuthToken { marketKit.vaultSingle(address, periodType) }
+    fun vault(address: String, currencyCode: String, periodType: HsTimePeriod): Single<Vault> {
+        return requestWithAuthToken { marketKit.vaultSingle(address, currencyCode, periodType) }
     }
 
 }

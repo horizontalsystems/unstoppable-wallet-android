@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market.earn.vault
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,13 +26,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
@@ -64,6 +65,7 @@ class VaultFragment : BaseComposeFragment() {
 
     @Parcelize
     data class Input(
+        val rank: Int,
         val address: String,
         val name: String,
         val tvl: String,
@@ -112,7 +114,6 @@ private fun VaultScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    contentPadding = PaddingValues(bottom = 32.dp),
                 ) {
                     item {
                         VaultCard(uiState.vaultViewItem.name, uiState.vaultViewItem.assetLogo)
@@ -124,22 +125,26 @@ private fun VaultScreen(
                         VSpacer(16.dp)
                         VaultDetails(uiState.vaultViewItem)
                     }
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryDefault(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.MarketEarn_OpenDapp),
-                        enabled = uiState.vaultViewItem.url != null,
-                        onClick = {
-                            uiState.vaultViewItem.url?.let{
-                                LinkHelper.openLinkInAppBrowser(context, it)
+                    item {
+                        VSpacer(18.dp)
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.Market_Vaults_OpenDapp),
+                            enabled = uiState.vaultViewItem.url != null,
+                            onClick = {
+                                uiState.vaultViewItem.url?.let {
+                                    LinkHelper.openLinkInAppBrowser(context, it)
+                                }
                             }
-                        }
-                    )
+                        )
+                        VSpacer(32.dp)
+                    }
+                    item {
+                        CellFooter("vaults.fyi")
+                    }
                 }
-                CellFooter("vaults.fyi")
             }
         }
     }
@@ -151,27 +156,28 @@ fun VaultDetails(item: VaultModule.VaultViewItem) {
         listOf(
             {
                 DetailCell(
-                    stringResource(R.string.MarketEarn_Vault_TVL),
-                    item.tvl
+                    stringResource(R.string.Market_Vaults_Vault_TVL),
+                    item.tvl,
+                    titleBadge = item.rank
                 )
             }, {
                 DetailCell(
-                    stringResource(R.string.MarketEarn_Vault_Network),
+                    stringResource(R.string.Market_Vaults_Vault_Network),
                     item.chain
                 )
             }, {
                 DetailCell(
-                    stringResource(R.string.MarketEarn_Vault_Protocol),
+                    stringResource(R.string.Market_Vaults_Vault_Protocol),
                     item.protocolName
                 )
             }, {
                 DetailCell(
-                    stringResource(R.string.MarketEarn_Vault_UnderlyingToken),
+                    stringResource(R.string.Market_Vaults_Vault_UnderlyingToken),
                     item.assetSymbol
                 )
             }, {
                 DetailCell(
-                    stringResource(R.string.MarketEarn_Vault_Holders),
+                    stringResource(R.string.Market_Vaults_Vault_Holders),
                     item.holders
                 )
             }
@@ -180,7 +186,11 @@ fun VaultDetails(item: VaultModule.VaultViewItem) {
 }
 
 @Composable
-fun DetailCell(title: String, value: String) {
+fun DetailCell(
+    title: String,
+    value: String,
+    titleBadge: String? = null
+) {
     RowUniversal(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,8 +198,15 @@ fun DetailCell(title: String, value: String) {
     ) {
         subhead2_grey(
             text = title,
-            modifier = Modifier.weight(1f)
         )
+        titleBadge?.let {
+            HSpacer(8.dp)
+            Badge(
+                modifier = Modifier.padding(end = 8.dp),
+                text = it
+            )
+        }
+        Spacer(Modifier.weight(1f))
 
         subhead1_leah(
             text = value,
