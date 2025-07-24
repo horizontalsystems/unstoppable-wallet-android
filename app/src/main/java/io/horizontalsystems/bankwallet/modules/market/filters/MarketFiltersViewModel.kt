@@ -135,8 +135,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
 
         selectedSectors = listOf(FilterViewItemWrapper.getAny())
         service.sectorIds = emptyList()
-        coinListSet = CoinList.Top200
-        service.coinCount = CoinList.Top200.itemsCount
+        coinListSet = CoinList.Top100
+        service.coinCount = CoinList.Top100.itemsCount
         resetEnabled = false
         reloadDataWithSpinner()
     }

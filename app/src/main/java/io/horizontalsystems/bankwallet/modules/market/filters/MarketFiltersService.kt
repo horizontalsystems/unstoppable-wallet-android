@@ -94,8 +94,9 @@ class MarketFiltersService(
     }
 
     suspend fun setStockPriceChanges() {
-        sp500PriceChanges = marketKit.getStocks(currencyCode).blockingGet().first { it.uid == "snp" }
-        goldPriceChanges = marketKit.getStocks(currencyCode).blockingGet().first { it.uid == "tether-gold" }
+        val stocks = marketKit.getStocks(currencyCode).blockingGet()
+        sp500PriceChanges = stocks.first { it.uid == "snp" }
+        goldPriceChanges = stocks.first { it.uid == "tether-gold" }
     }
 
     private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
