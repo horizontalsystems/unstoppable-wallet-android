@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -73,6 +72,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCirc
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
@@ -388,10 +388,7 @@ fun BalanceItems(
                         }
                         HSpacer(16.dp)
                     }
-                    Divider(
-                        thickness = 0.5.dp,
-                        color = ComposeAppTheme.colors.tyler,
-                    )
+                    HsDivider()
                 }
             }
 
@@ -624,10 +621,7 @@ fun <T> LazyListScope.wallets(
             Row {
                 itemContent(it)
             }
-            Divider(
-                thickness = 0.5.dp,
-                color = ComposeAppTheme.colors.tyler,
-            )
+            HsDivider()
         }
     })
     item {

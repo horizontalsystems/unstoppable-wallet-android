@@ -88,7 +88,7 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
             if (uiState.usedAddresses.isNotEmpty()) {
                 HsDivider(modifier = Modifier.fillMaxWidth())
                 RowUniversal(
-                    modifier = Modifier.height(48.dp),
+                    modifier = Modifier.height(52.dp),
                     onClick = {
                         navController.slideFromRight(
                             R.id.btcUsedAddressesFragment,

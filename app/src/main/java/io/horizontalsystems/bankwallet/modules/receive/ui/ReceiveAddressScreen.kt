@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -76,30 +77,31 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryOrangeCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ErrorScreenWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsTextButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -150,13 +152,6 @@ fun ReceiveAddressScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Done),
-                        onClick = closeModule,
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                )
             )
         }
     ) {
@@ -169,7 +164,18 @@ fun ReceiveAddressScreen(
                 Column {
                     when (viewState) {
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), onErrorClick)
+                            ErrorScreenWithAction(
+                                text = stringResource(R.string.SyncError),
+                                icon = R.drawable.ic_warning_64,
+                            ) {
+                                HsTextButton(
+                                    onClick = onErrorClick,
+                                ) {
+                                    captionSB_jacob(
+                                        text = stringResource(R.string.Button_Retry),
+                                    )
+                                }
+                            }
                         }
 
                         ViewState.Loading -> {
@@ -182,7 +188,6 @@ fun ReceiveAddressScreen(
                                     .weight(1f)
                                     .fillMaxWidth()
                                     .verticalScroll(rememberScrollState()),
-                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 VSpacer(12.dp)
                                 uiState.alertText?.let {
@@ -201,7 +206,7 @@ fun ReceiveAddressScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 16.dp)
-                                        .clip(RoundedCornerShape(24.dp))
+                                        .clip(RoundedCornerShape(16.dp))
                                         .background(ComposeAppTheme.colors.lawrence),
                                 ) {
                                     Column(
@@ -231,36 +236,37 @@ fun ReceiveAddressScreen(
                                         ) {
                                             QrCodeImage(uiState.uri)
                                         }
-                                        VSpacer(12.dp)
+                                        VSpacer(24.dp)
                                         subhead2_leah(
-                                            modifier = Modifier.padding(horizontal = 32.dp),
+                                            modifier = Modifier.padding(horizontal = 46.dp),
                                             text = uiState.address,
                                             textAlign = TextAlign.Center,
                                         )
 
-                                        val testNetBadge = if (!uiState.mainNet) " (TestNet)" else ""
+                                        val testNetBadge =
+                                            if (!uiState.mainNet) " (TestNet)" else ""
                                         uiState.blockchainName?.let { blockchainName ->
                                             VSpacer(12.dp)
-                                            subhead2_grey(
-                                                modifier = Modifier.padding(horizontal = 32.dp),
+                                            subhead_grey(
+                                                modifier = Modifier.padding(horizontal = 46.dp),
                                                 text = stringResource(R.string.Balance_Network) + ": " + blockchainName + testNetBadge,
                                                 textAlign = TextAlign.Center,
                                             )
                                         }
                                         uiState.addressFormat?.let { addressFormat ->
                                             VSpacer(12.dp)
-                                            subhead2_grey(
-                                                modifier = Modifier.padding(horizontal = 32.dp),
+                                            subhead_grey(
+                                                modifier = Modifier.padding(horizontal = 46.dp),
                                                 text = stringResource(R.string.Balance_Format) + ": " + addressFormat + testNetBadge,
                                                 textAlign = TextAlign.Center,
                                             )
                                         }
-                                        VSpacer(24.dp)
+                                        VSpacer(32.dp)
                                     }
                                     val additionalItems = buildList {
                                         addAll(uiState.additionalItems)
-                                        uiState.amount?.let {
-                                            add(ReceiveModule.AdditionalData.Amount(it.toString()))
+                                        uiState.amountString?.let { amount ->
+                                            add(ReceiveModule.AdditionalData.Amount(amount))
                                         }
                                     }
 
@@ -284,7 +290,7 @@ fun ReceiveAddressScreen(
                                     slot1.invoke()
                                 }
 
-                                VSpacer(52.dp)
+                                VSpacer(24.dp)
 
                                 ActionButtonsRow(
                                     uri = uiState.uri,
@@ -394,13 +400,11 @@ private fun ActionButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 48.dp),
+            .padding(horizontal = 32.dp),
         horizontalArrangement = if (watchAccount) Arrangement.Center else Arrangement.SpaceBetween,
     ) {
-        val itemModifier = if (watchAccount) Modifier else Modifier.weight(1f)
         if (!watchAccount) {
             ReceiveActionButton(
-                modifier = itemModifier,
                 icon = R.drawable.ic_edit_24px,
                 buttonText = stringResource(R.string.Button_SetAmount),
                 onClick = {
@@ -410,23 +414,6 @@ private fun ActionButtonsRow(
         }
 
         ReceiveActionButton(
-            modifier = itemModifier,
-            icon = R.drawable.ic_copy_24px,
-            buttonText = stringResource(R.string.Button_Copy),
-            onClick = {
-                TextHelper.copyText(uri)
-                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-
-                stat(page = StatPage.Receive, event = StatEvent.Copy(StatEntity.ReceiveAddress))
-            },
-        )
-
-        if (watchAccount) {
-            HSpacer(64.dp)
-        }
-
-        ReceiveActionButton(
-            modifier = itemModifier,
             icon = R.drawable.ic_share_24px,
             buttonText = stringResource(R.string.Button_Share),
             onClick = {
@@ -437,6 +424,22 @@ private fun ActionButtonsRow(
                 })
 
                 stat(page = StatPage.Receive, event = StatEvent.Share(StatEntity.ReceiveAddress))
+            },
+        )
+
+        if (watchAccount) {
+            HSpacer(64.dp)
+        }
+
+        ReceiveActionButton(
+            icon = R.drawable.ic_copy_24px,
+            buttonText = stringResource(R.string.Button_Copy),
+            emphasized = true,
+            onClick = {
+                TextHelper.copyText(uri)
+                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                stat(page = StatPage.Receive, event = StatEvent.Copy(StatEntity.ReceiveAddress))
             },
         )
     }
@@ -453,7 +456,7 @@ private fun AdditionalDataSection(
     items.forEach { item ->
         HsDivider(modifier = Modifier.fillMaxWidth())
         RowUniversal(
-            modifier = Modifier.height(48.dp),
+            modifier = Modifier.height(52.dp),
         ) {
             when (item) {
                 is ReceiveModule.AdditionalData.Amount -> {
@@ -465,13 +468,23 @@ private fun AdditionalDataSection(
                     )
                     subhead1_leah(
                         text = item.value,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp)
                     )
-                    ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = 16.dp),
-                        icon = R.drawable.ic_delete_20,
-                        onClick = onClearAmount
-                    )
+                    HsIconButton(
+                        onClick = {
+                            onClearAmount.invoke()
+                            stat(page = StatPage.TransactionInfo, event = StatEvent.TogglePrice)
+                        },
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .size(28.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_trash_filled_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.leah,
+                        )
+                    }
                 }
 
                 is ReceiveModule.AdditionalData.Memo -> {
@@ -528,19 +541,25 @@ private fun AdditionalDataSection(
 
 @Composable
 private fun ReceiveActionButton(
-    modifier: Modifier,
     icon: Int,
     buttonText: String,
+    emphasized: Boolean = false,
     onClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        ButtonPrimaryCircle(
-            icon = icon,
-            onClick = onClick,
-        )
+        if (emphasized) {
+            ButtonPrimaryOrangeCircle(
+                icon = icon,
+                onClick = onClick,
+            )
+        } else {
+            ButtonPrimaryCircle(
+                icon = icon,
+                onClick = onClick,
+            )
+        }
         caption_grey(
             modifier = Modifier.padding(top = 8.dp),
             text = buttonText,
@@ -555,7 +574,8 @@ fun AmountInputDialog(
     onDismissRequest: () -> Unit,
     onAmountConfirm: (BigDecimal?) -> Unit
 ) {
-    val textState = remember { mutableStateOf(TextFieldValue(text = initialAmount?.toString() ?: "")) }
+    val textState =
+        remember { mutableStateOf(TextFieldValue(text = initialAmount?.toString() ?: "")) }
     val focusRequester = remember { FocusRequester() }
     Dialog(onDismissRequest = onDismissRequest) {
         Column(

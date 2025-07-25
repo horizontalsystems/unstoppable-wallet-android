@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -74,6 +75,7 @@ class ReceiveAddressViewModel(
         watchAccount = watchAccount,
         additionalItems = getAdditionalData(),
         amount = amount,
+        amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
         alertText = null,
     )
 
