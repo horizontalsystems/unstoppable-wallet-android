@@ -35,6 +35,7 @@ object ReceiveModule {
         abstract val additionalItems: List<AdditionalData>
         abstract val watchAccount: Boolean
         abstract val amount: BigDecimal?
+        abstract val amountString: String?
     }
 
     data class UiState(
@@ -50,6 +51,7 @@ object ReceiveModule {
         override val watchAccount: Boolean,
         override val additionalItems: List<AdditionalData>,
         override val amount: BigDecimal?,
+        override val amountString: String?,
         override val alertText: AlertText?,
     ) : AbstractUiState()
 

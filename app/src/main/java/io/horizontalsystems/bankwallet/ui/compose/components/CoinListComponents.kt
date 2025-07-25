@@ -384,7 +384,7 @@ fun DescriptionCard(title: String?, description: String, image: ImageSource) {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 12.dp, end = 8.dp)
+                    .padding(start = 16.dp, end = 8.dp)
                     .weight(1f)
             ) {
                 title?.let {

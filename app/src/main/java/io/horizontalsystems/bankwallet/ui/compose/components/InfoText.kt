@@ -11,13 +11,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun InfoText(
     text: String,
+    modifier: Modifier = Modifier,
     paddingStart: Dp = 32.dp,
     paddingEnd: Dp = 32.dp,
     paddingTop: Dp = 12.dp,
     paddingBottom: Dp = 12.dp,
 ) {
-    subhead2_grey(
-        modifier = Modifier.padding(start = paddingStart, top = paddingTop, end = paddingEnd, bottom = paddingBottom),
+    subhead_grey(
+        modifier = modifier.padding(start = paddingStart, top = paddingTop, end = paddingEnd, bottom = paddingBottom),
         text = text
     )
 }

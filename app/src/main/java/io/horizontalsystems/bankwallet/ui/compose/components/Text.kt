@@ -585,6 +585,27 @@ fun subheadSB_andy(
 }
 
 @Composable
+fun subheadSB_grey(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.subheadSB,
+        color = ComposeAppTheme.colors.grey,
+    )
+}
+
+@Composable
 fun C3(
     text: String,
     modifier: Modifier = Modifier,
@@ -739,6 +760,26 @@ fun subhead2_grey(
         onTextLayout = onTextLayout,
     )
 }
+@Composable
+fun subhead_grey(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.subhead,
+        color = ComposeAppTheme.colors.grey,
+    )
+}
 
 @Composable
 fun D2(
@@ -776,6 +817,26 @@ fun subhead2_leah(
         overflow = overflow,
         maxLines = maxLines,
         onTextLayout = onTextLayout,
+    )
+}
+@Composable
+fun subhead_leah(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.subhead,
+        color = ComposeAppTheme.colors.leah,
     )
 }
 
@@ -1190,6 +1251,26 @@ fun caption_jacob(
         overflow = overflow,
         maxLines = maxLines,
         onTextLayout = onTextLayout,
+    )
+}
+@Composable
+fun captionSB_jacob(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.captionSB,
+        color = ComposeAppTheme.colors.jacob,
     )
 }
 
