@@ -152,29 +152,23 @@ fun MarketEarnScreen(
                                         OptionController(
                                             uiState.filterBy.titleResId,
                                             onOptionClick = {
-                                                navController.paidAction(AdvancedSearch) {
-                                                    openFilterSelector = true
-                                                }
+                                                openFilterSelector = true
                                             }
                                         )
                                         HSpacer(width = 12.dp)
                                         ButtonSecondaryWithIcon(
                                             modifier = Modifier.height(28.dp),
                                             onClick = {
-                                                navController.paidAction(AdvancedSearch) {
-                                                    openSortingSelector = true
-                                                }
+                                                openSortingSelector = true
                                             },
-                                            title = stringResource(uiState.sortingBy.titleResId),
+                                            title = uiState.sortingByTitle,
                                             iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                         )
                                         HSpacer(width = 12.dp)
                                         ButtonSecondaryWithIcon(
                                             modifier = Modifier.height(28.dp),
                                             onClick = {
-                                                navController.paidAction(AdvancedSearch) {
-                                                    openPeriodSelector = true
-                                                }
+                                                openPeriodSelector = true
                                             },
                                             title = stringResource(uiState.apyPeriod.titleResId),
                                             iconRight = painterResource(R.drawable.ic_down_arrow_20),
@@ -183,14 +177,14 @@ fun MarketEarnScreen(
                                         ButtonSecondaryWithIcon(
                                             modifier = Modifier.height(28.dp),
                                             onClick = {
-                                                navController.paidAction(AdvancedSearch) {
-                                                    navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
-                                                        R.id.vaultsBlockchainsSelectorFragment,
-                                                        VaultBlockchainsSelectorFragment.Input(
-                                                            uiState.selectedBlockchains,
-                                                            uiState.blockchains
-                                                        )
-                                                    ) {
+                                                navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
+                                                    R.id.vaultsBlockchainsSelectorFragment,
+                                                    VaultBlockchainsSelectorFragment.Input(
+                                                        uiState.selectedBlockchains,
+                                                        uiState.blockchains
+                                                    )
+                                                ) {
+                                                    navController.paidAction(AdvancedSearch) {
                                                         viewModel.onBlockchainsSelected(it.selected)
                                                     }
                                                 }
@@ -218,8 +212,10 @@ fun MarketEarnScreen(
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
                 openFilterSelector = false
-                scrollToTopAfterUpdate = true
-                viewModel.onFilterBySelected(selected)
+                navController.paidAction(AdvancedSearch) {
+                    scrollToTopAfterUpdate = true
+                    viewModel.onFilterBySelected(selected)
+                }
             },
             onDismiss = {
                 openFilterSelector = false
@@ -232,8 +228,10 @@ fun MarketEarnScreen(
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
                 openPeriodSelector = false
-                scrollToTopAfterUpdate = true
-                viewModel.onApyPeriodSelected(selected)
+                navController.paidAction(AdvancedSearch) {
+                    scrollToTopAfterUpdate = true
+                    viewModel.onApyPeriodSelected(selected)
+                }
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -246,8 +244,10 @@ fun MarketEarnScreen(
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->
                 openSortingSelector = false
-                scrollToTopAfterUpdate = true
-                viewModel.onSortingSelected(selected)
+                navController.paidAction(AdvancedSearch) {
+                    scrollToTopAfterUpdate = true
+                    viewModel.onSortingSelected(selected)
+                }
             },
             onDismiss = {
                 openSortingSelector = false
@@ -281,7 +281,7 @@ fun VaultList(
                 coinIconUrl = item.assetLogo,
                 coinIconPlaceholder = R.drawable.coin_placeholder,
                 value = item.apy,
-                subvalue = "TVL:" + item.tvl,
+                subvalue = item.tvl,
                 label = item.blockchainName,
                 onClick = { onCoinClick.invoke(item) },
             )
@@ -379,7 +379,7 @@ fun VaultFirstRow(
             }
         }
         Text(
-            text = vaultDiffText(value),
+            text = "APY ${vaultDiffText(value)}",
             color = diffColor(value),
             style = ComposeAppTheme.typography.subheadR,
             maxLines = 1,
@@ -403,7 +403,7 @@ private fun VaultSecondRow(
         )
         Spacer(Modifier.width(8.dp))
         subhead2_grey(
-            text = value,
+            text = "TVL: $value",
             maxLines = 1,
         )
     }
@@ -431,7 +431,7 @@ private fun PremiumContentMessage(
                     alternativeCoinIconUrl = null,
                     coinIconPlaceholder = R.drawable.coin_placeholder,
                     value = item.apy,
-                    subvalue = "TVL:" + item.tvl,
+                    subvalue = item.tvl,
                     label = item.blockchainName,
                 )
                 HsDivider()

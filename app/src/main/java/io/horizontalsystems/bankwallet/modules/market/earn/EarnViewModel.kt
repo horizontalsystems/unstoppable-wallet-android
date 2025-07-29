@@ -193,11 +193,19 @@ class MarketEarnViewModel(
             filterBy = filterBy,
             apyPeriod = apyPeriod,
             sortingBy = sortingBy,
+            sortingByTitle = getSortingByTitle(sortingBy),
             noPremium = !hasPremium,
             blockchains = blockchains,
             chainSelectorMenuTitle = getChainsMenuTitle(selectedBlockchains),
             selectedBlockchains = selectedBlockchains,
         )
+    }
+
+    private fun getSortingByTitle(sortingBy: VaultSorting): String {
+        return when (sortingBy) {
+            VaultSorting.APY -> "APY"
+            VaultSorting.TVL -> "TVL"
+        }
     }
 
     private fun getVaultsAndBlurredItems(processedViewItems: List<EarnModule.VaultViewItem>) =
@@ -319,7 +327,7 @@ object EarnModule {
 
     enum class ApyPeriod(@StringRes val titleResId: Int) : WithTranslatableTitle {
         ONE_DAY(R.string.CoinPage_TimeDuration_Day),
-        SEVEN_DAY(R.string.CoinPage_TimeDuration_Week),
+        SEVEN_DAY(R.string.CoinPage_TimeDuration_OneWeek),
         THIRTY_DAY(R.string.CoinPage_TimeDuration_Month);
 
         override val title = TranslatableString.ResString(titleResId)
@@ -340,6 +348,7 @@ object EarnModule {
         val filterBy: FilterBy,
         val apyPeriod: ApyPeriod,
         val sortingBy: VaultSorting,
+        val sortingByTitle: String,
         val noPremium: Boolean,
         val chainSelectorMenuTitle: String,
         val selectedBlockchains: List<Blockchain>,
