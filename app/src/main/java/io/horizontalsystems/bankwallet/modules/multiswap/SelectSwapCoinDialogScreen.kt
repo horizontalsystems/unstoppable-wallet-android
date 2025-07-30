@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -68,6 +69,7 @@ fun SelectSwapCoinDialogScreen(
                         )
                         Spacer(modifier = Modifier.size(16.dp))
                         MultitextM1(
+                            modifier = Modifier.weight(1f),
                             title = {
                                 Row {
                                     B2(text = coinItem.token.coin.code)
@@ -78,7 +80,7 @@ fun SelectSwapCoinDialogScreen(
                             },
                             subtitle = { D1(text = coinItem.token.coin.name) }
                         )
-                        Spacer(modifier = Modifier.weight(1f))
+                        HSpacer(8.dp)
                         MultitextM1(
                             title = {
                                 coinItem.balance?.let {
