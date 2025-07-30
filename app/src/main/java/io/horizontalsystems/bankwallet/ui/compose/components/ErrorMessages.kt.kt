@@ -52,7 +52,7 @@ fun ErrorScreenWithAction(
                 overflow = TextOverflow.Ellipsis,
             )
             actionsComposable?.let { composable ->
-                VSpacer(32.dp)
+                VSpacer(24.dp)
                 composable.invoke()
             }
             VSpacer(100.dp) //to move the content up a bit by design

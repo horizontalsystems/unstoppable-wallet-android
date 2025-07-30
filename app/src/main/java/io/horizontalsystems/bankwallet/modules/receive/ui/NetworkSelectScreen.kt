@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.receive.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -25,11 +28,10 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.NetworkSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -43,7 +45,12 @@ fun NetworkSelectScreen(
     fullCoin: FullCoin,
     onSelect: (Wallet) -> Unit
 ) {
-    val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
+    val viewModel = viewModel<NetworkSelectViewModel>(
+        factory = NetworkSelectViewModel.Factory(
+            activeAccount,
+            fullCoin
+        )
+    )
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -58,33 +65,35 @@ fun NetworkSelectScreen(
             )
         }
     ) {
-        Column(Modifier.padding(it)) {
-            Column(
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(ComposeAppTheme.colors.lawrence)
+                .verticalScroll(rememberScrollState())
+        ) {
+            InfoText(
                 modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                InfoText(
-                    text = stringResource(R.string.Balance_NetworkSelectDescription)
-                )
-                VSpacer(20.dp)
-                CellUniversalLawrenceSection(viewModel.eligibleTokens) { token ->
-                    val blockchain = token.blockchain
-                    SectionUniversalItem {
-                        NetworkCell(
-                            title = blockchain.name,
-                            subtitle = blockchain.description,
-                            imageUrl = blockchain.type.imageUrl,
-                            onClick = {
-                                coroutineScope.launch {
-                                    onSelect.invoke(viewModel.getOrCreateWallet(token))
-                                }
-                            }
-                        )
+                    .fillMaxWidth()
+                    .background(ComposeAppTheme.colors.tyler),
+                text = stringResource(R.string.Balance_NetworkSelectDescription),
+                paddingBottom = 32.dp
+            )
+            viewModel.eligibleTokens.forEach { token ->
+                val blockchain = token.blockchain
+                NetworkCell(
+                    title = blockchain.name,
+                    subtitle = blockchain.description,
+                    imageUrl = blockchain.type.imageUrl,
+                    onClick = {
+                        coroutineScope.launch {
+                            onSelect.invoke(viewModel.getOrCreateWallet(token))
+                        }
                     }
-                }
-                VSpacer(32.dp)
+                )
+                HsDivider()
             }
+            VSpacer(32.dp)
         }
     }
 }

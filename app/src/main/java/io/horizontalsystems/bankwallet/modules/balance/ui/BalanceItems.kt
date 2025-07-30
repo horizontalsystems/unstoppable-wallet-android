@@ -67,7 +67,7 @@ import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFr
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryOrangeCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
@@ -507,7 +507,7 @@ fun BalanceActionOrangeButton(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ButtonPrimaryOrangeCircle(
+        ButtonPrimaryJacobCircle(
             icon = icon,
             contentDescription = title,
             enabled = enabled,

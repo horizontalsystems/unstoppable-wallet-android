@@ -58,6 +58,8 @@
     <string name="Button_SetAmount">Set Amount</string>
     <string name="Button_ContinueAnyway">Continue Anyway</string>
 
+    <string name="Attention_Title">Attention</string>
+
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error_AssetNotEnabled">The recipient hasn\'t enabled %s, therefore they are unable to receive it.</string>
