@@ -36,7 +36,9 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
     override suspend fun onResume() = Unit
 
     override fun isActionAllowed(paidAction: IPaidAction): Boolean {
-        return prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null) != null
+        return getActiveSubscriptions().any {
+            it.subscription.actions.contains(paidAction)
+        }
     }
 
     private fun setActiveSubscription(subscriptionId: String?) {

@@ -19,6 +19,7 @@ object UserSubscriptionManager {
                 AddressPhishing,
                 AddressBlacklist,
                 VIPSupport,
+                MevProtection,
             )
         ),
     )

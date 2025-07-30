@@ -50,6 +50,7 @@ class SwapConfirmViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
 
+    private var mevProtectionEnabled = false
     private var loading = true
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
@@ -153,6 +154,7 @@ class SwapConfirmViewModel(
             cautions += cautionViewItems
         }
 
+        val mevProtectionAvailable = true
         return SwapConfirmUiState(
             expiresIn = timerState.remaining,
             expired = timerState.timeout,
@@ -175,6 +177,8 @@ class SwapConfirmViewModel(
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
             hasSettings = sendTransactionService.hasSettings,
+            mevProtectionAvailable = mevProtectionAvailable,
+            mevProtectionEnabled = mevProtectionEnabled,
         )
     }
 
@@ -222,7 +226,13 @@ class SwapConfirmViewModel(
     suspend fun swap() = withContext(Dispatchers.Default) {
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
-        sendTransactionService.sendTransaction()
+        sendTransactionService.sendTransaction(mevProtectionEnabled)
+    }
+
+    fun toggleMevProtection(enabled: Boolean) {
+        mevProtectionEnabled = enabled
+
+        emitState()
     }
 
     companion object {
@@ -268,6 +278,8 @@ data class SwapConfirmUiState(
     val transactionFields: List<DataField>,
     val extraFees: Map<FeeType, SendModule.AmountData>,
     val hasSettings: Boolean,
+    val mevProtectionAvailable: Boolean,
+    val mevProtectionEnabled: Boolean,
 ) {
     val totalFee by lazy {
         val networkFiatValue = networkFee?.secondary  ?: return@lazy null

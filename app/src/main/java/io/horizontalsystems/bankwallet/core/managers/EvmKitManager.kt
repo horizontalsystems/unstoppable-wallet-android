@@ -220,7 +220,8 @@ class EvmKitWrapper(
         transactionData: TransactionData,
         gasPrice: GasPrice,
         gasLimit: Long,
-        nonce: Long?
+        nonce: Long?,
+        mevProtectionEnabled: Boolean
     ): Single<FullTransaction> {
         return if (signer != null) {
             evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
