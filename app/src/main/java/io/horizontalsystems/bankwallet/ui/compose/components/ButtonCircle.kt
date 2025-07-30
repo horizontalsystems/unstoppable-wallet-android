@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Orange
 
 @Composable
 fun ButtonPrimaryCircle(
@@ -41,7 +40,7 @@ fun ButtonPrimaryCircle(
 }
 
 @Composable
-fun ButtonPrimaryOrangeCircle(
+fun ButtonPrimaryJacobCircle(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_left_24,
     contentDescription: String? = null,
     onClick: () -> Unit,
@@ -53,7 +52,7 @@ fun ButtonPrimaryOrangeCircle(
         modifier = Modifier
             .size(56.dp)
             .clip(shape)
-            .background(if (enabled) Orange else ComposeAppTheme.colors.blade),
+            .background(if (enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.blade),
         enabled = enabled,
         rippleColor = ComposeAppTheme.colors.blade
     ) {

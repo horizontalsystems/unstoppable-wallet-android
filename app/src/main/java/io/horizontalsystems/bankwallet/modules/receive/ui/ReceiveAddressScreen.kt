@@ -79,7 +79,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryOrangeCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ErrorScreenWithAction
@@ -550,7 +550,7 @@ private fun ReceiveActionButton(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (emphasized) {
-            ButtonPrimaryOrangeCircle(
+            ButtonPrimaryJacobCircle(
                 icon = icon,
                 onClick = onClick,
             )
