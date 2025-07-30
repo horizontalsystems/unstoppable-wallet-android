@@ -20,6 +20,7 @@ class VaultChartService(
     private val marketKit: MarketKitWrapper,
 ) : AbstractChartService() {
 
+    override val hasVolumes = true
     override val initialChartInterval = HsTimePeriod.Week1
     override val chartIntervals = listOf(
         HsTimePeriod.Week1,
@@ -55,8 +56,12 @@ class VaultChartService(
         return try {
             marketKit.vault(vaultAddress, currencyManager.baseCurrency.code, periodType)
                 .map { vault ->
-                    vault.apyChart.map {
-                        ChartPoint(it.apy.toFloat() * 100, it.timestamp.toLong())
+                    vault.chart.map { point ->
+                        ChartPoint(
+                            value = point.apy.toFloat() * 100,
+                            timestamp = point.timestamp.toLong(),
+                            volume = point.tvl.toFloat(),
+                        )
                     }
                 }
                 .map { ChartPointsWrapper(it, customHint = "APY (" + periodType.value.uppercase() + ")") }
