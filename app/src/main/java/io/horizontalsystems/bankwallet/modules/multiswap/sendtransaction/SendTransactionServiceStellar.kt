@@ -100,7 +100,7 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
         }
     }
 
-    override suspend fun sendTransaction(): SendTransactionResult {
+    override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val transactionEnvelope = transactionEnvelope
         if (transactionEnvelope != null) {
             adapter.send(transactionEnvelope)

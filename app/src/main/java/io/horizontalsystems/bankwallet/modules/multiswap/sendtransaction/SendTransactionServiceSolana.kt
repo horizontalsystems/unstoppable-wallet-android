@@ -89,7 +89,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
 //        addressService.setAddress(address)
     }
 
-    override suspend fun sendTransaction(): SendTransactionResult {
+    override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val tmpRawTransaction = rawTransaction
 
         if (tmpRawTransaction != null) {

@@ -217,7 +217,7 @@ class SendTransactionServiceEvm(
         setExtraFeesMap(data.feesMap)
     }
 
-    override suspend fun sendTransaction() : SendTransactionResult.Evm {
+    override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
         val transaction = transaction ?: throw Exception()
         if (transaction.errors.isNotEmpty()) throw Exception()
 
@@ -227,7 +227,7 @@ class SendTransactionServiceEvm(
         val nonce = transaction.nonce
 
         val fullTransaction = evmKitWrapper
-            .sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+            .sendSingle(transactionData, gasPrice, gasLimit, nonce, mevProtectionEnabled).await()
         return SendTransactionResult.Evm(fullTransaction)
     }
 

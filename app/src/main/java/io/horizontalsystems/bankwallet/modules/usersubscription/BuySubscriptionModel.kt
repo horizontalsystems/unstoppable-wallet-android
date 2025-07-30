@@ -8,6 +8,7 @@ import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.BasePlan
 import io.horizontalsystems.subscriptions.core.DuressMode
 import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.MevProtection
 import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
@@ -25,6 +26,7 @@ object BuySubscriptionModel {
             AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing
             AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport
+            MevProtection -> R.string.Premium_UpgradeFeature_MevProtection
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -37,6 +39,7 @@ object BuySubscriptionModel {
             AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing_Description
             AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist_Description
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_Description
+            MevProtection -> R.string.Premium_UpgradeFeature_MevProtection_Description
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -49,6 +52,7 @@ object BuySubscriptionModel {
             AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing_BigDescription
             AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist_BigDescription
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
+            MevProtection -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -61,6 +65,7 @@ object BuySubscriptionModel {
             AddressPhishing -> R.drawable.prem_shield_24
             AddressBlacklist -> R.drawable.prem_warning_24
             VIPSupport -> R.drawable.prem_vip_support_24
+            MevProtection -> R.drawable.prem_shield_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
