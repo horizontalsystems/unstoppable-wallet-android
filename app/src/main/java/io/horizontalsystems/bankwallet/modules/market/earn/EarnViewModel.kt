@@ -327,7 +327,7 @@ object EarnModule {
 
     enum class ApyPeriod(@StringRes val titleResId: Int) : WithTranslatableTitle {
         ONE_DAY(R.string.CoinPage_TimeDuration_Day),
-        SEVEN_DAY(R.string.CoinPage_TimeDuration_OneWeek),
+        SEVEN_DAY(R.string.CoinPage_TimeDuration_Week),
         THIRTY_DAY(R.string.CoinPage_TimeDuration_Month);
 
         override val title = TranslatableString.ResString(titleResId)
