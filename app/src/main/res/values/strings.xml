@@ -1506,7 +1506,6 @@
 
     <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">1W</string>
-    <string name="CoinPage_TimeDuration_OneWeek">1W</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
