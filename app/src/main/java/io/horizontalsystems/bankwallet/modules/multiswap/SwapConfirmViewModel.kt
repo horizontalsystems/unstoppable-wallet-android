@@ -61,6 +61,7 @@ class SwapConfirmViewModel(
     private var quoteFields: List<DataField> = listOf()
     private var cautionViewItems: List<CautionViewItem> = listOf()
     private var fetchFinalQuoteJob: Job? = null
+    private val mevProtectionAvailable = sendTransactionService.mevProtectionAvailable
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -154,7 +155,6 @@ class SwapConfirmViewModel(
             cautions += cautionViewItems
         }
 
-        val mevProtectionAvailable = true
         return SwapConfirmUiState(
             expiresIn = timerState.remaining,
             expired = timerState.timeout,

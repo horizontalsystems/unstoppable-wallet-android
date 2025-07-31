@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 
 abstract class AbstractSendTransactionService(val hasSettings: Boolean): ServiceState<SendTransactionServiceState>() {
+    open val mevProtectionAvailable: Boolean = false
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
     protected var uuid = UUID.randomUUID().toString()
     protected var extraFees = mapOf<FeeType, SendModule.AmountData>()
