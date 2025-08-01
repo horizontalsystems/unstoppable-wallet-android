@@ -44,6 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Token
 
 @Composable
 fun BalanceCardSwipable(
@@ -265,28 +266,58 @@ private fun WalletIcon(
                 }
             )
         }
-        if (viewItem.failedIconVisible) {
-            val clickableModifier = if (onClickSyncError != null) {
-                Modifier.clickable(onClick = onClickSyncError)
-            } else {
-                Modifier
-            }
+        IconCell(
+            viewItem.failedIconVisible,
+            viewItem.wallet.token,
+            iconAlpha,
+            onClickSyncError
+        )
+    }
+}
 
-            Image(
+@Composable
+private fun IconCell(
+    failedIconVisible: Boolean,
+    token: Token,
+    iconAlpha: Float,
+    onClickSyncError: (() -> Unit)?
+) {
+    if (failedIconVisible) {
+        if (onClickSyncError != null) {
+            Modifier.clickable(onClick = onClickSyncError)
+            HsIconButton(
                 modifier = Modifier
                     .size(32.dp)
-                    .then(clickableModifier),
+                    .then(
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onClickSyncError
+                        )
+                    ),
+                onClick = onClickSyncError,
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(32.dp),
+                    painter = painterResource(id = R.drawable.ic_balance_sync_error_32),
+                    contentDescription = "sync error",
+                )
+            }
+        } else {
+            Image(
+                modifier = Modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.ic_balance_sync_error_32),
                 contentDescription = "sync error",
             )
-        } else {
-            CoinImage(
-                token = viewItem.wallet.token,
-                modifier = Modifier
-                    .size(32.dp)
-                    .alpha(iconAlpha),
-            )
         }
+    } else {
+        CoinImage(
+            token = token,
+            modifier = Modifier
+                .size(32.dp)
+                .alpha(iconAlpha),
+        )
     }
 }
 
