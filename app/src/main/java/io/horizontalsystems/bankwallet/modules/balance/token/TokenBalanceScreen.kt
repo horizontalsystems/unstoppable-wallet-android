@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -66,21 +67,22 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.TokenBalanceErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
@@ -88,16 +90,40 @@ fun TokenBalanceScreen(
     navController: NavController
 ) {
     val uiState = viewModel.uiState
+    var bottomSheetContent by remember { mutableStateOf<BottomSheetContent?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    val infoModalBottomSheetState =
+        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = uiState.title,
+                title = {
+                    title3_leah(
+                        text = uiState.title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                showSpinner = uiState.balanceViewItem?.syncingProgress?.progress != null,
+                stateIcon = {
+                    if (uiState.balanceViewItem?.syncingProgress?.progress != null) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = ComposeAppTheme.colors.grey,
+                            strokeWidth = 2.dp
+                        )
+                    } else if (uiState.failedIconVisible) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_warning_filled_24),
+                            contentDescription = "sync failed icon",
+                            tint = ComposeAppTheme.colors.lucian
+                        )
+                    }
+                },
                 menuItems = buildList {
                     if (uiState.balanceViewItem?.isWatchAccount == true) {
                         add(
@@ -124,23 +150,37 @@ fun TokenBalanceScreen(
     ) { paddingValues ->
         val transactionItems = uiState.transactions
         if (transactionItems.isNullOrEmpty()) {
-            Column(Modifier.padding(paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
                 uiState.balanceViewItem?.let {
                     TokenBalanceHeader(
                         balanceViewItem = it,
                         navController = navController,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showBottomSheet = { content ->
+                            bottomSheetContent = content
+                            coroutineScope.launch {
+                                infoModalBottomSheetState.show()
+                            }
+                        },
+                        hideBottomSheet = {
+                            bottomSheetContent = null
+                            coroutineScope.launch {
+                                infoModalBottomSheetState.hide()
+                            }
+                        }
                     )
                 }
-                if (transactionItems == null) {
-                    ListEmptyView(
-                        text = stringResource(R.string.Transactions_WaitForSync),
-                        icon = R.drawable.ic_warning_filled_24
-                    )
-                } else {
-                    ListEmptyView(
-                        text = stringResource(R.string.Transactions_EmptyList),
-                        icon = R.drawable.ic_warning_filled_24
+                uiState.error?.let {
+                    TokenBalanceErrorView(
+                        modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
+                        text = it.message,
+                        title = it.errorTitle,
+                        icon = R.drawable.ic_warning_filled_24,
                     )
                 }
             }
@@ -158,7 +198,19 @@ fun TokenBalanceScreen(
                         TokenBalanceHeader(
                             balanceViewItem = it,
                             navController = navController,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            showBottomSheet = { content ->
+                                bottomSheetContent = content
+                                coroutineScope.launch {
+                                    infoModalBottomSheetState.show()
+                                }
+                            },
+                            hideBottomSheet = {
+                                bottomSheetContent = null
+                                coroutineScope.launch {
+                                    infoModalBottomSheetState.hide()
+                                }
+                            }
                         )
                     }
                 }
@@ -179,6 +231,18 @@ fun TokenBalanceScreen(
             }
         }
     }
+    bottomSheetContent?.let { info ->
+        InfoBottomSheet(
+            content = info,
+            bottomSheetState = infoModalBottomSheetState,
+            hideBottomSheet = {
+                coroutineScope.launch {
+                    infoModalBottomSheetState.hide()
+                }
+                bottomSheetContent = null
+            }
+        )
+    }
 
 }
 
@@ -197,18 +261,15 @@ private fun onTransactionClick(
     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
     viewModel: TokenBalanceViewModel,
+    showBottomSheet: (BottomSheetContent) -> Unit = { _ -> },
+    hideBottomSheet: () -> Unit
 ) {
     val context = LocalContext.current
-    val infoModalBottomSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var bottomSheetContent by remember { mutableStateOf<BottomSheetContent?>(null) }
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -262,49 +323,13 @@ private fun TokenBalanceHeader(
             viewItem = balanceViewItem,
             navController = navController,
             viewModel = viewModel,
-            showBottomSheet = {
-                bottomSheetContent = it
-                coroutineScope.launch {
-                    infoModalBottomSheetState.show()
-                }
-            }
+            showBottomSheet = showBottomSheet
         )
         LockedBalanceSection(
             balanceViewItem = balanceViewItem,
             navController = navController,
-            showBottomSheet = {
-                bottomSheetContent = it
-                coroutineScope.launch {
-                    infoModalBottomSheetState.show()
-                }
-            },
-            hideBottomSheet = {
-                coroutineScope.launch {
-                    bottomSheetContent = null
-                    infoModalBottomSheetState.hide()
-                }
-            }
-        )
-
-        balanceViewItem.warning?.let {
-            VSpacer(height = 8.dp)
-            TextImportantWarning(
-                icon = R.drawable.ic_attention_20,
-                title = it.title.getString(),
-                text = it.text.getString()
-            )
-        }
-    }
-    bottomSheetContent?.let { info ->
-        InfoBottomSheet(
-            content = info,
-            bottomSheetState = infoModalBottomSheetState,
-            hideBottomSheet = {
-                coroutineScope.launch {
-                    infoModalBottomSheetState.hide()
-                }
-                bottomSheetContent = null
-            }
+            showBottomSheet = showBottomSheet,
+            hideBottomSheet = hideBottomSheet
         )
     }
 }

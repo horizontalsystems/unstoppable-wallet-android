@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -61,6 +62,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 
 @Composable
 fun TransactionsScreen(
@@ -80,8 +82,22 @@ fun TransactionsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                title = stringResource(R.string.Transactions_Title),
-                showSpinner = syncing,
+                title = {
+                    title3_leah(
+                        text = stringResource(R.string.Transactions_Title),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                stateIcon = {
+                    if (syncing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = ComposeAppTheme.colors.grey,
+                            strokeWidth = 2.dp
+                        )
+                    }
+                },
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Transactions_Filter),
