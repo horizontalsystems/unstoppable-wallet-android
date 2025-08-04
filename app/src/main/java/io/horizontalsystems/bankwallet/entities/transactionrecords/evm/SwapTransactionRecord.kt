@@ -12,8 +12,9 @@ class SwapTransactionRecord(
     val exchangeAddress: String,
     val amountIn: Amount,
     val amountOut: Amount?,
-    val recipient: String?
-) : EvmTransactionRecord(transaction, baseToken, source) {
+    val recipient: String?,
+    protected: Boolean
+) : EvmTransactionRecord(transaction, baseToken, source, protected) {
 
     sealed class Amount(val value: TransactionValue) {
         class Exact(value: TransactionValue) : Amount(value)

@@ -10,8 +10,9 @@ class ApproveTransactionRecord(
     baseToken: Token,
     source: TransactionSource,
     val spender: String,
-    val value: TransactionValue
-) : EvmTransactionRecord(transaction, baseToken, source) {
+    val value: TransactionValue,
+    protected: Boolean
+) : EvmTransactionRecord(transaction, baseToken, source, protected) {
 
     override val mainValue = value
 
