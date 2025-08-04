@@ -11,11 +11,13 @@ class ExternalContractCallTransactionRecord(
     source: TransactionSource,
     val incomingEvents: List<TransferEvent>,
     val outgoingEvents: List<TransferEvent>,
-    isSpam: Boolean
+    isSpam: Boolean,
+    protected: Boolean
 ) : EvmTransactionRecord(
     transaction = transaction,
     baseToken = baseToken,
     source = source,
+    protected = protected,
     foreignTransaction = true,
     spam = isSpam
 ) {

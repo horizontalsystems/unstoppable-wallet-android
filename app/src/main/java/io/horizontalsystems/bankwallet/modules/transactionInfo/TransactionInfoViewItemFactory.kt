@@ -550,26 +550,37 @@ class TransactionInfoViewItemFactory(
         }
 
         itemSections.add(TransactionViewItemFactoryHelper.getStatusSectionItems(transaction, status, rates, blockchainType))
-        if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
-            itemSections.add(
-                listOf(
-                    SpeedUpCancel(
-                        transactionHash = transaction.transactionHash,
-                        blockchainType = transaction.blockchainType
-                    )
-                )
-            )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
-        } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
-            itemSections.add(
-                listOf(
-                    SpeedUpCancel(
-                        transactionHash = transaction.transactionHash,
-                        blockchainType = transaction.blockchainType
-                    )
-                )
-            )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+
+        if (resendEnabled) {
+            when (transaction) {
+                is EvmTransactionRecord -> {
+                    if (!transaction.foreignTransaction && status == TransactionStatus.Pending && !transaction.protected) {
+                        itemSections.add(
+                            listOf(
+                                SpeedUpCancel(
+                                    transactionHash = transaction.transactionHash,
+                                    blockchainType = transaction.blockchainType
+                                )
+                            )
+                        )
+                        itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+                    }
+                }
+
+                is BitcoinOutgoingTransactionRecord -> {
+                    if (transaction.replaceable) {
+                        itemSections.add(
+                            listOf(
+                                SpeedUpCancel(
+                                    transactionHash = transaction.transactionHash,
+                                    blockchainType = transaction.blockchainType
+                                )
+                            )
+                        )
+                        itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+                    }
+                }
+            }
         }
         itemSections.add(TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData))
 

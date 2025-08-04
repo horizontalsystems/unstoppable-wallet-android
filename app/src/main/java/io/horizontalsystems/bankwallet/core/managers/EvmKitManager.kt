@@ -174,10 +174,7 @@ class EvmKitManager(
             transactionManager = evmKit.transactionManager
         )
 
-        merkleTransactionAdapter?.let {
-            evmKit.addNonceProvider(it.blockchain)
-            evmKit.addTransactionSyncer(it.syncer)
-        }
+        merkleTransactionAdapter?.registerInKit(evmKit)
 
         evmKit.start()
 
