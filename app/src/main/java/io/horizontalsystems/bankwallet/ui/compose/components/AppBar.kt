@@ -80,7 +80,6 @@ fun AppBar(
     title: String? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
-    showSpinner: Boolean = false,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     val titleComposable: @Composable () -> Unit = {
@@ -97,7 +96,6 @@ fun AppBar(
         title = titleComposable,
         navigationIcon = navigationIcon,
         menuItems = menuItems,
-        showSpinner = showSpinner,
         backgroundColor = backgroundColor
     )
 }
@@ -108,7 +106,7 @@ fun AppBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
-    showSpinner: Boolean = false,
+    stateIcon: @Composable (() -> Unit)? = null,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
@@ -124,14 +122,15 @@ fun AppBar(
             }
         },
         actions = {
-            if (showSpinner) {
-                CircularProgressIndicator(
+            stateIcon?.let{
+                Box(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
                         .size(24.dp),
-                    color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
-                )
+                    contentAlignment = Alignment.Center
+                ) {
+                    it()
+                }
             }
             menuItems.forEach { menuItem ->
                 when (menuItem) {
