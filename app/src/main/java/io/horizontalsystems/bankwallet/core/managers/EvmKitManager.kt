@@ -171,7 +171,8 @@ class EvmKitManager(
             chain = chain,
             context = App.instance,
             walletId = account.id,
-            transactionManager = evmKit.transactionManager
+            transactionManager = evmKit.transactionManager,
+            sourceTag = "unstoppable-wallet-android"
         )
 
         merkleTransactionAdapter?.registerInKit(evmKit)
