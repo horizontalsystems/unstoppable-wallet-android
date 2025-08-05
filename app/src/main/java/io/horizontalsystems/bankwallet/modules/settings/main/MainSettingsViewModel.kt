@@ -29,6 +29,10 @@ class MainSettingsViewModel(
     private val appConfigProvider: AppConfigProvider,
 ) : ViewModelUiState<MainSettingUiState>() {
 
+    val fdroidSupportLink by lazy {
+        appConfigProvider.simplexSupportChat
+    }
+
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
