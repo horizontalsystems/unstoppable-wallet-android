@@ -323,26 +323,33 @@ private fun SettingSections(
 
     VSpacer(24.dp)
 
-    PremiumHeader()
+    if (isFDroidBuild) {
+        PremiumHeader(R.string.Premium_TitleForDroid)
+    } else {
+        PremiumHeader()
+    }
 
     SectionPremiumUniversalLawrence {
-        if (!BuildConfig.FDROID_BUILD) {
-            HsSettingCell(
-                title = R.string.Settings_VipSupport,
-                icon = R.drawable.ic_support_yellow_24,
-                iconTint = ComposeAppTheme.colors.jacob,
-                onClick = {
+        HsSettingCell(
+            title = if(isFDroidBuild) R.string.Settings_Support else R.string.Settings_VipSupport,
+            icon = R.drawable.ic_support_yellow_24,
+            iconTint = ComposeAppTheme.colors.jacob,
+            onClick = {
+                if (isFDroidBuild) {
+                    LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
+                } else {
                     navController.paidAction(VIPSupport) {
                         openVipSupport.invoke()
                     }
-                    stat(
-                        page = StatPage.Settings,
-                        event = StatEvent.OpenPremium(StatPremiumTrigger.VipSupport)
-                    )
                 }
-            )
-            HsDivider()
-        }
+
+                stat(
+                    page = StatPage.Settings,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.VipSupport)
+                )
+            }
+        )
+        HsDivider()
         HsSettingCell(
             title = R.string.SettingsAddressChecker_Title,
             icon = R.drawable.ic_radar_24,
