@@ -1496,6 +1496,11 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
 
+    <!-- Nym VPN -->
+
+    <string name="NymVpn_GetNymVpn" translatable="false">Get Nym VPN</string>
+    <string name="NymVpn_Description" translatable="false">Unstoppable offers the best prices on Nym VPN service. Connect through us and you will increase your privacy much more favorably</string>
+
     <!-- Tor -->
 
     <string name="Tor_Title" translatable="false">Tor</string>
