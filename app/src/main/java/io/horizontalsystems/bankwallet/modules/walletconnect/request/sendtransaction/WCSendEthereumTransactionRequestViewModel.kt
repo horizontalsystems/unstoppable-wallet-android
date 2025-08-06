@@ -92,7 +92,7 @@ class WCSendEthereumTransactionRequestViewModel(
                 chain?.let {
                     add(
                         ViewItem.Value(
-                            it.chain.name,
+                            it.name,
                             it.address ?: "",
                             ValueType.Regular
                         )

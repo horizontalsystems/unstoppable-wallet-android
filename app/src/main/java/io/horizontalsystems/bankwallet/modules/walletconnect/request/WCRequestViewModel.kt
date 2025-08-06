@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
@@ -36,7 +35,7 @@ class WCNewRequestViewModel(
 
     val blockchain: Blockchain? by lazy {
         val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return@lazy null
-        val chainId = getChainData(sessionChainId)?.chain?.id ?: return@lazy null
+        val chainId = getChainData(sessionChainId)?.id ?: return@lazy null
         evmBlockchainManager.getBlockchain(chainId)
     }
 
@@ -117,7 +116,7 @@ class WCNewRequestViewModel(
     private fun getEthereumKitWrapper(): EvmKitWrapper? {
         val blockchain = blockchain ?: return null
         val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return null
-        val chainId = getChainData(sessionChainId)?.chain?.id ?: return null
+        val chainId = getChainData(sessionChainId)?.id ?: return null
 
         val account = accountManager.activeAccount ?: return null
         val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchain.type)
@@ -218,7 +217,8 @@ sealed class SessionRequestUI {
 
 @Parcelize
 data class WCChainData(
-    val chain: Chain,
+    val id: Int,
+    val name: String,
     val address: String?
 ) : Parcelable
 

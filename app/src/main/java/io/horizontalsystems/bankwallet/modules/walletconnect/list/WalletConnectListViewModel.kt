@@ -9,8 +9,8 @@ import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -164,7 +164,7 @@ class WalletConnectListViewModel(
 
     private fun getSubtitle(chains: List<String>): String {
         val chainNames = chains.mapNotNull { chain ->
-            WCUtils.getChainData(chain)?.chain?.id?.let { chainId ->
+            WCUtils.getChainData(chain)?.id?.let { chainId ->
                 evmBlockchainManager.getBlockchain(chainId)?.name
             }
         }

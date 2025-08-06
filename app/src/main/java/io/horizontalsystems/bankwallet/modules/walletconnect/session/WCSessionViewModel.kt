@@ -242,7 +242,7 @@ class WCSessionViewModel(
             WCRequestViewItem(
                 requestId = request.request.id,
                 title = title(request.request.method),
-                subtitle = request.chainId?.let { WCUtils.getChainData(it) }?.chain?.name ?: "",
+                subtitle = request.chainId?.let { WCUtils.getChainData(it) }?.name ?: "",
                 request = request
             )
         }
