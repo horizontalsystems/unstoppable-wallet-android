@@ -20,7 +20,7 @@ object WCUtils {
         }
 
         return chain?.let {
-            WCChainData(chain, address)
+            WCChainData(chain.id, chain.name, address)
         }
     }
 }
