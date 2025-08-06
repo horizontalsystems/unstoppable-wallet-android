@@ -229,7 +229,7 @@ private fun MessageContent(
             )
         }
         wcChainData?.let {
-            BlockchainCell(wcChainData.chain.name, wcChainData.address)
+            BlockchainCell(wcChainData.name, wcChainData.address)
         }
     }
 
