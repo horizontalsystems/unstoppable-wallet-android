@@ -30,15 +30,22 @@ class PhishingAddressChecker(
 
 class BlacklistAddressChecker(
     private val hashDitAddressValidator: HashDitAddressValidator,
-    private val eip20AddressValidator: Eip20AddressValidator
+    private val eip20AddressValidator: Eip20AddressValidator,
+    private val trc20AddressValidator: Trc20AddressValidator,
 ) : AddressChecker {
     override suspend fun isClear(address: Address, token: Token): Boolean {
+        if (token.blockchainType == BlockchainType.Tron) {
+            return trc20AddressValidator.isClear(address, token)
+        }
         val hashDitCheckResult = hashDitAddressValidator.isClear(address, token)
         val eip20CheckResult = eip20AddressValidator.isClear(address, token)
         return hashDitCheckResult && eip20CheckResult
     }
 
     override fun supports(token: Token): Boolean {
+        if(token.blockchainType == BlockchainType.Tron) {
+            return trc20AddressValidator.supports(token)
+        }
         return hashDitAddressValidator.supports(token) || eip20AddressValidator.supports(token)
     }
 }
