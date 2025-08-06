@@ -48,6 +48,9 @@ fun TorBlock(
                     viewModel.setTorEnabledWithChecks(checked)
                 }
             )
+        },
+        onClick = {
+            viewModel.setTorEnabledWithChecks(!viewModel.torCheckEnabled)
         }
     )
 }
