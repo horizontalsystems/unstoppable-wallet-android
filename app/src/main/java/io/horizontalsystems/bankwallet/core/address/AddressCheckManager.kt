@@ -22,7 +22,8 @@ class AddressCheckManager(
                 appConfigProvider.hashDitApiKey,
                 evmBlockchainManager
             ),
-            Eip20AddressValidator(evmSyncSourceManager)
+            Eip20AddressValidator(evmSyncSourceManager),
+            Trc20AddressValidator()
         ),
         AddressCheckType.Sanction to SanctionAddressChecker(
             ChainalysisAddressValidator(
