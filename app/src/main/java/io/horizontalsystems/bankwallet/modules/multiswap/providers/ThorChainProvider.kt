@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -93,7 +94,16 @@ object ThorChainProvider : IMultiSwapProvider {
                 BlockchainType.Bitcoin,
                 BlockchainType.Litecoin,
                     -> {
-                    val tokens = App.marketKit.tokens(blockchainType.nativeTokenQueries)
+                    var nativeTokenQueries = blockchainType.nativeTokenQueries
+
+                    // filter out taproot for ltc
+                    if (blockchainType == BlockchainType.Litecoin) {
+                        nativeTokenQueries = nativeTokenQueries.filterNot {
+                            it.tokenType.derivation == TokenType.Derivation.Bip86
+                        }
+                    }
+
+                    val tokens = App.marketKit.tokens(nativeTokenQueries)
                     assets.addAll(tokens.map { Asset(pool.asset, it) })
                 }
 
