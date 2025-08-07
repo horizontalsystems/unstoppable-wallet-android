@@ -380,6 +380,7 @@
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Underlying token</string>
     <string name="Market_Vaults_Vault_Holders">Holders</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
 
     <!--Coin Markets-->
 

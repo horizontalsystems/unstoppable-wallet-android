@@ -209,7 +209,7 @@ open class ChartViewModel(
         val rsi = item.rsi
         val macd = item.macd
         val dominance = item.dominance
-        val volume = item.volume
+        val chartVolume = item.volume
 
         return when {
             movingAverages.isNotEmpty() || rsi != null || macd != null -> {
@@ -221,8 +221,13 @@ open class ChartViewModel(
                     null
                 )
             }
-            volume != null -> ChartModule.ChartHeaderExtraData.Volume(
-                App.numberFormatter.formatFiatShort(volume.toBigDecimal(), service.currency.symbol, 2)
+            chartVolume != null -> ChartModule.ChartHeaderExtraData.Volume(
+                volume = App.numberFormatter.formatFiatShort(
+                    chartVolume.value.toBigDecimal(),
+                    service.currency.symbol,
+                    2
+                ),
+                type = chartVolume.type
             )
             else -> null
         }

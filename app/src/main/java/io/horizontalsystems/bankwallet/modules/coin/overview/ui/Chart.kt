@@ -76,6 +76,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.chartview.ChartViewType
+import io.horizontalsystems.chartview.models.ChartVolumeType
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.launch
@@ -145,7 +146,7 @@ fun HsChartLineHeader(
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(R.string.CoinPage_Volume),
+                            text = stringResource(extraData.type.titleResId),
                             textAlign = TextAlign.End
                         )
                         subhead2_grey(
@@ -211,7 +212,8 @@ fun HsChartLineHeader(
                                     textSize = textLayoutResult.size
                                     textSize?.let { size ->
                                         if (size.width > MAX_WIDTH) {
-                                            textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                            textStyle =
+                                                textStyle.copy(fontSize = textStyle.fontSize * 0.9)
                                         } else {
                                             readyToDraw = true
                                         }
@@ -221,7 +223,13 @@ fun HsChartLineHeader(
                         }
 
                         if (extraData.rsi != null) {
-                            subhead2_jacob(text = App.numberFormatter.formatFiatShort(extraData.rsi.toBigDecimal(), "", 8))
+                            subhead2_jacob(
+                                text = App.numberFormatter.formatFiatShort(
+                                    extraData.rsi.toBigDecimal(),
+                                    "",
+                                    8
+                                )
+                            )
                         } else if (extraData.macd != null) {
                             val macd = extraData.macd
                             Row {
@@ -231,7 +239,8 @@ fun HsChartLineHeader(
                                 Text(
                                     text = buildAnnotatedString {
                                         macd.histogramValue?.let { value ->
-                                            val color = if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+                                            val color =
+                                                if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
                                             withStyle(style = SpanStyle(color = color)) {
                                                 append(value.plainString())
                                                 append(" ")
@@ -255,7 +264,8 @@ fun HsChartLineHeader(
                                         textSize = textLayoutResult.size
                                         textSize?.let { size ->
                                             if (size.width > MAX_WIDTH) {
-                                                textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                                textStyle =
+                                                    textStyle.copy(fontSize = textStyle.fontSize * 0.9)
                                             } else {
                                                 readyToDraw = true
                                             }
@@ -322,7 +332,8 @@ fun Chart(
                     Column {
                         HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
 
-                        val loadingModifier = if (uiState.loading) Modifier.alpha(0.5f) else Modifier
+                        val loadingModifier =
+                            if (uiState.loading) Modifier.alpha(0.5f) else Modifier
                         Box(
                             modifier = loadingModifier.fillMaxWidth()
                         ) {
@@ -732,3 +743,9 @@ fun <T> ChartTab(modifier: Modifier = Modifier, tabItems: List<TabItem<T>>, onSe
         }
     }
 }
+
+val ChartVolumeType.titleResId: Int
+    get() = when (this) {
+        ChartVolumeType.Volume -> R.string.CoinPage_Volume
+        ChartVolumeType.Tvl -> R.string.Market_Vaults_ChartTvl
+    }
