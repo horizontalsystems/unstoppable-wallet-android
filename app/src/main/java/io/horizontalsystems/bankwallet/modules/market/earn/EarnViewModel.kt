@@ -385,5 +385,5 @@ private fun Apy.getByPeriod(period: ApyPeriod): BigDecimal {
         ApyPeriod.SEVEN_DAY -> this.sevenDay
         ApyPeriod.THIRTY_DAY -> this.thirtyDay
     }
-    return stringValue.toBigDecimalOrNull()?.times(BigDecimal(100)) ?: BigDecimal.ZERO
+    return stringValue.toBigDecimalOrNull() ?: BigDecimal.ZERO
 }
