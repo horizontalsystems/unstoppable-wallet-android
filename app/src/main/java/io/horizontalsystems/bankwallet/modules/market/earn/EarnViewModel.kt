@@ -286,7 +286,7 @@ class MarketEarnViewModel(
             blockchainName = allBlockchains.firstOrNull { it.uid == vault.chain }?.name
                 ?: vault.chain.uppercase(),
             url = vault.url,
-            holders = vault.holders?.toString() ?: "---",
+            holders = vault.holders?.toString(),
             assetSymbol = vault.assetSymbol,
             protocolName = vault.protocolName.replaceFirstChar(Char::titlecase),
             assetLogo = vault.protocolLogo,
@@ -363,7 +363,7 @@ object EarnModule {
         val tvl: String,
         val tvlRaw: BigDecimal,
         val url: String?,
-        val holders: String,
+        val holders: String?,
         val assetSymbol: String,
         val assetLogo: String?,
         val protocolName: String,
