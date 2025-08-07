@@ -87,7 +87,7 @@ data class ChartData(
     fun volumeByTimestamp(): LinkedHashMap<Long, Float> {
         return LinkedHashMap(
             items.mapNotNull { item ->
-                item.volume?.let {
+                item.chartVolume?.value?.let {
                     item.timestamp to it
                 }
             }.toMap()

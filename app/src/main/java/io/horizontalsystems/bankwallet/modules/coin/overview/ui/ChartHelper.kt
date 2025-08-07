@@ -9,6 +9,7 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.chartview.models.ChartVolume
 import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -413,7 +414,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             timestamp = selectedTimestamp,
             mainValue = nearestChartPoint.value,
             dominance = nearestChartPoint.dominance,
-            volume = nearestChartPoint.volume,
+            volume = nearestChartPoint.chartVolume,
             movingAverages = selectedMovingAverages,
             rsi = selectedRsi,
             macd = selectedMacd,
@@ -427,7 +428,7 @@ data class SelectedItem(
     val timestamp: Long,
     val mainValue: Float,
     val dominance: Float?,
-    val volume: Float?,
+    val volume: ChartVolume?,
     val movingAverages: List<MA>,
     val rsi: Float?,
     val macd: Macd?

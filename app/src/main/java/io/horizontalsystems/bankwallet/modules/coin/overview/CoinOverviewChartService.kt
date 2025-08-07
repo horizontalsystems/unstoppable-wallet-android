@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartVolume
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
@@ -196,7 +197,7 @@ class CoinOverviewChartService(
                 ChartPoint(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
-                    volume = chartPoint.volume?.toFloat(),
+                    chartVolume = chartPoint.volume?.toFloat()?.let { ChartVolume(it) },
                 )
             }
 

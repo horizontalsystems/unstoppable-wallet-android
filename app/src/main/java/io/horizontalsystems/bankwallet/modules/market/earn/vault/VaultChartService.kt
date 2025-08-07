@@ -11,6 +11,8 @@ import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartVolume
+import io.horizontalsystems.chartview.models.ChartVolumeType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
@@ -59,9 +61,9 @@ class VaultChartService(
                 .map { vault ->
                     vault.chart.map { point ->
                         ChartPoint(
-                            value = point.apy.toFloat() * 100,
+                            value = point.apy.toFloat(),
                             timestamp = point.timestamp.toLong(),
-                            volume = point.tvl.toFloat(),
+                            chartVolume = ChartVolume(point.tvl.toFloat(), ChartVolumeType.Tvl),
                         )
                     }
                 }
