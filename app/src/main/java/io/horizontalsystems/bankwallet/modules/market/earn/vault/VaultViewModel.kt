@@ -65,7 +65,7 @@ object VaultModule {
         val tvl: String,
         val chain: String,
         val url: String?,
-        val holders: String,
+        val holders: String?,
         val assetSymbol: String,
         val protocolName: String,
         val assetLogo: String?,
