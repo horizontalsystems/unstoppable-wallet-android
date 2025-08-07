@@ -184,9 +184,7 @@ fun MarketEarnScreen(
                                                         uiState.blockchains
                                                     )
                                                 ) {
-                                                    navController.paidAction(AdvancedSearch) {
-                                                        viewModel.onBlockchainsSelected(it.selected)
-                                                    }
+                                                    viewModel.onBlockchainsSelected(it.selected)
                                                 }
                                             },
                                             title = uiState.chainSelectorMenuTitle,
