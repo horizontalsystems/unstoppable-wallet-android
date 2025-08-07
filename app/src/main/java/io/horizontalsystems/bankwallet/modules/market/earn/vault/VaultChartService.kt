@@ -23,6 +23,7 @@ class VaultChartService(
     override val hasVolumes = true
     override val initialChartInterval = HsTimePeriod.Week1
     override val chartIntervals = listOf(
+        HsTimePeriod.Day1,
         HsTimePeriod.Week1,
         HsTimePeriod.Week2,
         HsTimePeriod.Month1,
