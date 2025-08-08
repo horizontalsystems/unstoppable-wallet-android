@@ -212,24 +212,9 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
     ) {
-        val response = Wallet.Params.SessionRequestResponse(
-            sessionTopic = topic,
-            jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, data)
-        )
+        val jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, data)
 
-        Web3Wallet.respondSessionRequest(response,
-            onSuccess = {
-                onSuccessResult.invoke()
-                scope.launch {
-                    sessionRequestEvent = null
-                    _pendingRequestEvents.emit(Unit)
-                }
-            },
-            onError = { error ->
-                sessionRequestEvent = null
-                onErrorResult.invoke(error.throwable)
-                onError(error)
-            })
+        respondSessionRequest(topic, jsonRpcResponse, onSuccessResult, onErrorResult)
     }
 
     fun rejectRequest(
@@ -238,16 +223,28 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
     ) {
-        val result = Wallet.Params.SessionRequestResponse(
-            sessionTopic = topic,
-            jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
-                id = requestId,
-                code = 500,
-                message = "Rejected by user"
-            )
+        val jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
+            id = requestId,
+            code = 500,
+            message = "Rejected by user"
         )
 
-        Web3Wallet.respondSessionRequest(result,
+        respondSessionRequest(topic, jsonRpcResponse, onSuccessResult, onErrorResult)
+    }
+
+    private fun respondSessionRequest(
+        topic: String,
+        jsonRpcResponse: Wallet.Model.JsonRpcResponse,
+        onSuccessResult: () -> Unit,
+        onErrorResult: (Throwable) -> Unit,
+    ) {
+        val response = Wallet.Params.SessionRequestResponse(
+            sessionTopic = topic,
+            jsonRpcResponse = jsonRpcResponse
+        )
+
+        Web3Wallet.respondSessionRequest(
+            response,
             onSuccess = {
                 onSuccessResult.invoke()
                 scope.launch {

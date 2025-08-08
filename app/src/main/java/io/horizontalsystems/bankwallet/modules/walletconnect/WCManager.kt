@@ -1,7 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
+import com.walletconnect.web3.wallet.client.Wallet
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.walletconnect.handler.IWCHandler
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.IWCAction
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
+import io.horizontalsystems.marketkit.models.BlockchainType
+
 
 class WCManager(
     private val accountManager: IAccountManager,
@@ -11,6 +18,25 @@ class WCManager(
         object NotSupportedDueToNoActiveAccount : SupportState()
         class NotSupportedDueToNonBackedUpAccount(val account: Account) : SupportState()
         class NotSupported(val accountTypeDescription: String) : SupportState()
+    }
+
+    private val handlersMap = mutableMapOf<String, IWCHandler>()
+
+    fun addWcHandler(wcHandler: IWCHandler) {
+        handlersMap[wcHandler.chainNamespace] = wcHandler
+    }
+
+    fun getActionForRequest(sessionRequest: Wallet.Model.SessionRequest?): IWCAction? {
+        if (sessionRequest == null) return null
+        val chainId = sessionRequest.chainId ?: return null
+        val chainParts = chainId.split(":")
+
+        val chainNamespace = chainParts.getOrNull(0)
+        val chainInternalId = chainParts.getOrNull(1)
+
+        val handler = handlersMap[chainNamespace] ?: return null
+
+        return handler.getAction(sessionRequest.request, sessionRequest.peerMetaData, chainInternalId)
     }
 
     fun getWalletConnectSupportState(): SupportState {
@@ -25,4 +51,12 @@ class WCManager(
         }
     }
 
+    fun getBlockchainType(sessionChainId: String?): BlockchainType? {
+        val chainId = getChainData(sessionChainId)?.id
+        return chainId?.let { App.evmBlockchainManager.getBlockchain(it) }?.type
+    }
+
+    fun getChainData(chainId: String?): WCChainData? {
+        return WCUtils.getChainData(chainId ?: return null)
+    }
 }

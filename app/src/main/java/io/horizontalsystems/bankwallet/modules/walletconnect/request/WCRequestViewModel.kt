@@ -11,10 +11,9 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import kotlin.coroutines.resume
@@ -31,23 +30,27 @@ private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
 class WCNewRequestViewModel(
     private val accountManager: IAccountManager,
     private val evmBlockchainManager: EvmBlockchainManager,
+    private val wcManager: WCManager,
 ) : ViewModel() {
 
-    val blockchain: Blockchain? by lazy {
-        val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return@lazy null
-        val chainId = getChainData(sessionChainId)?.id ?: return@lazy null
-        evmBlockchainManager.getBlockchain(chainId)
-    }
+    private val sessionRequestEvent = WCDelegate.sessionRequestEvent
 
-    val evmKitWrapper: EvmKitWrapper? = getEthereumKitWrapper()
-    var sessionRequest: SessionRequestUI = generateSessionRequestUI()
+    val blockchainType = wcManager.getBlockchainType(sessionRequestEvent?.chainId)
+    private val chainData = sessionRequestEvent?.let {
+        wcManager.getChainData(it.chainId)
+    }
+    private val chainName = chainData?.name
+    private val chainAddress = chainData?.address
+
+    private val evmKitWrapper: EvmKitWrapper? = getEthereumKitWrapper()
+    var sessionRequestUi: SessionRequestUI = generateSessionRequestUI()
 
     private fun clearSessionRequest() {
-        sessionRequest = SessionRequestUI.Initial
+        sessionRequestUi = SessionRequestUI.Initial
     }
 
     private fun generateSessionRequestUI(): SessionRequestUI {
-        return WCDelegate.sessionRequestEvent?.let { sessionRequest ->
+        return sessionRequestEvent?.let { sessionRequest ->
             if (evmKitWrapper == null) {
                 clearSessionRequest()
                 return@let SessionRequestUI.Initial
@@ -63,8 +66,9 @@ class WCNewRequestViewModel(
                 topic = sessionRequest.topic,
                 requestId = sessionRequest.request.id,
                 param = getParam(sessionRequest),
-                chainData = getChainData(sessionRequest.chainId),
                 method = sessionRequest.request.method,
+                chainName = chainName,
+                chainAddress = chainAddress,
             )
         } ?: SessionRequestUI.Initial
     }
@@ -95,10 +99,6 @@ class WCNewRequestViewModel(
             }
         }
 
-    private fun getChainData(chainId: String?): WCChainData? {
-        return WCUtils.getChainData(chainId ?: return null)
-    }
-
     private fun extractMessageParamFromPersonalSign(input: String): String {
         val jsonArray = JSONArray(input)
         return if (jsonArray.length() > 0) {
@@ -114,27 +114,18 @@ class WCNewRequestViewModel(
     }
 
     private fun getEthereumKitWrapper(): EvmKitWrapper? {
-        val blockchain = blockchain ?: return null
-        val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return null
-        val chainId = getChainData(sessionChainId)?.id ?: return null
-
+        val blockchainType = blockchainType ?: return null
         val account = accountManager.activeAccount ?: return null
-        val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchain.type)
-        val evmKitWrapper = evmKitManager.getEvmKitWrapper(account, blockchain.type)
+        val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
 
-        return if (evmKitWrapper.evmKit.chain.id == chainId) {
-            evmKitWrapper
-        } else {
-            evmKitManager.unlink(account)
-            null
-        }
+        return evmKitManager.getEvmKitWrapper(account, blockchainType)
     }
 
     suspend fun allow() {
         val evmKit = evmKitWrapper ?: throw WCSessionManager.RequestDataError.NoSuitableEvmKit
         val signer = evmKit.signer ?: throw WCSessionManager.RequestDataError.NoSigner
         return suspendCoroutine { continuation ->
-            val sessionRequest = sessionRequest as? SessionRequestUI.Content
+            val sessionRequest = sessionRequestUi as? SessionRequestUI.Content
             if (sessionRequest != null) {
                 val result = when (sessionRequest.method) {
                     ETH_SIGN_METHOD -> {
@@ -176,7 +167,7 @@ class WCNewRequestViewModel(
 
     suspend fun reject() {
         return suspendCoroutine { continuation ->
-            val sessionRequest = sessionRequest as? SessionRequestUI.Content
+            val sessionRequest = sessionRequestUi as? SessionRequestUI.Content
             if (sessionRequest != null) {
                 WCDelegate.rejectRequest(
                     sessionRequest.topic,
@@ -194,10 +185,14 @@ class WCNewRequestViewModel(
         }
     }
 
-    class Factory() : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCNewRequestViewModel(App.accountManager, App.evmBlockchainManager) as T
+            return WCNewRequestViewModel(
+                App.accountManager,
+                App.evmBlockchainManager,
+                App.wcManager
+            ) as T
         }
     }
 }
@@ -210,8 +205,9 @@ sealed class SessionRequestUI {
         val topic: String,
         val requestId: Long,
         val param: String,
-        val chainData: WCChainData?,
         val method: String,
+        val chainName: String?,
+        val chainAddress: String?,
     ) : SessionRequestUI()
 }
 
