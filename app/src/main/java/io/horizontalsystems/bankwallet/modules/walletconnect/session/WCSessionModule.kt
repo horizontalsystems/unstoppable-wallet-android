@@ -42,26 +42,7 @@ data class WCSessionButtonStates(
     val remove: WCButtonState,
 )
 
-data class WCBlockchain(
-    val chainId: Int,
-    val name: String,
-    val address: String,
-) {
-    val chainNamespace = "eip155"
-
-    override fun equals(other: Any?): Boolean {
-        return other is WCBlockchain && this.chainId == other.chainId
-    }
-
-    override fun hashCode(): Int {
-        return chainId.hashCode()
-    }
-
-    fun getAccount() = "$chainNamespace:$chainId:$address"
-}
-
 data class WCRequestViewItem(
-    val requestId: Long,
     val title: String,
     val subtitle: String,
     val request: Wallet.Model.SessionRequest
