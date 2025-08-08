@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.IWCAction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.ValidationError
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 
@@ -59,4 +60,38 @@ class WCManager(
     fun getChainData(chainId: String?): WCChainData? {
         return WCUtils.getChainData(chainId ?: return null)
     }
+
+    fun validate(requiredNamespaces: Map<String, Wallet.Model.Namespace.Proposal>) {
+        requiredNamespaces.forEach { (chainNamespace, proposal) ->
+            val handler = handlersMap[chainNamespace]
+                ?: throw ValidationError.UnsupportedChainNamespace(chainNamespace)
+
+            proposal.chains?.let { requiredChains ->
+                val unsupportedChains = requiredChains - handler.supportedChains
+                if (unsupportedChains.isNotEmpty()) {
+                    throw ValidationError.UnsupportedChains(unsupportedChains)
+                }
+            }
+
+            val unsupportedMethods = proposal.methods - handler.supportedMethods
+            if (unsupportedMethods.isNotEmpty()) {
+                throw ValidationError.UnsupportedMethods(unsupportedMethods)
+            }
+
+            val unsupportedEvents = proposal.events - handler.supportedEvents
+            if (unsupportedEvents.isNotEmpty()) {
+                throw ValidationError.UnsupportedEvents(unsupportedEvents)
+            }
+        }
+    }
+
+    fun getSupportedNamespaces(account: Account) =
+        handlersMap.map { (chainNamespace, handler) ->
+            chainNamespace to Wallet.Model.Namespace.Session(
+                chains = handler.supportedChains,
+                methods = handler.supportedMethods,
+                events = handler.supportedEvents,
+                accounts = handler.getAccountAddresses(account)
+            )
+        }.toMap()
 }

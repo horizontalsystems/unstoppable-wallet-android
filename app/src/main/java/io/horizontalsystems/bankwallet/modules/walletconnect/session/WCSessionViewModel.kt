@@ -4,14 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
@@ -23,9 +21,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.Chain
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -36,7 +31,7 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
-    private val evmBlockchainManager: EvmBlockchainManager
+    private val wcManager: WCManager
 ) : ViewModelUiState<WCSessionUiState>() {
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
@@ -51,26 +46,6 @@ class WCSessionViewModel(
     private var showError: String? = null
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
-
-    private val supportedChains = EvmBlockchainManager.blockchainTypes.map { evmBlockchainManager.getChain(it) }
-
-    private val supportedMethods = listOf(
-        "eth_sendTransaction",
-        "personal_sign",
-//        "eth_accounts",
-//        "eth_requestAccounts",
-//        "eth_call",
-//        "eth_getBalance",
-//        "eth_sendRawTransaction",
-        "eth_sign",
-        "eth_signTransaction",
-        "eth_signTypedData",
-        "eth_signTypedData_v4",
-        "wallet_addEthereumChain",
-        "wallet_switchEthereumChain"
-    )
-
-    private val supportedEvents = listOf("chainChanged", "accountsChanged", "connect", "disconnect", "message")
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
@@ -177,31 +152,6 @@ class WCSessionViewModel(
         loadSessionProposal(topic)
     }
 
-    private fun validate(proposal: Wallet.Model.SessionProposal): ValidationError? {
-        val chains = proposal.requiredNamespaces.mapNotNull { it.value.chains }.flatten()
-        val methods = proposal.requiredNamespaces.map { it.value.methods }.flatten()
-        val events = proposal.requiredNamespaces.map { it.value.events }.flatten()
-
-        val supportedChains = supportedChains.map { "eip155:${it.id}" }
-
-        val unsupportedChains = chains - supportedChains.toSet()
-        if (unsupportedChains.isNotEmpty()) {
-            return ValidationError.UnsupportedChains(unsupportedChains)
-        }
-
-        val unsupportedMethods = methods - supportedMethods.toSet()
-        if (unsupportedMethods.isNotEmpty()) {
-            return ValidationError.UnsupportedMethods(unsupportedMethods)
-        }
-
-        val unsupportedEvents = events - supportedEvents.toSet()
-        if (unsupportedEvents.isNotEmpty()) {
-            return ValidationError.UnsupportedEvents(unsupportedEvents)
-        }
-
-        return null
-    }
-
     private fun loadSessionProposal(topic: String?) {
         if (topic != null) {
             val existingSession = sessionManager.sessions.firstOrNull { it.topic == topic }
@@ -230,7 +180,14 @@ class WCSessionViewModel(
                     account?.name,
                 )
                 proposal = sessionProposal
-                sessionServiceState = validate(sessionProposal)?.let { Invalid(it) } ?: WaitingForApproveSession
+
+                sessionServiceState = try {
+                    wcManager.validate(sessionProposal.requiredNamespaces)
+
+                    WaitingForApproveSession
+                } catch (e: Throwable) {
+                    Invalid(e)
+                }
             } ?: run {
                 sessionServiceState = Invalid(RequestNotFoundError)
             }
@@ -335,8 +292,7 @@ class WCSessionViewModel(
         val accountNonNull = account ?: return
         return suspendCoroutine { continuation ->
             if (Web3Wallet.getSessionProposals().isNotEmpty()) {
-                val blockchains = getSupportedBlockchains(accountNonNull)
-                val namespaces = getSupportedNamespaces(blockchains.map { it.getAccount() })
+                val namespaces = wcManager.getSupportedNamespaces(accountNonNull)
                 val sessionProposal: Wallet.Model.SessionProposal = try {
                     requireNotNull(
                         Web3Wallet.getSessionProposals()
@@ -484,52 +440,23 @@ class WCSessionViewModel(
             is NoSuitableAccount -> Translator.getString(R.string.WalletConnect_Error_NoSuitableAccount)
             is NoSuitableEvmKit -> Translator.getString(R.string.WalletConnect_Error_NoSuitableEvmKit)
             is RequestNotFoundError -> Translator.getString(R.string.WalletConnect_Error_RequestNotFoundError)
+            is ValidationError.UnsupportedChainNamespace -> Translator.getString(
+                R.string.WalletConnect_Error_UnsupportedChains,
+                error.chainNamespace)
             is ValidationError.UnsupportedChains -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedChains,
-                error.chains.joinToString { it })
+                error.chains.joinToString())
 
             is ValidationError.UnsupportedMethods -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedMethods,
-                error.methods.joinToString { it })
+                error.methods.joinToString())
 
             is ValidationError.UnsupportedEvents -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedEvents,
-                error.events.joinToString { it })
+                error.events.joinToString())
 
             else -> null
         }
-    }
-
-    private fun getEvmAddress(account: Account, chain: Chain) =
-        when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
-                val seed: ByteArray = accountType.seed
-                Signer.address(seed, chain)
-            }
-
-            is AccountType.EvmPrivateKey -> {
-                Signer.address(accountType.key)
-            }
-
-            is AccountType.EvmAddress -> {
-                Address(accountType.address)
-            }
-
-            else -> throw UnsupportedAccountException()
-        }
-
-    private fun getSupportedNamespaces(accounts: List<String>) = mapOf(
-        "eip155" to Wallet.Model.Namespace.Session(
-            chains = supportedChains.map { "eip155:${it.id}" },
-            methods = supportedMethods,
-            events = supportedEvents,
-            accounts = accounts
-        )
-    )
-
-    private fun getSupportedBlockchains(account: Account) = supportedChains.map {
-        val address = getEvmAddress(account, it).eip55
-        WCBlockchain(it.id, it.name, address)
     }
 
     fun setRequestToOpen(request: Wallet.Model.SessionRequest) {
@@ -539,6 +466,7 @@ class WCSessionViewModel(
 }
 
 sealed class ValidationError : Throwable() {
+    class UnsupportedChainNamespace(val chainNamespace: String) : ValidationError()
     class UnsupportedChains(val chains: List<String>) : ValidationError()
     class UnsupportedMethods(val methods: List<String>) : ValidationError()
     class UnsupportedEvents(val events: List<String>) : ValidationError()

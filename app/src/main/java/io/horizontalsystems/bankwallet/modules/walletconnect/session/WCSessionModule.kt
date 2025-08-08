@@ -20,7 +20,7 @@ object WCSessionModule {
                 App.connectivityManager,
                 App.accountManager.activeAccount,
                 sessionTopic,
-                App.evmBlockchainManager
+                App.wcManager
             ) as T
         }
     }
