@@ -1,19 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.request
+package io.horizontalsystems.bankwallet.modules.walletconnect.stellar
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.IWCAction
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.MessageContent
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
-class WalletConnectActionStellarSignAndSubmitXdr(
+class WCActionStellarSignXdr(
     private val params: String,
     private val peerName: String,
 ) : IWCAction {
-
-    init {
-
-        Log.e("AAA", "params: $params")
-    }
 
     override fun getTitle(): TranslatableString {
         return TranslatableString.ResString(R.string.WalletConnect_SignMessageRequest_Title)
@@ -33,4 +29,3 @@ class WalletConnectActionStellarSignAndSubmitXdr(
         TODO("Not yet implemented")
     }
 }
-

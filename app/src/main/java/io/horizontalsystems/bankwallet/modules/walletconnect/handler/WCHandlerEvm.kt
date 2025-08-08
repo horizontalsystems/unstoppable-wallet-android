@@ -44,6 +44,21 @@ class WCHandlerEvm(
         }
     }
 
+    override fun getMethodData(method: String, chainInternalId: String?): MethodData {
+        val evmChain = supportedEvmChains.firstOrNull { it.id == chainInternalId?.toInt() }
+
+        val title = when (method) {
+            "personal_sign" -> "Personal Sign Request"
+            "eth_sign" -> "Standard Sign Request"
+            "eth_signTypedData" -> "Typed Sign Request"
+            "eth_sendTransaction" -> "Approve Transaction"
+            "eth_signTransaction" -> "Sign Transaction"
+            else -> method
+        }
+
+        return MethodData(title, evmChain?.name ?: "")
+    }
+
     override fun getAction(
         request: Wallet.Model.SessionRequest.JSONRPCRequest,
         peerMetaData: Core.Model.AppMetaData?,
