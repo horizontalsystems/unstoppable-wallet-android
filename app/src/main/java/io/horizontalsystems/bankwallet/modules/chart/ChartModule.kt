@@ -17,6 +17,9 @@ object ChartModule {
 
     interface ChartNumberFormatter {
         fun formatValue(currency: Currency, value: BigDecimal): String
+        fun formatMinMaxValue(currency: Currency, value: BigDecimal): String {
+            return formatValue(currency, value)
+        }
     }
 
     data class ChartHeaderView(

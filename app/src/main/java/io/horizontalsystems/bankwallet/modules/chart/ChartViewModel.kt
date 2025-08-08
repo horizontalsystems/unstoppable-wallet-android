@@ -140,7 +140,7 @@ open class ChartViewModel(
             }
 
             val diff = if (chartPointsWrapper.customHint == null) {
-                Value.Percent(chartData.diff())
+                Value.Percent(service.chartPointsDiff(chartData.items))
             } else {
                 null
             }
@@ -184,7 +184,7 @@ open class ChartViewModel(
     }
 
     private fun getFormattedValue(value: Float, currency: Currency): String {
-        return valueFormatter.formatValue(currency,  value.toBigDecimal())
+        return valueFormatter.formatMinMaxValue(currency,  value.toBigDecimal())
     }
 
     override fun onCleared() {

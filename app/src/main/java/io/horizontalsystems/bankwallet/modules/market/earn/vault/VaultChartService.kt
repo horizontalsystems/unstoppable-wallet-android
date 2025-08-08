@@ -15,6 +15,7 @@ import io.horizontalsystems.chartview.models.ChartVolume
 import io.horizontalsystems.chartview.models.ChartVolumeType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
+import java.math.BigDecimal
 
 class VaultChartService(
     private val vaultAddress: String,
@@ -53,6 +54,25 @@ class VaultChartService(
         )
     }
 
+    override fun chartPointsDiff(items: List<ChartPoint>): BigDecimal {
+        val values = items.map { it.value }
+        if (values.isEmpty()) {
+            return BigDecimal.ZERO
+        }
+
+        val firstValue = values.find { it != 0f }
+        val lastValue = values.last()
+        if (lastValue == 0f || firstValue == null) {
+            return BigDecimal.ZERO
+        }
+
+        return try {
+            (lastValue - firstValue).toBigDecimal()
+        } catch(e: Exception) {
+            BigDecimal.ZERO
+        }
+    }
+
     private fun getChartPointsWrapper(
         periodType: HsTimePeriod,
     ): Single<ChartPointsWrapper> {
@@ -67,7 +87,7 @@ class VaultChartService(
                         )
                     }
                 }
-                .map { ChartPointsWrapper(it, customHint = "APY (" + periodType.value.uppercase() + ")") }
+                .map { ChartPointsWrapper(it) }
         } catch (e: Exception) {
             Single.error(e)
         }
