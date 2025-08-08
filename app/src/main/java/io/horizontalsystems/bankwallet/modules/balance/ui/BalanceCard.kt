@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -42,6 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.diffText
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -163,7 +165,7 @@ fun BalanceCardInner(
                 }
                 Spacer(Modifier.width(24.dp))
                 Text(
-                    text = if (viewItem.primaryValue.visible) viewItem.primaryValue.value else "*****",
+                    text = if (viewItem.primaryValue.visible) viewItem.primaryValue.value else "------",
                     color = if (viewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                     style = ComposeAppTheme.typography.headline2,
                     maxLines = 1,
@@ -178,7 +180,9 @@ fun BalanceCardInner(
                 Box(
                     modifier = Modifier.weight(1f),
                 ) {
-                    if (viewItem.syncingTextValue != null) {
+                    if (viewItem.failedIconVisible) {
+                        subhead_grey(text = stringResource(R.string.BalanceSyncError_Text))
+                    } else if (viewItem.syncingTextValue != null) {
                         subhead2_grey(
                             text = viewItem.syncingTextValue,
                             maxLines = 1,
@@ -225,7 +229,7 @@ fun BalanceCardInner(
                         )
                     } else {
                         Text(
-                            text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "*****",
+                            text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "",
                             color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
                             style = ComposeAppTheme.typography.subheadR,
                             maxLines = 1,
