@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.Re
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.RequestNotFoundError
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.UnsupportedChainId
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Invalid
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Killed
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
@@ -196,22 +195,14 @@ class WCSessionViewModel(
 
     private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
         return Web3Wallet.getPendingListOfSessionRequests(topic).map { request ->
+            val methodData = wcManager.getMethodData(request)
+
             WCRequestViewItem(
-                requestId = request.request.id,
-                title = title(request.request.method),
-                subtitle = request.chainId?.let { WCUtils.getChainData(it) }?.name ?: "",
+                title = methodData?.title ?: "Unsupported",
+                subtitle = methodData?.network ?: "",
                 request = request
             )
         }
-    }
-
-    private fun title(method: String?): String = when (method) {
-        "personal_sign" -> "Personal Sign Request"
-        "eth_sign" -> "Standard Sign Request"
-        "eth_signTypedData" -> "Typed Sign Request"
-        "eth_sendTransaction" -> "Approve Transaction"
-        "eth_signTransaction" -> "Sign Transaction"
-        else -> "Unsupported"
     }
 
     private fun sync(
