@@ -1814,6 +1814,7 @@
     <string name="BalanceSyncError_ButtonRetry">Retry</string>
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
+    <string name="BalanceSyncError_Text">Sync error</string>
 
     <!--Release notes-->
 
