@@ -88,6 +88,9 @@ object AddressInputModule {
                 BlockchainType.Stellar -> {
                     addressParserChain.addHandler(AddressHandlerStellar())
                 }
+                BlockchainType.Monero -> {
+                    addressParserChain.addHandler(AddressHandlerMonero())
+                }
                 is BlockchainType.Unsupported -> Unit
             }
 

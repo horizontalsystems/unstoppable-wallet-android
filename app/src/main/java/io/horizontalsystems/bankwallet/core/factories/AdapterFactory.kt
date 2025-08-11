@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.JettonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
@@ -171,6 +172,9 @@ class AdapterFactory(
             }
             BlockchainType.Stellar -> {
                 StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
+            }
+            BlockchainType.Monero -> {
+                MoneroAdapter.create(context, wallet)
             }
 
             else -> null

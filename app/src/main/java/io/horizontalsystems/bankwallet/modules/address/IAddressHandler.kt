@@ -128,6 +128,7 @@ class AddressHandlerUdn(
             BlockchainType.Tron -> "TRX"
             BlockchainType.Ton -> "TON"
             BlockchainType.Stellar -> "XLM"
+            BlockchainType.Monero -> "XMR"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
@@ -311,6 +312,22 @@ class AddressHandlerStellar : IAddressHandler {
     override fun parseAddress(value: String): Address {
         return Address(value, blockchainType = blockchainType)
     }
+}
+
+class AddressHandlerMonero : IAddressHandler {
+    override val blockchainType = BlockchainType.Monero
+
+    override fun isSupported(value: String) = try {
+        // TODO validate address
+        true
+    } catch (e: Exception) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(value, blockchainType = blockchainType)
+    }
+
 }
 
 class AddressHandlerPure(override val blockchainType: BlockchainType) : IAddressHandler {

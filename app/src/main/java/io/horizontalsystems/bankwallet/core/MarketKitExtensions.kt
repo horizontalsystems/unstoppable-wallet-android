@@ -161,6 +161,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Stellar -> {
             tokenType is TokenType.Native || tokenType is TokenType.Asset
         }
+        BlockchainType.Monero -> {
+            tokenType is TokenType.Native
+        }
         is BlockchainType.Unsupported -> false
     }
 
@@ -210,6 +213,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Ethereum,
         BlockchainType.Tron,
         BlockchainType.BinanceSmartChain,
+        BlockchainType.Monero,
         BlockchainType.Polygon,
         BlockchainType.Stellar,
         BlockchainType.ArbitrumOne,
@@ -275,6 +279,7 @@ val BlockchainType.title: String
     BlockchainType.Tron -> "Tron"
     BlockchainType.Ton -> "Ton"
     BlockchainType.Stellar -> "Stellar"
+    BlockchainType.Monero -> "Monero"
     is BlockchainType.Unsupported -> this.uid
 }
 
@@ -332,6 +337,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Tron,
         is BlockchainType.Unsupported,
         BlockchainType.Zcash,
+        BlockchainType.Monero,
             -> false
     }
 
@@ -624,6 +630,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Tron,
         BlockchainType.Ton,
         BlockchainType.Stellar,
+        BlockchainType.Monero,
     )
 
 val CoinPrice.diff: BigDecimal?

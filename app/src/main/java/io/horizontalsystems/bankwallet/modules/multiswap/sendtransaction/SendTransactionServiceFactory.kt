@@ -44,6 +44,7 @@ object SendTransactionServiceFactory {
 
             BlockchainType.Zcash,
             BlockchainType.Ton,
+            BlockchainType.Monero,
             is BlockchainType.Unsupported,
                 -> throw UnsupportedException("")
         }
