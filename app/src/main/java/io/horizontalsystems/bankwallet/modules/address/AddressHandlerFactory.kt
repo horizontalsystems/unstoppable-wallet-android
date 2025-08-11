@@ -79,6 +79,10 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerStellar())
             }
 
+            BlockchainType.Monero -> {
+                addressHandlers.add(AddressHandlerMonero())
+            }
+
             is BlockchainType.Unsupported -> {
             }
         }

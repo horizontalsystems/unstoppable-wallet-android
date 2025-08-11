@@ -60,6 +60,12 @@ class StellarAddressValidator(private val token: Token) : EnterAddressValidator 
     }
 }
 
+class MoneroAddressValidator() : EnterAddressValidator {
+    override suspend fun validate(address: Address) {
+        // TODO
+    }
+}
+
 class TronAddressValidator(
     private val token: Token,
     private val adapterManager: IAdapterManager
