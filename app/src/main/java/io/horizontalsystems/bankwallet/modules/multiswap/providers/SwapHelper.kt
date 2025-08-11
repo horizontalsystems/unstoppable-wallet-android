@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionApprove
+import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -88,13 +89,35 @@ object SwapHelper {
             .filter { it.spender.equals(routerAddress, true) }
             .maxByOrNull { it.timestamp }
 
-        val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue
+        val revoke = allowance > BigDecimal.ZERO && isUsdt(token)
 
-        return ActionApprove(
-            amountIn,
-            routerAddress,
-            token,
-            approveInProgress
-        )
+        return if (revoke) {
+            val revokeInProgress = approveTransaction != null && approveTransaction.value.zeroValue
+            ActionRevoke(
+                token,
+                routerAddress,
+                revokeInProgress,
+                allowance
+            )
+        } else {
+            val approveInProgress =
+                approveTransaction != null && !approveTransaction.value.zeroValue
+
+            return ActionApprove(
+                amountIn,
+                routerAddress,
+                token,
+                approveInProgress
+            )
+        }
     }
+
+    private fun isUsdt(token: Token): Boolean {
+        val tokenType = token.type
+
+        return token.blockchainType is BlockchainType.Tron
+                && tokenType is TokenType.Eip20
+                && tokenType.address.lowercase() == "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t".lowercase()
+    }
+
 }
