@@ -20,6 +20,7 @@ object SendBtcAdvancedSettingsModule {
         val transactionSortTitle: String,
         val utxoExpertModeEnabled: Boolean,
         val rbfEnabled: Boolean,
+        val rbfVisible: Boolean,
     )
 
     data class SortModeViewItem(

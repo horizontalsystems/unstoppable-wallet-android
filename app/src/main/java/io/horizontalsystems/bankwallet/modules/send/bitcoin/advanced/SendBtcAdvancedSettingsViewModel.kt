@@ -19,12 +19,14 @@ class SendBtcAdvancedSettingsViewModel(
         get() = getTransactionSortModeViewItems()
     private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
     private var rbfEnabled = localStorage.rbfEnabled
+    private val rbfVisible = rbfIsVisible(blockchainType)
 
     override fun createState() = SendBtcAdvancedSettingsModule.UiState(
         transactionSortOptions = sortOptions,
         transactionSortTitle = Translator.getString(sortMode.titleShort),
         utxoExpertModeEnabled = utxoExpertModeEnabled,
-        rbfEnabled = rbfEnabled
+        rbfEnabled = rbfEnabled,
+        rbfVisible = rbfVisible,
     )
 
     fun setTransactionMode(mode: TransactionDataSortMode) {
@@ -45,6 +47,19 @@ class SendBtcAdvancedSettingsViewModel(
         emitState()
     }
 
+    fun reset() {
+        setTransactionMode(TransactionDataSortMode.Shuffle)
+        setRbfEnabled(true)
+    }
+
+    private fun rbfIsVisible(blockchainType: BlockchainType): Boolean {
+        return when (blockchainType) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin -> true
+            else -> false
+        }
+    }
+
     private fun getTransactionSortModeViewItems(): List<SortModeViewItem> {
         return TransactionDataSortMode.values().map { mode ->
             SortModeViewItem(
@@ -52,10 +67,5 @@ class SendBtcAdvancedSettingsViewModel(
                 selected = mode == sortMode
             )
         }
-    }
-
-    fun reset() {
-        setTransactionMode(TransactionDataSortMode.Shuffle)
-        setRbfEnabled(true)
     }
 }

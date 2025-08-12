@@ -82,6 +82,7 @@ fun SendBtcAdvancedSettingsScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val uiState = viewModel.uiState
 
     ComposeAppTheme {
         ModalBottomSheetLayout(
@@ -89,7 +90,7 @@ fun SendBtcAdvancedSettingsScreen(
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
                 BottomSheetTransactionOrderSelector(
-                    items = viewModel.uiState.transactionSortOptions,
+                    items = uiState.transactionSortOptions,
                     onSelect = { mode ->
                         viewModel.setTransactionMode(mode)
                     },
@@ -198,7 +199,7 @@ fun SendBtcAdvancedSettingsScreen(
                     CellUniversalLawrenceSection(
                         listOf {
                             UtxoSwitch(
-                                enabled = viewModel.uiState.utxoExpertModeEnabled,
+                                enabled = uiState.utxoExpertModeEnabled,
                                 onChange = { viewModel.setUtxoExpertMode(it) }
                             )
                         }
@@ -207,11 +208,18 @@ fun SendBtcAdvancedSettingsScreen(
                         text = stringResource(R.string.Send_Utxo_Description),
                     )
 
-                    VSpacer(32.dp)
-                    CellUniversalLawrenceSection {
-                        RbfSwitch(
-                            enabled = viewModel.uiState.rbfEnabled,
-                            onChange = { viewModel.setRbfEnabled(it) }
+                    if (uiState.rbfVisible) {
+                        VSpacer(32.dp)
+                        CellUniversalLawrenceSection(
+                            listOf {
+                                RbfSwitch(
+                                    enabled = uiState.rbfEnabled,
+                                    onChange = { viewModel.setRbfEnabled(it) }
+                                )
+                            }
+                        )
+                        InfoText(
+                            text = stringResource(R.string.Send_Rbf_Description),
                         )
                     }
 
