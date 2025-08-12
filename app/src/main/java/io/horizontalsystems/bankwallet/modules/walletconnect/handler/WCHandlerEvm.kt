@@ -85,4 +85,10 @@ class WCHandlerEvm(
             else -> throw UnsupportedAccountException()
         }
 
+    override fun getChainName(chainInternalId: String): String? {
+        val evmChainId = chainInternalId.toInt()
+
+        return supportedEvmChains.find { it.id == evmChainId }?.name
+    }
+
 }
