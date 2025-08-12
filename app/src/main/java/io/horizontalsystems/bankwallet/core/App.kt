@@ -397,7 +397,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         wcManager = WCManager(accountManager)
         wcManager.addWcHandler(WCHandlerEvm(evmBlockchainManager))
-        wcManager.addWcHandler(WCHandlerStellar())
+        wcManager.addWcHandler(WCHandlerStellar(stellarKitManager))
         wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)

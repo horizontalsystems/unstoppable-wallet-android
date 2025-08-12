@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.handler
 import com.walletconnect.android.Core
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.IWCAction
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 
 interface IWCHandler {
     val chainNamespace: String
@@ -16,7 +16,7 @@ interface IWCHandler {
         request: Wallet.Model.SessionRequest.JSONRPCRequest,
         peerMetaData: Core.Model.AppMetaData?,
         chainInternalId: String?
-    ): IWCAction
+    ): AbstractWCAction
 
     fun getAccountAddresses(account: Account): List<String>
 
