@@ -12,8 +12,10 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 object EtfModule {
 
@@ -49,6 +51,8 @@ object EtfModule {
         val chartDataLoading: Boolean,
         val etfPoints: List<EtfPoint>,
         val currency: Currency,
+        val chartTabs: List<TabItem<HsTimePeriod?>>,
+        val selectedChartInterval: HsTimePeriod?,
     )
 
     enum class SortBy(@StringRes val titleResId: Int) : WithTranslatableTitle {
