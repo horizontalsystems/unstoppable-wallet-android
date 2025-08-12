@@ -1,17 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.market.etf
 
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.stringResId
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.EtfViewItem
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.RankedEtf
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -40,6 +44,12 @@ class EtfViewModel(
         EtfModule.SortBy.Inflow,
         EtfModule.SortBy.Outflow
     )
+    private val timePeriods = listOf(
+        HsTimePeriod.Month1,
+        HsTimePeriod.Month3,
+        HsTimePeriod.Month6,
+        HsTimePeriod.Year1,
+    )
     private var viewState: ViewState = ViewState.Loading
     private var isRefreshing: Boolean = false
     private var viewItems: List<EtfViewItem> = listOf()
@@ -50,6 +60,9 @@ class EtfViewModel(
     private var chartDataLoading = true
     private var etfPoints = listOf<EtfPoint>()
     private var tabKey: String = "btc"
+    private var chartTabItems = listOf<TabItem<HsTimePeriod?>>()
+    private var currentChartPeriod: HsTimePeriod? = HsTimePeriod.Month1
+    private val chartIntervals: List<HsTimePeriod?> = timePeriods + listOf<HsTimePeriod?>(null)
 
     override fun createState() = EtfModule.UiState(
         viewItems = viewItems,
@@ -59,8 +72,14 @@ class EtfViewModel(
         sortBy = sortBy,
         chartDataLoading = chartDataLoading,
         etfPoints = etfPoints,
-        currency = currencyManager.baseCurrency
+        currency = currencyManager.baseCurrency,
+        chartTabs = chartTabItems,
+        selectedChartInterval = currentChartPeriod
     )
+
+    init {
+        setChartTabs(currentChartPeriod)
+    }
 
     fun loadData(tabKey: String) {
         this.tabKey = tabKey
@@ -72,7 +91,7 @@ class EtfViewModel(
     private fun fetchChartData() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                etfPoints = marketKit.etfPoints(tabKey, currencyManager.baseCurrency.code).await()
+                etfPoints = marketKit.etfPoints(tabKey, currencyManager.baseCurrency.code, currentChartPeriod?.value ?: "all").await()
                     .sortedBy { it.date }
                 chartDataLoading = false
 
@@ -174,6 +193,19 @@ class EtfViewModel(
     fun onSelectSortBy(selected: EtfModule.SortBy) {
         sortBy = selected
         syncItems()
+    }
+
+    fun onSelectChartInterval(interval: HsTimePeriod?) {
+        currentChartPeriod = interval
+        setChartTabs(interval)
+        fetchChartData()
+    }
+
+    private fun setChartTabs(interval: HsTimePeriod?) {
+        chartTabItems = chartIntervals.map {
+            val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
+            TabItem(Translator.getString(titleResId), it == interval, it)
+        }
     }
 
 }

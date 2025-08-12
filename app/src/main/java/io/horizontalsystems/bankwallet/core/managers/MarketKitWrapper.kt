@@ -304,7 +304,7 @@ class MarketKitWrapper(
 
     fun etfs(category: String, currencyCode: String) = marketKit.etfSingle(category, currencyCode)
 
-    fun etfPoints(category: String, currencyCode: String) = marketKit.etfPointSingle(category, currencyCode)
+    fun etfPoints(category: String, currencyCode: String, period: String) = marketKit.etfPointSingle(category, currencyCode, period)
 
     // Vaults
 
