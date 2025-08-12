@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.stellar
 
 import com.walletconnect.android.Core
 import com.walletconnect.web3.wallet.client.Wallet
+import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.MethodData
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.UnsupportedMethodException
 
-class WCHandlerStellar : IWCHandler {
+class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHandler {
     override val chainNamespace = "stellar"
 
     override val supportedChains = listOf("stellar:pubnet")
@@ -37,9 +38,9 @@ class WCHandlerStellar : IWCHandler {
     }
 
     override fun getAccountAddresses(account: Account): List<String> {
-        return supportedChains.map {
-            "$it:GADCIJ2UKQRWG6WHHPFKKLX7BYAWL7HDL54RUZO7M7UIHNQZL63C2I4Z"
-        }
+        val address = stellarKitManager.getAddress(account.type)
+
+        return supportedChains.map { "$it:$address" }
     }
 
     override fun getMethodData(method: String, chainInternalId: String?): MethodData {

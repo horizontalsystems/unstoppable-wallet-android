@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.MethodData
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.IWCAction
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ValidationError
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -40,7 +40,7 @@ class WCManager(
         return handler.getMethodData(sessionRequest.request.method, chainInternalId)
     }
 
-    fun getActionForRequest(sessionRequest: Wallet.Model.SessionRequest?): IWCAction? {
+    fun getActionForRequest(sessionRequest: Wallet.Model.SessionRequest?): AbstractWCAction? {
         if (sessionRequest == null) return null
         val chainId = sessionRequest.chainId ?: return null
         val chainParts = chainId.split(":")
