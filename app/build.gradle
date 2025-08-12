@@ -308,6 +308,9 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
+    implementation "com.jakewharton.timber:timber:5.0.1"
+    implementation 'com.github.omurovch:monero-kit-android:aff3d88'
+
     implementation 'com.github.horizontalsystems:stellar-kit-android:519533b'
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:7826bf5'
