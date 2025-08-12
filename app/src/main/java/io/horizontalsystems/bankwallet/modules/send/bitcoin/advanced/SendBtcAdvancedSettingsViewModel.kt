@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule.rbfSupported
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -19,7 +20,7 @@ class SendBtcAdvancedSettingsViewModel(
         get() = getTransactionSortModeViewItems()
     private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
     private var rbfEnabled = localStorage.rbfEnabled
-    private val rbfVisible = rbfIsVisible(blockchainType)
+    private val rbfVisible = blockchainType.rbfSupported
     private val transactionSortingSupported = transactionSortingSupported(blockchainType)
 
     override fun createState() = SendBtcAdvancedSettingsModule.UiState(
@@ -52,14 +53,6 @@ class SendBtcAdvancedSettingsViewModel(
     fun reset() {
         setTransactionMode(TransactionDataSortMode.Shuffle)
         setRbfEnabled(true)
-    }
-
-    private fun rbfIsVisible(blockchainType: BlockchainType): Boolean {
-        return when (blockchainType) {
-            BlockchainType.Bitcoin,
-            BlockchainType.Litecoin -> true
-            else -> false
-        }
     }
 
     private fun transactionSortingSupported(blockchainType: BlockchainType) : Boolean {

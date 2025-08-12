@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 object SendBitcoinModule {
     @Suppress("UNCHECKED_CAST")
@@ -55,5 +56,12 @@ object SendBitcoinModule {
         Auto,
         Manual
     }
+
+    val BlockchainType.rbfSupported: Boolean
+        get() = when (this) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin -> true
+            else -> false
+        }
 
 }
