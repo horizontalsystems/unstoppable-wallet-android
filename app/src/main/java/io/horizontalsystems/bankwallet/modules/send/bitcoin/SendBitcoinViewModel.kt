@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule.rbfSupported
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
@@ -64,6 +65,7 @@ class SendBitcoinViewModel(
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
     private var memo: String? = null
+    private val rbfEnabled = blockchainType.rbfSupported && localStorage.rbfEnabled
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -246,7 +248,7 @@ class SendBitcoinViewModel(
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval,
             memo = memo,
-            rbfEnabled = localStorage.rbfEnabled
+            rbfEnabled = rbfEnabled
         )
     }
 
@@ -271,7 +273,7 @@ class SendBitcoinViewModel(
                 customUnspentOutputs,
                 pluginState.pluginData,
                 btcBlockchainManager.transactionSortMode(adapter.blockchainType),
-                localStorage.rbfEnabled,
+                rbfEnabled,
                 null,
                 false,
                 UtxoFilters()
