@@ -52,4 +52,8 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
 
         return MethodData(title, "Stellar")
     }
+
+    override fun getChainName(chainInternalId: String): String? {
+        return "Stellar"
+    }
 }

@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -132,7 +132,7 @@ class WalletConnectListViewModel(
             WalletConnectListModule.SessionViewItem(
                 sessionTopic = session.topic,
                 title = session.metaData?.name ?: "",
-                subtitle = getSubtitle(session.namespaces.values.map { it.accounts }.flatten()),
+                subtitle = App.wcManager.getChainNames(session.namespaces).joinToString(),
                 url = session.metaData?.url ?: "",
                 imageUrl = session.metaData?.icons?.lastOrNull(),
                 pendingRequestsCount = pendingRequestCountMap[session.topic] ?: 0,
@@ -161,16 +161,6 @@ class WalletConnectListViewModel(
     private fun getPairingCount(): Int {
         return CoreClient.Pairing.getPairings().size
     }
-
-    private fun getSubtitle(chains: List<String>): String {
-        val chainNames = chains.mapNotNull { chain ->
-            WCUtils.getChainData(chain)?.id?.let { chainId ->
-                evmBlockchainManager.getBlockchain(chainId)?.name
-            }
-        }
-        return chainNames.joinToString(", ")
-    }
-
 }
 
 data class WalletConnectListUiState(

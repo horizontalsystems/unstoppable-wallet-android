@@ -107,4 +107,23 @@ class WCManager(
                 accounts = handler.getAccountAddresses(account)
             )
         }.toMap()
+
+    fun getChainNames(namespaces: Map<String, Wallet.Model.Namespace.Session>): List<String> {
+        val res = mutableListOf<String>()
+
+        for ((chainNamespace, session) in namespaces) {
+            val handler = handlersMap[chainNamespace] ?: continue
+
+            for (accountId in session.accounts) {
+                val accountIdParts = accountId.split(":")
+                val chainInternalId = accountIdParts.getOrNull(1) ?: continue
+
+                handler.getChainName(chainInternalId)?.let {
+                    res.add(it)
+                }
+            }
+        }
+
+        return res
+    }
 }

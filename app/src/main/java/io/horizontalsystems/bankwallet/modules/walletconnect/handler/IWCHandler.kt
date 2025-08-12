@@ -21,4 +21,5 @@ interface IWCHandler {
     fun getAccountAddresses(account: Account): List<String>
 
     fun getMethodData(method: String, chainInternalId: String?): MethodData
+    fun getChainName(chainInternalId: String): String?
 }
