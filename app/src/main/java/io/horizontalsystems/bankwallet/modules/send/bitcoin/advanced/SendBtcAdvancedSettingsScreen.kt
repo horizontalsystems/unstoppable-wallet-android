@@ -167,13 +167,15 @@ fun SendBtcAdvancedSettingsScreen(
                         )
                     }
 
-                    VSpacer(24.dp)
-                    TransactionDataSortSettings(
-                        navController,
-                        viewModel.uiState.transactionSortTitle,
-                    ) {
-                        coroutineScope.launch {
-                            modalBottomSheetState.show()
+                    if (uiState.transactionSortingSupported) {
+                        VSpacer(24.dp)
+                        TransactionDataSortSettings(
+                            navController,
+                            viewModel.uiState.transactionSortTitle,
+                        ) {
+                            coroutineScope.launch {
+                                modalBottomSheetState.show()
+                            }
                         }
                     }
 
