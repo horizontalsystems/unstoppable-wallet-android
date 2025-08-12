@@ -20,11 +20,13 @@ class SendBtcAdvancedSettingsViewModel(
     private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
     private var rbfEnabled = localStorage.rbfEnabled
     private val rbfVisible = rbfIsVisible(blockchainType)
+    private val transactionSortingSupported = transactionSortingSupported(blockchainType)
 
     override fun createState() = SendBtcAdvancedSettingsModule.UiState(
         transactionSortOptions = sortOptions,
         transactionSortTitle = Translator.getString(sortMode.titleShort),
         utxoExpertModeEnabled = utxoExpertModeEnabled,
+        transactionSortingSupported = transactionSortingSupported,
         rbfEnabled = rbfEnabled,
         rbfVisible = rbfVisible,
     )
@@ -56,6 +58,15 @@ class SendBtcAdvancedSettingsViewModel(
         return when (blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.Litecoin -> true
+            else -> false
+        }
+    }
+
+    private fun transactionSortingSupported(blockchainType: BlockchainType) : Boolean {
+        return when (blockchainType) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin,
+            BlockchainType.Dash -> true
             else -> false
         }
     }
