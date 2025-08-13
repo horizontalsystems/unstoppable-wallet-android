@@ -96,7 +96,7 @@ private fun AdvancedSearchScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var bottomSheetType by remember { mutableStateOf(CoinSet) }
-    val modalBottomSheetState = rememberModalBottomSheetState()
+    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -302,7 +302,7 @@ fun AdvancedSearchContent(
             onDropdownClick = { showBottomSheet(CoinSet) }
         )
         AdvancedSearchDropdown(
-            title = R.string.Market_Filter_Volume,
+            title = R.string.Market_Filter_Volume24h,
             value = uiState.volume.title,
             onDropdownClick = { showBottomSheet(TradingVolume) }
         )
@@ -435,19 +435,6 @@ fun AdvancedSearchContent(
             }
         )
         AdvancedSearchSwitch(
-            title = R.string.Market_Filter_OutperformedGold,
-            enabled = uiState.outperformedGoldOn,
-            onChecked = {
-                navController.paidAction(AdvancedSearch) {
-                    viewModel.updateOutperformedGoldOn(it)
-                }
-                stat(
-                    page = StatPage.AdvancedSearch,
-                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedGold)
-                )
-            }
-        )
-        AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedSnp,
             enabled = uiState.outperformedSnpOn,
             onChecked = {
@@ -457,6 +444,19 @@ fun AdvancedSearchContent(
                 stat(
                     page = StatPage.AdvancedSearch,
                     event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedSp500)
+                )
+            }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedGold,
+            enabled = uiState.outperformedGoldOn,
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateOutperformedGoldOn(it)
+                }
+                stat(
+                    page = StatPage.AdvancedSearch,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.OutperformedGold)
                 )
             }
         )
