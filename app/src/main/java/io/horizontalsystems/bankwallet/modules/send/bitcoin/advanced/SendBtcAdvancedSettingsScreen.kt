@@ -171,6 +171,7 @@ fun SendBtcAdvancedSettingsScreen(
                         VSpacer(24.dp)
                         TransactionDataSortSettings(
                             navController,
+                            wallet.coin.code,
                             viewModel.uiState.transactionSortTitle,
                         ) {
                             coroutineScope.launch {
@@ -341,6 +342,7 @@ private fun BottomSheetTransactionOrderSelector(
 @Composable
 private fun TransactionDataSortSettings(
     navController: NavController,
+    coinCode: String,
     valueTitle: String,
     onClick: () -> Unit
 ) {
@@ -370,7 +372,7 @@ private fun TransactionDataSortSettings(
         }
     )
     InfoText(
-        text = stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription),
+        text = stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription, coinCode),
     )
 }
 
