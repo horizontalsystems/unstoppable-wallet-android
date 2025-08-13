@@ -221,8 +221,10 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
 
     <!--Market Global Metrics-->
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
-    <string name="MarketGlobalMetrics_Volume">24h Vol.</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Total Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
+    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_VolumeShort">24h Vol.</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies</string>

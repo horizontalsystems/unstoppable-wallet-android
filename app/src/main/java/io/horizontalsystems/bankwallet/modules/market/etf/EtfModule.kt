@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.stats.StatPeriod
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
-import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
@@ -46,13 +46,13 @@ object EtfModule {
         val viewItems: List<EtfViewItem>,
         val viewState: ViewState,
         val isRefreshing: Boolean,
-        val timeDuration: TimeDuration,
         val sortBy: SortBy,
         val chartDataLoading: Boolean,
         val etfPoints: List<EtfPoint>,
         val currency: Currency,
         val chartTabs: List<TabItem<HsTimePeriod?>>,
         val selectedChartInterval: HsTimePeriod?,
+        val listTimePeriod: EtfListTimePeriod
     )
 
     enum class SortBy(@StringRes val titleResId: Int) : WithTranslatableTitle {
@@ -85,3 +85,21 @@ object EtfModule {
     }
 }
 
+enum class EtfListTimePeriod(val titleResId: Int) : WithTranslatableTitle {
+    OneDay(R.string.Market_Filter_TimePeriod_1D),
+    SevenDay(R.string.Market_Filter_TimePeriod_1W),
+    ThirtyDay(R.string.Market_Filter_TimePeriod_1M),
+    ThreeMonths(R.string.Market_Filter_TimePeriod_3M),
+    All(R.string.Market_All);
+
+    override val title = TranslatableString.ResString(titleResId)
+}
+
+val EtfListTimePeriod.statPeriod: StatPeriod
+    get() = when(this) {
+        EtfListTimePeriod.OneDay -> StatPeriod.Day1
+        EtfListTimePeriod.SevenDay -> StatPeriod.Week1
+        EtfListTimePeriod.ThirtyDay -> StatPeriod.Month1
+        EtfListTimePeriod.ThreeMonths -> StatPeriod.Month3
+        EtfListTimePeriod.All -> StatPeriod.All
+    }

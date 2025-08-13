@@ -25,6 +25,7 @@ class MetricsPageChartService(
     override val chartIntervals = listOf(
         HsTimePeriod.Day1,
         HsTimePeriod.Week1,
+        HsTimePeriod.Week2,
         HsTimePeriod.Month1,
         HsTimePeriod.Month3,
         HsTimePeriod.Month6,
