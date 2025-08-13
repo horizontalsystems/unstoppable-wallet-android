@@ -53,6 +53,7 @@ class WCRequestStellarViewModel(
     private val wcAction: AbstractWCAction
 ) : ViewModelUiState<WCRequestStellarUiState>() {
 
+    private var approveInProgress = false
     private var finish: Boolean = false
     private var error: Throwable? = null
 
@@ -73,13 +74,15 @@ class WCRequestStellarViewModel(
     override fun createState() = WCRequestStellarUiState(
         title = wcAction.getTitle(),
         finish = finish,
-        runnable = actionState.runnable,
+        runnable = !approveInProgress && actionState.runnable,
         approveButtonTitle = wcAction.getApproveButtonTitle(),
         contentItems = actionState.items
     )
 
     fun approve() = viewModelScope.launch(Dispatchers.Default) {
         error = null
+        approveInProgress = true
+        emitState()
 
         val actionResult = wcAction.performAction()
 
@@ -88,16 +91,16 @@ class WCRequestStellarViewModel(
             sessionRequest.topic,
             actionResult,
             onSuccessResult = {
+                approveInProgress = false
                 finish = true
                 emitState()
             },
             onErrorResult = {
+                approveInProgress = true
                 error = it
                 emitState()
             }
         )
-
-        emitState()
     }
 
     fun reject() = viewModelScope.launch(Dispatchers.Default) {
