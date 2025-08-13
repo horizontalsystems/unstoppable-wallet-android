@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendMoneroAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -26,7 +27,7 @@ class MoneroAdapter(
     private val kit: MoneroKit,
     private val transactionsProvider: MoneroTransactionsProvider,
     private val transactionsAdapter: MoneroTransactionsAdapter,
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter by transactionsAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, ITransactionsAdapter by transactionsAdapter {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -85,8 +86,17 @@ class MoneroAdapter(
     }
 
     override val debugInfo: String
-        get() = TODO("Not yet implemented")
+        get() = ""
 
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
+        val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
+        kit.send(amountInPiconero, address, memo)
+    }
+
+    override suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?): BigDecimal {
+        val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
+        return kit.estimateFee(amountInPiconero, address, memo).scaledDown(DECIMALS)
+    }
 
     companion object {
         const val DECIMALS = 12

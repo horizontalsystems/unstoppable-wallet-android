@@ -67,7 +67,7 @@ class MoneroTransactionsAdapter(
         "https://localmonero.co/blocks/tx/$transactionHash"
 
     private fun getTransactionRecord(transaction: TransactionInfo): TransactionRecord {
-
+        val blockHeight = if (transaction.blockheight == 0L || transaction.isPending) null else transaction.blockheight.toInt()
         return when (transaction.direction) {
             Direction.Direction_In -> {
                 BitcoinIncomingTransactionRecord(
@@ -75,7 +75,7 @@ class MoneroTransactionsAdapter(
                     uid = transaction.hash,
                     transactionHash = transaction.hash,
                     transactionIndex = 0,
-                    blockHeight = transaction.blockheight.toInt(),
+                    blockHeight = blockHeight,
                     confirmationsThreshold = TransactionInfo.CONFIRMATION,
                     timestamp = transaction.timestamp,
                     fee = transaction.fee.scaledDown(DECIMALS),
@@ -96,7 +96,7 @@ class MoneroTransactionsAdapter(
                     uid = transaction.hash,
                     transactionHash = transaction.hash,
                     transactionIndex = 0,
-                    blockHeight = transaction.blockheight.toInt(),
+                    blockHeight = blockHeight,
                     confirmationsThreshold = TransactionInfo.CONFIRMATION,
                     timestamp = transaction.timestamp,
                     fee = transaction.fee.scaledDown(DECIMALS),

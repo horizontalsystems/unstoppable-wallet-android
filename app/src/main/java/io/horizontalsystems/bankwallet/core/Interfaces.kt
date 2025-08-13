@@ -423,6 +423,12 @@ interface ISendStellarAdapter {
     suspend fun send(transactionEnvelope: String)
 }
 
+interface ISendMoneroAdapter {
+    val balanceData: BalanceData
+    suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
+}
+
 interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData
