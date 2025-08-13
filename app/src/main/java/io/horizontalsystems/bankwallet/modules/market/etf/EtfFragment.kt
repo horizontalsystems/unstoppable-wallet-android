@@ -47,7 +47,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -183,7 +182,7 @@ fun EtfByChain(
                     val listState = hsRememberLazyListState(
                         2,
                         uiState.sortBy,
-                        uiState.timeDuration
+                        uiState.listTimePeriod
                     )
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -223,7 +222,7 @@ fun EtfByChain(
                                     onClick = {
                                         openPeriodSelector = true
                                     },
-                                    title = stringResource(uiState.timeDuration.titleResId),
+                                    title = stringResource(uiState.listTimePeriod.titleResId),
                                     iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 )
                                 HSpacer(width = 16.dp)
@@ -248,7 +247,7 @@ fun EtfByChain(
     if (openPeriodSelector) {
         AlertGroup(
             title = stringResource(R.string.CoinPage_Period),
-            select = Select(uiState.timeDuration, viewModel.timeDurations),
+            select = Select(uiState.listTimePeriod, EtfListTimePeriod.entries),
             onSelect = { selected ->
                 viewModel.onSelectTimeDuration(selected)
                 openPeriodSelector = false

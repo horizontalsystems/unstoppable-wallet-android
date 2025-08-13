@@ -187,7 +187,7 @@ fun MetricsBoard(
             .background(ComposeAppTheme.colors.lawrence)
     ) {
         MarketTotalCard(
-            title = stringResource(R.string.MarketGlobalMetrics_TotalMarketCap),
+            title = stringResource(R.string.MarketGlobalMetrics_TotalMarketCapShort),
             value = marketGlobal?.marketCap,
             changePercentage = marketGlobal?.marketCapChange,
             currency = currency,
@@ -199,7 +199,7 @@ fun MetricsBoard(
         VDivider()
 
         MarketTotalCard(
-            title = stringResource(R.string.MarketGlobalMetrics_Volume),
+            title = stringResource(R.string.MarketGlobalMetrics_VolumeShort),
             value = marketGlobal?.volume,
             changePercentage = marketGlobal?.volumeChange,
             currency = currency,
