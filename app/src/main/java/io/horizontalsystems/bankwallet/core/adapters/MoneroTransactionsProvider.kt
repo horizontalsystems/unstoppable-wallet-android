@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.reactivex.BackpressureStrategy
@@ -13,8 +14,12 @@ class MoneroTransactionsProvider {
     private val newTransactionsSubject = PublishSubject.create<List<TransactionInfo>>()
 
     fun onTransactions(transactionInfos: List<TransactionInfo>) {
+        Log.e(
+            "eee",
+            "txs: ${transactionInfos.joinToString(separator = "\n") { "${it.direction}  - blockheight: ${it.blockheight} confirms: ${it.confirmations}" }}"
+        )
         val newTransactions = transactionInfos.filter { tx ->
-            transactions.none { it.hash == tx.hash && it.blockheight == tx.blockheight }
+            transactions.none { it.hash == tx.hash && it.blockheight == tx.blockheight && it.confirmations == tx.confirmations }
         }
         if (newTransactions.isNotEmpty()) {
             newTransactionsSubject.onNext(newTransactions)

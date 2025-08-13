@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
@@ -45,7 +46,9 @@ class TransactionSyncStateRepository(
         adapters.forEach { (source, adapter) ->
             coroutineScope.launch {
                 adapter.lastBlockUpdatedFlowable.asFlow().collect {
+                    Log.e("eee", "lastBlockUpdated, lastBlocknfo: ${adapter.lastBlockInfo}")
                     adapter.lastBlockInfo?.let { lastBlockInfo ->
+
                         lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
                     }
                 }
