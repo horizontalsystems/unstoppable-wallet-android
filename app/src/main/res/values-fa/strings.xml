@@ -100,11 +100,13 @@
     <string name="Market_Filter_TimePeriod_1M">1Month</string>
     <string name="Market_Filter_TimePeriod_6M">6Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1Year</string>
+    <!--Vaults-->
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Send">ارسال</string>
+    <string name="Balance_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="Balance_Receive">دريافت</string>
     <string name="Balance_Address">آدرس</string>
     <string name="Balance_RatePerCoin">%1$sدر هر%2$s</string>
@@ -481,6 +483,7 @@
     <!-- Blockchain Settings -->
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">رایج قبل از ۲۰۱۸</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
+    <!-- Nym VPN -->
     <!-- Tor -->
     <string name="Tor_Connection_Enable">فعال کردن Tor</string>
     <string name="Tor_Connection_Disable">Tor را غیرفعال کنید</string>
