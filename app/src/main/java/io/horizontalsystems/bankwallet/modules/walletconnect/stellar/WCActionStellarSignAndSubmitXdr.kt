@@ -5,23 +5,27 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCActionContentItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCActionState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class WCActionStellarSignAndSubmitXdr(
     private val paramsJsonStr: String,
     private val peerName: String,
+    private val stellarKit: StellarKit,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
     private val params = gson.fromJson(paramsJsonStr, Params::class.java)
+    private val xdr = params.xdr
 
     private val token = App.marketKit.token(TokenQuery(BlockchainType.Stellar, TokenType.Native))!!
     private val sendTransactionService = SendTransactionServiceFactory.create(token)
@@ -37,7 +41,9 @@ class WCActionStellarSignAndSubmitXdr(
         }
 
         coroutineScope.launch {
-            sendTransactionService.setSendTransactionData(SendTransactionData.Stellar.WithTransactionEnvelope(params.xdr))
+            sendTransactionService.setSendTransactionData(
+                SendTransactionData.Stellar.WithTransactionEnvelope(xdr)
+            )
         }
     }
 
@@ -55,36 +61,21 @@ class WCActionStellarSignAndSubmitXdr(
         return gson.toJson(mapOf("status" to "success"))
     }
 
-    override fun createState() = WCActionState(
-        runnable = sendTransactionState.sendable,
-        items = listOf(
-            WCActionContentItem.Section(
-                listOf(
-                    WCActionContentItem.SingleLine(
-                        TranslatableString.ResString(R.string.WalletConnect_SignMessageRequest_dApp),
-                        TranslatableString.PlainString(peerName)
-                    ),
-                    WCActionContentItem.SingleLine(
-                        TranslatableString.PlainString("Stellar"),
-                        null
-                    )
-                )
-            ),
+    override fun createState(): WCActionState {
+        val transaction = stellarKit.getTransaction(xdr)
 
-            WCActionContentItem.Section(
-                listOf(
-                    WCActionContentItem.Paragraph(
-                        TranslatableString.PlainString(params.xdr)
-                    )
-                ),
-                TranslatableString.PlainString("Transaction XDR")
-            ),
-
-            WCActionContentItem.Fee(
-                sendTransactionState.networkFee
+        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr, peerName)
+        sendTransactionState.networkFee?.let { networkFee ->
+            sectionViewItems += SectionViewItem(
+                listOf(ViewItem.Fee(networkFee))
             )
+        }
+
+        return WCActionState(
+            runnable = sendTransactionState.sendable,
+            items = sectionViewItems
         )
-    )
+    }
 
     data class Params(val xdr: String)
 }

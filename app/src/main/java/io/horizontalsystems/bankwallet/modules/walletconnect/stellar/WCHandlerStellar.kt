@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.MethodData
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.UnsupportedMethodException
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 import io.horizontalsystems.stellarkit.StellarKit
 
 class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHandler {
@@ -21,25 +22,24 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
         request: Wallet.Model.SessionRequest.JSONRPCRequest,
         peerMetaData: Core.Model.AppMetaData?,
         chainInternalId: String?,
-    ) = when (request.method) {
-        "stellar_signAndSubmitXDR" -> {
-            WCActionStellarSignAndSubmitXdr(
-                request.params,
-                peerMetaData?.name ?: ""
-            )
-        }
+    ): AbstractWCAction {
+        val stellarKit = getStellarKit(App.accountManager.activeAccount!!)
 
-        "stellar_signXDR" -> {
-            val stellarKit = getStellarKit(App.accountManager.activeAccount!!)
-
-            WCActionStellarSignXdr(
+        return when (request.method) {
+            "stellar_signAndSubmitXDR" -> WCActionStellarSignAndSubmitXdr(
                 request.params,
                 peerMetaData?.name ?: "",
                 stellarKit
             )
-        }
 
-        else -> throw UnsupportedMethodException(request.method)
+            "stellar_signXDR" -> WCActionStellarSignXdr(
+                request.params,
+                peerMetaData?.name ?: "",
+                stellarKit
+            )
+
+            else -> throw UnsupportedMethodException(request.method)
+        }
     }
 
     private fun getStellarKit(account: Account): StellarKit {
@@ -62,7 +62,5 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
         return MethodData(title, "Stellar")
     }
 
-    override fun getChainName(chainInternalId: String): String? {
-        return "Stellar"
-    }
+    override fun getChainName(chainInternalId: String) = "Stellar"
 }

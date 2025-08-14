@@ -7,6 +7,7 @@ import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.Dispatchers
@@ -138,5 +139,5 @@ data class WCRequestStellarUiState(
     val finish: Boolean,
     val runnable: Boolean,
     val approveButtonTitle: TranslatableString,
-    val contentItems: List<WCActionContentItem>,
+    val contentItems: List<SectionViewItem>
 )
