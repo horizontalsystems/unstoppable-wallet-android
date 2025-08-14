@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -50,9 +52,12 @@ fun SelectSwapCoinDialogScreen(
             onSearchTextChanged = onSearchTextChanged
         )
 
-        LazyColumn {
+        LazyColumn(modifier = Modifier.imePadding()) {
+            item {
+                HsDivider()
+            }
             items(coinBalanceItems) { coinItem ->
-                SectionUniversalItem(borderTop = true) {
+                SectionUniversalItem(borderBottom = true) {
                     RowUniversal(
                         modifier = Modifier
                             .fillMaxWidth()
