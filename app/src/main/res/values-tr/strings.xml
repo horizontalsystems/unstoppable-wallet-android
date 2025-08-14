@@ -134,6 +134,7 @@
     <string name="Market_Field_PriceDiff">Fiyat</string>
     <string name="Market_Title">Marketler</string>
     <string name="Market_Search">Ara</string>
+    <string name="Market_All">Hepsi</string>
     <string name="Market_Search_Sections_RecentTitle">SON</string>
     <string name="Market_Search_Sections_PopularTitle">POPÜLER</string>
     <string name="Market_FilterSection_MarketParameters">PİYASA PARAMETRELERİ</string>
@@ -180,8 +181,10 @@
     <string name="MarketPlatformCoins_PlatformEcosystem">%s Ekosistemi</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s zincirindeki tüm protokollerin piyasa değeri</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Toplam Piyasa Değeri</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Toplam Piyasa Değeri</string>
     <string name="MarketGlobalMetrics_Volume">24s Hacim</string>
+    <string name="MarketGlobalMetrics_VolumeShort">24s Hacim</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Girişi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Tüm kripto paraların toplam piyasa değeri</string>
@@ -279,6 +282,11 @@
     <string name="Market_Sorting_HighestCap">En Yüksek</string>
     <string name="Market_Sorting_LowestCap">En Düşük</string>
     <string name="Market_Filters_Select">%d Seç</string>
+    <!--Vaults-->
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
+    <string name="Market_Vaults_Vault_Network">Ağ</string>
+    <string name="Market_Vaults_Vault_Holders">Sahipler</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-Chain</string>
@@ -286,6 +294,7 @@
     <string name="Balance_Withdraw">Hesaptan Çek</string>
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Send">Gönder</string>
+    <string name="Balance_ChooseCoin">Kripto Parayı Seç</string>
     <string name="Balance_Deposit">Al</string>
     <string name="Balance_Receive">Al</string>
     <string name="Balance_Address">Adres</string>
@@ -1095,6 +1104,7 @@
     <!-- Blockchain Settings -->
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018 öncesinde yaygın</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018 sonrasında yaygın</string>
+    <!-- Nym VPN -->
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Tor\'u etkinleştir</string>
     <string name="Tor_Connection_Disable">Tor\'u devre dışı bırak</string>
