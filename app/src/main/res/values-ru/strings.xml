@@ -50,6 +50,7 @@
     <string name="Button_Apply">Применить</string>
     <string name="Button_SetAmount">Установить сумму</string>
     <string name="Button_ContinueAnyway">Всё равно продолжить</string>
+    <string name="Attention_Title">Внимание</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error_AssetNotEnabled">Получатель не включил %s, поэтому он не может получить его.</string>
@@ -137,6 +138,7 @@
     <string name="Market_Field_PriceDiff">Цена</string>
     <string name="Market_Title">Рынки</string>
     <string name="Market_Search">Поиск</string>
+    <string name="Market_All">Все</string>
     <string name="Market_Search_Sections_RecentTitle">Недавние</string>
     <string name="Market_Search_Sections_PopularTitle">ПОПУЛЯРНЫЕ</string>
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
@@ -148,6 +150,7 @@
     <string name="Market_Field_HighestVolume">Наивысшему обьему</string>
     <string name="Market_Field_LowestVolume">Наименьшему объему</string>
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
+    <string name="Market_Filter_PopupTitle">Фильтровать по</string>
     <string name="Market_BtcDominance">Доминирование BTC</string>
     <string name="Market_SeeAll">Посмотреть всё</string>
     <string name="Market_PoweredByApi">Работает на CoinGeko API</string>
@@ -157,6 +160,7 @@
     <string name="Market_Tab_Pairs">Пары</string>
     <string name="Market_Tab_Sectors">Секторы</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
+    <string name="Market_Tab_Earn">Заработать</string>
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Signals">Сигналы</string>
@@ -183,8 +187,10 @@
     <string name="MarketPlatformCoins_PlatformEcosystem">%s Экосистема</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Общая капитализация</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Общая капитализация</string>
     <string name="MarketGlobalMetrics_Volume">Объём</string>
+    <string name="MarketGlobalMetrics_VolumeShort">Объём</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF приток</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют</string>
@@ -201,6 +207,9 @@
     <string name="MarketEtf_Inflow">Приток</string>
     <string name="MarketEtf_Outflow">Расход</string>
     <string name="MarketEtf_TotalNetAssets">Всего чистых активов</string>
+    <string name="MarketEtf_BitcoinEtf">Биткоин ETF</string>
+    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
+    <string name="MarketEtf_EtfDescription">Чистый приток всех ETF %s , включая точечные и фьючерсные фонды.</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
     <string name="Market_Filters">Фильтры</string>
@@ -220,6 +229,8 @@
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
     <string name="Market_Filter_OutperformedEth">Обошел ETH</string>
     <string name="Market_Filter_OutperformedBnb">Обошел BNB</string>
+    <string name="Market_Filter_OutperformedGold">Устаревшее золото</string>
+    <string name="Market_Filter_OutperformedSnp">Выполнено S&amp;P 500</string>
     <string name="Market_Filter_PriceCloseTo">Цена близка к</string>
     <string name="Market_Filter_PriceCloseToAth">Цена Близка к ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Цена Близка к ATL</string>
@@ -288,6 +299,23 @@
     <string name="Market_Sorting_HighestCap">Наивысшей кап.</string>
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <string name="Market_Filters_Select">Выбрать %d</string>
+    <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">Хотите открыть больше возможностей для заработка?</string>
+    <string name="Market_Vaults_UnlockPremium">Разблокировать Премиум</string>
+    <string name="Market_Vaults_Sorting_APY">Наибольшее APY</string>
+    <string name="Market_Vaults_Sorting_TVL">Наивысший ТВЛ</string>
+    <string name="Market_Vaults_Filter_AllAssets">Все медиафайлы</string>
+    <string name="Market_Vaults_Filter_AllChains">Все цепочки</string>
+    <string name="Market_Vaults_Filter_ETHYield">Усвоение ETH</string>
+    <string name="Market_Vaults_Filter_USDYield">Выход в USD</string>
+    <string name="Market_Vaults_OpenDapp">Открыть dapp</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d цепочки</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
+    <string name="Market_Vaults_Vault_Network">Сеть</string>
+    <string name="Market_Vaults_Vault_Protocol">Protocol</string>
+    <string name="Market_Vaults_Vault_UnderlyingToken">Базовый токен</string>
+    <string name="Market_Vaults_Vault_Holders">Держатели</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Мультичейн</string>
@@ -295,6 +323,7 @@
     <string name="Balance_Withdraw">Вывод средств</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_ChooseCoin">Выберите токен</string>
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Receive">Получить</string>
     <string name="Balance_Address">Адрес</string>
@@ -337,6 +366,7 @@
     <string name="Balance_Receive_ActivationRequired">Чтобы получить адрес, необходимо активировать токен. Требуется Stellar сеть.</string>
     <string name="Balance_Receive_Trustline">Строка доверия</string>
     <string name="Balance_Reserved_Title">Зарезервировано</string>
+    <string name="Balance_WalletAddress">Адрес кошелька</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Прозрачный</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Прозрачная сумма</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Прозрачный баланс пока не может быть использован в нашем кошельке. Но эти деньги могут быть использованы другими кошельками с поддержкой адреса</string>
@@ -574,6 +604,8 @@
     <string name="SwapConfirm_FetchingFinalQuote">Получение котировки</string>
     <string name="SwapWarning_SlippageNotApplicable_Title">Проскальзывание не применимо</string>
     <string name="SwapWarning_SlippageNotApplicable_Description">Минимальное проскальзывание, применимое для этой цитаты - %s%%</string>
+    <string name="SwapWarning_SlippageNotAvailable_Title">Без контроля проскальзывания</string>
+    <string name="SwapWarning_SlippageNotAvailable_Description">Межцепные операции зависят от ликвидности третьих сторон и задержек, что может повлиять на окончательную сумму.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_SlippageTitle">Допустимость отклонений</string>
@@ -761,6 +793,7 @@
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
+    <string name="Settings_Support">Поддержка</string>
     <string name="Settings_VipSupport">VIP группа</string>
     <string name="Settings_BotSupport">Поддержка BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
@@ -792,6 +825,7 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 минут</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 минут</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
+    <string name="Mev_Protection">Защита MEV</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Проверка адреса</string>
     <string name="SettingsAddressChecker_RecipientCheck">Проверка получателя</string>
@@ -843,6 +877,7 @@
     <string name="SettingsSubscription_SubscriptionInfo">Следующая дата платежа: %s. Вы можете управлять своей подпиской в разделе \"управление подпиской\".</string>
     <string name="SettingsSubscription_ManageSubscription">Управление подпиской</string>
     <string name="Period_Days">%s дня</string>
+    <string name="Premium_TitleForDroid">Премиум (бесплатно для F-Droid)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Премиум</string>
     <string name="Premium_ChoosePlanForYou">Выберите план</string>
@@ -869,6 +904,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Scam-защита</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist проверка</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP группа</string>
+    <string name="Premium_UpgradeFeature_MevProtection">Защита MEV</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Авто-мониторинг рыночных трендов для ваших токенов</string>
@@ -876,6 +912,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">Эффективная авто-защита против скам и фишинг-атак</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Гарантия легальности ваших крипто-операций</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Быстрый и удобный доступ к команде.</string>
+    <string name="Premium_UpgradeFeature_MevProtection_Description">Защита MEV</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокого анализа. Просматривайте подборку Top 250 токенов на основе объема торгов, ликвидности бирж, поведения держателей и трендов в сети — все в одном месте. Фильтруйте, анализируйте и оставайтесь впереди.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отфильтруйте ненужное и очно сфокусируйтесь на токенах с высоким потенциалом. Используйте расширенный поиск для фильтрации тысяч токенов по объему торгов, блокчейну, капитализации, ценовым трендам, сектору и эффективности — и не только. Мощный, точный инструмент для поиска.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Не упускайте выгодные торговые возможности. Функция отслеживания трендов отправляет уведомления в режиме реального времени, основанные на сложном техническом анализе. Она поможет вам распознавать тенденции, видеть прорывы рынка и обходить подводные камни до того, как они возникнут. Реагируйте оперативно, ведите торговлю с умом и увеличивайте свою прибыль.</string>
@@ -883,6 +920,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Один неверный адрес, и ваша крипта потеряна навсегда. Unstoppable автоматически проверяет адреса получателей на подозрительные шаблоны и защищает от новейших фишинговых угроз, предотвращая отправку средств хакерам. Блокируйте мошеннические переводы до того, как они произойдут.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Защитите себя от рисковых и санкционированных контрагентов. Blacklist Checker автоматически проверяет адреса получателей по базам высокого риска, выявляя мошеннические схемы, fraudulent-транзакции и санкционированные объекты еще до отправки средств.Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Станьте частью эволюции. Присоединитесь к VIP-группе для прямого взаимодействия с нашей командой по технической поддержке. Голосуйте за предстоящие функции и получайте эксклюзивный предварительный доступ к будущим обновлениям. Ваш голос имеет значение — помогите сформировать криптокошелек нового поколения.</string>
+    <string name="Premium_UpgradeFeature_MevProtection_BigDescription">Защита MEV</string>
     <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_WhatUsersSay">Что говорят пользователи:</string>
@@ -1181,6 +1219,7 @@
     <!-- Blockchain Settings -->
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">до 2018 года</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
+    <!-- Nym VPN -->
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Включить Tor</string>
     <string name="Tor_Connection_Disable">Отключить Tor</string>
@@ -1448,6 +1487,7 @@
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
     <string name="BalanceSyncError_ButtonChangeSource">Изменить источник</string>
     <string name="BalanceSyncError_ButtonReport">Пожаловаться</string>
+    <string name="BalanceSyncError_Text">Ошибка синхронизации</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">Be Unstoppable</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
