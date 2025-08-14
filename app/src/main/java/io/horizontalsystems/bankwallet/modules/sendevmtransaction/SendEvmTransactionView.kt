@@ -68,6 +68,7 @@ fun SendEvmTransactionView(
     Column {
         items.forEach { sectionViewItem ->
             SectionView(sectionViewItem.viewItems, navController, statPage)
+            Spacer(Modifier.height(16.dp))
         }
 
         if (transactionFields.isNotEmpty()) {
@@ -122,8 +123,7 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
 }
 
 @Composable
-private fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
-    Spacer(Modifier.height(16.dp))
+fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
             is ViewItem.Subhead -> Subhead(item)
@@ -164,8 +164,13 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                 )
             }
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
-            is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
+            is ViewItem.Input -> TitleValueHex(item.title, item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)
+            is ViewItem.Fee -> DataFieldFee(
+                navController,
+                item.networkFee.primary.getFormattedPlain() ?: "---",
+                item.networkFee.secondary?.getFormattedPlain() ?: "---"
+            )
         }
     }
 }

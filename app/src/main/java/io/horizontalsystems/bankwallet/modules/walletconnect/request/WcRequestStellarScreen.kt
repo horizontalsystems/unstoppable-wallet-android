@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,12 +17,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.TitleValue
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionView
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -29,8 +29,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 
 @Composable
 fun WcRequestStellarScreenPre(navController: NavController) {
@@ -106,52 +104,14 @@ fun WcRequestStellarScreen(
         ) {
             VSpacer(12.dp)
 
-            uiState.contentItems.forEach { item ->
-                SectionUniversalLawrence {
-                    ContentItem(item, navController)
-                }
-                VSpacer(height = 16.dp)
-            }
-        }
-    }
-}
-
-@Composable
-private fun ContentItem(item: WCActionContentItem, navController: NavController) {
-    when (item) {
-        is WCActionContentItem.Fee -> {
-            val networkFee = item.networkFee
-            DataFieldFee(
-                navController,
-                networkFee?.primary?.getFormattedPlain() ?: "---",
-                networkFee?.secondary?.getFormattedPlain() ?: "---"
-            )
-        }
-
-        is WCActionContentItem.Paragraph -> {
-            caption_leah(
-                modifier = Modifier.padding(16.dp),
-                text = item.value.getString()
-            )
-        }
-        is WCActionContentItem.Multiline -> {
-
-        }
-
-        is WCActionContentItem.Section -> {
-            item.items.forEach {
-                ContentItem(it, navController)
-            }
-        }
-
-        is WCActionContentItem.SingleLine -> {
-            TitleValue(
-                ViewItem.Value(
-                    title = item.title.getString(),
-                    value = item.value?.getString() ?: "",
-                    type = ValueType.Regular
+            uiState.contentItems.forEach { sectionViewItem ->
+                SectionView(
+                    sectionViewItem.viewItems,
+                    navController,
+                    StatPage.WalletConnect
                 )
-            )
+                Spacer(Modifier.height(16.dp))
+            }
         }
     }
 }
