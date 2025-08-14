@@ -50,6 +50,7 @@
     <string name="Button_Apply">Aplicar</string>
     <string name="Button_SetAmount">Definir Quantidade</string>
     <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
+    <string name="Attention_Title">Atenção</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
     <string name="Error_AssetNotEnabled">O destinatário não ativou %s, portanto ele não pode recebê-lo.</string>
@@ -135,6 +136,7 @@
     <string name="Market_Field_PriceDiff">Preço</string>
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>
+    <string name="Market_All">Todos</string>
     <string name="Market_Search_Sections_RecentTitle">RECENTES</string>
     <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
     <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
@@ -146,6 +148,7 @@
     <string name="Market_Field_HighestVolume">Maior volume</string>
     <string name="Market_Field_LowestVolume">Menor volume</string>
     <string name="Market_Sort_PopupTitle">Organizar por</string>
+    <string name="Market_Filter_PopupTitle">Filtrar por</string>
     <string name="Market_BtcDominance">Dominação BTC</string>
     <string name="Market_SeeAll">Ver tudo</string>
     <string name="Market_PoweredByApi">Desenvolvido por API CoinGeko</string>
@@ -155,6 +158,7 @@
     <string name="Market_Tab_Pairs">Pares</string>
     <string name="Market_Tab_Sectors">Setores</string>
     <string name="Market_Tab_Watchlist">Catálogo</string>
+    <string name="Market_Tab_Earn">Ganhar</string>
     <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Signals">Sinais</string>
@@ -181,8 +185,10 @@
     <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecossistema</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Capitalização Total</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Valor total de mercado</string>
     <string name="MarketGlobalMetrics_Volume">Volume em 24 horas</string>
+    <string name="MarketGlobalMetrics_VolumeShort">Vol. em 24h</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrada de ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas</string>
@@ -199,6 +205,9 @@
     <string name="MarketEtf_Inflow">Receita</string>
     <string name="MarketEtf_Outflow">Despesa</string>
     <string name="MarketEtf_TotalNetAssets">Total de Ativos Líquidos</string>
+    <string name="MarketEtf_BitcoinEtf">ETFs Bitcoin</string>
+    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
+    <string name="MarketEtf_EtfDescription">Entrada líquida de todos os ETFs %s , incluindo fundos locais e com base no futuro.</string>
     <!--Market Search-->
     <string name="EmptyResults">Nenhum resultado encontrado</string>
     <string name="Market_Filters">Filtros</string>
@@ -218,6 +227,8 @@
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
     <string name="Market_Filter_OutperformedEth">ETH superado</string>
     <string name="Market_Filter_OutperformedBnb">BNB superado</string>
+    <string name="Market_Filter_OutperformedGold">Ouro realizado</string>
+    <string name="Market_Filter_OutperformedSnp">Saída S&amp;P 500</string>
     <string name="Market_Filter_PriceCloseTo">Preço Próximo a</string>
     <string name="Market_Filter_PriceCloseToAth">Preço próximo a ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Preço próximo a ATL</string>
@@ -286,6 +297,23 @@
     <string name="Market_Sorting_HighestCap">Maior capitalização</string>
     <string name="Market_Sorting_LowestCap">Menor capitalização</string>
     <string name="Market_Filters_Select">Selecionado %d</string>
+    <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">Quer desbloquear mais oportunidades de ganhar?</string>
+    <string name="Market_Vaults_UnlockPremium">Desbloquear Premium</string>
+    <string name="Market_Vaults_Sorting_APY">Maior APY</string>
+    <string name="Market_Vaults_Sorting_TVL">Maior TVL</string>
+    <string name="Market_Vaults_Filter_AllAssets">Todas as mídias</string>
+    <string name="Market_Vaults_Filter_AllChains">Todas as cadeias</string>
+    <string name="Market_Vaults_Filter_ETHYield">Rendimento ETH</string>
+    <string name="Market_Vaults_Filter_USDYield">Rendimento em USD</string>
+    <string name="Market_Vaults_OpenDapp">Abrir dapp</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d Correntes</string>
+    <string name="Market_Vaults_Vault_TVL">VTB</string>
+    <string name="Market_Vaults_Vault_Network">Rede</string>
+    <string name="Market_Vaults_Vault_Protocol">Protocol</string>
+    <string name="Market_Vaults_Vault_UnderlyingToken">Token subjacente</string>
+    <string name="Market_Vaults_Vault_Holders">Detentores</string>
+    <string name="Market_Vaults_ChartTvl">VTB</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-Cadeia</string>
@@ -293,6 +321,7 @@
     <string name="Balance_Withdraw">Sacar</string>
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Send">Enviar</string>
+    <string name="Balance_ChooseCoin">Escolher Moeda</string>
     <string name="Balance_Deposit">Receber</string>
     <string name="Balance_Receive">Receber</string>
     <string name="Balance_Address">Endereço</string>
@@ -335,6 +364,7 @@
     <string name="Balance_Receive_ActivationRequired">Para receber um endereço você precisa ativar o token. Isso é necessário pela rede Stellar.</string>
     <string name="Balance_Receive_Trustline">Trustline</string>
     <string name="Balance_Reserved_Title">Reservado</string>
+    <string name="Balance_WalletAddress">Endereço da carteira</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
@@ -576,6 +606,8 @@
     <string name="SwapConfirm_FetchingFinalQuote">Buscando cotação final</string>
     <string name="SwapWarning_SlippageNotApplicable_Title">Slippage não é aplicável</string>
     <string name="SwapWarning_SlippageNotApplicable_Description">O mínimo de slippage aplicável para esta citação é %s%%</string>
+    <string name="SwapWarning_SlippageNotAvailable_Title">Nenhum Controle de Slippage</string>
+    <string name="SwapWarning_SlippageNotAvailable_Description">Os swaps entre cadeias dependem de liquidez e atrasos de terceiros, o que pode afetar o valor final.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configurações de troca</string>
     <string name="SwapSettings_SlippageTitle">Tolerância de Slippage</string>
@@ -763,6 +795,7 @@
     <string name="Settings_Contact_ViaEmail">por e-mail</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
     <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
+    <string name="Settings_Support">SUPORTE</string>
     <string name="Settings_VipSupport">Grupo VIP</string>
     <string name="Settings_BotSupport">Suporte por BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Aprenda e domine cripto através de vídeos exclusivos. Conheça-nos informalmente. Seja o primeiro a ver as coisas em que trabalhamos.</string>
@@ -794,6 +827,7 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 Minutos</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minutos</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
+    <string name="Mev_Protection">Proteção MEV</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Verificador de endereço</string>
     <string name="SettingsAddressChecker_RecipientCheck">Verificação do destinatário</string>
@@ -845,6 +879,7 @@
     <string name="SettingsSubscription_SubscriptionInfo">Próxima data de pagamento: %s. Você pode gerenciar sua assinatura na seção Gerenciar Assinatura.</string>
     <string name="SettingsSubscription_ManageSubscription">Gerenciar Assinatura</string>
     <string name="Period_Days">%s dias</string>
+    <string name="Premium_TitleForDroid">Premium (Gratuito para F-Droid)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Prêmio</string>
     <string name="Premium_ChoosePlanForYou">Escolha o plano</string>
@@ -871,6 +906,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Proteção contra Fraudes</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Verificação de Lista Negra</string>
     <string name="Premium_UpgradeFeature_VipSupport">Grupo VIP</string>
+    <string name="Premium_UpgradeFeature_MevProtection">Proteção MEV</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Acesso às listas top-100 por critérios-chave</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtragem multinível em múltiplos parâmetros</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoramento automático de tendências de mercado para seus tokens</string>
@@ -878,6 +914,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">Proteção automática eficaz contra fraudes e ataques de phishing</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Garantia de legalidade para suas operações com criptomoedas</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
+    <string name="Premium_UpgradeFeature_MevProtection_Description">Proteção MEV</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Sua ferramenta tudo-em-um para análise profunda. Navegue pelas listas de tokens Top 250 selecionados com base no volume de negociação, liquidez da corretora, comportamento do holder e tendências on-chain — tudo de uma vez. Filtre, analise e fique à frente.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Abandone o ruído e concentre-se em tokens de alto potencial com precisão. Use a Pesquisa Avançada para filtrar milhares de tokens por volume de negociação, blockchain, capitalização de mercado, tendências de preço, setor e desempenho — e muito mais. Poderoso, preciso e criado para descobrir.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Nunca mais perca uma oportunidade de negociação. O Monitoramento de Tendências fornece alertas em tempo real com base em análises técnicas avançadas, ajudando você a identificar tendências, detectar rompimentos e evitar armadilhas antes que elas aconteçam. Aja rápido, negocie de forma inteligente e maximize os ganhos.</string>
@@ -885,6 +922,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Um endereço errado e sua cripto se vai para sempre. A Unstoppable verifica automaticamente os endereços dos destinatários em busca de padrões suspeitos e defende contra as últimas ameaças de phishing, impedindo que você envie fundos para um hacker. Bloqueie transferências fraudulentas antes que elas aconteçam.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Proteja-se de entidades arriscadas e sancionadas. A Verificação de Lista Negra verifica automaticamente os endereços dos destinatários em relação a bancos de dados de alto risco, sinalizando golpes, fraudes e entidades sancionadas antes de você enviar. Se um endereço estiver na lista negra, você saberá antes de cometer um erro caro. Proteja suas transações. Mantenha sua criptomoeda limpa. Mantenha a conformidade.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seja parte da evolução. Junte-se ao Grupo VIP para se conectar diretamente com nossa equipe de suporte técnico. Vote nas próximas funcionalidades e tenha uma prévia exclusiva das atualizações futuras. Sua voz importa—ajude a moldar a carteira de criptomoedas de próxima geração.</string>
+    <string name="Premium_UpgradeFeature_MevProtection_BigDescription">Proteção MEV</string>
     <string name="Premium_HighlyRatedSecurity">Segurança altamente qualificada, privacidade excepcional e uma carteira verdadeiramente sem custódia.</string>
     <string name="Premium_ApprovedBy">Aprovado e Auditado Por:</string>
     <string name="Premium_WhatUsersSay">O que os usuários estão dizendo:</string>
@@ -1188,6 +1226,7 @@
     <!-- Blockchain Settings -->
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Comum antes de 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Comum depois de 2018</string>
+    <!-- Nym VPN -->
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Ativar Tor</string>
     <string name="Tor_Connection_Disable">Desativar Tor</string>
@@ -1455,6 +1494,7 @@
     <string name="BalanceSyncError_ButtonRetry">Tentar de novo</string>
     <string name="BalanceSyncError_ButtonChangeSource">Mudar a fonte</string>
     <string name="BalanceSyncError_ButtonReport">Reportar</string>
+    <string name="BalanceSyncError_Text">Erro de sincronização</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
     <string name="ProUsersInfo_UnstoppablePass">Senha Unstoppable</string>
