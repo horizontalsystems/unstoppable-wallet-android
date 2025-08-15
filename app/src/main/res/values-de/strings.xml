@@ -500,6 +500,7 @@
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Verbinde…</string>
     <string name="WalletConnect_NewConnect">Neue Verbindung</string>
+    <string name="WalletConnect_SendTransactionRequest_Title">Transaktion senden</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Senden</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
