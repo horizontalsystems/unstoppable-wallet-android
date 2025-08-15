@@ -1,111 +1,41 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
-import io.horizontalsystems.bankwallet.core.isNative
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
-import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
-import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarAddressService
-import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarMinimumAmountService
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionService(false) {
-    override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
+class SendTransactionServiceStellar(val stellarKit: StellarKit) : AbstractSendTransactionService(false) {
+    override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Stellar())
 
-    private val adapter = App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)!!
-    private var fee: BigDecimal? = adapter.fee
+    private var fee: BigDecimal? = stellarKit.sendFee
 
-    private val amountService = SendAmountService(
-        amountValidator = AmountValidator(),
-        coinCode = token.coin.code,
-        availableBalance = adapter.maxSendableBalance,
-        leaveSomeBalanceForFee = token.type.isNative
-    )
-    private val addressService = SendStellarAddressService()
-    private val minimumAmountService = SendStellarMinimumAmountService(adapter)
     private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Stellar, TokenType.Native)) ?: throw IllegalArgumentException()
 
-    private var amountState = amountService.stateFlow.value
-    private var addressState = addressService.stateFlow.value
-    private var minimumAmountState = minimumAmountService.stateFlow.value
-    private var memo: String? = null
     private var transactionEnvelope: String? = null
 
-    override fun start(coroutineScope: CoroutineScope) {
-        coroutineScope.launch(Dispatchers.Default) {
-            amountService.stateFlow.collect {
-                handleUpdatedAmountState(it)
-            }
-        }
-        coroutineScope.launch(Dispatchers.Default) {
-            addressService.stateFlow.collect {
-                handleUpdatedAddressState(it)
-            }
-        }
-        coroutineScope.launch(Dispatchers.Default) {
-            minimumAmountService.stateFlow.collect {
-                handleUpdatedMinimumAmountState(it)
-            }
-        }
-    }
-
-    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
-        this.amountState = amountState
-
-        emitState()
-    }
-
-    private suspend fun handleUpdatedAddressState(addressState: SendStellarAddressService.State) {
-        this.addressState = addressState
-
-        minimumAmountService.setValidAddress(addressState.validAddress)
-
-        emitState()
-    }
-
-    private fun handleUpdatedMinimumAmountState(state: SendStellarMinimumAmountService.State) {
-        minimumAmountState = state
-
-        amountService.setMinimumSendAmount(minimumAmountState.minimumAmount)
-
-        emitState()
-    }
+    override fun start(coroutineScope: CoroutineScope) = Unit
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Stellar)
 
-        when (data) {
-            is SendTransactionData.Stellar.Regular -> {
-                memo = data.memo
-                addressService.setAddress(Address(data.address))
-                amountService.setAmount(data.amount)
-            }
-            is SendTransactionData.Stellar.WithTransactionEnvelope -> {
-                transactionEnvelope = data.transactionEnvelope
-                fee = StellarKit.estimateFee(data.transactionEnvelope)
-
-                emitState()
-            }
+        if (data is SendTransactionData.Stellar.WithTransactionEnvelope) {
+            transactionEnvelope = data.transactionEnvelope
+            fee = StellarKit.estimateFee(data.transactionEnvelope)
         }
+
+        emitState()
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val transactionEnvelope = transactionEnvelope
         if (transactionEnvelope != null) {
-            adapter.send(transactionEnvelope)
-        } else {
-            adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+            stellarKit.sendTransaction(transactionEnvelope)
         }
 
         return SendTransactionResult.Stellar
@@ -117,7 +47,7 @@ class SendTransactionServiceStellar(token: Token) : AbstractSendTransactionServi
             getAmountData(CoinValue(feeToken, it))
         },
         cautions = listOf(),
-        sendable = transactionEnvelope != null || (amountState.canBeSend && addressState.canBeSend && minimumAmountState.canBeSend),
+        sendable = transactionEnvelope != null,
         loading = false,
         fields = listOf(),
         extraFees = extraFees
