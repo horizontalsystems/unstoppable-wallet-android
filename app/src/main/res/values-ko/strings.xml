@@ -118,7 +118,6 @@
     <string name="Restore_PrivateKey_InvalidKey">잘못된 암호입니다</string>
     <string name="SelectContacts_All">모든</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
-    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">더 빠른 동기화를 위해 지갑의 생일 키를 입력하세요.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000(선택 사항)</string>
     <string name="Restore_ZCash_RestoreAsNew">새 것으로 복원</string>
