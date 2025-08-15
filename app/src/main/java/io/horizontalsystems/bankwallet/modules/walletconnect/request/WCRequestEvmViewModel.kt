@@ -27,7 +27,7 @@ private const val ETH_SIGN_METHOD = "eth_sign"
 private const val SEND_TRANSACTION_METHOD = "eth_sendTransaction"
 private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
 
-class WCNewRequestViewModel(
+class WCRequestEvmViewModel(
     private val accountManager: IAccountManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val wcManager: WCManager,
@@ -188,7 +188,7 @@ class WCNewRequestViewModel(
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCNewRequestViewModel(
+            return WCRequestEvmViewModel(
                 App.accountManager,
                 App.evmBlockchainManager,
                 App.wcManager

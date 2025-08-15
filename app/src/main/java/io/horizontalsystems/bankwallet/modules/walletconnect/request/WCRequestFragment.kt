@@ -72,12 +72,12 @@ class WCRequestFragment : BaseComposeFragment() {
 
     @Composable
     fun WcRequestEvm(navController: NavController) {
-        val wcRequestViewModel = viewModel<WCNewRequestViewModel>(factory = WCNewRequestViewModel.Factory())
+        val wcRequestEvmViewModel = viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
         val composableScope = rememberCoroutineScope()
-        when (val sessionRequestUI = wcRequestViewModel.sessionRequestUi) {
+        when (val sessionRequestUI = wcRequestEvmViewModel.sessionRequestUi) {
             is SessionRequestUI.Content -> {
                 if (sessionRequestUI.method == "eth_sendTransaction") {
-                    val blockchainType = wcRequestViewModel.blockchainType ?: return
+                    val blockchainType = wcRequestEvmViewModel.blockchainType ?: return
                     val transaction =
                         try {
                             val ethTransaction = Gson().fromJson(
@@ -97,7 +97,7 @@ class WCRequestFragment : BaseComposeFragment() {
                         sessionRequestUI.peerUI.peerName
                     )
                 } else if (sessionRequestUI.method == "eth_signTransaction") {
-                    val blockchainType = wcRequestViewModel.blockchainType ?: return
+                    val blockchainType = wcRequestEvmViewModel.blockchainType ?: return
 
                     val transaction = try {
                         val ethTransaction = Gson().fromJson(
@@ -123,7 +123,7 @@ class WCRequestFragment : BaseComposeFragment() {
                         onAllow = {
                             composableScope.launch {
                                 try {
-                                    wcRequestViewModel.allow()
+                                    wcRequestEvmViewModel.allow()
                                     navController.popBackStack()
                                 } catch (e: Throwable) {
                                     showError(e)
@@ -134,7 +134,7 @@ class WCRequestFragment : BaseComposeFragment() {
                         onDecline = {
                             composableScope.launch {
                                 try {
-                                    wcRequestViewModel.reject()
+                                    wcRequestEvmViewModel.reject()
                                     navController.popBackStack()
                                 } catch (e: Throwable) {
                                     showError(e)
