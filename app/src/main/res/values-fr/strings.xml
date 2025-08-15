@@ -120,7 +120,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Clé invalide</string>
     <string name="SelectContacts_All">Tout</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
-    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Saisissez la hauteur de l\'anniversaire du portefeuille pour une synchronisation plus rapide.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (facultatif)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurer à l\'état d\'usine</string>
