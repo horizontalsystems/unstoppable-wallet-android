@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 
 class RestoreViewModel: ViewModel() {
 
@@ -19,7 +19,7 @@ class RestoreViewModel: ViewModel() {
     var fileBackup: Boolean = false
         private set
 
-    var zCashConfig: ZCashConfig? = null
+    var birthdayHeightConfig: BirthdayHeightConfig? = null
         private set
 
     var statPage: StatPage? = null
@@ -35,8 +35,8 @@ class RestoreViewModel: ViewModel() {
         this.statPage = statPage
     }
 
-    fun setZCashConfig(config: ZCashConfig?) {
-        zCashConfig = config
+    fun setZCashConfig(config: BirthdayHeightConfig?) {
+        birthdayHeightConfig = config
     }
 
 }

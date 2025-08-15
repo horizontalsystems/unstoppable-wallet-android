@@ -15,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 class RestoreSettingsService(
     private val manager: RestoreSettingsManager,
     private val zcashBirthdayProvider: ZcashBirthdayProvider
-    ) : Clearable {
+) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
     val rejectApproveSettingsObservable = PublishSubject.create<Token>()
@@ -51,13 +51,17 @@ class RestoreSettingsService(
         manager.save(settings, account, blockchainType)
     }
 
-    fun enter(zcashConfig: ZCashConfig, token: Token) {
+    fun enter(config: BirthdayHeightConfig, token: Token) {
         val settings = RestoreSettings()
-        settings.birthdayHeight =
-            if (zcashConfig.restoreAsNew)
-                zcashBirthdayProvider.getLatestCheckpointBlockHeight()
-            else
-                zcashConfig.birthdayHeight?.toLongOrNull()
+        settings.birthdayHeight = if (config.restoreAsNew) {
+            when (token.blockchainType) {
+                BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
+                BlockchainType.Monero -> -1
+                else -> null
+            }
+        } else {
+            config.birthdayHeight?.toLongOrNull()
+        }
 
         val tokenWithSettings = TokenWithSettings(token, settings)
         approveSettingsObservable.onNext(tokenWithSettings)

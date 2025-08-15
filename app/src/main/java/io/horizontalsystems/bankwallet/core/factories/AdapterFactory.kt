@@ -174,7 +174,7 @@ class AdapterFactory(
                 StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
             }
             BlockchainType.Monero -> {
-                MoneroAdapter.create(context, wallet)
+                MoneroAdapter.create(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType))
             }
 
             else -> null

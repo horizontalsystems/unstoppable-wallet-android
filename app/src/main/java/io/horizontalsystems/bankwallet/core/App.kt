@@ -209,8 +209,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var recentAddressManager: RecentAddressManager
         lateinit var roiManager: RoiManager
         var trialExpired: Boolean = false
-
-//        lateinit var moneroKit: MoneroKit
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -475,7 +473,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         roiManager = RoiManager(localStorage)
 
-//        moneroKit = Mone(this)
         Timber.plant(Timber.DebugTree())
         startTasks()
     }
@@ -606,10 +603,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmLabelManager.sync()
             contactsRepository.initialize()
             trialExpired = !UserSubscriptionManager.hasFreeTrial()
-
-//            Log.e("eee", "restore monero wallet")
-//
-//            moneroKit.restoreWallet("spout justice gels large agile ladder weavers dice utmost ought reduce nomad ashtray biscuit boyfriend cadets uncle hashing hounded touchy october sawmill nagged oozed touchy")
         }
 
         coroutineScope.launch {

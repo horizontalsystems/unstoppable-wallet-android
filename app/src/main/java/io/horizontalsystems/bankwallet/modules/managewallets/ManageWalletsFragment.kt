@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -77,10 +77,13 @@ private fun ManageWalletsScreen(
 ) {
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
 
-    if (restoreSettingsViewModel.openZcashConfigure != null) {
-        restoreSettingsViewModel.zcashConfigureOpened()
+    restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
+        restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromBottomForResult<ZcashConfigure.Result>(R.id.zcashConfigure) {
+        navController.slideFromBottomForResult<BirthdayHeightConfig.Result>(
+            resId = R.id.zcashConfigure,
+            input = token
+        ) {
             if (it.config != null) {
                 restoreSettingsViewModel.onEnter(it.config)
             } else {
@@ -153,7 +156,10 @@ private fun ManageWalletsScreen(
                                 }
                             },
                             onInfoClick = {
-                                navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
+                                navController.slideFromBottom(
+                                    R.id.configuredTokenInfo,
+                                    viewItem.item
+                                )
 
                                 stat(
                                     page = StatPage.CoinManager,
