@@ -526,6 +526,8 @@
     <string name="WalletConnect_Status_Online">On-line</string>
     <string name="WalletConnect_Status_Connecting">Conectando...</string>
     <string name="WalletConnect_NewConnect">Nova Conexão</string>
+    <string name="WalletConnect_SendTransactionRequest_Title">Enviar transação</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">Enviar</string>
     <string name="WalletConnect_SignMessageRequest_Title">Solicitação de assinatura</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Mensagem não assinada</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Assinar</string>
