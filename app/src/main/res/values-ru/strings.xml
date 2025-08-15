@@ -122,7 +122,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="SelectContacts_All">Все</string>
     <string name="Restore_BirthdayHeight">Блок создания</string>
-    <string name="Restore_ZCash">Zcash</string>
+    <string name="Restore_ZCash">Зкаш</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
