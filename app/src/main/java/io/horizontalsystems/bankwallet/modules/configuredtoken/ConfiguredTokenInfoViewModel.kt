@@ -45,6 +45,7 @@ class ConfiguredTokenInfoViewModel(
                 ConfiguredTokenInfoType.Bch
             }
             TokenType.Native -> when (token.blockchainType) {
+                BlockchainType.Monero,
                 BlockchainType.Zcash -> {
                     ConfiguredTokenInfoType.BirthdayHeight(getBirthdayHeight(token))
                 }

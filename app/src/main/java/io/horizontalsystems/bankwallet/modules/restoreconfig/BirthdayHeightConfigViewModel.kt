@@ -1,12 +1,12 @@
-package io.horizontalsystems.bankwallet.modules.zcashconfigure
+package io.horizontalsystems.bankwallet.modules.restoreconfig
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 
-class ZcashConfigureViewModel : ViewModel() {
+class BirthdayHeightConfigViewModel : ViewModel() {
 
     var uiState by mutableStateOf(
         ZCashConfigView(
@@ -51,7 +51,7 @@ class ZcashConfigureViewModel : ViewModel() {
             restoreAsNew = uiState.restoreAsNew,
             restoreAsOld = uiState.restoreAsOld,
             doneButtonEnabled = uiState.doneButtonEnabled,
-            closeWithResult = ZCashConfig(uiState.birthdayHeight, uiState.restoreAsNew)
+            closeWithResult = BirthdayHeightConfig(uiState.birthdayHeight, uiState.restoreAsNew)
         )
     }
 
@@ -71,5 +71,5 @@ data class ZCashConfigView(
     val restoreAsNew: Boolean,
     val restoreAsOld: Boolean,
     val doneButtonEnabled: Boolean,
-    val closeWithResult: ZCashConfig? = null
+    val closeWithResult: BirthdayHeightConfig? = null
 )

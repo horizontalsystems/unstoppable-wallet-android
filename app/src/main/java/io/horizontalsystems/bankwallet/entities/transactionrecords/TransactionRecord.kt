@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -51,14 +50,12 @@ abstract class TransactionRecord(
     }
 
     open fun status(lastBlockHeight: Int?): TransactionStatus {
-        Log.e("eee", "status: lastblockheight= $lastBlockHeight, blockHeight = $blockHeight")
         if (failed) {
             return TransactionStatus.Failed
         } else if (blockHeight != null && lastBlockHeight != null) {
             val threshold = confirmationsThreshold ?: 1
             val confirmations = lastBlockHeight - blockHeight.toInt() + 1
 
-            Log.e("eee", "threshold = $threshold, confirmations = ${lastBlockHeight - blockHeight.toInt() + 1}")
             return if (confirmations >= threshold) {
                 TransactionStatus.Completed
             } else {

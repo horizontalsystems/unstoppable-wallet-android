@@ -54,13 +54,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun ManageWalletsScreen(
     mainViewModel: RestoreViewModel,
-    openZCashConfigure: () -> Unit,
+    openBirthdayHeightConfigure: (Token) -> Unit,
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
@@ -90,7 +91,7 @@ fun ManageWalletsScreen(
     val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
     val restored = viewModel.restored
 
-    mainViewModel.zCashConfig?.let { config ->
+    mainViewModel.birthdayHeightConfig?.let { config ->
         restoreSettingsViewModel.onEnter(config)
         mainViewModel.setZCashConfig(null)
     }
@@ -100,9 +101,9 @@ fun ManageWalletsScreen(
         mainViewModel.cancelZCashConfig = false
     }
 
-    if (restoreSettingsViewModel.openZcashConfigure != null) {
-        restoreSettingsViewModel.zcashConfigureOpened()
-        openZCashConfigure.invoke()
+    restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
+        restoreSettingsViewModel.birthdayHeightConfigOpened()
+        openBirthdayHeightConfigure.invoke(token)
 
         stat(page = StatPage.RestoreSelect, event = StatEvent.Open(StatPage.BirthdayInput))
     }

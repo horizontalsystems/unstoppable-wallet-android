@@ -202,6 +202,7 @@ val BlockchainType.imageUrl: String
 
 val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
     get() = when (this) {
+        BlockchainType.Monero,
         BlockchainType.Zcash -> listOf(RestoreSettingType.BirthdayHeight)
         else -> listOf()
     }

@@ -20,7 +20,8 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.Restor
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
-import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigureScreen
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
@@ -46,7 +47,8 @@ private fun RestoreAccountNavHost(
     inclusive: Boolean
 ) {
     val navController = rememberNavController()
-    val restoreMenuViewModel: RestoreMenuViewModel = viewModel(factory = RestoreMenuModule.Factory())
+    val restoreMenuViewModel: RestoreMenuViewModel =
+        viewModel(factory = RestoreMenuModule.Factory())
     val mainViewModel: RestoreViewModel = viewModel()
     NavHost(
         navController = navController,
@@ -82,7 +84,13 @@ private fun RestoreAccountNavHost(
         composablePage("restore_select_coins") {
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
-                openZCashConfigure = { navController.navigate("zcash_configure") },
+                openBirthdayHeightConfigure = { token ->
+                    when (token.blockchainType) {
+                        BlockchainType.Zcash -> navController.navigate("zcash_configure")
+                        BlockchainType.Monero -> navController.navigate("monero_configure")
+                        else -> Unit
+                    }
+                },
                 onBackClick = { navController.popBackStack() }
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
         }
@@ -94,7 +102,21 @@ private fun RestoreAccountNavHost(
             )
         }
         composablePopup("zcash_configure") {
-            ZcashConfigureScreen(
+            BirthdayHeightConfigScreen(
+                blockchainType = BlockchainType.Zcash,
+                onCloseWithResult = { config ->
+                    mainViewModel.setZCashConfig(config)
+                    navController.popBackStack()
+                },
+                onCloseClick = {
+                    mainViewModel.cancelZCashConfig = true
+                    navController.popBackStack()
+                }
+            )
+        }
+        composablePopup("monero_configure") {
+            BirthdayHeightConfigScreen(
+                blockchainType = BlockchainType.Monero,
                 onCloseWithResult = { config ->
                     mainViewModel.setZCashConfig(config)
                     navController.popBackStack()

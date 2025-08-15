@@ -260,7 +260,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment" />
     <fragment
         android:id="@+id/zcashConfigure"
-        android:name="io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure"/>
+        android:name="io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig"/>
     <fragment
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment" />
