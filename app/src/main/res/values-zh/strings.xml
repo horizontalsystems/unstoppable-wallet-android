@@ -522,6 +522,8 @@
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <string name="WalletConnect_NewConnect">新连接</string>
+    <string name="WalletConnect_SendTransactionRequest_Title">发送交易</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">发送​​</string>
     <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
