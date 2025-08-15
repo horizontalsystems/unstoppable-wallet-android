@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -12,6 +15,8 @@ import io.horizontalsystems.bankwallet.core.ISendMoneroAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.SyncState
 import io.reactivex.BackpressureStrategy
@@ -20,6 +25,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import kotlin.math.roundToInt
 
@@ -27,6 +33,7 @@ class MoneroAdapter(
     private val kit: MoneroKit,
     private val transactionsProvider: MoneroTransactionsProvider,
     private val transactionsAdapter: MoneroTransactionsAdapter,
+    private val backgroundManager: BackgroundManager,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, ITransactionsAdapter by transactionsAdapter {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -71,6 +78,14 @@ class MoneroAdapter(
         kit.allTransactionsFlow.collectWith(coroutineScope, transactionsProvider::onTransactions)
 
         kit.start()
+
+        coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterBackground) {
+                    kit.saveState()
+                }
+            }
+        }
     }
 
     override fun stop() {
@@ -97,7 +112,6 @@ class MoneroAdapter(
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
         return kit.estimateFee(amountInPiconero, address, memo).scaledDown(DECIMALS)
     }
-
     companion object {
         const val DECIMALS = 12
 
@@ -120,7 +134,8 @@ class MoneroAdapter(
             return MoneroAdapter(
                 kit,
                 transactionsProvider,
-                transactionsAdapter
+                transactionsAdapter,
+                App.backgroundManager
             )
 
         }
