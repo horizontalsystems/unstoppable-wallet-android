@@ -96,16 +96,13 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     ) {
         sessionRequestEvent = null
 
-        val sessionRequestForAccount =
-            App.wcSessionManager.getCurrentSessionRequests().reversed().firstOrNull()
-                ?: return
+        val newSessionRequest = App.wcSessionManager.getNewSessionRequest() ?: return
+        if (App.wcWalletRequestHandler.handle(newSessionRequest)) return
 
-        if (App.wcWalletRequestHandler.handle(sessionRequestForAccount)) return
-
-        sessionRequestEvent = sessionRequestForAccount
+        sessionRequestEvent = newSessionRequest
 
         scope.launch {
-            _walletEvents.emit(sessionRequestForAccount)
+            _walletEvents.emit(newSessionRequest)
             _pendingRequestEvents.emit(Unit)
         }
     }
