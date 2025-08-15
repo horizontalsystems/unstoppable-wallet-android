@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 
-class WCRequestStellarPreViewModel : ViewModelUiState<DataState<WCRequestStellarPreUiState>>() {
+class WCRequestPreViewModel : ViewModelUiState<DataState<WCRequestPreUiState>>() {
     private val sessionRequest = WCDelegate.sessionRequestEvent
     private val wcAction = App.wcManager.getActionForRequest(sessionRequest)
 
@@ -23,7 +23,7 @@ class WCRequestStellarPreViewModel : ViewModelUiState<DataState<WCRequestStellar
 
         else -> {
             DataState.Success(
-                WCRequestStellarPreUiState(
+                WCRequestPreUiState(
                     wcAction = wcAction,
                     sessionRequest = sessionRequest,
                 )
@@ -34,12 +34,12 @@ class WCRequestStellarPreViewModel : ViewModelUiState<DataState<WCRequestStellar
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCRequestStellarPreViewModel() as T
+            return WCRequestPreViewModel() as T
         }
     }
 }
 
-data class WCRequestStellarPreUiState(
+data class WCRequestPreUiState(
     val wcAction: AbstractWCAction,
     val sessionRequest: Wallet.Model.SessionRequest
 )

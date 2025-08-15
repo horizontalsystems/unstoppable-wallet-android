@@ -29,13 +29,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 @Composable
-fun WcRequestStellarScreen(
+fun WcRequestScreen(
     navController: NavController,
     sessionRequest: Wallet.Model.SessionRequest,
     wcAction: AbstractWCAction
 ) {
-    val viewModel = viewModel<WCRequestStellarViewModel>(
-        factory = WCRequestStellarViewModel.Factory(sessionRequest, wcAction)
+    val viewModel = viewModel<WCRequestViewModel>(
+        factory = WCRequestViewModel.Factory(sessionRequest, wcAction)
     )
 
     val uiState = viewModel.uiState

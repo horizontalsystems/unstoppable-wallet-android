@@ -11,10 +11,10 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WCRequestStellarViewModel(
+class WCRequestViewModel(
     private val sessionRequest: Wallet.Model.SessionRequest,
     private val wcAction: AbstractWCAction
-) : ViewModelUiState<WCRequestStellarUiState>() {
+) : ViewModelUiState<WCRequestUiState>() {
 
     private var approveInProgress = false
     private var finish: Boolean = false
@@ -34,7 +34,7 @@ class WCRequestStellarViewModel(
         wcAction.start(viewModelScope)
     }
 
-    override fun createState() = WCRequestStellarUiState(
+    override fun createState() = WCRequestUiState(
         title = wcAction.getTitle(),
         finish = finish,
         runnable = !approveInProgress && actionState.runnable,
@@ -91,12 +91,12 @@ class WCRequestStellarViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCRequestStellarViewModel(sessionRequest, wcAction) as T
+            return WCRequestViewModel(sessionRequest, wcAction) as T
         }
     }
 }
 
-data class WCRequestStellarUiState(
+data class WCRequestUiState(
     val title: TranslatableString,
     val finish: Boolean,
     val runnable: Boolean,
