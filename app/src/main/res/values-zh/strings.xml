@@ -120,7 +120,7 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="SelectContacts_All">所有</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
-    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
     <string name="Restore_ZCash_RestoreAsNew">恢复为新的</string>
