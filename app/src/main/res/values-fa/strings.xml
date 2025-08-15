@@ -185,6 +185,7 @@
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <string name="WalletConnect_NewConnect">اتصال جدید</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">ارسال</string>
     <string name="WalletConnect_SignMessageRequest_Title">امضای درخواست</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">پیام برای امضا</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
