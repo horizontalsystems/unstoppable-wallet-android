@@ -57,7 +57,7 @@ class WCRequestFragment : BaseComposeFragment() {
         } else if (blockchainType.isEvm) {
             WcRequestEvm(navController)
         } else if (blockchainType is BlockchainType.Stellar) {
-            WcRequestStellarScreenPre(navController)
+            WcRequestPreScreen(navController)
         } else {
             WcRequestError(navController)
         }
