@@ -484,6 +484,7 @@
     <string name="WalletConnect_Status_Online">Çevrimiçi</string>
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">Gönder</string>
     <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
