@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionView
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -26,24 +25,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-
-@Composable
-fun WcRequestStellarScreenPre(navController: NavController) {
-    val viewModelPre = viewModel<WCRequestStellarPreViewModel>(
-        factory = WCRequestStellarPreViewModel.Factory()
-    )
-
-    val uiState = viewModelPre.uiState
-
-    if (uiState is DataState.Success) {
-        WcRequestStellarScreen(navController, uiState.data.sessionRequest, uiState.data.wcAction)
-    } else if (uiState is DataState.Error) {
-        ListErrorView(uiState.error.message ?: "Error") { }
-    }
-}
 
 @Composable
 fun WcRequestStellarScreen(
