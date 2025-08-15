@@ -118,7 +118,6 @@
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="SelectContacts_All">Hepsi</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
-    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Daha hızlı senkronizasyon için cüzdanın doğum günü yüksekliğini girin.</string>
     <string name="Restore_ZCash_Birthday_Hint">00000000 (isteğe bağlı)</string>
     <string name="Restore_ZCash_RestoreAsNew">Yeni olarak geri yükle</string>
