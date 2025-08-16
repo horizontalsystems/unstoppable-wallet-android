@@ -189,6 +189,7 @@ val Blockchain.description: String
         BlockchainType.Tron -> "TRX, TRC20 tokens"
         BlockchainType.Ton -> "TON"
         BlockchainType.Stellar -> "XLM, Stellar assets"
+        BlockchainType.Monero -> "XMR"
         else -> ""
     }
 
