@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.blockchainsettings
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
@@ -18,6 +19,7 @@ class BlockchainSettingsService(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
+    private val moneroNodeManager: MoneroNodeManager
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -54,7 +56,9 @@ class BlockchainSettingsService(
             }
         }
 
-        syncBlockchainItems()
+        coroutineScope.launch {
+            syncBlockchainItems()
+        }
     }
 
     fun stop() {
@@ -78,7 +82,12 @@ class BlockchainSettingsService(
             solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
         }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + solanaBlockchainItems).sortedBy { it.order }
+        val moneroBlockchainItems = mutableListOf<BlockchainItem>()
+        moneroNodeManager.blockchain?.let {
+            moneroBlockchainItems.add(BlockchainItem.Monero(it, moneroNodeManager.currentNode))
+        }
+
+        blockchainItems = (btcBlockchainItems +  evmBlockchainItems + solanaBlockchainItems + moneroBlockchainItems).sortedBy { it.order }
     }
 
 }

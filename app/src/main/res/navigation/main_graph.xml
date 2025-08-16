@@ -279,6 +279,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkFragment"
         android:label="SolanaNetworkFragment" />
     <fragment
+        android:id="@+id/moneroNetworkFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment"
+        android:label="MoneroNetworkFragment" />
+    <fragment
         android:id="@+id/btcBlockchainSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment"/>
     <fragment
