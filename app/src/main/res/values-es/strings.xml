@@ -983,6 +983,13 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Auth Básica (opcional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La fuente RPC con esta url ya existe</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Añadir Nodo</string>
+    <string name="AddMoneroNode_NodeUrl">Url del nodo</string>
+    <string name="AddMoneroNode_Username">Nombre de usuario (opcional)</string>
+    <string name="AddMoneroNode_Pasword">Contraseña (opcional)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Ya existe un nodo con esta url</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: https</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar la fuente, el monedero tendrá que resinc sí mismo.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación Unstoppable debería usar para sincronizar la(s) cartera(s).</string>
