@@ -298,6 +298,7 @@
     <string name="Market_Sorting_LowestCap">Cap. marché la plus basse</string>
     <string name="Market_Filters_Select">Sélectionner %d</string>
     <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">Explorez les meilleurs retours de staking DeFI, tous en un seul endroit.</string>
     <string name="Market_Vaults_UnlockPremium">Débloquer Premium</string>
     <string name="Market_Vaults_Sorting_APY">Meilleur APY</string>
     <string name="Market_Vaults_Sorting_TVL">TVL le plus haut</string>
