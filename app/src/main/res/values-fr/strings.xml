@@ -983,6 +983,13 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Authentification basique (facultatif)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La source RPC avec cette url existe déjà</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Ajouter un noeud</string>
+    <string name="AddMoneroNode_NodeUrl">Url du noeud</string>
+    <string name="AddMoneroNode_Username">Nom d\'utilisateur (facultatif)</string>
+    <string name="AddMoneroNode_Pasword">Mot de passe (facultatif)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Un noeud avec cette url existe déjà</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : https</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Après avoir changé de source, le portefeuille devra se resynchroniser lui-même.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
