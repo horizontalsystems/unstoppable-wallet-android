@@ -292,6 +292,7 @@
     <string name="Market_Sorting_LowestCap">Niedrigste Obergrenze</string>
     <string name="Market_Filters_Select">%d auswählen</string>
     <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">Erkunden Sie die besten DeFi-Einsteck-Retouren, alle an einem Ort.</string>
     <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Netzwerk</string>
     <string name="Market_Vaults_Vault_Holders">Halter</string>
