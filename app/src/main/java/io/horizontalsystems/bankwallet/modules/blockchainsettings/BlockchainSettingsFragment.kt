@@ -130,6 +130,15 @@ private fun onClick(
                 event = StatEvent.Open(StatPage.BlockchainSettingsSolana)
             )
         }
+
+        is BlockchainSettingsModule.BlockchainItem.Monero -> {
+            navController.slideFromBottom(R.id.moneroNetworkFragment)
+
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
+            )
+        }
     }
 }
 

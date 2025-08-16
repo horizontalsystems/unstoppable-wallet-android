@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.ISendMoneroAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -71,8 +72,6 @@ class MoneroAdapter(
         }
 
         kit.syncStateFlow.collectWith(coroutineScope) {
-            Log.e("eee", "syncstate: $it")
-
             balanceState = it.toAdapterState()
 
             balanceStateUpdatedSubject.onNext(Unit)
@@ -127,7 +126,8 @@ class MoneroAdapter(
         fun create(
             context: Context,
             wallet: Wallet,
-            restoreSettings: RestoreSettings
+            restoreSettings: RestoreSettings,
+            node: MoneroNode
         ): MoneroAdapter {
             val mnemonic = (wallet.account.type as? AccountType.Mnemonic)
                 ?: throw IllegalStateException("Unsupported account type: ${wallet.account.type.javaClass.simpleName}")
@@ -137,14 +137,15 @@ class MoneroAdapter(
                 AccountOrigin.Restored -> (restoreSettings.birthdayHeight ?: 0).toString()
             }
 
-            Log.e("eee", "birthdayHeightOrDate: $birthdayHeightOrDate")
+            Log.e("eee", "birthdayHeightOrDate: $birthdayHeightOrDate, node: ${node.serialized}")
 
             val kit = MoneroKit.getInstance(
                 context,
                 mnemonic.words,
                 mnemonic.passphrase,
                 birthdayHeightOrDate,
-                wallet.account.id
+                wallet.account.id,
+                node.serialized
             )
 
             val transactionsProvider = MoneroTransactionsProvider()

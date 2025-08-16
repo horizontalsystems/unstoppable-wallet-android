@@ -100,16 +100,22 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                         navController.popBackStack()
 
                         val blockchainWrapper = viewModel.blockchainWrapper
-                        when (blockchainWrapper?.type) {
-                            SyncErrorModule.BlockchainWrapper.Type.Bitcoin -> {
+                        when (blockchainWrapper) {
+                            is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
                                 navController.slideFromBottom(
                                     R.id.btcBlockchainSettingsFragment,
                                     blockchainWrapper.blockchain
                                 )
                             }
-                            SyncErrorModule.BlockchainWrapper.Type.Evm -> {
+
+                            is SyncErrorModule.BlockchainWrapper.Evm -> {
                                 navController.slideFromBottom(R.id.evmNetworkFragment, blockchainWrapper.blockchain)
                             }
+
+                            SyncErrorModule.BlockchainWrapper.Monero -> {
+                                navController.slideFromBottom(R.id.moneroNetworkFragment)
+                            }
+
                             else -> {}
                         }
                     }

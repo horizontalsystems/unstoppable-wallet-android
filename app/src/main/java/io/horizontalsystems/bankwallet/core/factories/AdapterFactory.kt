@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
@@ -57,6 +58,7 @@ class AdapterFactory(
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
+    private val moneroNodeManager: MoneroNodeManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -174,7 +176,12 @@ class AdapterFactory(
                 StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
             }
             BlockchainType.Monero -> {
-                MoneroAdapter.create(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType))
+                MoneroAdapter.create(
+                    context = context,
+                    wallet = wallet,
+                    restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
+                    node = moneroNodeManager.currentNode
+                )
             }
 
             else -> null

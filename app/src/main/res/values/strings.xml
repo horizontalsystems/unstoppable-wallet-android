@@ -1184,6 +1184,15 @@
     <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
 
 
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Add Node</string>
+    <string name="AddMoneroNode_NodeUrl">Node Url</string>
+    <string name="AddMoneroNode_Username">Username (optional)</string>
+    <string name="AddMoneroNode_Pasword">Password (optional)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Node with this url already exists</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https</string>
+
+
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>
