@@ -985,6 +985,13 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Добавить узел</string>
+    <string name="AddMoneroNode_NodeUrl">Адрес узла</string>
+    <string name="AddMoneroNode_Username">Имя пользователя (необязательно)</string>
+    <string name="AddMoneroNode_Pasword">Пароль (необязательно)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Узел с этим url уже существует</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: https</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с блокчейном.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька. Восстановление из блокчейна занимает значительно больше времени.</string>
