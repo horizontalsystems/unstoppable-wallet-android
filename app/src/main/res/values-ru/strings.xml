@@ -300,6 +300,7 @@
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <string name="Market_Filters_Select">Выбрать %d</string>
     <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">Исследуйте лучшие возвраты расстановки DeFi, все в одном месте.</string>
     <string name="Market_Vaults_UnlockPremium">Разблокировать Премиум</string>
     <string name="Market_Vaults_Sorting_APY">Наибольшее APY</string>
     <string name="Market_Vaults_Sorting_TVL">Наивысший ТВЛ</string>
