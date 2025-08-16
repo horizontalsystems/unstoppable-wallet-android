@@ -298,7 +298,6 @@
     <string name="Market_Sorting_LowestCap">市值由低到高</string>
     <string name="Market_Filters_Select">選擇 %d</string>
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">想要解锁更多赚钱的机会吗？</string>
     <string name="Market_Vaults_UnlockPremium">解锁高级版</string>
     <string name="Market_Vaults_Sorting_APY">最大APY</string>
     <string name="Market_Vaults_Sorting_TVL">最高TVL</string>
