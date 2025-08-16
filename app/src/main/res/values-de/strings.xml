@@ -953,6 +953,13 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Einfacher Auth (optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC-Quelle mit dieser URL existiert bereits</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Knoten hinzufügen</string>
+    <string name="AddMoneroNode_NodeUrl">Knoten-Url</string>
+    <string name="AddMoneroNode_Username">Benutzername (optional)</string>
+    <string name="AddMoneroNode_Pasword">Passwort (optional)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Knoten mit dieser URL existiert bereits</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: https</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle muss die Brieftasche sich selbst synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Wählen Sie die Datenquelle für die Wiederherstellung des Wallets mit Transaktionen aus.</string>
