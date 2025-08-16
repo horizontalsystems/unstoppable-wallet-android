@@ -987,6 +987,13 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Autenticação básica (opcional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Fonte RPC com esta url já existe</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Url inserida é inválida. URL válida deve ter um dos seguintes esquemas: http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Adicionar node</string>
+    <string name="AddMoneroNode_NodeUrl">URL do nó</string>
+    <string name="AddMoneroNode_Username">Nome de usuário (opcional)</string>
+    <string name="AddMoneroNode_Pasword">Senha (opcional)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Já existe um nó com esta url</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">URL inserida é inválida. URL válida deve ter um dos esquemas a seguir: https</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte, a carteira terá que ressincronizar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
