@@ -298,7 +298,6 @@
     <string name="Market_Sorting_LowestCap">Menor capitalização</string>
     <string name="Market_Filters_Select">Selecionado %d</string>
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">Quer desbloquear mais oportunidades de ganhar?</string>
     <string name="Market_Vaults_UnlockPremium">Desbloquear Premium</string>
     <string name="Market_Vaults_Sorting_APY">Maior APY</string>
     <string name="Market_Vaults_Sorting_TVL">Maior TVL</string>
