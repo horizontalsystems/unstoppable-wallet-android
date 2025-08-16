@@ -365,7 +365,7 @@
     <string name="Market_Filters_Select">Select %d</string>
 
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">Want to unlock more earning opportunities?</string>
+    <string name="Market_Vaults_WantToUnlockPremium">Explore the best DeFi staking returns, all in one place.</string>
     <string name="Market_Vaults_UnlockPremium">Unlock Premium</string>
     <string name="Market_Vaults_Sorting_APY">Highest APY</string>
     <string name="Market_Vaults_Sorting_TVL">Highest TVL</string>
@@ -1504,7 +1504,7 @@
     <!-- Nym VPN -->
 
     <string name="NymVpn_GetNymVpn" translatable="false">Get Nym VPN</string>
-    <string name="NymVpn_Description" translatable="false">Unstoppable offers the best prices on Nym VPN service. Connect through us and you will increase your privacy much more favorably</string>
+    <string name="NymVpn_Description" translatable="false">Unstoppable recommends NYM VPN for increased privacy.</string>
 
     <!-- Tor -->
 
