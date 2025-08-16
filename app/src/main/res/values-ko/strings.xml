@@ -874,6 +874,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
+    <!--Add Monero Node-->
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">소스를 변경한 후에는 지갑이 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
