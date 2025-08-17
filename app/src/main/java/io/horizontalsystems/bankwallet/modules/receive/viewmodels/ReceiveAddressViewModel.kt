@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
@@ -99,6 +100,13 @@ class ReceiveAddressViewModel(
     private suspend fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
+            //temporary solution for waiting Monero wallet initialization
+            while (adapter.receiveAddress.isEmpty()) {
+                viewState = ViewState.Loading
+                emitState()
+                delay(1000)
+            }
+            ////////////////////////////////////////////////////////////
             address = adapter.receiveAddress
             addressUriService.setAddress(address)
             usedAddresses = adapter.usedAddresses(false)
