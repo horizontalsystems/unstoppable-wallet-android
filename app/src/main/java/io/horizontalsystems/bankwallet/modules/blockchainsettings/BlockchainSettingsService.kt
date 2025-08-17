@@ -55,6 +55,11 @@ class BlockchainSettingsService(
                 syncBlockchainItems()
             }
         }
+        coroutineScope.launch {
+            moneroNodeManager.currentNodeUpdatedFlow.collect {
+                syncBlockchainItems()
+            }
+        }
 
         coroutineScope.launch {
             syncBlockchainItems()
