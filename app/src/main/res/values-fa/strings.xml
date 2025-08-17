@@ -78,7 +78,6 @@
     <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
     <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
     <string name="Restore_BirthdayHeight">قد تولد</string>
-    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_NewWallet">کیف پول جدید</string>
     <!--Backup-->
     <!--Market-->
@@ -100,11 +99,13 @@
     <string name="Market_Filter_TimePeriod_1M">1Month</string>
     <string name="Market_Filter_TimePeriod_6M">6Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1Year</string>
+    <!--Vaults-->
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Send">ارسال</string>
+    <string name="Balance_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="Balance_Receive">دريافت</string>
     <string name="Balance_Address">آدرس</string>
     <string name="Balance_RatePerCoin">%1$sدر هر%2$s</string>
@@ -183,6 +184,7 @@
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <string name="WalletConnect_NewConnect">اتصال جدید</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">ارسال</string>
     <string name="WalletConnect_SignMessageRequest_Title">امضای درخواست</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">پیام برای امضا</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
@@ -364,6 +366,7 @@
     <!-- Security Center -->
     <!--Evm Network-->
     <!--Add RPC Source-->
+    <!--Add Monero Node-->
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">با تغییر در نحوه ساخت تراکنش ها، ردیابی تراکنش های BTC, LTC, BCH را دشوارتر کنید.</string>
     <!--Info screen-->
@@ -481,6 +484,7 @@
     <!-- Blockchain Settings -->
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">رایج قبل از ۲۰۱۸</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
+    <!-- Nym VPN -->
     <!-- Tor -->
     <string name="Tor_Connection_Enable">فعال کردن Tor</string>
     <string name="Tor_Connection_Disable">Tor را غیرفعال کنید</string>
