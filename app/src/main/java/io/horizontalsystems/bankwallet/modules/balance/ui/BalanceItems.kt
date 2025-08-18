@@ -711,9 +711,7 @@ fun <T> LazyListScope.wallets(
 ) {
     items(items = items, key = key, itemContent = {
         Column {
-            Row {
-                itemContent(it)
-            }
+            itemContent(it)
             HsDivider()
         }
     })
