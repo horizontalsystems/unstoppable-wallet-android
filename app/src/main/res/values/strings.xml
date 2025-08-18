@@ -57,6 +57,8 @@
     <string name="Button_Apply">Apply</string>
     <string name="Button_SetAmount">Set Amount</string>
     <string name="Button_ContinueAnyway">Continue Anyway</string>
+    <string name="Button_CopyAddress">Copy Address</string>
+    <string name="Button_HideCoin">Hide Coin</string>
 
     <string name="Attention_Title">Attention</string>
 

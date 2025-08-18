@@ -9,6 +9,7 @@ import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
@@ -44,6 +45,7 @@ class BalanceViewModel(
     private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
     private val priceManager: PriceManager,
+    private val adapterManager: IAdapterManager,
     val isSwapEnabled: Boolean
 ) : ViewModelUiState<BalanceUiState>(), ITotalBalance by totalBalance {
 
@@ -332,6 +334,10 @@ class BalanceViewModel(
     fun errorShown() {
         errorMessage = null
         emitState()
+    }
+
+    fun getReceiveAddress(wallet: Wallet): String? {
+        return adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress
     }
 
     sealed class SyncError {

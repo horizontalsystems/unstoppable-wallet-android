@@ -52,7 +52,9 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceContextMenuItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceUiState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
@@ -60,9 +62,11 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -80,6 +84,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -454,6 +459,35 @@ fun BalanceItems(
                         onClickSyncError = {
                             onClickSyncError.invoke(item)
                         },
+                        onContextMenuItemClick = {
+                            handleContextMenuClick(
+                                menuItem = it,
+                                balanceViewItem = item,
+                                navController = navController,
+                                onAddressCopyClick = { wallet ->
+                                    val address = viewModel.getReceiveAddress(wallet)
+                                    if (address == null) {
+                                        HudHelper.showErrorMessage(
+                                            view,
+                                            R.string.Error
+                                        )
+                                    } else {
+                                        TextHelper.copyText(address)
+
+                                        HudHelper.showSuccessMessage(
+                                            view,
+                                            R.string.Hud_Text_Copied
+                                        )
+
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.CopyAddress(wallet.token.coin.name)
+                                        )
+                                    }
+                                },
+                                onDisable = onDisable
+                            )
+                        },
                         onDisable = {
                             onDisable.invoke(item)
                         }
@@ -473,6 +507,65 @@ fun BalanceItems(
             )
         )
         viewModel.onSendOpened()
+    }
+}
+
+private fun handleContextMenuClick(
+    menuItem: BalanceContextMenuItem,
+    balanceViewItem: BalanceViewItem2,
+    navController: NavController,
+    onAddressCopyClick: (Wallet) -> Unit,
+    onDisable: (BalanceViewItem2) -> Unit
+) {
+    when (menuItem) {
+        BalanceContextMenuItem.Send -> {
+            val sendTitle = Translator.getString(
+                R.string.Send_Title,
+                balanceViewItem.wallet.token.fullCoin.coin.code
+            )
+            navController.slideFromRight(
+                R.id.enterAddressFragment,
+                EnterAddressFragment.Input(
+                    wallet = balanceViewItem.wallet,
+                    title = sendTitle
+                )
+            )
+
+            stat(
+                page = StatPage.Balance,
+                event = StatEvent.OpenSend(balanceViewItem.wallet.token)
+            )
+        }
+
+        BalanceContextMenuItem.CopyAddress -> { onAddressCopyClick.invoke(balanceViewItem.wallet) }
+
+        BalanceContextMenuItem.Swap -> {
+            navController.slideFromRight(
+                R.id.multiswap,
+                balanceViewItem.wallet.token
+            )
+
+            stat(
+                page = StatPage.Balance,
+                event = StatEvent.Open(StatPage.Swap)
+            )
+        }
+
+        BalanceContextMenuItem.CoinInfo -> {
+            val coinUid = balanceViewItem.wallet.coin.uid
+            val arguments = CoinFragment.Input(coinUid)
+
+            navController.slideFromRight(R.id.coinFragment, arguments)
+
+            stat(
+                page = StatPage.Balance,
+                event = StatEvent.OpenCoin(coinUid)
+            )
+        }
+
+        BalanceContextMenuItem.HideToken -> {
+            onDisable(balanceViewItem)
+        }
     }
 }
 
