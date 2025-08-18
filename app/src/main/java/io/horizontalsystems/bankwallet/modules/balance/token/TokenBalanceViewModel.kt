@@ -38,7 +38,7 @@ class TokenBalanceViewModel(
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
-    private var addressForWatchAccount: String? = null
+    private var addressForAccount: String? = null
     private var error: TokenBalanceModule.TokenBalanceError? = null
     private var failedIconVisible = false
     private var loadingTransactions = true
@@ -79,13 +79,13 @@ class TokenBalanceViewModel(
         title = title,
         balanceViewItem = balanceViewItem,
         transactions = transactions,
-        receiveAddressForWatchAccount = addressForWatchAccount,
+        receiveAddress = addressForAccount,
         failedIconVisible = failedIconVisible,
         error = error
     )
 
     private fun setReceiveAddressForWatchAccount() {
-        addressForWatchAccount = adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress
+        addressForAccount = adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress
         emitState()
     }
 

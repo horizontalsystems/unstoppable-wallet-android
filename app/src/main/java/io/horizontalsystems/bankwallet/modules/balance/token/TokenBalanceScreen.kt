@@ -565,7 +565,7 @@ private fun ButtonsRow(
     if (viewItem.isWatchAccount) {
         val infoTitle = stringResource(R.string.Balance_WalletAddress)
         val infoDescription = ""
-        viewModel.uiState.receiveAddressForWatchAccount?.let { address ->
+        viewModel.uiState.receiveAddress?.let { address ->
             WatchAddressCell(
                 address = address,
                 onInfoClick = {

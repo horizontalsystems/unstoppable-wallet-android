@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -39,6 +41,7 @@ object BalanceModule {
                 App.wcManager,
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 App.priceManager,
+                App.adapterManager,
                 App.instance.isSwapEnabled
             ) as T
         }
@@ -69,3 +72,42 @@ object BalanceModule {
             )
         }
 }
+
+private fun BalanceContextMenuItem.toDropDownItem(isEnabled: Boolean = true): BalanceContextMenuViewItem {
+    return BalanceContextMenuViewItem(
+        item = this,
+        isEnabled = isEnabled
+    )
+}
+
+val BalanceViewItem2.contextMenuItems: List<BalanceContextMenuViewItem>
+    get() {
+        return if (this.isWatchAccount) {
+            listOf(
+                BalanceContextMenuItem.CopyAddress.toDropDownItem(),
+                BalanceContextMenuItem.HideToken.toDropDownItem(),
+                BalanceContextMenuItem.CoinInfo.toDropDownItem()
+            )
+        } else {
+            listOf(
+                BalanceContextMenuItem.Send.toDropDownItem(this.sendEnabled),
+                BalanceContextMenuItem.CopyAddress.toDropDownItem(),
+                BalanceContextMenuItem.Swap.toDropDownItem(this.swapEnabled),
+                BalanceContextMenuItem.CoinInfo.toDropDownItem(),
+                BalanceContextMenuItem.HideToken.toDropDownItem()
+            )
+        }
+    }
+
+enum class BalanceContextMenuItem(@StringRes val title: Int, @DrawableRes val icon: Int) {
+    Send(R.string.Balance_Send, R.drawable.ic_arrow_up_24),
+    CopyAddress(R.string.Button_CopyAddress, R.drawable.ic_copy_24),
+    Swap(R.string.Swap, R.drawable.ic_swap_circle_24),
+    CoinInfo(R.string.Coin_Info, R.drawable.ic_coin_info_24),
+    HideToken(R.string.Button_HideCoin, R.drawable.ic_minus_24),
+}
+
+data class BalanceContextMenuViewItem(
+    val item: BalanceContextMenuItem,
+    val isEnabled: Boolean = true
+)
