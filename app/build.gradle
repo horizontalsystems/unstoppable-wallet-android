@@ -316,7 +316,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:5d94bfe'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:3b88c12'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:7d01e63'
     implementation 'com.github.horizontalsystems:market-kit-android:ef89ba0'
     implementation 'com.github.horizontalsystems:solana-kit-android:eae6858'
     implementation 'com.github.horizontalsystems:tron-kit-android:16ae04a'
