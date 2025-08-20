@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.tokenselect
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
-import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner
+import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleType
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -104,16 +102,13 @@ fun TokenSelectScreen(
                     }
                     val balanceViewItems = uiState.items
                     items(balanceViewItems) { item ->
-                        Box(
-                            modifier = Modifier.clickable {
+                        BalanceCardInner2(
+                            viewItem = item,
+                            type = BalanceCardSubtitleType.CoinName,
+                            onClick = {
                                 onClickItem.invoke(item)
                             }
-                        ) {
-                            BalanceCardInner(
-                                viewItem = item,
-                                type = BalanceCardSubtitleType.CoinName
-                            )
-                        }
+                        )
                         HsDivider()
                     }
                     item {

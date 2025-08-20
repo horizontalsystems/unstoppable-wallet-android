@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.uiv3.components
+package io.horizontalsystems.bankwallet.uiv3.components.cell
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 
 @Composable
 private fun Cell(
@@ -22,19 +23,19 @@ private fun Cell(
 ) {
     var modifier = Modifier
         .fillMaxWidth()
-        .padding(paddingValues = paddingValues)
 
     onClick?.let {
         modifier = modifier.clickable(onClick = onClick)
     }
 
     Row(
-        modifier = modifier,
+        modifier = modifier.padding(paddingValues = paddingValues),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         left?.invoke(this)
         middle.invoke(this)
+        HFillSpacer(0.dp)
         right?.invoke(this)
     }
 }
