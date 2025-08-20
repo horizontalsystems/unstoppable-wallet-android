@@ -208,6 +208,7 @@ private fun MoneroNetworkScreen(
                             event = StatEvent.OpenBlockchainSettingsEvmAdd(BlockchainType.Monero.uid)
                         )
                     }
+                    Spacer(Modifier.height(60.dp))
                 }
             }
         }
