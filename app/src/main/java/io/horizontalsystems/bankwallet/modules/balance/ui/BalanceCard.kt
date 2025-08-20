@@ -187,11 +187,14 @@ fun BalanceCard(
                 )
             }
     ) {
-        BalanceCardInner(
-            viewItem = viewItem,
-            type = BalanceCardSubtitleType.Rate,
-            onClickSyncError = onClickSyncError
-        )
+        Box(modifier = Modifier.background(ComposeAppTheme.colors.lawrence)) {
+            BalanceCardInner2(
+                viewItem = viewItem,
+                type = BalanceCardSubtitleType.Rate,
+                onClickSyncError = onClickSyncError,
+                onClick = null
+            )
+        }
     }
     val menuMinWidth = 200.dp
     val horizontalMargin = 16.dp
@@ -400,7 +403,7 @@ private fun WalletIcon(
 }
 
 @Composable
-private fun IconCell(
+fun IconCell(
     failedIconVisible: Boolean,
     token: Token,
     iconAlpha: Float,
