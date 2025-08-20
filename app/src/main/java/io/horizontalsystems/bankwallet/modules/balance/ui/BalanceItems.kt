@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -76,7 +76,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCirc
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
@@ -85,6 +84,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -393,7 +393,6 @@ fun BalanceItems(
                         }
                         HSpacer(16.dp)
                     }
-                    HsDivider()
                 }
             }
 
@@ -438,60 +437,63 @@ fun BalanceItems(
             } else {
                 wallets(
                     items = balanceViewItems,
-                    key = {
-                        it.wallet.hashCode()
+                    key = { _, item ->
+                        item.wallet.hashCode()
                     }
-                ) { item ->
-                    BalanceCardSwipable(
-                        viewItem = item,
-                        revealed = revealedCardId == item.wallet.hashCode(),
-                        onReveal = { walletHashCode ->
-                            if (revealedCardId != walletHashCode) {
-                                revealedCardId = walletHashCode
+                ) { index, item ->
+                    BoxBordered(top = true, bottom = index == balanceViewItems.size - 1) {
+                        BalanceCardSwipable(
+                            viewItem = item,
+                            revealed = revealedCardId == item.wallet.hashCode(),
+                            onReveal = { walletHashCode ->
+                                if (revealedCardId != walletHashCode) {
+                                    revealedCardId = walletHashCode
+                                }
+                            },
+                            onConceal = {
+                                revealedCardId = null
+                            },
+                            onClick = {
+                                navigateToTokenBalance.invoke(item)
+                            },
+                            onClickSyncError = {
+                                onClickSyncError.invoke(item)
+                            },
+                            onContextMenuItemClick = {
+                                handleContextMenuClick(
+                                    menuItem = it,
+                                    balanceViewItem = item,
+                                    navController = navController,
+                                    onAddressCopyClick = { wallet ->
+                                        val address = viewModel.getReceiveAddress(wallet)
+                                        if (address == null) {
+                                            HudHelper.showErrorMessage(
+                                                view,
+                                                R.string.Error
+                                            )
+                                        } else {
+                                            TextHelper.copyText(address)
+
+                                            HudHelper.showSuccessMessage(
+                                                view,
+                                                R.string.Hud_Text_Copied
+                                            )
+
+                                            stat(
+                                                page = StatPage.Balance,
+                                                event = StatEvent.CopyAddress(wallet.token.coin.name)
+                                            )
+                                        }
+                                    },
+                                    onDisable = onDisable
+                                )
+                            },
+                            onDisable = {
+                                onDisable.invoke(item)
                             }
-                        },
-                        onConceal = {
-                            revealedCardId = null
-                        },
-                        onClick = {
-                            navigateToTokenBalance.invoke(item)
-                        },
-                        onClickSyncError = {
-                            onClickSyncError.invoke(item)
-                        },
-                        onContextMenuItemClick = {
-                            handleContextMenuClick(
-                                menuItem = it,
-                                balanceViewItem = item,
-                                navController = navController,
-                                onAddressCopyClick = { wallet ->
-                                    val address = viewModel.getReceiveAddress(wallet)
-                                    if (address == null) {
-                                        HudHelper.showErrorMessage(
-                                            view,
-                                            R.string.Error
-                                        )
-                                    } else {
-                                        TextHelper.copyText(address)
+                        )
+                    }
 
-                                        HudHelper.showSuccessMessage(
-                                            view,
-                                            R.string.Hud_Text_Copied
-                                        )
-
-                                        stat(
-                                            page = StatPage.Balance,
-                                            event = StatEvent.CopyAddress(wallet.token.coin.name)
-                                        )
-                                    }
-                                },
-                                onDisable = onDisable
-                            )
-                        },
-                        onDisable = {
-                            onDisable.invoke(item)
-                        }
-                    )
                 }
             }
         }
@@ -707,15 +709,12 @@ fun TotalBalanceRow(
 
 fun <T> LazyListScope.wallets(
     items: List<T>,
-    key: ((item: T) -> Any)? = null,
-    itemContent: @Composable (LazyItemScope.(item: T) -> Unit),
+    key: ((index: Int, item: T) -> Any)? = null,
+    itemContent: @Composable (LazyItemScope.(index: Int, item: T) -> Unit),
 ) {
-    items(items = items, key = key, itemContent = {
-        Column {
-            itemContent(it)
-            HsDivider()
-        }
-    })
+    itemsIndexed(items, key = key) { index, item ->
+        itemContent(index, item)
+    }
     item {
         VSpacer(height = 10.dp)
     }
