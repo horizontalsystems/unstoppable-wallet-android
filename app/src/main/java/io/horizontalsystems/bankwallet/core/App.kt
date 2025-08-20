@@ -469,6 +469,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmSyncSourceManager = evmSyncSourceManager,
             evmSyncSourceStorage = evmSyncSourceStorage,
             solanaRpcSourceManager = solanaRpcSourceManager,
+            moneroNodeManager = moneroNodeManager,
+            moneroNodeStorage = moneroNodeStorage,
             contactsRepository = contactsRepository
         )
 
