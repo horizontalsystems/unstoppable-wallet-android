@@ -67,7 +67,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewMode
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Orange
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigation
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigationItem
@@ -174,7 +173,7 @@ private fun MainScreen(
                             },
                             selected = item.selected,
                             enabled = item.enabled,
-                            selectedContentColor = Orange,
+                            selectedContentColor = ComposeAppTheme.colors.jacob,
                             unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.andy,
                             onClick = {
                                 viewModel.onSelect(item.mainNavItem)
