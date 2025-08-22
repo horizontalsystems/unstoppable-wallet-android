@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.ChainalysisAddressValidator
 import io.horizontalsystems.bankwallet.core.address.Eip20AddressValidator
+import io.horizontalsystems.bankwallet.core.address.Trc20AddressValidator
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Address
@@ -30,7 +31,8 @@ class UnifiedAddressCheckerViewModel(
     addressHandlerFactory: AddressHandlerFactory,
     private val hashDitValidator: HashDitAddressValidator,
     private val chainalysisValidator: ChainalysisAddressValidator,
-    private val eip20Validator: Eip20AddressValidator
+    private val eip20Validator: Eip20AddressValidator,
+    private val trc20Validator: Trc20AddressValidator,
 ) : ViewModelUiState<AddressCheckState>() {
     private var addressValidationInProgress: Boolean = false
 
@@ -66,7 +68,7 @@ class UnifiedAddressCheckerViewModel(
                     val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid }
                     fullCoin?.let {
                         val filteredTokens = it.tokens.filter { token ->
-                            eip20Validator.supports(token)
+                            eip20Validator.supports(token) || token.blockchainType == BlockchainType.Tron
                         }
                         FullCoin(coin = it.coin, tokens = filteredTokens)
                     }
@@ -172,7 +174,15 @@ class UnifiedAddressCheckerViewModel(
     private suspend fun performSingleCheck(address: Address, type: IssueType): CheckState {
         val canCheck = when (type) {
             is IssueType.Chainalysis -> true
-            is IssueType.HashDit, is IssueType.Contract -> {
+            is IssueType.Contract -> {
+                if (trc20Validator.supports(type.token) || eip20Validator.supports(type.token)) {
+                    true
+                } else {
+                    false
+                }
+            }
+
+            is IssueType.HashDit -> {
                 address.blockchainType?.let { addressBlockchainType ->
                     EvmBlockchainManager.blockchainTypes.contains(addressBlockchainType)
                 } ?: false
@@ -194,7 +204,11 @@ class UnifiedAddressCheckerViewModel(
                 }
 
                 is IssueType.Contract -> {
-                    eip20Validator.isClear(address, type.token)
+                    if (type.token.blockchainType == BlockchainType.Tron) {
+                        trc20Validator.isClear(address, type.token)
+                    } else {
+                        eip20Validator.isClear(address, type.token)
+                    }
                 }
             }
 
@@ -223,7 +237,8 @@ class UnifiedAddressCheckerViewModel(
                     appConfigProvider.chainalysisBaseUrl,
                     appConfigProvider.chainalysisApiKey
                 ),
-                Eip20AddressValidator(App.evmSyncSourceManager)
+                Eip20AddressValidator(App.evmSyncSourceManager),
+                Trc20AddressValidator(),
             ) as T
         }
     }
