@@ -64,7 +64,7 @@ class MoneroTransactionsAdapter(
     }
 
     override fun getTransactionUrl(transactionHash: String): String =
-        "https://localmonero.co/blocks/tx/$transactionHash"
+        "https://blockchair.com/monero/transaction/$transactionHash"
 
     private fun getTransactionRecord(transaction: TransactionInfo): TransactionRecord {
         val blockHeight = if (transaction.blockheight == 0L || transaction.isPending) null else transaction.blockheight.toInt()
