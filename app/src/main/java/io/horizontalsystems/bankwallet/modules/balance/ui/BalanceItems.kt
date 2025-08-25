@@ -70,8 +70,6 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
@@ -83,7 +81,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -374,8 +374,10 @@ fun BalanceItems(
                         }
 
                         HSpacer(12.dp)
-                        ButtonSecondaryCircle(
-                            icon = R.drawable.ic_manage_20,
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_manage_20),
                             contentDescription = stringResource(R.string.ManageCoins_title),
                             onClick = {
                                 navController.slideFromRight(R.id.manageWalletsFragment)
@@ -640,9 +642,9 @@ fun BalanceSortingSelector(
 ) {
     var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
 
-    ButtonSecondaryWithIcon(
+    HSDropdownButton(
+        variant = ButtonVariant.Secondary,
         title = stringResource(sortType.getTitleRes()),
-        iconRight = painterResource(R.drawable.ic_arrow_down_filled_16),
         onClick = {
             showSortTypeSelectorDialog = true
         }
