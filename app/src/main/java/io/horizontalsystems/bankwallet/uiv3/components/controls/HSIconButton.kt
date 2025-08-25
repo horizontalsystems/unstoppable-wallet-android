@@ -27,6 +27,7 @@ fun HSIconButton(
     style: ButtonStyle = ButtonStyle.Solid,
     size: ButtonSize = ButtonSize.Medium,
     icon: Painter,
+    contentDescription: String? = null,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
@@ -49,7 +50,7 @@ fun HSIconButton(
         Icon(
             modifier = Modifier.size(buttonProps.iconSize),
             painter = icon,
-            contentDescription = null,
+            contentDescription = contentDescription,
         )
     }
 }
