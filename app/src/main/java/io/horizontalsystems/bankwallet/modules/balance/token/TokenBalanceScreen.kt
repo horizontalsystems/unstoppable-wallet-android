@@ -49,7 +49,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
-import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionOrangeButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
@@ -78,6 +77,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
@@ -597,12 +597,14 @@ private fun ButtonsRow(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            BalanceActionOrangeButton(
+            BalanceActionButton(
+                variant = ButtonVariant.Primary,
                 icon = R.drawable.ic_arrow_down_24,
                 title = stringResource(R.string.Balance_Receive),
                 onClick = onClickReceive,
             )
             BalanceActionButton(
+                variant = ButtonVariant.Secondary,
                 icon = R.drawable.ic_arrow_up_24,
                 title = stringResource(R.string.Balance_Send),
                 enabled = viewItem.sendEnabled,
@@ -627,6 +629,7 @@ private fun ButtonsRow(
             )
             if (viewItem.swapVisible) {
                 BalanceActionButton(
+                    variant = ButtonVariant.Secondary,
                     icon = R.drawable.ic_swap_circle_24,
                     title = stringResource(R.string.Swap),
                     enabled = viewItem.swapEnabled,
@@ -638,6 +641,7 @@ private fun ButtonsRow(
                 )
             }
             BalanceActionButton(
+                variant = ButtonVariant.Secondary,
                 icon = R.drawable.ic_balance_chart_24,
                 title = stringResource(R.string.Coin_Info),
                 enabled = !viewItem.wallet.token.isCustom,
