@@ -70,8 +70,6 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -85,6 +83,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -278,7 +278,8 @@ fun BalanceItems(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        BalanceActionOrangeButton(
+                        BalanceActionButton(
+                            variant = ButtonVariant.Primary,
                             icon = R.drawable.ic_arrow_down_24,
                             title = stringResource(R.string.Balance_Receive),
                             enabled = true,
@@ -316,6 +317,7 @@ fun BalanceItems(
                             }
                         )
                         BalanceActionButton(
+                            variant = ButtonVariant.Secondary,
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
@@ -329,6 +331,7 @@ fun BalanceItems(
                         )
                         if (viewModel.isSwapEnabled) {
                             BalanceActionButton(
+                                variant = ButtonVariant.Secondary,
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
@@ -343,6 +346,7 @@ fun BalanceItems(
                         }
                         if (accountViewItem.type.supportsWalletConnect) {
                             BalanceActionButton(
+                                variant = ButtonVariant.Secondary,
                                 icon = R.drawable.ic_scan_24,
                                 title = stringResource(R.string.Button_ScanQr),
                                 onClick = onScanClick
@@ -574,6 +578,7 @@ private fun handleContextMenuClick(
 
 @Composable
 fun BalanceActionButton(
+    variant: ButtonVariant = ButtonVariant.Primary,
     @DrawableRes icon: Int,
     title: String,
     enabled: Boolean = true,
@@ -582,30 +587,9 @@ fun BalanceActionButton(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ButtonPrimaryCircle(
-            icon = icon,
-            contentDescription = title,
-            enabled = enabled,
-            onClick = onClick
-        )
-        VSpacer(8.dp)
-        caption_grey(title)
-    }
-}
-
-@Composable
-fun BalanceActionOrangeButton(
-    @DrawableRes icon: Int,
-    title: String,
-    enabled: Boolean = true,
-    onClick: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ButtonPrimaryJacobCircle(
-            icon = icon,
-            contentDescription = title,
+        HSIconButton(
+            variant = variant,
+            icon = painterResource(icon),
             enabled = enabled,
             onClick = onClick
         )
