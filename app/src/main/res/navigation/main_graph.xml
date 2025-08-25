@@ -268,6 +268,9 @@
         android:id="@+id/btcUsedAddressesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.BtcUsedAddressesFragment" />
     <fragment
+        android:id="@+id/moneroSubaddressesFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receive.monero.MoneroSubaddressesFragment" />
+    <fragment
         android:id="@+id/receiveChooseCoinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinFragment" />
     <fragment

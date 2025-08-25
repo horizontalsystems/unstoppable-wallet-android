@@ -20,6 +20,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.SyncState
+import io.horizontalsystems.monerokit.data.Subaddress
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -118,6 +119,10 @@ class MoneroAdapter(
     ): BigDecimal {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
         return kit.estimateFee(amountInPiconero, address, memo).scaledDown(DECIMALS)
+    }
+
+    fun getSubaddresses(): List<Subaddress> {
+        return kit.getSubaddresses()
     }
 
     companion object {
