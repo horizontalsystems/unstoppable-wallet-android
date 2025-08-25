@@ -74,7 +74,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
-import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
@@ -85,6 +84,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -686,7 +686,7 @@ fun TotalBalanceRow(
 ) {
     when (totalState) {
         TotalUIState.Hidden -> {
-            DoubleText(
+            CardsElementAmountText(
                 title = "------",
                 body = "",
                 dimmed = false,
@@ -696,7 +696,7 @@ fun TotalBalanceRow(
         }
 
         is TotalUIState.Visible -> {
-            DoubleText(
+            CardsElementAmountText(
                 title = totalState.primaryAmountStr,
                 body = totalState.secondaryAmountStr,
                 dimmed = totalState.dimmed,
