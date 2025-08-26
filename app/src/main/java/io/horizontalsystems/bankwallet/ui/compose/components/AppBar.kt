@@ -170,7 +170,7 @@ fun AppBar(
 }
 
 @Composable
-private fun MenuItemSimple(menuItem: MenuItem) {
+fun MenuItemSimple(menuItem: MenuItem) {
     val color = if (menuItem.enabled) {
         if (menuItem.tint == Color.Unspecified)
             ComposeAppTheme.colors.grey

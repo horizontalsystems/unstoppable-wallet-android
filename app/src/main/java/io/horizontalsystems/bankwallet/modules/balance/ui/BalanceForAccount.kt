@@ -9,8 +9,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
@@ -50,8 +48,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -98,56 +96,49 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
 
 
     BackupAlert(navController)
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = accountViewItem.name,
-                menuItems = buildList {
-                    if (!viewModel.uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
-                                icon = R.drawable.ic_qr_scan_20,
-                                onClick = {
-                                    onScanClick(
-                                        viewModel,
-                                        qrScannerLauncher,
-                                        context,
-                                        navController
-                                    )
-                                }
+    HSScaffold(
+        title = accountViewItem.name,
+        menuItems = buildList {
+            if (!viewModel.uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
+                add(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
+                        icon = R.drawable.ic_qr_scan_20,
+                        onClick = {
+                            onScanClick(
+                                viewModel,
+                                qrScannerLauncher,
+                                context,
+                                navController
                             )
+                        }
+                    )
+                )
+            }
+            add(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.ManageAccounts_Title),
+                    icon = R.drawable.ic_wallet_switch_24,
+                    onClick = {
+                        navController.slideFromBottom(
+                            R.id.manageAccountsFragment,
+                            ManageAccountsModule.Mode.Switcher
+                        )
+
+                        stat(
+                            page = StatPage.Balance,
+                            event = StatEvent.Open(StatPage.ManageWallets)
                         )
                     }
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.ManageAccounts_Title),
-                            icon = R.drawable.ic_wallet_switch_24,
-                            onClick = {
-                                navController.slideFromBottom(
-                                    R.id.manageAccountsFragment,
-                                    ManageAccountsModule.Mode.Switcher
-                                )
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.ManageWallets)
-                                )
-                            }
-                        )
-                    )
-                }
+                )
             )
         }
-    ) { paddingValues ->
+    ) {
         val uiState = viewModel.uiState
 
         Crossfade(
             targetState = uiState.viewState,
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             label = ""
         ) { viewState ->
             when (viewState) {
