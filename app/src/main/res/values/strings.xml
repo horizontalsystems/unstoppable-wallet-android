@@ -393,6 +393,7 @@
 
     <!--Balance-->
 
+    <string name="Wallet_Title">Wallet</string>
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
