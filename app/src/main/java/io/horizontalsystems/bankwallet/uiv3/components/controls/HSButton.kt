@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSPreview
 
 @Composable
 fun HSButton(
+    modifier: Modifier = Modifier,
     variant: ButtonVariant = ButtonVariant.Primary,
     style: ButtonStyle = ButtonStyle.Solid,
     size: ButtonSize = ButtonSize.Medium,
@@ -31,7 +32,7 @@ fun HSButton(
     val buttonProps = getButtonProps(size, style, variant)
 
     Button(
-        modifier = Modifier.height(buttonProps.buttonHeight),
+        modifier = modifier.height(buttonProps.buttonHeight),
         shape = RoundedCornerShape(28.dp),
         onClick = onClick,
         colors = ButtonPrimaryDefaults.textButtonColors(
