@@ -8,16 +8,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.IMenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.bars.HSTopAppBar
 
 @Composable
 fun HSScaffold(
     title: String,
+    menuItems: List<IMenuItem> = listOf(),
     content: @Composable BoxScope.() -> Unit
 ) {
     Scaffold(
         topBar = {
-            HSTopAppBar(title)
+            HSTopAppBar(title, menuItems)
         },
         backgroundColor = ComposeAppTheme.colors.tyler
     ) {
