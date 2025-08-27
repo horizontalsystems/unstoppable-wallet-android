@@ -61,6 +61,8 @@ enum class StatPage(val key: String) {
     EvmAddress("evm_address"),
     EvmPrivateKey("evm_private_key"),
     StellarSecretKey("stellar_secret_key"),
+    MoneroPrivateKey("monero_private_key"),
+    MoneroPublicKey("monero_public_key"),
     ExportFull("export_full"),
     ExportFullToFiles("export_full_to_files"),
     ExportWalletToFiles("export_wallet_to_files"),

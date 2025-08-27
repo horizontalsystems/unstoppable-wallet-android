@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysModule.ExtendedPublicKey
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey
+import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyModule
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
@@ -29,9 +30,11 @@ class PublicKeysViewModel(
                 val chain = evmBlockchainManager.getChain(BlockchainType.Ethereum)
                 Signer.address(accountType.words, accountType.passphrase, chain).eip55
             }
+
             is AccountType.EvmPrivateKey -> {
                 Signer.address(accountType.key).eip55
             }
+
             is AccountType.EvmAddress -> accountType.address
             is AccountType.SolanaAddress -> accountType.address
             is AccountType.TronAddress -> accountType.address
@@ -56,9 +59,12 @@ class PublicKeysViewModel(
             null
         }
 
+        val moneroKeys = ShowMoneroKeyModule.getPublicMoneroKeys(account)
+
         viewState = PublicKeysModule.ViewState(
             evmAddress = evmAddress,
-            extendedPublicKey = publicKey?.let { ExtendedPublicKey(it, accountPublicKey) }
+            extendedPublicKey = publicKey?.let { ExtendedPublicKey(it, accountPublicKey) },
+            moneroKeys = moneroKeys
         )
     }
 
