@@ -4,17 +4,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.toStellarWallet
 import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
+import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyModule
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
@@ -33,6 +36,7 @@ class PrivateKeysViewModel(
                 val chain = evmBlockchainManager.getChain(BlockchainType.Ethereum)
                 toHexString(Signer.privateKey(accountType.words, accountType.passphrase, chain))
             }
+
             is AccountType.EvmPrivateKey -> toHexString(accountType.key)
             else -> null
         }
@@ -64,6 +68,8 @@ class PrivateKeysViewModel(
             null
         }
 
+        val moneroKeys = ShowMoneroKeyModule.getPrivateMoneroKeys(account)
+
         viewState = PrivateKeysModule.ViewState(
             evmPrivateKey = ethereumPrivateKey,
             bip32RootKey = bip32RootKey?.let {
@@ -72,7 +78,8 @@ class PrivateKeysViewModel(
             accountExtendedPrivateKey = accountExtendedPrivateKey?.let {
                 PrivateKeysModule.ExtendedKey(it, accountExtendedDisplayType)
             },
-            stellarSecretKey = stellarSecretKey
+            stellarSecretKey = stellarSecretKey,
+            moneroKeys = moneroKeys
         )
     }
 

@@ -286,7 +286,7 @@ private fun ShowExtendedKeyScreen(
 }
 
 @Composable
-private fun MenuItem(
+fun MenuItem(
     title: String,
     value: String,
     infoButtonClick: (() -> Unit)? = null,

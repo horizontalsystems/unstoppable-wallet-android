@@ -1459,6 +1459,13 @@
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
     <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
+    <string name="PrivateKeys_MoneroPrivateKey">Monero Private Keys</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">Grants full control over Monero (XMR) assets within the respective wallet, including the ability to spend funds.</string>
+    <string name="MoneroKeyType">Type</string>
+    <string name="MoneroKeyType_Spend">Spend</string>
+    <string name="MoneroKeyType_View">View</string>
+    <string name="MoneroKeyType_Private">Monero Private Keys</string>
+    <string name="MoneroKeyType_Public">Monero Public Keys</string>
 
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Public Keys</string>
@@ -1466,6 +1473,8 @@
     <string name="PublicKeys_AccountExtendedPublicKey" translatable="false">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
+    <string name="PublicKeys_MoneroPublicKey">Monero Public Keys</string>
+    <string name="PublicKeys_MoneroPublicKeyDescription">Allows read-only monitoring of wallets holding Monero (XMR) assets without granting spending access.</string>
 
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Verify</string>

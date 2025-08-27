@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey
+import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyModule.MoneroKeys
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 object PublicKeysModule {
@@ -18,7 +19,8 @@ object PublicKeysModule {
 
     data class ViewState(
         val evmAddress: String? = null,
-        val extendedPublicKey: ExtendedPublicKey? = null
+        val extendedPublicKey: ExtendedPublicKey? = null,
+        val moneroKeys: MoneroKeys? = null
     )
 
     data class ExtendedPublicKey(

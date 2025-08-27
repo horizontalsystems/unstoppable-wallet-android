@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.monerokit.Seed
 import io.horizontalsystems.monerokit.SyncState
 import io.horizontalsystems.monerokit.data.Subaddress
 import io.reactivex.BackpressureStrategy
@@ -146,8 +147,7 @@ class MoneroAdapter(
 
             val kit = MoneroKit.getInstance(
                 context,
-                mnemonic.words,
-                mnemonic.passphrase,
+                Seed.Bip39(mnemonic.words, mnemonic.passphrase),
                 birthdayHeightOrDate,
                 wallet.account.id,
                 node.serialized
@@ -176,4 +176,9 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.Syncing -> AdapterState.Syncing(progress?.let {
         (it * 100).roundToInt().coerceAtMost(100)
     })
+}
+
+fun AccountType.toMoneroSeed() = when (this) {
+    is AccountType.Mnemonic -> Seed.Bip39(words, passphrase)
+    else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to Monero Seed")
 }
