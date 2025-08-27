@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -70,7 +68,6 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
@@ -85,6 +82,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsSectionButtons
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -357,23 +355,14 @@ fun BalanceItems(
             }
 
             stickyHeader {
-                Column {
-                    Row(
-                        modifier = Modifier
-                            .height(48.dp)
-                            .fillMaxWidth()
-                            .background(ComposeAppTheme.colors.lawrence),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        HSpacer(16.dp)
+                TabsSectionButtons(
+                    left = {
                         BalanceSortingSelector(
                             sortType = uiState.sortType,
                             sortTypes = uiState.sortTypes
                         ) {
                             viewModel.setSortType(it)
                         }
-
-                        HSpacer(12.dp)
                         HSIconButton(
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
@@ -388,18 +377,16 @@ fun BalanceItems(
                                 )
                             }
                         )
-
-                        Spacer(modifier = Modifier.weight(1f))
+                    },
+                    right = {
                         if (accountViewItem.isWatchAccount) {
-                            HSpacer(12.dp)
                             Image(
                                 painter = painterResource(R.drawable.icon_binocule_20),
                                 contentDescription = "binoculars icon"
                             )
                         }
-                        HSpacer(16.dp)
                     }
-                }
+                )
             }
 
             item {
