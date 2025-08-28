@@ -19,10 +19,13 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.diffText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
 fun BalanceCardInner2(
@@ -36,31 +39,29 @@ fun BalanceCardInner2(
             WalletIcon2(viewItem, onClickSyncError)
         },
         middle = {
-            val subtitle: String
-            var subtitle2: String? = null
+            val subtitle: HSString
+            var subtitle2: HSString? = null
 
             if (viewItem.failedIconVisible) {
-                subtitle = stringResource(R.string.BalanceSyncError_Text)
+                subtitle = stringResource(R.string.BalanceSyncError_Text).hs
             } else if (viewItem.syncingTextValue != null) {
-                subtitle = viewItem.syncingTextValue
+                subtitle = viewItem.syncingTextValue.hs
             } else {
                 when (type) {
                     BalanceCardSubtitleType.Rate -> {
-                        // TODO("viewItem.exchangeValue.dimmed")
-                        subtitle = viewItem.exchangeValue.value
-                        // TODO("diffColor(viewItem.diff)")
-                        subtitle2 = diffText(viewItem.diff)
+                        subtitle = viewItem.exchangeValue.value.hs(dimmed = viewItem.exchangeValue.dimmed)
+                        subtitle2 = diffText(viewItem.diff).hs(color = diffColor(viewItem.diff))
                     }
 
                     BalanceCardSubtitleType.CoinName -> {
-                        subtitle = viewItem.wallet.coin.name
+                        subtitle = viewItem.wallet.coin.name.hs
                     }
                 }
             }
 
             CellMiddleInfo(
-                title = viewItem.wallet.coin.code,
-                badge = viewItem.badge,
+                title = viewItem.wallet.coin.code.hs,
+                badge = viewItem.badge?.hs,
                 subtitle = subtitle,
                 subtitle2 = subtitle2
             )
