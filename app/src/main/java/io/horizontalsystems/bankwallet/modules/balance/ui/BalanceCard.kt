@@ -9,21 +9,15 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
@@ -42,10 +36,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -56,17 +48,10 @@ import io.horizontalsystems.bankwallet.modules.balance.contextMenuItems
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
-import io.horizontalsystems.bankwallet.ui.compose.components.diffText
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
-import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
@@ -245,161 +230,6 @@ fun BalanceCard(
 
 enum class BalanceCardSubtitleType {
     Rate, CoinName
-}
-
-@Composable
-fun BalanceCardInner(
-    viewItem: BalanceViewItem2,
-    type: BalanceCardSubtitleType,
-    onClickSyncError: (() -> Unit)? = null
-) {
-    Row(
-        modifier = Modifier
-            .height(72.dp)
-            .background(ComposeAppTheme.colors.lawrence),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        WalletIcon(viewItem, onClickSyncError)
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    modifier = Modifier.weight(weight = 1f),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    headline2_leah(
-                        text = viewItem.wallet.coin.code,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    if (!viewItem.badge.isNullOrBlank()) {
-                        Badge(
-                            modifier = Modifier.padding(start = 8.dp),
-                            text = viewItem.badge,
-                        )
-                    }
-                }
-                Spacer(Modifier.width(24.dp))
-                Text(
-                    text = if (viewItem.primaryValue.visible) viewItem.primaryValue.value else "------",
-                    color = if (viewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.headline2,
-                    maxLines = 1,
-                )
-            }
-
-            Spacer(modifier = Modifier.height(3.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Box(
-                    modifier = Modifier.weight(1f),
-                ) {
-                    if (viewItem.failedIconVisible) {
-                        subhead_grey(text = stringResource(R.string.BalanceSyncError_Text))
-                    } else if (viewItem.syncingTextValue != null) {
-                        subhead2_grey(
-                            text = viewItem.syncingTextValue,
-                            maxLines = 1,
-                        )
-                    } else {
-                        when (type) {
-                            BalanceCardSubtitleType.Rate -> {
-                                if (viewItem.exchangeValue.visible) {
-                                    Row {
-                                        Text(
-                                            text = viewItem.exchangeValue.value,
-                                            color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
-                                            style = ComposeAppTheme.typography.subheadR,
-                                            maxLines = 1,
-                                        )
-                                        Text(
-                                            modifier = Modifier.padding(start = 4.dp),
-                                            text = diffText(viewItem.diff),
-                                            color = diffColor(viewItem.diff),
-                                            style = ComposeAppTheme.typography.subheadR,
-                                            maxLines = 1,
-                                        )
-                                    }
-                                }
-                            }
-
-                            BalanceCardSubtitleType.CoinName -> {
-                                subhead2_grey(
-                                    text = viewItem.wallet.coin.name,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                        }
-                    }
-                }
-                Box(
-                    modifier = Modifier.padding(start = 16.dp),
-                ) {
-                    if (viewItem.syncedUntilTextValue != null) {
-                        subhead2_grey(
-                            text = viewItem.syncedUntilTextValue,
-                            maxLines = 1,
-                        )
-                    } else {
-                        Text(
-                            text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "",
-                            color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subheadR,
-                            maxLines = 1,
-                        )
-                    }
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.width(16.dp))
-    }
-}
-
-@Composable
-private fun WalletIcon(
-    viewItem: BalanceViewItem2,
-    onClickSyncError: (() -> Unit)?
-) {
-    val iconAlpha = if (viewItem.syncingProgress.progress == null) 1f else 0.35f
-    Box(
-        modifier = Modifier
-            .width(64.dp)
-            .fillMaxHeight(),
-        contentAlignment = Alignment.Center
-    ) {
-        viewItem.syncingProgress.progress?.let { progress ->
-            AndroidView(
-                modifier = Modifier.size(47.dp),
-                factory = { context ->
-                    RotatingCircleProgressView(context)
-                },
-                update = { view ->
-                    val color = when (viewItem.syncingProgress.dimmed) {
-                        true -> R.color.andy
-                        false -> R.color.leah
-                    }
-                    view.setProgressColored(progress, view.context.getColor(color), true)
-                }
-            )
-        }
-        IconCell(
-            viewItem.failedIconVisible,
-            viewItem.wallet.token,
-            iconAlpha,
-            onClickSyncError
-        )
-    }
 }
 
 @Composable
