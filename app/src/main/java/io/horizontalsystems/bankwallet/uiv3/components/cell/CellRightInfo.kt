@@ -25,14 +25,22 @@ fun CellRightInfo(
         Text(
             text = title.text,
             style = ComposeAppTheme.typography.headline2,
-            color = title.color ?: ComposeAppTheme.colors.leah,
+            color = when {
+                title.color != null -> title.color
+                title.dimmed -> ComposeAppTheme.colors.andy
+                else -> ComposeAppTheme.colors.leah
+            },
         )
 
         subtitle?.let {
             Text(
                 text = it.text,
                 style = ComposeAppTheme.typography.subhead,
-                color = it.color ?: ComposeAppTheme.colors.grey,
+                color = when {
+                    it.color != null -> it.color
+                    it.dimmed -> ComposeAppTheme.colors.andy
+                    else -> ComposeAppTheme.colors.grey
+                },
             )
         }
 

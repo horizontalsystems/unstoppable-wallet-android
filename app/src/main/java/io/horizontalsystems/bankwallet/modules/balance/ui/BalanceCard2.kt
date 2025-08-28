@@ -50,7 +50,13 @@ fun BalanceCardInner2(
                 when (type) {
                     BalanceCardSubtitleType.Rate -> {
                         subtitle = viewItem.exchangeValue.value.hs(dimmed = viewItem.exchangeValue.dimmed)
-                        subtitle2 = diffText(viewItem.diff).hs(color = diffColor(viewItem.diff))
+                        subtitle2 = viewItem.diff?.let { diff ->
+                            HSString(
+                                diffText(diff.value),
+                                diffColor(diff.value),
+                                diff.dimmed
+                            )
+                        }
                     }
 
                     BalanceCardSubtitleType.CoinName -> {

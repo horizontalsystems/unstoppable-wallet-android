@@ -5,9 +5,11 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 data class HSString(
     val text: String,
-    val color: Color?,
+    val colorOrigin: Color?,
     val dimmed: Boolean,
-)
+) {
+    val color = if (dimmed) colorOrigin?.copy(alpha = 0.5f) else colorOrigin
+}
 
 val String.hs: HSString
     get() = HSString(this, null, false)
