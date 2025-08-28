@@ -126,6 +126,9 @@ class MoneroAdapter(
         return kit.getSubaddresses()
     }
 
+    val statusInfo: Map<String, Any>
+        get() = kit.statusInfo()
+
     companion object {
         const val DECIMALS = 12
 
