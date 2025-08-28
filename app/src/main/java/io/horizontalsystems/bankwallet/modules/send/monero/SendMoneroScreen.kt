@@ -41,6 +41,7 @@ fun SendMoneroScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
+    memo: String?,
     riskyAddress: Boolean
 ) {
     val wallet = viewModel.wallet
@@ -112,7 +113,7 @@ fun SendMoneroScreen(
             )
 
             VSpacer(16.dp)
-            HSMemoInput(maxLength = 120) {
+            HSMemoInput(maxLength = 120, memo) {
                 viewModel.onEnterMemo(it)
             }
 

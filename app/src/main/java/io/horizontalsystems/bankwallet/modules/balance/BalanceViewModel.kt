@@ -293,7 +293,8 @@ class BalanceViewModel(
                 blockchainTypes = allowedBlockchainTypes,
                 tokenTypes = allowedTokenTypes,
                 address = uri.address,
-                amount = uri.amount
+                amount = uri.amount,
+                memo = uri.memo,
             )
             emitState()
         } else {
@@ -370,6 +371,7 @@ data class OpenSendTokenSelect(
     val tokenTypes: List<TokenType>?,
     val address: String,
     val amount: BigDecimal? = null,
+    val memo: String? = null
 )
 
 sealed class TotalUIState {

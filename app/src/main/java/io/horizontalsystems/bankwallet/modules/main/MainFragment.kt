@@ -341,7 +341,8 @@ private fun MainScreen(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
-                openSend.amount
+                openSend.amount,
+                openSend.memo,
             )
         )
         viewModel.onSendOpened()

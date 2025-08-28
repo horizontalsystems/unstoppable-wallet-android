@@ -44,6 +44,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 address = input?.address,
                                 amount = input?.amount,
+                                memo = input?.memo,
                             )
                         )
                     }
@@ -68,5 +69,6 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         val tokenTypes: List<TokenType>?,
         val address: String,
         val amount: BigDecimal?,
+        val memo: String?
     ) : Parcelable
 }
