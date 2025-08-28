@@ -503,7 +503,8 @@ fun BalanceItems(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
-                openSend.amount
+                openSend.amount,
+                openSend.memo,
             )
         )
         viewModel.onSendOpened()

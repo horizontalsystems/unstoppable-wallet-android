@@ -63,6 +63,7 @@ class SendFragment : BaseFragment() {
                 val riskyAddress = input.riskyAddress
                 val hideAddress = input.hideAddress
                 val amount = input.amount
+                val memo = input.memo
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
@@ -209,6 +210,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 amount,
+                                memo,
                                 riskyAddress = riskyAddress
                             )
                         }
@@ -231,6 +233,7 @@ class SendFragment : BaseFragment() {
         val address: Address,
         val riskyAddress: Boolean = false,
         val amount: BigDecimal? = null,
-        val hideAddress: Boolean = false
+        val hideAddress: Boolean = false,
+        val memo: String? = null,
     ) : Parcelable
 }
