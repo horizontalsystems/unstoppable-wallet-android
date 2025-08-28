@@ -241,7 +241,8 @@ object TransactionViewItemFactoryHelper {
         hideAmount: Boolean,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
-        showHistoricalRate: Boolean = true
+        showHistoricalRate: Boolean = true,
+        toAddress: String? = null
     ): List<TransactionInfoViewItem> {
         val mint = fromAddress == zeroAddress
         val title: String =
@@ -276,6 +277,24 @@ object TransactionViewItemFactoryHelper {
                     contact == null,
                     blockchainType,
                     StatSection.AddressFrom
+                )
+            )
+            contact?.let {
+                items.add(
+                    TransactionInfoViewItem.ContactItem(it)
+                )
+            }
+        }
+
+        toAddress?.let {
+            val contact = getContact(toAddress, blockchainType)
+            items.add(
+                TransactionInfoViewItem.Address(
+                    Translator.getString(R.string.TransactionInfo_To),
+                    toAddress,
+                    contact == null,
+                    blockchainType,
+                    StatSection.AddressTo
                 )
             )
             contact?.let {
