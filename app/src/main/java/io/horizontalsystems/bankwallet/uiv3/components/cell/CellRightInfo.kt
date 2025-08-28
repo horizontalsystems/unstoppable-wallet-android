@@ -1,32 +1,47 @@
 package io.horizontalsystems.bankwallet.uiv3.components.cell
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun CellRightInfo(
-    eyebrow: String? = null,
-    title: String,
-    subtitle: String? = null,
-    description: String? = null,
+    eyebrow: HSString? = null,
+    title: HSString,
+    subtitle: HSString? = null,
+    description: HSString? = null,
 ) {
     Column(horizontalAlignment = Alignment.End) {
         eyebrow?.let {
-            subhead_grey(it)
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.subhead,
+                color = it.color ?: ComposeAppTheme.colors.grey,
+            )
         }
 
-        headline2_leah(title)
+        Text(
+            text = title.text,
+            style = ComposeAppTheme.typography.headline2,
+            color = title.color ?: ComposeAppTheme.colors.leah,
+        )
 
         subtitle?.let {
-            subhead_grey(it)
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.subhead,
+                color = it.color ?: ComposeAppTheme.colors.grey,
+            )
         }
 
         description?.let {
-            captionSB_grey(it)
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.captionSB,
+                color = it.color ?: ComposeAppTheme.colors.grey,
+            )
         }
     }
 }

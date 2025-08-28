@@ -67,18 +67,22 @@ fun BalanceCardInner2(
             )
         },
         right = {
-            val subtitle = when {
-                viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue
-                viewItem.secondaryValue.visible -> {
-                    // TODO("viewItem.secondaryValue.dimmed")
-                    viewItem.secondaryValue.value
-                }
-                else -> ""
+            val title = if (viewItem.primaryValue.visible) {
+                viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
+            } else {
+                "------".hs
             }
 
-            // TODO("viewItem.primaryValue.dimmed")
+            val subtitle = when {
+                viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue.hs
+                viewItem.secondaryValue.visible -> {
+                    viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
+                }
+                else -> null
+            }
+
             CellRightInfo(
-                title = if (viewItem.primaryValue.visible) viewItem.primaryValue.value else "------",
+                title = title,
                 subtitle = subtitle
             )
         },
