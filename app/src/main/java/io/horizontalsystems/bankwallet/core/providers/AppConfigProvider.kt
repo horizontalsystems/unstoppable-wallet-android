@@ -159,6 +159,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
                 BlockchainType.Fantom to "0x2174BFA51C4c5ADa3035f3a9ccEb5DbeE32EE162",
                 BlockchainType.Ton to "UQA94iEyQI0iVD0ssowbHGizBEY5uMm9tMz72IecYjA_nnZG",
                 BlockchainType.Tron to "TXkwDeqz77793xYJqxCHuEPiqqj8B8Cf2Z",
+                BlockchainType.Monero to "4B5Dc1VFUpsVxDu8d8y8r44FQAjfmaSL4c3SSydUATpJPGsMkV4qswkenLAY4g9wm98bsvskVZXgDWgW2jA1t31MNcCZ8AZ",
             ).toList().sortedBy { (key, _) -> key.order }.toMap()
         } else {
             mapOf(
@@ -181,6 +182,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
                 BlockchainType.Fantom to "0x731352dcF66014156B1560B832B56069e7b38ab1",
                 BlockchainType.Ton to "UQDgkDkU_3Mtujk2FukZEsiXV9pOhVzkdvvYH8es0tZylTZY",
                 BlockchainType.Tron to "TXKA3SxjLsUL4n6j3v2h85fzb4V7Th6yh6",
+                BlockchainType.Monero to "46ZLVbtaBZFBdztK3L2sJEEwhvKL9B5jbEjBtJWS5DLTAsBS7K4KBpHU3M738qvVcZ1ejUoFichxubCnHLwvGQnu2SWtoeK"
             ).toList().sortedBy { (key, _) -> key.order }.toMap()
         }
     }
