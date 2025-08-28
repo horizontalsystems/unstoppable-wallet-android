@@ -419,6 +419,7 @@ class TransactionInfoViewItemFactory(
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
+                        toAddress = transaction.to
                     )
                 )
 

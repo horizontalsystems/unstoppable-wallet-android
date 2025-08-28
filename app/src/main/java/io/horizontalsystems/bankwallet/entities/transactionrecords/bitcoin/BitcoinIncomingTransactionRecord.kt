@@ -22,7 +22,8 @@ class BitcoinIncomingTransactionRecord(
     amount: BigDecimal,
     val from: String?,
     memo: String?,
-    source: TransactionSource
+    source: TransactionSource,
+    val to: String? = null
 ) : BitcoinTransactionRecord(
     uid = uid,
     transactionHash = transactionHash,

@@ -70,6 +70,7 @@ class MoneroTransactionsAdapter(
         val blockHeight = if (transaction.blockheight == 0L || transaction.isPending) null else transaction.blockheight.toInt()
         return when (transaction.direction) {
             Direction.Direction_In -> {
+                val subaddress = kit.getSubaddress(transaction.accountIndex, transaction.addressIndex)
                 BitcoinIncomingTransactionRecord(
                     token = wallet.token,
                     uid = transaction.hash,
@@ -85,6 +86,7 @@ class MoneroTransactionsAdapter(
                     showRawTransaction = false,
                     amount = transaction.amount.scaledDown(DECIMALS),
                     from = null,
+                    to = subaddress?.address,
                     memo = transaction.notes,
                     source = wallet.transactionSource
                 )

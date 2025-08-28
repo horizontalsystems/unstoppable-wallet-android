@@ -1065,6 +1065,11 @@ class TransactionViewItemFactory(
                 R.string.Transactions_From,
                 mapped(it, record.blockchainType)
             )
+        } ?: record.to?.let {
+            Translator.getString(
+                R.string.Transactions_To,
+                mapped(it, record.blockchainType)
+            )
         } ?: "---"
 
         val primaryValue = getColoredValue(record.value, ColorName.Remus)
