@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -76,6 +77,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
@@ -241,7 +245,8 @@ fun BalanceItems(
                 saver = LazyListState.Saver
             ) {
                 LazyListState()
-            }
+            },
+            contentPadding = PaddingValues(bottom = 32.dp)
         ) {
             item {
                 TotalBalanceRow(
@@ -354,6 +359,50 @@ fun BalanceItems(
                 }
             }
 
+            item {
+                when (uiState.headerNote) {
+                    HeaderNote.None -> Unit
+                    HeaderNote.NonStandardAccount -> {
+                        AlertCard(
+                            modifier = Modifier
+                                .background(ComposeAppTheme.colors.tyler)
+                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
+                                .fillMaxWidth(),
+                            format = AlertFormat.Structured,
+                            type = AlertType.Critical,
+                            text = stringResource(R.string.AccountRecovery_MigrationRequired),
+                            onClick = {
+                                FaqManager.showFaqPage(
+                                    navController,
+                                    FaqManager.faqPathMigrationRequired
+                                )
+                            }
+                        )
+                    }
+
+                    HeaderNote.NonRecommendedAccount -> {
+                        AlertCard(
+                            modifier = Modifier
+                                .background(ComposeAppTheme.colors.tyler)
+                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
+                                .fillMaxWidth(),
+                            format = AlertFormat.Structured,
+                            type = AlertType.Caution,
+                            text = stringResource(R.string.AccountRecovery_MigrationRecommended),
+                            onClick = {
+                                FaqManager.showFaqPage(
+                                    navController,
+                                    FaqManager.faqPathMigrationRecommended
+                                )
+                            },
+                            onClose = {
+                                viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
+                            }
+                        )
+                    }
+                }
+            }
+
             stickyHeader {
                 TabsSectionButtons(
                     left = {
@@ -387,40 +436,6 @@ fun BalanceItems(
                         }
                     }
                 )
-            }
-
-            item {
-                when (uiState.headerNote) {
-                    HeaderNote.None -> Unit
-                    HeaderNote.NonStandardAccount -> {
-                        NoteError(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
-                            text = stringResource(R.string.AccountRecovery_MigrationRequired),
-                            onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRequired
-                                )
-                            }
-                        )
-                    }
-
-                    HeaderNote.NonRecommendedAccount -> {
-                        NoteWarning(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
-                            text = stringResource(R.string.AccountRecovery_MigrationRecommended),
-                            onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRecommended
-                                )
-                            },
-                            onClose = {
-                                viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
-                            }
-                        )
-                    }
-                }
             }
 
             if (balanceViewItems.isEmpty()) {
@@ -688,9 +703,4 @@ fun <T> LazyListScope.wallets(
     itemsIndexed(items, key = key) { index, item ->
         itemContent(index, item)
     }
-    item {
-        VSpacer(height = 10.dp)
-    }
 }
-
-
