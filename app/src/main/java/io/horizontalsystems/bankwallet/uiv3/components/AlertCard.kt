@@ -31,8 +31,7 @@ fun AlertCard(
     format: AlertFormat,
     type: AlertType,
     text: String,
-    onClick: (() -> Unit)? = null,
-    onClose: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null
 ) {
     val alertColor = when (type) {
         AlertType.Critical -> ComposeAppTheme.colors.lucian

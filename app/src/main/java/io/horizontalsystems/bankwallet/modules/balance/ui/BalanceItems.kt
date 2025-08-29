@@ -381,13 +381,11 @@ fun BalanceItems(
                     }
 
                     HeaderNote.NonRecommendedAccount -> {
-                        AlertCard(
+                        NoteWarning(
                             modifier = Modifier
                                 .background(ComposeAppTheme.colors.tyler)
                                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
                                 .fillMaxWidth(),
-                            format = AlertFormat.Structured,
-                            type = AlertType.Caution,
                             text = stringResource(R.string.AccountRecovery_MigrationRecommended),
                             onClick = {
                                 FaqManager.showFaqPage(
