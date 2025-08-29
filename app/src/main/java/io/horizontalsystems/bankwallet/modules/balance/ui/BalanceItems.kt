@@ -281,8 +281,16 @@ fun BalanceItems(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        if (accountViewItem.type.supportsWalletConnect) {
+                            BalanceActionButton(
+                                variant = ButtonVariant.Primary,
+                                icon = R.drawable.ic_scan_24,
+                                title = stringResource(R.string.Button_ScanQr),
+                                onClick = onScanClick
+                            )
+                        }
                         BalanceActionButton(
-                            variant = ButtonVariant.Primary,
+                            variant = ButtonVariant.Secondary,
                             icon = R.drawable.ic_arrow_down_24,
                             title = stringResource(R.string.Balance_Receive),
                             enabled = true,
@@ -345,14 +353,6 @@ fun BalanceItems(
                                         event = StatEvent.Open(StatPage.Swap)
                                     )
                                 }
-                            )
-                        }
-                        if (accountViewItem.type.supportsWalletConnect) {
-                            BalanceActionButton(
-                                variant = ButtonVariant.Secondary,
-                                icon = R.drawable.ic_scan_24,
-                                title = stringResource(R.string.Button_ScanQr),
-                                onClick = onScanClick
                             )
                         }
                     }
