@@ -189,11 +189,11 @@ class TvlFragment : BaseComposeFragment() {
                                                 item.tvl,
                                                 when (tvlDiffType) {
                                                     TvlDiffType.Percent -> item.tvlChangePercent?.let {
-                                                        MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
+                                                        MarketDataValue.Diff(Value.Percent(item.tvlChangePercent))
                                                     }
 
                                                     TvlDiffType.Currency -> item.tvlChangeAmount?.let {
-                                                        MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
+                                                        MarketDataValue.Diff(Value.Currency(item.tvlChangeAmount))
                                                     }
 
                                                     else -> null

@@ -124,12 +124,8 @@ fun marketDataValueComponent(marketDataValue: MarketDataValue?): HSString {
 
         is MarketDataValue.Volume -> marketDataValue.value.hs
 
-        is MarketDataValue.Diff -> diffText(marketDataValue.value).hs(diffColor(marketDataValue.value))
-
-        is MarketDataValue.DiffNew -> formatValueAsDiff(marketDataValue.value).hs(
-            diffColor(
-                marketDataValue.value.raw()
-            )
+        is MarketDataValue.Diff -> formatValueAsDiff(marketDataValue.value).hs(
+            diffColor(marketDataValue.value.raw())
         )
 
         null -> "---".hs

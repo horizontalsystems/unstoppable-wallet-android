@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -225,7 +226,9 @@ fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) 
         right = {
             CellRightInfo(
                 title = item.marketCap.hs,
-                subtitle = marketDataValueComponent(MarketDataValue.Diff(item.marketCapDiff))
+                subtitle = item.marketCapDiff?.let {
+                    marketDataValueComponent(MarketDataValue.Diff(Value.Percent(it)))
+                }
             )
         },
         onClick = { onItemClick.invoke(item.platform) }

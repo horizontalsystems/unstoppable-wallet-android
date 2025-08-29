@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageModule.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
@@ -50,19 +51,19 @@ class MetricsPageViewModel(
         else -> throw Exception("MetricsType not supported")
     }
 
-    private val title = when(metricsType) {
+    private val title = when (metricsType) {
         MetricsType.Volume24h -> R.string.MarketGlobalMetrics_Volume
         MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCap
         else -> throw Exception("MetricsType not supported")
     }
 
-    private val description = when(metricsType) {
+    private val description = when (metricsType) {
         MetricsType.Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
         MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCapDescription
         else -> throw Exception("MetricsType not supported")
     }
 
-    private val icon = when(metricsType) {
+    private val icon = when (metricsType) {
         MetricsType.Volume24h -> "total_volume"
         MetricsType.TotalMarketCap -> "total_mcap"
         else -> throw Exception("MetricsType not supported")
@@ -145,7 +146,9 @@ class MetricsPageViewModel(
                             currency,
                             marketInfo.price ?: BigDecimal.ZERO
                         ).getFormattedFull(),
-                        marketDataValue = MarketDataValue.Diff(marketInfo.priceChangeValue(period)),
+                        marketDataValue = marketInfo.priceChangeValue(period)?.let {
+                            MarketDataValue.Diff(Value.Percent(it))
+                        },
                         rank = marketInfo.marketCapRank?.toString(),
                         sortField = when (metricsType) {
                             MetricsType.Volume24h -> marketInfo.totalVolume
