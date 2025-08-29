@@ -35,6 +35,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -110,23 +112,26 @@ fun TopCoins(
                                     borderBottom = true,
                                 ) {
                                     HSpacer(width = 16.dp)
-                                    OptionController(
-                                        uiState.sortingField.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.sortingField.titleResId),
+                                        onClick = {
                                             openSortingSelector = true
                                         }
                                     )
                                     HSpacer(width = 12.dp)
-                                    OptionController(
-                                        uiState.topMarket.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.topMarket.titleResId),
+                                        onClick = {
                                             openTopSelector = true
                                         }
                                     )
                                     HSpacer(width = 12.dp)
-                                    OptionController(
-                                        uiState.period.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.period.titleResId),
+                                        onClick = {
                                             openPeriodSelector = true
                                         }
                                     )

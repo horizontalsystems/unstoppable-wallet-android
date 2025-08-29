@@ -103,7 +103,7 @@ fun HeaderSorting(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp)
+            .height(52.dp)
             .background(ComposeAppTheme.colors.tyler)
     ) {
         if (borderTop) {

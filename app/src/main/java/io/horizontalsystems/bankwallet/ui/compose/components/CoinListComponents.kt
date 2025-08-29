@@ -11,14 +11,12 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +30,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
@@ -47,7 +44,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -65,6 +61,13 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -172,62 +175,79 @@ fun CoinList(
     LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
         preItems.invoke(this)
         itemsIndexed(items, key = { _, item -> item.coinUid }) { _, item ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 24.dp)
-                    .clickable { onCoinClick.invoke(item.fullCoin.coin.uid) }
-                    .background(ComposeAppTheme.colors.tyler)
-                    .padding(horizontal = 16.dp)
-                    .padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                HsImage(
-                    url = item.fullCoin.coin.imageUrl,
-                    alternativeUrl = item.fullCoin.coin.alternativeImageUrl,
-                    placeholder = item.fullCoin.iconPlaceholder,
+            BoxBordered(bottom = true) {
+                Row(
                     modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(32.dp)
-                        .clip(CircleShape)
-                )
-                Column(
-                    modifier = Modifier.weight(1f)
+                        .fillMaxWidth()
+                        .clickable { onCoinClick.invoke(item.fullCoin.coin.uid) },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    MarketCoinFirstRow(item.fullCoin.coin.code, item.value, item.signal)
-                    Spacer(modifier = Modifier.height(3.dp))
-                    MarketCoinSecondRow(item.subtitle, item.marketDataValue, item.rank)
-                }
-                HSpacer(16.dp)
-                if (item.favorited) {
-                    HsIconButton(
-                        modifier = Modifier.size(20.dp),
-                        onClick = {
-                            onRemoveFavorite(item.coinUid)
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_heart_filled_20),
-                            contentDescription = "heart icon button",
-                            tint = ComposeAppTheme.colors.jacob
+                    Box(modifier = Modifier.weight(1f)) {
+                        CellPrimary(
+                            left = {
+                                CellLeftImage(
+                                    type = ImageType.Ellipse,
+                                    size = 32,
+                                    painter = rememberAsyncImagePainter(
+                                        model = item.fullCoin.coin.imageUrl,
+                                        error = item.fullCoin.coin.alternativeImageUrl?.let { alternativeUrl ->
+                                            rememberAsyncImagePainter(
+                                                model = alternativeUrl,
+                                                error = painterResource(item.fullCoin.iconPlaceholder)
+                                            )
+                                        } ?: painterResource(item.fullCoin.iconPlaceholder)
+                                    ),
+                                )
+                            },
+                            middle = {
+                                CellMiddleInfo(
+                                    title = item.fullCoin.coin.code.hs,
+                                    badge = item.signal?.name?.hs,
+                                    subtitle = item.subtitle.hs,
+                                    subtitleBadge = item.rank?.hs,
+                                )
+                            },
+                            right = {
+                                CellRightInfo(
+                                    title = item.value.hs,
+                                    subtitle = marketDataValueComponent(item.marketDataValue)
+                                )
+                            },
                         )
                     }
-                } else {
-                    HsIconButton(
-                        modifier = Modifier.size(20.dp),
-                        onClick = {
-                            onAddFavorite(item.coinUid)
+                    if (item.favorited) {
+                        HsIconButton(
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .size(20.dp),
+                            onClick = {
+                                onRemoveFavorite(item.coinUid)
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_heart_filled_20),
+                                contentDescription = "heart icon button",
+                                tint = ComposeAppTheme.colors.jacob
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_heart_20),
-                            contentDescription = "heart icon button",
-                            tint = ComposeAppTheme.colors.grey
-                        )
+                    } else {
+                        HsIconButton(
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .size(20.dp),
+                            onClick = {
+                                onAddFavorite(item.coinUid)
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_heart_20),
+                                contentDescription = "heart icon button",
+                                tint = ComposeAppTheme.colors.grey
+                            )
+                        }
                     }
                 }
             }
-            HsDivider()
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -333,44 +353,6 @@ fun SortMenu(title: TranslatableString, onClick: () -> Unit) {
         iconRight = R.drawable.ic_down_arrow_20,
         onClick = onClick
     )
-}
-
-@Composable
-fun SortMenu(titleRes: Int, onClick: () -> Unit) {
-    SortMenu(TranslatableString.ResString(titleRes), onClick)
-}
-
-@Composable
-fun TopCloseButton(
-    onCloseButtonClick: () -> Unit
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Box(
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onCloseButtonClick.invoke()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_close),
-                contentDescription = "close icon",
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp),
-                tint = ComposeAppTheme.colors.jacob
-            )
-        }
-    }
 }
 
 @Composable

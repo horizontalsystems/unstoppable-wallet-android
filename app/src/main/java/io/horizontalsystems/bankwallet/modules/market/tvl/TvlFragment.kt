@@ -2,25 +2,17 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,17 +40,25 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.bankwallet.ui.compose.components.marketDataValueComponent
 import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
@@ -96,7 +96,9 @@ class TvlFragment : BaseComposeFragment() {
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
-        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
+        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(
+            SelectorDialogState.Closed
+        )
 
         Column(
             modifier = Modifier
@@ -152,7 +154,11 @@ class TvlFragment : BaseComposeFragment() {
                             ) {
                                 item {
                                     tvlViewModel.header.let { header ->
-                                        DescriptionCard(header.title, header.description, header.icon)
+                                        DescriptionCard(
+                                            header.title,
+                                            header.description,
+                                            header.icon
+                                        )
                                     }
                                 }
                                 item {
@@ -174,25 +180,27 @@ class TvlFragment : BaseComposeFragment() {
                                     }
 
                                     items(tvlData.coinTvlViewItems) { item ->
-                                        DefiMarket(
-                                            item.name,
-                                            item.chain,
-                                            item.iconUrl,
-                                            item.iconPlaceholder,
-                                            item.tvl,
-                                            when (tvlDiffType) {
-                                                TvlDiffType.Percent -> item.tvlChangePercent?.let {
-                                                    MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
-                                                }
+                                        BoxBordered(bottom = true) {
+                                            DefiMarket(
+                                                item.name,
+                                                item.chain,
+                                                item.iconUrl,
+                                                item.iconPlaceholder,
+                                                item.tvl,
+                                                when (tvlDiffType) {
+                                                    TvlDiffType.Percent -> item.tvlChangePercent?.let {
+                                                        MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
+                                                    }
 
-                                                TvlDiffType.Currency -> item.tvlChangeAmount?.let {
-                                                    MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
-                                                }
+                                                    TvlDiffType.Currency -> item.tvlChangeAmount?.let {
+                                                        MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
+                                                    }
 
-                                                else -> null
-                                            },
-                                            item.rank
-                                        ) { onCoinClick(item.coinUid) }
+                                                    else -> null
+                                                },
+                                                item.rank
+                                            ) { onCoinClick(item.coinUid) }
+                                        }
                                     }
                                 }
                             }
@@ -232,25 +240,25 @@ class TvlFragment : BaseComposeFragment() {
     ) {
         HeaderSorting(borderBottom = true, borderTop = true) {
             HSpacer(16.dp)
-            ButtonSecondaryWithIcon(
-                modifier = Modifier.height(28.dp),
+            HSDropdownButton(
+                variant = ButtonVariant.Secondary,
                 onClick = onClickChainSelector,
-                title =chainSelect.selected.title.getString(),
-                iconRight = painterResource(R.drawable.ic_down_arrow_20),
+                title = chainSelect.selected.title.getString(),
             )
             HSpacer(8.dp)
-            ButtonSecondaryWithIcon(
+            HSButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
                 title = stringResource(R.string.Market_TVL),
-                iconRight = painterResource(
-                    if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                ),
+                icon = painterResource(if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
                 onClick = onToggleSortType
             )
             tvlDiffType?.let {
                 HSpacer(8.dp)
-                ButtonSecondaryCircle(
-                    modifier = Modifier.padding(end = 16.dp),
-                    icon = if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20,
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
+                    icon = painterResource(if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20),
                     onClick = { onToggleTvlDiffType() }
                 )
             }
@@ -269,31 +277,36 @@ class TvlFragment : BaseComposeFragment() {
         label: String? = null,
         onClick: (() -> Unit)? = null
     ) {
-        SectionItemBorderedRowUniversalClear(
-            onClick = onClick,
-            borderBottom = true
-        ) {
-            Image(
-                painter = rememberAsyncImagePainter(
-                    model = iconUrl,
-                    error = painterResource(
-                        iconPlaceholder ?: R.drawable.ic_platform_placeholder_24
-                    )
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                MarketCoinFirstRow(name, tvl.getFormattedShort())
-                Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(chain.getString(), marketDataValue, label)
-            }
-        }
+        CellPrimary(
+            left = {
+                CellLeftImage(
+                    type = ImageType.Rectangle,
+                    size = 32,
+                    painter = rememberAsyncImagePainter(
+                        model = iconUrl,
+                        error = iconPlaceholder?.let { alternativeUrl ->
+                            rememberAsyncImagePainter(
+                                model = alternativeUrl,
+                                error = painterResource(R.drawable.ic_platform_placeholder_24)
+                            )
+                        } ?: painterResource(R.drawable.ic_platform_placeholder_24)
+                    ),
+                )
+            },
+            middle = {
+                CellMiddleInfo(
+                    title = name.hs,
+                    subtitle = chain.getString().hs,
+                    subtitleBadge = label?.hs,
+                )
+            },
+            right = {
+                CellRightInfo(
+                    title = tvl.getFormattedShort().hs,
+                    subtitle = marketDataValueComponent(marketDataValue)
+                )
+            },
+            onClick = onClick
+        )
     }
-
 }

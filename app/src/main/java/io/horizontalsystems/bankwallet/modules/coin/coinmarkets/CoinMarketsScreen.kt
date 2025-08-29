@@ -1,20 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +21,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,11 +43,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWith
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.bankwallet.ui.compose.components.marketDataValueComponent
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
 
@@ -154,15 +154,17 @@ fun CoinMarketList(
 
     LazyColumn(state = listState) {
         items(items) { item ->
-            CoinMarketCell(
-                item.market,
-                item.pair,
-                item.marketImageUrl ?: "",
-                item.volumeToken,
-                MarketDataValue.Volume(item.volumeFiat),
-                item.tradeUrl,
-                item.badge
-            )
+            BoxBordered(bottom = true) {
+                CoinMarketCell(
+                    item.market,
+                    item.pair,
+                    item.marketImageUrl ?: "",
+                    item.volumeToken,
+                    MarketDataValue.Volume(item.volumeFiat),
+                    item.tradeUrl,
+                    item.badge
+                )
+            }
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -186,31 +188,34 @@ fun CoinMarketCell(
     badge: TranslatableString?
 ) {
     val context = LocalContext.current
-    SectionItemBorderedRowUniversalClear(
-        onClick = tradeUrl?.let {
-            { LinkHelper.openLinkInAppBrowser(context, it) }
+    CellPrimary(
+        left = {
+            CellLeftImage(
+                type = ImageType.Rectangle,
+                size = 32,
+                painter = rememberAsyncImagePainter(
+                    model = iconUrl,
+                    error =painterResource(R.drawable.ic_platform_placeholder_24)
+                ),
+            )
         },
-        borderBottom = true
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = iconUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_24)
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
-                .clip(RoundedCornerShape(8.dp)),
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            MarketCoinFirstRow(name, volumeToken, badge = badge?.getString())
-            Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(subtitle, marketDataValue, null)
+        middle = {
+            CellMiddleInfo(
+                title = name.hs,
+                badge = badge?.toString()?.hs,
+                subtitle = subtitle.hs,
+            )
+        },
+        right = {
+            CellRightInfo(
+                title = volumeToken.hs,
+                subtitle = marketDataValueComponent(marketDataValue)
+            )
+        },
+        onClick =  tradeUrl?.let {
+            { LinkHelper.openLinkInAppBrowser(context, it) }
         }
-    }
+    )
 }
 
 @Composable
