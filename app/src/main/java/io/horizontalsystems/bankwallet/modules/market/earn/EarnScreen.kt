@@ -1,25 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.earn
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,14 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.paidAction
@@ -49,25 +41,28 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultFragment
-import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -149,33 +144,33 @@ fun MarketEarnScreen(
                                         borderBottom = true,
                                     ) {
                                         HSpacer(width = 16.dp)
-                                        OptionController(
-                                            uiState.filterBy.titleResId,
-                                            onOptionClick = {
+                                        HSDropdownButton(
+                                            variant = ButtonVariant.Secondary,
+                                            title = stringResource(uiState.filterBy.titleResId),
+                                            onClick = {
                                                 openFilterSelector = true
                                             }
                                         )
                                         HSpacer(width = 12.dp)
-                                        ButtonSecondaryWithIcon(
-                                            modifier = Modifier.height(28.dp),
+                                        HSDropdownButton(
+                                            variant = ButtonVariant.Secondary,
+                                            title = uiState.sortingByTitle,
                                             onClick = {
                                                 openSortingSelector = true
                                             },
-                                            title = uiState.sortingByTitle,
-                                            iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                         )
                                         HSpacer(width = 12.dp)
-                                        ButtonSecondaryWithIcon(
-                                            modifier = Modifier.height(28.dp),
+                                        HSDropdownButton(
+                                            variant = ButtonVariant.Secondary,
+                                            title = stringResource(uiState.apyPeriod.titleResId),
                                             onClick = {
                                                 openPeriodSelector = true
                                             },
-                                            title = stringResource(uiState.apyPeriod.titleResId),
-                                            iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                         )
                                         HSpacer(width = 12.dp)
-                                        ButtonSecondaryWithIcon(
-                                            modifier = Modifier.height(28.dp),
+                                        HSDropdownButton(
+                                            variant = ButtonVariant.Secondary,
+                                            title = uiState.chainSelectorMenuTitle,
                                             onClick = {
                                                 navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
                                                     R.id.vaultsBlockchainsSelectorFragment,
@@ -187,8 +182,6 @@ fun MarketEarnScreen(
                                                     viewModel.onBlockchainsSelected(it.selected)
                                                 }
                                             },
-                                            title = uiState.chainSelectorMenuTitle,
-                                            iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                         )
                                         HSpacer(width = 16.dp)
                                     }
@@ -273,16 +266,18 @@ fun VaultList(
             items = items,
             key = { item -> item.address + item.protocolName }
         ) { item ->
-            VaultItem(
-                title = item.assetSymbol,
-                subtitle = item.name,
-                coinIconUrl = item.assetLogo,
-                coinIconPlaceholder = R.drawable.coin_placeholder,
-                value = item.apy,
-                subvalue = item.tvl,
-                label = item.blockchainName,
-                onClick = { onCoinClick.invoke(item) },
-            )
+            BoxBordered(bottom = true) {
+                VaultItem(
+                    title = item.assetSymbol,
+                    subtitle = item.name,
+                    coinIconUrl = item.assetLogo,
+                    coinIconPlaceholder = R.drawable.coin_placeholder,
+                    value = item.apy,
+                    subvalue = item.tvl,
+                    label = item.blockchainName,
+                    onClick = { onCoinClick.invoke(item) },
+                )
+            }
 
             HsDivider()
         }
@@ -320,91 +315,37 @@ private fun VaultItem(
     label: String? = null,
     onClick: (() -> Unit)? = null,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 24.dp)
-            .clickable { onClick?.invoke() }
-            .background(ComposeAppTheme.colors.tyler)
-            .padding(horizontal = 16.dp)
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        HsImage(
-            url = coinIconUrl,
-            alternativeUrl = alternativeCoinIconUrl,
-            placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
-                .clip(CircleShape)
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            VaultFirstRow(title, value, label)
-            Spacer(modifier = Modifier.height(3.dp))
-            VaultSecondRow(subtitle, subvalue)
-        }
-    }
-}
-
-@Composable
-fun VaultFirstRow(
-    title: String,
-    value: BigDecimal,
-    badge: String? = null
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            body_leah(
-                text = title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+    CellPrimary(
+        left = {
+            CellLeftImage(
+                type = ImageType.Ellipse,
+                size = 32,
+                painter = rememberAsyncImagePainter(
+                    model = coinIconUrl,
+                    error = alternativeCoinIconUrl?.let { alternativeUrl ->
+                        rememberAsyncImagePainter(
+                            model = alternativeUrl,
+                            error = painterResource(coinIconPlaceholder)
+                        )
+                    } ?: painterResource(coinIconPlaceholder)
+                ),
             )
-            if (badge != null) {
-                Badge(
-                    text = badge,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-        }
-        Text(
-            text = "APY ${vaultDiffText(value)}",
-            color = diffColor(value),
-            style = ComposeAppTheme.typography.subheadR,
-            maxLines = 1,
-        )
-    }
-}
-
-@Composable
-private fun VaultSecondRow(
-    subtitle: String,
-    value: String,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        subhead2_grey(
-            text = subtitle,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
-        )
-        Spacer(Modifier.width(8.dp))
-        subhead2_grey(
-            text = "TVL: $value",
-            maxLines = 1,
-        )
-    }
+        },
+        middle = {
+            CellMiddleInfo(
+                title = title.hs,
+                badge = label?.hs,
+                subtitle = subtitle.hs,
+            )
+        },
+        right = {
+            CellRightInfo(
+                title = "APY ${vaultDiffText(value)}".hs(diffColor(value)),
+                subtitle = subvalue.hs
+            )
+        },
+        onClick = onClick
+    )
 }
 
 @Composable
@@ -422,16 +363,18 @@ private fun PremiumContentMessage(
             )
         ) {
             blurredItems.forEach { item ->
-                VaultItem(
-                    title = item.assetSymbol,
-                    subtitle = item.name,
-                    coinIconUrl = item.assetLogo,
-                    alternativeCoinIconUrl = null,
-                    coinIconPlaceholder = R.drawable.coin_placeholder,
-                    value = item.apy,
-                    subvalue = item.tvl,
-                    label = item.blockchainName,
-                )
+                BoxBordered(bottom = true) {
+                    VaultItem(
+                        title = item.assetSymbol,
+                        subtitle = item.name,
+                        coinIconUrl = item.assetLogo,
+                        alternativeCoinIconUrl = null,
+                        coinIconPlaceholder = R.drawable.coin_placeholder,
+                        value = item.apy,
+                        subvalue = item.tvl,
+                        label = item.blockchainName,
+                    )
+                }
                 HsDivider()
             }
         }

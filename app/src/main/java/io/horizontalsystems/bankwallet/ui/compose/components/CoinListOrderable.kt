@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -59,105 +60,106 @@ fun CoinListOrderable(
     LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
         preItems.invoke(this)
         itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
-            if (showReorderArrows) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    IconButton(
-                        onClick = { onReorder.invoke(index, index - 1) }
+            BoxBordered(bottom = true) {
+                if (showReorderArrows) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_big_up_20),
-                            tint = ComposeAppTheme.colors.grey,
-                            contentDescription = null
-                        )
-                    }
-                    IconButton(
-                        onClick = { onReorder.invoke(index, index + 1) }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_big_down_20),
-                            tint = ComposeAppTheme.colors.grey,
-                            contentDescription = null
-                        )
-                    }
-
-                    MarketCoin(
-                        title = item.fullCoin.coin.code,
-                        subtitle = item.subtitle,
-                        coinIconUrl = item.fullCoin.coin.imageUrl,
-                        alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
-                        coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                        value = item.value,
-                        marketDataValue = item.marketDataValue,
-                        label = item.rank,
-                        advice = item.signal,
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Max)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
-                            .align(Alignment.CenterEnd)
-                            .width(100.dp)
-                            .clickable {
-                                if (item.favorited) {
-                                    onRemoveFavorite(item.coinUid)
-                                } else {
-                                    onAddFavorite(item.coinUid)
-                                }
-                                coroutineScope.launch {
-                                    delay(200)
-                                    revealedCardId = null
-                                }
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
-                            tint = ComposeAppTheme.colors.blade,
-                            contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
-                        )
-                    }
-                    DraggableCardSimple(
-                        key = item.coinUid,
-                        isRevealed = revealedCardId == item.coinUid,
-                        cardOffset = 100f,
-                        onReveal = {
-                            if (revealedCardId != item.coinUid) {
-                                revealedCardId = item.coinUid
-                            }
-                        },
-                        onConceal = {
-                            revealedCardId = null
-                        },
-                        content = {
-                            MarketCoin(
-                                title = item.fullCoin.coin.code,
-                                subtitle = item.subtitle,
-                                coinIconUrl = item.fullCoin.coin.imageUrl,
-                                alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
-                                coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                                value = item.value,
-                                marketDataValue = item.marketDataValue,
-                                label = item.rank,
-                                advice = item.signal,
-                                onClick = { onCoinClick.invoke(item.fullCoin.coin.uid) },
-                                onLongClick = {
-                                    if (canReorder) {
-                                        enableManualOrder()
-                                    }
-                                }
+                        IconButton(
+                            onClick = { onReorder.invoke(index, index - 1) }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_arrow_big_up_20),
+                                tint = ComposeAppTheme.colors.grey,
+                                contentDescription = null
                             )
                         }
-                    )
-                    HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
+                        IconButton(
+                            onClick = { onReorder.invoke(index, index + 1) }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_arrow_big_down_20),
+                                tint = ComposeAppTheme.colors.grey,
+                                contentDescription = null
+                            )
+                        }
+
+                        MarketCoin(
+                            title = item.fullCoin.coin.code,
+                            subtitle = item.subtitle,
+                            coinIconUrl = item.fullCoin.coin.imageUrl,
+                            alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
+                            coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                            value = item.value,
+                            marketDataValue = item.marketDataValue,
+                            label = item.rank,
+                            advice = item.signal,
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                                .align(Alignment.CenterEnd)
+                                .width(100.dp)
+                                .clickable {
+                                    if (item.favorited) {
+                                        onRemoveFavorite(item.coinUid)
+                                    } else {
+                                        onAddFavorite(item.coinUid)
+                                    }
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        revealedCardId = null
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                                tint = ComposeAppTheme.colors.blade,
+                                contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
+                            )
+                        }
+                        DraggableCardSimple(
+                            key = item.coinUid,
+                            isRevealed = revealedCardId == item.coinUid,
+                            cardOffset = 100f,
+                            onReveal = {
+                                if (revealedCardId != item.coinUid) {
+                                    revealedCardId = item.coinUid
+                                }
+                            },
+                            onConceal = {
+                                revealedCardId = null
+                            },
+                            content = {
+                                MarketCoin(
+                                    title = item.fullCoin.coin.code,
+                                    subtitle = item.subtitle,
+                                    coinIconUrl = item.fullCoin.coin.imageUrl,
+                                    alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
+                                    coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                                    value = item.value,
+                                    marketDataValue = item.marketDataValue,
+                                    label = item.rank,
+                                    advice = item.signal,
+                                    onClick = { onCoinClick.invoke(item.fullCoin.coin.uid) },
+                                    onLongClick = {
+                                        if (canReorder) {
+                                            enableManualOrder()
+                                        }
+                                    }
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -3,21 +3,14 @@ package io.horizontalsystems.bankwallet.modules.market.filtersresult
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -37,18 +30,19 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
-import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.subscriptions.core.TradeSignals
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
@@ -145,17 +139,21 @@ private fun SearchResultsScreen(
                                 stickyHeader {
                                     HeaderSorting(borderBottom = true, borderTop = true) {
                                         HSpacer(width = 16.dp)
-                                        OptionController(
-                                            uiState.sortingField.titleResId,
-                                            onOptionClick = {
+                                        HSDropdownButton(
+                                            variant = ButtonVariant.Secondary,
+                                            title = stringResource(uiState.sortingField.titleResId),
+                                            onClick = {
                                                 openSortingSelector = true
                                             }
                                         )
                                         HSpacer(width = 12.dp)
-                                        SignalButton(
-                                            turnedOn = uiState.showSignal,
-                                            onToggle = {
-                                                if (it) {
+                                        HSButton(
+                                            variant = ButtonVariant.Secondary,
+                                            style = ButtonStyle.Solid,
+                                            size = ButtonSize.Small,
+                                            title = stringResource(id = R.string.Market_Signals),
+                                            onClick = {
+                                                if (!uiState.showSignal) {
                                                     navController.paidAction(TradeSignals) {
                                                         navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
                                                             R.id.marketSignalsFragment
@@ -173,7 +171,8 @@ private fun SearchResultsScreen(
                                                 } else {
                                                     viewModel.hideSignals()
                                                 }
-                                            })
+                                            }
+                                        )
                                         HSpacer(width = 16.dp)
                                     }
                                 }
@@ -203,45 +202,4 @@ private fun SearchResultsScreen(
 
         }
     }
-}
-
-@Composable
-fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
-    val title = stringResource(id = R.string.Market_Signals)
-    val onClick = { onToggle.invoke(!turnedOn) }
-    val buttonColors = if (turnedOn) {
-        ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        )
-    } else {
-        SecondaryButtonDefaults.buttonColors()
-    }
-    ButtonSecondary(
-        onClick = onClick,
-        contentPadding = PaddingValues(
-            start = 10.dp,
-            end = 16.dp,
-        ),
-        buttonColors = buttonColors,
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.padding(end = 2.dp),
-                    painter = painterResource(R.drawable.ic_star_filled_20),
-                    contentDescription = null,
-                    tint = if (turnedOn) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob
-                )
-                Text(
-                    text = title,
-                    style = ComposeAppTheme.typography.captionSB,
-                    color = if (turnedOn) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.leah,
-                )
-            }
-        },
-    )
 }

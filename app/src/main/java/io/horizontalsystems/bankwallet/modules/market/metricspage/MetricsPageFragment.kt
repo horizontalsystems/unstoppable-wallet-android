@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,14 +35,17 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoin
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 
 class MetricsPageFragment : BaseComposeFragment() {
 
@@ -139,30 +141,29 @@ class MetricsPageFragment : BaseComposeFragment() {
                                 stickyHeader {
                                     HeaderSorting(borderBottom = true, borderTop = true) {
                                         HSpacer(width = 16.dp)
-                                        ButtonSecondaryWithIcon(
-                                            modifier = Modifier.height(28.dp),
-                                            onClick = {
-                                                viewModel.toggleSorting()
-                                            },
-                                            title =uiState.toggleButtonTitle,
-                                            iconRight = painterResource(
-                                                if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                                            ),
+                                        HSButton(
+                                            variant = ButtonVariant.Secondary,
+                                            size = ButtonSize.Small,
+                                            title = uiState.toggleButtonTitle,
+                                            icon = painterResource(if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
+                                            onClick = { viewModel.toggleSorting() }
                                         )
                                         HSpacer(width = 16.dp)
                                     }
                                 }
                                 items(uiState.viewItems) { viewItem ->
-                                    MarketCoinClear(
-                                        title = viewItem.fullCoin.coin.code,
-                                        subtitle = viewItem.subtitle,
-                                        coinIconUrl = viewItem.fullCoin.coin.imageUrl,
-                                        alternativeCoinIconUrl = viewItem.fullCoin.coin.alternativeImageUrl,
-                                        coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
-                                        value = viewItem.coinRate,
-                                        marketDataValue = viewItem.marketDataValue,
-                                        label = viewItem.rank,
-                                    ) { onCoinClick(viewItem.fullCoin.coin.uid) }
+                                    BoxBordered(bottom = true) {
+                                        MarketCoin(
+                                            title = viewItem.fullCoin.coin.code,
+                                            subtitle = viewItem.subtitle,
+                                            coinIconUrl = viewItem.fullCoin.coin.imageUrl,
+                                            alternativeCoinIconUrl = viewItem.fullCoin.coin.alternativeImageUrl,
+                                            coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
+                                            value = viewItem.coinRate,
+                                            marketDataValue = viewItem.marketDataValue,
+                                            label = viewItem.rank,
+                                        ) { onCoinClick(viewItem.fullCoin.coin.uid) }
+                                    }
                                 }
                             }
                         }

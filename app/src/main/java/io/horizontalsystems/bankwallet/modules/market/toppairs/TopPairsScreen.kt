@@ -5,10 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,17 +35,22 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.marketDataValueComponent
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -91,31 +93,31 @@ fun TopPairsScreen() {
                                 stickyHeader {
                                     HeaderSorting(borderBottom = true) {
                                         HSpacer(width = 16.dp)
-                                        ButtonSecondaryWithIcon(
-                                            modifier = Modifier.height(28.dp),
-                                            onClick = {
-                                                viewModel.toggleSorting()
-                                            },
+                                        HSButton(
+                                            variant = ButtonVariant.Secondary,
+                                            size = ButtonSize.Small,
                                             title = stringResource(R.string.Market_Volume),
-                                            iconRight = painterResource(
-                                                if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                                            ),
+                                            icon = painterResource(if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
+                                            onClick = { viewModel.toggleSorting() }
                                         )
                                         HSpacer(width = 16.dp)
                                     }
                                 }
                                 itemsIndexed(uiState.items) { _, item ->
-                                    TopPairItem(item, borderBottom = true) {
-                                        it.tradeUrl?.let {
-                                            LinkHelper.openLinkInAppBrowser(context, it)
+                                    BoxBordered(bottom = true) {
+                                        TopPairItem(item) {
+                                            it.tradeUrl?.let {
+                                                LinkHelper.openLinkInAppBrowser(context, it)
 
-                                            stat(
-                                                page = StatPage.Markets,
-                                                event = StatEvent.Open(StatPage.ExternalMarketPair),
-                                                section = StatSection.Pairs
-                                            )
+                                                stat(
+                                                    page = StatPage.Markets,
+                                                    event = StatEvent.Open(StatPage.ExternalMarketPair),
+                                                    section = StatSection.Pairs
+                                                )
+                                            }
                                         }
                                     }
+
                                 }
                                 item {
                                     VSpacer(height = 32.dp)
@@ -132,68 +134,64 @@ fun TopPairsScreen() {
 @Composable
 fun TopPairItem(
     item: TopPairViewItem,
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
     onItemClick: (TopPairViewItem) -> Unit,
 ) {
-    SectionItemBorderedRowUniversalClear(
-        borderTop = borderTop,
-        borderBottom = borderBottom,
-        onClick = { onItemClick(item) }
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .width(54.dp)
-        ) {
+    CellPrimary(
+        left = {
+            Box(modifier = Modifier.width(54.dp)) {
 
-            val targetCoinModifier = Modifier
-                .size(32.dp)
-                .background(ComposeAppTheme.colors.tyler)
-                .clip(CircleShape)
-                .align(Alignment.TopEnd)
+                val targetCoinModifier = Modifier
+                    .size(32.dp)
+                    .background(ComposeAppTheme.colors.tyler)
+                    .clip(CircleShape)
+                    .align(Alignment.TopEnd)
 
-            if (item.targetCoin != null) {
-                CoinImage(
-                    coin = item.targetCoin,
-                    modifier = targetCoinModifier
-                )
-            } else {
-                HsImage(
-                    url = item.target.fiatIconUrl,
-                    placeholder = R.drawable.ic_platform_placeholder_32,
-                    modifier = targetCoinModifier
-                )
+                if (item.targetCoin != null) {
+                    CoinImage(
+                        coin = item.targetCoin,
+                        modifier = targetCoinModifier
+                    )
+                } else {
+                    HsImage(
+                        url = item.target.fiatIconUrl,
+                        placeholder = R.drawable.ic_platform_placeholder_32,
+                        modifier = targetCoinModifier
+                    )
+                }
+
+                val baseCoinModifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.tyler)
+                    .align(Alignment.TopStart)
+
+                if (item.baseCoin != null) {
+                    CoinImage(
+                        coin = item.baseCoin,
+                        modifier = baseCoinModifier
+                    )
+                } else {
+                    HsImage(
+                        url = item.base.fiatIconUrl,
+                        placeholder = R.drawable.ic_platform_placeholder_32,
+                        modifier = baseCoinModifier
+                    )
+                }
             }
-
-            val baseCoinModifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(ComposeAppTheme.colors.tyler)
-                .align(Alignment.TopStart)
-
-            if (item.baseCoin != null) {
-                CoinImage(
-                    coin = item.baseCoin,
-                    modifier = baseCoinModifier
-                )
-            } else {
-                HsImage(
-                    url = item.base.fiatIconUrl,
-                    placeholder = R.drawable.ic_platform_placeholder_32,
-                    modifier = baseCoinModifier
-                )
-            }
-        }
-
-        Column(modifier = Modifier.fillMaxWidth()) {
-            MarketCoinFirstRow(item.title, item.volumeInFiat)
-            Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(
-                subtitle = item.name,
-                marketDataValue = item.price?.let { MarketDataValue.Volume(it) },
-                label = item.rank
+        },
+        middle = {
+            CellMiddleInfo(
+                title = item.title.hs,
+                subtitle = item.name.hs,
+                subtitleBadge = item.rank.hs,
             )
-        }
-    }
+        },
+        right = {
+            CellRightInfo(
+                title = item.volumeInFiat.hs,
+                subtitle = marketDataValueComponent(item.price?.let { MarketDataValue.Volume(it) })
+            )
+        },
+        onClick = { onItemClick(item) }
+    )
 }
