@@ -116,7 +116,9 @@ class TokenBalanceViewModel(
         }
 
         this.balanceViewItem = balanceViewItem.copy(
-            primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.wallet.coin.code)
+            primaryValue = balanceViewItem.primaryValue?.let {
+                it.copy(value = it.value + " " + balanceViewItem.wallet.coin.code)
+            }
         )
 
         updateErrorState()
