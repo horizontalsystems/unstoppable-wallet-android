@@ -278,16 +278,16 @@ private fun TokenBalanceHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         VSpacer(height = 12.dp)
-        if (balanceViewItem.primaryValue.visible) {
+        if (!balanceViewItem.balanceHidden && balanceViewItem.primaryValue != null) {
             val body = if (balanceViewItem.syncingTextValue != null) {
                 balanceViewItem.syncingTextValue + (balanceViewItem.syncedUntilTextValue?.let { " - $it" }
                     ?: "")
             } else {
-                balanceViewItem.secondaryValue.value
+                balanceViewItem.secondaryValue?.value
             }
             DoubleText(
                 title = balanceViewItem.primaryValue.value,
-                body = body,
+                body = body ?: "",
                 dimmed = balanceViewItem.primaryValue.dimmed,
                 onClickTitle = {
                     viewModel.toggleBalanceVisibility()
@@ -423,7 +423,8 @@ private fun LockedBalanceSection(
 
             LockedBalanceCell(
                 title = lockedValue.title.getString(),
-                lockedAmount = lockedValue.coinValue
+                lockedAmount = lockedValue.coinValue,
+                balanceHidden = balanceViewItem.balanceHidden
             ) {
                 showBottomSheet.invoke(
                     BottomSheetContent(
@@ -496,6 +497,7 @@ fun InfoBottomSheet(
 private fun LockedBalanceCell(
     title: String,
     lockedAmount: DeemedValue<String>,
+    balanceHidden: Boolean,
     onClickInfo: () -> Unit
 ) {
     RowUniversal(
@@ -524,7 +526,7 @@ private fun LockedBalanceCell(
         Spacer(Modifier.weight(1f))
         Text(
             modifier = Modifier.padding(start = 6.dp),
-            text = if (lockedAmount.visible) lockedAmount.value else "*****",
+            text = if (!balanceHidden) lockedAmount.value else "*****",
             color = if (lockedAmount.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.subheadR,
             maxLines = 1,

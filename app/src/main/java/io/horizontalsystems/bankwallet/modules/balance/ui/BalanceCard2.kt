@@ -39,7 +39,7 @@ fun BalanceCardInner2(
             WalletIcon2(viewItem, onClickSyncError)
         },
         middle = {
-            val subtitle: HSString
+            val subtitle: HSString?
             var subtitle2: HSString? = null
 
             if (viewItem.failedIconVisible) {
@@ -49,7 +49,9 @@ fun BalanceCardInner2(
             } else {
                 when (type) {
                     BalanceCardSubtitleType.Rate -> {
-                        subtitle = viewItem.exchangeValue.value.hs(dimmed = viewItem.exchangeValue.dimmed)
+                        subtitle = viewItem.exchangeValue?.let {
+                            it.value.hs(dimmed = it.dimmed)
+                        }
                         subtitle2 = viewItem.diff?.let { diff ->
                             HSString(
                                 diffText(diff.value),
@@ -68,27 +70,25 @@ fun BalanceCardInner2(
             CellMiddleInfo(
                 title = viewItem.wallet.coin.code.hs,
                 badge = viewItem.badge?.hs,
-                subtitle = subtitle,
+                subtitle = subtitle ?: stringResource(R.string.NotAvailable).hs,
                 subtitle2 = subtitle2
             )
         },
         right = {
-            val title = if (viewItem.primaryValue.visible) {
-                viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
+            val title = if (viewItem.balanceHidden || viewItem.primaryValue == null) {
+                null
             } else {
-                "------".hs
+                viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
             }
 
             val subtitle = when {
                 viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue.hs
-                viewItem.secondaryValue.visible -> {
-                    viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
-                }
-                else -> null
+                viewItem.balanceHidden || viewItem.secondaryValue == null -> null
+                else -> viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
             }
 
             CellRightInfo(
-                title = title,
+                title = title ?: "---".hs,
                 subtitle = subtitle
             )
         },
