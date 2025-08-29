@@ -56,14 +56,22 @@ fun CellMiddleInfo(
                     Text(
                         text = it.text,
                         style = ComposeAppTheme.typography.subhead,
-                        color = it.color ?: ComposeAppTheme.colors.grey,
+                        color = when {
+                            it.color != null -> it.color
+                            it.dimmed -> ComposeAppTheme.colors.andy
+                            else -> ComposeAppTheme.colors.grey
+                        },
                     )
                 }
                 subtitle2?.let {
                     Text(
                         text = it.text,
                         style = ComposeAppTheme.typography.subhead,
-                        color = it.color ?: ComposeAppTheme.colors.grey,
+                        color = when {
+                            it.color != null -> it.color
+                            it.dimmed -> ComposeAppTheme.colors.andy
+                            else -> ComposeAppTheme.colors.grey
+                        },
                     )
                 }
             }
