@@ -191,8 +191,7 @@ sealed class Value {
 sealed class MarketDataValue {
     class MarketCap(val value: String) : MarketDataValue()
     class Volume(val value: String) : MarketDataValue()
-    class Diff(val value: BigDecimal?) : MarketDataValue()
-    class DiffNew(val value: Value) : MarketDataValue()
+    class Diff(val value: Value) : MarketDataValue()
 }
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {

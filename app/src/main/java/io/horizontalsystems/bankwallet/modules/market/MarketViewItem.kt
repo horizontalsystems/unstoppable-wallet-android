@@ -13,7 +13,7 @@ data class MarketViewItem(
     val fullCoin: FullCoin,
     val subtitle: String,
     val value: String,
-    val marketDataValue: MarketDataValue,
+    val marketDataValue: MarketDataValue?,
     val rank: String?,
     val favorited: Boolean,
     val signal: Advice? = null
@@ -62,7 +62,7 @@ data class MarketViewItem(
                     marketItem.rate.value,
                     marketItem.rate.currency.symbol
                 ),
-                MarketDataValue.Diff(marketItem.diff),
+                marketItem.diff?.let { MarketDataValue.Diff(Value.Percent(it)) },
                 marketItem.rank?.toString(),
                 favorited,
                 advice

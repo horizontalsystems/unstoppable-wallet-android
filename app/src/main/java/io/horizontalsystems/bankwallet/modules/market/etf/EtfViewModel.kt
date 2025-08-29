@@ -151,7 +151,7 @@ class EtfViewModel(
             App.numberFormatter.formatFiatShort(it, currencyManager.baseCurrency.symbol, 0)
         },
         subvalue = rankedEtf.etf.priceChangeValue(listTimePeriod)?.let {
-            MarketDataValue.DiffNew(
+            MarketDataValue.Diff(
                 Value.Currency(
                     CurrencyValue(currencyManager.baseCurrency, it)
                 )
