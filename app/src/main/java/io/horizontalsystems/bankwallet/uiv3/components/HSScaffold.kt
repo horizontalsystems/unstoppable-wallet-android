@@ -15,11 +15,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.bars.HSTopAppBar
 fun HSScaffold(
     title: String,
     menuItems: List<IMenuItem> = listOf(),
+    onBack: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit
 ) {
     Scaffold(
         topBar = {
-            HSTopAppBar(title, menuItems)
+            HSTopAppBar(title, menuItems, onBack)
         },
         backgroundColor = ComposeAppTheme.colors.tyler
     ) {

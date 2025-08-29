@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -59,14 +57,13 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TokenBalanceErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -74,9 +71,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -95,66 +92,52 @@ fun TokenBalanceScreen(
     val infoModalBottomSheetState =
         androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = {
-                    title3_leah(
-                        text = uiState.title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                stateIcon = {
-                    if (uiState.balanceViewItem?.syncingProgress?.progress != null) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = ComposeAppTheme.colors.grey,
-                            strokeWidth = 2.dp
-                        )
-                    } else if (uiState.failedIconVisible) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_warning_filled_24),
-                            contentDescription = "sync failed icon",
-                            tint = ComposeAppTheme.colors.lucian
-                        )
-                    }
-                },
-                menuItems = buildList {
-                    if (uiState.balanceViewItem?.isWatchAccount == true) {
-                        add(
-                            MenuItem(
-                                icon = R.drawable.ic_balance_chart_24,
-                                title = TranslatableString.ResString(R.string.Coin_Info),
-                                onClick = {
-                                    val coinUid = uiState.balanceViewItem.wallet.coin.uid
-                                    val arguments = CoinFragment.Input(coinUid)
-
-                                    navController.slideFromRight(R.id.coinFragment, arguments)
-
-                                    stat(
-                                        page = StatPage.TokenPage,
-                                        event = StatEvent.OpenCoin(coinUid)
-                                    )
-                                }
-                            )
-                        )
-                    }
+    HSScaffold(
+        title = uiState.title,
+        onBack = navController::popBackStack,
+        menuItems = buildList {
+            when {
+                uiState.balanceViewItem?.syncingProgress?.progress != null -> {
+                    add(MenuItemLoading)
                 }
-            )
-        },
-    ) { paddingValues ->
+                uiState.failedIconVisible -> {
+                    add(
+                        MenuItem(
+                            icon = R.drawable.ic_warning_filled_24,
+                            title = TranslatableString.ResString(R.string.BalanceSyncError_Title),
+                            tint = ComposeAppTheme.colors.lucian,
+                            onClick = {
+                            }
+                        )
+                    )
+                }
+            }
+
+            if (uiState.balanceViewItem?.isWatchAccount == true) {
+                add(
+                    MenuItem(
+                        icon = R.drawable.ic_balance_chart_24,
+                        title = TranslatableString.ResString(R.string.Coin_Info),
+                        onClick = {
+                            val coinUid = uiState.balanceViewItem.wallet.coin.uid
+                            val arguments = CoinFragment.Input(coinUid)
+
+                            navController.slideFromRight(R.id.coinFragment, arguments)
+
+                            stat(
+                                page = StatPage.TokenPage,
+                                event = StatEvent.OpenCoin(coinUid)
+                            )
+                        }
+                    )
+                )
+            }
+        }
+    ) {
         val transactionItems = uiState.transactions
         if (transactionItems.isNullOrEmpty()) {
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .background(ComposeAppTheme.colors.lawrence)
+                modifier = Modifier.fillMaxSize()
             ) {
                 uiState.balanceViewItem?.let {
                     TokenBalanceHeader(
@@ -187,10 +170,7 @@ fun TokenBalanceScreen(
         } else {
             val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .background(ComposeAppTheme.colors.lawrence),
+                modifier = Modifier.fillMaxSize(),
                 state = listState
             ) {
                 item {
@@ -601,6 +581,20 @@ private fun ButtonsRow(
         ) {
             BalanceActionButton(
                 variant = ButtonVariant.Primary,
+                icon = R.drawable.ic_balance_chart_24,
+                title = stringResource(R.string.Coin_Chart),
+                enabled = !viewItem.wallet.token.isCustom,
+                onClick = {
+                    val coinUid = viewItem.wallet.coin.uid
+                    val arguments = CoinFragment.Input(coinUid)
+
+                    navController.slideFromRight(R.id.coinFragment, arguments)
+
+                    stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
+                },
+            )
+            BalanceActionButton(
+                variant = ButtonVariant.Secondary,
                 icon = R.drawable.ic_arrow_down_24,
                 title = stringResource(R.string.Balance_Receive),
                 onClick = onClickReceive,
@@ -642,20 +636,6 @@ private fun ButtonsRow(
                     },
                 )
             }
-            BalanceActionButton(
-                variant = ButtonVariant.Secondary,
-                icon = R.drawable.ic_balance_chart_24,
-                title = stringResource(R.string.Coin_Info),
-                enabled = !viewItem.wallet.token.isCustom,
-                onClick = {
-                    val coinUid = viewItem.wallet.coin.uid
-                    val arguments = CoinFragment.Input(coinUid)
-
-                    navController.slideFromRight(R.id.coinFragment, arguments)
-
-                    stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
-                },
-            )
         }
     }
 }

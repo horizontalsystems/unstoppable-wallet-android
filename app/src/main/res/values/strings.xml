@@ -1542,6 +1542,7 @@
 
     <!--Coin Page-->
 
+    <string name="Coin_Chart">Chart</string>
     <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Price</string>
     <string name="Coin_Tab_Market">Markets</string>
