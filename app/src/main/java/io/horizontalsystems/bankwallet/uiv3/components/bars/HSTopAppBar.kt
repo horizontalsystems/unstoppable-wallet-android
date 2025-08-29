@@ -13,9 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.IMenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemSimple
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
 
@@ -24,6 +26,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndi
 fun HSTopAppBar(
     title: String,
     menuItems: List<IMenuItem>,
+    onBack: (() -> Unit)?,
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -37,6 +40,9 @@ fun HSTopAppBar(
             )
         },
         navigationIcon = {
+            if (onBack != null) {
+                HsBackButton(onClick = onBack)
+            }
         },
         actions = {
             menuItems.forEach { menuItem: IMenuItem ->
@@ -68,6 +74,14 @@ fun HSTopAppBar(
                                 )
                             }
                         }
+                    }
+
+                    is MenuItemLoading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = ComposeAppTheme.colors.grey,
+                            strokeWidth = 2.dp
+                        )
                     }
                 }
             }

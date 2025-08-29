@@ -28,6 +28,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 sealed class IMenuItem
 
+data object MenuItemLoading : IMenuItem()
+
 data class MenuItemTimeoutIndicator(
     val progress: Float
 ) : IMenuItem()
@@ -162,6 +164,8 @@ fun AppBar(
                             }
                         }
                     }
+
+                    is MenuItemLoading -> TODO()
                 }
             }
         },
