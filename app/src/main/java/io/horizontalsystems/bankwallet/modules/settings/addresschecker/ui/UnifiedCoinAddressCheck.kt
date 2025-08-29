@@ -325,7 +325,7 @@ fun NetworkItem(
     ) {
         Text(
             text = title,
-            color = Color.Black,
+            color = ComposeAppTheme.colors.grey,
             fontSize = 14.sp
         )
 
