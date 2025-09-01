@@ -59,7 +59,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
@@ -74,6 +73,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
@@ -272,7 +272,7 @@ private fun TokenBalanceHeader(
             } else {
                 balanceViewItem.secondaryValue?.value
             }
-            DoubleText(
+            CardsElementAmountText(
                 title = balanceViewItem.primaryValue.value,
                 body = body ?: "",
                 dimmed = balanceViewItem.primaryValue.dimmed,
@@ -290,7 +290,7 @@ private fun TokenBalanceHeader(
                 },
             )
         } else {
-            DoubleText(
+            CardsElementAmountText(
                 title = "------",
                 body = "",
                 dimmed = false,
