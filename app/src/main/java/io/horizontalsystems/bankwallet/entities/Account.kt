@@ -39,6 +39,10 @@ data class Account(
         get() = type.isWatchAccountType
 
     @IgnoredOnParcel
+    val watchAccountAddress: String?
+        get() = type.watchAccountAddress
+
+    @IgnoredOnParcel
     val nonStandard: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val words = type.words.joinToString(separator = " ")
@@ -343,6 +347,17 @@ sealed class AccountType : Parcelable {
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             else -> false
+        }
+
+    val watchAccountAddress: String?
+        get() = when (this) {
+            is EvmAddress -> address
+            is SolanaAddress -> address
+            is TronAddress -> address
+            is TonAddress -> address
+            is StellarAddress -> address
+            is BitcoinAddress -> address
+            else -> null
         }
 
     fun evmAddress(chain: Chain) = when (this) {

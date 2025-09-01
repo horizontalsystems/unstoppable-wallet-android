@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.uiv3.components.cell
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,7 @@ private fun Cell(
     left: @Composable() (() -> Unit)?,
     middle: @Composable() (() -> Unit),
     right: @Composable() (() -> Unit)?,
+    backgroundColor: Color?,
     onClick: (() -> Unit)?,
 ) {
     var modifier = Modifier
@@ -33,6 +36,10 @@ private fun Cell(
 
     onClick?.let {
         modifier = modifier.clickable(onClick = onClick)
+    }
+
+    backgroundColor?.let {
+        modifier = modifier.background(backgroundColor)
     }
 
     Row(
@@ -53,13 +60,15 @@ fun CellPrimary(
     left: @Composable() (() -> Unit)? = null,
     middle: @Composable() (() -> Unit),
     right: @Composable() (() -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    backgroundColor: Color? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     Cell(
         paddingValues = PaddingValues(16.dp),
         left = left,
         middle = middle,
         right = right,
+        backgroundColor = backgroundColor,
         onClick = onClick
     )
 }
@@ -69,6 +78,7 @@ fun CellSecondary(
     left: @Composable() (() -> Unit)? = null,
     middle: @Composable() (() -> Unit),
     right: @Composable() (() -> Unit)? = null,
+    backgroundColor: Color? = null,
     onClick: (() -> Unit)? = null
 ) {
     Cell(
@@ -76,7 +86,8 @@ fun CellSecondary(
         left = left,
         middle = middle,
         right = right,
-        onClick = onClick
+        onClick = onClick,
+        backgroundColor = backgroundColor
     )
 }
 
