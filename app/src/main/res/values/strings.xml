@@ -1364,6 +1364,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Invalid Password</string>
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
+    <string name="WatchWallet">Watch Wallet</string>
     <string name="Watch_Address_Hint">Paste public address or XPUB</string>
     <string name="Watch_Address_Watch">Watch</string>
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>

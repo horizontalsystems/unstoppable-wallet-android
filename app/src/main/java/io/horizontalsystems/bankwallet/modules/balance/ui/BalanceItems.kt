@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,6 +45,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -82,6 +82,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
@@ -401,6 +407,42 @@ fun BalanceItems(
                 }
             }
 
+            if (accountViewItem.isWatchAccount) {
+                item {
+                    CellPrimary(
+                        left = {
+                            CellLeftImage(
+                                painter = painterResource(R.drawable.binocular_24),
+                                contentDescription = "binoculars icon",
+                                type = ImageType.Ellipse,
+                                size = 24
+                            )
+                        },
+                        middle = {
+                            CellMiddleInfoTextIcon(text = stringResource(R.string.WatchWallet).hs)
+                        },
+                        right = {
+                            accountViewItem.watchAddress?.let { watchAddress ->
+                                CellRightControlsButtonText(
+                                    text = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
+                                    icon = painterResource(id = R.drawable.copy_filled_24),
+                                    iconTint = ComposeAppTheme.colors.leah,
+                                    onIconClick = {
+                                        TextHelper.copyText(watchAddress)
+                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+//                                        stat(
+//                                            page = StatPage.Balance,
+//                                            event = StatEvent.CopyAddress(viewItem.wallet.token.blockchain.uid)
+//                                        )
+                                    }
+                                )
+                            }
+                        },
+                        backgroundColor = ComposeAppTheme.colors.tyler,
+                    )
+                }
+            }
+
             stickyHeader {
                 TabsSectionButtons(
                     left = {
@@ -424,14 +466,6 @@ fun BalanceItems(
                                 )
                             }
                         )
-                    },
-                    right = {
-                        if (accountViewItem.isWatchAccount) {
-                            Image(
-                                painter = painterResource(R.drawable.icon_binocule_20),
-                                contentDescription = "binoculars icon"
-                            )
-                        }
                     }
                 )
             }
