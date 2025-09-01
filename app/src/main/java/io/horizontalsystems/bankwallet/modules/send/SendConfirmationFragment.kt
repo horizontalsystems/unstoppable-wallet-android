@@ -53,13 +53,20 @@ class SendConfirmationFragment : BaseComposeFragment() {
                 }
 
                 Type.Tron -> {
-                    val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment)
-                    SendTronConfirmationScreen(
-                        navController,
-                        sendTronViewModel,
-                        amountInputModeViewModel,
-                        input.sendEntryPointDestId
-                    )
+                    val sendTronViewModel: SendTronViewModel? = try {
+                        navGraphViewModels<SendTronViewModel>(R.id.sendXFragment).value
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    sendTronViewModel?.let { viewModel ->
+                        SendTronConfirmationScreen(
+                            navController,
+                            viewModel,
+                            amountInputModeViewModel,
+                            input.sendEntryPointDestId
+                        )
+                    } ?: navController.popBackStack()
                 }
 
                 Type.Solana -> {
