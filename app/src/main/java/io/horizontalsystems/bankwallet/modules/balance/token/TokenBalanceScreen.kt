@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,7 +66,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TokenBalanceErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
@@ -74,6 +74,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -90,7 +91,7 @@ fun TokenBalanceScreen(
     var bottomSheetContent by remember { mutableStateOf<BottomSheetContent?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val infoModalBottomSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     HSScaffold(
         title = uiState.title,
@@ -137,7 +138,9 @@ fun TokenBalanceScreen(
         val transactionItems = uiState.transactions
         if (transactionItems.isNullOrEmpty()) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ComposeAppTheme.colors.lawrence)
             ) {
                 uiState.balanceViewItem?.let {
                     TokenBalanceHeader(
@@ -159,11 +162,15 @@ fun TokenBalanceScreen(
                     )
                 }
                 uiState.error?.let {
-                    TokenBalanceErrorView(
-                        modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
-                        text = it.message,
+                    VSpacer(82.dp)
+                    CardsErrorMessageDefault(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 64.dp),
+                        icon = painterResource(R.drawable.warning_filled_24),
+                        iconTint = ComposeAppTheme.colors.grey,
                         title = it.errorTitle,
-                        icon = R.drawable.ic_warning_filled_24,
+                        text = it.message,
                     )
                 }
             }

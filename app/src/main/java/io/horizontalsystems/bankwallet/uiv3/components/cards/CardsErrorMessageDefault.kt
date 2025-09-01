@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -31,12 +32,12 @@ fun CardsErrorMessageDefault(
     iconTint: Color = LocalContentColor.current,
     title: String? = null,
     text: String? = null,
-    buttonTitle: String,
-    buttonTitle2: String,
-    buttonTitle3: String,
-    onClick: () -> Unit,
-    onClick2: () -> Unit,
-    onClick3: () -> Unit,
+    buttonTitle: String? = null,
+    buttonTitle2: String? = null,
+    buttonTitle3: String? = null,
+    onClick: (() -> Unit)? = null,
+    onClick2: (() -> Unit)? = null,
+    onClick3: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier,
@@ -52,40 +53,44 @@ fun CardsErrorMessageDefault(
         )
         title?.let {
             VSpacer(16.dp)
-            headline2_leah(title)
+            headline2_leah(text = title, textAlign = TextAlign.Center)
         }
         text?.let {
             VSpacer(8.dp)
-            subheadR_grey(text)
+            subheadR_grey(text = text, textAlign = TextAlign.Center)
         }
         VSpacer(24.dp)
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            HSButton(
-                modifier = Modifier.fillMaxWidth(),
-                variant = ButtonVariant.Primary,
-                style = ButtonStyle.Solid,
-                title = buttonTitle,
-                onClick = onClick
-            )
-            HSButton(
-                modifier = Modifier.fillMaxWidth(),
-                variant = ButtonVariant.Secondary,
-                style = ButtonStyle.Solid,
-                title = buttonTitle2,
-                onClick = onClick2
-            )
-            HSButton(
-                modifier = Modifier.fillMaxWidth(),
-                variant = ButtonVariant.Secondary,
-                style = ButtonStyle.Transparent,
-                title = buttonTitle3,
-                onClick = onClick3
-            )
+            if (buttonTitle != null && onClick != null) {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Primary,
+                    style = ButtonStyle.Solid,
+                    title = buttonTitle,
+                    onClick = onClick
+                )
+            }
+            if (buttonTitle2 != null && onClick2 != null) {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Solid,
+                    title = buttonTitle2,
+                    onClick = onClick2
+                )
+            }
+            if (buttonTitle3 != null && onClick3 != null) {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Transparent,
+                    title = buttonTitle3,
+                    onClick = onClick3
+                )
+            }
         }
     }
 }
-
-
 
 @Preview
 @Composable
