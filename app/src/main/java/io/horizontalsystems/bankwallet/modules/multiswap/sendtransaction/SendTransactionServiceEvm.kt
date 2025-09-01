@@ -69,7 +69,10 @@ class SendTransactionServiceEvm(
     initialNonce: Long? = null
 ) : AbstractSendTransactionService(true) {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
-    private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
+    private val evmKitWrapper by lazy {
+        val account = App.accountManager.activeAccount ?: throw IllegalArgumentException("No active account")
+        App.evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(account, blockchainType)
+    }
     private val gasPriceService: IEvmGasPriceService by lazy {
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
