@@ -128,6 +128,7 @@ class BalanceViewModel(
         balanceTabButtonsEnabled = balanceTabButtonsEnabled,
         sortType = sortType,
         sortTypes = sortTypes,
+        networkAvailable = service.networkAvailable
     )
 
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -364,6 +365,7 @@ data class BalanceUiState(
     val balanceTabButtonsEnabled: Boolean,
     val sortType: BalanceSortType,
     val sortTypes: List<BalanceSortType>,
+    val networkAvailable: Boolean,
 )
 
 data class OpenSendTokenSelect(

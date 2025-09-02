@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -57,6 +55,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.ButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
@@ -471,12 +470,7 @@ private fun ButtonsRow(
         }
     }
 
-    Row(
-        modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 24.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+    ButtonsGroup {
         BalanceActionButton(
             variant = ButtonVariant.Primary,
             icon = R.drawable.ic_balance_chart_24,
