@@ -4,15 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -29,7 +25,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -56,19 +51,19 @@ import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -429,39 +424,24 @@ private fun LockedBalanceCell(
     balanceHidden: Boolean,
     onClickInfo: () -> Unit
 ) {
-    RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        subhead2_grey(
-            text = title,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        HSpacer(8.dp)
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = onClickInfo
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-        Spacer(Modifier.weight(1f))
-        Text(
-            modifier = Modifier.padding(start = 6.dp),
-            text = if (!balanceHidden) lockedAmount.value else "*****",
-            color = if (lockedAmount.dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subheadR,
-            maxLines = 1,
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfoTextIcon(
+                    text = title.hs,
+                    icon = painterResource(R.drawable.info_filled_24),
+                    iconTint = ComposeAppTheme.colors.grey,
+                    onIconClick = onClickInfo,
+                )
+            },
+            right = {
+                CellRightInfoTextIcon(
+                    text = if (!balanceHidden) lockedAmount.value.hs(dimmed = lockedAmount.dimmed) else "*****".hs,
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence
         )
     }
-    HsDivider()
 }
 
 @Composable
