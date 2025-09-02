@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -80,6 +81,8 @@ fun TokenBalanceScreen(
     val infoModalBottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    val view = LocalView.current
+
     HSScaffold(
         title = uiState.title,
         onBack = navController::popBackStack,
@@ -95,6 +98,9 @@ fun TokenBalanceScreen(
                             title = TranslatableString.ResString(R.string.BalanceSyncError_Title),
                             tint = ComposeAppTheme.colors.lucian,
                             onClick = {
+                                uiState.failedErrorMessage?.let {
+                                    HudHelper.showErrorMessage(view, it)
+                                }
                             }
                         )
                     )

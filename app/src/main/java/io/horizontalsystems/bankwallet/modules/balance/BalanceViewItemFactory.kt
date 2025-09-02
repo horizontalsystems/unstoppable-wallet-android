@@ -199,7 +199,8 @@ class BalanceViewItemFactory {
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,
-        balanceViewType: BalanceViewType
+        balanceViewType: BalanceViewType,
+        networkAvailable: Boolean
     ): BalanceViewItem {
         val wallet = item.wallet
         val state = item.state
@@ -308,6 +309,12 @@ class BalanceViewItemFactory {
             }
         }
 
+        val errorMessage = if (networkAvailable) {
+            (state as? AdapterState.NotSynced)?.error?.message
+        } else {
+            Translator.getString(R.string.Hud_Text_NoInternet)
+        }
+
         return BalanceViewItem(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -323,7 +330,7 @@ class BalanceViewItemFactory {
             badge = wallet.badge,
             swapVisible = App.instance.isSwapEnabled && wallet.token.swappable,
             swapEnabled = state is AdapterState.Synced,
-            errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
+            errorMessage = errorMessage,
             isWatchAccount = watchAccount,
             warning = item.warning?.warningText,
             balanceHidden = hideBalance
