@@ -489,7 +489,6 @@ private fun ButtonsRow(
             variant = ButtonVariant.Secondary,
             icon = R.drawable.ic_arrow_up_24,
             title = stringResource(R.string.Balance_Send),
-            enabled = viewItem.sendEnabled,
             onClick = {
                 val sendTitle = Translator.getString(
                     R.string.Send_Title,
@@ -514,7 +513,6 @@ private fun ButtonsRow(
                 variant = ButtonVariant.Secondary,
                 icon = R.drawable.ic_swap_circle_24,
                 title = stringResource(R.string.Swap),
-                enabled = viewItem.swapEnabled,
                 onClick = {
                     navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
 

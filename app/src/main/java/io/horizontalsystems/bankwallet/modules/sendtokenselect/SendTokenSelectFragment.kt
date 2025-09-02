@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
@@ -33,30 +32,18 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             navController = navController,
             title = stringResource(R.string.Balance_ChooseCoin),
             onClickItem = {
-                when {
-                    it.sendEnabled -> {
-                        val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
-                        navController.slideFromRight(
-                            R.id.enterAddressFragment,
-                            EnterAddressFragment.Input(
-                                wallet = it.wallet,
-                                title = sendTitle,
-                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
-                                address = input?.address,
-                                amount = input?.amount,
-                                memo = input?.memo,
-                            )
-                        )
-                    }
-
-                    it.syncingProgress.progress != null -> {
-                        HudHelper.showWarningMessage(view, R.string.Hud_WaitForSynchronization)
-                    }
-
-                    it.errorMessage != null -> {
-                        HudHelper.showErrorMessage(view, it.errorMessage)
-                    }
-                }
+                val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+                navController.slideFromRight(
+                    R.id.enterAddressFragment,
+                    EnterAddressFragment.Input(
+                        wallet = it.wallet,
+                        title = sendTitle,
+                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        address = input?.address,
+                        amount = input?.amount,
+                        memo = input?.memo,
+                    )
+                )
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
         )

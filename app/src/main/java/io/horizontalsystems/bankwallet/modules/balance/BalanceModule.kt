@@ -51,7 +51,6 @@ object BalanceModule {
         val wallet: Wallet,
         val balanceData: BalanceData,
         val state: AdapterState,
-        val sendAllowed: Boolean,
         val coinPrice: CoinPrice?,
         val warning: BalanceWarning? = null
     ) {
@@ -90,9 +89,9 @@ val BalanceViewItem2.contextMenuItems: List<BalanceContextMenuViewItem>
             )
         } else {
             listOf(
-                BalanceContextMenuItem.Send.toDropDownItem(this.sendEnabled),
+                BalanceContextMenuItem.Send.toDropDownItem(),
                 BalanceContextMenuItem.CopyAddress.toDropDownItem(),
-                BalanceContextMenuItem.Swap.toDropDownItem(this.swapEnabled),
+                BalanceContextMenuItem.Swap.toDropDownItem(),
                 BalanceContextMenuItem.CoinInfo.toDropDownItem(),
                 BalanceContextMenuItem.HideToken.toDropDownItem()
             )
