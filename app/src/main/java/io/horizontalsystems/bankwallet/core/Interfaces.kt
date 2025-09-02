@@ -297,8 +297,6 @@ interface IBalanceAdapter {
 
     val balanceData: BalanceData
     val balanceUpdatedFlowable: Flowable<Unit>
-
-    fun sendAllowed() = balanceState is AdapterState.Synced
 }
 
 open class BalanceData(

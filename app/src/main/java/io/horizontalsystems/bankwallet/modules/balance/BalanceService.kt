@@ -112,7 +112,6 @@ class BalanceService(
             allBalanceItems[i] = balanceItem.copy(
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet),
-                sendAllowed = adapterRepository.sendAllowed(balanceItem.wallet),
             )
         }
 
@@ -128,7 +127,6 @@ class BalanceService(
             allBalanceItems[indexOfFirst] = itemToUpdate.copy(
                 balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet),
-                sendAllowed = adapterRepository.sendAllowed(wallet),
             )
 
             sortAndEmitItems()
@@ -162,7 +160,6 @@ class BalanceService(
                 wallet = wallet,
                 balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet),
-                sendAllowed = adapterRepository.sendAllowed(wallet),
                 coinPrice = latestRates[wallet.coin.uid]
             )
         }
