@@ -40,7 +40,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
         uiState = BirthdayHeightUiState(
             birthdayHeight = height,
             restoreAsNew = false,
-            restoreAsOld = false,
+            restoreAsOld = true,
             doneButtonEnabled = height.isNotBlank()
         )
     }
