@@ -74,11 +74,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.ButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
@@ -278,15 +280,7 @@ fun BalanceItems(
 
             if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(ComposeAppTheme.colors.tyler)
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
+                    ButtonsGroup {
                         if (accountViewItem.type.supportsWalletConnect) {
                             BalanceActionButton(
                                 variant = ButtonVariant.Primary,
@@ -466,6 +460,11 @@ fun BalanceItems(
                                 )
                             }
                         )
+                    },
+                    right = {
+                        if (!uiState.networkAvailable) {
+                            subheadSB_lucian(stringResource(R.string.Hud_Text_NoInternet))
+                        }
                     }
                 )
             }

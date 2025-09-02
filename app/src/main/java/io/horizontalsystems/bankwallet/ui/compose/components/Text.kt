@@ -627,6 +627,27 @@ fun subheadSB_grey(
 }
 
 @Composable
+fun subheadSB_lucian(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.subheadSB,
+        color = ComposeAppTheme.colors.lucian,
+    )
+}
+
+@Composable
 fun C3(
     text: String,
     modifier: Modifier = Modifier,

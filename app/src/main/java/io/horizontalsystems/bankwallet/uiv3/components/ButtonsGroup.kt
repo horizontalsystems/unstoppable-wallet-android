@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.uiv3.components.tabs
+package io.horizontalsystems.bankwallet.uiv3.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,23 +13,15 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun TabsSectionButtons(
-    left: @Composable RowScope.() -> Unit = {},
-    right: @Composable RowScope.() -> Unit = {}
-) {
+fun ButtonsGroup(content: @Composable RowScope.() -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .background(ComposeAppTheme.colors.tyler)
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            left()
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            right()
-        }
-    }
+        horizontalArrangement = Arrangement.SpaceBetween,
+        content = content
+    )
 }

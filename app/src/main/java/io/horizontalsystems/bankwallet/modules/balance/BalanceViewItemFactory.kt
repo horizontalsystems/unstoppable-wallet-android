@@ -359,7 +359,7 @@ class BalanceViewItemFactory {
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state),
             syncedUntilTextValue = getSyncedUntilText(state),
-            failedIconVisible = state is AdapterState.NotSynced,
+            failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             badge = wallet.badge,
             swapEnabled = state is AdapterState.Synced,
             errorMessage = errorMessage,
