@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
@@ -32,6 +33,7 @@ class TokenBalanceViewModel(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val accountManager: IAccountManager,
     private val adapterManager: IAdapterManager,
+    private val connectivityManager: ConnectivityManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -41,6 +43,7 @@ class TokenBalanceViewModel(
     private var addressForAccount: String? = null
     private var error: TokenBalanceModule.TokenBalanceError? = null
     private var failedIconVisible = false
+    private var failedErrorMessage: String? = null
     private var loadingTransactions = true
 
     init {
@@ -81,7 +84,8 @@ class TokenBalanceViewModel(
         transactions = transactions,
         receiveAddress = addressForAccount,
         failedIconVisible = failedIconVisible,
-        error = error
+        failedErrorMessage = failedErrorMessage,
+        error = error,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -106,10 +110,12 @@ class TokenBalanceViewModel(
             balanceService.baseCurrency,
             balanceHiddenManager.balanceHidden,
             wallet.account.isWatchAccount,
-            BalanceViewType.CoinThenFiat
+            BalanceViewType.CoinThenFiat,
+            connectivityManager.isConnected
         )
 
         failedIconVisible = balanceViewItem.failedIconVisible
+        failedErrorMessage = balanceViewItem.errorMessage
 
         if (wallet.account.isWatchAccount) {
             setReceiveAddressForWatchAccount()
