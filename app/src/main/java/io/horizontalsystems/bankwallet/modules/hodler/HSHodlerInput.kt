@@ -22,11 +22,11 @@ import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.hodler.LockTimeInterval
 
 @Composable
@@ -37,10 +37,10 @@ fun HSHodlerInput(
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }
     if (showSelectorDialog) {
-        SelectorDialogCompose(
+        MenuGroup(
             title = stringResource(R.string.Send_DialogSpeed),
             items = lockTimeIntervals.map {
-                SelectorItem(stringResource(it.stringResId()), it == lockTimeInterval, it)
+                MenuItemX(stringResource(it.stringResId()), it == lockTimeInterval, it)
             },
             onDismissRequest = {
                 showSelectorDialog = false

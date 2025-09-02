@@ -36,11 +36,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
 fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndicatorSetting) {
@@ -60,10 +60,10 @@ fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndic
     val maType = uiState.maType ?: viewModel.defaultMaType
 
     if (showEmaSelectorDialog) {
-        SelectorDialogCompose(
+        MenuGroup(
             title = stringResource(R.string.CoinPage_Type),
             items = viewModel.maTypes.map {
-                SelectorItem(it, it == maType, it)
+                MenuItemX(it, it == maType, it)
             },
             onDismissRequest = {
                 showEmaSelectorDialog = false

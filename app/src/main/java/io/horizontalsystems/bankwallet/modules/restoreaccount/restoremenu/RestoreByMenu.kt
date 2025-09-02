@@ -18,9 +18,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
 fun RestoreByMenu(
@@ -30,8 +30,8 @@ fun RestoreByMenu(
         menuTitle = stringResource(R.string.Restore_By),
         menuValue = stringResource(viewModel.restoreOption.titleRes),
         selectorDialogTitle = stringResource(R.string.Restore_RestoreBy),
-        selectorItems = viewModel.restoreOptions.map {
-            SelectorItem(
+        menuItems = viewModel.restoreOptions.map {
+            MenuItemX(
                 stringResource(it.titleRes),
                 it == viewModel.restoreOption,
                 it
@@ -48,15 +48,15 @@ fun <T> ByMenu(
     menuTitle: String,
     menuValue: String,
     selectorDialogTitle: String,
-    selectorItems: List<SelectorItem<T>>,
+    menuItems: List<MenuItemX<T>>,
     onSelectItem: (T) -> Unit
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }
 
     if (showSelectorDialog) {
-        SelectorDialogCompose(
+        MenuGroup(
             title = selectorDialogTitle,
-            items = selectorItems,
+            items = menuItems,
             onDismissRequest = {
                 showSelectorDialog = false
             },

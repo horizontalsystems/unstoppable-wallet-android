@@ -46,11 +46,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -250,10 +250,10 @@ fun ContactsScreen(
                 }
 
                 if (showMoreSelectorDialog) {
-                    SelectorDialogCompose(
+                    MenuGroup(
                         title = stringResource(R.string.Contacts_ActionMore),
                         items = ContactsModule.ContactsAction.values().map {
-                            (SelectorItem(stringResource(it.title), false, it))
+                            (MenuItemX(stringResource(it.title), false, it))
                         },
                         onDismissRequest = {
                             showMoreSelectorDialog = false

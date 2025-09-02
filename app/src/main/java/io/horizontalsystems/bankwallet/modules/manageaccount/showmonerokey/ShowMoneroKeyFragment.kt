@@ -34,11 +34,11 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -142,10 +142,10 @@ private fun ShowMoneroKeyScreen(
                     }
 
                     if (showKeyTypeSelectorDialog) {
-                        SelectorDialogCompose(
+                        MenuGroup(
                             title = stringResource(R.string.MoneroKeyType),
                             items = MoneroKeyType.entries.map {
-                                SelectorItem(stringResource(it.title), it == keyType, it)
+                                MenuItemX(stringResource(it.title), it == keyType, it)
                             },
                             onDismissRequest = {
                                 showKeyTypeSelectorDialog = false
