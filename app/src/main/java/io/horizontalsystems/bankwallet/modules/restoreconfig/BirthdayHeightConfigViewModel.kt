@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Birthd
 class BirthdayHeightConfigViewModel : ViewModel() {
 
     var uiState by mutableStateOf(
-        ZCashConfigView(
+        BirthdayHeightUiState(
             birthdayHeight = null,
             restoreAsNew = true,
             restoreAsOld = false,
@@ -19,7 +19,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
         private set
 
     fun restoreAsNew() {
-        uiState = ZCashConfigView(
+        uiState = BirthdayHeightUiState(
             birthdayHeight = null,
             restoreAsNew = true,
             restoreAsOld = false,
@@ -28,7 +28,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
     }
 
     fun restoreAsOld() {
-        uiState = ZCashConfigView(
+        uiState = BirthdayHeightUiState(
             birthdayHeight = null,
             restoreAsNew = false,
             restoreAsOld = true,
@@ -37,7 +37,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
     }
 
     fun setBirthdayHeight(height: String) {
-        uiState = ZCashConfigView(
+        uiState = BirthdayHeightUiState(
             birthdayHeight = height,
             restoreAsNew = false,
             restoreAsOld = false,
@@ -46,7 +46,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
     }
 
     fun onDoneClick() {
-        uiState = ZCashConfigView(
+        uiState = BirthdayHeightUiState(
             birthdayHeight = uiState.birthdayHeight,
             restoreAsNew = uiState.restoreAsNew,
             restoreAsOld = uiState.restoreAsOld,
@@ -56,7 +56,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
     }
 
     fun onClosed() {
-        uiState = ZCashConfigView(
+        uiState = BirthdayHeightUiState(
             birthdayHeight = uiState.birthdayHeight,
             restoreAsNew = uiState.restoreAsNew,
             restoreAsOld = uiState.restoreAsOld,
@@ -66,7 +66,7 @@ class BirthdayHeightConfigViewModel : ViewModel() {
     }
 }
 
-data class ZCashConfigView(
+data class BirthdayHeightUiState(
     val birthdayHeight: String?,
     val restoreAsNew: Boolean,
     val restoreAsOld: Boolean,

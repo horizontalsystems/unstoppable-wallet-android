@@ -25,7 +25,7 @@ class RestoreViewModel: ViewModel() {
     var statPage: StatPage? = null
         private set
 
-    var cancelZCashConfig: Boolean = false
+    var cancelBirthdayHeightConfig: Boolean = false
 
     fun setAccountData(accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean, statPage: StatPage) {
         this.accountType = accountType
@@ -35,7 +35,7 @@ class RestoreViewModel: ViewModel() {
         this.statPage = statPage
     }
 
-    fun setZCashConfig(config: BirthdayHeightConfig?) {
+    fun setBirthdayHeightConfig(config: BirthdayHeightConfig?) {
         birthdayHeightConfig = config
     }
 

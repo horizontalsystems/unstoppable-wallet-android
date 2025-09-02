@@ -105,11 +105,11 @@ private fun RestoreAccountNavHost(
             BirthdayHeightConfigScreen(
                 blockchainType = BlockchainType.Zcash,
                 onCloseWithResult = { config ->
-                    mainViewModel.setZCashConfig(config)
+                    mainViewModel.setBirthdayHeightConfig(config)
                     navController.popBackStack()
                 },
                 onCloseClick = {
-                    mainViewModel.cancelZCashConfig = true
+                    mainViewModel.cancelBirthdayHeightConfig = true
                     navController.popBackStack()
                 }
             )
@@ -118,11 +118,11 @@ private fun RestoreAccountNavHost(
             BirthdayHeightConfigScreen(
                 blockchainType = BlockchainType.Monero,
                 onCloseWithResult = { config ->
-                    mainViewModel.setZCashConfig(config)
+                    mainViewModel.setBirthdayHeightConfig(config)
                     navController.popBackStack()
                 },
                 onCloseClick = {
-                    mainViewModel.cancelZCashConfig = true
+                    mainViewModel.cancelBirthdayHeightConfig = true
                     navController.popBackStack()
                 }
             )

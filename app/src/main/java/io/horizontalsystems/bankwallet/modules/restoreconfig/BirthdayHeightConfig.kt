@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -163,6 +164,12 @@ fun BirthdayHeightConfigScreen(
         mutableStateOf(TextFieldValue(""))
     }
 
+    fun showRestoreAsOldConfirmation() {
+        showSlowSyncWarning = true
+        textState = textState.copy(text = "", selection = TextRange(0))
+        focusManager.clearFocus()
+    }
+
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
@@ -173,6 +180,7 @@ fun BirthdayHeightConfigScreen(
                     showSlowSyncWarning = false
                     scope.launch { sheetState.hide() }
                     viewModel.restoreAsOld()
+                    focusRequester.requestFocus()
                 },
                 onCloseClick = {
                     showSlowSyncWarning = false
@@ -213,12 +221,7 @@ fun BirthdayHeightConfigScreen(
                                     title = stringResource(R.string.Restore_ZCash_OldWallet),
                                     subtitle = stringResource(R.string.Restore_ZCash_OldWallet_Description),
                                     checked = viewModel.uiState.restoreAsOld,
-                                    onClick = {
-                                        showSlowSyncWarning = true
-                                        textState =
-                                            textState.copy(text = "", selection = TextRange(0))
-                                        focusManager.clearFocus()
-                                    }
+                                    onClick = { showRestoreAsOldConfirmation() }
                                 )
                             },
                         )
@@ -238,6 +241,11 @@ fun BirthdayHeightConfigScreen(
                         onValueChange = { textFieldValue ->
                             textState = textFieldValue
                             viewModel.setBirthdayHeight(textFieldValue.text)
+                        },
+                        onFocused = {
+                            if (viewModel.uiState.restoreAsNew) {
+                                showRestoreAsOldConfirmation()
+                            }
                         }
                     )
 
@@ -387,9 +395,15 @@ private fun BirthdayHeightInput(
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onValueChange: (TextFieldValue) -> Unit,
     focusRequester: FocusRequester,
+    onFocused: (() -> Unit)? = null
 ) {
     Row(
         modifier = Modifier
+            .onFocusChanged { focusState ->
+                if (focusState.isFocused) {
+                    onFocused?.invoke()
+                }
+            }
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
@@ -402,6 +416,7 @@ private fun BirthdayHeightInput(
 
         BasicTextField(
             modifier = Modifier
+                .focusRequester(focusRequester)
                 .padding(vertical = 12.dp)
                 .weight(1f),
             value = textState,
@@ -419,7 +434,6 @@ private fun BirthdayHeightInput(
             decorationBox = { innerTextField ->
                 if (textState.text.isEmpty()) {
                     body_grey50(
-                        modifier = Modifier.focusRequester(focusRequester),
                         text = "000000000",
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,

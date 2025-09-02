@@ -93,12 +93,12 @@ fun ManageWalletsScreen(
 
     mainViewModel.birthdayHeightConfig?.let { config ->
         restoreSettingsViewModel.onEnter(config)
-        mainViewModel.setZCashConfig(null)
+        mainViewModel.setBirthdayHeightConfig(null)
     }
 
-    if (mainViewModel.cancelZCashConfig) {
+    if (mainViewModel.cancelBirthdayHeightConfig) {
         restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-        mainViewModel.cancelZCashConfig = false
+        mainViewModel.cancelBirthdayHeightConfig = false
     }
 
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
