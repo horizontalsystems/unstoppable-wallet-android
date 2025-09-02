@@ -354,7 +354,7 @@ class BalanceViewItemFactory {
             balance = item.balanceData.total,
             fullFormat = !amountRoundingEnabled,
             coinDecimals = wallet.decimal,
-            dimmed = state !is AdapterState.Synced,
+            dimmed = networkAvailable && state !is AdapterState.Synced,
             coinPrice = latestRate,
             currency = currency,
             balanceViewType = balanceViewType
