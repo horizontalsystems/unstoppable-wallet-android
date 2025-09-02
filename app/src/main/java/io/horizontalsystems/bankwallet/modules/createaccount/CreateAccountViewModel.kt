@@ -73,6 +73,7 @@ class CreateAccountViewModel(
         accountManager.save(account)
         activateDefaultWallets(account)
         predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
+        predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Monero)
         success = accountType
     }
 
