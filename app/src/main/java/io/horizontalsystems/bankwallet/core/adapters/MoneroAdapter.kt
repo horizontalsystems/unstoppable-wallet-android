@@ -141,9 +141,15 @@ class MoneroAdapter(
             val mnemonic = (wallet.account.type as? AccountType.Mnemonic)
                 ?: throw IllegalStateException("Unsupported account type: ${wallet.account.type.javaClass.simpleName}")
 
+            val birthdayHeightStr = restoreSettings.birthdayHeight?.toString()
             val birthdayHeightOrDate: String = when (wallet.account.origin) {
-                AccountOrigin.Created -> LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                AccountOrigin.Restored -> (restoreSettings.birthdayHeight ?: 0).toString()
+                AccountOrigin.Created -> {
+                    birthdayHeightStr ?: LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                }
+
+                AccountOrigin.Restored -> {
+                    birthdayHeightStr ?: "1"
+                }
             }
 
             Log.e("eee", "birthdayHeightOrDate: $birthdayHeightOrDate, node: ${node.serialized}")
