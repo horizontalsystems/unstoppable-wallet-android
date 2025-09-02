@@ -56,6 +56,8 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -297,10 +299,10 @@ fun TransactionInfoAddressCell(
     }
 
     if (showSaveAddressDialog) {
-        SelectorDialogCompose(
+        MenuGroup(
             title = stringResource(R.string.Contacts_AddAddress),
             items = ContactsModule.AddAddressAction.values().map {
-                SelectorItem(stringResource(it.title), false, it)
+                MenuItemX(stringResource(it.title), false, it)
             },
             onDismissRequest = {
                 showSaveAddressDialog = false
