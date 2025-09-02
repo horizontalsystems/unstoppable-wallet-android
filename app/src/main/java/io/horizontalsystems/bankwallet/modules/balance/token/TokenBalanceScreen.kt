@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -249,50 +248,39 @@ private fun TokenBalanceHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ComposeAppTheme.colors.tyler),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(ComposeAppTheme.colors.tyler)
     ) {
-        VSpacer(height = 12.dp)
-        if (!balanceViewItem.balanceHidden && balanceViewItem.primaryValue != null) {
-            val body = if (balanceViewItem.syncingTextValue != null) {
-                balanceViewItem.syncingTextValue + (balanceViewItem.syncedUntilTextValue?.let { " - $it" }
-                    ?: "")
-            } else {
-                balanceViewItem.secondaryValue?.value
-            }
-            CardsElementAmountText(
-                title = balanceViewItem.primaryValue.value,
-                body = body ?: "",
-                dimmed = balanceViewItem.primaryValue.dimmed,
-                onClickTitle = {
-                    viewModel.toggleBalanceVisibility()
-                    HudHelper.vibrate(context)
+        val title: String
+        val body: String
+        val dimmed: Boolean
 
-                    stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
-                },
-                onClickSubtitle = {
-                    viewModel.toggleBalanceVisibility()
-                    HudHelper.vibrate(context)
-
-                    stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
-                },
-            )
+        if (balanceViewItem.balanceHidden || balanceViewItem.primaryValue == null) {
+            title = "------"
+            body = ""
+            dimmed = false
         } else {
-            CardsElementAmountText(
-                title = "------",
-                body = "",
-                dimmed = false,
-                onClickTitle = {
-                    viewModel.toggleBalanceVisibility()
-                    HudHelper.vibrate(context)
-
-                    stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
-                },
-                onClickSubtitle = {
-
-                }
-            )
+            title = balanceViewItem.primaryValue.value
+            body = balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: ""
+            dimmed = balanceViewItem.primaryValue.dimmed
         }
+
+        CardsElementAmountText(
+            title = title,
+            body = body,
+            dimmed = dimmed,
+            onClickTitle = {
+                viewModel.toggleBalanceVisibility()
+                HudHelper.vibrate(context)
+
+                stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
+            },
+            onClickSubtitle = {
+                viewModel.toggleBalanceVisibility()
+                HudHelper.vibrate(context)
+
+                stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
+            },
+        )
 
         if (!balanceViewItem.isWatchAccount) {
             ButtonsRow(

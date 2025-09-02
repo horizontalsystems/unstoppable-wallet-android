@@ -37,7 +37,17 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean,
     val warning: WarningText?,
     val balanceHidden: Boolean
-)
+) {
+    val syncingLineText = syncingTextValue?.let {
+        buildString {
+            append(syncingTextValue)
+
+            syncedUntilTextValue?.let {
+                append(" - $syncedUntilTextValue")
+            }
+        }
+    }
+}
 
 data class WarningText(
     val title: TranslatableString,
