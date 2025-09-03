@@ -36,6 +36,7 @@ class TokenSelectViewModel(
 ) : ViewModelUiState<TokenSelectUiState>() {
 
     private var noItems = false
+    private var hasAssets = false
     private var query: String? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
     private var availableBlockchainTypes: List<BlockchainType>? = blockchainTypes
@@ -46,6 +47,7 @@ class TokenSelectViewModel(
         return TokenSelectUiState(
             items = balanceViewItems,
             noItems = noItems,
+            hasAssets = hasAssets,
             selectedTab = selectedChainTab,
             tabs = getTabs()
         )
@@ -92,10 +94,12 @@ class TokenSelectViewModel(
         withContext(Dispatchers.IO) {
             if (balanceItems == null) {
                 balanceViewItems = emptyList()
+                hasAssets = false
                 noItems = true
                 emitState()
                 return@withContext
             }
+            hasAssets = balanceItems.isNotEmpty()
 
             val currentQuery = query // Local copy for thread safety
             val currentSelectedChainTab = selectedChainTab // Local copy
@@ -180,6 +184,7 @@ class TokenSelectViewModel(
 data class TokenSelectUiState(
     val items: List<BalanceViewItem2>,
     val noItems: Boolean,
+    val hasAssets: Boolean,
     val selectedTab: SelectChainTab,
     val tabs: List<SelectChainTab>,
 )
