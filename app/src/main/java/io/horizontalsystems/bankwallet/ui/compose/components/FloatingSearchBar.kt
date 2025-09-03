@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun BoxScope.FloatingSearchBarRow(
+    modifier: Modifier = Modifier,
     searchQuery: String,
     isSearchActive: Boolean,
     focusRequester: FocusRequester,
@@ -41,7 +42,7 @@ fun BoxScope.FloatingSearchBarRow(
     onActiveChange: (Boolean) -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .align(Alignment.BottomCenter)
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,

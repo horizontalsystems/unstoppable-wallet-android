@@ -5,6 +5,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -68,7 +71,12 @@ fun TokenSelectScreen(
 
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    top = paddingValues.calculateTopPadding(), // Keep top padding for the AppBar
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = 0.dp // Explicitly ignore bottom padding from Scaffold's paddingValues
+                )
                 .windowInsetsPadding(WindowInsets.ime)
         ) {
             val tabItems: List<TabItem<SelectChainTab>> = uiState.tabs.map { chainTab ->
@@ -134,6 +142,7 @@ fun TokenSelectScreen(
                 }
 
                 FloatingSearchBarRow(
+                    modifier = Modifier.padding(bottom = 16.dp),
                     searchQuery = searchQuery,
                     isSearchActive = isSearchActive,
                     focusRequester = focusRequester,
