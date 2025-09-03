@@ -50,6 +50,8 @@
     <string name="Button_Apply">应用</string>
     <string name="Button_SetAmount">设定金额</string>
     <string name="Button_ContinueAnyway">仍然繼續</string>
+    <string name="Button_CopyAddress">复制地址</string>
+    <string name="Button_HideCoin">隐藏硬币</string>
     <string name="Attention_Title">注意事项</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
@@ -162,7 +164,7 @@
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_TopCoins">前列代币</string>
     <string name="Market_Signals">信号</string>
-    <string name="Market_Volume">Volume</string>
+    <string name="Market_Volume">音量</string>
     <string name="Market_MarketCap">市值</string>
     <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">下面的信号是基于Bollinger Bands 和 RSI 技术价格指标的近似值。 最近30天。这些信号是算法，可以经常改变。</string>
@@ -175,8 +177,8 @@
     <string name="Market_Signal_Warning">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="Market_Signal_TurnOn">打开</string>
     <string name="Market_Top_100">前100名</string>
-    <string name="Market_Top_200">Top 200</string>
-    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_200">前 200</string>
+    <string name="Market_Top_300">前 300</string>
     <string name="Market_Top_500">前500名</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
@@ -365,6 +367,9 @@
     <string name="Balance_Receive_Trustline">信任线</string>
     <string name="Balance_Reserved_Title">保留</string>
     <string name="Balance_WalletAddress">钱包地址</string>
+    <string name="Balance_Receive_Subaddresses">子项</string>
+    <string name="Balance_Receive_SubaddressesInfo">子地址让您在一个钱包内使用多个唯一地址来方便和增强隐私。</string>
+    <string name="Balance_Receive_SubaddressesTransactions">交易: %s</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">透明的</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
@@ -801,7 +806,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
     <string name="Settings_PersonalSupport_Account">账户</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@用户名</string>
     <string name="Settings_PersonalSupport_Requested">已申请</string>
     <string name="Settings_PersonalSupport_Request">请求</string>
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
@@ -1014,7 +1019,7 @@
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
+    <string name="SettingsSecurity_SortingBip69Short">确定性</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
@@ -1044,7 +1049,7 @@
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">不可阻止的</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系我们</string>
     <!--Setting_Notifications-->
@@ -1176,7 +1181,7 @@
     <string name="StellarSecretKey_Title">恒星秘密密钥</string>
     <string name="StellarSecretKey_ShowSecretKey">点击以显示密钥</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <string name="Bip32RootKey">BIP32 根密钥</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
     <string name="ExtendedKey_AccountInfo">待办</string>
@@ -1190,11 +1195,20 @@
     <string name="PrivateKeys_AccountExtendedPrivateKey">账户扩展私钥</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
+    <string name="PrivateKeys_MoneroPrivateKey">单声道私钥</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">对各自钱包内的Monero（XMR）资产实行完全控制，包括有能力使用资金。</string>
+    <string name="MoneroKeyType">类型</string>
+    <string name="MoneroKeyType_Spend">支出</string>
+    <string name="MoneroKeyType_View">查看</string>
+    <string name="MoneroKeyType_Private">单声道私钥</string>
+    <string name="MoneroKeyType_Public">Monero 公钥</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">公钥</string>
     <string name="PublicKeys_EvmAddress">EVM 地址</string>
     <string name="PublicKeys_EvmAddress_Description">允许只读监视持有Etherum、 Binance Smart Chain和其他基于 EVM 的区块链的钱包。</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">允许只读监视持有比特币和其他基于 UTXO 的加密钱包(即Liteco、 比特币现金、 破折号等)。</string>
+    <string name="PublicKeys_MoneroPublicKey">Monero 公钥</string>
+    <string name="PublicKeys_MoneroPublicKeyDescription">允许只读监视持有Monero (XMR)资产的钱包而不允许使用支出。</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">验证</string>
     <string name="RecoveryPhraseVerify_Description">从你的钱包恢复短语中选择两个请求的单词</string>
@@ -1432,8 +1446,8 @@
     <string name="TechnicalAdvice_IndicatorsDisclaimer">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="TechnicalAdvice_OverBought">已购买过期的</string>
     <string name="TechnicalAdvice_OverSold">超价</string>
-    <string name="TechnicalAdvice_Down">down</string>
-    <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_Down">向下</string>
+    <string name="TechnicalAdvice_Up">上</string>
     <string name="TechnicalAdvice_OverMain">资产的行动是有风险的。</string>
     <string name="TechnicalAdvice_OverIndicators_SignalDate">从 %s 开始</string>
     <string name="TechnicalAdvice_OverIndicators">资产不属于Bollinger频道和 %s。</string>
@@ -1497,7 +1511,7 @@
     <string name="BalanceSyncError_Text">同步错误</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">加入未加入的</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">不可阻止的通路</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
     <string name="ProUsersInfo_Features_DesLiquidity">DEX 流动性和等级</string>
