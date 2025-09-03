@@ -70,6 +70,7 @@
     <string name="Idle" translatable="false">-</string>
     <string name="Any">Any</string>
     <string name="SyncError">Sync error. Try Again</string>
+    <string name="Search_NotFounded">Not Founded</string>
 
     <string name="FooterText" translatable="false">© Horizontal Systems %d</string>
 

@@ -1,27 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.tokenselect
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,17 +29,15 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleType
-import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.FloatingSearchBarRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_andy
 
 @Composable
 fun TokenSelectScreen(
@@ -47,11 +45,16 @@ fun TokenSelectScreen(
     title: String,
     onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
-    emptyItemsText: String,
     header: @Composable (() -> Unit)? = null
 ) {
+    var searchQuery by remember { mutableStateOf("") }
+    var isSearchActive by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = title,
@@ -62,17 +65,12 @@ fun TokenSelectScreen(
         }
     ) { paddingValues ->
         val uiState = viewModel.uiState
-        if (uiState.noItems) {
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                header?.invoke()
-                ListEmptyView(
-                    text = emptyItemsText,
-                    icon = R.drawable.ic_empty_wallet
-                )
-            }
-        } else {
+
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .windowInsetsPadding(WindowInsets.ime)
+        ) {
             val tabItems: List<TabItem<SelectChainTab>> = uiState.tabs.map { chainTab ->
                 TabItem(
                     title = chainTab.title,
@@ -80,96 +78,73 @@ fun TokenSelectScreen(
                     item = chainTab,
                 )
             }
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                SearchInput { text ->
-                    viewModel.updateFilter(text)
-                }
-                if (tabItems.isNotEmpty()) {
-                    ScrollableTabs(tabItems) {
-                        viewModel.onTabSelected(it)
-                    }
-                }
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(ComposeAppTheme.colors.lawrence),
-                    contentPadding = paddingValues
-                ) {
-                    item {
-                        header?.invoke()
-                    }
-                    val balanceViewItems = uiState.items
-                    items(balanceViewItems) { item ->
-                        BalanceCardInner2(
-                            viewItem = item,
-                            type = BalanceCardSubtitleType.CoinName,
-                            onClick = {
-                                onClickItem.invoke(item)
-                            }
-                        )
-                        HsDivider()
-                    }
-                    item {
-                        VSpacer(32.dp)
-                    }
+            if (tabItems.isNotEmpty()) {
+                ScrollableTabs(tabItems) {
+                    viewModel.onTabSelected(it)
                 }
             }
-        }
-    }
-}
 
-@Composable
-private fun SearchInput(
-    onSearchQueryChange: (String) -> Unit = {}
-) {
-    var searchQuery by remember { mutableStateOf("") }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        shape = RoundedCornerShape(24.dp),
-        elevation = 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(ComposeAppTheme.colors.blade)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_search),
-                contentDescription = "Search",
-                tint = ComposeAppTheme.colors.andy,
-                modifier = Modifier.size(24.dp)
-            )
-
-            HSpacer(12.dp)
-
-            BasicTextField(
-                value = searchQuery,
-                onValueChange = { newValue ->
-                    searchQuery = newValue
-                    onSearchQueryChange(newValue)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
-                    textStyle = ComposeAppTheme.typography.body
-                ),
-                singleLine = true,
-                decorationBox = { innerTextField ->
-                    if (searchQuery.isEmpty()) {
-                        body_andy(
-                            text = stringResource(R.string.Market_Search)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                if (uiState.noItems) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        header?.invoke()
+                        ListEmptyView(
+                            text = stringResource(if (uiState.hasAssets) R.string.Search_NotFounded else R.string.Balance_NoAssetsToSend),
+                            icon = R.drawable.warning_filled_24
                         )
                     }
-                    innerTextField()
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(ComposeAppTheme.colors.lawrence)
+                            .pointerInput(Unit) {
+                                detectTapGestures {
+                                    // Hide keyboard when scrolling/tapping on list
+                                    if (isSearchActive) {
+                                        keyboardController?.hide()
+                                        focusManager.clearFocus()
+                                    }
+                                }
+                            }
+                    ) {
+                        item {
+                            header?.invoke()
+                        }
+                        val balanceViewItems = uiState.items
+                        items(balanceViewItems) { item ->
+                            BalanceCardInner2(
+                                viewItem = item,
+                                type = BalanceCardSubtitleType.CoinName,
+                                onClick = {
+                                    onClickItem.invoke(item)
+                                }
+                            )
+                            HsDivider()
+                        }
+                        item {
+                            VSpacer(100.dp)
+                        }
+                    }
                 }
-            )
+
+                FloatingSearchBarRow(
+                    searchQuery = searchQuery,
+                    isSearchActive = isSearchActive,
+                    focusRequester = focusRequester,
+                    keyboardController = keyboardController,
+                    focusManager = focusManager,
+                    onSearchQueryChange = { query ->
+                        searchQuery = query
+                        viewModel.updateFilter(query)
+                    }
+                ) { isSearchActive = it }
+            }
         }
     }
 }
