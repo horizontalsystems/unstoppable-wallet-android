@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Loading">로딩중...</string>
@@ -159,7 +158,6 @@
     <string name="Market_Signals">신호</string>
     <string name="Market_Volume">거래량</string>
     <string name="Market_MarketCap">시가총액</string>
-    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">아래 신호는 대략 최근 30일 동안의 볼린저 밴드와 RSI 기술적 가격 지표를 기반으로 합니다. 이러한 신호는 알고리즘에 기반하며 자주 변경될 수 있습니다.</string>
     <string name="Market_Signal_StrongBuy_Description">가격 상승에 대한 높은 신뢰도.</string>
     <string name="Market_Signal_Buy_Description">가까운 미래에 가능성 있는 가격 상승.</string>
@@ -284,10 +282,8 @@
     <string name="Market_Sorting_LowestCap">가장 낮은 시가총액</string>
     <string name="Market_Filters_Select">%d 선택</string>
     <!--Vaults-->
-    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">회로망</string>
     <string name="Market_Vaults_Vault_Holders">소유주</string>
-    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">다중 체인</string>
@@ -303,7 +299,6 @@
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_Sort_Balance">잔액</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
@@ -583,7 +578,6 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">잘못된 %s 주소</string>
     <string name="SwapSettings_Warning_UnusualSlippage">거래가 프론트런 당할 수 있습니다</string>
     <!-- Swap Confirmation -->
-    <string name="Activate_Activating">Activating</string>
     <string name="Activate_InsufficientBalance_Title">잔액 부족</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s을(를) 교환하거나 새 금액을 취소하고 승인해야 합니다.</string>
@@ -739,7 +733,6 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">이미 비공개 채팅을 요청하셨습니다. Telegram에서 찾아보세요.</string>
     <string name="Settings_PersonalSupport_Account">계정</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">신청 완료</string>
     <string name="Settings_PersonalSupport_Request">요청</string>
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
@@ -769,7 +762,6 @@
     <!--Why Donate Page-->
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">활성</string>
-    <string name="SettingsSubscription_GetPremium">Get Premium</string>
     <string name="SettingsSubscription_RestorePurchase">구매 복원</string>
     <string name="SettingsSubscription_SubscriptionPlan">구독 플랜</string>
     <string name="SettingsSubscription_SubscriptionInfo">다음 결제일: %s. 구독 관리 섹션에서 구독을 관리할 수 있습니다.</string>
@@ -869,7 +861,6 @@
     <string name="EvmNetwork_AddNew">신규로 추가</string>
     <string name="EvmNetwork_Added">추가됨</string>
     <!--Add RPC Source-->
-    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
@@ -903,10 +894,8 @@
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
-    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르고 비공개, 중앙집중화</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 필터링</string>
@@ -933,7 +922,6 @@
     <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">문의하기</string>
     <!--Setting_Notifications-->
@@ -1062,7 +1050,6 @@
     <string name="EvmPrivateKey_ShowPrivateKey">개인 키 보기</string>
     <!-- Stellar Secret Key -->
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
     <string name="ExtendedKey_AccountInfo">할 일</string>
@@ -1142,7 +1129,6 @@
     <string name="CoinPage_Overview">개요</string>
     <string name="CoinPage_Contracts">계약</string>
     <string name="CoinPage_Blockchains">블록체인</string>
-    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">코인 유형</string>
     <string name="CoinPage_Links">링크</string>
     <string name="CoinPage_Guide">가이드</string>
@@ -1343,15 +1329,7 @@
     <string name="ActivateSubscription_Wallet">지갑</string>
     <string name="ActivateSubscription_Address">주소</string>
     <string name="ActivateSubscription_NoSubscriptionError">귀하의 월렛 주소는 프리미엄 기능을 구독하지 않았습니다. 구독을 활성화하려면 구매해야 합니다.</string>
-    <string name="SubscriptionInfo_Title">Premium Features</string>
-    <string name="SubscriptionInfo_Analytics_Title">Cryptocurrency Analytics</string>
-    <string name="SubscriptionInfo_Analytics_Info">Access comprehensive market and on-chain stats about each token.</string>
-    <string name="SubscriptionInfo_Indicators_Title">Price Trend Indicators</string>
-    <string name="SubscriptionInfo_Indicators_Info">Discover uptrending tokens based on technical analysis indicators.</string>
     <string name="SubscriptionInfo_PersonalSupport_Title">개인 지원</string>
-    <string name="SubscriptionInfo_PersonalSupport_Info">Contact our team directly over Telegram for personal assistance.</string>
-    <string name="SubscriptionInfo_GetPremium">Get Premium</string>
-    <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->
@@ -1366,7 +1344,6 @@
     <string name="BalanceSyncError_ButtonChangeSource">출처를 변경하다</string>
     <string name="BalanceSyncError_ButtonReport">보고</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
     <string name="ProUsersInfo_Description">이 데이터를 활성화하려면 브론즈 레벨 UW NFTs \'Coin Info+\'를 획득해야 합니다.
 \n\n또한 아래의 데이터에 액세스할 수 있습니다:</string>
