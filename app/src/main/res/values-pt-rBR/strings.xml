@@ -15,7 +15,7 @@
     <string name="Button_Disable">Desativar</string>
     <string name="Button_ScanQr">Escanear QR Code</string>
     <string name="Button_Close">Fechar</string>
-    <string name="Button_Ok">OK</string>
+    <string name="Button_Ok">Certo</string>
     <string name="Button_Activate">Ativar</string>
     <string name="Button_Later">Depois</string>
     <string name="Button_Done">Concluído</string>
@@ -50,6 +50,8 @@
     <string name="Button_Apply">Aplicar</string>
     <string name="Button_SetAmount">Definir Quantidade</string>
     <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
+    <string name="Button_CopyAddress">Copiar Endereço</string>
+    <string name="Button_HideCoin">Ocultar moeda</string>
     <string name="Attention_Title">Atenção</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
@@ -138,7 +140,7 @@
     <string name="Market_Search">Buscar</string>
     <string name="Market_All">Todas</string>
     <string name="Market_Search_Sections_RecentTitle">RECENTES</string>
-    <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
+    <string name="Market_Search_Sections_PopularTitle">Popular</string>
     <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
     <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
     <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
@@ -291,7 +293,7 @@
     <string name="Market_Filter_TimePeriod_3Y">3 Anos</string>
     <string name="Market_Filter_TimePeriod_4Y">4 Anos</string>
     <string name="Market_Filter_TimePeriod_5Y">5 Anos</string>
-    <string name="Market_Sorting_Manual">Manual</string>
+    <string name="Market_Sorting_Manual">Manualmente</string>
     <string name="Market_Sorting_Gainers">Ganhadores</string>
     <string name="Market_Sorting_Losers">Perdedores</string>
     <string name="Market_Sorting_HighestCap">Maior capitalização</string>
@@ -365,6 +367,9 @@
     <string name="Balance_Receive_Trustline">Trustline</string>
     <string name="Balance_Reserved_Title">Reservado</string>
     <string name="Balance_WalletAddress">Endereço da carteira</string>
+    <string name="Balance_Receive_Subaddresses">Sub-endereços</string>
+    <string name="Balance_Receive_SubaddressesInfo">Subendereços permitem que você use vários endereços exclusivos dentro de uma carteira para conveniência e privacidade aprimorada.</string>
+    <string name="Balance_Receive_SubaddressesTransactions">Transações: %s</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
@@ -393,7 +398,7 @@
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_YouSend">Enviar</string>
     <string name="Send_Confirmation_YouReceive">Você Recebe</string>
-    <string name="Send_Confirmation_Mint">Mint</string>
+    <string name="Send_Confirmation_Mint">Hortelã</string>
     <string name="Send_Confirmation_Burn">Queimar</string>
     <string name="Send_Confirmation_To">Para</string>
     <string name="Send_Confirmation_Own">Próprio</string>
@@ -518,7 +523,7 @@
     <string name="TonConnect_Wallet">Carteira</string>
     <string name="TonConnect_ChooseWallet">Escolha uma Carteira</string>
     <!--WalletConnect-->
-    <string name="WalletConnect_Status">Status</string>
+    <string name="WalletConnect_Status">SItuação</string>
     <string name="WalletConnect_Approve_Hint">Ao clicar em conectar, você permite que este aplicativo visualize seu endereço público. Esta é uma importante etapa de segurança para proteger seus dados contra possíveis riscos de phishing.</string>
     <string name="WalletConnect_Reconnect_Hint">Não foi possível estabelecer a conexão. Tente reconectar novamente.</string>
     <string name="WalletConnect_Error_InvalidUrl">Endereço URL Inválido</string>
@@ -577,7 +582,7 @@
     <string name="Swap_PriceImpactTooHigh">A diferença entre o preço de mercado e o preço de liquidação esperado é bastante elevada.</string>
     <string name="Swap_PriceImpactWarning">Importante! Você está recebendo um preço extremamente desfavorável. Isso se deve a uma liquidez extremamente baixa.</string>
     <string name="Swap_MinimumReceived">Valor garantido</string>
-    <string name="Swap_Slippage">Slippage</string>
+    <string name="Swap_Slippage">Corrente</string>
     <string name="Swap_Recipient">Destinatário</string>
     <string name="Swap_ErrorNoProviders">Sem provedores</string>
     <string name="Swap_ErrorNoQuote">Sem ofertas</string>
@@ -708,7 +713,7 @@
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Você não tem nenhum contato adequado </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Informações sobre a transação</string>
-    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Status">SItuação</string>
     <string name="TransactionInfo_Date">Data</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Serviço</string>
@@ -1199,11 +1204,20 @@
     <string name="PrivateKeys_AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Concede controle total sobre Bitcoin e outras criptomoedas baseadas em UTXO, ou seja, Litecoin, Bitcoin Cash, Dash etc. dentro da respectiva carteira.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
+    <string name="PrivateKeys_MoneroPrivateKey">Monero Chaves Privadas</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">Concede controle total sobre os ativos Monero (XMR) dentro da respectiva carteira, incluindo a capacidade de gastar fundos.</string>
+    <string name="MoneroKeyType">tipo</string>
+    <string name="MoneroKeyType_Spend">Gastar</string>
+    <string name="MoneroKeyType_View">Visualizar</string>
+    <string name="MoneroKeyType_Private">Monero Chaves Privadas</string>
+    <string name="MoneroKeyType_Public">Chaves públicas Monero</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Chaves públicas</string>
     <string name="PublicKeys_EvmAddress">Endereço EVM</string>
     <string name="PublicKeys_EvmAddress_Description">Permite o monitoramento somente leitura de carteiras mantendo ativos na Ethereum, na Binance Smart Chain e em outras blockchains baseadas em EVM.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Permite monitoramento somente leitura das carteiras segurando Bitcoin e outras cripto baseadas em UTXO (ou seja, Litecoin, Bitcoin Cash, Dash etc.).</string>
+    <string name="PublicKeys_MoneroPublicKey">Chaves públicas Monero</string>
+    <string name="PublicKeys_MoneroPublicKeyDescription">Permite monitoramento somente leitura de carteiras com Monero (XMR) ativos sem conceder acesso aos gastos.</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Verificar</string>
     <string name="RecoveryPhraseVerify_Description">Selecione duas palavras solicitadas da sua frase de recuperação de carteira</string>
@@ -1250,10 +1264,10 @@
     <string name="Coin_Tab_Details">Análises</string>
     <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
-    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_Month">1MB</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
-    <string name="CoinPage_TimeDuration_Month3">3M</string>
-    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
+    <string name="CoinPage_TimeDuration_Month3">3MB</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6MB</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
     <string name="CoinPage_TimeDuration_Year5">5A</string>
@@ -1284,11 +1298,11 @@
     <string name="CoinPage_DilutedMarketCap">Cap. De Mercado diluído</string>
     <string name="CoinPage_inCirculation">Em Circulação</string>
     <string name="CoinPage_TotalSupply">Fornecimento total</string>
-    <string name="CoinPage_MarketCap_Thousand">K</string>
-    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Thousand">KB</string>
+    <string name="CoinPage_MarketCap_Million">MM</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
-    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
+    <string name="CoinPage_MarketCap_Quadrillion">PQ</string>
     <string name="CoinPage_Volume">Volume</string>
     <string name="CoinPage_NoData">Sem dados</string>
     <string name="CoinPage_NoDataAvailable">Não há dados disponíveis</string>
