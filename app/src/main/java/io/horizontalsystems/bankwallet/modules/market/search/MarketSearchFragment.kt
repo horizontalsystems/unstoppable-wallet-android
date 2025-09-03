@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -79,7 +81,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
     val uiState = viewModel.uiState
 
     Column(
-        modifier = Modifier.navigationBarsPadding()
+        modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
     ) {
         SearchBar(
             title = stringResource(R.string.Market_Search),
