@@ -357,6 +357,7 @@ sealed class AccountType : Parcelable {
             is TonAddress -> address
             is StellarAddress -> address
             is BitcoinAddress -> address
+            is HdExtendedKey -> keySerialized
             else -> null
         }
 

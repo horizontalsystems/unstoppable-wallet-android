@@ -143,7 +143,7 @@ fun LockTimeInterval?.stringResId(): Int {
 }
 
 fun String.shorten(): String {
-    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:")
+    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:", "xpub", "ypub", "zpub")
 
     var prefix = ""
     for (p in prefixes) {
