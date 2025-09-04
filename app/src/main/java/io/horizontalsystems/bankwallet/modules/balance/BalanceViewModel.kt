@@ -73,7 +73,7 @@ class BalanceViewModel(
                     totalBalance.setTotalServiceItems(items?.map {
                         TotalService.BalanceItem(
                             it.balanceData.total,
-                            it.state !is AdapterState.Synced,
+                            service.networkAvailable && it.state !is AdapterState.Synced,
                             it.coinPrice
                         )
                     })
