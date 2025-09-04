@@ -421,18 +421,20 @@ fun BalanceItems(
                                     text = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
                                     icon = painterResource(id = R.drawable.copy_filled_24),
                                     iconTint = ComposeAppTheme.colors.leah,
-                                    onIconClick = {
-                                        TextHelper.copyText(watchAddress)
-                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-//                                        stat(
-//                                            page = StatPage.Balance,
-//                                            event = StatEvent.CopyAddress(viewItem.wallet.token.blockchain.uid)
-//                                        )
-                                    }
                                 )
                             }
                         },
                         backgroundColor = ComposeAppTheme.colors.tyler,
+                        onClick = {
+                            accountViewItem.watchAddress?.let { watchAddress ->
+                                TextHelper.copyText(watchAddress)
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+//                                        stat(
+//                                            page = StatPage.Balance,
+//                                            event = StatEvent.CopyAddress(viewItem.wallet.token.blockchain.uid)
+//                                        )
+                            }
+                        }
                     )
                 }
             }
