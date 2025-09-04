@@ -58,7 +58,9 @@ class SendBtcAdvancedSettingsViewModel(
     private fun transactionSortingSupported(blockchainType: BlockchainType) : Boolean {
         return when (blockchainType) {
             BlockchainType.Bitcoin,
+            BlockchainType.BitcoinCash,
             BlockchainType.Litecoin,
+            BlockchainType.ECash,
             BlockchainType.Dash -> true
             else -> false
         }
