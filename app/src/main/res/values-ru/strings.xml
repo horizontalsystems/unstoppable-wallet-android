@@ -364,6 +364,7 @@
     <string name="Balance_Receive_UsedAddresses">Использованные адреса</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s адресов изменены для повышения конфиденциальности и безопасности. Ниже приведен список использованных адресов в этом кошельке.</string>
     <string name="Balance_Receive_ReceiveAddresses">Адреса для получения</string>
+    <string name="Balance_ReceiveAddress">Получающий адрес</string>
     <string name="Balance_Receive_ChangeAddresses">Адрес-сдача</string>
     <string name="Balance_SendHint_CoinName">Название токена</string>
     <string name="Balance_ReceiveHint_Search">Поиск</string>
