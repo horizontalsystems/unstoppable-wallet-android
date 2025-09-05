@@ -60,6 +60,7 @@
     <string name="NotAvailable">n/a</string>
     <string name="Any">Alle</string>
     <string name="SyncError">Sync-Fehler. Versuchen Sie es erneut</string>
+    <string name="Search_NotFounded">Nicht gegründet</string>
     <string name="Keyboard">Keyboard</string>
     <string name="AccountRecovery_Note">Notiz</string>
     <string name="AccountRecovery_MigrationRecommended">Diese Brieftasche scheint ein nicht-Standard-Zeichen in ihrer Wiederherstellungsphrase und/oder einer Passphrase zu verwenden. Wenn Sie kein Guthaben oder keine Transaktionen sehen, lesen Sie bitte unten für Details.\n\nKLICKEN SIE ZUM ERHALTEN MEHR INFO</string>
@@ -320,6 +321,7 @@
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Mehrere Ketten</string>
     <!--Balance-->
+    <string name="Wallet_Title">Wallet</string>
     <string name="Balance_Withdraw">Abheben</string>
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Send">Senden</string>
@@ -1131,6 +1133,7 @@
     <string name="ImportBackupFile_EnterPassword_Description">Geben Sie das Sicherungspasswort ein, um Ihre Brieftasche zu importieren.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
     <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
+    <string name="WatchWallet">Wallet ansehen</string>
     <string name="Watch_Address_Hint">Öffentliche Adresse oder XPUB einfügen</string>
     <string name="Watch_Address_Watch">Beobachten</string>
     <string name="Watch_Select_Blockchains">Blockchain auswählen</string>
@@ -1262,6 +1265,7 @@
     <string name="TorPage_Failed">Fehler beim Verbinden von Tor</string>
     <string name="Tor_TorIsActive">Tor ist aktiv</string>
     <!--Coin Page-->
+    <string name="Coin_Chart">Diagramm</string>
     <string name="Coin_Info">Münzinfo</string>
     <string name="Coin_Tab_Overview">Preis</string>
     <string name="Coin_Tab_Market">Märkte</string>
