@@ -362,6 +362,7 @@
     <string name="Balance_Receive_UsedAddresses">Adresses utilisées</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s adresse des changements pour la confidentialité et la sécurité. Ci-dessous une liste d\'adresses utilisées dans ce portefeuille.</string>
     <string name="Balance_Receive_ReceiveAddresses">Recevoir des adresses</string>
+    <string name="Balance_ReceiveAddress">Adresse de réception</string>
     <string name="Balance_Receive_ChangeAddresses">Modifier les adresses</string>
     <string name="Balance_SendHint_CoinName">Nom de la pièce</string>
     <string name="Balance_ReceiveHint_Search">Chercher</string>
