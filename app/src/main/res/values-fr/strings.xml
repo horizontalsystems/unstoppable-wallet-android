@@ -60,6 +60,7 @@
     <string name="NotAvailable">n/a</string>
     <string name="Any">N\'importe quel</string>
     <string name="SyncError">Erreur de synchronisation. Réessayez</string>
+    <string name="Search_NotFounded">Non Trouvé</string>
     <string name="Keyboard">Keyboard</string>
     <string name="AccountRecovery_Note">Note</string>
     <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non standard dans sa phrase de récupération et/ou une phrase secrète. Si vous ne voyez pas de solde ou de transactions, veuillez lire ci-dessous pour plus de détails.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFORMATIONS</string>
@@ -320,6 +321,7 @@
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-chaîne</string>
     <!--Balance-->
+    <string name="Wallet_Title">Portefeuille</string>
     <string name="Balance_Withdraw">Retirer</string>
     <string name="Balance_Title">Solde</string>
     <string name="Balance_Send">Envoyer</string>
@@ -1124,6 +1126,7 @@
     <string name="ImportBackupFile_EnterPassword_Description">Entrez le mot de passe de sauvegarde pour importer votre portefeuille.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
     <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
+    <string name="WatchWallet">Regarder le portefeuille</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
     <string name="Watch_Address_Watch">Suivi</string>
     <string name="Watch_Select_Blockchains">Choisir la blockchain</string>
@@ -1255,6 +1258,7 @@
     <string name="TorPage_Failed">Impossible de connecter Tor</string>
     <string name="Tor_TorIsActive">Tor est actif</string>
     <!--Coin Page-->
+    <string name="Coin_Chart">Graphique</string>
     <string name="Coin_Info">Informations de la cryptomonnaie</string>
     <string name="Coin_Tab_Overview">Prix</string>
     <string name="Coin_Tab_Market">Marchés</string>
