@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -28,6 +27,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -62,6 +62,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDe
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
@@ -128,13 +129,34 @@ fun TokenBalanceScreen(
             }
         }
     ) {
+        val onClickReceive = {
+            try {
+                val wallet = viewModel.getWalletForReceive()
+                navController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet))
+
+                stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
+            } catch (e: BackupRequiredError) {
+                val text = Translator.getString(
+                    R.string.ManageAccount_BackupRequired_Description,
+                    e.account.name,
+                    e.coinTitle
+                )
+                navController.slideFromBottom(
+                    R.id.backupRequiredDialog,
+                    BackupRequiredDialog.Input(e.account, text)
+                )
+
+                stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
+            }
+        }
+
         val transactionItems = uiState.transactions
-        if (transactionItems.isNullOrEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(ComposeAppTheme.colors.lawrence)
-            ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ComposeAppTheme.colors.lawrence)
+        ) {
+            item {
                 uiState.balanceViewItem?.let {
                     TokenBalanceHeader(
                         balanceViewItem = it,
@@ -151,50 +173,45 @@ fun TokenBalanceScreen(
                             coroutineScope.launch {
                                 infoModalBottomSheetState.hide()
                             }
+                        },
+                        onClickReceive = onClickReceive
+                    )
+
+                    if (it.isWatchAccount) {
+                        uiState.receiveAddress?.let { receiveAddress ->
+                            CellPrimary(
+                                middle = {
+                                    CellMiddleInfoTextIcon(text = stringResource(R.string.Balance_ReceiveAddress).hs)
+                                },
+                                right = {
+                                    CellRightNavigation(
+                                        subtitle = receiveAddress.shorten().hs(color = ComposeAppTheme.colors.leah)
+                                    )
+                                },
+                                backgroundColor = ComposeAppTheme.colors.tyler,
+                                onClick = onClickReceive
+                            )
                         }
-                    )
-                }
-                uiState.error?.let {
-                    VSpacer(82.dp)
-                    CardsErrorMessageDefault(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 64.dp),
-                        icon = painterResource(R.drawable.warning_filled_24),
-                        iconTint = ComposeAppTheme.colors.grey,
-                        title = it.errorTitle,
-                        text = it.message,
-                    )
+                    }
                 }
             }
-        } else {
-            val listState = rememberLazyListState()
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = listState
-            ) {
+
+            if (transactionItems.isNullOrEmpty()) {
                 item {
-                    uiState.balanceViewItem?.let {
-                        TokenBalanceHeader(
-                            balanceViewItem = it,
-                            navController = navController,
-                            viewModel = viewModel,
-                            showBottomSheet = { content ->
-                                bottomSheetContent = content
-                                coroutineScope.launch {
-                                    infoModalBottomSheetState.show()
-                                }
-                            },
-                            hideBottomSheet = {
-                                bottomSheetContent = null
-                                coroutineScope.launch {
-                                    infoModalBottomSheetState.hide()
-                                }
-                            }
+                    uiState.error?.let {
+                        VSpacer(82.dp)
+                        CardsErrorMessageDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 64.dp),
+                            icon = painterResource(R.drawable.warning_filled_24),
+                            iconTint = ComposeAppTheme.colors.grey,
+                            title = it.errorTitle,
+                            text = it.message,
                         )
                     }
                 }
-
+            } else {
                 transactionList(
                     transactionsMap = transactionItems,
                     willShow = { viewModel.willShow(it) },
@@ -247,7 +264,8 @@ private fun TokenBalanceHeader(
     navController: NavController,
     viewModel: TokenBalanceViewModel,
     showBottomSheet: (BottomSheetContent) -> Unit = { _ -> },
-    hideBottomSheet: () -> Unit
+    hideBottomSheet: () -> Unit,
+    onClickReceive: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -292,7 +310,7 @@ private fun TokenBalanceHeader(
             ButtonsRow(
                 viewItem = balanceViewItem,
                 navController = navController,
-                viewModel = viewModel
+                onClickReceive = onClickReceive
             )
         }
 
@@ -441,29 +459,8 @@ private fun LockedBalanceCell(
 private fun ButtonsRow(
     viewItem: BalanceViewItem,
     navController: NavController,
-    viewModel: TokenBalanceViewModel
+    onClickReceive: () -> Unit
 ) {
-    val onClickReceive = {
-        try {
-            val wallet = viewModel.getWalletForReceive()
-            navController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet))
-
-            stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
-        } catch (e: BackupRequiredError) {
-            val text = Translator.getString(
-                R.string.ManageAccount_BackupRequired_Description,
-                e.account.name,
-                e.coinTitle
-            )
-            navController.slideFromBottom(
-                R.id.backupRequiredDialog,
-                BackupRequiredDialog.Input(e.account, text)
-            )
-
-            stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
-        }
-    }
-
     ButtonsGroup {
         BalanceActionButton(
             variant = ButtonVariant.Primary,
