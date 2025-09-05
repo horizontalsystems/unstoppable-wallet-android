@@ -76,6 +76,7 @@ object ThorChainProvider : IMultiSwapProvider {
                 BlockchainType.Avalanche,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Ethereum,
+                BlockchainType.Base,
                     -> {
                     val components = assetId.split("-")
 
@@ -295,6 +296,7 @@ object ThorChainProvider : IMultiSwapProvider {
             BlockchainType.Avalanche,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Ethereum,
+            BlockchainType.Base,
                 -> {
                 val transactionData = when (val tokenType = tokenIn.type) {
                     TokenType.Native -> {
