@@ -60,6 +60,7 @@
     <string name="NotAvailable">N/A</string>
     <string name="Any">任何</string>
     <string name="SyncError">同步错误。请再试一次</string>
+    <string name="Search_NotFounded">未找到</string>
     <string name="Keyboard">键盘</string>
     <string name="AccountRecovery_Note">备注</string>
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
@@ -320,6 +321,7 @@
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">多链</string>
     <!--Balance-->
+    <string name="Wallet_Title">钱包</string>
     <string name="Balance_Withdraw">提取</string>
     <string name="Balance_Title">余额</string>
     <string name="Balance_Send">发送​​</string>
@@ -1118,6 +1120,7 @@
     <string name="ImportBackupFile_EnterPassword_Description">输入备份密码以导入您的钱包。</string>
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
+    <string name="WatchWallet">观看钱包</string>
     <string name="Watch_Address_Hint">地址或域名</string>
     <string name="Watch_Address_Watch">观察</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
@@ -1249,6 +1252,7 @@
     <string name="TorPage_Failed">Tor 연결 실패</string>
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <!--Coin Page-->
+    <string name="Coin_Chart">图表</string>
     <string name="Coin_Info">硬币信息</string>
     <string name="Coin_Tab_Overview">行情</string>
     <string name="Coin_Tab_Market">市场</string>
