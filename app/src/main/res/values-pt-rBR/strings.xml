@@ -60,6 +60,7 @@
     <string name="NotAvailable">N/A</string>
     <string name="Any">Qualquer</string>
     <string name="SyncError">Erro de sincronização. Tente novamente</string>
+    <string name="Search_NotFounded">Não Encontrado</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Observação</string>
     <string name="AccountRecovery_MigrationRecommended">Esta carteira parece usar um caractere não padrão em sua frase de recuperação e/ou senha. Se você não vir um saldo ou transações, leia abaixo para obter detalhes.\n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
@@ -320,6 +321,7 @@
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-Cadeia</string>
     <!--Balance-->
+    <string name="Wallet_Title">Carteira</string>
     <string name="Balance_Withdraw">Sacar</string>
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Send">Enviar</string>
@@ -1127,6 +1129,7 @@
     <string name="ImportBackupFile_EnterPassword_Description">Digite a senha de backup para importar sua carteira.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
     <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
+    <string name="WatchWallet">Assistir Carteira</string>
     <string name="Watch_Address_Hint">Digite seu EVM, TRON, TON ou Endereço Público (Bitcoin, Litecoin, Bitcoin Cash) ou Conta xPubKey.</string>
     <string name="Watch_Address_Watch">Ver</string>
     <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
@@ -1258,6 +1261,7 @@
     <string name="TorPage_Failed">Falha ao conectar Tor</string>
     <string name="Tor_TorIsActive">Tor está ativo</string>
     <!--Coin Page-->
+    <string name="Coin_Chart">Gráfico</string>
     <string name="Coin_Info">Inf. sobre moeda</string>
     <string name="Coin_Tab_Overview">Preço</string>
     <string name="Coin_Tab_Market">Mercados</string>
