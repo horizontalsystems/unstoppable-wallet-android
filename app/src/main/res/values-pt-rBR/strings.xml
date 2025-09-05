@@ -362,6 +362,7 @@
     <string name="Balance_Receive_UsedAddresses">Endereços Usados</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">O número de endereços %s muda para privacidade e segurança. Abaixo está uma lista de endereços usados neste carteira.</string>
     <string name="Balance_Receive_ReceiveAddresses">Endereços de Recebimento</string>
+    <string name="Balance_ReceiveAddress">Endereço de recebimento</string>
     <string name="Balance_Receive_ChangeAddresses">Endereço de troco</string>
     <string name="Balance_SendHint_CoinName">Nome da Moeda</string>
     <string name="Balance_ReceiveHint_Search">Buscar</string>
