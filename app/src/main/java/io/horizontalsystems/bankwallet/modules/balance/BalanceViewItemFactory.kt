@@ -207,7 +207,7 @@ class BalanceViewItemFactory {
             balance = item.balanceData.total,
             fullFormat = true,
             coinDecimals = wallet.decimal,
-            dimmed = state !is AdapterState.Synced,
+            dimmed = networkAvailable && state !is AdapterState.Synced,
             coinPrice = latestRate,
             currency = currency,
             balanceViewType = balanceViewType
@@ -321,7 +321,7 @@ class BalanceViewItemFactory {
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state),
             syncedUntilTextValue = getSyncedUntilText(state),
-            failedIconVisible = state is AdapterState.NotSynced,
+            failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
             swapVisible = App.instance.isSwapEnabled && wallet.token.swappable,
