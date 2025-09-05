@@ -249,6 +249,7 @@
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
+    <string name="Wallet_Title">Cüzdanı</string>
     <string name="Balance_Withdraw">Hesaptan Çek</string>
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Send">Gönder</string>
