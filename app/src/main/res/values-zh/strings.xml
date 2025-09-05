@@ -362,6 +362,7 @@
     <string name="Balance_Receive_UsedAddresses">已使用地址</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 地址用于隐私和安全。以下是此钱包中已使用的地址列表。</string>
     <string name="Balance_Receive_ReceiveAddresses">接收地址</string>
+    <string name="Balance_ReceiveAddress">接收地址</string>
     <string name="Balance_Receive_ChangeAddresses">找零地址</string>
     <string name="Balance_SendHint_CoinName">代币图片</string>
     <string name="Balance_ReceiveHint_Search">查询</string>
