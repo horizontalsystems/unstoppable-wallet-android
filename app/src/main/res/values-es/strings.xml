@@ -362,6 +362,7 @@
     <string name="Balance_Receive_UsedAddresses">Direcciones Utilizadas</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s direcciones cambian por privacidad y seguridad. A continuación, una lista de las direcciones utilizadas en esta billetera.</string>
     <string name="Balance_Receive_ReceiveAddresses">Direcciones para recibir</string>
+    <string name="Balance_ReceiveAddress">Dirección de recepción</string>
     <string name="Balance_Receive_ChangeAddresses">Cambiar direcciones</string>
     <string name="Balance_SendHint_CoinName">Nombre de moneda</string>
     <string name="Balance_ReceiveHint_Search">Buscar</string>
