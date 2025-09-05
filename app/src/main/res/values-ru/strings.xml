@@ -60,6 +60,7 @@
     <string name="NotAvailable">Нет данных</string>
     <string name="Any">Любые</string>
     <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
+    <string name="Search_NotFounded">Не задано</string>
     <string name="Keyboard">Клавиатура</string>
     <string name="AccountRecovery_Note">Примечание</string>
     <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.
@@ -322,6 +323,7 @@
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Мультичейн</string>
     <!--Balance-->
+    <string name="Wallet_Title">Кошелек</string>
     <string name="Balance_Withdraw">Вывод средств</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
@@ -1120,6 +1122,7 @@
     <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
+    <string name="WatchWallet">Смотреть кошелек</string>
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_Address_Watch">Смотреть</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
@@ -1251,6 +1254,7 @@
     <string name="TorPage_Failed">Не удалось подключиться к Tor</string>
     <string name="Tor_TorIsActive">Tor активен</string>
     <!--Coin Page-->
+    <string name="Coin_Chart">Диаграмма</string>
     <string name="Coin_Info">Информация о токене</string>
     <string name="Coin_Tab_Overview">Цена</string>
     <string name="Coin_Tab_Market">Рынки</string>
