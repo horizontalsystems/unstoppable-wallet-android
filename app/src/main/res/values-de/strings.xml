@@ -362,6 +362,7 @@
     <string name="Balance_Receive_UsedAddresses">Verwendete Adressen</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s Adressen ändern sich aus Gründen der Privatsphäre und der Sicherheit. Unten finden Sie eine Liste der verwendeten Adressen in dieser Wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Adressen erhalten</string>
+    <string name="Balance_ReceiveAddress">Empfangsadresse</string>
     <string name="Balance_Receive_ChangeAddresses">Adressen ändern</string>
     <string name="Balance_SendHint_CoinName">Münzname</string>
     <string name="Balance_ReceiveHint_Search">Suchen</string>
