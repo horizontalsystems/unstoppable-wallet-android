@@ -134,7 +134,10 @@ class BalanceViewItemFactory {
             is AdapterState.Syncing -> {
                 if (state.progress != null) {
                     Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
-                } else {
+                } else if (state.connecting) {
+                    Translator.getString(R.string.WalletConnect_Status_Connecting)
+                }
+                else {
                     Translator.getString(R.string.Balance_Syncing)
                 }
             }

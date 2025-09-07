@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import android.util.Log
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -39,8 +38,7 @@ class MoneroAdapter(
     private val transactionsProvider: MoneroTransactionsProvider,
     private val transactionsAdapter: MoneroTransactionsAdapter,
     private val backgroundManager: BackgroundManager,
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter,
-    ITransactionsAdapter by transactionsAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, ITransactionsAdapter by transactionsAdapter {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -81,11 +79,13 @@ class MoneroAdapter(
 
         kit.allTransactionsFlow.collectWith(coroutineScope, transactionsProvider::onTransactions)
 
-        kit.start()
+        coroutineScope.launch {
+            kit.start()
+        }
 
         coroutineScope.launch {
-            backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterBackground) {
+            backgroundManager.stateFlow.collect {
+                if (it == BackgroundManagerState.EnterBackground) {
                     kit.saveState()
                 }
             }
@@ -93,16 +93,23 @@ class MoneroAdapter(
     }
 
     override fun stop() {
-        Log.e("AAA", "moneroAdapter: stop()")
-        kit.stop()
+        val job = coroutineScope.launch {
+            kit.saveState()
+            kit.stop()
+        }
 
-        coroutineScope.cancel()
+        job.invokeOnCompletion {
+            coroutineScope.cancel()
+        }
     }
 
     override fun refresh() {
-        Log.e("AAA", "moneroAdapter: refresh()")
-        kit.stop()
-        kit.start()
+        if (kit.syncStateFlow.value is SyncState.NotSynced) {
+            coroutineScope.launch {
+                kit.stop()
+                kit.start()
+            }
+        }
     }
 
     override val debugInfo: String
@@ -152,8 +159,6 @@ class MoneroAdapter(
                 }
             }
 
-            Log.e("eee", "birthdayHeightOrDate: $birthdayHeightOrDate, node: ${node.serialized}")
-
             val kit = MoneroKit.getInstance(
                 context,
                 Seed.Bip39(mnemonic.words, mnemonic.passphrase),
@@ -182,6 +187,7 @@ fun Long.scaledDown(decimals: Int): BigDecimal {
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> AdapterState.NotSynced(error)
     is SyncState.Synced -> AdapterState.Synced
+    is SyncState.Connecting -> AdapterState.Syncing(connecting = true)
     is SyncState.Syncing -> AdapterState.Syncing(progress?.let {
         (it * 100).roundToInt().coerceAtMost(100)
     })
