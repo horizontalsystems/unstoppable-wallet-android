@@ -17,11 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,9 +47,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
@@ -67,6 +68,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.launch
 
 class MoneroNetworkFragment : BaseComposeFragment() {
 
@@ -108,114 +110,126 @@ private fun MoneroNetworkScreen(
     navController: NavController,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<MoneroNetworkViewModel>(
-        factory = MoneroNetworkModule.Factory()
-    )
+    val viewModel = viewModel<MoneroNetworkViewModel>(factory = MoneroNetworkModule.Factory())
     var revealedCardId by remember { mutableStateOf<String?>(null) }
     val view = LocalView.current
+    val skipHalfExpanded by remember { mutableStateOf(true) }
+    val modalBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = skipHalfExpanded
+    )
+    val coroutineScope = rememberCoroutineScope()
+    var selectedNode by remember { mutableStateOf<MoneroNode?>(null) }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                title = viewModel.title,
-                navigationIcon = {
-                    Image(
-                        painter = rememberAsyncImagePainter(
-                            model = BlockchainType.Monero.imageUrl,
-                            error = painterResource(R.drawable.ic_platform_placeholder_32)
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 14.dp)
-                            .size(24.dp)
-                    )
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            onBackPress.invoke()
-                        }
+    fun showTrustedSettings(node: MoneroNode) {
+        selectedNode = node
+        coroutineScope.launch { modalBottomSheetState.show() }
+    }
+
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            selectedNode?.let { node ->
+                MoneroNodeTrustBottomSheet(
+                    node,
+                    onDone = { checked ->
+                        viewModel.onSelectNode(node.copy(trusted = checked))
+                        coroutineScope.launch { modalBottomSheetState.hide() }
+                    },
+                    onCloseClick = {
+                        viewModel.onSelectNode(node)
+                        coroutineScope.launch { modalBottomSheetState.hide() }
+                    }
+                )
+            }
+        }
+
+    ) {
+        Surface(color = ComposeAppTheme.colors.tyler) {
+            Column {
+                AppBar(
+                    title = viewModel.title,
+                    navigationIcon = {
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                model = BlockchainType.Monero.imageUrl,
+                                error = painterResource(R.drawable.ic_platform_placeholder_32)
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(start = 14.dp)
+                                .size(24.dp)
+                        )
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                onBackPress.invoke()
+                            }
+                        )
                     )
                 )
-            )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
 
-                item {
-                    VSpacer(12.dp)
-                    subhead2_grey(
-                        modifier = Modifier.padding(horizontal = 32.dp),
-                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
-                    )
-                    VSpacer(32.dp)
-                }
-
-                item {
-                    CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
-                        BlockchainSettingCell(item.name, item.url, item.selected, null) {
-                            viewModel.onSelectNode(item.node)
-
-                            stat(
-                                page = StatPage.BlockchainSettingsEvm,
-                                event = StatEvent.SwitchEvmSource(BlockchainType.Monero.uid, item.name)
-                            )
-                        }
+                    item {
+                        VSpacer(12.dp)
+                        subhead2_grey(
+                            modifier = Modifier.padding(horizontal = 32.dp),
+                            text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                        )
+                        VSpacer(32.dp)
                     }
-                }
 
-                if (viewModel.viewState.customItems.isNotEmpty()) {
-                    CustomNodeListSection(
-                        viewModel.viewState.customItems,
-                        revealedCardId,
-                        onClick = { syncSource ->
-                            viewModel.onSelectNode(syncSource)
-
-                            stat(
-                                page = StatPage.BlockchainSettingsEvm,
-                                event = StatEvent.SwitchEvmSource(BlockchainType.Monero.uid, "custom")
-                            )
-                        },
-                        onReveal = { id ->
-                            if (revealedCardId != id) {
-                                revealedCardId = id
+                    item {
+                        CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
+                            BlockchainSettingCell(item.name, item.url, item.selected, null) {
+                                showTrustedSettings(item.node)
                             }
-                        },
-                        onConceal = {
-                            revealedCardId = null
                         }
-                    ) {
-                        viewModel.onRemoveCustomNode(it)
-                        HudHelper.showErrorMessage(view, R.string.Hud_Removed)
-
-                        stat(
-                            page = StatPage.BlockchainSettingsEvm,
-                            event = StatEvent.DeleteCustomEvmSource(BlockchainType.Monero.uid)
-                        )
                     }
-                }
 
-                item {
-                    Spacer(Modifier.height(32.dp))
-                    AddButton {
-                        navController.navigate(AddNodePage)
+                    if (viewModel.viewState.customItems.isNotEmpty()) {
+                        customNodeListSection(
+                            viewModel.viewState.customItems,
+                            revealedCardId,
+                            onClick = { node ->
+                                showTrustedSettings(node)
+                            },
+                            onReveal = { id ->
+                                if (revealedCardId != id) {
+                                    revealedCardId = id
+                                }
+                            },
+                            onConceal = {
+                                revealedCardId = null
+                            }
+                        ) {
+                            viewModel.onRemoveCustomNode(it)
+                            HudHelper.showErrorMessage(view, R.string.Hud_Removed)
 
-                        stat(
-                            page = StatPage.BlockchainSettingsEvm,
-                            event = StatEvent.OpenBlockchainSettingsEvmAdd(BlockchainType.Monero.uid)
-                        )
+                        }
                     }
-                    Spacer(Modifier.height(60.dp))
+
+                    item {
+                        Spacer(Modifier.height(32.dp))
+                        AddButton {
+                            navController.navigate(AddNodePage)
+                        }
+                        Spacer(Modifier.height(60.dp))
+                    }
                 }
             }
         }
     }
 }
 
-private fun LazyListScope.CustomNodeListSection(
+private fun LazyListScope.customNodeListSection(
     items: List<MoneroNetworkViewModel.ViewItem>,
     revealedCardId: String?,
     onClick: (MoneroNode) -> Unit,

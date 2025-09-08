@@ -10,6 +10,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import java.util.Objects
 
 class MoneroNodeManager(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
@@ -24,26 +25,37 @@ class MoneroNodeManager(
     private val _nodesUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val nodesUpdatedFlow = _nodesUpdatedFlow.asSharedFlow()
 
-    val defaultNodes: List<MoneroNode> =
-        listOf(
-            MoneroNode("xmr-de.boldsuck.org:18081", "boldsuck.org", "xmr-de.boldsuck.org:18081/mainnet/boldsuck.org"),
-            MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
-            MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),
-            MoneroNode("node.monerodevs.org:18089", "monerodevs.org", "node.monerodevs.org:18089/mainnet/monerodevs.org"),
-            MoneroNode("nodex.monerujo.io:18081", "monerujo.io", "nodex.monerujo.io:18081/mainnet/monerujo.io"),
-            MoneroNode("xmr-node.cakewallet.com:18081", "cakewallet.com", "xmr-node.cakewallet.com:18081/mainnet/cakewallet.com"),
-            MoneroNode("monero.stackwallet.com:18081", "stackwallet.com", "monero.stackwallet.com:18081/mainnet/stackwallet.com"),
-        )
+    val defaultNodesInitial = listOf(
+        MoneroNode("xmr-de.boldsuck.org:18081", "boldsuck.org", "xmr-de.boldsuck.org:18081/mainnet/boldsuck.org"),
+        MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
+        MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),
+        MoneroNode("node.monerodevs.org:18089", "monerodevs.org", "node.monerodevs.org:18089/mainnet/monerodevs.org"),
+        MoneroNode("nodex.monerujo.io:18081", "monerujo.io", "nodex.monerujo.io:18081/mainnet/monerujo.io"),
+        MoneroNode("xmr-node.cakewallet.com:18081", "cakewallet.com", "xmr-node.cakewallet.com:18081/mainnet/cakewallet.com"),
+        MoneroNode("monero.stackwallet.com:18081", "stackwallet.com", "monero.stackwallet.com:18081/mainnet/stackwallet.com"),
+    )
+
+    val defaultNodes: List<MoneroNode>
+        get() {
+            val nodeRecordsMap = moneroNodeStorage.getAll().associateBy { it.url }
+            return defaultNodesInitial.map {
+                it.copy(trusted = nodeRecordsMap[it.host]?.trusted ?: false)
+            }
+        }
 
     val customNodes: List<MoneroNode>
         get() {
-            val records = moneroNodeStorage.getAll()
+            val defaultNodesUrls = defaultNodesInitial.map { it.host }
+            val customNodeRecords = moneroNodeStorage.getAll().filterNot { defaultNodesUrls.contains(it.url) }
             return try {
-                records.mapNotNull { record ->
+                customNodeRecords.map { record ->
                     val uri = record.url.toUri()
                     MoneroNode(
                         host = record.url,
                         name = uri.host ?: "",
+                        username = record.username,
+                        password = record.password,
+                        trusted = record.trusted,
                         serialized = serializeNode(uri, record.username, record.password)
                     )
                 }
@@ -68,6 +80,14 @@ class MoneroNodeManager(
         get() = marketKitWrapper.blockchain(blockchainType.uid)
 
     fun save(node: MoneroNode) {
+        val record = MoneroNodeRecord(
+            url = node.host,
+            username = node.username,
+            password = node.password,
+            trusted = node.trusted
+        )
+        moneroNodeStorage.save(record)
+
         blockchainSettingsStorage.saveMoneroNode(node.host)
         _currentNodeUpdatedFlow.tryEmit(node.host)
     }
@@ -76,11 +96,12 @@ class MoneroNodeManager(
         return "$username:$password@${uri.host}:${uri.port}/mainnet/${uri.host ?: ""}"
     }
 
-    fun addMoneroNode(url: String, username: String?, password: String?) {
+    fun addMoneroNode(url: String, username: String?, password: String?, trusted: Boolean) {
         val record = MoneroNodeRecord(
             url = url,
             username = username,
-            password = password
+            password = password,
+            trusted = trusted
         )
 
         moneroNodeStorage.save(record)
@@ -107,14 +128,17 @@ class MoneroNodeManager(
     data class MoneroNode(
         val host: String,
         val name: String,
-        val serialized: String
+        val serialized: String,
+        val username: String? = null,
+        val password: String? = null,
+        val trusted: Boolean = false
     ) {
         override fun equals(other: Any?): Boolean {
-            return other is MoneroNode && other.host == this.host
+            return other is MoneroNode && other.host == this.host && other.trusted == this.trusted
         }
 
         override fun hashCode(): Int {
-            return this.host.hashCode()
+            return Objects.hash(host, trusted)
         }
     }
 }

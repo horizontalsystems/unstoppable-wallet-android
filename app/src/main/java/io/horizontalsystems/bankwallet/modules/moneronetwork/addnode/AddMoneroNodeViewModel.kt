@@ -54,7 +54,7 @@ class AddMoneroNodeViewModel(
             if (!hasRequiredProtocol) {
                 throw MalformedURLException()
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             urlCaution = Caution(Translator.getString(R.string.AddMoneroNode_Error_InvalidUrl), Caution.Type.Error)
             syncState()
             return
@@ -66,14 +66,9 @@ class AddMoneroNodeViewModel(
             return
         }
 
-        nodeManager.addMoneroNode(url, username, password)
+        nodeManager.addMoneroNode(url, username, password, true)
 
         viewState = AddMoneroNodeViewState(null, true)
-
-        stat(
-            page = StatPage.BlockchainSettingsEvmAdd,
-            event = StatEvent.AddEvmSource(BlockchainType.Monero.uid)
-        )
     }
 
     private fun syncState() {

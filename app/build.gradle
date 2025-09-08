@@ -311,7 +311,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:5.0.1"
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:monero-kit-android:443f98c'
+    implementation 'com.github.horizontalsystems:monero-kit-android:55377aa'
     implementation 'com.github.horizontalsystems:stellar-kit-android:519533b'
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:5d94bfe'

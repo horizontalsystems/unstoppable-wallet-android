@@ -1199,8 +1199,11 @@
     <string name="AddMoneroNode_Pasword">Password (optional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Node with this url already exists</string>
     <string name="AddMoneroNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https</string>
-
-
+    <string name="MoneroNodeSettings_TrustedTitle">Node Preferences</string>
+    <string name="MoneroNodeSettings_TrustedDescription">Trusted node — the wallet trusts the selected node and uses its data without extra verification.
+        \n\nOn → transactions instantly appear as Pending when broadcast (faster sync, but lower privacy and reliance on the node).
+        \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
+    <string name="MoneroNodeSettings_Trusted">Trusted</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>
