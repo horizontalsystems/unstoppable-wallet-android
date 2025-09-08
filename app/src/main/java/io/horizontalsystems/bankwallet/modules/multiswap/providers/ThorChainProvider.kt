@@ -205,6 +205,8 @@ object ThorChainProvider : IMultiSwapProvider {
             destination = destination,
             affiliate = AFFILIATE,
             affiliateBps = AFFILIATE_BPS,
+            streamingInterval = 1,
+            streamingQuantity = 0,
             toleranceBps = slippage?.movePointRight(2)?.toLong()
         )
     }
@@ -374,8 +376,8 @@ interface ThornodeAPI {
         @Query("destination") destination: String,
         @Query("affiliate") affiliate: String?,
         @Query("affiliate_bps") affiliateBps: Int?,
-//        @Query("streaming_interval") streamingInterval: Long,
-//        @Query("streaming_quantity") streamingQuantity: Long,
+        @Query("streaming_interval") streamingInterval: Long,
+        @Query("streaming_quantity") streamingQuantity: Long,
         @Query("tolerance_bps") toleranceBps: Long?,
 
     ): Response.QuoteSwap
