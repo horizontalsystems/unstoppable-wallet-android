@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvid
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.QuickSwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.marketkit.models.Token
@@ -31,7 +32,7 @@ class SwapQuoteService {
         QuickSwapProvider,
         UniswapProvider,
         UniswapV3Provider,
-//        ThorChainProvider,
+        ThorChainProvider,
         AllBridgeProvider,
     )
 

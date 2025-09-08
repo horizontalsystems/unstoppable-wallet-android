@@ -38,21 +38,16 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.Date
 
-object BaseThorChainProvider : IMultiSwapProvider {
-    override val id = "thorchain"
-    override val title = "THORChain"
-    override val url = "https://thorchain.org/swap"
-    override val icon = R.drawable.thorchain
-    override val priority = 0
-    private val adapterManager = App.adapterManager
-    private const val AFFILIATE = "hrz"
-    private const val AFFILIATE_BPS = 100
+abstract class BaseThorChainProvider : IMultiSwapProvider {
+    protected abstract val baseUrl: String
+    protected abstract val affiliate: String?
+    protected abstract val affiliateBps: Int?
 
     private val thornodeAPI =
-        APIClient.retrofit("https://thornode.ninerealms.com", 60).create(ThornodeAPI::class.java)
-
+        APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
 
     private val blockchainTypes = mapOf(
+        "ARB" to BlockchainType.ArbitrumOne,
         "AVAX" to BlockchainType.Avalanche,
         "BCH" to BlockchainType.BitcoinCash,
         "BSC" to BlockchainType.BinanceSmartChain,
@@ -60,6 +55,8 @@ object BaseThorChainProvider : IMultiSwapProvider {
         "ETH" to BlockchainType.Ethereum,
         "LTC" to BlockchainType.Litecoin,
         "BASE" to BlockchainType.Base,
+        "DASH" to BlockchainType.Dash,
+//        "ZEC" to BlockchainType.Zcash,
     )
 
     private var assets = listOf<Asset>()
@@ -73,6 +70,7 @@ object BaseThorChainProvider : IMultiSwapProvider {
             val blockchainType = blockchainTypes[assetBlockchainId] ?: continue
 
             when (blockchainType) {
+                BlockchainType.ArbitrumOne,
                 BlockchainType.Avalanche,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Ethereum,
@@ -94,6 +92,8 @@ object BaseThorChainProvider : IMultiSwapProvider {
                 BlockchainType.BitcoinCash,
                 BlockchainType.Bitcoin,
                 BlockchainType.Litecoin,
+                BlockchainType.Dash,
+//                BlockchainType.Zcash,
                     -> {
                     var nativeTokenQueries = blockchainType.nativeTokenQueries
 
@@ -203,8 +203,8 @@ object BaseThorChainProvider : IMultiSwapProvider {
             toAsset = assetOut.asset,
             amount = amountIn.movePointRight(8).toLong(),
             destination = destination,
-            affiliate = AFFILIATE,
-            affiliateBps = AFFILIATE_BPS,
+            affiliate = affiliate,
+            affiliateBps = affiliateBps,
             streamingInterval = 1,
             streamingQuantity = 0,
             toleranceBps = slippage?.movePointRight(2)?.toLong()
@@ -295,6 +295,7 @@ object BaseThorChainProvider : IMultiSwapProvider {
         )
 
         return when (tokenIn.blockchainType) {
+            BlockchainType.ArbitrumOne,
             BlockchainType.Avalanche,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Ethereum,
@@ -340,6 +341,7 @@ object BaseThorChainProvider : IMultiSwapProvider {
             BlockchainType.BitcoinCash,
             BlockchainType.Bitcoin,
             BlockchainType.Litecoin,
+            BlockchainType.Dash,
                 -> {
                 SendTransactionData.Btc(
                     address = inboundAddress,
@@ -365,10 +367,10 @@ object BaseThorChainProvider : IMultiSwapProvider {
 }
 
 interface ThornodeAPI {
-    @GET("/thorchain/pools")
+    @GET("/pools")
     suspend fun pools(): List<Response.Pool>
 
-    @GET("/thorchain/quote/swap")
+    @GET("/quote/swap")
     suspend fun quoteSwap(
         @Query("from_asset") fromAsset: String,
         @Query("to_asset") toAsset: String,
