@@ -1002,6 +1002,11 @@
     <string name="AddMoneroNode_Pasword">Mot de passe (facultatif)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Un noeud avec cette url existe déjà</string>
     <string name="AddMoneroNode_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Préférences du noeud</string>
+    <string name="MoneroNodeSettings_TrustedDescription">Noeud de confiance — le portefeuille confie le noeud sélectionné et utilise ses données sans vérification supplémentaire.
+        \n\nOn → transactions apparaissent instantanément en attente de diffusion (synchronisation plus rapide, mais la confidentialité et la dépendance au noeud).
+        \n\nDésactivé → les transactions ne sont affichées qu\'après confirmation du réseau (plus lent, mais plus sûr et plus privé).</string>
+    <string name="MoneroNodeSettings_Trusted">Avoir confiance</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Après avoir changé de source, le portefeuille devra se resynchroniser lui-même.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
