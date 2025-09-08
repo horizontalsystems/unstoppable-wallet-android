@@ -30,7 +30,6 @@ import java.math.BigDecimal
 object OneInchProvider : IMultiSwapProvider {
     override val id = "oneinch"
     override val title = "1inch"
-    override val url = "https://app.1inch.io/"
     override val icon = R.drawable.oneinch
     override val priority = 100
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }

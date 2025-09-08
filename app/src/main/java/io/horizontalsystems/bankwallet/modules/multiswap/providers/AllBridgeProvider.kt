@@ -37,7 +37,6 @@ import java.math.BigInteger
 object AllBridgeProvider : IMultiSwapProvider {
     override val id = "allbridge"
     override val title = "AllBridge"
-    override val url = "https://allbridge.io/"
     override val icon = R.drawable.allbridge
     override val priority = 0
     private val feePaymentMethod = FeePaymentMethod.StableCoin
