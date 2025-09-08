@@ -1,0 +1,15 @@
+package io.horizontalsystems.bankwallet.modules.multiswap.providers
+
+import io.horizontalsystems.bankwallet.R
+
+object MayaProvider : BaseThorChainProvider(
+    baseUrl = "https://mayanode.mayachain.info/mayachain/",
+    affiliate = null,
+    affiliateBps = null,
+) {
+    override val id = "mayachain"
+    override val title = "Maya Protocol"
+    override val url = ""
+    override val icon = R.drawable.maya
+    override val priority = 0
+}
