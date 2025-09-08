@@ -1002,6 +1002,11 @@
     <string name="AddMoneroNode_Pasword">Passwort (optional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Knoten mit dieser URL existiert bereits</string>
     <string name="AddMoneroNode_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Knoten-Einstellungen</string>
+    <string name="MoneroNodeSettings_TrustedDescription">Vertrauenswürdiger Knoten — die Brieftasche vertraut dem ausgewählten Knoten und verwendet seine Daten ohne zusätzliche Überprüfung.
+        \n\nAuf → Transaktionen erscheinen sofort als ausstehend beim Broadcasten (schneller synchronisieren, aber weniger Privatsphäre und Abhängigkeit vom Knoten).
+        \n\n\n Aus → Transaktionen werden nur nach Bestätigung aus dem Netzwerk angezeigt (langsamer, aber sicherer und privat).</string>
+    <string name="MoneroNodeSettings_Trusted">Vertrauen</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle muss die Brieftasche sich selbst synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Wählen Sie die Quell-Nicht stoppbare App zur Synchronisierung von Brieftasche(n).</string>
