@@ -38,7 +38,7 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.Date
 
-object ThorChainProvider : IMultiSwapProvider {
+object BaseThorChainProvider : IMultiSwapProvider {
     override val id = "thorchain"
     override val title = "THORChain"
     override val url = "https://thorchain.org/swap"
