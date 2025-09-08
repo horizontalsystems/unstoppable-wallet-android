@@ -1000,6 +1000,11 @@
     <string name="AddMoneroNode_Pasword">Пароль (необязательно)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Узел с этим url уже существует</string>
     <string name="AddMoneroNode_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Настройки узла</string>
+    <string name="MoneroNodeSettings_TrustedDescription">Надежный узел — кошелек доверяет выбранному узлу и использует его данные без дополнительной проверки.
+        \n\nВключенные → транзакции мгновенно появляются в ожидании передачи (ускоренная синхронизация, но снизить конфиденциальность и полагаться на узел).
+        \n\nВыкл → транзакции отображаются только после подтверждения из сети (медленнее, но безопаснее и более приватно).</string>
+    <string name="MoneroNodeSettings_Trusted">Доверенный</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с блокчейном.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька. Восстановление из блокчейна занимает значительно больше времени.</string>
