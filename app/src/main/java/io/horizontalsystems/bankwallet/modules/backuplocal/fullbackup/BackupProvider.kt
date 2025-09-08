@@ -267,7 +267,7 @@ class BackupProvider(
                 val decryptedPassword = decrypted(it, passphrase)
                 String(decryptedPassword, Charsets.UTF_8)
             }
-            moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password))
+            moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password, node.trusted))
         }
 
         settings.moneroNodes?.selected?.forEach { node ->
@@ -693,7 +693,7 @@ data class MoneroNodeBackup(
     val url: String,
     val login: String?,
     val password: BackupLocalModule.BackupCrypto?,
-    val isTrusted: Boolean,
+    val trusted: Boolean,
 )
 
 data class MoneroNodes(

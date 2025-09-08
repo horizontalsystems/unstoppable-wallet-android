@@ -164,7 +164,8 @@ class MoneroAdapter(
                 Seed.Bip39(mnemonic.words, mnemonic.passphrase),
                 birthdayHeightOrDate,
                 wallet.account.id,
-                node.serialized
+                node.serialized,
+                node.trusted
             )
 
             val transactionsProvider = MoneroTransactionsProvider()

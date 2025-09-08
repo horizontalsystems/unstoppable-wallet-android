@@ -6,5 +6,6 @@ import androidx.room.Entity
 data class MoneroNodeRecord(
     val url: String,
     val username: String?,
-    val password: String?
+    val password: String?,
+    val trusted: Boolean
 )
