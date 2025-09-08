@@ -1002,6 +1002,11 @@
     <string name="AddMoneroNode_Pasword">Senha (opcional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Já existe um nó com esta url</string>
     <string name="AddMoneroNode_Error_InvalidUrl">URL inserida é inválida. URL válida deve ter um dos esquemas a seguir: https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Preferências de Nó</string>
+    <string name="MoneroNodeSettings_TrustedDescription">O nó confiável — a carteira confia no nó selecionado e usa seus dados sem verificação extra.
+        \n\nEm → transações aparecem instantaneamente como pendentes quando a transmissão (sincronização mais rápida, mas baixa privacidade e confiança no nó).
+        \n\nOff → transações são mostradas apenas após confirmações da rede (lento, mas mais seguro e mais privado).</string>
+    <string name="MoneroNodeSettings_Trusted">Confiável</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte, a carteira terá que ressincronizar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
