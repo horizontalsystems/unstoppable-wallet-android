@@ -998,6 +998,11 @@
     <string name="AddMoneroNode_Pasword">Contraseña (opcional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Ya existe un nodo con esta url</string>
     <string name="AddMoneroNode_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Preferencias del nodo</string>
+    <string name="MoneroNodeSettings_TrustedDescription">Nodo de confianza — el monedero confía en el nodo seleccionado y utiliza sus datos sin verificación adicional.
+        \n\nEn → las transacciones al instante aparecen como Pendientes cuando se transmite (sincronización más rápida, pero menor privacidad y confianza en el nodo).
+        \n\nApagado → las transacciones se muestran sólo después de las confirmaciones de la red (más lento, pero más seguro y más privado).</string>
+    <string name="MoneroNodeSettings_Trusted">Confiado</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar la fuente, el monedero tendrá que resinc sí mismo.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación Unstoppable debería usar para sincronizar la(s) cartera(s).</string>
