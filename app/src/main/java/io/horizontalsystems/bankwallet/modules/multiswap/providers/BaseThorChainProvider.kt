@@ -38,10 +38,11 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.Date
 
-abstract class BaseThorChainProvider : IMultiSwapProvider {
-    protected abstract val baseUrl: String
-    protected abstract val affiliate: String?
-    protected abstract val affiliateBps: Int?
+abstract class BaseThorChainProvider(
+    baseUrl: String,
+    private val affiliate: String?,
+    private val affiliateBps: Int?,
+) : IMultiSwapProvider {
 
     private val thornodeAPI =
         APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
@@ -367,10 +368,10 @@ abstract class BaseThorChainProvider : IMultiSwapProvider {
 }
 
 interface ThornodeAPI {
-    @GET("/pools")
+    @GET("pools")
     suspend fun pools(): List<Response.Pool>
 
-    @GET("/quote/swap")
+    @GET("quote/swap")
     suspend fun quoteSwap(
         @Query("from_asset") fromAsset: String,
         @Query("to_asset") toAsset: String,
