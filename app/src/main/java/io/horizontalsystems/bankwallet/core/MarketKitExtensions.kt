@@ -57,6 +57,7 @@ val Token.swappable: Boolean
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
         BlockchainType.Litecoin,
+        BlockchainType.Dash,
         BlockchainType.Stellar,
         BlockchainType.Solana,
         BlockchainType.Tron,
