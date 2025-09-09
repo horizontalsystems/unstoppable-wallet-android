@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.isEvm
@@ -56,6 +57,10 @@ object SwapHelper {
 
                 BlockchainType.Litecoin -> {
                     LitecoinAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.Dash -> {
+                    DashAdapter.firstAddress(account.type)
                 }
 
                 BlockchainType.Tron -> {
