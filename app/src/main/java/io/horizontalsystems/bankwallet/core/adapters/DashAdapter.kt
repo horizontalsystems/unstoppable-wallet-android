@@ -85,6 +85,31 @@ class DashAdapter(
     companion object {
         private const val confirmationsThreshold = 1
 
+        fun firstAddress(accountType: AccountType): String {
+            when (accountType) {
+                is AccountType.Mnemonic -> {
+                    val address = DashKit.firstAddress(
+                        accountType.seed,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.HdExtendedKey -> {
+                    val address = DashKit.firstAddress(
+                        accountType.hdExtendedKey,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.BitcoinAddress -> {
+                    return accountType.address
+                }
+                else -> throw UnsupportedAccountException()
+            }
+        }
+
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): DashKit {
             val account = wallet.account
 
