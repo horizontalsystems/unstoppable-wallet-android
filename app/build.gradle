@@ -314,7 +314,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:monero-kit-android:4e75439'
     implementation 'com.github.horizontalsystems:stellar-kit-android:519533b'
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:502b0e1'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:7fd8667'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:3b88c12'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:7d01e63'
     implementation 'com.github.horizontalsystems:market-kit-android:ef89ba0'
