@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.address
 
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
@@ -66,7 +67,7 @@ class Trc20AddressValidator {
     }
 
     fun supports(token: Token): Boolean {
-        return method(token.coin.uid) != null
+        return token.blockchainType == BlockchainType.Tron && method(token.coin.uid) != null
     }
 
     private suspend fun checkBlacklistStatus(
