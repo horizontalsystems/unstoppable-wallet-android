@@ -247,6 +247,10 @@ val AccountType.statAccountType: String
             "stellar_secret_key"
         }
 
+        is AccountType.MoneroWatchAccount -> {
+            "monero_watch_account"
+        }
+
         is AccountType.HdExtendedKey -> {
             if (hdExtendedKey.isPublic) {
                 "account_x_pub_key"
