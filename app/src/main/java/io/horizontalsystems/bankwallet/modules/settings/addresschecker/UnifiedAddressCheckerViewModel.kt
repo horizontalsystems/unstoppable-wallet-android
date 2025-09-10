@@ -68,7 +68,7 @@ class UnifiedAddressCheckerViewModel(
                     val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid }
                     fullCoin?.let {
                         val filteredTokens = it.tokens.filter { token ->
-                            eip20Validator.supports(token) || token.blockchainType == BlockchainType.Tron
+                            eip20Validator.supports(token) || trc20Validator.supports(token)
                         }
                         FullCoin(coin = it.coin, tokens = filteredTokens)
                     }
