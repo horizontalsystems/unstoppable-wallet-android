@@ -31,6 +31,7 @@ class SelectBlockchainsViewModel(
         val tokens = service.tokens(accountType)
 
         when (accountType) {
+            is AccountType.MoneroWatchAccount,
             is AccountType.SolanaAddress,
             is AccountType.TronAddress,
             is AccountType.BitcoinAddress,

@@ -18,6 +18,7 @@ object BackupLocalModule {
     private const val STELLAR_ADDRESS = "stellar_address"
     private const val BITCOIN_ADDRESS = "bitcoin_address"
     private const val HD_EXTENDED_LEY = "hd_extended_key"
+    private const val MONERO_WATCH_ACCOUNT = "monero_watch_account"
 
     //Backup Json file data structure
 
@@ -78,6 +79,7 @@ object BackupLocalModule {
         is AccountType.StellarAddress -> STELLAR_ADDRESS
         is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
         is AccountType.HdExtendedKey -> HD_EXTENDED_LEY
+        is AccountType.MoneroWatchAccount -> MONERO_WATCH_ACCOUNT
     }
 
     @Throws(IllegalStateException::class)
@@ -102,7 +104,7 @@ object BackupLocalModule {
             STELLAR_ADDRESS -> AccountType.StellarAddress(String(data, Charsets.UTF_8))
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
-
+            MONERO_WATCH_ACCOUNT -> AccountType.MoneroWatchAccount.fromSerialized(String(data, Charsets.UTF_8))
             else -> throw IllegalStateException("Unknown account type")
         }
     }
@@ -127,6 +129,7 @@ object BackupLocalModule {
         is AccountType.StellarAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
+        is AccountType.MoneroWatchAccount -> accountType.serialized.toByteArray(Charsets.UTF_8)
     }
 
     val kdfDefault = KdfParams(

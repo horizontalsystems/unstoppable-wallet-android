@@ -93,6 +93,11 @@ class WatchAddressService(
                         add(TokenQuery(BlockchainType.ECash, TokenType.Native))
                     }
                 }
+                is AccountType.MoneroWatchAccount -> {
+                    if (BlockchainType.Monero.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Monero, TokenType.Native))
+                    }
+                }
             }
         }
 
