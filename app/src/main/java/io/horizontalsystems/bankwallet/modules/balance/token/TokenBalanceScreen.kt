@@ -279,7 +279,7 @@ private fun TokenBalanceHeader(
         val dimmed: Boolean
 
         if (balanceViewItem.balanceHidden || balanceViewItem.primaryValue == null) {
-            title = "------"
+            title = "***"
             body = ""
             dimmed = false
         } else {
