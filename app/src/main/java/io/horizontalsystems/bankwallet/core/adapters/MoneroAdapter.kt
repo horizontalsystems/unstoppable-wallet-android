@@ -145,10 +145,22 @@ class MoneroAdapter(
             restoreSettings: RestoreSettings,
             node: MoneroNode
         ): MoneroAdapter {
-            val mnemonic = (wallet.account.type as? AccountType.Mnemonic)
-                ?: throw IllegalStateException("Unsupported account type: ${wallet.account.type.javaClass.simpleName}")
+            val birthdayHeightStr: String?
+            val seed: Seed
+            when (val accountType = wallet.account.type) {
+                is AccountType.Mnemonic -> {
+                    birthdayHeightStr = restoreSettings.birthdayHeight?.toString()
+                    seed = Seed.Bip39(accountType.words, accountType.passphrase)
+                }
 
-            val birthdayHeightStr = restoreSettings.birthdayHeight?.toString()
+                is AccountType.MoneroWatchAccount -> {
+                    birthdayHeightStr = accountType.restoreHeight.toString()
+                    seed = Seed.WatchOnly(accountType.address, accountType.privateViewKey)
+                }
+
+                else -> throw IllegalStateException("Unsupported account type: ${wallet.account.type.javaClass.simpleName}")
+            }
+
             val birthdayHeightOrDate: String = when (wallet.account.origin) {
                 AccountOrigin.Created -> {
                     birthdayHeightStr ?: LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -161,7 +173,7 @@ class MoneroAdapter(
 
             val kit = MoneroKit.getInstance(
                 context,
-                Seed.Bip39(mnemonic.words, mnemonic.passphrase),
+                seed,
                 birthdayHeightOrDate,
                 wallet.account.id,
                 node.serialized,

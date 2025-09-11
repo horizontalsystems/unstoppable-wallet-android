@@ -151,6 +151,7 @@
     <string name="SelectContacts_All">All</string>
 
     <string name="Restore_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_BirthdayHeight_Invalid">Invalid Birthday Height</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
@@ -1369,11 +1370,12 @@
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
     <string name="WatchWallet">Watch Wallet</string>
-    <string name="Watch_Address_Hint">Paste public address or XPUB</string>
+    <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) or XPUB</string>
     <string name="Watch_Address_Watch">Watch</string>
+    <string name="Watch_ViewKey">Private View Key</string>">
+    <string name="Watch_BirthdayHeight">Restore Height</string>">
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>
     <string name="Watch_Select_Coins">Choose Coins</string>
-    <string name="Watch_InfoText">Supports addresses from EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) and XPUB keys.</string>
     <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
 
     <!--Manage Account-->
