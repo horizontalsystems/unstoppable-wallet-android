@@ -19,7 +19,6 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
-import java.math.BigDecimal
 
 class BitcoinCashAdapter(
     override val kit: BitcoinCashKit,
@@ -38,12 +37,6 @@ class BitcoinCashAdapter(
     init {
         kit.listener = this
     }
-
-    //
-    // BitcoinBaseAdapter
-    //
-
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // BitcoinCashKit Listener

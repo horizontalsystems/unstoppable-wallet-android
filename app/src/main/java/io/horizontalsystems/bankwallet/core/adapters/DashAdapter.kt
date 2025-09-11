@@ -15,7 +15,6 @@ import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
 import io.horizontalsystems.marketkit.models.BlockchainType
-import java.math.BigDecimal
 
 class DashAdapter(
         override val kit: DashKit,
@@ -30,12 +29,6 @@ class DashAdapter(
     init {
         kit.listener = this
     }
-
-    //
-    // BitcoinBaseAdapter
-    //
-
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // DashKit Listener
