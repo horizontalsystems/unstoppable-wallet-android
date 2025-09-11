@@ -1304,6 +1304,7 @@
 
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
+    <string name="Hud_Text_AddressCopied">Address copied</string>
     <string name="Hud_Text_Created">Created</string>
     <string name="Hud_Text_Restored">Imported</string>
     <string name="Hud_Text_AddressAdded">Address Added</string>
