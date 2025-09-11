@@ -87,7 +87,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase de passe ne peut pas être vide</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement les symboles pris en charge : <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase de passe ne correspond pas</string>
-    <string name="CreateWallet_PassphraseDescription">Les phrases de passe ajoutent une couche de sécurité supplémentaire pour les portefeuilles. Pour restaurer ce portefeuille, un utilisateur a besoin à la fois d\'une phrase de récupération et d\'une phrase de passe.\n\nLes phrases de passe permettent également aux utilisateurs d\'avoir facilement de nombreux portefeuilles multi-pièces en utilisant un seul mot de passe mnémonique mais différent.</string>
+    <string name="CreateWallet_PassphraseDescription">Les phrases de passe fournissent une couche supplémentaire de sécurité pour les portefeuilles. poule qui restaure un portefeuille protégé par une phrase de passe, l\'utilisateur doit fournir à la fois la phrase de récupération et la phrase de passe.\n\nLes phrases de passe permettent également aux utilisateurs de créer plusieurs portefeuilles multi-pièces indépendants à partir du même mnémonique, simplement en utilisant des phrases de passe différentes.</string>
     <!--Languages-->
     <string name="Language_English">Anglais</string>
     <string name="Language_Japanese">Japonais</string>
@@ -384,7 +384,7 @@
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
     <string name="Send_Fee">Frais</string>
-    <string name="Send_Fee_Info">Les Blockchains exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés quand beaucoup de transactions sont effectuées sur le réseau.</string>
+    <string name="Send_Fee_Info">Le coût estimé du traitement de cette transaction sur la blockchain.</string>
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_Max">Max.</string>
     <string name="Send_Advanced">Avancé</string>
@@ -491,11 +491,9 @@
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que nécessaire pour traiter cette transaction maintenant.</string>
     <string name="FeeSettings_FeeRate">Taux de frais (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Voici la valeur recommandée pour appuyer sur les 2 prochains blocs</string>
-    <string name="FeeSettings_FeeRate_Info">Les Blockchains exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés quand beaucoup de transactions sont effectuées sur le réseau.
-        \n\nLe portefeuille Unstoppable estime les frais en fonction de l\'activité actuelle de la blockchain et recommande la valeur optimale afin que la transaction soit traitée dans un délai raisonnable.
-        \n\nLe taux de frais recommandé indiqué comme le montant de satoshi utilisateur doit payer pour un octet unique de la transaction. Ainsi, les frais totaux dépendent de la taille totale de la transaction qui est mesurée en octets.
-        \n\nLes utilisateurs peuvent utiliser les contrôles fournis pour augmenter ou diminuer la valeur du taux de frais. Le changement de taux de frais modifie les frais totaux pour la transaction que l\'utilisateur paiera.
-        \n\nDéfinir le taux de frais en dessous de la valeur recommandée peut entraîner une transaction en attente d\'heures, ou être rejeté. Plus la valeur est basse, plus il faudra de temps pour que la transaction soit confirmée. Pour les transactions où la priorité est importante, nous recommandons de définir un taux de frais plus élevé.</string>
+    <string name="FeeSettings_FeeRate_Info">Lorsque vous envoyez une transaction, vous devez payer des frais de réseau. Plus le réseau est occupé, plus les frais sont élevés.
+        \n\nLe portefeuille Unstoppable suggère des frais optimaux pour aider à confirmer votre transaction dans un délai raisonnable. Vous pouvez augmenter ou diminuer cette valeur.
+        \n\nDéfinir les frais trop bas peut faire en sorte que votre transaction reste en attente pendant une longue période ou même être rejetée. Pour une confirmation plus rapide, utilisez des frais plus élevés.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
@@ -540,7 +538,7 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message à signer</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
     <string name="WalletConnect_Error_NoWallet">Vous devez créer ou importer un portefeuille avant de pouvoir utiliser WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Créez une copie de sauvegarde de la phrase de récupération et du mot de passe qui vous permettra de récupérer votre portefeuille si votre téléphone est perdu, volé, cassé, etc.</string>
+    <string name="WalletConnect_Error_NeedBackup">Créez une sauvegarde de votre phrase de récupération et de la phrase de passe associée. Celles-ci vous permettront de restaurer votre portefeuille si votre téléphone est perdu, volé ou endommagé.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Blockchain non pris en charge</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Aucun kit evm approprié</string>
@@ -621,11 +619,11 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
-    <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
+    <string name="SwapSettings_SlippageDescription">Si le prix dépasse ce pourcentage, le swap ne passera pas.</string>
     <string name="SwapSettings_DeadlineTitle">Date limite de transaction</string>
     <string name="SwapSettings_DeadlineDescription">Votre transaction sera annulée si elle est en suspens pendant une période dépassant ce délai.</string>
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
-    <string name="SwapSettings_RecipientAddressDescription">Le montant sera transféré à l\'adresse indiquée après l\'opération de change</string>
+    <string name="SwapSettings_RecipientAddressDescription">Le montant permuté sera envoyé à l\'adresse spécifiée.</string>
     <string name="SwapSettings_Apply">Appliquer</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
@@ -655,14 +653,14 @@
     <string name="Swap_Approve_Unlimited">Illimité</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
-    <string name="SwapInfo_AllowanceDescription">Le montant qu\'un échange peut dépenser pour le compte de l\'utilisateur lors de l\'exécution de swaps de jetons. Une provision suffisante est requise avant de pouvoir effectuer une opération d\'échange réelle.</string>
+    <string name="SwapInfo_AllowanceDescription">L\'indemnité est le montant que vous laissez utiliser en votre nom pour échanger des swaps. Avant d\'effectuer un swap, vous devez d\'abord approuver une transaction d\'amortissement.</string>
     <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
     <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <!--Transactions-->
     <string name="Transactions_Title">Virements</string>
-    <string name="Transactions_EmptyList">Vous n\'avez encore aucune transaction en cours ou passée</string>
+    <string name="Transactions_EmptyList">Aucune transaction en attente ou passée pour le moment.</string>
     <string name="Transactions_WaitForSync">Veuillez attendre la fin de la synchronisation.</string>
     <string name="Transactions_Pending">En attente</string>
     <string name="Transactions_Receive">Reçue</string>
@@ -820,7 +818,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">La requête a échoué</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_VipSupport_StartChat">Rejoindre le Groupe VIP</string>
-    <string name="Settings_VipSupport_Description">Obtenez un accès exclusif à notre Groupe VIP, où les utilisateurs premium et l\'équipe d\'Unstoppable Wallet collaborent. Recevez une assistance directe, discutez des futures mises à jour et contribuez à façonner l\'évolution du portefeuille.</string>
+    <string name="Settings_VipSupport_Description">Rejoignez notre groupe VIP pour obtenir un soutien direct, participer à des discussions sur les mises à jour à venir et se connecter plus étroitement avec l\'équipe d\'Unstoppable.</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
     <string name="Settings_GetYourTokens">Obtenir vos tokens</string>
@@ -841,7 +839,7 @@
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Vérificateur d\'adresse</string>
     <string name="SettingsAddressChecker_RecipientCheck">Vérification du destinataire</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Vérifie l\'adresse du destinataire avant l\'envoi.</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Analyse l\'adresse du destinataire pour détecter les risques de sécurité avant l\'envoi.</string>
     <string name="SettingsAddressChecker_CheckAddress">Vérifier l\'adresse</string>
     <string name="SettingsAddressChecker_SelectBlockchain">Sélectionnez la Blockchain</string>
     <string name="SettingsAddressChecker_SelectCoin">Sélectionner une pièce</string>
@@ -950,7 +948,7 @@
     <string name="Appearance_HideBalanceTabButtons">Masquer les boutons</string>
     <string name="Appearance_AmountRounding">Arrondi du montant</string>
     <string name="Appearance_BalanceAutoHide">Masquer le Solde Automatiquement</string>
-    <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde à chaque ouverture de l\'application, indépendamment des préférences précédentes.</string>
+    <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde chaque fois que l\'application est ouverte.</string>
     <string name="Appearance_PriceChangeInterval">Variation de prix %</string>
     <string name="Appearance_HideButtonsInfo">La configuration « Masquer les boutons» masque les boutons Envoyer, Recevoir et Permuter dans l\'onglet Solde.</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
@@ -979,12 +977,12 @@
     <string name="BackupManager_AppSettingsTitle">Paramètres de l\'application</string>
     <string name="BackupManager_AppSettingsDescription">Langue, Devise, Apparence ...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable ne collecte pas de données personnelles exposant vos informations privées, telles que les soldes de coins ou les adresses. Bien que nous recueillions certaines statistiques d\'utilisation de l\'interface utilisateur, cela sert uniquement à comprendre notre base d\'utilisateurs et les tendances d\'utilisation de l\'application. Cela peut être désactivé si vous le souhaitez.</string>
+    <string name="Privacy_Information">Unstoppable ne collecte pas de données personnelles comme vos soldes ou adresses de portefeuille. Nous utilisons uniquement des données anonymes pour améliorer l\'application.</string>
     <string name="Privacy_BulletedText1">Le portefeuille ne recueille aucune donnée personnelle.</string>
     <string name="Privacy_BulletedText2">Il n\'y a pas de comptes utilisateurs ni de bases de données stockant les données des utilisateurs.</string>
-    <string name="Privacy_BulletedText3">Si autorisé, le portefeuille partagera les habitudes d\'utilisation de l\'application avec l\'équipe d\'Unstoppable. Cela permet de comprendre quelles fonctionnalités sont utilisées (ou non) par nos utilisateurs. Étant une application axée sur la confidentialité, nous avons besoin d\'une manière d\'évaluer nos efforts, et sans cela, nous n\'avons aucune idée si les fonctionnalités que nous avons développées sont utilisées ou non.</string>
+    <string name="Privacy_BulletedText3">Si autorisé, le portefeuille partagera les habitudes d\'utilisation de l\'application avec l\'équipe Unstoppable. Ceci est pour comprendre quelles fonctionnalités sont utilisées (ou pas) par nos utilisateurs. Étant une application axée sur la protection de la vie privée, nous avons besoin d\'une manière ou d\'une autre pour évaluer nos efforts et sans cela, nous n\'avons aucune idée si les fonctionnalités que nous avons construites sont utilisées ou non.</string>
     <string name="ShareUiData">Partager les données UI</string>
-    <string name="ShareUiDataDescription">Ce paramètre vous permet de désactiver les analyses d\'interface utilisateur et de garantir une confidentialité totale.</string>
+    <string name="ShareUiDataDescription">Ce paramètre vous permet de désactiver l\'analyse et de garder votre activité entièrement privée.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>
@@ -1025,7 +1023,7 @@
     <string name="SettingsSecurity_SetDuressPin">Activer le Mode Duress</string>
     <string name="SettingsSecurity_EditDuressPin">Modifier le code de détresse</string>
     <string name="SettingsSecurity_DisableDuressPin">Désactiver le mot de passe de détresse</string>
-    <string name="SettingsSecurity_DuressPinDescription">Un mode spécialisé conçu pour protéger les portefeuilles sélectionnés en cas de contrainte.</string>
+    <string name="SettingsSecurity_DuressPinDescription">Un mode spécial qui protège les portefeuilles sélectionnés en cas de contrainte.</string>
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
     <string name="SettingsSecurity_AppRestartWarning">Cette opération va redémarrer Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre connexion Internet lorsque vous utilisez cette application. Remarque : dans certains cas, la fonction WalletConnect pour les applications DeFi peut être très lente ou ne pas fonctionner du tout.</string>
@@ -1122,7 +1120,7 @@
     <string name="ImportWallet_BackupFile">À partir du fichier</string>
     <string name="ImportWallet_BackupFile_Description">Importer depuis un fichier de sauvegarde.</string>
     <string name="ImportWallet_RecoveryPhrase">Voir la phase de récupération</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Importer à l\'aide de la phrase de récupération ou de la clé privée.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importer un portefeuille en utilisant une phrase de récupération ou une clé privée.</string>
     <string name="ImportWallet_ExchangeWallet">depuis Exchange Wallet</string>
     <string name="ImportWallet_ExchangeWallet_Description">Connectez-vous à un portefeuille en échange centralisé.</string>
     <string name="ImportWallet_WarningInvalidJson">Fichier Json invalide</string>
@@ -1168,7 +1166,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Ne pas copier</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Sauvegarder le portefeuille</string>
-    <string name="BackupRecoveryPhrase_Description">Sauvegarder ce portefeuille en créant une copie de sa phrase de récupération. Il sera nécessaire pour accéder au portefeuille si votre téléphone est perdu, volé, cassé, etc.</string>
+    <string name="BackupRecoveryPhrase_Description">Créez une sauvegarde de votre phrase de récupération et de la phrase de passe associée. Celles-ci vous permettront de restaurer votre portefeuille si votre téléphone est perdu, volé ou endommagé.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Sauvegarde manuelle</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Sauvegarde locale</string>
     <string name="BackupRecoveryPhrase_Later">Plus tard</string>
@@ -1186,7 +1184,7 @@
     <string name="LocalBackup_Term1">Je comprends que la perte ou l\'endommagement d\'un périphérique de sauvegarde entraînera la perte des données de sauvegarde correspondantes.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Phrase de récupération</string>
-    <string name="RecoveryPhrase_Description">Écrivez ces mots dans le bon ordre et conservez-les dans un endroit sûr</string>
+    <string name="RecoveryPhrase_Description">Écrivez ces mots dans l\'ordre et gardez-les en sécurité.</string>
     <string name="RecoveryPhrase_ShowPhrase">Appuyez pour afficher la phrase de récupération</string>
     <string name="RecoveryPhrase_Verify">Vérifier</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Risque de copie</string>
@@ -1598,7 +1596,7 @@
     <string name="Contacts_DiscardChanges">Annuler les modifications</string>
     <string name="Contacts_KeepEditing">Poursuivre les modifications</string>
     <string name="Contacts_DiscardChanges_Warning">Êtes-vous sûr de vouloir annuler ces modifications ?</string>
-    <string name="Contacts_NoContacts">Vous n\'avez pas ajouté de contact</string>
+    <string name="Contacts_NoContacts">Aucun contact n\'a encore été ajouté</string>
     <string name="Contacts_ActionMore">Plus</string>
     <string name="Contacts_Error_DefinedAddress">Cette adresse est déjà utilisée pour %s</string>
     <string name="Contacts_Error_DefinedName">Le nom a été utilisé</string>
