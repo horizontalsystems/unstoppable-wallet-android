@@ -24,8 +24,15 @@ object WatchAddressModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WatchAddressService(App.accountManager, App.walletActivator, App.accountFactory, App.marketKit, App.evmBlockchainManager)
-            val addressHandlerFactory =  AddressHandlerFactory(App.appConfigProvider.udnApiKey)
+            val service = WatchAddressService(
+                App.accountManager,
+                App.walletActivator,
+                App.accountFactory,
+                App.marketKit,
+                App.evmBlockchainManager,
+                App.restoreSettingsManager
+            )
+            val addressHandlerFactory = AddressHandlerFactory(App.appConfigProvider.udnApiKey)
             val addressParserChain = addressHandlerFactory.parserChain(
                 blockchainTypes = supportedBlockchainTypes,
                 blockchainTypesWithEns = listOf(BlockchainType.Ethereum)
