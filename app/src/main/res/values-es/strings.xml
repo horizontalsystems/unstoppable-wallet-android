@@ -87,7 +87,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor usa solo símbolos compatibles: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
-    <string name="CreateWallet_PassphraseDescription">Las contraseñas añaden una capa de seguridad adicional para las carteras. Para restaurar dicha cartera, un usuario requiere tanto mnemonic como una contraseña.\n\nPassphrases también facilita a los usuarios tener muchos monederos multi-moneda usando un solo mnemónico pero diferente contraseña.</string>
+    <string name="CreateWallet_PassphraseDescription">Las contraseñas proporcionan una capa adicional de seguridad para las carteras. recuperando una cartera protegida por una contraseña, el usuario debe proporcionar tanto la frase de recuperación como la contraseña.\n\nPassphrases también permiten a los usuarios crear múltiples monederos multi-moneda independientes a partir del mismo mnemonic, simplemente utilizando diferentes contraseñas.</string>
     <!--Languages-->
     <string name="Language_English">Inglés</string>
     <string name="Language_Japanese">Japonés</string>
@@ -384,7 +384,7 @@
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dominio o dirección</string>
     <string name="Send_Fee">Comisión</string>
-    <string name="Send_Fee_Info">Blockchains requiere que los usuarios paguen comisiones de red al enviar transacciones. Las comisiones son más altas cuando muchas transacciones tienen lugar en la red.</string>
+    <string name="Send_Fee_Info">El costo estimado de procesar esta transacción en la cadena de bloques.</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Advanced">Avanzado</string>
@@ -491,7 +491,9 @@
     <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
     <string name="FeeSettings_FeeRate">Tarifa de tarifa (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Este es el valor recomendado para golpear los siguientes 2 bloques</string>
-    <string name="FeeSettings_FeeRate_Info">Las cadenas de bloques requieren que los usuarios paguen tarifas de red al enviar transacciones. Las tarifas son más altas cuando hay muchas transacciones ocurriendo en la red.\n\nLa cartera %@ estima la tarifa basándose en la actividad actual de la cadena de bloques y recomienda el valor óptimo para que la transacción sea procesada en un tiempo razonable.\n\nLa tarifa recomendada se muestra como la cantidad de satoshis que el usuario necesita pagar por un solo byte de la transacción. Por lo tanto, la tarifa total depende del tamaño total de la transacción, que se mide en bytes.\n\nLos usuarios pueden usar los controles proporcionados para aumentar o disminuir el valor de la tarifa. El cambio en la tarifa modifica la tarifa total que el usuario pagará por la transacción.\n\nEstablecer una tarifa por debajo del valor recomendado puede resultar en que la transacción se mantenga en espera durante horas o sea rechazada. Cuanto más bajo sea el valor, más tiempo tardará en confirmarse la transacción. Para transacciones donde la prioridad es importante, recomendamos establecer una tarifa más alta.</string>
+    <string name="FeeSettings_FeeRate_Info">Al enviar una transacción, debe pagar una cuota de red. Cuanto más buscada sea la red, más alta será la comisión.
+        \n\nMonedero imparable sugiere una tarifa óptima para ayudar a que su transacción confirme en un tiempo razonable. Puedes aumentar o disminuir este valor.
+        \n\nEstablecer la comisión demasiado baja puede causar que tu transacción permanezca pendiente durante mucho tiempo o incluso sea rechazada. Para una confirmación más rápida, utilice una tarifa más alta.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
     <string name="FeeInfo_Description">Las blockchain de Bitcoin como las de Ethereum requieren que los usuarios paguen comisiones de red al enviar transacciones. Las comisiones son más altas cuando muchas transacciones están teniendo lugar en la red y más bajas cuando el blockchain está menos ocupado.</string>
@@ -536,7 +538,7 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Mensaje a firmar</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Firma</string>
     <string name="WalletConnect_Error_NoWallet">Necesita crear o importar una cartera antes de poder usar WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Copia de seguridad de esta cartera creando una copia de su frase de recuperación. Será necesario para acceder al monedero si su teléfono está perdido, robado, roto, etc.</string>
+    <string name="WalletConnect_Error_NeedBackup">Crear una copia de seguridad de su frase de recuperación y la frase de contraseña asociada. Esto le permitirá restaurar su cartera si su teléfono está perdido, robado o dañado.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Blockchain no soportado</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No hay cuenta adecuada</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No hay kit de evm adecuado</string>
@@ -617,11 +619,11 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Ajustes de intercambio</string>
     <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
-    <string name="SwapSettings_SlippageDescription">Tu transacción se revertirá si el precio cambia desfavorablemente en más de este porcentaje</string>
+    <string name="SwapSettings_SlippageDescription">Si el precio se mueve más allá de este porcentaje, el intercambio no pasará.</string>
     <string name="SwapSettings_DeadlineTitle">Fecha límite de transacción</string>
     <string name="SwapSettings_DeadlineDescription">Su transacción se revertirá si está pendiente por más de este tiempo.</string>
     <string name="SwapSettings_RecipientAddressTitle">Dirección del destinatario</string>
-    <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
+    <string name="SwapSettings_RecipientAddressDescription">La cantidad intercambiada se enviará a la dirección especificada.</string>
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
@@ -651,14 +653,14 @@
     <string name="Swap_Approve_Unlimited">Ilimitado</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Permiso de acceso</string>
-    <string name="SwapInfo_AllowanceDescription">La cantidad que un intercambio puede gastar en nombre del usuario al ejecutar swaps de token. Se requiere un permiso suficiente para establecer una transacción anterior antes de que pueda tener lugar una transacción de intercambio real.</string>
+    <string name="SwapInfo_AllowanceDescription">Permiso es la cantidad que usted permite el uso de la bolsa en su nombre para los swaps. Antes de realizar un swap, primero necesita aprobar una transacción de permisos.</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto en el precio</string>
     <string name="SwapInfo_PriceImpactDescription">Desviación de precio esperada de un valor mostrado, normalmente aumenta con la cantidad de swap.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
-    <string name="Transactions_EmptyList">Todavía no tienes transacciones pendientes o pasadas</string>
+    <string name="Transactions_EmptyList">Aún no hay transacciones pendientes o pasadas.</string>
     <string name="Transactions_WaitForSync">Por favor, espere a que termine la sincronización.</string>
     <string name="Transactions_Pending">Pendiente</string>
     <string name="Transactions_Receive">Recibido</string>
@@ -816,7 +818,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">Error en la solicitud</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_VipSupport_StartChat">Únete al Grupo VIP</string>
-    <string name="Settings_VipSupport_Description">Obtén acceso exclusivo a nuestro Grupo VIP, donde usuarios premium y el equipo de Unstoppable Wallet colaboran. Recibe asistencia directa, discute futuras actualizaciones y ayuda a dar forma a la evolución de la cartera.</string>
+    <string name="Settings_VipSupport_Description">Únete a nuestro Grupo VIP para obtener apoyo directo, participar en discusiones sobre las próximas actualizaciones y conectarte más estrechamente con el equipo de Unstoppable.</string>
     <string name="Settings_Donate_Info">¡Junto con tu apoyo, podemos hacer esta aplicación aún mejor!</string>
     <string name="Settings_Donate">Donar</string>
     <string name="Settings_GetYourTokens">Obtener tokens</string>
@@ -837,7 +839,7 @@
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Verificador de dirección</string>
     <string name="SettingsAddressChecker_RecipientCheck">Revisión del destinatario</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Comprueba los riesgos de la dirección del destinatario antes de enviar.</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Escanea la dirección del destinatario en busca de riesgos de seguridad antes de enviar.</string>
     <string name="SettingsAddressChecker_CheckAddress">Comprobar dirección</string>
     <string name="SettingsAddressChecker_SelectBlockchain">Seleccionar Blockchain</string>
     <string name="SettingsAddressChecker_SelectCoin">Seleccionar Moneda</string>
@@ -946,7 +948,7 @@
     <string name="Appearance_HideBalanceTabButtons">Ocultar Botones</string>
     <string name="Appearance_AmountRounding">Monto Redondeo</string>
     <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
-    <string name="Appearance_BalanceAutoHide_Description">Oculta automáticamente el balance cada vez que se abre la aplicación, independientemente de las preferencias anteriores.</string>
+    <string name="Appearance_BalanceAutoHide_Description">Oculta automáticamente el balance cada vez que se abre la aplicación.</string>
     <string name="Appearance_PriceChangeInterval">Cambio de Precio %</string>
     <string name="Appearance_HideButtonsInfo">La configuración “Ocultar botones” oculta los botones Enviar, Recibir y Intercambiar en la pestaña Balance.</string>
     <string name="BalanceViewType_CoinValue">Valor de la moneda</string>
@@ -975,12 +977,12 @@
     <string name="BackupManager_AppSettingsTitle">Ajustes de app</string>
     <string name="BackupManager_AppSettingsDescription">Idioma, moneda, Apariencia …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable no recopila datos personales que exponen su información privada, es decir, saldos de monedas o direcciones. Mientras recopilamos algunas estadísticas de uso de la interfaz de usuario, es sólo para entender nuestras tendencias de uso de la base de usuarios y de la aplicación. Esto puede desactivarse si lo desea.</string>
+    <string name="Privacy_Information">Imparable no recopila datos personales como sus balances o direcciones de billetera. Solo utilizamos datos anónimos para mejorar la aplicación.</string>
     <string name="Privacy_BulletedText1">La cartera no recoge ningún dato personal.</string>
     <string name="Privacy_BulletedText2">No hay cuentas de usuario o bases de datos almacenando datos de usuario.</string>
-    <string name="Privacy_BulletedText3">Si se permite el monedero compartirá los hábitos de uso de la aplicación con el equipo imparable. Esto es para entender qué características están siendo utilizadas (o no) por nuestros usuarios. Siendo una aplicación enfocada a la privacidad, necesitamos alguna forma de evaluar nuestros esfuerzos y sin esto no tenemos ni idea de si las características que construimos están siendo usadas o no.</string>
+    <string name="Privacy_BulletedText3">Si se permite, la cartera compartirá los hábitos de uso de la aplicación con el equipo imparable. Esto es para entender qué características están siendo utilizadas (o no) por nuestros usuarios. Siendo una aplicación enfocada a la privacidad, necesitamos alguna forma de evaluar nuestros esfuerzos y sin esto no tenemos ni idea de si las características que construimos están siendo usadas o no.</string>
     <string name="ShareUiData">Compartir datos de UI</string>
-    <string name="ShareUiDataDescription">Esta configuración te permite desactivar el análisis de UI/UX y garantizar total confidencialidad.</string>
+    <string name="ShareUiDataDescription">Esta opción le permite desactivar el análisis y mantener su actividad totalmente privada.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Añadir Nuevo</string>
@@ -1021,7 +1023,7 @@
     <string name="SettingsSecurity_SetDuressPin">Establecer modo de Duración</string>
     <string name="SettingsSecurity_EditDuressPin">Editar contraseña de Duración</string>
     <string name="SettingsSecurity_DisableDuressPin">Desactivar Duress Passcode</string>
-    <string name="SettingsSecurity_DuressPinDescription">Un modo especializado diseñado para mantener las billeteras seleccionadas a salvo bajo coacción.</string>
+    <string name="SettingsSecurity_DuressPinDescription">Un modo especial que protege las carteras seleccionadas en caso de coerción.</string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimiza completamente tu internet mientras usas esta aplicación. Tenga en cuenta que en algunos casos la función WalletConnect para aplicaciones DeFi puede ser muy lenta o no funcionar.</string>
@@ -1116,7 +1118,7 @@
     <string name="ImportWallet_BackupFile">Desde archivo</string>
     <string name="ImportWallet_BackupFile_Description">Importar desde un archivo de copia de seguridad.</string>
     <string name="ImportWallet_RecoveryPhrase">de Frase de Recuperación</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Importe utilizando la frase de recuperación o la clave privada.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importar una cartera usando una frase de recuperación o una clave privada.</string>
     <string name="ImportWallet_ExchangeWallet">de Exchange Wallet</string>
     <string name="ImportWallet_ExchangeWallet_Description">Conectar a una cartera en un intercambio centralizado.</string>
     <string name="ImportWallet_WarningInvalidJson">Archivo Json inválido</string>
@@ -1162,7 +1164,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">No copiar</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Backup del Monedero</string>
-    <string name="BackupRecoveryPhrase_Description">Copia de seguridad de esta cartera creando una copia de su frase de recuperación. Será necesario para acceder al monedero si su teléfono está perdido, robado, roto, etc.</string>
+    <string name="BackupRecoveryPhrase_Description">Crear una copia de seguridad de su frase de recuperación y la frase de contraseña asociada. Esto le permitirá restaurar su cartera si su teléfono está perdido, robado o dañado.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Copia de seguridad manual</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Copia de seguridad local</string>
     <string name="BackupRecoveryPhrase_Later">Más tarde</string>
@@ -1180,7 +1182,7 @@
     <string name="LocalBackup_Term1">Entiendo que el robo o daño de un dispositivo de copia de seguridad resultará en la pérdida de una copia de seguridad a una cartera respectiva.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperación</string>
-    <string name="RecoveryPhrase_Description">Escriba estas palabras en el orden correcto y guárdelas en un lugar seguro</string>
+    <string name="RecoveryPhrase_Description">Escriba estas palabras en orden y manténgalas seguras.</string>
     <string name="RecoveryPhrase_ShowPhrase">Toca para mostrar la frase de recuperación</string>
     <string name="RecoveryPhrase_Verify">Verificar</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Riesgo de Copia</string>
@@ -1592,7 +1594,7 @@
     <string name="Contacts_DiscardChanges">Descartar cambios</string>
     <string name="Contacts_KeepEditing">Sigue editando</string>
     <string name="Contacts_DiscardChanges_Warning">¿Estás seguro de que quieres descartar estos nuevos cambios?</string>
-    <string name="Contacts_NoContacts">No tienes un contacto añadido</string>
+    <string name="Contacts_NoContacts">No hay contactos añadidos aún</string>
     <string name="Contacts_ActionMore">Más</string>
     <string name="Contacts_Error_DefinedAddress">Esta dirección ya está en uso para %s</string>
     <string name="Contacts_Error_DefinedName">El nombre ya existe</string>
