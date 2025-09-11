@@ -80,7 +80,6 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
-    <string name="CreateWallet_PassphraseDescription">Parolalar, cüzdanlar için ek bir güvenlik katmanı ekler. Bir cüzdanı geri yüklemek için bir kullanıcı hem anımsatıcı hem de bir parola gerektiriyordu.\n\n\nParolalar, kullanıcıların tek bir anımsatıcı ancak farklı bir parola kullanarak çok paralı cüzdanlara sahip olmalarını da kolaylaştırır.</string>
     <!--Languages-->
     <string name="Language_English">İngilizce</string>
     <string name="Language_Japanese">Japonca</string>
@@ -298,7 +297,6 @@
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
     <string name="Send_Fee">Masraf</string>
-    <string name="Send_Fee_Info">Blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksektir.</string>
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Advanced">İleri düzey</string>
@@ -397,11 +395,6 @@
     <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
     <string name="FeeSettings_FeeRate">Ücret Oranı (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">İşte sonraki 2 bloğa eklenmek için önerilen değer</string>
-    <string name="FeeSettings_FeeRate_Info">Blok zincirleri, kullanıcıların işlemleri gönderirken ağ ücretlerini ödemelerini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksektir.
-         \n\nUnstoppable cüzdan, mevcut blockchain etkinliğine dayalı olarak ücreti tahmin eder ve işlemin makul bir süre içinde işlenmesi için en uygun değeri önerir.
-         \n\nSatoshi kullanıcının işlemin tek bir baytı için ödemesi gereken miktar olarak gösterilen önerilen ücret oranı. Bu nedenle toplam ücret, işlemin bayt cinsinden ölçülen toplam boyutuna bağlıdır.
-         \n\nKullanıcılar, ücret oranı değerini artırmak veya azaltmak için sağlanan kontrolleri kullanabilir. Ücret oranındaki değişiklik, kullanıcının ödeyeceği işlem için toplam ücreti değiştirir.
-         \n\nÜcret oranının önerilen değerin altında ayarlanması, bir işlemin saatlerce beklemede kalmasına veya reddedilmesine neden olabilir. Değer ne kadar düşük olursa, işlemin onaylanması o kadar uzun sürer. Önceliğin önemli olduğu işlemler için daha yüksek ücret oranı belirlemenizi öneririz.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">İşlem hızı</string>
     <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
@@ -445,7 +438,6 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect\'i kullanmadan önce bir cüzdan oluşturmanız veya içe aktarmanız gerekir</string>
-    <string name="WalletConnect_Error_NeedBackup">Kurtarma ifadesinin bir kopyasını oluşturarak bu cüzdanı yedekleyin. Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdana erişmek için gerekli olacaktır.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Uygun evm kiti yok</string>
@@ -522,11 +514,9 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
-    <string name="SwapSettings_SlippageDescription">Fiyat bu yüzde oranından daha fazla olumsuz olarak değişirse, İşleminiz geri alınacaktır</string>
     <string name="SwapSettings_DeadlineTitle">İşlem Son Günü</string>
     <string name="SwapSettings_DeadlineDescription">Bundan daha uzun süre beklemede olursa, İşleminiz geri alınacaktır.</string>
     <string name="SwapSettings_RecipientAddressTitle">Alıcı Adresi</string>
-    <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
     <string name="SwapSettings_Apply">Uygula</string>
     <string name="SwapSettings_DeadlineMinute">%s dk</string>
     <string name="SwapSettings_Error_DeadlineZero">Geçersiz Son Tarih</string>
@@ -549,14 +539,12 @@
     <string name="Swap_Approve_Unlimited">Sınırsız</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Ödenek</string>
-    <string name="SwapInfo_AllowanceDescription">Bir borsanın, token takaslarını yürütürken kullanıcının adına harcayabileceği ödenek miktarı. Fiili bir takas işleminin gerçekleşmesinde yeterli ödenek gereklidir.</string>
     <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
     <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
-    <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
     <string name="Transactions_WaitForSync">Lütfen güncellemenin bitmesini bekleyin.</string>
     <string name="Transactions_Pending">Devam ediyor</string>
     <string name="Transactions_Receive">Alındı</string>
@@ -694,7 +682,6 @@
     <string name="Settings_PersonalSupport_Requestfailed">Talep Başarısız oldu</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_VipSupport_StartChat">VIP Gruba Katılın</string>
-    <string name="Settings_VipSupport_Description">Premium kullanıcıların ve Unstoppable Wallet ekibinin işbirliği yaptığı VIP Grubumuza özel erişim kazanın. Doğrudan destek alın, gelecek güncellemeler hakkında tartışın ve cüzdanın gelişimine katkıda bulunun.</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
     <string name="Settings_GetYourTokens">Tokenlarınızı alın</string>
@@ -773,7 +760,6 @@
     <string name="Appearance_HideMarketsTab">Piyasaları Gizle</string>
     <string name="Appearance_HideBalanceTabButtons">Düğmeleri Gizle</string>
     <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
-    <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
     <string name="Appearance_PriceChangeInterval">Fiyat Değişimi %</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
@@ -801,12 +787,9 @@
     <string name="BackupManager_AppSettingsTitle">Uygulama Ayarları</string>
     <string name="BackupManager_AppSettingsDescription">Dil, Para Birimi, Görünüm...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable, coin bakiyelerinizi veya adreslerinizi açığa çıkaran kişisel verileri toplamaz. Biraz kullanıcı arayüzü kullanım istatistikleri topluyoruz, ancak bunlar yalnızca kullanıcı tabanımızı ve uygulama kullanım eğilimlerini anlamak içindir. İsterseniz bunu devre dışı bırakabilirsiniz.</string>
     <string name="Privacy_BulletedText1">Cüzdan herhangi bir kişisel veri toplamaz.</string>
     <string name="Privacy_BulletedText2">Kullanıcı hesapları veya kullanıcı verilerini depolayan veritabanları yoktur.</string>
-    <string name="Privacy_BulletedText3">İzin verilirse, cüzdan, Unstoppable ekibiyle uygulama kullanım alışkanlıklarını paylaşacak. Bu, kullanıcılarımızın hangi özellikleri kullandığını (veya kullanmadığını) anlamak için. Gizliliğe odaklanan bir uygulama olarak, çabalarımızı değerlendirmenin bir yolu olmalı ve bu olmadan, oluşturduğumuz özelliklerin kullanılıp kullanılmadığını bilmiyoruz.</string>
     <string name="ShareUiData">UI Verilerini Paylaş</string>
-    <string name="ShareUiDataDescription">Bu ayar, UI/UX analizlerini devre dışı bırakmanıza ve tam gizlilik sağlamanıza olanak tanır.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Yeni ekle</string>
@@ -835,7 +818,6 @@
     <string name="SettingsSecurity_SetDuressPin">Baskı Modunu Ayarla</string>
     <string name="SettingsSecurity_EditDuressPin">Duress Şifresini Düzenle</string>
     <string name="SettingsSecurity_DisableDuressPin">Zorlama Şifresini Devre Dışı Bırak</string>
-    <string name="SettingsSecurity_DuressPinDescription">Seçilen cüzdanları zorlama altında güvende tutmak için tasarlanmış özel bir mod.</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
@@ -931,7 +913,6 @@
     <string name="ImportWallet_BackupFile">Dosyadan</string>
     <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar.</string>
     <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Kurtarma ifadesini veya özel anahtarı kullanarak içe aktarın.</string>
     <string name="ImportWallet_ExchangeWallet">Exchange Wallet\'tan</string>
     <string name="ImportWallet_ExchangeWallet_Description">Merkezi borsada bir cüzdana bağlanın.</string>
     <string name="ImportWallet_WarningInvalidJson">Geçersiz Json Dosyası</string>
@@ -975,7 +956,6 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Kopyalama</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Cüzdanı yedekle</string>
-    <string name="BackupRecoveryPhrase_Description">Kurtarma ifadesinin bir kopyasını oluşturarak bu cüzdanı yedekleyin. Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdana erişmek için gerekli olacaktır.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manuel Yedekleme</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Yerel Yedekleme</string>
     <string name="BackupRecoveryPhrase_Later">Sonra</string>
@@ -993,7 +973,6 @@
     <string name="LocalBackup_Term1">Bir yedekleme cihazının çalınmasının veya hasar görmesinin, ilgili cüzdanın yedeğinin kaybolmasına neden olacağını anlıyorum.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Kurtarma cümlesi</string>
-    <string name="RecoveryPhrase_Description">Bu kelimeleri doğru sırayla yazın ve güvenli bir yerde saklayın</string>
     <string name="RecoveryPhrase_ShowPhrase">Kurtarma ifadesini göstermek için dokunun</string>
     <string name="RecoveryPhrase_Verify">Doğrula</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Kopyalama Riski</string>
@@ -1352,7 +1331,6 @@
     <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
     <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
     <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
-    <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
     <string name="Contacts_ActionMore">Daha fazla</string>
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
     <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
