@@ -1084,6 +1084,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
+    <string name="Hud_Text_AddressCopied">Adresse kopiert</string>
     <string name="Hud_Text_Created">Erstellt</string>
     <string name="Hud_Text_Restored">Importiert</string>
     <string name="Hud_Text_AddressAdded">Adresse hinzugefügt</string>
