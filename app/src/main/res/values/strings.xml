@@ -979,7 +979,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">Request failed</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
     <string name="Settings_VipSupport_StartChat">Join VIP Group</string>
-    <string name="Settings_VipSupport_Description">Get exclusive access to our VIP Group, where premium users and the Unstoppable Wallet team collaborate. Receive direct assistance, discuss future updates, and help shape the wallet’s evolution.</string>
+    <string name="Settings_VipSupport_Description">Join our VIP Group to get direct support, take part in discussions about upcoming updates, and connect more closely with the Unstoppable team.</string>
 
     <string name="Settings_Donate_Info">Together, with your support, we can make this app even better!</string>
     <string name="Settings_Donate">Donate</string>
@@ -1004,7 +1004,7 @@
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Address Checker</string>
     <string name="SettingsAddressChecker_RecipientCheck">Recipient Check</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Checks the recipient address for risks before sending.</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Scans the recipient address for security risks prior to sending.</string>
     <string name="SettingsAddressChecker_CheckAddress">Check Address</string>
     <string name="SettingsAddressChecker_SelectBlockchain">Select Blockchain</string>
     <string name="SettingsAddressChecker_SelectCoin">Select Coin</string>
@@ -1126,7 +1126,7 @@
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_AmountRounding">Amount Rounding</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
-    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance every time the app is opened.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
     <string name="Appearance_HideButtonsInfo">The “Hide Buttons” configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
 
@@ -1167,12 +1167,12 @@
 
     <!-- Privacy  -->
 
-    <string name="Privacy_Information">Unstoppable never collects personal data such as coin balances or wallet addresses. Only anonymous interface usage data is gathered to help enhance the app experience.</string>
+    <string name="Privacy_Information">Unstoppable doesn’t collect personal data like your balances or wallet addresses. We only use anonymous data to improve the app.</string>
     <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
     <string name="Privacy_BulletedText2">There are no user accounts or databases storing user data.</string>
-    <string name="Privacy_BulletedText3">If allowed the wallet will share app usage habits with Unstoppable team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
+    <string name="Privacy_BulletedText3">If allowed, the wallet will share app usage habits with the Unstoppable team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
     <string name="ShareUiData">Share UI data</string>
-    <string name="ShareUiDataDescription">This setting allows you to disable UI/UX analytics and ensure complete confidentiality.</string>
+    <string name="ShareUiDataDescription">This setting lets you turn off analytics and keep your activity fully private.</string>
 
     <!-- Security Center -->
 
@@ -1228,7 +1228,7 @@
     <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
     <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
     <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
-    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
+    <string name="SettingsSecurity_DuressPinDescription">A special mode that protects selected wallets in case of coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
@@ -1934,7 +1934,7 @@
     <string name="Contacts_DiscardChanges">Discard Changes</string>
     <string name="Contacts_KeepEditing">Keep Editing</string>
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
-    <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="Contacts_NoContacts">No contacts added yet</string>
     <string name="Contacts_ActionMore">More</string>
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>
