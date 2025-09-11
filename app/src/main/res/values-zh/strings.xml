@@ -87,7 +87,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只使用支持的符号： <![CDATA[A-Z a-z 0-9 \' " & / ? ！: ; 。 ，~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
-    <string name="CreateWallet_PassphraseDescription">密码为钱包添加一个额外的安全层。要恢复这个钱包，用户既需要密码，也需要密码。\n\n密码也使得用户可以轻松地使用单一的密钥但不同的密码来拥有许多多币钱包。</string>
+    <string name="CreateWallet_PassphraseDescription">密码为钱包提供了额外的一层安全保护。 hen 恢复受密码保护的钱包，用户必须同时提供恢复短语和密码。\n\n密码还允许用户只要使用不同的密码，就可以从同一个mnemonic创建多个独立的多币钱包。</string>
     <!--Languages-->
     <string name="Language_English">汉语</string>
     <string name="Language_Japanese">日语</string>
@@ -384,7 +384,7 @@
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
     <string name="Send_Fee">费用</string>
-    <string name="Send_Fee_Info">区块链要求用户在发送交易时支付网络费用。当大量交易在网络上进行时，这笔费用将更高。</string>
+    <string name="Send_Fee_Info">区块链上处理此交易的估计成本。</string>
     <string name="Send_Button_Paste">粘帖</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Advanced">高级</string>
@@ -491,7 +491,9 @@
     <string name="FeeSettings_Overpricing">当前设置的交易费用高于处理此交易所需的费用。</string>
     <string name="FeeSettings_FeeRate">费率(SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">这是击中下2个区块的推荐值</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.\n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.\n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.\n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.\n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
+    <string name="FeeSettings_FeeRate_Info">当发送交易时，您必须支付网络费用。网络变得更加繁忙，收费越高。
+        \n\n不可阻挡的钱包建议提供最佳费用以帮助您在合理的时间内确认交易。 您可以增加或减少这个值。
+        \n\n设置收费太低可能会导致您的交易被长期搁置，甚至被拒绝。 为了更快的确认，请使用更高的费用。</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币和Etherum区块链都要求用户在发送交易时支付网络费用。当区块链上发生大量交易时费用较高；而区块链空闲时费用较低。</string>
@@ -536,7 +538,7 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
     <string name="WalletConnect_Error_NoWallet">您需要先创建或导入钱包才能使用 WaletConnect。</string>
-    <string name="WalletConnect_Error_NeedBackup">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
+    <string name="WalletConnect_Error_NeedBackup">创建恢复短语和相关密码的备份。 如果您的手机丢失、被盗或损坏，这些将允许您恢复您的钱包。</string>
     <string name="WalletConnect_Error_UnsupportedChainId">不支持的Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">没有合适的帐户</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">没有合适的 evm 套件</string>
@@ -617,11 +619,11 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">掉期设置</string>
     <string name="SwapSettings_SlippageTitle">无效滑点</string>
-    <string name="SwapSettings_SlippageDescription">如果价格的不利变化超出此百分比，您的交易将退回。</string>
+    <string name="SwapSettings_SlippageDescription">如果价格超过这个百分比，转换将不会通过。</string>
     <string name="SwapSettings_DeadlineTitle">交易截止日期</string>
     <string name="SwapSettings_DeadlineDescription">如果您交易的待定时间多于此时间，您的交易将退回。</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
-    <string name="SwapSettings_RecipientAddressDescription">在兑换操作之后，金额将转移至指定地址</string>
+    <string name="SwapSettings_RecipientAddressDescription">交换的金额将被发送到指定地址。</string>
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
     <string name="SwapSettings_Error_DeadlineZero">没有截止日期</string>
@@ -651,14 +653,14 @@
     <string name="Swap_Approve_Unlimited">无限</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">补贴</string>
-    <string name="SwapInfo_AllowanceDescription">当执行令牌交换时，交易所可以代表用户花费的金额。 在进行实际互换交易之前，需要先确定足够的备抵。</string>
+    <string name="SwapInfo_AllowanceDescription">允许是您允许交易所代表您进行交换的金额。 在交换之前，您首先需要批准一项备抵交易。</string>
     <string name="SwapInfo_PriceImpactTitle">价格影响</string>
     <string name="SwapInfo_PriceImpactDescription">预期价格和显示价格的偏差通常会增加互兑金额。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易</string>
-    <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
+    <string name="Transactions_EmptyList">尚无待处理或过去的交易。</string>
     <string name="Transactions_WaitForSync">请等待同步结束。</string>
     <string name="Transactions_Pending">待处理</string>
     <string name="Transactions_Receive">已收到</string>
@@ -816,7 +818,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">请求失败</string>
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
     <string name="Settings_VipSupport_StartChat">加入貴賓群組</string>
-    <string name="Settings_VipSupport_Description">獲得專屬訪問我們的貴賓群組的權限，高級用戶和Unstoppable錢包團隊在此協作。接收直接協助、討論未來更新，並幫助塑造錢包的發展。</string>
+    <string name="Settings_VipSupport_Description">加入我们的 VIP 组以获得直接支持，参与关于即将进行的更新的讨论，并且更密切地连接到无法阻挡的团队。</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
     <string name="Settings_GetYourTokens">获取代币</string>
@@ -837,7 +839,7 @@
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">地址检查器</string>
     <string name="SettingsAddressChecker_RecipientCheck">收件人检查</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">在发送之前检查收件人地址是否有风险。</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">在发送前扫描收件人地址以获取安全风险。</string>
     <string name="SettingsAddressChecker_CheckAddress">检查地址</string>
     <string name="SettingsAddressChecker_SelectBlockchain">选择Blockchain</string>
     <string name="SettingsAddressChecker_SelectCoin">选择硬币</string>
@@ -946,7 +948,7 @@
     <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
     <string name="Appearance_AmountRounding">四舍五入量</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
-    <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡，不管先前的偏好设置。</string>
+    <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡。</string>
     <string name="Appearance_PriceChangeInterval">价格变化 %</string>
     <string name="Appearance_HideButtonsInfo">“隐藏按钮”配置隐藏平衡选项卡上的发送、接收和交换按钮。</string>
     <string name="BalanceViewType_CoinValue">币值</string>
@@ -975,12 +977,12 @@
     <string name="BackupManager_AppSettingsTitle">应用设置</string>
     <string name="BackupManager_AppSettingsDescription">语言、 货币、 外观 ...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable 不收集暴露您私人信息的个人数据，例如币余额或地址。虽然我们收集了一些用户界面使用统计数据，但这仅用于了解我们的用户群和应用程序使用趋势。如果您希望，可以禁用此功能。</string>
+    <string name="Privacy_Information">不可阻挡的不是\n无法收集个人数据，例如您的余额或钱包地址。我们只使用匿名数据来改进应用程序。</string>
     <string name="Privacy_BulletedText1">钱包没有收集任何个人数据。</string>
     <string name="Privacy_BulletedText2">我们没有用户账户或存储用户数据的数据库。</string>
-    <string name="Privacy_BulletedText3">如果允许，钱包将与不可阻挡团队分享应用程序使用习惯。这是为了了解我们的用户正在使用哪些功能（或未使用）。作为一个关注隐私的应用程序，我们需要一种评估我们努力的方式，如果没有这个，我们就无法知道我们构建的功能是否被使用。</string>
+    <string name="Privacy_BulletedText3">如果允许，钱包将与无法阻止的团队分享应用使用习惯。 这是为了了解我们的用户正在使用(或没有)哪些功能。 作为一个以隐私为重点的应用程序，我们需要有某种方法来评估我们的努力，没有这种方法，我们就不知道我们构建的功能是否正在被使用。</string>
     <string name="ShareUiData">共享界面数据</string>
-    <string name="ShareUiDataDescription">此設置允許您禁用UI/UX分析並確保完全的隱私性。</string>
+    <string name="ShareUiDataDescription">此设置允许您关闭分析并保持您的活动完全隐私。</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">添加新的</string>
@@ -1021,7 +1023,7 @@
     <string name="SettingsSecurity_SetDuressPin">设置压力模式</string>
     <string name="SettingsSecurity_EditDuressPin">编辑货币密码</string>
     <string name="SettingsSecurity_DisableDuressPin">禁用冒险密码</string>
-    <string name="SettingsSecurity_DuressPinDescription">专用模式用于在胁迫下使选定的钱包安全。</string>
+    <string name="SettingsSecurity_DuressPinDescription">在胁迫情况下保护选定钱包的特殊模式。</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动本钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
@@ -1116,7 +1118,7 @@
     <string name="ImportWallet_BackupFile">从文件</string>
     <string name="ImportWallet_BackupFile_Description">从备份文件导入.</string>
     <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入。</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入钱包。</string>
     <string name="ImportWallet_ExchangeWallet">来自Exchange 钱包</string>
     <string name="ImportWallet_ExchangeWallet_Description">在集中交易所上连接到钱包。</string>
     <string name="ImportWallet_WarningInvalidJson">无效的 Json 文件</string>
@@ -1162,7 +1164,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">不复制</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">备份钱包</string>
-    <string name="BackupRecoveryPhrase_Description">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
+    <string name="BackupRecoveryPhrase_Description">创建恢复短语和相关密码的备份。 如果您的手机丢失、被盗或损坏，这些将允许您恢复您的钱包。</string>
     <string name="BackupRecoveryPhrase_ManualBackup">进行手动备份</string>
     <string name="BackupRecoveryPhrase_LocalBackup">本地备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
@@ -1180,7 +1182,7 @@
     <string name="LocalBackup_Term1">我的理解是，备份设备被盗或损坏将导致备份丢失，进而导致钱包丢失。</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">恢复码</string>
-    <string name="RecoveryPhrase_Description">按正确顺序写下这些单词，并将其保留在一个安全的地方</string>
+    <string name="RecoveryPhrase_Description">写下这些单词以保证它们的安全。</string>
     <string name="RecoveryPhrase_ShowPhrase">点击显示恢复密语</string>
     <string name="RecoveryPhrase_Verify">验证</string>
     <string name="RecoveryPhrase_CopyWarning_Title">复制的风险</string>
@@ -1592,7 +1594,7 @@
     <string name="Contacts_DiscardChanges">放弃更改</string>
     <string name="Contacts_KeepEditing">继续编辑</string>
     <string name="Contacts_DiscardChanges_Warning">您确定要放弃此新更改吗？</string>
-    <string name="Contacts_NoContacts">您没有已添加的联系人</string>
+    <string name="Contacts_NoContacts">尚未添加联系人</string>
     <string name="Contacts_ActionMore">更多</string>
     <string name="Contacts_Error_DefinedAddress">此地址已用于 %s</string>
     <string name="Contacts_Error_DefinedName">该名称已存在</string>
