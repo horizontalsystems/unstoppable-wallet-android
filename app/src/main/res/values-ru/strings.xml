@@ -88,7 +88,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="CreateWallet_PassphraseDescription">Кодовая фраза добавляет дополнительный слой безопасности для кошельков. Чтобы восстановить такой кошелек требуется как мнемоник, так и кодовая фраза.\n\nКодовая фраза также облегчает пользователям возможность иметь множество мульти-монетных кошельков, используя одну фразу восстановления, но другой пароль.</string>
+    <string name="CreateWallet_PassphraseDescription">Парольные фразы обеспечивают дополнительный уровень безопасности кошельков. она восстанавливает кошелек, защищённый ключевой фразой, пользователь должен предоставить как ключевую фразу, так и ключевую фразу.\n\nКодовые фразы также позволяют пользователям создавать несколько независимых мульти-кодовых кошельков из одного и того же мнемоники, просто используя различные кодовые фразы.</string>
     <!--Languages-->
     <string name="Language_English">Английский</string>
     <string name="Language_Japanese">Японский</string>
@@ -386,7 +386,7 @@
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
     <string name="Send_Fee">Комиссия</string>
-    <string name="Send_Fee_Info">Блокчейн требует от пользователей оплаты сетевых сборов при отправке транзакций. Эти сборы выше, когда в сети происходит много транзакций.</string>
+    <string name="Send_Fee_Info">Ориентировочная стоимость обработки транзакции в блокчейне.</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Advanced">Доп. настройки</string>
@@ -493,7 +493,9 @@
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_FeeRate">Ставка комиссии (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Это рекомендуемое значение для попадания в следующие 2 блока</string>
-    <string name="FeeSettings_FeeRate_Info">Блокчейн требует от пользователей оплаты сетевых сборов при отправке транзакций. Комиссия выше, когда в сети проходит много транзакций.\n\nКошелек Unstoppable оценивает комиссию на основе текущей активности блокчейна и рекомендует оптимальное значение для того, чтобы транзакция была обработана в разумные сроки.\n\nРекомендованная ставка комиссии показана как количество сатоши, которое пользователь должен заплатить за один байт транзакции. Таким образом, общая сумма комиссии зависит от общего размера транзакции, который измеряется в байтах.\n\n\nПользователи могут использовать предусмотренные элементы управления, чтобы увеличить или уменьшить значение ставки комиссии. Изменение ставки комиссии изменяет общую плату за транзакцию, которую заплатит пользователь.\n\n\nУстановка комиссии ниже рекомендуемого значения может привести к тому, что транзакция будет находиться в ожидании в течение нескольких часов или будет отклонена. Чем ниже значение, тем больше времени потребуется для подтверждения транзакции. Для транзакций, где важен приоритет, мы рекомендуем установить более высокую ставку комиссии.</string>
+    <string name="FeeSettings_FeeRate_Info">При отправке транзакции вы должны оплатить сетевую плату. Работник сети, чем больше комиссия.
+        \n\nНеостановимый кошелек предлагает оптимальную комиссию для подтверждения вашей транзакции в разумные сроки. Вы можете увеличить или уменьшить это значение.
+        \n\nУстановка комиссии может привести к тому, что ваша транзакция будет оставаться в ожидании долгого времени или даже быть отклонена. Для более быстрого подтверждения, используйте более высокую комиссию.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость транзакции</string>
     <string name="FeeInfo_Description">Пользователи блокчейнов для Bitcoin и Ethereum должны оплачивать сетевые комиссии при отправке транзакций. Комиссии обычно выше при обработке большего количества транзакций в сети и ниже при меньшей занятости блокчейна.</string>
@@ -538,7 +540,7 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Вам нужно создать или импортировать кошелек перед использованием WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
+    <string name="WalletConnect_Error_NeedBackup">Создайте резервную копию вашей ключевой фразы восстановления и связанной с ней ключевой фразы. Они позволят вам восстановить ваш кошелек, если ваш телефон потерян, украден или поврежден.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего evm kit</string>
@@ -619,11 +621,11 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_SlippageTitle">Допустимость отклонений</string>
-    <string name="SwapSettings_SlippageDescription">Ваша транзакция будет отменена, если цена изменится в неблагоприятную сторону более чем на этот процент</string>
+    <string name="SwapSettings_SlippageDescription">Если цена переместится за пределы этого процента, обмен не будет завершаться.</string>
     <string name="SwapSettings_DeadlineTitle">Срок транзакции</string>
     <string name="SwapSettings_DeadlineDescription">Ваша транзакция будет отменена, если перевод займет больше указанного срока.</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес получателя</string>
-    <string name="SwapSettings_RecipientAddressDescription">После операции обмена сумма будет переведена на указанный адрес</string>
+    <string name="SwapSettings_RecipientAddressDescription">Переменная сумма будет отправлена на указанный адрес.</string>
     <string name="SwapSettings_Apply">Применить</string>
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
     <string name="SwapSettings_Error_DeadlineZero">Нулевой срок</string>
@@ -653,14 +655,14 @@
     <string name="Swap_Approve_Unlimited">Неограниченно</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
-    <string name="SwapInfo_AllowanceDescription">Сумма, которую exchange может потратить от имени пользователя при выполнении обмена токенов. Действующая транзакция, устанавливающая достаточный уровень допустимости, необходима для того, чтобы транзакция обмена была осуществлена.</string>
+    <string name="SwapInfo_AllowanceDescription">Разрешение - это сумма, которую Вы можете использовать на обмене на Вашем имени. Перед тем как оформить перевод, Вы должны сначала утвердить транзакцию по выплате пособия.</string>
     <string name="SwapInfo_PriceImpactTitle">Отклонение от рын. цены</string>
     <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
-    <string name="Transactions_EmptyList">У вас ещё нет незавершенных или прошлых транзакций</string>
+    <string name="Transactions_EmptyList">Еще нет отложенных или прошлых транзакций.</string>
     <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
     <string name="Transactions_Pending">В обработке</string>
     <string name="Transactions_Receive">Получено</string>
@@ -818,7 +820,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Settings_VipSupport_StartChat">Присоединиться к VIP-группе</string>
-    <string name="Settings_VipSupport_Description">Получите эксклюзивный доступ к нашей VIP-группе, где премиальные пользователи и команда Unstoppable Wallet работают сообща. Получайте прямую поддержку, обсуждайте будущие обновления и помогайте формировать развитие кошелька.</string>
+    <string name="Settings_VipSupport_Description">Присоединяйтесь к нашей группе VIP, чтобы получить прямую поддержку, участвуйте в обсуждениях о предстоящих обновлениях и связывайтесь с командой Unstoppable.</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_GetYourTokens">Получи токены UWT</string>
@@ -839,7 +841,7 @@
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Проверка адреса</string>
     <string name="SettingsAddressChecker_RecipientCheck">Проверка получателя</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Проверяет адрес получателя перед отправкой.</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Сканирует адрес получателя на предмет риска безопасности перед отправкой.</string>
     <string name="SettingsAddressChecker_CheckAddress">Проверить адрес</string>
     <string name="SettingsAddressChecker_SelectBlockchain">Выберите блокчейн</string>
     <string name="SettingsAddressChecker_SelectCoin">Выберите монету</string>
@@ -948,7 +950,7 @@
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
     <string name="Appearance_AmountRounding">Количество округления</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
-    <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
+    <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения.</string>
     <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
     <string name="Appearance_HideButtonsInfo">Конфигурация «Скрыть кнопки» скрывает кнопки «Отправить», «Получать» и «Поменять» на вкладке Баланс.</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
@@ -977,12 +979,12 @@
     <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable не собирает персональные данные, которые могут раскрывать вашу частную информацию, такую как балансы монет или адреса. Мы собираем некоторую статистику использования интерфейса исключительно для понимания нашей пользовательской базы и тенденций использования приложения. Эта функция может быть отключена по вашему желанию.</string>
+    <string name="Privacy_Information">Неостановимо не собирает персональные данные, такие как балансы или адреса кошельков. Мы используем анонимные данные только для улучшения приложения.</string>
     <string name="Privacy_BulletedText1">Кошелек не собирает личные данные.</string>
     <string name="Privacy_BulletedText2">Здесь нет пользовательских аккаунтов или баз данных для хранения данных пользователей.</string>
-    <string name="Privacy_BulletedText3">Если разрешено, кошелек будет делиться с командой Unstoppable информацией о привычках использования приложения. Это необходимо для понимания, какие функции используются (или нет) нашими пользователями. В качестве приложения, ориентированного на конфиденциальность, нам нужен способ оценить наши усилия, и без этого мы не сможем определить, используются ли построенные нами функции или нет.</string>
+    <string name="Privacy_BulletedText3">Если разрешено, кошелек будет делиться привычками использования приложения с командой «Неостановимы». Это позволяет понять, какие функции используются (или нет) нашими пользователями. Будучи приложением, ориентированным на конфиденциальность, нам нужен какой-то способ оценить наши усилия и без этого мы не понимаем, используются ли наши встроенные функции.</string>
     <string name="ShareUiData">Поделиться данными UI</string>
-    <string name="ShareUiDataDescription">Эта настройка позволяет отключить аналитику UI/UX и обеспечить полную конфиденциальность.</string>
+    <string name="ShareUiDataDescription">Этот параметр позволяет отключить аналитику и сохранить вашу активность в полной конфиденциальности.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Добавить новый</string>
@@ -1023,7 +1025,7 @@
     <string name="SettingsSecurity_SetDuressPin">Установить режим Duress</string>
     <string name="SettingsSecurity_EditDuressPin">Изменить Duress код</string>
     <string name="SettingsSecurity_DisableDuressPin">Отключить Duress код</string>
-    <string name="SettingsSecurity_DuressPinDescription">Специализированный режим, разработанный для обеспечения безопасности выбранных кошельков в условиях принуждения.</string>
+    <string name="SettingsSecurity_DuressPinDescription">Специальный режим, защищающий выбранные кошельки в случае принуждения.</string>
     <string name="SettingsSecurity_ManageKeys">Кошельки</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
@@ -1118,7 +1120,7 @@
     <string name="ImportWallet_BackupFile">Резервный файл</string>
     <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Импортировать кошелек с использованием ключевого словосочетания или приватного ключа.</string>
     <string name="ImportWallet_ExchangeWallet">с exchange кошелька</string>
     <string name="ImportWallet_ExchangeWallet_Description">Подключиться к кошельку на централизованной бирже.</string>
     <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
@@ -1164,7 +1166,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Не копировать</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Резервная копия</string>
-    <string name="BackupRecoveryPhrase_Description">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
+    <string name="BackupRecoveryPhrase_Description">Создайте резервную копию вашей ключевой фразы восстановления и связанной с ней ключевой фразы. Они позволят вам восстановить ваш кошелек, если ваш телефон потерян, украден или поврежден.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Ручное резервное копирование</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Локальная резерв. копия</string>
     <string name="BackupRecoveryPhrase_Later">Позже</string>
@@ -1182,7 +1184,7 @@
     <string name="LocalBackup_Term1">Я понимаю, что кража или повреждение устройства резервного копирования приведет к потере резервной копии в соответствующем кошельке.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Фраза восстановления</string>
-    <string name="RecoveryPhrase_Description">Напишите эти слова в правильном порядке и храните их в безопасном месте</string>
+    <string name="RecoveryPhrase_Description">Запишите эти слова в порядке и храните их в безопасности.</string>
     <string name="RecoveryPhrase_ShowPhrase">Нажмите, чтобы показать фразу восстановления</string>
     <string name="RecoveryPhrase_Verify">Подтвердить</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Риск копирования</string>
@@ -1594,7 +1596,7 @@
     <string name="Contacts_DiscardChanges">Отменить изменения</string>
     <string name="Contacts_KeepEditing">Продолжить редактирование</string>
     <string name="Contacts_DiscardChanges_Warning">Вы уверены, что хотите отменить эти изменения?</string>
-    <string name="Contacts_NoContacts">У вас нет добавленных контактов</string>
+    <string name="Contacts_NoContacts">Контакты еще не добавлены</string>
     <string name="Contacts_ActionMore">Ещё</string>
     <string name="Contacts_Error_DefinedAddress">Этот адрес уже используется для %s</string>
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
