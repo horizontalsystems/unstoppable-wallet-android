@@ -1076,6 +1076,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">没有网络</string>
     <string name="Hud_Text_Copied">已复制</string>
+    <string name="Hud_Text_AddressCopied">地址已复制</string>
     <string name="Hud_Text_Created">已创建</string>
     <string name="Hud_Text_Restored">已恢复</string>
     <string name="Hud_Text_AddressAdded">地址已添加</string>
