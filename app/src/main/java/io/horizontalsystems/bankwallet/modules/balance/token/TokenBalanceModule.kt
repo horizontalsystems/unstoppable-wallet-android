@@ -59,6 +59,7 @@ class TokenBalanceModule {
         val failedIconVisible: Boolean,
         val error: TokenBalanceError? = null,
         val failedErrorMessage: String?,
+        val warningMessage: String?,
     )
 
     data class TokenBalanceError(
