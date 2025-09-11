@@ -1076,6 +1076,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
+    <string name="Hud_Text_AddressCopied">Dirección copiada</string>
     <string name="Hud_Text_Created">Creado</string>
     <string name="Hud_Text_Restored">Restaurado </string>
     <string name="Hud_Text_AddressAdded">Dirección añadida</string>
