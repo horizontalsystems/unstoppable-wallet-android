@@ -31,9 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
@@ -117,6 +119,7 @@ fun BalanceCard(
 
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
+    val hapticFeedback = LocalHapticFeedback.current
 
     var isContextMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -157,6 +160,7 @@ fun BalanceCard(
                 detectTapGestures(
                     onLongPress = {
                         if (viewItem.isWatchAccount) {
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                             isContextMenuVisible = true
                             pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
                             val press = PressInteraction.Press(it)
