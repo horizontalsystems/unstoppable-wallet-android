@@ -1080,6 +1080,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Sem Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
+    <string name="Hud_Text_AddressCopied">Endereço copiado</string>
     <string name="Hud_Text_Created">Criado</string>
     <string name="Hud_Text_Restored">Restaurado</string>
     <string name="Hud_Text_AddressAdded">Endereço Adicionado</string>
