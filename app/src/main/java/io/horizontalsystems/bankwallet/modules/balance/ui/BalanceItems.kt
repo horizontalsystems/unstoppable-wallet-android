@@ -517,7 +517,7 @@ fun BalanceItems(
 
                                             HudHelper.showSuccessMessage(
                                                 view,
-                                                R.string.Hud_Text_Copied
+                                                R.string.Hud_Text_AddressCopied
                                             )
 
                                             stat(
