@@ -81,7 +81,6 @@
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">지원되는 기호만 사용하세요:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
-    <string name="CreateWallet_PassphraseDescription">암호는 지갑에 대한 추가 보안 계층을 추가합니다. 이러한 지갑을 복원하려면 사용자는 니모닉과 암호가 모두 필요했습니다.\n\n암호는 또한 사용자가 하나의 니모닉을 사용하지만 다른 암호를 사용하여 여러 코인 지갑을 쉽게 가질 수 있도록 합니다.</string>
     <!--Languages-->
     <string name="Language_English">영어</string>
     <string name="Language_Japanese">일본어</string>
@@ -338,7 +337,6 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
     <string name="Send_Fee">수수료</string>
-    <string name="Send_Fee_Info">블록체인은 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 이 수수료는 네트워크에서 많은 거래가 발생할 때 더 높아집니다.</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
@@ -439,11 +437,6 @@
     <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
     <string name="FeeSettings_FeeRate">수수료율 (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">다음 2 블록 타격에 대한 권장 값은 다음과 같습니다.</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi the user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
-        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
-        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
     <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 수수료는 네트워크에서 많은 거래가 발생할 때 더 높고 블록체인이 적으면 더 낮습니다.</string>
@@ -487,7 +480,6 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect를 사용하려면 먼저 지갑을 생성하거나 가져와야 합니다</string>
-    <string name="WalletConnect_Error_NeedBackup">복구 문구의 복사본을 생성하여 이 지갑을 백업하십시오. 휴대폰 분실, 도난, 파손 등의 경우 지갑에 액세스하기 위해 필요합니다.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 블록체인입니다</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
@@ -564,11 +556,9 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_SlippageTitle">토큰 범위 설정</string>
-    <string name="SwapSettings_SlippageDescription">가격이 해당 퍼센티지 이상으로 불리하게 변경되면 거래가 취소됩니다.</string>
     <string name="SwapSettings_DeadlineTitle">거래 마감 시간</string>
     <string name="SwapSettings_DeadlineDescription">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다.</string>
     <string name="SwapSettings_RecipientAddressTitle">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다</string>
-    <string name="SwapSettings_RecipientAddressDescription">교환 작업 후, 금액은 지정된 주소로 이체됩니다.</string>
     <string name="SwapSettings_Apply">적용</string>
     <string name="SwapSettings_DeadlineMinute">최소 %s</string>
     <string name="SwapSettings_Error_DeadlineZero">올바르지 않은 마감 시간</string>
@@ -591,14 +581,12 @@
     <string name="Swap_Approve_Unlimited">무제한</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">허용량</string>
-    <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 거래소가 사용자를 대신하여 지출할 수 있는 금액. 실제 스왑 거래가 발생하기 전에 선행 거래 설정 충분한 여유가 필요합니다.</string>
     <string name="SwapInfo_PriceImpactTitle">가격 영향</string>
     <string name="SwapInfo_PriceImpactDescription">표시된 가격과의 예상 가격 편차는 일반적으로 스왑 금액에 따라 증가합니다.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
-    <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
     <string name="Transactions_Receive">수령됨</string>
@@ -740,7 +728,6 @@
     <string name="Settings_PersonalSupport_Requestfailed">요청 실패</string>
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
     <string name="Settings_VipSupport_StartChat">VIP 그룹 참여하기</string>
-    <string name="Settings_VipSupport_Description">프리미엄 사용자와 Unstoppable Wallet 팀이 협력하는 VIP 그룹에 독점 액세스하세요. 직접적인 지원을 받고, 향후 업데이트에 대해 논의하며, 지갑의 발전 방향을 함께 만들어 나가세요.</string>
     <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
     <string name="Settings_GetYourTokens">토큰 받기</string>
@@ -823,7 +810,6 @@
     <string name="Appearance_HideMarketsTab">마켓 숨기기</string>
     <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
-    <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
     <string name="Appearance_PriceChangeInterval">가격 변경 %</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
@@ -851,12 +837,9 @@
     <string name="BackupManager_AppSettingsTitle">앱 설정</string>
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable 는 코인 잔액이나 주소와 같은 개인 정보를 노출하는 개인 데이터를 수집하지 않습니다. UI 사용 통계를 수집하긴 하지만, 이는 사용자 기반 및 앱 사용 트렌드를 이해하기 위한 것입니다. 원하신다면 비활성화할 수 있습니다.</string>
     <string name="Privacy_BulletedText1">이 지갑은 개인 데이터를 수집하지 않습니다.</string>
     <string name="Privacy_BulletedText2">사용자 계정이나 사용자 데이터를 저장하는 데이터베이스가 없습니다.</string>
-    <string name="Privacy_BulletedText3">허용된 경우, 지갑은 앱 사용 습관을 Unstoppable 팀과 공유할 것입니다. 이는 사용자가 어떤 기능을 사용하고 있는지 (또는 사용하지 않는지) 이해하기 위한 것입니다. 개인 정보 보호를 중시하는 앱이지만, 우리의 노력을 평가할 방법이 필요합니다. 이를 통해 만든 기능이 사용되고 있는지 여부를 알 수 없기 때문입니다.</string>
     <string name="ShareUiData">UI 데이터 공유</string>
-    <string name="ShareUiDataDescription">이 설정을 통해 UI/UX 분석을 비활성화하고 완전한 기밀성을 보장할 수 있습니다.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">신규로 추가</string>
@@ -889,7 +872,6 @@
     <string name="SettingsSecurity_SetDuressPin">긴급 상황 모드 설정</string>
     <string name="SettingsSecurity_EditDuressPin">긴급 상황 비밀번호 편집</string>
     <string name="SettingsSecurity_DisableDuressPin">협박 비밀번호를 비활성화합니다.</string>
-    <string name="SettingsSecurity_DuressPinDescription">강요 상황에서 선택한 지갑을 안전하게 보관하기 위해 디자인된 특별한 모드입니다.</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>
@@ -980,7 +962,6 @@
     <string name="ImportWallet_BackupFile">파일에서</string>
     <string name="ImportWallet_BackupFile_Description">백업 파일에서 가져오기.</string>
     <string name="ImportWallet_RecoveryPhrase">복구 문구에서</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">이 문구는 복구 문구 또는 개인 키를 사용하여 가져올 수 있습니다.</string>
     <string name="ImportWallet_ExchangeWallet">거래소 지갑에서</string>
     <string name="ImportWallet_ExchangeWallet_Description">중앙집중형 거래소의 지갑에 연결하세요.</string>
     <string name="ImportWallet_WarningInvalidJson">잘못된 Json 파일입니다.</string>
@@ -1024,7 +1005,6 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">복사 금지</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">백업용 지갑</string>
-    <string name="BackupRecoveryPhrase_Description">복구 문구의 복사본을 생성하여 이 지갑을 백업하십시오. 휴대폰 분실, 도난, 파손 등의 경우 지갑에 액세스하기 위해 필요합니다.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">수동으로 백업합니다</string>
     <string name="BackupRecoveryPhrase_LocalBackup">로컬 백업</string>
     <string name="BackupRecoveryPhrase_Later">나중에</string>
@@ -1042,7 +1022,6 @@
     <string name="LocalBackup_Term1">백업 장치의 도난 또는 손상은 해당 지갑의 백업을 손실할 수 있음을 이해합니다.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">복구 문구</string>
-    <string name="RecoveryPhrase_Description">이 단어들을 올바른 순서로 기록하고 안전한 장소에 보관하십시오</string>
     <string name="RecoveryPhrase_ShowPhrase">탭하여 복구 문구 표시</string>
     <string name="RecoveryPhrase_Verify">확인하기</string>
     <string name="RecoveryPhrase_CopyWarning_Title">복사의 위험</string>
@@ -1416,7 +1395,6 @@
     <string name="Contacts_DiscardChanges">변경 내용 취소</string>
     <string name="Contacts_KeepEditing">편집 계속하기</string>
     <string name="Contacts_DiscardChanges_Warning">변경 사항을 취소하시겠습니까?</string>
-    <string name="Contacts_NoContacts">추가된 연락처가 없습니다</string>
     <string name="Contacts_ActionMore">보다</string>
     <string name="Contacts_Error_DefinedAddress">이 주소는 이미 %s에 사용되었습니다</string>
     <string name="Contacts_Error_DefinedName">해당 이름은 이미 존재합니다</string>
