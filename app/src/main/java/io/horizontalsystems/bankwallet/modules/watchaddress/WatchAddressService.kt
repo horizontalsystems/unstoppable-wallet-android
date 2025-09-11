@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.supports
@@ -20,6 +22,7 @@ class WatchAddressService(
     private val accountFactory: IAccountFactory,
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,
+    private val restoreSettingsManager: RestoreSettingsManager
 ) {
 
     fun nextWatchAccountName() = accountFactory.getNextWatchAccountName()
@@ -114,6 +117,11 @@ class WatchAddressService(
         val account = accountFactory.watchAccount(accountName, accountType)
 
         accountManager.save(account)
+
+        if (accountType is AccountType.MoneroWatchAccount) {
+            val restoreSettings = RestoreSettings().apply { birthdayHeight = accountType.restoreHeight }
+            restoreSettingsManager.save(restoreSettings, account, BlockchainType.Monero)
+        }
 
         try {
             walletActivator.activateTokens(account, tokens)
