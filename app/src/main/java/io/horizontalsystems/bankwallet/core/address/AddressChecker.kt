@@ -40,6 +40,8 @@ class BlacklistAddressChecker(
         if (hashDitAddressValidator.supports(token)) {
             if (!hashDitAddressValidator.isClear(address, token)) {
                 return false
+            } else if (!eip20AddressValidator.supports(token)) {
+                return true
             }
         }
         val eip20CheckResult = eip20AddressValidator.isClear(address, token)
