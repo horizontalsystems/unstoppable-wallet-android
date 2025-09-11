@@ -107,7 +107,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases provide an additional layer of security for wallets.When restoring a wallet protected by a passphrase, the user must provide both the recovery phrase and the passphrase.\n\nPassphrases also allow users to create multiple independent multi-coin wallets from the same mnemonic, simply by using different passphrases.</string>
 
     <!--Languages-->
     <string name="Language_English">English</string>
@@ -463,7 +463,7 @@
     <string name="Send_Hint_Address">Address or Domain</string>
 
     <string name="Send_Fee">Fee</string>
-    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
+    <string name="Send_Fee_Info">The estimated cost of processing this transaction on the blockchain.</string>
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Advanced">Advanced</string>
@@ -589,11 +589,9 @@
     <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
     <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
-        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
-        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
+    <string name="FeeSettings_FeeRate_Info">When sending a transaction, you must pay a network fee. The busier the network, the higher the fee.
+        \n\nUnstoppable Wallet suggests an optimal fee to help your transaction confirm in a reasonable time. You can increase or decrease this value.
+        \n\nSetting the fee too low may cause your transaction to stay pending for a long time or even be rejected. For faster confirmation, use a higher fee.</string>
 
 
     <!--Fee Info -->
@@ -649,7 +647,7 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
+    <string name="WalletConnect_Error_NeedBackup">Create a backup of your recovery phrase and the associated passphrase. These will allow you to restore your wallet if your phone is lost, stolen, or damaged.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
@@ -736,11 +734,11 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
-    <string name="SwapSettings_SlippageDescription">Your transaction will revert if the price changes unfavorably by more than this percentage</string>
+    <string name="SwapSettings_SlippageDescription">If the price moves beyond this percentage, the swap won’t go through.</string>
     <string name="SwapSettings_DeadlineTitle">Transaction Deadline</string>
     <string name="SwapSettings_DeadlineDescription">Your transaction will revert if it is pending for more than this long.</string>
     <string name="SwapSettings_RecipientAddressTitle">Recipient Address</string>
-    <string name="SwapSettings_RecipientAddressDescription">After the exchange operation, the amount will be transferred to the specified address</string>
+    <string name="SwapSettings_RecipientAddressDescription">The swapped amount will be sent to the specified address.</string>
     <string name="SwapSettings_Apply">Apply</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
 
@@ -781,7 +779,7 @@
     <!--Uniswap Info -->
 
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">Allowance is the amount you let the exchange use on your behalf for swaps. Before making a swap, you first need to approve an allowance transaction.</string>
     <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
 
@@ -792,7 +790,7 @@
     <!--Transactions-->
 
     <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
+    <string name="Transactions_EmptyList">No pending or past transactions yet.</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
@@ -1357,7 +1355,7 @@
     <string name="ImportWallet_BackupFile">from File</string>
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase or a private key.</string>
     <string name="ImportWallet_ExchangeWallet">from Exchange Wallet</string>
     <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange.</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
@@ -1410,7 +1408,7 @@
 
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Backup Recovery Phrase</string>
-    <string name="BackupRecoveryPhrase_Description">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
+    <string name="BackupRecoveryPhrase_Description">Create a backup of your recovery phrase and the associated passphrase. These will allow you to restore your wallet if your phone is lost, stolen, or damaged.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manual Backup</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Local Backup</string>
     <string name="BackupRecoveryPhrase_Later">Later</string>
@@ -1430,7 +1428,7 @@
 
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Recovery Phrase</string>
-    <string name="RecoveryPhrase_Description">Write these words down in the correct order and keep them in a safe place</string>
+    <string name="RecoveryPhrase_Description">Write these words down in order and keep them safe.</string>
     <string name="RecoveryPhrase_ShowPhrase">Tap to show recovery phrase</string>
     <string name="RecoveryPhrase_Verify">Verify</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Risk of Copying</string>
