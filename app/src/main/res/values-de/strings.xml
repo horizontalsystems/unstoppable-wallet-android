@@ -87,7 +87,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Bitte verwenden Sie nur unterstützte Symbole: <![CDATA[A-Z a-z 0-9 \' " ` & / ? , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase-Bestätigung stimmt nicht überein</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases fügen zusätzliche Sicherheitsebenen für Wallets hinzu. Um eine solche Wallet wiederherzustellen, benötigt ein Benutzer sowohl eine Wiederherstellungsphrase als auch eine Passphrase.\n\nPassphrasen erleichtern es auch Benutzern, mehrere Multi-Coin-Wallets mit einem einzigen mnemonischen, aber unterschiedlichen Passwörtern zu haben.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases bieten eine zusätzliche Sicherheitsstufe für Wallets. hen Wiederherstellen einer Brieftasche, die durch eine Passphrase geschützt ist, muss der Benutzer sowohl die Wiederherstellungsphrase als auch die Passphrase angeben.\n\nPassphrasen erlauben es Benutzern auch, mehrere unabhängige Multi-Coin-Wallets aus derselben Mnemonik zu erstellen, indem sie einfach verschiedene Passphrasen verwenden.</string>
     <!--Languages-->
     <string name="Language_English">Englisch</string>
     <string name="Language_Japanese">Japanisch</string>
@@ -384,7 +384,7 @@
     <string name="Send_Title">Senden %s</string>
     <string name="Send_Hint_Address">Adresse oder Domäne</string>
     <string name="Send_Fee">Gebühr</string>
-    <string name="Send_Fee_Info">Blockchains verlangen, dass Nutzer Netzwerkgebühren beim Versenden von Transaktionen bezahlen. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk stattfinden.</string>
+    <string name="Send_Fee_Info">Die geschätzten Kosten für die Verarbeitung dieser Transaktion auf der Blockchain.</string>
     <string name="Send_Button_Paste">Einfügen</string>
     <string name="Send_Button_Max">Max.</string>
     <string name="Send_Advanced">Erweitert</string>
@@ -491,11 +491,9 @@
     <string name="FeeSettings_Overpricing">Die festgelegte Transaktionsgebühr ist jetzt höher als für die Verarbeitung dieser Transaktion erforderlich.</string>
     <string name="FeeSettings_FeeRate">Gebühr (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Hier ist der empfohlene Wert, um die nächsten 2 Blöcke zu treffen</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains verlangen, dass Nutzer Netzwerkgebühren beim Versenden von Transaktionen bezahlen. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk stattfinden.
-        \n\nDie unaufhaltsame Brieftasche berechnet die Gebühr basierend auf der aktuellen Blockchain-Aktivität und empfiehlt den optimalen Wert, damit die Transaktion innerhalb einer angemessenen Zeit bearbeitet werden kann.
-        \n\nDer empfohlene Gebührensatz, der als Betrag des satoshi Benutzers angezeigt wird, muss für ein einzelnes Byte der Transaktion bezahlen. Daher hängt die Gesamtgebühr von der Gesamtgröße der Transaktion ab, die in Bytes gemessen wird.
-        \n\nBenutzer können die zur Verfügung gestellten Steuerelemente verwenden, um den Gebührenwert zu erhöhen oder zu senken. Die Änderung des Gebührensatzes ändert die Gesamtgebühr für die Transaktion, die der Nutzer zu zahlen hat.
-        \n\nSetzen der Gebühr unter dem empfohlenen Wert kann dazu führen, dass eine Transaktion für Stunden als ausstehend gehalten wird oder abgelehnt werden. Je niedriger der Wert, desto länger dauert die Bestätigung der Transaktion. Für Transaktionen, bei denen Priorität wichtig ist, empfehlen wir, höhere Gebührensätze festzulegen.</string>
+    <string name="FeeSettings_FeeRate_Info">Wenn Sie eine Transaktion versenden, zahlen Sie eine Netzwerkgebühr. Je stärker das Netzwerk ist, desto höher die Gebühr.
+        \n\nUnstoppable Wallet schlägt eine optimale Gebühr vor, um Ihre Transaktion in einer angemessenen Zeit zu bestätigen. Sie können diesen Wert erhöhen oder verringern.
+        \n\nSetzen der Gebühr zu niedrig kann dazu führen, dass Ihre Transaktion lange ausbleibt oder sogar abgelehnt wird. Benutzen Sie für eine schnellere Bestätigung eine höhere Gebühr.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Transaktionsgeschwindigkeit</string>
     <string name="FeeInfo_Description">Sowohl Bitcoin als auch Ethereum Blockchains verlangen vom Benutzer, Netzwerkgebühren zu zahlen, wenn er Transaktionen versendet. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk durchgeführt werden und niedriger, wenn die Blockchain weniger beschäftigt ist.</string>
@@ -540,7 +538,7 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
     <string name="WalletConnect_Error_NoWallet">Sie müssen eine Wallet erstellen oder importieren bevor Sie WalletConnect verwenden können</string>
-    <string name="WalletConnect_Error_NeedBackup">Erstellen Sie eine Sicherungskopie der Wiederherstellungsphrase und des zugehörigen Passworts, mit dem Sie Ihre Wallet wiederherstellen können, wenn Ihr Telefon verloren geht, gestohlen, kaputt, etc.</string>
+    <string name="WalletConnect_Error_NeedBackup">Erstellen Sie eine Sicherung Ihrer Wiederherstellungsphrase und der zugehörigen Passphrase. Dadurch können Sie Ihre Brieftasche wiederherstellen, wenn Ihr Telefon verloren, gestohlen oder beschädigt ist.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Nicht unterstützte Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
@@ -621,11 +619,11 @@
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap-Einstellungen</string>
     <string name="SwapSettings_SlippageTitle">Slippage Toleranz</string>
-    <string name="SwapSettings_SlippageDescription">Ihre Transaktion wird rückgängig gemacht, wenn sich der Preis ungünstig um mehr als diesen Prozentsatz ändert</string>
+    <string name="SwapSettings_SlippageDescription">Wenn der Preis über diesen Prozentsatz hinausgeht, wird der Swap-Kurs nicht durchlaufen.</string>
     <string name="SwapSettings_DeadlineTitle">Transaktionsfrist</string>
     <string name="SwapSettings_DeadlineDescription">Ihre Transaktion wird rückgängig gemacht, wenn sie länger aussteht.</string>
     <string name="SwapSettings_RecipientAddressTitle">Empfängeradresse</string>
-    <string name="SwapSettings_RecipientAddressDescription">Nach dem Umtauschvorgang wird der Betrag an die angegebene Adresse überwiesen</string>
+    <string name="SwapSettings_RecipientAddressDescription">Der ausgetauschte Betrag wird an die angegebene Adresse gesendet.</string>
     <string name="SwapSettings_Apply">Übernehmen</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_Error_DeadlineZero">Null Frist</string>
@@ -655,14 +653,14 @@
     <string name="Swap_Approve_Unlimited">Unbegrenzt</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
-    <string name="SwapInfo_AllowanceDescription">Der Betrag, den ein Austausch im Namen eines Benutzers ausgeben kann, wenn ein Token-Swaps ausgeführt wird. Bevor eine tatsächliche Swap-Transaktion durchgeführt werden kann, ist eine ausreichende Vergütung erforderlich.</string>
+    <string name="SwapInfo_AllowanceDescription">Die Freigabe ist der Betrag, den Sie den Austausch in Ihrem Namen für Swaps verwenden lassen. Bevor Sie einen Swap, müssen Sie zuerst eine Zertifikatstransaktion genehmigen.</string>
     <string name="SwapInfo_PriceImpactTitle">Preisauswirkungen</string>
     <string name="SwapInfo_PriceImpactDescription">Die erwartete Preisabweichung von einem angezeigten Preis steigt typischerweise mit dem Swap-Betrag.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Erhalte %s</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
-    <string name="Transactions_EmptyList">Sie haben noch keine ausstehenden oder letzten Transaktionen</string>
+    <string name="Transactions_EmptyList">Noch keine ausstehenden oder letzten Transaktionen.</string>
     <string name="Transactions_WaitForSync">Bitte warten Sie, bis die Synchronisation beendet ist.</string>
     <string name="Transactions_Pending">Ausstehend</string>
     <string name="Transactions_Receive">Erhalten</string>
@@ -820,7 +818,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">Anfrage fehlgeschlagen</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Telegramm öffnen</string>
     <string name="Settings_VipSupport_StartChat">VIP Gruppe beitreten</string>
-    <string name="Settings_VipSupport_Description">Erhalten Sie exklusiven Zugang zu unserer VIP-Gruppe, in der Premium-Nutzer und das unaufhaltsame Wallet-Team zusammenarbeiten. Erhalten Sie direkte Unterstützung, diskutieren Sie zukünftige Aktualisierungen und helfen Sie dabei, die Entwicklung der Brieftasche zu gestalten.</string>
+    <string name="Settings_VipSupport_Description">Treten Sie unserer VIP Gruppe bei, um direkten Support zu erhalten, an Diskussionen über kommende Updates teilzunehmen und sich enger mit dem unaufhaltsamen Team zu verbinden.</string>
     <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
     <string name="Settings_Donate">Spenden</string>
     <string name="Settings_GetYourTokens">Holen Sie sich Ihre Token</string>
@@ -841,7 +839,7 @@
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Adressprüfung</string>
     <string name="SettingsAddressChecker_RecipientCheck">Empfängerprüfung</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Prüft die Empfängeradresse vor dem Senden auf Risiken.</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Prüft die Empfängeradresse auf Sicherheitsrisiken vor dem Versand.</string>
     <string name="SettingsAddressChecker_CheckAddress">Adresse prüfen</string>
     <string name="SettingsAddressChecker_SelectBlockchain">Blockchain auswählen</string>
     <string name="SettingsAddressChecker_SelectCoin">Münze auswählen</string>
@@ -950,7 +948,7 @@
     <string name="Appearance_HideBalanceTabButtons">Buttons ausblenden</string>
     <string name="Appearance_AmountRounding">Betrag Rundung</string>
     <string name="Appearance_BalanceAutoHide">Auto-Ausblenden ausgleichen</string>
-    <string name="Appearance_BalanceAutoHide_Description">Bei jedem Öffnen der App wird der Saldo automatisch ausgeblendet, unabhängig von den vorherigen Einstellungen.</string>
+    <string name="Appearance_BalanceAutoHide_Description">Versteckt bei jedem Öffnen der App automatisch das Guthaben.</string>
     <string name="Appearance_PriceChangeInterval">Preisänderung %</string>
     <string name="Appearance_HideButtonsInfo">Die Einstellungen „Verstecke Schaltflächen ausblenden“ verstecken die Schaltflächen Senden, Empfangen und Tauschen auf der Registerkarte „Salden“.</string>
     <string name="BalanceViewType_CoinValue">Münzwert</string>
@@ -979,12 +977,12 @@
     <string name="BackupManager_AppSettingsTitle">App-Einstellungen</string>
     <string name="BackupManager_AppSettingsDescription">Sprache, Währung, Aussehen …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unaufhaltsam sammelt niemals personenbezogene Daten wie Münzsalden oder Brieftaschen-Adressen. Es werden nur anonyme Schnittstellennutzungsdaten gesammelt, um das App-Erlebnis zu verbessern.</string>
+    <string name="Privacy_Information">Unaufhaltsam sammelt keine persönlichen Daten wie Ihr Guthaben oder Ihre Brieftaschen-Adressen. Wir verwenden nur anonyme Daten, um die App zu verbessern.</string>
     <string name="Privacy_BulletedText1">Die Brieftasche sammelt keine persönlichen Daten.</string>
     <string name="Privacy_BulletedText2">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten speichern.</string>
     <string name="Privacy_BulletedText3">Wenn erlaubt, teilt die Brieftasche App-Nutzungsgewohnheiten mit dem unaufhaltsamen Team. Dies ist zu verstehen, welche Funktionen von unseren Benutzern verwendet werden (oder nicht). Als datenschutzorientierte App brauchen wir eine Möglichkeit, unsere Bemühungen zu bewerten, und ohne dies haben wir keine Ahnung, ob die von uns erstellten Funktionen genutzt werden oder nicht.</string>
     <string name="ShareUiData">UI-Daten teilen</string>
-    <string name="ShareUiDataDescription">Diese Einstellung ermöglicht Ihnen die Deaktivierung der UI/UX-Analyse und die Gewährleistung vollständiger Vertraulichkeit.</string>
+    <string name="ShareUiDataDescription">Mit dieser Einstellung können Sie die Analyse ausschalten und Ihre Aktivität vollständig privat halten.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Neu</string>
@@ -1029,7 +1027,7 @@
     <string name="SettingsSecurity_SetDuressPin">Duress Modus setzen</string>
     <string name="SettingsSecurity_EditDuressPin">Duress Passwort bearbeiten</string>
     <string name="SettingsSecurity_DisableDuressPin">Duress Passwort deaktivieren</string>
-    <string name="SettingsSecurity_DuressPinDescription">Ein spezialisierter Modus, der entworfen wurde, um ausgewählte Brieftaschen unter Zwang zu schützen.</string>
+    <string name="SettingsSecurity_DuressPinDescription">Ein spezieller Modus, der ausgewählte Brieftaschen im Falle von Zwang schützt.</string>
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion startet die unaufhaltsame Wallet neu.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Vollständig anonymisieren Sie Ihr Internet während Sie diese App verwenden. Beachten Sie, dass in einigen Fällen die WalletConnect-Funktion für DeFi-Apps sehr langsam oder gar nicht funktionieren kann.</string>
@@ -1129,7 +1127,7 @@
     <string name="ImportWallet_BackupFile">aus Datei</string>
     <string name="ImportWallet_BackupFile_Description">Importieren Sie eine Sicherungsdatei aus Ihrem lokalen Ordner.</string>
     <string name="ImportWallet_RecoveryPhrase">von Wiederherstellungsphrase</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Mit Wiederherstellungsphrase oder privatem Schlüssel importieren.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importieren Sie eine Brieftasche mit einer Wiederherstellungsphrase oder einem privaten Schlüssel.</string>
     <string name="ImportWallet_ExchangeWallet">von Exchange Wallet</string>
     <string name="ImportWallet_ExchangeWallet_Description">Verbinden Sie sich mit einer Brieftasche bei zentralisiertem Austausch.</string>
     <string name="ImportWallet_WarningInvalidJson">Ungültige Json-Datei</string>
@@ -1175,7 +1173,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Nicht kopieren</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Wiederherstellungsphrase sichern</string>
-    <string name="BackupRecoveryPhrase_Description">Sichern Sie diese Brieftasche durch Erstellen einer Kopie ihrer Wiederherstellungs-Phrase. Es wird benötigt, um auf die Brieftasche zuzugreifen, wenn Ihr Telefon verloren geht, gestohlen, kaputt usw.</string>
+    <string name="BackupRecoveryPhrase_Description">Erstellen Sie eine Sicherung Ihrer Wiederherstellungsphrase und der zugehörigen Passphrase. Dadurch können Sie Ihre Brieftasche wiederherstellen, wenn Ihr Telefon verloren, gestohlen oder beschädigt ist.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manuelle Sicherung</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Lokale Sicherung</string>
     <string name="BackupRecoveryPhrase_Later">Später</string>
@@ -1193,7 +1191,7 @@
     <string name="LocalBackup_Term1">Ich verstehe, dass Diebstahl oder Beschädigung eines Sicherungsgeräts zum Verlust eines Sicherungskopfes an eine entsprechende Brieftasche führen wird.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Wiederherstellungsphrase</string>
-    <string name="RecoveryPhrase_Description">Schreibe diese Wörter in die richtige Reihenfolge und halte sie an einem sicheren Ort</string>
+    <string name="RecoveryPhrase_Description">Schreiben Sie diese Wörter in der Reihenfolge und bewahren Sie sie sicher.</string>
     <string name="RecoveryPhrase_ShowPhrase">Tippen, um Wiederherstellungsphrase anzuzeigen</string>
     <string name="RecoveryPhrase_Verify">Überprüfen</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Kopierrisiko</string>
@@ -1605,7 +1603,7 @@
     <string name="Contacts_DiscardChanges">Änderungen verwerfen</string>
     <string name="Contacts_KeepEditing">Weiter bearbeiten</string>
     <string name="Contacts_DiscardChanges_Warning">Sind Sie sicher, dass Sie diese neuen Änderungen verwerfen möchten?</string>
-    <string name="Contacts_NoContacts">Sie haben keinen neuen Kontakt</string>
+    <string name="Contacts_NoContacts">Noch keine Kontakte hinzugefügt</string>
     <string name="Contacts_ActionMore">Mehr</string>
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
     <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>
