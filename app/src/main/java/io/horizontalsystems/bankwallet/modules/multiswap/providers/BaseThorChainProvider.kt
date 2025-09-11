@@ -349,7 +349,7 @@ abstract class BaseThorChainProvider(
                     memo = memo,
                     amount = amountIn,
                     recommendedGasRate = recommendedGasRate,
-                    dustThreshold = dustThreshold,
+                    minimumSendAmount = dustThreshold?.plus(1),
                     changeToFirstInput = true,
                     utxoFilters = UtxoFilters(
                         scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),

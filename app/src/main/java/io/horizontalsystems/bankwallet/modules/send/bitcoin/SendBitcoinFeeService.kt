@@ -24,7 +24,6 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
     private var pluginData: Map<Byte, IPluginData>? = null
 
     private var feeRate: Int? = null
-    private var dustThreshold: Int? = null
     private var changeToFirstInput = false
     private var utxoFilters = UtxoFilters()
 
@@ -42,7 +41,7 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
                 memo,
                 customUnspentOutputs,
                 pluginData,
-                dustThreshold,
+                null,
                 changeToFirstInput,
                 utxoFilters
             )
@@ -90,13 +89,6 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
 
     fun setMemo(memo: String?) {
         this.memo = memo
-
-        refreshFeeInfo()
-        emitState()
-    }
-
-    fun setDustThreshold(dustThreshold: Int?) {
-        this.dustThreshold = dustThreshold
 
         refreshFeeInfo()
         emitState()

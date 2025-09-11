@@ -22,13 +22,13 @@ class SendBitcoinAmountService(
     private var amountCaution: HSCaution? = null
 
     private var minimumSendAmount: BigDecimal? = null
+    private var userMinimumSendAmount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var validAddress: Address? = null
     private var memo: String? = null
     private var feeRate: Int? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
-    private var dustThreshold: Int? = null
     private var changeToFirstInput = false
     private var utxoFilters = UtxoFilters()
 
@@ -68,7 +68,7 @@ class SendBitcoinAmountService(
                 memo,
                 customUnspentOutputs,
                 pluginData,
-                dustThreshold,
+                null,
                 changeToFirstInput,
                 utxoFilters
             )
@@ -76,16 +76,17 @@ class SendBitcoinAmountService(
     }
 
     private fun refreshMinimumSendAmount() {
-        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex, dustThreshold)
+        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex, null)
     }
 
     private fun validateAmount() {
         availableBalance?.let {
+            val mins = listOfNotNull(minimumSendAmount, userMinimumSendAmount)
             amountCaution = amountValidator.validate(
                 amount,
                 coinCode,
                 it,
-                minimumSendAmount,
+                mins.maxOrNull(),
             )
         }
     }
@@ -126,11 +127,11 @@ class SendBitcoinAmountService(
         emitState()
     }
 
-    fun setDustThreshold(dustThreshold: Int?) {
-        this.dustThreshold = dustThreshold
+    fun setUserMinimumSendAmount(userMinimumSendAmount: Int?) {
+        this.userMinimumSendAmount = userMinimumSendAmount?.let {
+            adapter.satoshiToBTC(it.toLong())
+        }
 
-        refreshAvailableBalance()
-        refreshMinimumSendAmount()
         validateAmount()
 
         emitState()
