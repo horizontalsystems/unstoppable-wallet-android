@@ -1078,6 +1078,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Нет интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
+    <string name="Hud_Text_AddressCopied">Адрес скопирован</string>
     <string name="Hud_Text_Created">Создан</string>
     <string name="Hud_Text_Restored">Импортировано</string>
     <string name="Hud_Text_AddressAdded">Адрес добавлен</string>
