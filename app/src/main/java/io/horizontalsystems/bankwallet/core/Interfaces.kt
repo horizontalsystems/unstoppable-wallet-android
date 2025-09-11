@@ -374,6 +374,8 @@ interface ISendBitcoinAdapter {
         changeToFirstInput: Boolean,
         utxoFilters: UtxoFilters
     ): BitcoinTransactionRecord?
+
+    fun satoshiToBTC(value: Long): BigDecimal
 }
 
 interface ISendEthereumAdapter {

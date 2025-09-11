@@ -14,7 +14,6 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ecash.ECashKit
 import io.horizontalsystems.marketkit.models.BlockchainType
-import java.math.BigDecimal
 
 class ECashAdapter(
         override val kit: ECashKit,
@@ -32,12 +31,6 @@ class ECashAdapter(
     init {
         kit.listener = this
     }
-
-    //
-    // BitcoinBaseAdapter
-    //
-
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // ECashKit Listener
