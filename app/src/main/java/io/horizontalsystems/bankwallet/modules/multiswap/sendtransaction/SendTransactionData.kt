@@ -20,7 +20,7 @@ sealed class SendTransactionData {
         val memo: String,
         val amount: BigDecimal,
         val recommendedGasRate: Int,
-        val dustThreshold: Int?,
+        val minimumSendAmount: Int?,
         val changeToFirstInput: Boolean,
         val utxoFilters: UtxoFilters,
         val feesMap: Map<FeeType, CoinValue>

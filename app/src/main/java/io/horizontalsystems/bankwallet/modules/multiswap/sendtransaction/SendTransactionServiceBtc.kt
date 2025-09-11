@@ -65,7 +65,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     private var addressState = addressService.stateFlow.value
 
     private var memo: String? = null
-    private var dustThreshold: Int? = null
     private var changeToFirstInput: Boolean = false
     private var utxoFilters: UtxoFilters = UtxoFilters()
     private var networkFee: SendModule.AmountData? = null
@@ -155,19 +154,17 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         check(data is SendTransactionData.Btc)
 
         memo = data.memo
-        dustThreshold = data.dustThreshold
         changeToFirstInput = data.changeToFirstInput
         utxoFilters = data.utxoFilters
 
         feeRateService.setRecommendedAndMin(data.recommendedGasRate, data.recommendedGasRate)
 
         feeService.setMemo(memo)
-        feeService.setDustThreshold(dustThreshold)
         feeService.setChangeToFirstInput(changeToFirstInput)
         feeService.setUtxoFilters(utxoFilters)
 
         amountService.setMemo(memo)
-        amountService.setDustThreshold(dustThreshold)
+        amountService.setUserMinimumSendAmount(data.minimumSendAmount)
         amountService.setChangeToFirstInput(changeToFirstInput)
         amountService.setUtxoFilters(utxoFilters)
         amountService.setAmount(data.amount)
@@ -196,7 +193,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
             pluginData = null,
             transactionSorting = null,
             rbfEnabled = false,
-            dustThreshold = dustThreshold,
+            dustThreshold = null,
             changeToFirstInput = changeToFirstInput,
             utxoFilters = utxoFilters
         )
