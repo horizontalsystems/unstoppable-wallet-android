@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
@@ -44,6 +45,7 @@ class TokenBalanceViewModel(
     private var error: TokenBalanceModule.TokenBalanceError? = null
     private var failedIconVisible = false
     private var failedErrorMessage: String? = null
+    private var waringMessage: String? = null
     private var loadingTransactions = true
 
     init {
@@ -76,6 +78,10 @@ class TokenBalanceViewModel(
             delay(300)
             transactionsService.start()
         }
+
+        if (wallet.account.type is AccountType.MoneroWatchAccount) {
+            waringMessage = Translator.getString(R.string.Watch_Monero_Warning)
+        }
     }
 
     override fun createState() = TokenBalanceUiState(
@@ -86,6 +92,7 @@ class TokenBalanceViewModel(
         failedIconVisible = failedIconVisible,
         failedErrorMessage = failedErrorMessage,
         error = error,
+        warningMessage = waringMessage,
     )
 
     private fun setReceiveAddressForWatchAccount() {

@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
+import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -192,6 +193,15 @@ fun TokenBalanceScreen(
                                 onClick = onClickReceive
                             )
                         }
+                    }
+
+                    uiState.warningMessage?.let { warning ->
+                        TextAttention(
+                            modifier = Modifier
+                                .background(ComposeAppTheme.colors.tyler)
+                                .padding(16.dp),
+                            text = warning
+                        )
                     }
                 }
             }
