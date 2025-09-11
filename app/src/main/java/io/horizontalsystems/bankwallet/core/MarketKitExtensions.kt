@@ -271,7 +271,7 @@ val BlockchainType.title: String
     BlockchainType.BinanceSmartChain -> "BNB Smart Chain"
     BlockchainType.Polygon -> "Polygon"
     BlockchainType.Avalanche -> "Avalanche"
-    BlockchainType.ArbitrumOne -> "ArbitrumOne"
+    BlockchainType.ArbitrumOne -> "Arbitrum"
     BlockchainType.Optimism -> "Optimism"
     BlockchainType.Base -> "Base"
     BlockchainType.ZkSync -> "ZKsync"
@@ -543,7 +543,7 @@ val Token.badge: String?
             tokenType.type.bitcoinCashCoinType.value.uppercase()
         }
         else -> {
-            protocolType?.uppercase()
+            protocolType?.replaceFirstChar(Char::uppercase)
         }
     }
 
