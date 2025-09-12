@@ -14,7 +14,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.Url
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -54,6 +59,13 @@ class NetworkManager : INetworkManager {
     override suspend fun registerApp(userId: String, referralCode: String)
             : MiniAppRegisterService.RegisterAppResponse {
         return MiniAppRegisterService.service().registerApp(userId, referralCode)
+    }
+
+    override suspend fun getWCWhiteList(
+        host: String,
+        path: String
+    ): List<ServiceWCWhitelist.WCWhiteList> {
+        return ServiceWCWhitelist.service(host).getWhiteList(path)
     }
 }
 
@@ -144,6 +156,24 @@ object MiniAppRegisterService {
     data class RegisterAppResponse(
         val success: Boolean,
         val message: String
+    )
+}
+
+object ServiceWCWhitelist {
+    fun service(apiURL: String): WCWhiteListAPI {
+        return APIClient.retrofit(apiURL, 60)
+            .create(WCWhiteListAPI::class.java)
+    }
+
+    interface WCWhiteListAPI {
+        @GET
+        @Headers("Content-Type: application/json")
+        suspend fun getWhiteList(@Url path: String): List<WCWhiteList>
+    }
+
+    data class WCWhiteList(
+        val name: String,
+        val url: String
     )
 }
 

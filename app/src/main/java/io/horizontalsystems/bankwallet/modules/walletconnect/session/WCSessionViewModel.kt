@@ -1,11 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.ServiceWCWhitelist
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
@@ -20,7 +25,11 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -30,8 +39,12 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
-    private val wcManager: WCManager
+    private val wcManager: WCManager,
+    private val networkManager: INetworkManager,
+    appConfigProvider: AppConfigProvider
 ) : ViewModelUiState<WCSessionUiState>() {
+
+    val marketApiBaseUrl = appConfigProvider.marketApiBaseUrl
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<String?>()
@@ -45,16 +58,25 @@ class WCSessionViewModel(
     private var showError: String? = null
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
+    private var blockchainTypes: List<BlockchainType>? = null
+    private var connected: Boolean = topic != null
+    private var whiteListState = WCWhiteListState.InProgress
+    private var whiteListCache: List<ServiceWCWhitelist.WCWhiteList>? = null
+    private var hasSubscription = false
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
         closeEnabled = closeEnabled,
         connecting = connecting,
+        connected = connected,
         buttonStates = buttonStates,
         hint = hint,
         showError = showError,
         status = status,
         pendingRequests = pendingRequests,
+        blockchainTypes = blockchainTypes,
+        whiteListState = whiteListState,
+        hasSubscription = hasSubscription,
     )
 
     private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
@@ -148,6 +170,18 @@ class WCSessionViewModel(
             }
         }
 
+        viewModelScope.launch(Dispatchers.IO) {
+            whiteListCache = getWCWhiteList()
+            checkWhiteListStatus()
+        }
+
+        viewModelScope.launch {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                hasSubscription = it != null
+                emitState()
+            }
+        }
+
         loadSessionProposal(topic)
     }
 
@@ -155,6 +189,12 @@ class WCSessionViewModel(
         if (topic != null) {
             val existingSession = sessionManager.sessions.firstOrNull { it.topic == topic }
             if (existingSession != null) {
+                blockchainTypes = existingSession.namespaces.values.flatMap { namespace ->
+                    namespace.chains?.mapNotNull { chain ->
+                        determineBlockchainType(chain)
+                    } ?: emptyList()
+                }
+
                 peerMeta = existingSession.metaData?.let {
                     PeerMetaItem(
                         it.name,
@@ -168,6 +208,10 @@ class WCSessionViewModel(
                 session = existingSession
                 pendingRequests = getPendingRequestViewItems(topic)
                 sessionServiceState = Ready
+
+                if (whiteListCache != null) {
+                    checkWhiteListStatus()
+                }
             }
         } else {
             WCDelegate.sessionProposalEvent?.let { (sessionProposal, _) ->
@@ -178,6 +222,13 @@ class WCSessionViewModel(
                     sessionProposal.icons.lastOrNull()?.toString(),
                     account?.name,
                 )
+
+                blockchainTypes = sessionProposal.optionalNamespaces.flatMap {
+                    it.value.chains?.mapNotNull { chain ->
+                        determineBlockchainType(chain)
+                    } ?: emptyList()
+                }
+
                 proposal = sessionProposal
 
                 sessionServiceState = try {
@@ -186,6 +237,10 @@ class WCSessionViewModel(
                     WaitingForApproveSession
                 } catch (e: Throwable) {
                     Invalid(e)
+                }
+
+                if (whiteListCache != null) {
+                    checkWhiteListStatus()
                 }
             } ?: run {
                 sessionServiceState = Invalid(RequestNotFoundError)
@@ -203,6 +258,68 @@ class WCSessionViewModel(
                 request = request
             )
         }
+    }
+
+    private suspend fun getWCWhiteList(): List<ServiceWCWhitelist.WCWhiteList> {
+        val url = URL(marketApiBaseUrl)
+        val path = "/v1/defi-protocols/dapps"
+        return try {
+            networkManager.getWCWhiteList("${url.protocol}://${url.host}", path)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun checkWhiteListStatus() {
+        val urlToCheck = getCurrentUrl()
+        val whiteList = whiteListCache
+        whiteListState = when {
+            urlToCheck.isNullOrEmpty() || whiteList.isNullOrEmpty() -> WCWhiteListState.Error
+            isUrlInWhiteList(urlToCheck, whiteList) -> WCWhiteListState.InWhiteList
+            else -> WCWhiteListState.NotInWhiteList
+        }
+        emitState()
+    }
+
+    private fun getCurrentUrl(): String? {
+        return when {
+            // For new proposals
+            proposal != null -> proposal?.url
+            // For existing sessions
+            session != null -> session?.metaData?.url
+            // Fallback to peerMeta
+            peerMeta != null -> peerMeta?.url
+            else -> null
+        }
+    }
+
+    private fun isUrlInWhiteList(
+        url: String,
+        whiteList: List<ServiceWCWhitelist.WCWhiteList>
+    ): Boolean {
+        val normalizedUrl = normalizeUrl(url)
+
+        return whiteList.any { whiteListItem ->
+            val normalizedWhiteListUrl = normalizeUrl(whiteListItem.url)
+
+            // Exact match
+            normalizedUrl == normalizedWhiteListUrl ||
+                    // Domain match (handles subdomains)
+                    normalizedUrl.endsWith(".$normalizedWhiteListUrl") ||
+                    normalizedUrl.endsWith(normalizedWhiteListUrl) ||
+                    // Reverse check for subdomain cases
+                    normalizedWhiteListUrl.endsWith(".$normalizedUrl") ||
+                    normalizedWhiteListUrl.endsWith(normalizedUrl)
+        }
+    }
+
+    private fun normalizeUrl(url: String): String {
+        return url.lowercase()
+            .removePrefix("https://")
+            .removePrefix("http://")
+            .removePrefix("www.")
+            .removeSuffix("/")
+            .trim()
     }
 
     private fun sync(
@@ -256,6 +373,7 @@ class WCSessionViewModel(
         viewModelScope.launch {
             try {
                 approve(proposal.proposerPublicKey)
+                connected = true
             } catch (t: Throwable) {
                 WCDelegate.sessionProposalEvent = null
                 showErrorLiveEvent.postValue(t.message)
@@ -302,7 +420,8 @@ class WCSessionViewModel(
                     namespaces = sessionNamespaces
                 )
 
-                Web3Wallet.approveSession(approveProposal,
+                Web3Wallet.approveSession(
+                    approveProposal,
                     onError = { error ->
                         continuation.resumeWithException(error.throwable)
                         WCDelegate.sessionProposalEvent = null
@@ -327,7 +446,8 @@ class WCSessionViewModel(
                     reason = rejectionReason
                 )
 
-                Web3Wallet.rejectSession(reject,
+                Web3Wallet.rejectSession(
+                    reject,
                     onSuccess = {
                         continuation.resume(Unit)
                         WCDelegate.sessionProposalEvent = null
@@ -389,6 +509,31 @@ class WCSessionViewModel(
         }
     }
 
+    private fun determineBlockchainType(chain: String): BlockchainType? {
+        val chainParts = chain.split(":")
+        val first = chainParts[0]
+
+        return when (first) {
+            "eip155" -> {
+                val chainId = chainParts[1].toIntOrNull()
+                chainId?.let {
+                    App.evmBlockchainManager.getBlockchain(it)
+                }?.type
+            }
+
+            "stellar" -> {
+                val s = chainParts[1]
+                if (s == "pubnet") {
+                    BlockchainType.Stellar
+                } else {
+                    null
+                }
+            }
+
+            else -> null
+        }
+    }
+
     private fun getRemoveButtonState(
         state: WCSessionServiceState,
         connectionState: Boolean?
@@ -404,7 +549,9 @@ class WCSessionViewModel(
         state: WCSessionServiceState
     ) {
         val error: String? = when {
-            state is Invalid && (state.error !is ValidationError) -> state.error.message ?: state.error::class.java.simpleName
+            state is Invalid && (state.error !is ValidationError) -> state.error.message
+                ?: state.error::class.java.simpleName
+
             else -> null
         }
 
@@ -420,7 +567,6 @@ class WCSessionViewModel(
 
             connection == null -> return null
             state is Invalid -> return getErrorMessage(state.error)
-            state == WaitingForApproveSession -> Translator.getString(R.string.WalletConnect_Approve_Hint)
         }
         return null
     }
@@ -433,18 +579,23 @@ class WCSessionViewModel(
             is RequestNotFoundError -> Translator.getString(R.string.WalletConnect_Error_RequestNotFoundError)
             is ValidationError.UnsupportedChainNamespace -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedChains,
-                error.chainNamespace)
+                error.chainNamespace
+            )
+
             is ValidationError.UnsupportedChains -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedChains,
-                error.chains.joinToString())
+                error.chains.joinToString()
+            )
 
             is ValidationError.UnsupportedMethods -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedMethods,
-                error.methods.joinToString())
+                error.methods.joinToString()
+            )
 
             is ValidationError.UnsupportedEvents -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedEvents,
-                error.events.joinToString())
+                error.events.joinToString()
+            )
 
             else -> null
         }
