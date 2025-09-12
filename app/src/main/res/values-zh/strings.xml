@@ -123,6 +123,7 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="SelectContacts_All">所有</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
+    <string name="Restore_BirthdayHeight_Invalid">生日高度无效</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
@@ -1130,12 +1131,14 @@
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
     <string name="WatchWallet">观看钱包</string>
-    <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="Watch_Address_Hint">粘贴您的地址 (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) 或 XPUB</string>
     <string name="Watch_Address_Watch">观察</string>
+    <string name="Watch_ViewKey">私人视图密钥</string>
+    <string name="Watch_BirthdayHeight">还原高度</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
-    <string name="Watch_InfoText">支持来自EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) 和 XPUB 密钥的地址。</string>
     <string name="Watch_Error_InvalidAddressFormat">不支持的地址格式</string>
+    <string name="Watch_Monero_Warning">Monero 监视钱包只显示收到的交易。显示的余额可能不正确。</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
