@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 
 @Composable
 fun BoxScope.FloatingSearchBarRow(
@@ -63,23 +63,14 @@ fun BoxScope.FloatingSearchBarRow(
         // Show clear button when there's text OR when search is active but empty
         if (searchQuery.isNotEmpty() || isSearchActive) {
             HSpacer(14.dp)
-            IconButton(
-                onClick = {
-                    onSearchQueryChange("")
-                    onActiveChange(false)
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                },
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(ComposeAppTheme.colors.jacob)
-                    .size(32.dp)
+            HSIconButton(
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.close_24)
             ) {
-                Icon(
-                    painterResource(R.drawable.close_24),
-                    contentDescription = "Clear",
-                    tint = Color.White,
-                )
+                onSearchQueryChange("")
+                onActiveChange(false)
+                keyboardController?.hide()
+                focusManager.clearFocus()
             }
         }
     }
