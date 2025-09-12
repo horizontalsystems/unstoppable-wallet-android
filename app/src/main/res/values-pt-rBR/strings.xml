@@ -550,7 +550,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">Pedido não encontrado erro</string>
     <string name="WalletConnect_NoConnection">Você não tem nenhum Dapps conectado</string>
     <string name="WalletConnect_PendingRequests">Solicitações Pendentes</string>
-    <string name="WalletConnect_ActiveWallet">Carteira ativa</string>
+    <string name="WalletConnect_ActiveWallet">Carteira</string>
     <string name="WalletConnect_NotSupportedDescription">Seu tipo de carteira atual %s não suporta WalletConnect</string>
     <string name="WalletConnect_Unnamed">Sem nome</string>
     <string name="WalletConnect_Pairings">Pareamento</string>
@@ -559,6 +559,12 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Você deseja excluir todos os dApps pareados?</string>
     <string name="WalletConnect_Pairings_Delete">Deletar</string>
     <string name="WalletConnect_DeleteAllPairs">Deletar todos pareados</string>
+    <string name="WalletConnect_Networks">Redes</string>
+    <string name="WalletConnect_ConnectTo">Conectar a %s</string>
+    <string name="WalletConnect_ConnectedTo">Conectado a %s</string>
+    <string name="WalletConnect_WhiteListDeactivatedWarning">A Proteção de Scam está desativada. Verificação de domínio não está disponível. Atualize para a versão Premium para proteger contra sites não verificados ou phishing.</string>
+    <string name="WalletConnect_NotInWhiteListAlert">Este site não é verificado e pode levar a phishing ou perda de fundos. Conectar é fortemente desencorajado.</string>
+    <string name="WalletConnect_ConnectWarning">Ao clicar em conectar, você permite que este aplicativo veja seu endereço público.</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erro</string>
