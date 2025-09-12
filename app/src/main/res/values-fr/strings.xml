@@ -550,7 +550,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">Erreur de requête non trouvée</string>
     <string name="WalletConnect_NoConnection">Vous n\'avez aucune dapp connectée</string>
     <string name="WalletConnect_PendingRequests">Demandes en attente</string>
-    <string name="WalletConnect_ActiveWallet">Activer le portefeuille</string>
+    <string name="WalletConnect_ActiveWallet">Portefeuille</string>
     <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
     <string name="WalletConnect_Unnamed">Inconnu</string>
     <string name="WalletConnect_Pairings">Paires de Devises</string>
@@ -559,6 +559,12 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
     <string name="WalletConnect_Pairings_Delete">Supprimer</string>
     <string name="WalletConnect_DeleteAllPairs">Supprimer toutes les paires</string>
+    <string name="WalletConnect_Networks">Réseaux</string>
+    <string name="WalletConnect_ConnectTo">Se connecter à %s</string>
+    <string name="WalletConnect_ConnectedTo">Connecté à %s</string>
+    <string name="WalletConnect_WhiteListDeactivatedWarning">La protection contre les escroqueries est désactivée. La vérification de domaine n\'est pas disponible. Passez à la version Premium pour vous protéger contre les sites Web non vérifiés ou hameçonnage.</string>
+    <string name="WalletConnect_NotInWhiteListAlert">Ce site Web n\'est pas vérifié et peut conduire à l\'hameçonnage ou à la perte de fonds. La connexion est fortement déconseillée.</string>
+    <string name="WalletConnect_ConnectWarning">En cliquant sur connecter, vous autorisez cette application à afficher votre adresse publique.</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Attention</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
