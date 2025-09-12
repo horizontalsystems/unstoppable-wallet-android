@@ -125,6 +125,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="SelectContacts_All">Все</string>
     <string name="Restore_BirthdayHeight">Блок создания</string>
+    <string name="Restore_BirthdayHeight_Invalid">Недопустимая высота дня рождения</string>
     <string name="Restore_ZCash">Зкаш</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
@@ -1132,12 +1133,14 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
     <string name="WatchWallet">Смотреть кошелек</string>
-    <string name="Watch_Address_Hint">Адрес или домен</string>
+    <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
     <string name="Watch_Address_Watch">Смотреть</string>
+    <string name="Watch_ViewKey">Приватный ключ</string>
+    <string name="Watch_BirthdayHeight">Восстановить высоту</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
-    <string name="Watch_InfoText">Поддерживает адреса из ключей EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) и XPUB.</string>
     <string name="Watch_Error_InvalidAddressFormat">Формат адреса не поддерживается</string>
+    <string name="Watch_Monero_Warning">Monero watch кошелек показывает только входящие транзакции. Отображаемый баланс может быть некорректным.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
     <string name="ManageAccount_Save">Сохранить</string>
