@@ -552,7 +552,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">Запрос не найден</string>
     <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
     <string name="WalletConnect_PendingRequests">Ожидающие запросы</string>
-    <string name="WalletConnect_ActiveWallet">Активный кошелек</string>
+    <string name="WalletConnect_ActiveWallet">Кошелек</string>
     <string name="WalletConnect_NotSupportedDescription">Ваш текущий тип кошелька %s не поддерживает WalletConnect</string>
     <string name="WalletConnect_Unnamed">Без имени</string>
     <string name="WalletConnect_Pairings">Соединения</string>
@@ -561,6 +561,12 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Вы хотите удалить все соединенные dApss?</string>
     <string name="WalletConnect_Pairings_Delete">Удалить</string>
     <string name="WalletConnect_DeleteAllPairs">Удалить все пары</string>
+    <string name="WalletConnect_Networks">Сети</string>
+    <string name="WalletConnect_ConnectTo">Подключиться к %s</string>
+    <string name="WalletConnect_ConnectedTo">Подключено к %s</string>
+    <string name="WalletConnect_WhiteListDeactivatedWarning">Защита от мошенничества отключена. Проверка домена недоступна. Обновите до Премиум, чтобы защитить от непроверенных или фишинговых сайтов.</string>
+    <string name="WalletConnect_NotInWhiteListAlert">Этот веб-сайт не верифицирован и может привести к фишингу или потере средств. Подключение крайне не приветствуется.</string>
+    <string name="WalletConnect_ConnectWarning">Нажав на кнопку \"Подключиться\", вы разрешите этому приложению просматривать свой публичный адрес.</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
