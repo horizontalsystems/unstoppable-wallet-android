@@ -425,7 +425,7 @@ fun FormsInputMultiline(
                 .background(ComposeAppTheme.colors.lawrence),
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(initial ?: ""))
+                mutableStateOf(TextFieldValue(initial ?: "", selection = TextRange((initial ?: "").length)))
             }
 
             Spacer(modifier = Modifier.height(12.dp))

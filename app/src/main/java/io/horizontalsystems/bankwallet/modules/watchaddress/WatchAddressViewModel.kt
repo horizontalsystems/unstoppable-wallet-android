@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.BitcoinAddress
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.MoneroWatchAddress
 import io.horizontalsystems.bankwallet.entities.tokenType
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -75,7 +76,9 @@ class WatchAddressViewModel(
 
         if (v.isBlank()) {
             inputState = null
-            accountName = defaultAccountName
+            if (!accountNameEdited) {
+                accountName = defaultAccountName
+            }
             syncSubmitButtonType()
             emitState()
         } else {
@@ -98,7 +101,15 @@ class WatchAddressViewModel(
                         val parsedAddress = handler.parseAddress(vTrimmed)
                         ensureActive()
                         withContext(Dispatchers.Main) {
-                            setAddress(parsedAddress)
+                            if (parsedAddress is MoneroWatchAddress) {
+                                setAddress(parsedAddress)
+                                onEnterViewKey(parsedAddress.viewKey)
+                                parsedAddress.height?.let {
+                                    onEnterBirthdayHeight(parsedAddress.height.toString())
+                                }
+                            } else {
+                                setAddress(parsedAddress)
+                            }
                         }
                     } catch (t: Throwable) {
                         ensureActive()
@@ -174,7 +185,7 @@ class WatchAddressViewModel(
         }
 
         type = addressType(address)
-        inputState = DataState.Success(address.hex)
+        inputState = DataState.Success(address.domain ?: address.hex)
 
         syncSubmitButtonType()
         emitState()
@@ -286,12 +297,15 @@ class WatchAddressViewModel(
                 throw IllegalStateException("Unsupported address type")
             }
         }
+
         Type.TonAddress -> address?.let {
             AccountType.TonAddress(it.hex)
         }
+
         Type.StellarAddress -> address?.let {
             AccountType.StellarAddress(it.hex)
         }
+
         Type.MoneroAddress -> address?.let {
             AccountType.MoneroWatchAccount(it.hex, viewKey!!, birthdayHeight ?: 1)
         }
