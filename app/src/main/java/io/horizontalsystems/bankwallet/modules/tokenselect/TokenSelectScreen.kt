@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -78,6 +79,7 @@ fun TokenSelectScreen(
                     bottom = 0.dp // Explicitly ignore bottom padding from Scaffold's paddingValues
                 )
                 .windowInsetsPadding(WindowInsets.ime)
+                .systemBarsPadding()
         ) {
             val tabItems: List<TabItem<SelectChainTab>> = uiState.tabs.map { chainTab ->
                 TabItem(
@@ -142,7 +144,6 @@ fun TokenSelectScreen(
                 }
 
                 FloatingSearchBarRow(
-                    modifier = Modifier.padding(bottom = 16.dp),
                     searchQuery = searchQuery,
                     isSearchActive = isSearchActive,
                     focusRequester = focusRequester,
