@@ -121,7 +121,7 @@ class ManageAccountViewModel(
                     listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)
                 }
             }
-            is AccountType.MoneroWatchAccount -> listOf() //TODO
+            is AccountType.MoneroWatchAccount -> listOf()
         }
     }
 
