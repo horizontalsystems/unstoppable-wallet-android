@@ -923,7 +923,6 @@
     <string name="ImportBackupFile_EnterPassword_Description">Cüzdanınızı içe aktarmak için yedek parolayı girin.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Geçersiz şifre</string>
     <string name="ImportBackupFile_BackupPassword">Yedek Şifre</string>
-    <string name="Watch_Address_Hint">Adres veya Domain</string>
     <string name="Watch_Address_Watch">İzle</string>
     <string name="Watch_Select_Blockchains">Blok Zincirleri Seç</string>
     <string name="Watch_Select_Coins">Kripto Parayı Seç</string>
