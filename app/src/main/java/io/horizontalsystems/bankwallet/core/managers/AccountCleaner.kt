@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
+import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
@@ -27,6 +28,7 @@ class AccountCleaner : IAccountCleaner {
         ZcashAdapter.clear(accountId)
         SolanaAdapter.clear(accountId)
         TronAdapter.clear(accountId)
+        MoneroAdapter.clear(accountId)
     }
 
 }

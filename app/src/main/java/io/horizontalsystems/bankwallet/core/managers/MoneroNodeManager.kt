@@ -26,6 +26,7 @@ class MoneroNodeManager(
     val nodesUpdatedFlow = _nodesUpdatedFlow.asSharedFlow()
 
     val defaultNodesInitial = listOf(
+        MoneroNode("opennode.xmr-tw.org:18089", "xmr-tw.org", "opennode.xmr-tw.org:18089/mainnet/xmr-tw.org"),
         MoneroNode("xmr-de.boldsuck.org:18081", "boldsuck.org", "xmr-de.boldsuck.org:18081/mainnet/boldsuck.org"),
         MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
         MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),

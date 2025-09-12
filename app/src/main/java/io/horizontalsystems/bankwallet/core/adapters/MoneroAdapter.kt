@@ -190,6 +190,10 @@ class MoneroAdapter(
                 App.backgroundManager
             )
         }
+
+        fun clear(walletId: String) {
+            MoneroKit.deleteWallet(App.instance, walletId)
+        }
     }
 }
 
