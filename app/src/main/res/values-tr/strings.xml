@@ -448,7 +448,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">İstek bulunamadı hatası</string>
     <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
     <string name="WalletConnect_PendingRequests">bekleyen istekler</string>
-    <string name="WalletConnect_ActiveWallet">Aktif Cüzdan</string>
+    <string name="WalletConnect_ActiveWallet">Cüzdanı</string>
     <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <string name="WalletConnect_Unnamed">İsimsiz</string>
     <string name="WalletConnect_Pairings">Eşleştirme</string>
