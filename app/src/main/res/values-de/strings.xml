@@ -123,6 +123,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="SelectContacts_All">Alle</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
+    <string name="Restore_BirthdayHeight_Invalid">Ungültige Geburtstagshöhe</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe der Brieftasche für eine schnellere Synchronisierung ein.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
@@ -1139,12 +1140,14 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
     <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
     <string name="WatchWallet">Wallet ansehen</string>
-    <string name="Watch_Address_Hint">Öffentliche Adresse oder XPUB einfügen</string>
+    <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) oder XPUB</string>
     <string name="Watch_Address_Watch">Beobachten</string>
+    <string name="Watch_ViewKey">Privater Ansichtsschlüssel</string>
+    <string name="Watch_BirthdayHeight">Höhe wiederherstellen</string>
     <string name="Watch_Select_Blockchains">Blockchain auswählen</string>
     <string name="Watch_Select_Coins">Münzen auswählen</string>
-    <string name="Watch_InfoText">Unterstützt Adressen von EVM, Tron, TON, Stellar, Bitcoin-Familie (BTC, LTC, BCH, Dash) und XPUB-Schlüsseln.</string>
     <string name="Watch_Error_InvalidAddressFormat">Adressformat wird nicht unterstützt</string>
+    <string name="Watch_Monero_Warning">Monero Watchwallet zeigt nur eingehende Transaktionen an. Das angezeigte Guthaben ist möglicherweise falsch.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
