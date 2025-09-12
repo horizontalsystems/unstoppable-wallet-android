@@ -269,6 +269,45 @@
             </intent-filter>
         </activity-alias>
 
+        <activity-alias
+            android:name="${applicationId}.MoneroLauncherAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/launcher_monero"
+            android:label="@string/App_Name"
+            android:targetActivity=".modules.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="${applicationId}.ZCashLauncherAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/launcher_zcash"
+            android:label="@string/App_Name"
+            android:targetActivity=".modules.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="${applicationId}.SinwarLauncherAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/launcher_sinwar"
+            android:label="@string/App_Name"
+            android:targetActivity=".modules.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <!--Deprecated -->
         <activity-alias
             android:name="${applicationId}.LeoLauncherAlias"
