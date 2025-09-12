@@ -383,11 +383,10 @@ private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (Ap
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         val rows = appIconOptions.options.chunked(3)
-        AppIconsRow(rows[0], appIconOptions.selected, onAppIconSelect)
-        AppIconsRow(rows[1], appIconOptions.selected, onAppIconSelect)
-        AppIconsRow(rows[2], appIconOptions.selected, onAppIconSelect)
-        AppIconsRow(rows[3], appIconOptions.selected, onAppIconSelect)
-        AppIconsRow(rows[4], appIconOptions.selected, onAppIconSelect)
+        rows.forEach { row ->
+            AppIconsRow(row, appIconOptions.selected, onAppIconSelect)
+        }
+
     }
 }
 

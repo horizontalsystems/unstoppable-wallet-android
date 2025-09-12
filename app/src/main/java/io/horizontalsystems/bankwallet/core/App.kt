@@ -130,11 +130,11 @@ import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.security.MessageDigest
 import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
-import timber.log.Timber
 
 class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
@@ -214,6 +214,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
         lateinit var roiManager: RoiManager
+        lateinit var appIconService: AppIconService
         var trialExpired: Boolean = false
     }
 
@@ -447,6 +448,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         contactsRepository = ContactsRepository(marketKit)
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
+        appIconService = AppIconService(localStorage)
+
         backupProvider = BackupProvider(
             localStorage = localStorage,
             languageManager = languageManager,
@@ -460,7 +463,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmBlockchainManager = evmBlockchainManager,
             marketFavoritesManager = marketFavoritesManager,
             balanceViewTypeManager = balanceViewTypeManager,
-            appIconService = AppIconService(localStorage),
+            appIconService = appIconService,
             themeService = ThemeService(localStorage),
             chartIndicatorManager = chartIndicatorManager,
             chartIndicatorSettingsDao = appDatabase.chartIndicatorSettingsDao(),
@@ -617,6 +620,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmLabelManager.sync()
             contactsRepository.initialize()
             trialExpired = !UserSubscriptionManager.hasFreeTrial()
+            appIconService.validateAndFixCurrentIcon()
         }
 
         coroutineScope.launch {

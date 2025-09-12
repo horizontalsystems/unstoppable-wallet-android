@@ -31,13 +31,10 @@ object AppearanceModule {
 
 }
 
-enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle {
+enum class AppIcon(val icon: Int, val titleText: String, val isDeprecated: Boolean = false) : WithTranslatableTitle {
     Main(R.drawable.launcher_main_preview, "Main"),
     Dark(R.drawable.launcher_dark_preview, "Dark"),
     Mono(R.drawable.launcher_mono_preview, "Mono"),
-    Leo(R.drawable.launcher_leo_preview, "Leo"),
-    Mustang(R.drawable.launcher_mustang_preview, "Mustang"),
-    Yak(R.drawable.launcher_yak_preview, "Yak"),
     Punk(R.drawable.launcher_punk_preview, "Punk"),
     Ape(R.drawable.launcher_ape_preview, "#1874"),
     Ball8(R.drawable.launcher_8ball_preview, "8ball"),
@@ -45,7 +42,12 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     Doge(R.drawable.launcher_doge_preview, "Doge"),
     Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad"),
     Plflag(R.drawable.launcher_plflag_preview, "Plflag"),
-    Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad");
+    Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad"),
+    //deprecated icons with manifest aliases should stay in app for 2 releases before removal
+    //remove deprecated below in 0.47
+    Leo(R.drawable.launcher_leo_preview, "Leo", true),
+    Mustang(R.drawable.launcher_mustang_preview, "Mustang", true),
+    Yak(R.drawable.launcher_yak_preview, "Yak", true);
 
     override val title: TranslatableString
         get() = TranslatableString.PlainString(titleText)
@@ -58,6 +60,7 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
         private val map = values().associateBy(AppIcon::name)
         private val titleMap = values().associateBy(AppIcon::titleText)
 
+        fun getActiveIcons(): List<AppIcon> = entries.filter { !it.isDeprecated }
         fun fromString(type: String?): AppIcon? = map[type]
         fun fromTitle(title: String?): AppIcon? = titleMap[title]
     }
