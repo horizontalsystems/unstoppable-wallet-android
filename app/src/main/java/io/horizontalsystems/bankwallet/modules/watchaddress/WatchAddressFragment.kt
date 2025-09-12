@@ -140,6 +140,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
             Spacer(Modifier.height(32.dp))
             FormsInputMultiline(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                initial = uiState.inputState?.dataOrNull,
                 hint = stringResource(id = R.string.Watch_Address_Hint),
                 qrScannerEnabled = true,
                 state = uiState.inputState,
@@ -160,6 +161,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
             if (uiState.addressType == WatchAddressViewModel.Type.MoneroAddress) {
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                    initial = uiState.viewKeyState?.dataOrNull,
                     pasteEnabled = true,
                     hint = stringResource(R.string.Watch_ViewKey),
                     onValueChange = viewModel::onEnterViewKey,
@@ -168,6 +170,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
 
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = uiState.birthdayHeightState?.dataOrNull,
                     pasteEnabled = true,
                     hint = stringResource(R.string.Watch_BirthdayHeight),
                     onValueChange = viewModel::onEnterBirthdayHeight,

@@ -4,6 +4,8 @@ import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAddressValidator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.BitcoinAddress
+import io.horizontalsystems.bankwallet.entities.MoneroWatchAddress
+import io.horizontalsystems.bankwallet.modules.watchaddress.MoneroUriParser
 import io.horizontalsystems.bitcoincore.crypto.Base58
 import io.horizontalsystems.bitcoincore.network.Network
 import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
@@ -319,14 +321,25 @@ class AddressHandlerMonero : IAddressHandler {
     override val blockchainType = BlockchainType.Monero
 
     override fun isSupported(value: String) = try {
-        MoneroKit.validateAddress(value)
+        val uriInfo = MoneroUriParser.parse(value)
+        val address = uriInfo?.address ?: value
+        MoneroKit.validateAddress(address)
         true
     } catch (_: Exception) {
         false
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(value, blockchainType = blockchainType)
+        val uriInfo = MoneroUriParser.parse(value)
+        return if (uriInfo?.viewKey != null) {
+            val address = uriInfo.address
+            val viewKey = uriInfo.viewKey
+            val height = uriInfo.height
+
+            MoneroWatchAddress(address, viewKey, height)
+        } else {
+            Address(hex = value, blockchainType = blockchainType)
+        }
     }
 }
 
