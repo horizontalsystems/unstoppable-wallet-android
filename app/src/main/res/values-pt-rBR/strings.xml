@@ -123,6 +123,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="SelectContacts_All">Todas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
+    <string name="Restore_BirthdayHeight_Invalid">Altura de aniversário inválida</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Insira a data da criação da carteira para uma sincronização mais rápida.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
@@ -1135,12 +1136,14 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
     <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
     <string name="WatchWallet">Assistir Carteira</string>
-    <string name="Watch_Address_Hint">Digite seu EVM, TRON, TON ou Endereço Público (Bitcoin, Litecoin, Bitcoin Cash) ou Conta xPubKey.</string>
+    <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
     <string name="Watch_Address_Watch">Ver</string>
+    <string name="Watch_ViewKey">Chave Privada de Visualização</string>
+    <string name="Watch_BirthdayHeight">Altura da Restauração</string>
     <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
     <string name="Watch_Select_Coins">Escolher Moedas</string>
-    <string name="Watch_InfoText">Suporta endereços de chaves de EVM, Tron, TON, Stellar, Bitcoin-family (BTC, LTC, BCH, Dash) e XPUB.</string>
     <string name="Watch_Error_InvalidAddressFormat">Formato de endereço não suportado</string>
+    <string name="Watch_Monero_Warning">Monero watch wallet mostra apenas transações recebidas. O saldo exibido pode estar incorreto.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nome</string>
     <string name="ManageAccount_Save">Salvar</string>
