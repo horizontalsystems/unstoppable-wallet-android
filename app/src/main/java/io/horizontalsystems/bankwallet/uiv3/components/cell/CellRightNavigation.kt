@@ -30,11 +30,11 @@ fun CellRightNavigation(
 ) {
     Column {
         title?.let { headline2_leah(it.text) }
-        subtitle?.let {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            subtitle?.let {
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
                     text = it.text,
@@ -49,12 +49,12 @@ fun CellRightNavigation(
                         tint = iconTint
                     )
                 }
-                Icon(
-                    painter = painterResource(R.drawable.arrow_b_right_24),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
             }
+            Icon(
+                painter = painterResource(R.drawable.arrow_b_right_24),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
         }
         subtitle2?.let {
             Text(

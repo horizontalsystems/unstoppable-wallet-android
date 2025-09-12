@@ -393,6 +393,9 @@
         android:id="@+id/wcSessionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionFragment"/>
     <fragment
+        android:id="@+id/wcNetworksFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCNetworksFragment"/>
+    <fragment
         android:id="@+id/wcRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
     <fragment
