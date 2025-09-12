@@ -550,7 +550,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">请求找不到错误</string>
     <string name="WalletConnect_NoConnection">您没有任何已连接的dapps</string>
     <string name="WalletConnect_PendingRequests">待处理请求</string>
-    <string name="WalletConnect_ActiveWallet">激活钱包</string>
+    <string name="WalletConnect_ActiveWallet">钱包</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
     <string name="WalletConnect_Pairings">货币对</string>
@@ -559,6 +559,12 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
     <string name="WalletConnect_Pairings_Delete">删除</string>
     <string name="WalletConnect_DeleteAllPairs">删除所有对</string>
+    <string name="WalletConnect_Networks">网络</string>
+    <string name="WalletConnect_ConnectTo">连接到 %s</string>
+    <string name="WalletConnect_ConnectedTo">已连接到 %s</string>
+    <string name="WalletConnect_WhiteListDeactivatedWarning">Scam 保护功能已停用。域名验证不可用。升级到高级版以保护免受未验证或钓鱼网站之害。</string>
+    <string name="WalletConnect_NotInWhiteListAlert">此网站未经过核实，可能导致网络钓鱼或资金流失。连接被强烈阻止。</string>
+    <string name="WalletConnect_ConnectWarning">点击连接，允许此应用查看您的公共地址。</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
