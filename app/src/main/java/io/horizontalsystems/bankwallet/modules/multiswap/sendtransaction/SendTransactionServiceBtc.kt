@@ -193,7 +193,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
             pluginData = null,
             transactionSorting = null,
             rbfEnabled = false,
-            dustThreshold = null,
             changeToFirstInput = changeToFirstInput,
             utxoFilters = utxoFilters
         )

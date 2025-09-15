@@ -41,7 +41,6 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
                 memo,
                 customUnspentOutputs,
                 pluginData,
-                null,
                 changeToFirstInput,
                 utxoFilters
             )
