@@ -343,7 +343,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     Spacer(Modifier.weight(1f))
                     item.primaryValue?.let { coloredValue ->
                         Text(
-                            text = if (item.showAmount) coloredValue.value else "*****",
+                            text = if (item.showAmount) coloredValue.value else "* * *",
                             style = ComposeAppTheme.typography.body,
                             color = coloredValue.color.compose(),
                             overflow = TextOverflow.Ellipsis,
@@ -384,7 +384,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     )
                     item.secondaryValue?.let { coloredValue ->
                         Text(
-                            text = if (item.showAmount) coloredValue.value else "*****",
+                            text = if (item.showAmount) coloredValue.value else "",
                             style = ComposeAppTheme.typography.subheadR,
                             color = coloredValue.color.compose(),
                             maxLines = 1,

@@ -190,7 +190,7 @@ fun PassphraseCell(passphrase: String, hidden: Boolean) {
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Spacer(Modifier.weight(1f))
-                    C2(text = if (hidden) "*****" else passphrase)
+                    C2(text = if (hidden) "* * *" else passphrase)
                 }
             })
         Spacer(Modifier.height(32.dp))

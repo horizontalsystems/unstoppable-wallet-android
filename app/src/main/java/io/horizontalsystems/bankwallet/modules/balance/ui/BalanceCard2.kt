@@ -88,7 +88,7 @@ fun BalanceCardInner2(
             }
 
             CellRightInfo(
-                title = title ?: "***".hs,
+                title = title ?: "* * *".hs,
                 subtitle = subtitle
             )
         },

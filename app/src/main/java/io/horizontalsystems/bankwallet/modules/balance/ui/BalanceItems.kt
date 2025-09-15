@@ -706,7 +706,7 @@ fun TotalBalanceRow(
     when (totalState) {
         TotalUIState.Hidden -> {
             CardsElementAmountText(
-                title = "***",
+                title = "* * *",
                 body = "",
                 dimmed = false,
                 onClickTitle = onClickTitle,

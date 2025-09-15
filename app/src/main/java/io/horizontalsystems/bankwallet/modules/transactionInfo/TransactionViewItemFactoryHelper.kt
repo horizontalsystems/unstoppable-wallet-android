@@ -123,7 +123,7 @@ object TransactionViewItemFactoryHelper {
         hideAmount: Boolean,
         nftMetadata: NftAssetBriefMetadata?,
     ): TransactionInfoViewItem {
-        val valueFormatted = if (hideAmount) "*****" else value.decimalValue.let { decimalValue ->
+        val valueFormatted = if (hideAmount) "* * *" else value.decimalValue.let { decimalValue ->
             val sign = when {
                 incoming == null -> ""
                 decimalValue < BigDecimal.ZERO -> "-"
@@ -161,7 +161,7 @@ object TransactionViewItemFactoryHelper {
         amount: SwapTransactionRecord.Amount? = null,
         hasRecipient: Boolean = false,
     ): TransactionInfoViewItem {
-        val valueInFiat = if (hideAmount) "*****" else rate?.let {
+        val valueInFiat = if (hideAmount) "* * *" else rate?.let {
             value.decimalValue?.let { decimalValue ->
                 numberFormatter.formatFiatFull(
                     (it.value * decimalValue).abs(),
@@ -171,7 +171,7 @@ object TransactionViewItemFactoryHelper {
         } ?: "---"
         val fiatValueColored = ColoredValue(valueInFiat, ColorName.Grey)
         val coinValueFormatted =
-            if (hideAmount) "*****" else value.decimalValue?.let { decimalValue ->
+            if (hideAmount) "* * *" else value.decimalValue?.let { decimalValue ->
                 val sign = when (incoming) {
                     true -> "+"
                     false -> "-"
@@ -519,7 +519,7 @@ object TransactionViewItemFactoryHelper {
         } ?: ""
 
         val coinAmountString = when {
-            hideAmount -> "*****"
+            hideAmount -> "* * *"
             value.isMaxValue -> "∞ ${value.coinCode}"
 
             else -> coinAmountFormatted
@@ -528,7 +528,7 @@ object TransactionViewItemFactoryHelper {
         val coinAmountColoredValue = ColoredValue(coinAmountString, getAmountColor(null))
 
         val fiatAmountString = when {
-            hideAmount -> "*****"
+            hideAmount -> "* * *"
             value.isMaxValue -> Translator.getString(R.string.Transaction_Unlimited)
             else -> fiatAmountFormatted
         }
