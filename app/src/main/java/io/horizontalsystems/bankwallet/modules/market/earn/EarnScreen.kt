@@ -3,9 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.earn
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -292,7 +290,7 @@ fun VaultList(
             //Add bottom space only when all items are visible
             //and don't show bottom space when Premium banner is shown
             if (!noPremium) {
-                Spacer(modifier = Modifier.height(32.dp))
+                VSpacer(72.dp)
             }
         }
         if (scrollToTop) {

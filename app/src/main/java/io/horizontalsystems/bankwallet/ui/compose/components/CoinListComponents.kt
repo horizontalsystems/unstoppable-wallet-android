@@ -44,7 +44,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -87,7 +86,6 @@ fun CoinListSlidable(
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(
-        modifier = Modifier.background(Color.Yellow),
         state = listState,
         userScrollEnabled = userScrollEnabled
     ) {
@@ -154,7 +152,7 @@ fun CoinListSlidable(
             }
         }
         item {
-            Spacer(modifier = Modifier.height(32.dp))
+            VSpacer(72.dp)
         }
         if (scrollToTop) {
             coroutineScope.launch {

@@ -142,8 +142,9 @@ fun TokenSelectScreen(
                     onSearchQueryChange = { query ->
                         searchQuery = query
                         viewModel.updateFilter(query)
-                    }
-                ) { isSearchActive = it }
+                    },
+                    onActiveChange = { isSearchActive = it },
+                )
             }
         }
     }

@@ -264,8 +264,9 @@ fun ContactsScreen(
                 onSearchQueryChange = { query ->
                     searchQuery = query
                     viewModel.onEnterQuery(query)
-                }
-            ) { isSearchActive = it }
+                },
+                onActiveChange = { isSearchActive = it },
+            )
         }
         bottomSheetType?.let { type ->
             ModalBottomSheet(
