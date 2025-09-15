@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +50,6 @@ import io.horizontalsystems.bankwallet.core.stats.statSection
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.FloatingSearchBarRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
@@ -64,6 +62,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBordered
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Coin
 import java.util.Optional
 
@@ -103,40 +102,34 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
         }
     }
 
-    Scaffold(
-        containerColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Market_Search),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Market_Filters),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = {
-                            navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+    HSScaffold(
+        title = stringResource(R.string.Market_Search),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Market_Filters),
+                icon = R.drawable.ic_manage_2_24,
+                onClick = {
+                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
 
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.AdvancedSearch)
-                            )
-                        },
-                    ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
+                    stat(
+                        page = StatPage.Markets,
+                        event = StatEvent.Open(StatPage.AdvancedSearch)
                     )
-                )
+                },
+            ),
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = { navController.popBackStack() }
             )
-        }
-    ) { paddingValues ->
+        )
+    ) {
         Box(
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.ime)
-                .padding(paddingValues)
                 .fillMaxSize(),
         ) {
-            if (itemSections.all { (_, items) -> items.isEmpty() }) {
+            if (!uiState.loading && itemSections.all { (_, items) -> items.isEmpty() }) {
                 ListEmptyView(
                     text = stringResource(R.string.EmptyResults),
                     icon = R.drawable.ic_not_found
