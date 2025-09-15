@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import android.view.View
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -54,6 +52,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftLoaderCoinSyncFailed
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
@@ -246,34 +245,7 @@ fun IconCell(
     onClickSyncError: (() -> Unit)?
 ) {
     if (failedIconVisible) {
-        if (onClickSyncError != null) {
-            Modifier.clickable(onClick = onClickSyncError)
-            HsIconButton(
-                modifier = Modifier
-                    .size(32.dp)
-                    .then(
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onClickSyncError
-                        )
-                    ),
-                onClick = onClickSyncError,
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(32.dp),
-                    painter = painterResource(id = R.drawable.ic_balance_sync_error_32),
-                    contentDescription = "sync error",
-                )
-            }
-        } else {
-            Image(
-                modifier = Modifier.size(32.dp),
-                painter = painterResource(id = R.drawable.ic_balance_sync_error_32),
-                contentDescription = "sync error",
-            )
-        }
+        CellLeftLoaderCoinSyncFailed(onClickSyncError)
     } else {
         CoinImage(
             token = token,

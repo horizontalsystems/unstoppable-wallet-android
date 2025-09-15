@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -476,7 +474,7 @@ fun BalanceItems(
                     NoCoinsBlock()
                 }
             } else {
-                wallets(
+                itemsIndexed(
                     items = balanceViewItems,
                     key = { _, item ->
                         item.wallet.hashCode()
@@ -725,15 +723,5 @@ fun TotalBalanceRow(
                 onClickSubtitle = onClickSubtitle,
             )
         }
-    }
-}
-
-fun <T> LazyListScope.wallets(
-    items: List<T>,
-    key: ((index: Int, item: T) -> Any)? = null,
-    itemContent: @Composable (LazyItemScope.(index: Int, item: T) -> Unit),
-) {
-    itemsIndexed(items, key = key) { index, item ->
-        itemContent(index, item)
     }
 }
