@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.compose.components
+package io.horizontalsystems.bankwallet.uiv3.components.bottom
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,12 +18,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,19 +34,20 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_andy
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 
 @Composable
-fun BoxScope.FloatingSearchBarRow(
+fun BoxScope.BottomSearchBar(
     modifier: Modifier = Modifier,
     searchQuery: String,
     isSearchActive: Boolean,
-    focusRequester: FocusRequester,
-    keyboardController: SoftwareKeyboardController?,
-    focusManager: FocusManager,
-    onSearchQueryChange: (String) -> Unit,
+    keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
+    focusManager: FocusManager = LocalFocusManager.current,
     onActiveChange: (Boolean) -> Unit,
+    onSearchQueryChange: (String) -> Unit,
     onCloseSearch: () -> Unit = { },
 ) {
     Row(
@@ -63,7 +67,6 @@ fun BoxScope.FloatingSearchBarRow(
             onActiveChange = { active ->
                 onActiveChange(active)
             },
-            focusRequester = focusRequester,
             modifier = Modifier.weight(1f)
         )
 
@@ -90,9 +93,10 @@ fun FloatingSearchBar(
     onSearchQueryChange: (String) -> Unit,
     isActive: Boolean,
     onActiveChange: (Boolean) -> Unit,
-    focusRequester: FocusRequester,
     modifier: Modifier = Modifier
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
