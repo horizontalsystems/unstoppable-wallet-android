@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -26,13 +25,13 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.FloatingSearchBarRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 
 @Composable
 fun TokenSelectScreen(
@@ -44,7 +43,6 @@ fun TokenSelectScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
@@ -118,17 +116,16 @@ fun TokenSelectScreen(
                     }
                 }
 
-                FloatingSearchBarRow(
+                BottomSearchBar(
                     searchQuery = searchQuery,
                     isSearchActive = isSearchActive,
-                    focusRequester = focusRequester,
                     keyboardController = keyboardController,
                     focusManager = focusManager,
+                    onActiveChange = { isSearchActive = it },
                     onSearchQueryChange = { query ->
                         searchQuery = query
                         viewModel.updateFilter(query)
                     },
-                    onActiveChange = { isSearchActive = it },
                 )
             }
         }

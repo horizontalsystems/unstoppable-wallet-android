@@ -47,7 +47,6 @@ import io.horizontalsystems.bankwallet.core.stats.statSection
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.FloatingSearchBarRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -60,6 +59,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 import io.horizontalsystems.marketkit.models.Coin
 import java.util.Optional
 
@@ -195,21 +195,17 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                 }
             }
 
-            FloatingSearchBarRow(
+            BottomSearchBar(
                 searchQuery = searchQuery,
                 isSearchActive = isSearchActive,
-                focusRequester = focusRequester,
-                keyboardController = keyboardController,
-                focusManager = focusManager,
+                onActiveChange = { isSearchActive = it },
                 onSearchQueryChange = { query ->
                     searchQuery = query
                     viewModel.searchByQuery(query)
-                },
-                onActiveChange = { isSearchActive = it },
-                onCloseSearch = {
-                    navController.popBackStack()
                 }
-            )
+            ) {
+                navController.popBackStack()
+            }
         }
     }
 }
