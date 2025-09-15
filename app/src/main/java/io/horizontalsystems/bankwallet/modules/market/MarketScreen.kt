@@ -9,19 +9,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -51,11 +59,13 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_andy
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
@@ -77,18 +87,6 @@ fun MarketScreen(navController: NavController) {
                 title = stringResource(R.string.Market_Title),
                 menuItems = listOf(
                     MenuItem(
-                        title = TranslatableString.ResString(R.string.Market_Search),
-                        icon = R.drawable.icon_search,
-                        onClick = {
-                            navController.slideFromRight(R.id.marketSearchFragment)
-
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.MarketSearch)
-                            )
-                        },
-                    ),
-                    MenuItem(
                         title = TranslatableString.ResString(R.string.Market_Filters),
                         icon = R.drawable.ic_manage_2_24,
                         onClick = {
@@ -103,18 +101,56 @@ fun MarketScreen(navController: NavController) {
                 )
             )
         }
-    ) {
-        Column(
-            Modifier
-                .padding(it)
-                .background(ComposeAppTheme.colors.tyler)
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .windowInsetsPadding(WindowInsets.ime)
+                .padding(paddingValues)
+                .fillMaxSize(),
         ) {
-            Crossfade(uiState.marketGlobal, label = "") {
-                MetricsBoard(navController, it, uiState.currency)
+            Column() {
+                Crossfade(uiState.marketGlobal, label = "") {
+                    MetricsBoard(navController, it, uiState.currency)
+                }
+                HsDivider()
+                TabsSection(navController, tabs, uiState.selectedTab) { tab ->
+                    viewModel.onSelect(tab)
+                }
             }
-            HsDivider()
-            TabsSection(navController, tabs, uiState.selectedTab) { tab ->
-                viewModel.onSelect(tab)
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(ComposeAppTheme.colors.blade)
+                        .height(48.dp)
+                        .clickable {
+                            navController.slideFromBottom(R.id.marketSearchFragment)
+                            stat(
+                                page = StatPage.Markets,
+                                event = StatEvent.Open(StatPage.MarketSearch)
+                            )
+                        }
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_search),
+                        contentDescription = "Search",
+                        tint = ComposeAppTheme.colors.andy,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    HSpacer(8.dp)
+                    body_andy(
+                        text = stringResource(R.string.Balance_ReceiveHint_Search),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -313,9 +349,11 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
         MetricsType.TvlInDefi -> {
             navController.slideFromBottom(R.id.tvlFragment)
         }
+
         MetricsType.Etf -> {
             navController.slideFromBottom(R.id.etfFragment)
         }
+
         else -> {
             navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
         }

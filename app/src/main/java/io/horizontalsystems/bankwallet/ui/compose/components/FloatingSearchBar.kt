@@ -40,6 +40,7 @@ fun BoxScope.FloatingSearchBarRow(
     focusManager: FocusManager,
     onSearchQueryChange: (String) -> Unit,
     onActiveChange: (Boolean) -> Unit,
+    onCloseSearch: () -> Unit = { },
 ) {
     Row(
         modifier = modifier
@@ -67,6 +68,7 @@ fun BoxScope.FloatingSearchBarRow(
                 size = ButtonSize.Small,
                 icon = painterResource(R.drawable.close_24)
             ) {
+                onCloseSearch.invoke()
                 onSearchQueryChange("")
                 onActiveChange(false)
                 keyboardController?.hide()
