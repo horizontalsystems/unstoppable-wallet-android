@@ -6,19 +6,15 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,11 +40,9 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.FloatingSearchBarRow
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -56,6 +50,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAc
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.SnackbarDuration
@@ -137,50 +132,42 @@ fun ContactsScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    Scaffold(
-        containerColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Contacts),
-                navigationIcon = {
-                    HsBackButton(onClick = onNavigateToBack)
-                },
-                menuItems = buildList {
-                    if (uiState.showAddContact) {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Contacts_NewContact),
-                                icon = R.drawable.icon_user_plus,
-                                onClick = onNavigateToCreateContact
-                            )
-                        )
-                    }
-                    if (uiState.showMoreOptions) {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Contacts_ActionMore),
-                                icon = R.drawable.ic_more2_20,
-                                enabled = true,
-                                onClick = {
-                                    showMoreSelectorDialog = true
-                                }
-                            )
-                        )
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
+    HSScaffold(
+        title = stringResource(R.string.Contacts),
+        menuItems = buildList {
+            if (uiState.showAddContact) {
+                add(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Contacts_NewContact),
+                        icon = R.drawable.icon_user_plus,
+                        onClick = onNavigateToCreateContact
+                    )
+                )
+            }
+            if (uiState.showMoreOptions) {
+                add(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Contacts_ActionMore),
+                        icon = R.drawable.ic_more2_20,
+                        enabled = true,
+                        onClick = {
+                            showMoreSelectorDialog = true
+                        }
+                    )
+                )
+            }
+        },
+        onBack = onNavigateToBack,
+    ) {
         Box(
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.ime)
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             if (uiState.contacts.isNotEmpty()) {
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
                     VSpacer(12.dp)
                     CellUniversalLawrenceSection(uiState.contacts) { contact ->
                         Contact(contact) {
