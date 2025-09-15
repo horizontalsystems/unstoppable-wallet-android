@@ -6,15 +6,19 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,8 +27,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,13 +44,15 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.FloatingSearchBarRow
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -122,12 +131,20 @@ fun ContactsScreen(
     val coroutineScope = rememberCoroutineScope()
     var selectedContact by remember { mutableStateOf<Contact?>(null) }
 
+    var searchQuery by remember { mutableStateOf("") }
+    var isSearchActive by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
-            SearchBar(
+            AppBar(
                 title = stringResource(R.string.Contacts),
-                searchHintText = stringResource(R.string.Market_Search_Hint),
+                navigationIcon = {
+                    HsBackButton(onClick = onNavigateToBack)
+                },
                 menuItems = buildList {
                     if (uiState.showAddContact) {
                         add(
@@ -150,21 +167,20 @@ fun ContactsScreen(
                             )
                         )
                     }
-                },
-                onClose = onNavigateToBack,
-                onSearchTextChanged = { text ->
-                    viewModel.onEnterQuery(text)
                 }
             )
         }
     ) { paddingValues ->
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.ime)
                 .padding(paddingValues)
+                .fillMaxSize(),
         ) {
             if (uiState.contacts.isNotEmpty()) {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())) {
                     VSpacer(12.dp)
                     CellUniversalLawrenceSection(uiState.contacts) { contact ->
                         Contact(contact) {
@@ -238,6 +254,18 @@ fun ContactsScreen(
                         }
                     })
             }
+
+            FloatingSearchBarRow(
+                searchQuery = searchQuery,
+                isSearchActive = isSearchActive,
+                focusRequester = focusRequester,
+                keyboardController = keyboardController,
+                focusManager = focusManager,
+                onSearchQueryChange = { query ->
+                    searchQuery = query
+                    viewModel.onEnterQuery(query)
+                }
+            ) { isSearchActive = it }
         }
         bottomSheetType?.let { type ->
             ModalBottomSheet(
