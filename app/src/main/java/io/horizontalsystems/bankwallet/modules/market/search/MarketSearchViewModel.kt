@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchViewModel.UiState
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -18,7 +18,7 @@ class MarketSearchViewModel(
     private val marketFavoritesManager: MarketFavoritesManager,
     private val marketSearchService: MarketSearchService,
     private val marketDiscoveryService: MarketDiscoveryService,
-) : ViewModel() {
+) : ViewModelUiState<UiState>() {
     private var searchState = marketSearchService.stateFlow.value
     private var discoveryState = marketDiscoveryService.stateFlow.value
     private var listId: String = ""
@@ -26,9 +26,7 @@ class MarketSearchViewModel(
         recent = coinItems(discoveryState.recent),
         popular = coinItems(discoveryState.popular),
     )
-
-    var uiState by mutableStateOf(UiState(page, listId))
-        private set
+    private var loading = true
 
     init {
         viewModelScope.launch {
@@ -43,23 +41,35 @@ class MarketSearchViewModel(
         }
         viewModelScope.launch {
             marketFavoritesManager.dataUpdatedAsync.asFlow().collect {
-                emitState()
+                syncState()
             }
         }
 
-        marketDiscoveryService.start()
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            marketDiscoveryService.start()
+            loading = false
+        }
+    }
+
+    override fun createState(): UiState {
+        return UiState(
+            page = page,
+            listId = listId,
+            loading = loading,
+        )
     }
 
     private fun handleUpdatedDiscoveryState(discoveryState: MarketDiscoveryService.State) {
         this.discoveryState = discoveryState
 
-        emitState()
+        syncState()
     }
 
     private fun handleUpdatedSearchState(searchState: MarketSearchService.State) {
         this.searchState = searchState
 
-        emitState()
+        syncState()
     }
 
     fun searchByQuery(query: String) {
@@ -74,7 +84,7 @@ class MarketSearchViewModel(
             )
         }
 
-    private fun emitState() {
+    private fun syncState() {
         if (searchState.query.isNotBlank()) {
             page = Page.SearchResults(coinItems(searchState.results))
             listId = searchState.query
@@ -87,7 +97,7 @@ class MarketSearchViewModel(
         }
 
         viewModelScope.launch {
-            uiState = UiState(page, listId)
+            emitState()
         }
     }
 
@@ -109,11 +119,16 @@ class MarketSearchViewModel(
 
     data class UiState(
         val page: Page,
-        val listId: String
+        val listId: String,
+        val loading: Boolean,
     )
 
     sealed class Page {
-        data class Discovery(val recent: List<MarketSearchModule.CoinItem>, val popular: List<MarketSearchModule.CoinItem>) : Page()
+        data class Discovery(
+            val recent: List<MarketSearchModule.CoinItem>,
+            val popular: List<MarketSearchModule.CoinItem>
+        ) : Page()
+
         data class SearchResults(val items: List<MarketSearchModule.CoinItem>) : Page()
     }
 }
