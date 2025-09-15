@@ -344,12 +344,11 @@ interface ISendBitcoinAdapter {
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
-        dustThreshold: Int?,
         changeToFirstInput: Boolean,
         utxoFilters: UtxoFilters
     ): BigDecimal
 
-    fun minimumSendAmount(address: String?, dustThreshold: Int?): BigDecimal?
+    fun minimumSendAmount(address: String?): BigDecimal?
     fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
@@ -357,7 +356,6 @@ interface ISendBitcoinAdapter {
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
-        dustThreshold: Int?,
         changeToFirstInput: Boolean,
         filters: UtxoFilters
     ): BitcoinFeeInfo?
@@ -372,7 +370,6 @@ interface ISendBitcoinAdapter {
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
-        dustThreshold: Int?,
         changeToFirstInput: Boolean,
         utxoFilters: UtxoFilters
     ): BitcoinTransactionRecord?

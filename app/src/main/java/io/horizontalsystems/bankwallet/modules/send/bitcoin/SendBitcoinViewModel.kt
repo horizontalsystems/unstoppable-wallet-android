@@ -274,7 +274,6 @@ class SendBitcoinViewModel(
                 pluginState.pluginData,
                 btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 rbfEnabled,
-                null,
                 false,
                 UtxoFilters()
             )

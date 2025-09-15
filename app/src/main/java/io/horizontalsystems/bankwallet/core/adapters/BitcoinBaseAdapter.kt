@@ -285,7 +285,6 @@ abstract class BitcoinBaseAdapter(
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
-        dustThreshold: Int?,
         changeToFirstInput: Boolean,
         utxoFilters: UtxoFilters
     ): BitcoinTransactionRecord? {
@@ -301,7 +300,6 @@ abstract class BitcoinBaseAdapter(
             unspentOutputs = unspentOutputs,
             pluginData = pluginData ?: mapOf(),
             rbfEnabled = rbfEnabled,
-            dustThreshold = dustThreshold,
             changeToFirstInput = changeToFirstInput,
             filters = utxoFilters,
         )
@@ -320,7 +318,6 @@ abstract class BitcoinBaseAdapter(
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
-        dustThreshold: Int?,
         changeToFirstInput: Boolean,
         utxoFilters: UtxoFilters
     ): BigDecimal {
@@ -331,7 +328,6 @@ abstract class BitcoinBaseAdapter(
                 feeRate = feeRate,
                 unspentOutputInfos = unspentOutputs,
                 pluginData = pluginData ?: mapOf(),
-                dustThreshold = dustThreshold,
                 changeToFirstInput = changeToFirstInput,
                 filters = utxoFilters,
             )
@@ -341,9 +337,9 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    override fun minimumSendAmount(address: String?, dustThreshold: Int?): BigDecimal? {
+    override fun minimumSendAmount(address: String?): BigDecimal? {
         return try {
-            satoshiToBTC(kit.minimumSpendableValue(address, dustThreshold).toLong())
+            satoshiToBTC(kit.minimumSpendableValue(address).toLong())
         } catch (e: Exception) {
             null
         }
@@ -356,7 +352,6 @@ abstract class BitcoinBaseAdapter(
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
-        dustThreshold: Int?,
         changeToFirstInput: Boolean,
         filters: UtxoFilters
     ): BitcoinFeeInfo? {
@@ -370,7 +365,6 @@ abstract class BitcoinBaseAdapter(
                 feeRate = feeRate,
                 unspentOutputs = unspentOutputs,
                 pluginData = pluginData ?: mapOf(),
-                dustThreshold = dustThreshold,
                 changeToFirstInput = changeToFirstInput,
                 filters = filters
             ).let {

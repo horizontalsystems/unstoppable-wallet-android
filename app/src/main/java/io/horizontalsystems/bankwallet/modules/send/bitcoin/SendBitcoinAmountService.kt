@@ -68,7 +68,6 @@ class SendBitcoinAmountService(
                 memo,
                 customUnspentOutputs,
                 pluginData,
-                null,
                 changeToFirstInput,
                 utxoFilters
             )
@@ -76,7 +75,7 @@ class SendBitcoinAmountService(
     }
 
     private fun refreshMinimumSendAmount() {
-        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex, null)
+        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex)
     }
 
     private fun validateAmount() {
