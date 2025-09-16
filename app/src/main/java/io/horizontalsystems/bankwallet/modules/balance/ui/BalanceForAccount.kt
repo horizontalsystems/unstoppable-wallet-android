@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -96,9 +97,15 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
 
 
     BackupAlert(navController)
+    val uiState = viewModel.uiState
+
     HSScaffold(
         title = accountViewItem.name,
         menuItems = buildList {
+            if (uiState.loading) {
+                add(MenuItemLoading)
+            }
+
             if (!viewModel.uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 add(
                     MenuItem(
@@ -134,8 +141,6 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             )
         }
     ) {
-        val uiState = viewModel.uiState
-
         Crossfade(
             targetState = uiState.viewState,
             modifier = Modifier.fillMaxSize(),
