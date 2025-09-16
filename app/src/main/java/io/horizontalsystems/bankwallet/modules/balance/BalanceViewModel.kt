@@ -40,14 +40,14 @@ class BalanceViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
     private val priceManager: PriceManager,
     private val adapterManager: IAdapterManager,
-    val isSwapEnabled: Boolean
-) : ViewModelUiState<BalanceUiState>(), ITotalBalance by totalBalance {
+    val isSwapEnabled: Boolean,
+    private val totalService: TotalService
+) : ViewModelUiState<BalanceUiState>() {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
@@ -66,11 +66,14 @@ class BalanceViewModel(
 
     private var refreshViewItemsJob: Job? = null
 
+    var totalUiState by mutableStateOf(createTotalUIState(totalService.stateFlow.value))
+        private set
+
     init {
         viewModelScope.launch(Dispatchers.Default) {
             service.balanceItemsFlow
                 .collect { items ->
-                    totalBalance.setTotalServiceItems(items?.map {
+                    totalService.setItems(items?.map {
                         TotalService.BalanceItem(
                             it.balanceData.total,
                             service.networkAvailable && it.state !is AdapterState.Synced,
@@ -83,7 +86,7 @@ class BalanceViewModel(
         }
 
         viewModelScope.launch {
-            totalBalance.stateFlow.collect {
+            totalService.stateFlow.collect {
                 refreshViewItems(service.balanceItemsFlow.value)
             }
         }
@@ -113,9 +116,53 @@ class BalanceViewModel(
             }
         }
 
-        service.start()
+        viewModelScope.launch {
+            totalService.stateFlow.collect {
+                totalUiState = createTotalUIState(it)
+            }
+        }
 
-        totalBalance.start(viewModelScope)
+        totalService.start()
+        service.start()
+    }
+
+    private fun createTotalUIState(state: TotalService.State) = when (state) {
+        TotalService.State.Hidden -> TotalUIState.Hidden
+        is TotalService.State.Visible -> TotalUIState.Visible(
+            primaryAmountStr = getPrimaryAmount(state, state.showFullAmount) ?: "---",
+            secondaryAmountStr = getSecondaryAmount(state, state.showFullAmount) ?: "---",
+            dimmed = state.dimmed
+        )
+    }
+
+    fun toggleBalanceVisibility() {
+        totalService.toggleBalanceVisibility()
+    }
+
+    fun toggleTotalType() {
+        totalService.toggleType()
+    }
+
+    private fun getPrimaryAmount(
+        totalState: TotalService.State.Visible,
+        fullFormat: Boolean
+    ) = totalState.currencyValue?.let {
+        if (fullFormat) {
+            App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
+        } else {
+            App.numberFormatter.formatFiatShort(it.value, it.currency.symbol, 8)
+        }
+    }
+
+    private fun getSecondaryAmount(
+        totalState: TotalService.State.Visible,
+        fullFormat: Boolean
+    ) = totalState.coinValue?.let {
+        if (fullFormat) {
+            "≈" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
+        } else {
+            "≈" + App.numberFormatter.formatCoinShort(it.value, it.coin.code, it.decimal)
+        }
     }
 
     override fun createState() = BalanceUiState(
@@ -160,7 +207,7 @@ class BalanceViewModel(
                     balanceViewItemFactory.viewItem2(
                         balanceItem,
                         service.baseCurrency,
-                        balanceHidden,
+                        totalService.balanceHidden,
                         service.isWatchAccount,
                         balanceViewType,
                         service.networkAvailable,
@@ -182,7 +229,7 @@ class BalanceViewModel(
     }
 
     override fun onCleared() {
-        totalBalance.stop()
+        totalService.stop()
         service.clear()
     }
 

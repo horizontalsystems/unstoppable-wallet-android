@@ -36,13 +36,13 @@ object BalanceModule {
                 BalanceService.getInstance("wallet"),
                 BalanceViewItemFactory(),
                 App.balanceViewTypeManager,
-                TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
                 App.wcManager,
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 App.priceManager,
                 App.adapterManager,
-                App.instance.isSwapEnabled
+                App.instance.isSwapEnabled,
+                totalService
             ) as T
         }
     }

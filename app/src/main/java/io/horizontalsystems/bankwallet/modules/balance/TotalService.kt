@@ -28,7 +28,9 @@ class TotalService(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val localStorage: ILocalStorage,
 ) {
-    private var balanceHidden = balanceHiddenManager.balanceHidden
+    var balanceHidden = balanceHiddenManager.balanceHidden
+        private set
+
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
     private var dimmed = false
@@ -66,7 +68,7 @@ class TotalService(
 
         coroutineScope.launch {
             balanceHiddenManager.balanceHiddenFlow.collect {
-                setBalanceHidden(it)
+                handleUpdatedBalanceHidden(it)
             }
         }
 
@@ -95,7 +97,11 @@ class TotalService(
         baseTokenManager.toggleBaseToken()
     }
 
-    private fun setBalanceHidden(balanceHidden: Boolean) {
+    fun toggleBalanceVisibility() {
+        balanceHiddenManager.toggleBalanceHidden()
+    }
+
+    private fun handleUpdatedBalanceHidden(balanceHidden: Boolean) {
         this.balanceHidden = balanceHidden
 
         emitState()
