@@ -50,7 +50,7 @@ fun CardsElementAmountText(
                 ),
             text = body,
             style = ComposeAppTheme.typography.body,
-            color = if (dimmed) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
+            color = ComposeAppTheme.colors.grey,
             maxLines = 1
         )
     }
