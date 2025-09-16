@@ -150,7 +150,8 @@ fun HSTopAppBar(
                                     modifier = Modifier
                                         .align(Alignment.Center)
                                         .size(20.dp),
-                                    color = ComposeAppTheme.colors.grey,
+                                    color = ComposeAppTheme.colors.leah,
+                                    backgroundColor = ComposeAppTheme.colors.andy,
                                     strokeWidth = 2.dp
                                 )
                             }

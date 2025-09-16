@@ -81,7 +81,8 @@ data class BalanceViewItem2(
     val badge: String?,
     val errorMessage: String?,
     val isWatchAccount: Boolean,
-    val balanceHidden: Boolean
+    val balanceHidden: Boolean,
+    val loading: Boolean
 )
 
 data class DeemedValue<T>(val value: T, val dimmed: Boolean = false)
@@ -377,7 +378,8 @@ class BalanceViewItemFactory {
             badge = wallet.badge,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
-            balanceHidden = hideBalance
+            balanceHidden = hideBalance,
+            loading = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         )
     }
 }
