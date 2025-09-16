@@ -72,7 +72,7 @@ class SwapViewModel(
         }
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
-                fiatAmountInputEnabled = it.coinPrice != null
+                fiatAmountInputEnabled = it.coinPrice != null && !it.coinPrice.expired
                 fiatAmountIn = it.fiatAmount
                 quoteService.setAmount(it.amount)
                 priceImpactService.setFiatAmountIn(fiatAmountIn)
