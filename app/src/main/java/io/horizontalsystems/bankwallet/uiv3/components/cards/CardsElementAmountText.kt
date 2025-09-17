@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
 fun CardsElementAmountText(
-    title: String,
+    title: HSString,
     body: String,
-    dimmed: Boolean,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
 ) {
@@ -36,9 +37,9 @@ fun CardsElementAmountText(
                     indication = null,
                     onClick = onClickTitle
                 ),
-            text = title,
+            text = title.text,
             style = ComposeAppTheme.typography.title2М,
-            color = if (dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
+            color = title.color ?: ComposeAppTheme.colors.leah,
             maxLines = 1
         )
         Text(
@@ -61,9 +62,8 @@ fun CardsElementAmountText(
 fun Preview_CardsElementAmountText() {
     ComposeAppTheme {
         CardsElementAmountText(
-            title = "\$1,289,231.60",
+            title = "\$1,289,231.60".hs,
             body = "≈22.6057 BTC",
-            dimmed = false,
             onClickTitle = {},
             onClickSubtitle = {}
         )

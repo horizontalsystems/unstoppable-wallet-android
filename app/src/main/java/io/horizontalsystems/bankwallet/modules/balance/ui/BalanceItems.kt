@@ -272,7 +272,8 @@ fun BalanceItems(
 
                             stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
-                    }
+                    },
+                    loading = uiState.loading
                 )
             }
 
@@ -701,24 +702,31 @@ fun BalanceSortingSelector(
 fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
-    onClickSubtitle: () -> Unit
+    onClickSubtitle: () -> Unit,
+    loading: Boolean
 ) {
     when (totalState) {
         TotalUIState.Hidden -> {
             CardsElementAmountText(
-                title = "* * *",
+                title = "* * *".hs,
                 body = "",
-                dimmed = false,
                 onClickTitle = onClickTitle,
                 onClickSubtitle = onClickSubtitle
             )
         }
 
         is TotalUIState.Visible -> {
+            val color = if (loading) {
+                ComposeAppTheme.colors.andy
+            } else if (totalState.dimmed) {
+                ComposeAppTheme.colors.grey
+            } else {
+                null
+            }
+
             CardsElementAmountText(
-                title = totalState.primaryAmountStr,
+                title = totalState.primaryAmountStr.hs(color = color),
                 body = totalState.secondaryAmountStr,
-                dimmed = totalState.dimmed,
                 onClickTitle = onClickTitle,
                 onClickSubtitle = onClickSubtitle,
             )
