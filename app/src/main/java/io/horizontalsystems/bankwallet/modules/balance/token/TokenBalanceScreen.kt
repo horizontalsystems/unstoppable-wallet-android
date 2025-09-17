@@ -64,6 +64,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIc
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
@@ -84,13 +85,14 @@ fun TokenBalanceScreen(
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val view = LocalView.current
+    val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
     HSScaffold(
         title = uiState.title,
         onBack = navController::popBackStack,
         menuItems = buildList {
             when {
-                uiState.balanceViewItem?.syncingProgress?.progress != null -> {
+                loading -> {
                     add(MenuItemLoading)
                 }
                 uiState.failedIconVisible -> {
@@ -175,7 +177,8 @@ fun TokenBalanceScreen(
                                 infoModalBottomSheetState.hide()
                             }
                         },
-                        onClickReceive = onClickReceive
+                        onClickReceive = onClickReceive,
+                        loading = loading
                     )
 
                     if (it.isWatchAccount) {
@@ -275,7 +278,8 @@ private fun TokenBalanceHeader(
     viewModel: TokenBalanceViewModel,
     showBottomSheet: (BottomSheetContent) -> Unit = { _ -> },
     hideBottomSheet: () -> Unit,
-    onClickReceive: () -> Unit
+    onClickReceive: () -> Unit,
+    loading: Boolean
 ) {
     val context = LocalContext.current
 
@@ -284,24 +288,28 @@ private fun TokenBalanceHeader(
             .fillMaxWidth()
             .background(ComposeAppTheme.colors.tyler)
     ) {
-        val title: String
+        val title: HSString
         val body: String
-        val dimmed: Boolean
 
         if (balanceViewItem.balanceHidden || balanceViewItem.primaryValue == null) {
-            title = "* * *"
+            title = "* * *".hs
             body = ""
-            dimmed = false
         } else {
-            title = balanceViewItem.primaryValue.value
+            val color = if (loading) {
+                ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.primaryValue.dimmed) {
+                ComposeAppTheme.colors.grey
+            } else {
+                null
+            }
+
+            title = balanceViewItem.primaryValue.value.hs(color = color)
             body = balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: ""
-            dimmed = balanceViewItem.primaryValue.dimmed
         }
 
         CardsElementAmountText(
             title = title,
             body = body,
-            dimmed = dimmed,
             onClickTitle = {
                 viewModel.toggleBalanceVisibility()
                 HudHelper.vibrate(context)
