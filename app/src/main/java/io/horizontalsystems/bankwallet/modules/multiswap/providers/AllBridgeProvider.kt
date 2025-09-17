@@ -19,8 +19,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippageNotAvailable
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -179,9 +177,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
 
         val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        if (crosschain) {
-            cautions.add(SlippageNotAvailable())
-        } else {
+        if (!crosschain) {
             settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
         }
 
@@ -194,9 +190,6 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
             if (allowance != null && allowance < amountIn) {
                 add(DataFieldAllowance(allowance, tokenIn))
-            }
-            if (crosschain) {
-                add(DataFieldSlippageNotAvailable)
             }
         }
 
@@ -279,9 +272,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         var settingSlippage: SwapSettingSlippage? = null
 
         val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        if (crosschain) {
-            cautions.add(SlippageNotAvailable())
-        } else {
+        if (!crosschain) {
             settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         }
 
@@ -307,9 +298,6 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
             settingSlippage?.value?.let {
                 add(DataFieldSlippage(it))
-            }
-            if (crosschain) {
-                add(DataFieldSlippageNotAvailable)
             }
         }
 
@@ -533,9 +521,3 @@ interface AllBridgeAPI {
 }
 
 data class AllBridgeTokenPair(val abToken: Response.Token, val token: Token)
-
-class SlippageNotAvailable() : HSCaution(
-    TranslatableString.ResString(R.string.SwapWarning_SlippageNotAvailable_Title),
-    Type.Warning,
-    TranslatableString.ResString(R.string.SwapWarning_SlippageNotAvailable_Description),
-)
