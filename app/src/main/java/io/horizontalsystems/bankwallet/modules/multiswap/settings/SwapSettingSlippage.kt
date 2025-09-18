@@ -17,9 +17,7 @@ data class SwapSettingSlippage(
 ) : ISwapSetting {
     override val id = "slippage"
 
-    val value = settings[id] as? BigDecimal
-
-    fun valueOrDefault() = value ?: defaultSlippage
+    val value = settings[id] as? BigDecimal ?: defaultSlippage
 
     @Composable
     override fun GetContent(

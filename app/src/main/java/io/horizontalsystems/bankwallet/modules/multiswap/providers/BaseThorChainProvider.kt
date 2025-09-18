@@ -138,7 +138,7 @@ abstract class BaseThorChainProvider(
         val cautions = mutableListOf<HSCaution>()
         val slippageThreshold = getSlippageThreshold(quoteSwap)
         val settingSlippage = SwapSettingSlippage(settings, slippageThreshold, true)
-        val slippage = settingSlippage.valueOrDefault()
+        val slippage = settingSlippage.value
         if (slippage < slippageThreshold) {
             cautions.add(SlippageNotApplicable(slippageThreshold))
         }
@@ -160,9 +160,7 @@ abstract class BaseThorChainProvider(
             settingRecipient.value?.let {
                 add(DataFieldRecipient(it))
             }
-            settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(settingSlippage.value))
             if (allowance != null && allowance < amountIn) {
                 add(DataFieldAllowance(allowance, tokenIn))
             }
@@ -226,7 +224,7 @@ abstract class BaseThorChainProvider(
 
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         val settingSlippage = SwapSettingSlippage(swapSettings, slippageThreshold, true)
-        val slippage = settingSlippage.valueOrDefault()
+        val slippage = settingSlippage.value
 
         val cautions = mutableListOf<HSCaution>()
         val finalSlippage: BigDecimal?
