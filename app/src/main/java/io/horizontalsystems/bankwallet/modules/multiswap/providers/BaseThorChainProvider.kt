@@ -132,12 +132,12 @@ abstract class BaseThorChainProvider(
         settings: Map<String, Any?>,
     ): ISwapQuote {
         val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
 
         val cautions = mutableListOf<HSCaution>()
         val slippageThreshold = getSlippageThreshold(quoteSwap)
+        val settingSlippage = SwapSettingSlippage(settings, slippageThreshold, true)
         val slippage = settingSlippage.valueOrDefault()
         if (slippage < slippageThreshold) {
             cautions.add(SlippageNotApplicable(slippageThreshold))
@@ -225,7 +225,7 @@ abstract class BaseThorChainProvider(
         val slippageThreshold = swapQuote.slippageThreshold
 
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
+        val settingSlippage = SwapSettingSlippage(swapSettings, slippageThreshold, true)
         val slippage = settingSlippage.valueOrDefault()
 
         val cautions = mutableListOf<HSCaution>()

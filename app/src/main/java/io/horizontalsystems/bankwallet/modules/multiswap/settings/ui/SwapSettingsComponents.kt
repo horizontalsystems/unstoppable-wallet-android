@@ -45,6 +45,7 @@ fun SlippageAmount(
     initial: String?,
     buttons: List<InputButton>,
     error: Throwable?,
+    readOnly: Boolean,
     onValueChange: (String) -> Unit
 ) {
     HeaderText(
@@ -56,6 +57,7 @@ fun SlippageAmount(
         initial = initial,
         buttons = buttons,
         state = error?.let { DataState.Error(it) },
+        readOnly = readOnly,
         onValueChange = onValueChange
     )
     InfoText(
@@ -119,6 +121,7 @@ fun InputWithButtons(
     initial: String? = null,
     buttons: List<InputButton>,
     state: DataState<Any>? = null,
+    readOnly: Boolean = false,
     onValueChange: (String) -> Unit,
 ) {
     val borderColor = when (state) {
@@ -168,8 +171,9 @@ fun InputWithButtons(
                     textState = textValue
                     onValueChange.invoke(textValue.text)
                 },
+                enabled = !readOnly,
                 textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
+                    color = if (readOnly) { ComposeAppTheme.colors.andy } else { ComposeAppTheme.colors.leah},
                     textStyle = ComposeAppTheme.typography.body
                 ),
                 maxLines = 1,
@@ -185,28 +189,30 @@ fun InputWithButtons(
                 },
             )
 
-            if (textState.text.isNotEmpty()) {
-                ButtonSecondaryCircle(
-                    icon = R.drawable.ic_delete_20,
-                    onClick = {
-                        val text = ""
-                        textState = textState.copy(text = text, selection = TextRange(0))
-                        onValueChange.invoke(text)
-                    }
-                )
-            } else {
-                buttons.forEachIndexed { index, button ->
-                    ButtonSecondaryDefault(
-                        modifier = Modifier.padding(end = if (index == buttons.size - 1) 0.dp else 8.dp),
-                        title = button.title,
+            if (!readOnly) {
+                if (textState.text.isNotEmpty()) {
+                    ButtonSecondaryCircle(
+                        icon = R.drawable.ic_delete_20,
                         onClick = {
-                            textState = textState.copy(
-                                text = button.rawValue,
-                                selection = TextRange(button.rawValue.length)
-                            )
-                            onValueChange.invoke(button.rawValue)
-                        },
+                            val text = ""
+                            textState = textState.copy(text = text, selection = TextRange(0))
+                            onValueChange.invoke(text)
+                        }
                     )
+                } else {
+                    buttons.forEachIndexed { index, button ->
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(end = if (index == buttons.size - 1) 0.dp else 8.dp),
+                            title = button.title,
+                            onClick = {
+                                textState = textState.copy(
+                                    text = button.rawValue,
+                                    selection = TextRange(button.rawValue.length)
+                                )
+                                onValueChange.invoke(button.rawValue)
+                            },
+                        )
+                    }
                 }
             }
 
