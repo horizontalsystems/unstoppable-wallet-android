@@ -42,9 +42,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             bestTrade.settingRecipient.value?.let {
                 add(DataFieldRecipient(it))
             }
-            bestTrade.settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(bestTrade.settingSlippage.value))
             if (allowance != null && allowance < amountIn) {
                 add(DataFieldAllowance(allowance, tokenIn))
             }
@@ -84,7 +82,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             bestTrade.tradeDataV3
         )
 
-        val slippage = bestTrade.settingSlippage.valueOrDefault()
+        val slippage = bestTrade.settingSlippage.value
         val amountOut = bestTrade.tradeDataV3.tokenAmountOut.decimalAmount!!
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
@@ -92,9 +90,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             bestTrade.settingRecipient.value?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
-            bestTrade.settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(bestTrade.settingSlippage.value))
         }
 
         return SwapFinalQuoteEvm(
@@ -125,7 +121,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
         val settingDeadline = SwapSettingDeadline(settings, TradeOptions.defaultTtl)
 
         val tradeOptions = TradeOptions(
-            allowedSlippagePercent = settingSlippage.valueOrDefault(),
+            allowedSlippagePercent = settingSlippage.value,
             ttl = settingDeadline.valueOrDefault(),
             recipient = settingRecipient.getEthereumKitAddress(),
         )

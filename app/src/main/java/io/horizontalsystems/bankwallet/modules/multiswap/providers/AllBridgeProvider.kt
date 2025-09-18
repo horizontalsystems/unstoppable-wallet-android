@@ -276,7 +276,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         }
 
-        val slippage = settingSlippage?.valueOrDefault()
+        val slippage = settingSlippage?.value
 
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
