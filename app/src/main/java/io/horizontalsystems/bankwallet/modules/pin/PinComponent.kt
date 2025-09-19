@@ -55,7 +55,7 @@ class PinComponent(
     override val pinSetFlowable: Flowable<Unit>
         get() = pinManager.pinSetSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val _isLockedFlow = MutableStateFlow(true)
+    private val _isLockedFlow = MutableStateFlow(false)
     override val isLockedFlowable: StateFlow<Boolean>
         get() = _isLockedFlow
 

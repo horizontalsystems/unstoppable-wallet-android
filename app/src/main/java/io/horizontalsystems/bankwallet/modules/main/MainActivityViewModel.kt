@@ -40,7 +40,7 @@ class MainActivityViewModel(
     val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
 
-    private val _contentHidden = MutableStateFlow(true)
+    private val _contentHidden = MutableStateFlow(false)
     val contentHidden: StateFlow<Boolean> = _contentHidden.asStateFlow()
 
     init {
