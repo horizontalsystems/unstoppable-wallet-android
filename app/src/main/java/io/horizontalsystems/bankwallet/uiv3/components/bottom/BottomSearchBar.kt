@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -114,7 +115,7 @@ fun FloatingSearchBar(
         Icon(
             painter = painterResource(R.drawable.ic_search),
             contentDescription = "Search",
-            tint = ComposeAppTheme.colors.andy,
+            tint = ComposeAppTheme.colors.grey,
             modifier = Modifier.size(24.dp)
         )
         HSpacer(8.dp)
@@ -136,7 +137,8 @@ fun FloatingSearchBar(
                         body_andy(stringResource(R.string.Balance_ReceiveHint_Search))
                     }
                     innerTextField()
-                }
+                },
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
             )
             if (searchQuery.isNotEmpty()) {
                 IconButton(
@@ -146,9 +148,10 @@ fun FloatingSearchBar(
                         .size(32.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_delete_20),
+                        painter = painterResource(R.drawable.trash_filled_24),
                         contentDescription = "Clear",
                         tint = ComposeAppTheme.colors.leah,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
