@@ -33,11 +33,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
 import java.net.UnknownHostException
 
 class GuidesFragment : BaseComposeFragment() {
@@ -92,7 +92,7 @@ fun GuidesScreen(navController: NavController) {
                     if (selectedCategory != null) {
                         Column {
                             val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
-                            ScrollableTabs(tabItems) { tab ->
+                            TabsTopScrolled(tabItems) { tab ->
                                 viewModel.onSelectCategory(tab)
                             }
                             val listState = rememberSaveable(
