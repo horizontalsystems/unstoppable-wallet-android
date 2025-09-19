@@ -871,8 +871,8 @@ fun AmountInput(
 @Composable
 fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
-        PriceImpactLevel.Warning,
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.grey
+        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
         else -> ComposeAppTheme.colors.grey
