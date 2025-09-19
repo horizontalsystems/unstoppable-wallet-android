@@ -24,9 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -78,11 +75,8 @@ class MarketSearchFragment : BaseComposeFragment() {
 fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavController) {
     val uiState = viewModel.uiState
 
-    val focusRequester = remember { FocusRequester() }
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(true) }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
 
     val itemSections = when (uiState.page) {
         is MarketSearchViewModel.Page.Discovery -> {
@@ -113,11 +107,6 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                         event = StatEvent.Open(StatPage.AdvancedSearch)
                     )
                 },
-            ),
-            MenuItem(
-                title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
-                onClick = { navController.popBackStack() }
             )
         )
     ) {
