@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
@@ -73,62 +71,6 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                             overflow = TextOverflow.Ellipsis
                         )
                     })
-            }
-        }
-    }
-}
-
-@Composable
-fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
-    val selectedIndex = tabs.indexOfFirst { it.selected }
-
-    Box(
-        modifier = Modifier
-            .background(ComposeAppTheme.colors.tyler)
-            .height(44.dp)
-    ) {
-        HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
-
-        ScrollableTabRow(
-            selectedTabIndex = selectedIndex,
-            backgroundColor = ComposeAppTheme.colors.transparent,
-            contentColor = ComposeAppTheme.colors.tyler,
-            edgePadding = 16.dp,
-            indicator = @Composable { tabPositions ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier
-                        .tabIndicatorOffset(tabPositions[selectedIndex])
-                        .clip(RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp)),
-                    color = ComposeAppTheme.colors.jacob
-                )
-            }
-        ) {
-            tabs.forEach { tab ->
-                val textColor = when{
-                    tab.selected -> ComposeAppTheme.colors.leah
-                    tab.premium -> ComposeAppTheme.colors.jacob
-                    else -> ComposeAppTheme.colors.grey
-                }
-                Tab(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 12.dp),
-                    selected = tab.selected,
-                    onClick = {
-                        onClick.invoke(tab.item)
-                    },
-                    content = {
-                        ProvideTextStyle(
-                            ComposeAppTheme.typography.subhead
-                        ) {
-                            Text(
-                                text = tab.title,
-                                color = textColor,
-                                style = if (tab.selected) ComposeAppTheme.typography.subheadB else ComposeAppTheme.typography.subheadSB,
-                            )
-                        }
-                    }
-                )
             }
         }
     }

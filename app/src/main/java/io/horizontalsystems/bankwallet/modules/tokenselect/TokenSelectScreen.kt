@@ -27,11 +27,11 @@ import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleTyp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
 
 @Composable
 fun TokenSelectScreen(
@@ -61,7 +61,7 @@ fun TokenSelectScreen(
                 )
             }
             if (tabItems.isNotEmpty()) {
-                ScrollableTabs(tabItems) {
+                TabsTopScrolled(tabItems) {
                     viewModel.onTabSelected(it)
                 }
             }

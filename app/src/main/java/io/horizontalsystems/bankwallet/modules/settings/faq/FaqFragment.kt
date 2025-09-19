@@ -32,9 +32,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
 import java.net.UnknownHostException
 
 class FaqListFragment : BaseComposeFragment() {
@@ -99,7 +99,7 @@ private fun FaqScreen(
                                     it
                                 )
                             }
-                        ScrollableTabs(tabItems) { tab ->
+                        TabsTopScrolled(tabItems) { tab ->
                             viewModel.onSelectSection(tab)
                         }
 
