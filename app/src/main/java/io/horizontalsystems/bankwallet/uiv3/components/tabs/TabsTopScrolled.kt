@@ -16,9 +16,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 
 @Composable
-fun TabsTopScrolled(items: List<String>, selectedIndex: Int, onSelect: (Int) -> Unit) {
+fun <T>TabsTopScrolled(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
+    val selectedIndex = tabs.indexOfFirst { it.selected }
+
+    val premiumIndexes = buildList {
+        tabs.forEachIndexed { index, item ->
+            if (item.premium) {
+                add(index)
+            }
+        }
+    }
+
+    TabsTopScrolled(
+        items = tabs.map { it.title },
+        selectedIndex = selectedIndex,
+        onSelect = {
+            onClick.invoke(tabs[it].item)
+        },
+        premiumIndexes = premiumIndexes
+    )
+}
+
+@Composable
+fun TabsTopScrolled(items: List<String>, selectedIndex: Int, onSelect: (Int) -> Unit, premiumIndexes: List<Int> = listOf()) {
     SecondaryScrollableTabRow(
         containerColor = ComposeAppTheme.colors.tyler,
         selectedTabIndex = selectedIndex,
@@ -36,6 +59,7 @@ fun TabsTopScrolled(items: List<String>, selectedIndex: Int, onSelect: (Int) -> 
     ) {
         items.forEachIndexed { index, item ->
             val selected = selectedIndex == index
+            val premium = premiumIndexes.contains(index)
             Tab(
                 modifier = Modifier.height(52.dp),
                 selected = selected,
@@ -47,14 +71,21 @@ fun TabsTopScrolled(items: List<String>, selectedIndex: Int, onSelect: (Int) -> 
                         ComposeAppTheme.typography.subhead
                     }
 
+                    val color = if (selected) {
+                        ComposeAppTheme.colors.leah
+                    } else if (premium) {
+                        ComposeAppTheme.colors.jacob
+                    } else {
+                        ComposeAppTheme.colors.grey
+                    }
+
                     Text(
                         text = item,
-                        maxLines = 1,
-                        style = style
+                        color = color,
+                        style = style,
+                        maxLines = 1
                     )
                 },
-                selectedContentColor = ComposeAppTheme.colors.leah,
-                unselectedContentColor = ComposeAppTheme.colors.grey,
             )
         }
     }
@@ -73,7 +104,8 @@ fun Preview_TabsTop() {
                 selectedIndex = selectedTabIndex,
                 onSelect = {
                     selectedTabIndex = it
-                }
+                },
+                premiumIndexes = listOf(3)
             )
         }
     }
