@@ -10,7 +10,7 @@ class LockManager(
     private val localStorage: ILocalStorage
 ) {
 
-    var isLocked: Boolean = true
+    var isLocked: Boolean = false
         private set
     private val lockTimeout = 60L
     private var appLastVisitTime: Long = 0
