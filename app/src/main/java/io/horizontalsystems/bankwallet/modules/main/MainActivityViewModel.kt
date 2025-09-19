@@ -21,6 +21,7 @@ import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -64,8 +65,8 @@ class MainActivityViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.isLockedFlowable.collect {
-                _contentHidden.value = it
+            pinComponent.isLockedFlowable.collect { locked ->
+                _contentHidden.update { locked }
             }
         }
     }
@@ -115,7 +116,7 @@ class MainActivityViewModel(
     }
 
     fun onResume() {
-        _contentHidden.value = pinComponent.isLocked
+        _contentHidden.update { pinComponent.isLocked }
     }
 
     class Factory : ViewModelProvider.Factory {
