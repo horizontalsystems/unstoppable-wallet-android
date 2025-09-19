@@ -19,16 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 data class TabItem<T>(
     val title: String,
     val selected: Boolean,
     val item: T,
-    val icon: ImageSource? = null,
-    val label: String? = null,
-    val enabled: Boolean = true,
     val premium: Boolean = false,
 )
 
