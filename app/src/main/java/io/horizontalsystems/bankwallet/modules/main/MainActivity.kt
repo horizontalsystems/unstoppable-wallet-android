@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
@@ -18,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
 import io.horizontalsystems.core.hideKeyboard
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
 
@@ -103,8 +107,15 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        viewModel.contentHidden.observe(this) { hidden ->
-            hideContent.visibility = if (hidden) View.VISIBLE else View.GONE
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.contentHidden.collect { hidden ->
+                    hideContent.visibility = if (hidden) View.VISIBLE else View.GONE
+                    if (hidden) {
+                        LockScreenActivity.start(this@MainActivity)
+                    }
+                }
+            }
         }
 
         viewModel.setIntent(intent)
@@ -131,8 +142,6 @@ class MainActivity : BaseActivity() {
     } catch (e: MainScreenValidationError.Welcome) {
         IntroActivity.start(this)
         finish()
-    } catch (e: MainScreenValidationError.Unlock) {
-        LockScreenActivity.start(this)
     } catch (e: MainScreenValidationError.KeystoreRuntimeException) {
         Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
         finish()

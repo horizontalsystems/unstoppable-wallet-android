@@ -142,6 +142,9 @@ class PinComponent(
 
     override fun willEnterForeground() {
         appLockManager.willEnterForeground()
+        if (appLockManager.isLocked) {
+            _isLockedFlow.value = true
+        }
     }
 
     override fun didEnterBackground() {
