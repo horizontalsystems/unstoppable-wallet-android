@@ -158,15 +158,13 @@ fun BalanceCard(
             .pointerInput(true) {
                 detectTapGestures(
                     onLongPress = {
-                        if (viewItem.isWatchAccount) {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                            isContextMenuVisible = true
-                            pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
-                            val press = PressInteraction.Press(it)
-                            pressInteraction = press
-                            coroutineScope.launch {
-                                interactionSource.emit(press)
-                            }
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                        isContextMenuVisible = true
+                        pressOffset = DpOffset(it.x.toDp(), it.y.toDp())
+                        val press = PressInteraction.Press(it)
+                        pressInteraction = press
+                        coroutineScope.launch {
+                            interactionSource.emit(press)
                         }
                     },
                     onTap = {
