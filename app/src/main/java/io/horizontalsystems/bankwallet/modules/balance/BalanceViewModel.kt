@@ -169,7 +169,7 @@ class BalanceViewModel(
         balanceViewItems = balanceViewItems,
         viewState = viewState,
         isRefreshing = isRefreshing,
-        headerNote = headerNote(),
+        nonStandardAccount = service.account?.nonStandard == true,
         errorMessage = errorMessage,
         openSend = openSendTokenSelect,
         balanceTabButtonsEnabled = balanceTabButtonsEnabled,
@@ -187,14 +187,6 @@ class BalanceViewModel(
         service.balanceItemsFlow.value?.let {
             refreshViewItems(it)
         }
-    }
-
-    private fun headerNote(): HeaderNote {
-        val account = service.account ?: return HeaderNote.None
-        val nonRecommendedDismissed =
-            localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
-
-        return account.headerNote(nonRecommendedDismissed)
     }
 
     private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
@@ -259,19 +251,6 @@ class BalanceViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             service.sortType = sortType
-        }
-    }
-
-    fun onCloseHeaderNote(headerNote: HeaderNote) {
-        when (headerNote) {
-            HeaderNote.NonRecommendedAccount -> {
-                service.account?.let { account ->
-                    localStorage.nonRecommendedAccountAlertDismissedAccounts += account.id
-                    emitState()
-                }
-            }
-
-            else -> Unit
         }
     }
 
@@ -409,7 +388,7 @@ data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem2>,
     val viewState: ViewState?,
     val isRefreshing: Boolean,
-    val headerNote: HeaderNote,
+    val nonStandardAccount: Boolean,
     val errorMessage: String?,
     val openSend: OpenSendTokenSelect? = null,
     val balanceTabButtonsEnabled: Boolean,
@@ -444,8 +423,8 @@ enum class HeaderNote {
     NonRecommendedAccount
 }
 
-fun Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
+fun Account.headerNote(): HeaderNote = when {
     nonStandard -> HeaderNote.NonStandardAccount
-    nonRecommended -> if (nonRecommendedDismissed) HeaderNote.None else HeaderNote.NonRecommendedAccount
+    nonRecommended -> HeaderNote.NonRecommendedAccount
     else -> HeaderNote.None
 }

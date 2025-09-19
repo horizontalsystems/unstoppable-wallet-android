@@ -128,7 +128,6 @@ interface ILocalStorage {
     val balanceTabButtonsEnabledFlow: StateFlow<Boolean>
     var amountRoundingEnabled: Boolean
     val amountRoundingEnabledFlow: StateFlow<Boolean>
-    var nonRecommendedAccountAlertDismissedAccounts: Set<String>
     var personalSupportEnabled: Boolean
     var hideSuspiciousTransactions: Boolean
     var pinRandomized: Boolean

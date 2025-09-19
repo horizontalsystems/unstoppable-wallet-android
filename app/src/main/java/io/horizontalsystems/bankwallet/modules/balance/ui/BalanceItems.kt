@@ -56,7 +56,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceUiState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
-import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -359,44 +358,22 @@ fun BalanceItems(
             }
 
             item {
-                when (uiState.headerNote) {
-                    HeaderNote.None -> Unit
-                    HeaderNote.NonStandardAccount -> {
-                        AlertCard(
-                            modifier = Modifier
-                                .background(ComposeAppTheme.colors.tyler)
-                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
-                                .fillMaxWidth(),
-                            format = AlertFormat.Structured,
-                            type = AlertType.Critical,
-                            text = stringResource(R.string.AccountRecovery_MigrationRequired),
-                            onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRequired
-                                )
-                            }
-                        )
-                    }
-
-                    HeaderNote.NonRecommendedAccount -> {
-                        NoteWarning(
-                            modifier = Modifier
-                                .background(ComposeAppTheme.colors.tyler)
-                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
-                                .fillMaxWidth(),
-                            text = stringResource(R.string.AccountRecovery_MigrationRecommended),
-                            onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRecommended
-                                )
-                            },
-                            onClose = {
-                                viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
-                            }
-                        )
-                    }
+                if (uiState.nonStandardAccount) {
+                    AlertCard(
+                        modifier = Modifier
+                            .background(ComposeAppTheme.colors.tyler)
+                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
+                            .fillMaxWidth(),
+                        format = AlertFormat.Structured,
+                        type = AlertType.Critical,
+                        text = stringResource(R.string.AccountRecovery_MigrationRequired),
+                        onClick = {
+                            FaqManager.showFaqPage(
+                                navController,
+                                FaqManager.faqPathMigrationRequired
+                            )
+                        }
+                    )
                 }
             }
 

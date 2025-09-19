@@ -28,7 +28,7 @@ class ManageAccountViewModel(
             newName = account.name,
             canSave = false,
             closeScreen = false,
-            headerNote = account.headerNote(false),
+            headerNote = account.headerNote(),
             keyActions = getKeyActions(account),
             backupActions = getBackupItems(account),
         )

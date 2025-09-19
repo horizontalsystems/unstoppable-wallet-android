@@ -537,12 +537,6 @@ class LocalStorageManager(
     private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)
     override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
 
-    override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
-        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()
-        set(value) {
-            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
-        }
-
     override var autoLockInterval: AutoLockInterval
         get() = preferences.getString(APP_AUTO_LOCK_INTERVAL, null)?.let {
             AutoLockInterval.fromRaw(it)
