@@ -35,12 +35,23 @@ fun TabsTopScrolled(items: List<String>, selectedIndex: Int, onSelect: (Int) -> 
         minTabWidth = 0.dp
     ) {
         items.forEachIndexed { index, item ->
+            val selected = selectedIndex == index
             Tab(
                 modifier = Modifier.height(52.dp),
-                selected = selectedIndex == index,
+                selected = selected,
                 onClick = { onSelect(index) },
                 text = {
-                    Text(text = item, maxLines = 1)
+                    val style = if (selected) {
+                        ComposeAppTheme.typography.subheadSB
+                    } else {
+                        ComposeAppTheme.typography.subhead
+                    }
+
+                    Text(
+                        text = item,
+                        maxLines = 1,
+                        style = style
+                    )
                 },
                 selectedContentColor = ComposeAppTheme.colors.leah,
                 unselectedContentColor = ComposeAppTheme.colors.grey,
