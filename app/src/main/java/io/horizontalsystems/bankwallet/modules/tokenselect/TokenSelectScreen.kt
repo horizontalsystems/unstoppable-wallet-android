@@ -72,7 +72,9 @@ fun TokenSelectScreen(
             ) {
                 if (uiState.noItems) {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(ComposeAppTheme.colors.lawrence),
                     ) {
                         header?.invoke()
                         ListEmptyView(

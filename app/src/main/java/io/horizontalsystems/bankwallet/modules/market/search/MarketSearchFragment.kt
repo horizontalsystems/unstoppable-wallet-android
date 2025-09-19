@@ -113,8 +113,8 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
         Box(modifier = Modifier.fillMaxSize()) {
             if (!uiState.loading && itemSections.all { (_, items) -> items.isEmpty() }) {
                 ListEmptyView(
-                    text = stringResource(R.string.EmptyResults),
-                    icon = R.drawable.ic_not_found
+                    text = stringResource(R.string.Search_NotFounded),
+                    icon = R.drawable.warning_filled_24
                 )
             } else {
                 LazyColumn(
