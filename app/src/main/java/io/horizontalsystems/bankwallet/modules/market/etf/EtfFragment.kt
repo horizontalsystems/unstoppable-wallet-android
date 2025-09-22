@@ -81,7 +81,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopFitted
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
@@ -135,7 +136,9 @@ fun EtfPage(
                 .padding(it)
                 .fillMaxSize(),
         ) {
-            TabsTopFitted(tabItems, onClick = { selectedTab = it })
+            TabsTop(TabsTopType.Fitted, tabItems) {
+                selectedTab = it
+            }
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false

@@ -62,7 +62,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 
 @Composable
 fun TransactionsScreen(
@@ -406,7 +407,7 @@ private fun FilterTypeTabs(
         TabItem(stringResource(it.item.title), it.selected, it.item)
     }
 
-    TabsTopScrolled(tabItems) { transactionType ->
+    TabsTop(TabsTopType.Scrolled, tabItems) { transactionType: FilterTransactionType ->
         onTransactionTypeClick.invoke(transactionType)
     }
 }
