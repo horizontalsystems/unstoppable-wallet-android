@@ -48,7 +48,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopFitted
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import kotlinx.parcelize.Parcelize
 
 class DetectorsFragment : BaseComposeFragment() {
@@ -106,7 +107,9 @@ private fun DetectorsScreen(
             val tabItems = tabs.map {
                 TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
             }
-            TabsTopFitted(tabItems, onClick = { selectedTab = it })
+            TabsTop(TabsTopType.Fitted, tabItems) {
+                selectedTab = it
+            }
 
             HorizontalPager(
                 state = pagerState,

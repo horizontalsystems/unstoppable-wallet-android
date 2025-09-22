@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Faq
+import io.horizontalsystems.bankwallet.entities.FaqSection
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -34,7 +35,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import java.net.UnknownHostException
 
 class FaqListFragment : BaseComposeFragment() {
@@ -99,7 +101,7 @@ private fun FaqScreen(
                                     it
                                 )
                             }
-                        TabsTopScrolled(tabItems) { tab ->
+                        TabsTop(TabsTopType.Scrolled, tabItems) { tab: FaqSection ->
                             viewModel.onSelectSection(tab)
                         }
 

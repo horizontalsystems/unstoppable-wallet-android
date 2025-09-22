@@ -64,7 +64,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
 
@@ -150,7 +151,7 @@ fun TabsSection(
         )
     }
 
-    TabsTopScrolled(tabItems) {
+    TabsTop(TabsTopType.Scrolled, tabItems) {
         onTabClick(it)
     }
 

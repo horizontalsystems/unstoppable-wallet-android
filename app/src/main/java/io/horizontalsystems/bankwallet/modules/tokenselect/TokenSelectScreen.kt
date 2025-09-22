@@ -31,7 +31,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopScrolled
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 
 @Composable
 fun TokenSelectScreen(
@@ -61,7 +62,7 @@ fun TokenSelectScreen(
                 )
             }
             if (tabItems.isNotEmpty()) {
-                TabsTopScrolled(tabItems) {
+                TabsTop(TabsTopType.Scrolled, tabItems) {
                     viewModel.onTabSelected(it)
                 }
             }

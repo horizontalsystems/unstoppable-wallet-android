@@ -21,16 +21,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun <T>TabsTopScrolled(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
-    TabsTop(TabsTopType.Scrolled, tabs, onClick)
-}
-
-@Composable
-fun <T>TabsTopFitted(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
-    TabsTop(TabsTopType.Fitted, tabs, onClick)
-}
-
-@Composable
 fun <T> TabsTop(
     type: TabsTopType,
     tabs: List<TabItem<T>>,
