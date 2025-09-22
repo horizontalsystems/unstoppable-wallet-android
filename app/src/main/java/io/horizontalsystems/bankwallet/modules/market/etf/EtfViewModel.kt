@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.EtfViewItem
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.RankedEtf
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod

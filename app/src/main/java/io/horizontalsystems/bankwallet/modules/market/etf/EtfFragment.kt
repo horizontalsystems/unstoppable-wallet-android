@@ -67,8 +67,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoin
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversalFixedHeight
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
@@ -82,6 +80,8 @@ import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopFitted
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
@@ -135,7 +135,7 @@ fun EtfPage(
                 .padding(it)
                 .fillMaxSize(),
         ) {
-            Tabs(tabItems, onClick = { selectedTab = it })
+            TabsTopFitted(tabItems, onClick = { selectedTab = it })
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false
