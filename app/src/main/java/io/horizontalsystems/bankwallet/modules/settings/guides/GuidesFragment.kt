@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -94,7 +93,7 @@ fun GuidesScreen(navController: NavController) {
                     if (selectedCategory != null) {
                         Column {
                             val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
-                            TabsTop(TabsTopType.Scrolled, tabItems) { tab: GuideCategory ->
+                            TabsTop(TabsTopType.Scrolled, tabItems) { tab ->
                                 viewModel.onSelectCategory(tab)
                             }
                             val listState = rememberSaveable(
