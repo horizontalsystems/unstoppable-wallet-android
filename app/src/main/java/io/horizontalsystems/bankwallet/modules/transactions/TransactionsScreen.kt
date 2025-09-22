@@ -407,7 +407,7 @@ private fun FilterTypeTabs(
         TabItem(stringResource(it.item.title), it.selected, it.item)
     }
 
-    TabsTop(TabsTopType.Scrolled, tabItems) { transactionType: FilterTransactionType ->
+    TabsTop(TabsTopType.Scrolled, tabItems) { transactionType ->
         onTransactionTypeClick.invoke(transactionType)
     }
 }

@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Faq
-import io.horizontalsystems.bankwallet.entities.FaqSection
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -101,7 +100,7 @@ private fun FaqScreen(
                                     it
                                 )
                             }
-                        TabsTop(TabsTopType.Scrolled, tabItems) { tab: FaqSection ->
+                        TabsTop(TabsTopType.Scrolled, tabItems) { tab ->
                             viewModel.onSelectSection(tab)
                         }
 
