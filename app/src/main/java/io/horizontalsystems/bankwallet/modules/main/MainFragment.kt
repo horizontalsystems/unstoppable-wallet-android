@@ -147,7 +147,7 @@ private fun MainScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val modalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    val modalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     Scaffold(
