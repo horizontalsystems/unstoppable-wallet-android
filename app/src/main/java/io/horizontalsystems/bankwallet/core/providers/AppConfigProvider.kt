@@ -44,29 +44,8 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val bscscanApiKey by lazy {
         Translator.getString(R.string.bscscanKey).split(",")
     }
-    val polygonscanApiKey by lazy {
-        Translator.getString(R.string.polygonscanKey).split(",")
-    }
-    val snowtraceApiKey by lazy {
-        Translator.getString(R.string.snowtraceApiKey).split(",")
-    }
-    val optimisticEtherscanApiKey by lazy {
-        Translator.getString(R.string.optimisticEtherscanApiKey).split(",")
-    }
-    val arbiscanApiKey by lazy {
-        Translator.getString(R.string.arbiscanApiKey).split(",")
-    }
-    val gnosisscanApiKey by lazy {
-        Translator.getString(R.string.gnosisscanApiKey).split(",")
-    }
-    val ftmscanApiKey by lazy {
-        Translator.getString(R.string.ftmscanApiKey).split(",")
-    }
-    val basescanApiKey by lazy {
-        Translator.getString(R.string.basescanApiKey).split(",")
-    }
-    val eraZkSyncApiKey by lazy {
-        Translator.getString(R.string.eraZkSyncApiKey).split(",")
+    val otherScanApiKey by lazy {
+        Translator.getString(R.string.otherScanKey).split(",")
     }
     val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)

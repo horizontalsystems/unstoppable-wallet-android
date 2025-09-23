@@ -30,16 +30,16 @@ class EvmSyncSourceManager(
 
     private fun defaultTransactionSource(blockchainType: BlockchainType): TransactionSource {
         return when (blockchainType) {
-            BlockchainType.Ethereum -> TransactionSource.ethereumEtherscan(appConfigProvider.etherscanApiKey)
-            BlockchainType.BinanceSmartChain -> TransactionSource.bscscan(appConfigProvider.bscscanApiKey)
-            BlockchainType.Polygon -> TransactionSource.polygonscan(appConfigProvider.polygonscanApiKey)
-            BlockchainType.Avalanche -> TransactionSource.snowtrace(appConfigProvider.snowtraceApiKey)
-            BlockchainType.Optimism -> TransactionSource.optimisticEtherscan(appConfigProvider.optimisticEtherscanApiKey)
-            BlockchainType.ArbitrumOne -> TransactionSource.arbiscan(appConfigProvider.arbiscanApiKey)
-            BlockchainType.Gnosis -> TransactionSource.gnosis(appConfigProvider.gnosisscanApiKey)
-            BlockchainType.Fantom -> TransactionSource.fantom(appConfigProvider.ftmscanApiKey)
-            BlockchainType.Base -> TransactionSource.basescan(appConfigProvider.basescanApiKey)
-            BlockchainType.ZkSync -> TransactionSource.eraZkSync(appConfigProvider.eraZkSyncApiKey)
+            BlockchainType.Ethereum -> TransactionSource.etherscanApi(appConfigProvider.etherscanApiKey)
+            BlockchainType.BinanceSmartChain -> TransactionSource.etherscanApi(appConfigProvider.bscscanApiKey)
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.Base,
+            BlockchainType.ZkSync -> TransactionSource.etherscanApi(appConfigProvider.otherScanApiKey)
             else -> throw Exception("Non-supported EVM blockchain")
         }
     }
