@@ -183,7 +183,7 @@ abstract class BaseThorChainProvider(
     private fun getSlippageThreshold(quoteSwap: Response.QuoteSwap): BigDecimal {
         return quoteSwap.fees.total
             .multiply(BigDecimal(100))
-            .divide(quoteSwap.expected_amount_out + quoteSwap.fees.total, 0, RoundingMode.CEILING)
+            .divide(quoteSwap.expected_amount_out + quoteSwap.fees.total, 2, RoundingMode.CEILING)
     }
 
     private suspend fun quoteSwap(
