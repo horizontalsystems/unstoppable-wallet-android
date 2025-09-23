@@ -10,6 +10,7 @@ class LockManager(
     private val localStorage: ILocalStorage
 ) {
 
+    val pinSet by pinManager::isPinSet
     var isLocked: Boolean = false
         private set
     private val lockTimeout = 60L

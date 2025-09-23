@@ -49,7 +49,6 @@ interface IPinComponent {
     fun validateCurrentLevel(pin: String): Boolean
     fun onBiometricUnlock()
     fun initDefaultPinLevel()
-    fun lock()
     fun updateLastExitDateBeforeRestart()
     fun isUnique(pin: String, forDuress: Boolean): Boolean
     fun keepUnlocked()

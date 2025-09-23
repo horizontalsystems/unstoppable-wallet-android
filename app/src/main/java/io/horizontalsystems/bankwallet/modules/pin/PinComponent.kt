@@ -56,6 +56,15 @@ class PinComponent(
         get() = pinManager.pinSetSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     private val _isLockedFlow = MutableStateFlow(false)
+
+    private fun lock() {
+        if (!appLockManager.pinSet) {
+            return
+        }
+        appLockManager.lock()
+        _isLockedFlow.value = true
+    }
+
     override val isLockedFlowable: StateFlow<Boolean>
         get() = _isLockedFlow
 
@@ -129,11 +138,6 @@ class PinComponent(
     override fun onBiometricUnlock() {
         appLockManager.onUnlock()
         userManager.setUserLevel(pinManager.getPinLevelLast())
-    }
-
-    override fun lock() {
-        appLockManager.lock()
-        _isLockedFlow.value = true
     }
 
     override fun updateLastExitDateBeforeRestart() {
