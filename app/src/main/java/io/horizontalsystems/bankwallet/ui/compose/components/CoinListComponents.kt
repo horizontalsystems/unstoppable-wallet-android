@@ -322,11 +322,11 @@ fun ScreenMessageWithAction(
         verticalArrangement = Arrangement.Center
     ) {
         Box(
-            modifier = Modifier.size(96.dp),
+            modifier = Modifier.size(104.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(72.dp),
                 painter = painterResource(icon),
                 contentDescription = text,
                 tint = ComposeAppTheme.colors.grey
@@ -343,6 +343,7 @@ fun ScreenMessageWithAction(
             VSpacer(32.dp)
             composable.invoke()
         }
+        VSpacer(62.dp)
     }
 }
 
@@ -483,6 +484,17 @@ fun CategoryCard(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewScreenMessageWithAction() {
+    ComposeAppTheme {
+        ScreenMessageWithAction(
+            text = "Sync error. Try again",
+            icon = R.drawable.warning_filled_24
+        )
     }
 }
 
