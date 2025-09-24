@@ -125,7 +125,9 @@ class ZcashAdapter(
             lightWalletEndpoint = lightWalletEndpoint,
             setup = AccountCreateSetup(accountName = wallet.account.name, keySource = null, seed = FirstClassByteArray(seed)),
             birthday = birthday,
-            walletInitMode = walletInitMode
+            walletInitMode = walletInitMode,
+            isTorEnabled = false,
+            isExchangeRateEnabled = false
         )
 
         zcashAccount = runBlocking { synchronizer.getAccounts().first() }
