@@ -961,6 +961,7 @@
     <string name="Settings_TonConnect" translatable="false">TON Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
+    <string name="Settings_LaunchScreen_Tip">Select which screen opens on startup</string>
     <string name="Settings_Appearance">Appearance</string>
     <string name="Settings_AppSettings">App Settings</string>
     <string name="Settings_Subscription">Subscription</string>
@@ -1128,13 +1129,18 @@
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceValue">Balance Value</string>
+    <string name="Appearance_BalanceValue_Tip">Show balance in coins or fiat</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_HideMarketsTab">Hide Markets</string>
+    <string name="Appearance_HideMarketsTab_Tip">Remove the Markets tab from view</string>
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Hide Send, Receive, and Swap buttons in Balance</string>
     <string name="Appearance_AmountRounding">Amount Rounding</string>
+    <string name="Appearance_AmountRounding_Tip">Round balance numbers for easier reading</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance every time the app is opened.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Choose period for price change display</string>
     <string name="Appearance_HideButtonsInfo">The “Hide Buttons” configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
