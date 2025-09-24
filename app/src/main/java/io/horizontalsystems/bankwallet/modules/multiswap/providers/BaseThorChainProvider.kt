@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.derivation
@@ -21,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
@@ -35,7 +33,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.RoundingMode
 import java.util.Date
 
 abstract class BaseThorChainProvider(
@@ -136,12 +133,7 @@ abstract class BaseThorChainProvider(
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
 
         val cautions = mutableListOf<HSCaution>()
-        val slippageThreshold = getSlippageThreshold(quoteSwap)
-        val settingSlippage = SwapSettingSlippage(settings, slippageThreshold, true)
-        val slippage = settingSlippage.value
-        if (slippage < slippageThreshold) {
-            cautions.add(SlippageNotApplicable(slippageThreshold))
-        }
+        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -175,15 +167,8 @@ abstract class BaseThorChainProvider(
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionApprove,
-            cautions = cautions,
-            slippageThreshold = slippageThreshold
+            cautions = cautions
         )
-    }
-
-    private fun getSlippageThreshold(quoteSwap: Response.QuoteSwap): BigDecimal {
-        return quoteSwap.fees.total
-            .multiply(BigDecimal(100))
-            .divide(quoteSwap.expected_amount_out + quoteSwap.fees.total, 2, RoundingMode.CEILING)
     }
 
     private suspend fun quoteSwap(
@@ -206,7 +191,7 @@ abstract class BaseThorChainProvider(
             affiliateBps = affiliateBps,
             streamingInterval = 1,
             streamingQuantity = 0,
-            toleranceBps = slippage?.movePointRight(2)?.toLong()
+            liquidityToleranceBps = slippage?.movePointRight(2)?.toLong()
         )
     }
 
@@ -220,38 +205,23 @@ abstract class BaseThorChainProvider(
     ): ISwapFinalQuote {
         check(swapQuote is SwapQuoteThorChain)
 
-        val slippageThreshold = swapQuote.slippageThreshold
-
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(swapSettings, slippageThreshold, true)
+        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.value
 
         val cautions = mutableListOf<HSCaution>()
-        val finalSlippage: BigDecimal?
 
-        if (slippage >= slippageThreshold) {
-            finalSlippage = slippage
-        } else {
-            cautions.add(SlippageNotApplicable(slippageThreshold))
-
-            finalSlippage = null
-        }
-
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, finalSlippage, settingRecipient.value)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, settingRecipient.value)
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
-        val amountOutMin = finalSlippage?.let {
-            amountOut.subtract(amountOut.multiply(it.movePointLeft(2)))
-        }
+        val amountOutMin = amountOut.subtract(amountOut.multiply(slippage.movePointLeft(2)))
 
         val fields = buildList {
             settingRecipient.value?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
-            finalSlippage?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(slippage))
         }
 
         return SwapFinalQuoteThorChain(
@@ -379,7 +349,7 @@ interface ThornodeAPI {
         @Query("affiliate_bps") affiliateBps: Int?,
         @Query("streaming_interval") streamingInterval: Long,
         @Query("streaming_quantity") streamingQuantity: Long,
-        @Query("tolerance_bps") toleranceBps: Long?,
+        @Query("liquidity_tolerance_bps") liquidityToleranceBps: Long?,
 
     ): Response.QuoteSwap
 
@@ -469,9 +439,3 @@ class DepositWithExpiryMethod(
 sealed class SwapError : Exception() {
     class NoDestinationAddress : SwapError()
 }
-
-class SlippageNotApplicable(minSlippageApplicable: BigDecimal) : HSCaution(
-    TranslatableString.ResString(R.string.SwapWarning_SlippageNotApplicable_Title),
-    Type.Warning,
-    TranslatableString.ResString(R.string.SwapWarning_SlippageNotApplicable_Description, minSlippageApplicable),
-)

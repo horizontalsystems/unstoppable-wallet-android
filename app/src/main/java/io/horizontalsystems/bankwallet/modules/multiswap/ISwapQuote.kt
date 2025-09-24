@@ -71,5 +71,4 @@ class SwapQuoteThorChain(
     override val amountIn: BigDecimal,
     override val actionRequired: ISwapProviderAction?,
     override val cautions: List<HSCaution>,
-    val slippageThreshold: BigDecimal,
 ) : ISwapQuote
