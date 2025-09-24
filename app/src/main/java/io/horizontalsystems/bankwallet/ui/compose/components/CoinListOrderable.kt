@@ -1,14 +1,10 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -24,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
@@ -34,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSCellButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -101,30 +97,21 @@ fun CoinListOrderable(
                             .fillMaxWidth()
                             .height(IntrinsicSize.Max)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
-                                .align(Alignment.CenterEnd)
-                                .width(100.dp)
-                                .clickable {
-                                    if (item.favorited) {
-                                        onRemoveFavorite(item.coinUid)
-                                    } else {
-                                        onAddFavorite(item.coinUid)
-                                    }
-                                    coroutineScope.launch {
-                                        delay(200)
-                                        revealedCardId = null
-                                    }
-                                },
-                            contentAlignment = Alignment.Center
+                        HSCellButton(
+                            modifier = Modifier.align(Alignment.CenterEnd),
+                            icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                            iconTint = ComposeAppTheme.colors.blade,
+                            backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
                         ) {
-                            Icon(
-                                painter = painterResource(id = if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
-                                tint = ComposeAppTheme.colors.blade,
-                                contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
-                            )
+                            if (item.favorited) {
+                                onRemoveFavorite(item.coinUid)
+                            } else {
+                                onAddFavorite(item.coinUid)
+                            }
+                            coroutineScope.launch {
+                                delay(200)
+                                revealedCardId = null
+                            }
                         }
                         DraggableCardSimple(
                             key = item.coinUid,

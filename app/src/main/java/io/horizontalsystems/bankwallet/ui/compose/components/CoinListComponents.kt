@@ -72,6 +72,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSCellButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -100,31 +101,23 @@ fun CoinListSlidable(
                     .fillMaxWidth()
                     .height(IntrinsicSize.Max)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
-                        .align(Alignment.CenterEnd)
-                        .width(100.dp)
-                        .clickable {
-                            if (item.favorited) {
-                                onRemoveFavorite(item.coinUid)
-                            } else {
-                                onAddFavorite(item.coinUid)
-                            }
-                            coroutineScope.launch {
-                                delay(200)
-                                revealedCardId = null
-                            }
-                        },
-                    contentAlignment = Alignment.Center
+                HSCellButton(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                    iconTint = ComposeAppTheme.colors.blade,
+                    backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
                 ) {
-                    Icon(
-                        painter = painterResource(id = if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
-                        tint = ComposeAppTheme.colors.blade,
-                        contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
-                    )
+                    if (item.favorited) {
+                        onRemoveFavorite(item.coinUid)
+                    } else {
+                        onAddFavorite(item.coinUid)
+                    }
+                    coroutineScope.launch {
+                        delay(200)
+                        revealedCardId = null
+                    }
                 }
+
                 DraggableCardSimple(
                     key = item.coinUid,
                     isRevealed = revealedCardId == item.coinUid,
