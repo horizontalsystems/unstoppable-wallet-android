@@ -4,8 +4,8 @@ import io.horizontalsystems.bankwallet.R
 
 object MayaProvider : BaseThorChainProvider(
     baseUrl = "https://mayanode.mayachain.info/mayachain/",
-    affiliate = null,
-    affiliateBps = null,
+    affiliate = "hrz_android",
+    affiliateBps = 100,
 ) {
     override val id = "mayachain"
     override val title = "Maya Protocol"
