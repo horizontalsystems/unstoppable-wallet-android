@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +36,10 @@ fun <T> MenuGroup(
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
-            Modifier.Companion
+            Modifier
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
+                .width(240.dp)
                 .padding(vertical = 8.dp)
         ) {
             title?.let {
@@ -65,7 +67,7 @@ private fun <T> MenuItem(
     onSelectItem: (T) -> Unit,
 ) {
     Column(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .fillMaxWidth()
             .clickable(
                 enabled = !item.selected,
@@ -85,14 +87,14 @@ private fun <T> MenuItem(
 
 @Composable
 private fun MenuHeader(title: String) {
-    Box(modifier = Modifier.Companion.height(40.dp)) {
+    Box(modifier = Modifier.height(40.dp)) {
         subheadSB_grey(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .align(Alignment.Companion.Center),
+                .align(Alignment.Center),
             text = title,
-            textAlign = TextAlign.Companion.Center
+            textAlign = TextAlign.Center
         )
     }
 }
