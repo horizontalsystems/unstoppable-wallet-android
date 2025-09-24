@@ -72,10 +72,13 @@ class MarketSearchFragment : BaseComposeFragment() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavController) {
+fun MarketSearchScreen(
+    viewModel: MarketSearchViewModel,
+    navController: NavController
+) {
     val uiState = viewModel.uiState
 
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by remember { mutableStateOf(uiState.searchQuery) }
     var isSearchActive by remember { mutableStateOf(true) }
 
     val itemSections = when (uiState.page) {
@@ -156,6 +159,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                                                 viewModel.onFavoriteClick(favorited, coin.uid)
                                             },
                                             onClick = {
+                                                isSearchActive = false
                                                 viewModel.onCoinOpened(coin)
                                                 navController.slideFromRight(
                                                     R.id.coinFragment,

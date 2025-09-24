@@ -18,7 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +35,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -97,6 +103,13 @@ fun FloatingSearchBar(
     modifier: Modifier = Modifier
 ) {
     val focusRequester = remember { FocusRequester() }
+    var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        val text = searchQuery
+        mutableStateOf(TextFieldValue(text))
+    }
+    LaunchedEffect(searchQuery) {
+        textState = textState.copy(text = searchQuery, selection = TextRange(searchQuery.length))
+    }
 
     Row(
         modifier = modifier
@@ -120,18 +133,22 @@ fun FloatingSearchBar(
         )
         HSpacer(8.dp)
 
-        if (isActive) {
+        if (isActive || searchQuery.isNotEmpty()) {
             BasicTextField(
-                value = searchQuery,
-                onValueChange = onSearchQueryChange,
-                singleLine = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester),
+                value = textState,
+                onValueChange = { textFieldValue ->
+                    val newValue = textFieldValue.text
+                    onSearchQueryChange(newValue)
+                    textState = textFieldValue
+                },
                 textStyle = ColoredTextStyle(
                     color = ComposeAppTheme.colors.leah,
                     textStyle = ComposeAppTheme.typography.body
                 ),
-                modifier = Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester),
+                singleLine = true,
                 decorationBox = { innerTextField ->
                     if (searchQuery.isEmpty()) {
                         body_andy(stringResource(R.string.Balance_ReceiveHint_Search))
