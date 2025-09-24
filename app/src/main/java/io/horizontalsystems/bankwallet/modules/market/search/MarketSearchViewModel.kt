@@ -27,6 +27,7 @@ class MarketSearchViewModel(
         popular = coinItems(discoveryState.popular),
     )
     private var loading = true
+    private var searchQuery = ""
 
     init {
         viewModelScope.launch {
@@ -57,6 +58,7 @@ class MarketSearchViewModel(
             page = page,
             listId = listId,
             loading = loading,
+            searchQuery = searchQuery,
         )
     }
 
@@ -73,6 +75,7 @@ class MarketSearchViewModel(
     }
 
     fun searchByQuery(query: String) {
+        searchQuery = query
         marketSearchService.setQuery(query)
     }
 
@@ -121,6 +124,7 @@ class MarketSearchViewModel(
         val page: Page,
         val listId: String,
         val loading: Boolean,
+        val searchQuery: String,
     )
 
     sealed class Page {
