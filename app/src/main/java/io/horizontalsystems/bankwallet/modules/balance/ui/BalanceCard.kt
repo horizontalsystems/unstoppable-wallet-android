@@ -9,11 +9,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material3.DropdownMenu
@@ -50,9 +50,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCa
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftLoaderCoinSyncFailed
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSCellButton
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
@@ -72,28 +72,20 @@ fun BalanceCardSwipable(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(IntrinsicSize.Max)
             .background(ComposeAppTheme.colors.tyler),
         contentAlignment = Alignment.Center
     ) {
-        HsIconButton(
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd)
-                .width(88.dp),
-            onClick = onDisable,
-            content = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                    tint = ComposeAppTheme.colors.grey,
-                    contentDescription = "delete",
-                )
-            }
+        HSCellButton(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            icon = painterResource(R.drawable.trash_24),
+            onClick = onDisable
         )
 
         DraggableCardSimple(
             key = viewItem.wallet,
             isRevealed = revealed,
-            cardOffset = 88f,
+            cardOffset = 100f,
             onReveal = { onReveal(viewItem.wallet.hashCode()) },
             onConceal = onConceal,
             content = {
