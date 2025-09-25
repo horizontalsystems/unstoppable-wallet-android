@@ -30,8 +30,7 @@ object SendMoneroModule {
             val amountService = SendAmountService(
                 amountValidator = amountValidator,
                 coinCode = wallet.coin.code,
-                availableBalance = adapter.balanceData.available,
-                leaveSomeBalanceForFee = wallet.token.type.isNative
+                availableBalance = adapter.balanceData.available
             )
             val addressService = SendMoneroAddressService()
             val feeService = SendMoneroFeeService(adapter)
