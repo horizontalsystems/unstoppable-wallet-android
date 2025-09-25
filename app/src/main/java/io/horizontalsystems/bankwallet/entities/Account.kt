@@ -384,6 +384,7 @@ sealed class AccountType : Parcelable {
             is StellarAddress -> address
             is BitcoinAddress -> address
             is HdExtendedKey -> keySerialized
+            is MoneroWatchAccount -> address
             else -> null
         }
 
