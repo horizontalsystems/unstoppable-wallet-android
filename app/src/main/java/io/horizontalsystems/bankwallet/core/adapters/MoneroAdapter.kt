@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.monerokit.Balance
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.Seed
 import io.horizontalsystems.monerokit.SyncState
@@ -45,12 +46,12 @@ class MoneroAdapter(
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    private var totalBalance = BigDecimal.ZERO
+    private var balance = Balance(0, 0)
 
     override var balanceState: AdapterState = kit.syncStateFlow.value.toAdapterState()
 
     override val balanceData: BalanceData
-        get() = BalanceData(totalBalance)
+        get() = balance.toBalanceData()
 
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -66,7 +67,7 @@ class MoneroAdapter(
 
     override fun start() {
         kit.balanceFlow.collectWith(coroutineScope) {
-            totalBalance = it.scaledDown(DECIMALS)
+            balance = it
 
             balanceUpdatedSubject.onNext(Unit)
         }
@@ -213,4 +214,10 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
 fun AccountType.toMoneroSeed() = when (this) {
     is AccountType.Mnemonic -> Seed.Bip39(words, passphrase)
     else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to Monero Seed")
+}
+
+fun Balance.toBalanceData(): BalanceData {
+    val available = unlocked.scaledDown(MoneroAdapter.DECIMALS)
+    val pending = (all - unlocked).coerceAtLeast(0).scaledDown(MoneroAdapter.DECIMALS)
+    return BalanceData(available, pending = pending)
 }
