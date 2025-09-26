@@ -805,6 +805,7 @@
     <string name="Settings_AppStatus">Статус приложения</string>
     <string name="Settings_RateUs">Оцените нас</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
+    <string name="Settings_LaunchScreen_Tip">Выберите, какой экран открывается при запуске</string>
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_AppSettings">Настройки приложения</string>
     <string name="Settings_Subscription">Подписка</string>
@@ -952,13 +953,18 @@
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
     <string name="Appearance_BalanceValue">Значение баланса</string>
+    <string name="Appearance_BalanceValue_Tip">Показать баланс в монетах или фиатах</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_HideMarketsTab">Скрыть рынки</string>
+    <string name="Appearance_HideMarketsTab_Tip">Удалить вкладку Markets из вида</string>
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Скрыть кнопки \"Отправить\", \"Получить\" и \"Поменять\" на балансе</string>
     <string name="Appearance_AmountRounding">Количество округления</string>
+    <string name="Appearance_AmountRounding_Tip">Округлённые номера баланса для облегчения чтения</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения.</string>
     <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Выберите период для показа изменения цены</string>
     <string name="Appearance_HideButtonsInfo">Конфигурация «Скрыть кнопки» скрывает кнопки «Отправить», «Получать» и «Поменять» на вкладке Баланс.</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
