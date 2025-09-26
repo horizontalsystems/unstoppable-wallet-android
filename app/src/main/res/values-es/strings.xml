@@ -803,6 +803,7 @@
     <string name="Settings_AppStatus">Estado de la aplicación</string>
     <string name="Settings_RateUs">Califícanos</string>
     <string name="Settings_LaunchScreen">Pantalla de lanzamiento</string>
+    <string name="Settings_LaunchScreen_Tip">Seleccione qué pantalla se abre al iniciar</string>
     <string name="Settings_Appearance">Apariencia</string>
     <string name="Settings_AppSettings">Ajustes de app</string>
     <string name="Settings_Subscription">Suscripción</string>
@@ -950,13 +951,18 @@
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICONO APP</string>
     <string name="Appearance_BalanceValue">Valor de Saldo</string>
+    <string name="Appearance_BalanceValue_Tip">Mostrar saldo en monedas o fiat</string>
     <string name="Appearance_Warning_CloseApplication">Cambiar icono cerrará la aplicación</string>
     <string name="Appearance_HideMarketsTab">Ocultar Mercados</string>
+    <string name="Appearance_HideMarketsTab_Tip">Quitar la pestaña Markets de la vista</string>
     <string name="Appearance_HideBalanceTabButtons">Ocultar Botones</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Ocultar botones de Enviar, Recibir y Intercambio en Saldo</string>
     <string name="Appearance_AmountRounding">Monto Redondeo</string>
+    <string name="Appearance_AmountRounding_Tip">Redondea los números de saldo para una lectura más fácil</string>
     <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
     <string name="Appearance_BalanceAutoHide_Description">Oculta automáticamente el balance cada vez que se abre la aplicación.</string>
     <string name="Appearance_PriceChangeInterval">Cambio de Precio %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Elegir período para mostrar el cambio de precio</string>
     <string name="Appearance_HideButtonsInfo">La configuración “Ocultar botones” oculta los botones Enviar, Recibir y Intercambiar en la pestaña Balance.</string>
     <string name="BalanceViewType_CoinValue">Valor de la moneda</string>
     <string name="BalanceViewType_FiatValue">Valor Fiat</string>
