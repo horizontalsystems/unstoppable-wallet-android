@@ -803,6 +803,7 @@
     <string name="Settings_AppStatus">应用状态</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
+    <string name="Settings_LaunchScreen_Tip">选择启动时打开哪个屏幕</string>
     <string name="Settings_Appearance">外观</string>
     <string name="Settings_AppSettings">应用设置</string>
     <string name="Settings_Subscription">訂閱</string>
@@ -950,13 +951,18 @@
     <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_AppIcon">应用图标</string>
     <string name="Appearance_BalanceValue">余额值</string>
+    <string name="Appearance_BalanceValue_Tip">以硬币或纤维显示余额</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_HideMarketsTab">隐藏市场</string>
+    <string name="Appearance_HideMarketsTab_Tip">从视图中删除市场标签</string>
     <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">在余额中隐藏发送、接收和交换按钮</string>
     <string name="Appearance_AmountRounding">四舍五入量</string>
+    <string name="Appearance_AmountRounding_Tip">更容易读取的圆平衡数</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡。</string>
     <string name="Appearance_PriceChangeInterval">价格变化 %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">选择价格变化显示的期间</string>
     <string name="Appearance_HideButtonsInfo">“隐藏按钮”配置隐藏平衡选项卡上的发送、接收和交换按钮。</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
