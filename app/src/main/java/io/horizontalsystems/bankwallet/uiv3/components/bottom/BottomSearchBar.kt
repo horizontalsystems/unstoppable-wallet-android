@@ -4,14 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
@@ -26,13 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -51,16 +48,24 @@ fun BoxScope.BottomSearchBar(
     modifier: Modifier = Modifier,
     searchQuery: String,
     isSearchActive: Boolean,
-    keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
-    focusManager: FocusManager = LocalFocusManager.current,
     onActiveChange: (Boolean) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCloseSearch: () -> Unit = { },
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(isSearchActive) {
+        if (!isSearchActive) {
+            keyboardController?.hide()
+            focusManager.clearFocus()
+        }
+    }
+
     Row(
         modifier = modifier
             .align(Alignment.BottomCenter)
-            .windowInsetsPadding(WindowInsets.ime)
+            .imePadding()
             .systemBarsPadding()
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -73,6 +78,13 @@ fun BoxScope.BottomSearchBar(
             isActive = isSearchActive,
             onActiveChange = { active ->
                 onActiveChange(active)
+                if (active) {
+                    focusManager.clearFocus(force = true)
+                    keyboardController?.show()
+                } else {
+                    keyboardController?.hide()
+                    focusManager.clearFocus(force = true)
+                }
             },
             modifier = Modifier.weight(1f)
         )
@@ -103,6 +115,9 @@ fun FloatingSearchBar(
     modifier: Modifier = Modifier
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    var basicTextFieldHasFocus by remember { mutableStateOf(false) }
+
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         val text = searchQuery
         mutableStateOf(TextFieldValue(text))
@@ -117,10 +132,9 @@ fun FloatingSearchBar(
             .clip(RoundedCornerShape(24.dp))
             .background(ComposeAppTheme.colors.blade)
             .height(48.dp)
+            .focusRequester(focusRequester)
             .clickable {
-                if (!isActive) {
-                    onActiveChange(true)
-                }
+                onActiveChange(true)
             }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -137,7 +151,14 @@ fun FloatingSearchBar(
             BasicTextField(
                 modifier = Modifier
                     .weight(1f)
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        basicTextFieldHasFocus = focusState.isFocused
+
+                        if (focusState.isFocused && !isActive) {
+                            onActiveChange(true)
+                        }
+                    },
                 value = textState,
                 onValueChange = { textFieldValue ->
                     val newValue = textFieldValue.text
@@ -175,15 +196,20 @@ fun FloatingSearchBar(
         } else {
             body_andy(
                 text = stringResource(R.string.Balance_ReceiveHint_Search),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
             )
         }
     }
 
-    // Auto-focus when becoming active
     LaunchedEffect(isActive) {
         if (isActive) {
             focusRequester.requestFocus()
+        } else {
+            if (basicTextFieldHasFocus) {
+                focusManager.clearFocus()
+            }
         }
     }
 }
