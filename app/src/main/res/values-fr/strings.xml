@@ -803,6 +803,7 @@
     <string name="Settings_AppStatus">Statut de l\'appli</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
+    <string name="Settings_LaunchScreen_Tip">Sélectionnez l\'écran qui s\'ouvre au démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
     <string name="Settings_AppSettings">Paramètres de l\'application</string>
     <string name="Settings_Subscription">Abonnement</string>
@@ -950,13 +951,18 @@
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
     <string name="Appearance_BalanceValue">Valeur du solde</string>
+    <string name="Appearance_BalanceValue_Tip">Afficher le solde en pièces ou en monnaie fiduciaire</string>
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_HideMarketsTab">Masquer les marchés</string>
+    <string name="Appearance_HideMarketsTab_Tip">Retirer l\'onglet Marchés de la vue</string>
     <string name="Appearance_HideBalanceTabButtons">Masquer les boutons</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Masquer les boutons Envoyer, Recevoir et Permuter dans la balance</string>
     <string name="Appearance_AmountRounding">Arrondi du montant</string>
+    <string name="Appearance_AmountRounding_Tip">Numéros de solde arrondis pour faciliter la lecture</string>
     <string name="Appearance_BalanceAutoHide">Masquer le Solde Automatiquement</string>
     <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde chaque fois que l\'application est ouverte.</string>
     <string name="Appearance_PriceChangeInterval">Variation de prix %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Choisir la période d\'affichage du changement de prix</string>
     <string name="Appearance_HideButtonsInfo">La configuration « Masquer les boutons» masque les boutons Envoyer, Recevoir et Permuter dans l\'onglet Solde.</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
     <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
