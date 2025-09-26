@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.tokenselect
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,11 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -33,6 +30,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun TokenSelectScreen(
@@ -44,8 +43,7 @@ fun TokenSelectScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
 
     HSScaffold(
         title = title,
@@ -89,15 +87,6 @@ fun TokenSelectScreen(
                             .fillMaxSize()
                             .imePadding()
                             .background(ComposeAppTheme.colors.lawrence)
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    // Hide keyboard when scrolling/tapping on list
-                                    if (isSearchActive) {
-                                        keyboardController?.hide()
-                                        focusManager.clearFocus()
-                                    }
-                                }
-                            }
                     ) {
                         item {
                             header?.invoke()
@@ -108,7 +97,11 @@ fun TokenSelectScreen(
                                 viewItem = item,
                                 type = BalanceCardSubtitleType.CoinName,
                                 onClick = {
-                                    onClickItem.invoke(item)
+                                    isSearchActive = false
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        onClickItem.invoke(item)
+                                    }
                                 }
                             )
                             HsDivider()
@@ -122,8 +115,6 @@ fun TokenSelectScreen(
                 BottomSearchBar(
                     searchQuery = searchQuery,
                     isSearchActive = isSearchActive,
-                    keyboardController = keyboardController,
-                    focusManager = focusManager,
                     onActiveChange = { isSearchActive = it },
                     onSearchQueryChange = { query ->
                         searchQuery = query

@@ -52,6 +52,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 enum class ContactsScreenBottomSheetType {
@@ -175,7 +176,11 @@ fun ContactsScreen(
                                     }
                                 }
                             } else {
-                                onNavigateToContact(contact)
+                                isSearchActive = false
+                                coroutineScope.launch {
+                                    delay(200)
+                                    onNavigateToContact(contact)
+                                }
                             }
                         }
                     }

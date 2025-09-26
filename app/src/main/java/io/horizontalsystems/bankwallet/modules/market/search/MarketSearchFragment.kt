@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -58,6 +60,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 import io.horizontalsystems.marketkit.models.Coin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Optional
 
 class MarketSearchFragment : BaseComposeFragment() {
@@ -80,6 +84,7 @@ fun MarketSearchScreen(
 
     var searchQuery by remember { mutableStateOf(uiState.searchQuery) }
     var isSearchActive by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
 
     val itemSections = when (uiState.page) {
         is MarketSearchViewModel.Page.Discovery -> {
@@ -113,91 +118,101 @@ fun MarketSearchScreen(
             )
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            if (!uiState.loading && itemSections.all { (_, items) -> items.isEmpty() }) {
-                ListEmptyView(
-                    text = stringResource(R.string.Search_NotFounded),
-                    icon = R.drawable.warning_filled_24
-                )
-            } else {
-                LazyColumn(
-                    state = rememberSaveable(
-                        uiState.listId,
-                        saver = LazyListState.Saver
+        Column {
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (!uiState.loading && itemSections.all { (_, items) -> items.isEmpty() }) {
+                    ListEmptyView(
+                        text = stringResource(R.string.Search_NotFounded),
+                        icon = R.drawable.warning_filled_24
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .imePadding()
+                            .fillMaxSize(),
+                        state = rememberSaveable(
+                            uiState.listId,
+                            saver = LazyListState.Saver
+                        ) {
+                            LazyListState()
+                        }
                     ) {
-                        LazyListState()
-                    }
-                ) {
-                    itemSections.forEach { (section, coinItems) ->
-                        if (coinItems.isNotEmpty()) {
-                            section.title.ifPresent {
-                                stickyHeader {
-                                    HeaderStick(
-                                        borderTop = true,
-                                        text = stringResource(id = section.title.get())
-                                    )
-                                }
-                            }
-                            items(coinItems) { item ->
-                                val coin = item.fullCoin.coin
-
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(IntrinsicSize.Max)
-                                ) {
-                                    Box(modifier = Modifier.background(ComposeAppTheme.colors.tyler)) {
-                                        MarketCoin(
-                                            coinUid = coin.uid,
-                                            coinCode = coin.code,
-                                            coinName = coin.name,
-                                            coinIconUrl = coin.imageUrl,
-                                            alternativeCoinIconUrl = coin.alternativeImageUrl,
-                                            coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                                            favourited = item.favourited,
-                                            onFavoriteClick = { favorited, _ ->
-                                                viewModel.onFavoriteClick(favorited, coin.uid)
-                                            },
-                                            onClick = {
-                                                isSearchActive = false
-                                                viewModel.onCoinOpened(coin)
-                                                navController.slideFromRight(
-                                                    R.id.coinFragment,
-                                                    CoinFragment.Input(coin.uid)
-                                                )
-
-                                                stat(
-                                                    page = StatPage.MarketSearch,
-                                                    event = StatEvent.OpenCoin(coin.uid),
-                                                    section = section.statSection
-                                                )
-                                            },
+                        itemSections.forEach { (section, coinItems) ->
+                            if (coinItems.isNotEmpty()) {
+                                section.title.ifPresent {
+                                    stickyHeader {
+                                        HeaderStick(
+                                            borderTop = true,
+                                            text = stringResource(id = section.title.get())
                                         )
+                                    }
+                                }
+                                items(coinItems) { item ->
+                                    val coin = item.fullCoin.coin
+
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(IntrinsicSize.Max)
+                                    ) {
+                                        Box(modifier = Modifier.background(ComposeAppTheme.colors.tyler)) {
+                                            MarketCoin(
+                                                coinUid = coin.uid,
+                                                coinCode = coin.code,
+                                                coinName = coin.name,
+                                                coinIconUrl = coin.imageUrl,
+                                                alternativeCoinIconUrl = coin.alternativeImageUrl,
+                                                coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                                                favourited = item.favourited,
+                                                onFavoriteClick = { favorited, _ ->
+                                                    viewModel.onFavoriteClick(favorited, coin.uid)
+                                                },
+                                                onClick = {
+                                                    isSearchActive = false
+                                                    coroutineScope.launch {
+                                                        delay(200)
+
+                                                        viewModel.onCoinOpened(coin)
+                                                        navController.slideFromRight(
+                                                            R.id.coinFragment,
+                                                            CoinFragment.Input(coin.uid)
+                                                        )
+                                                    }
+                                                    stat(
+                                                        page = StatPage.MarketSearch,
+                                                        event = StatEvent.OpenCoin(coin.uid),
+                                                        section = section.statSection
+                                                    )
+                                                },
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    item {
-                        HsDivider()
-                    }
-                    item {
-                        VSpacer(72.dp)
+                        item {
+                            HsDivider()
+                        }
+                        item {
+                            VSpacer(72.dp)
+                        }
                     }
                 }
-            }
 
-            BottomSearchBar(
-                searchQuery = searchQuery,
-                isSearchActive = isSearchActive,
-                onActiveChange = { isSearchActive = it },
-                onSearchQueryChange = { query ->
-                    searchQuery = query
-                    viewModel.searchByQuery(query)
+                BottomSearchBar(
+                    searchQuery = searchQuery,
+                    isSearchActive = isSearchActive,
+                    onActiveChange = { active ->
+                        isSearchActive = active
+                    },
+                    onSearchQueryChange = { query ->
+                        searchQuery = query
+                        viewModel.searchByQuery(query)
+                    }
+                ) {
+                    navController.popBackStack()
                 }
-            ) {
-                navController.popBackStack()
             }
         }
     }

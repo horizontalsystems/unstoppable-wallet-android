@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchViewMod
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -47,7 +46,6 @@ class MarketSearchViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            delay(300)
             marketDiscoveryService.start()
             loading = false
         }
