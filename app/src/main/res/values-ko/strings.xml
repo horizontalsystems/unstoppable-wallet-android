@@ -805,11 +805,9 @@
     <string name="Appearance_MarketsTab">마켓 탭</string>
     <string name="Appearance_BalanceTab">잔고 탭</string>
     <string name="Appearance_AppIcon">앱 아이콘</string>
-    <string name="Appearance_BalanceValue">균형 가치</string>
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
     <string name="Appearance_HideMarketsTab">마켓 숨기기</string>
     <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
-    <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="Appearance_PriceChangeInterval">가격 변경 %</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
@@ -1035,9 +1033,6 @@
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">개인 암호</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
-    <string name="PrivateKeys_EvmPrivateKeyDescription">각 지갑 내에서 EVM 기반 암호화, 즉 이더리움, 바이낸스 스마트 체인 등에 대한 완전한 제어 권한을 부여합니다.</string>
-    <string name="PrivateKeys_Bip32RootKeyDescription">각 지갑의 자산에 대한 모든 권한을 부여합니다.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">각 지갑 내에서 비트코인 및 기타 UTXO 기반 암호화, 즉 라이트코인, 비트코인 캐시, 대시 등을 완벽하게 제어할 수 있습니다.</string>
     <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">공개 키</string>
