@@ -961,7 +961,7 @@
     <string name="Settings_TonConnect" translatable="false">TON Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
-    <string name="Settings_LaunchScreen_Tip">Select which screen opens on startup</string>
+    <string name="Settings_LaunchScreen_Tip">Choose which screen the app opens on by default.</string>
     <string name="Settings_Appearance">Appearance</string>
     <string name="Settings_AppSettings">App Settings</string>
     <string name="Settings_Subscription">Subscription</string>
@@ -1128,19 +1128,19 @@
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">APP ICON</string>
-    <string name="Appearance_BalanceValue">Balance Value</string>
-    <string name="Appearance_BalanceValue_Tip">Show balance in coins or fiat</string>
+    <string name="Appearance_BalanceValue">Coin Balances</string>
+    <string name="Appearance_BalanceValue_Tip">Show balances highlighted in either crypto or fiat.</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_HideMarketsTab">Hide Markets</string>
-    <string name="Appearance_HideMarketsTab_Tip">Remove the Markets tab from view</string>
+    <string name="Appearance_HideMarketsTab_Tip">Hide the Markets tab completely.</string>
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_HideBalanceTabButtons_Tip">Hide Send, Receive, and Swap buttons in Balance</string>
     <string name="Appearance_AmountRounding">Amount Rounding</string>
-    <string name="Appearance_AmountRounding_Tip">Round balance numbers for easier reading</string>
-    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
-    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance every time the app is opened.</string>
+    <string name="Appearance_AmountRounding_Tip">Display rounded balances and transaction amounts.</string>
+    <string name="Appearance_BalanceAutoHide">Balance Tab</string>
+    <string name="Appearance_BalanceAutoHide_Description">Hide the Send, Receive, and Swap buttons from the Balance tab.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
-    <string name="Appearance_PriceChangeInterval_Tip">Choose period for price change display</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Select the time period for token price change display.</string>
     <string name="Appearance_HideButtonsInfo">The “Hide Buttons” configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
@@ -1472,16 +1472,16 @@
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Private Keys</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
-    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over assets on EVM-based networks (e.g., Ethereum, BNB Smart Chain, Polygon, Avalanche) within this wallet.</string>
     <string name="PrivateKeys_StellarSecretKey">Stellar Secret Key</string>
-    <string name="PrivateKeys_StellarSecretKeyDescription">Grants full control over Stellar account within respective wallet.</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Grants full control over assets on the Stellar network within this wallet.</string>
     <string name="PrivateKeys_Bip32RootKey" translatable="false">BIP32 Root Key</string>
-    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">The master private key of the wallet. Grants full control over all derived accounts and assets.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO-based assets (e.g., Litecoin, Bitcoin Cash, Dash) within this wallet.</string>
     <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Monero Private Keys</string>
-    <string name="PrivateKeys_MoneroPrivateKeyDescription">Grants full control over Monero (XMR) assets within the respective wallet, including the ability to spend funds.</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">Grants full control over Monero (XMR) assets within this wallet, including the ability to spend funds.</string>
     <string name="MoneroKeyType">Type</string>
     <string name="MoneroKeyType_Spend">Spend</string>
     <string name="MoneroKeyType_View">View</string>
