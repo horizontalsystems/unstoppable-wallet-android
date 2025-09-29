@@ -755,11 +755,9 @@
     <string name="Premium_SubscriptionPeriod_Annually">Yıllık</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Aylık</string>
     <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
-    <string name="Appearance_BalanceValue">Bakiye değeri</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
     <string name="Appearance_HideMarketsTab">Piyasaları Gizle</string>
     <string name="Appearance_HideBalanceTabButtons">Düğmeleri Gizle</string>
-    <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
     <string name="Appearance_PriceChangeInterval">Fiyat Değişimi %</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
@@ -986,9 +984,6 @@
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Gizli Anahtar</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
-    <string name="PrivateKeys_EvmPrivateKeyDescription">Ilgili cüzdan içinde EVM tabanlı kripto, yani Ethereum, Binance Smart Chain vb. Üzerinde tam kontrol sağlar.</string>
-    <string name="PrivateKeys_Bip32RootKeyDescription">İlgili cüzdandaki varlıklar üzerinde tam kontrol sağlar.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Ilgili cüzdan içinde Bitcoin ve diğer UTXO tabanlı kriptolar üzerinde tam kontrol sağlar, yani Litecoin, Bitcoin Cash, Dash vb.</string>
     <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
