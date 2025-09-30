@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -591,7 +590,7 @@ private fun handleContextMenuClick(
 }
 
 @Composable
-fun RowScope.BalanceActionButton(
+fun BalanceActionButton(
     variant: ButtonVariant = ButtonVariant.Primary,
     @DrawableRes icon: Int,
     title: String,
@@ -599,7 +598,6 @@ fun RowScope.BalanceActionButton(
     onClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.weight(1f),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HSIconButton(
