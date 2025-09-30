@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -44,12 +47,27 @@ fun TokenSelectScreen(
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val uiState = viewModel.uiState
+
+    val lazyListState = rememberSaveable(
+        uiState.items.size,
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+
+    LaunchedEffect(lazyListState.isScrollInProgress) {
+        if (lazyListState.isScrollInProgress) {
+            if (isSearchActive) {
+                isSearchActive = false
+            }
+        }
+    }
 
     HSScaffold(
         title = title,
         onBack = { navController.popBackStack() },
     ) {
-        val uiState = viewModel.uiState
 
         Column {
             val tabItems: List<TabItem<SelectChainTab>> = uiState.tabs.map { chainTab ->
@@ -86,7 +104,8 @@ fun TokenSelectScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .imePadding()
-                            .background(ComposeAppTheme.colors.lawrence)
+                            .background(ComposeAppTheme.colors.lawrence),
+                        state = lazyListState
                     ) {
                         item {
                             header?.invoke()

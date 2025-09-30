@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,6 +87,21 @@ fun MarketSearchScreen(
     var isSearchActive by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
+    val lazyListState = rememberSaveable(
+        uiState.listId,
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+
+    LaunchedEffect(lazyListState.isScrollInProgress) {
+        if (lazyListState.isScrollInProgress) {
+            if (isSearchActive) {
+                isSearchActive = false
+            }
+        }
+    }
+
     val itemSections = when (uiState.page) {
         is MarketSearchViewModel.Page.Discovery -> {
             mapOf(
@@ -130,12 +146,7 @@ fun MarketSearchScreen(
                         modifier = Modifier
                             .imePadding()
                             .fillMaxSize(),
-                        state = rememberSaveable(
-                            uiState.listId,
-                            saver = LazyListState.Saver
-                        ) {
-                            LazyListState()
-                        }
+                        state = lazyListState
                     ) {
                         itemSections.forEach { (section, coinItems) ->
                             if (coinItems.isNotEmpty()) {
