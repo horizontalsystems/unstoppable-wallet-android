@@ -689,7 +689,7 @@ fun TotalBalanceRow(
         TotalUIState.Hidden -> {
             CardsElementAmountText(
                 title = "* * *".hs,
-                body = "",
+                body = "".hs,
                 onClickTitle = onClickTitle,
                 onClickSubtitle = onClickSubtitle
             )
@@ -706,7 +706,7 @@ fun TotalBalanceRow(
 
             CardsElementAmountText(
                 title = totalState.primaryAmountStr.hs(color = color),
-                body = totalState.secondaryAmountStr,
+                body = totalState.secondaryAmountStr.hs(color = color),
                 onClickTitle = onClickTitle,
                 onClickSubtitle = onClickSubtitle,
             )

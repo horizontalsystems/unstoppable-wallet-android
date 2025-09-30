@@ -11,6 +11,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
+import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
@@ -86,6 +88,20 @@ fun TokenBalanceScreen(
 
     val view = LocalView.current
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
+
+    LaunchedEffect(uiState.failedIconVisible) {
+        if (uiState.failedIconVisible) {
+            val wallet = uiState.balanceViewItem?.wallet
+            val errorMessage = uiState.failedErrorMessage
+
+            wallet?.let {
+                navController.slideFromBottom(
+                    R.id.syncErrorDialog,
+                    SyncErrorDialog.Input(wallet, errorMessage)
+                )
+            }
+        }
+    }
 
     HSScaffold(
         title = uiState.title,
@@ -289,11 +305,11 @@ private fun TokenBalanceHeader(
             .background(ComposeAppTheme.colors.tyler)
     ) {
         val title: HSString
-        val body: String
+        val body: HSString
 
         if (balanceViewItem.balanceHidden || balanceViewItem.primaryValue == null) {
             title = "* * *".hs
-            body = ""
+            body = "".hs
         } else {
             val color = if (loading) {
                 ComposeAppTheme.colors.andy
@@ -304,7 +320,7 @@ private fun TokenBalanceHeader(
             }
 
             title = balanceViewItem.primaryValue.value.hs(color = color)
-            body = balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: ""
+            body = (balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: "").hs(color = color)
         }
 
         CardsElementAmountText(
