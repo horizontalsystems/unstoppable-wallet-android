@@ -21,7 +21,7 @@ fun ButtonsGroup(content: @Composable RowScope.() -> Unit) {
             .padding(horizontal = 16.dp)
             .padding(bottom = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceAround,
         content = content
     )
 }
