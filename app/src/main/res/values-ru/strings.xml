@@ -13,7 +13,7 @@
     <string name="Button_Next">Далее</string>
     <string name="Button_Enable">Активировать</string>
     <string name="Button_Disable">Выкл.</string>
-    <string name="Button_ScanQr">Сканировать QR-код</string>
+    <string name="Button_ScanQr">QR-код</string>
     <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">ОК</string>
     <string name="Button_Activate">Активировать</string>
