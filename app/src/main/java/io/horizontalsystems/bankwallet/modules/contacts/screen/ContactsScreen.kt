@@ -4,25 +4,32 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -38,7 +45,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewMo
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -159,28 +166,53 @@ fun ContactsScreen(
         ) {
             if (uiState.contacts.isNotEmpty()) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
+                    modifier = Modifier.fillMaxSize()
                 ) {
+                    val lazyListState = rememberSaveable(
+                        uiState.contacts.size,
+                        saver = LazyListState.Saver
+                    ) {
+                        LazyListState()
+                    }
+
+                    LaunchedEffect(lazyListState.isScrollInProgress) {
+                        if (lazyListState.isScrollInProgress) {
+                            if (isSearchActive) {
+                                isSearchActive = false
+                            }
+                        }
+                    }
                     VSpacer(12.dp)
-                    CellUniversalLawrenceSection(uiState.contacts) { contact ->
-                        Contact(contact) {
-                            if (viewModel.shouldShowReplaceWarning(contact)) {
-                                coroutineScope.launch {
-                                    bottomSheetType =
-                                        ContactsScreenBottomSheetType.ReplaceAddressConfirmation
-                                    selectedContact = contact
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .imePadding()
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(ComposeAppTheme.colors.lawrence),
+                        state = lazyListState
+                    ) {
+                        itemsIndexed(uiState.contacts) { index, contact ->
+                            Contact(contact) {
+                                if (viewModel.shouldShowReplaceWarning(contact)) {
                                     coroutineScope.launch {
-                                        bottomSheetState.show()
+                                        bottomSheetType =
+                                            ContactsScreenBottomSheetType.ReplaceAddressConfirmation
+                                        selectedContact = contact
+                                        coroutineScope.launch {
+                                            bottomSheetState.show()
+                                        }
+                                    }
+                                } else {
+                                    isSearchActive = false
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        onNavigateToContact(contact)
                                     }
                                 }
-                            } else {
-                                isSearchActive = false
-                                coroutineScope.launch {
-                                    delay(200)
-                                    onNavigateToContact(contact)
-                                }
+                            }
+                            if (index < uiState.contacts.size - 1) {
+                                HsDivider()
                             }
                         }
                     }
