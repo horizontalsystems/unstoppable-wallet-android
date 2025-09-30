@@ -15,7 +15,8 @@ class LockManager(
         private set
     private val lockTimeout = 60L
     private var appLastVisitTime: Long = 0
-    private var keepUnlocked = false
+    var keepUnlocked = false
+        private set
 
     fun didEnterBackground() {
         if (isLocked) {
