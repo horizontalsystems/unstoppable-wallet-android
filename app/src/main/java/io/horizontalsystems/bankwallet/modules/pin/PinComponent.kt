@@ -58,7 +58,7 @@ class PinComponent(
     private val _isLockedFlow = MutableStateFlow(false)
 
     private fun lock() {
-        if (!appLockManager.pinSet) {
+        if (!appLockManager.pinSet || appLockManager.keepUnlocked) {
             return
         }
         appLockManager.lock()
