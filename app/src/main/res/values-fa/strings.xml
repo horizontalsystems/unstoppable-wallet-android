@@ -194,7 +194,6 @@
     <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
     <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
-    <string name="WalletConnect_ActiveWallet">کیف پول فعال</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
     <string name="EthereumTransaction_Error_Title">خطا</string>
@@ -232,11 +231,9 @@
     <string name="Swap_Confirm_Title">تاييد</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
-    <string name="SwapSettings_SlippageDescription">در صورت تغییر نامطلوب قیمت بیش از این درصد، معامله شما برگردانده خواهد شد</string>
     <string name="SwapSettings_DeadlineTitle">مهلت تراکنش</string>
     <string name="SwapSettings_DeadlineDescription">اگر تراکنش شما بیش از این مدت معوق باشد برگشت می خورد.</string>
     <string name="SwapSettings_RecipientAddressTitle">آدرس گیرنده</string>
-    <string name="SwapSettings_RecipientAddressDescription">پس از انجام عملیات تراکنش، مبلغ به آدرس مشخص شده انتقال داده می شود</string>
     <string name="SwapSettings_Apply">درخواست دادن</string>
     <string name="SwapSettings_DeadlineMinute">%s دقیقه</string>
     <string name="SwapSettings_Error_DeadlineZero">مهلت صفر</string>
@@ -259,7 +256,6 @@
     <string name="Deposit_Title">دریافت %s</string>
     <!--Transactions-->
     <string name="Transactions_Title">تراکنش ها</string>
-    <string name="Transactions_EmptyList">شما هيچ گونه معاملات يا قرارداد نداريد تا هنوز</string>
     <string name="Transactions_WaitForSync">لطفا منتظر بمانید تا همگام سازی تمام شود.</string>
     <string name="Transactions_Pending">در حالت معلق</string>
     <string name="Transactions_Receive">دريافت شد</string>
@@ -423,7 +419,6 @@
     <string name="ManageAccounts_WatchAddress">مشاهده آدرس</string>
     <!-- Import Wallet -->
     <!-- Import Backup File -->
-    <string name="Watch_Address_Hint">آدرس یا دامنه</string>
     <string name="Watch_Address_Watch">مشاهده</string>
     <string name="Watch_Select_Blockchains">انتخاب زنجیره های بلوکی</string>
     <string name="Watch_Select_Coins">سکه ها را انتخاب کنید</string>
@@ -448,7 +443,6 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">من آن را به خطر می اندازم</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
-    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
     <string name="BackupRecoveryPhrase_Later">بعداً</string>
     <!-- Local Backup -->
     <!-- Recovery Phrase -->

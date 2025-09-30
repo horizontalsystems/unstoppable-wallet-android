@@ -12,7 +12,7 @@ Bei der Entwicklung von Unstoppable wurde Folgendes berücksichtigt:
 
 Wenn sich das oben Gesagte gut auf Sie reimt, dann ist Unstoppable genau das Richtige für Sie! Und wir sind hier, um uns auf Ihre individuellen Bedürfnisse zu konzentrieren und Sie bestmöglich zu bedienen.
 
-WALLET FEATURES:
+WALLET FEATUREN:
 
 - Nicht-treuhänderisches Multi-Wallet >> Verwalten Sie eine beliebige Anzahl von Kryptowährungen über mehrere Wallets im Portfolio-Stil hinweg auf nicht-treuhänderische Weise. Dieses Wallet ist wie Ihre eigene Bank wo Sie der einzige Kunde und der einzige in Verantwortung sind. Es ist so konzipiert, dass Vermögenswerte sicher aufbewahrt werden und leicht wiederhergestellt werden können, selbst wenn das Telefon gestohlen oder manipuliert wird.
 
