@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -86,20 +85,11 @@ fun TokenBalanceScreen(
     val infoModalBottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val view = LocalView.current
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
     LaunchedEffect(uiState.failedIconVisible) {
         if (uiState.failedIconVisible) {
-            val wallet = uiState.balanceViewItem?.wallet
-            val errorMessage = uiState.failedErrorMessage
-
-            wallet?.let {
-                navController.slideFromBottom(
-                    R.id.syncErrorDialog,
-                    SyncErrorDialog.Input(wallet, errorMessage)
-                )
-            }
+            openSyncErrorDialog(uiState, navController)
         }
     }
 
@@ -118,9 +108,7 @@ fun TokenBalanceScreen(
                             title = TranslatableString.ResString(R.string.BalanceSyncError_Title),
                             tint = ComposeAppTheme.colors.lucian,
                             onClick = {
-                                uiState.failedErrorMessage?.let {
-                                    HudHelper.showErrorMessage(view, it)
-                                }
+                                openSyncErrorDialog(uiState, navController)
                             }
                         )
                     )
@@ -270,6 +258,21 @@ fun TokenBalanceScreen(
         )
     }
 
+}
+
+private fun openSyncErrorDialog(
+    uiState: TokenBalanceModule.TokenBalanceUiState,
+    navController: NavController
+) {
+    val wallet = uiState.balanceViewItem?.wallet
+    val errorMessage = uiState.failedErrorMessage
+
+    wallet?.let {
+        navController.slideFromBottom(
+            R.id.syncErrorDialog,
+            SyncErrorDialog.Input(wallet, errorMessage)
+        )
+    }
 }
 
 
