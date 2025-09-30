@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -110,7 +111,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                 add(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
-                        icon = R.drawable.ic_qr_scan_20,
+                        icon = R.drawable.ic_scan_24,
                         onClick = {
                             onScanClick(
                                 viewModel,
@@ -127,7 +128,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
-                        navController.slideFromBottom(
+                        navController.slideFromRight(
                             R.id.manageAccountsFragment,
                             ManageAccountsModule.Mode.Switcher
                         )

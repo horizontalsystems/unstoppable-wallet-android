@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 @Composable
 fun CardsElementAmountText(
     title: HSString,
-    body: String,
+    body: HSString,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
 ) {
@@ -49,9 +49,9 @@ fun CardsElementAmountText(
                     indication = null,
                     onClick = onClickSubtitle
                 ),
-            text = body,
+            text = body.text,
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.grey,
+            color = body.color ?: ComposeAppTheme.colors.grey,
             maxLines = 1
         )
     }
@@ -63,7 +63,7 @@ fun Preview_CardsElementAmountText() {
     ComposeAppTheme {
         CardsElementAmountText(
             title = "\$1,289,231.60".hs,
-            body = "≈22.6057 BTC",
+            body = "≈22.6057 BTC".hs,
             onClickTitle = {},
             onClickSubtitle = {}
         )

@@ -78,7 +78,7 @@
 
     <string name="AccountRecovery_Note">Note</string>
     <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
-    <string name="AccountRecovery_MigrationRequired">This is a non-standard wallet. \n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRequired">This is a non-standard wallet. Please migrate to a standard wallet to avoid risk of fund loss. \n\nCLICK TO GET MORE INFO</string>
 
     <!--Intro-->
 
