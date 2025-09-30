@@ -488,6 +488,21 @@ fun BalanceItems(
                                                 view,
                                                 R.string.Error
                                             )
+                                        } else if (viewModel.getReceiveAllowedState() is ReceiveAllowedState.BackupRequired) {
+                                            val account = wallet.account
+                                            val text = Translator.getString(
+                                                R.string.Balance_Receive_BackupRequired_Description,
+                                                account.name
+                                            )
+                                            navController.slideFromBottom(
+                                                R.id.backupRequiredDialog,
+                                                BackupRequiredDialog.Input(account, text)
+                                            )
+
+                                            stat(
+                                                page = StatPage.Balance,
+                                                event = StatEvent.Open(StatPage.BackupRequired)
+                                            )
                                         } else {
                                             TextHelper.copyText(address)
 
