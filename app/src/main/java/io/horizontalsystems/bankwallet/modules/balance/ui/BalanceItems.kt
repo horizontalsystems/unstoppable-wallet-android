@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,6 +50,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceContextMenuItem
@@ -305,19 +307,9 @@ fun BalanceItems(
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
-                                        val account = receiveAllowedState.account
-                                        val text = Translator.getString(
-                                            R.string.Balance_Receive_BackupRequired_Description,
-                                            account.name
-                                        )
-                                        navController.slideFromBottom(
-                                            R.id.backupRequiredDialog,
-                                            BackupRequiredDialog.Input(account, text)
-                                        )
-
-                                        stat(
-                                            page = StatPage.Balance,
-                                            event = StatEvent.Open(StatPage.BackupRequired)
+                                        showBackupRequiredDialog(
+                                            account = receiveAllowedState.account,
+                                            navController = navController
                                         )
                                     }
 
@@ -482,40 +474,7 @@ fun BalanceItems(
                                     balanceViewItem = item,
                                     navController = navController,
                                     onAddressCopyClick = { wallet ->
-                                        val address = viewModel.getReceiveAddress(wallet)
-                                        if (address == null) {
-                                            HudHelper.showErrorMessage(
-                                                view,
-                                                R.string.Error
-                                            )
-                                        } else if (viewModel.getReceiveAllowedState() is ReceiveAllowedState.BackupRequired) {
-                                            val account = wallet.account
-                                            val text = Translator.getString(
-                                                R.string.Balance_Receive_BackupRequired_Description,
-                                                account.name
-                                            )
-                                            navController.slideFromBottom(
-                                                R.id.backupRequiredDialog,
-                                                BackupRequiredDialog.Input(account, text)
-                                            )
-
-                                            stat(
-                                                page = StatPage.Balance,
-                                                event = StatEvent.Open(StatPage.BackupRequired)
-                                            )
-                                        } else {
-                                            TextHelper.copyText(address)
-
-                                            HudHelper.showSuccessMessage(
-                                                view,
-                                                R.string.Hud_Text_AddressCopied
-                                            )
-
-                                            stat(
-                                                page = StatPage.Balance,
-                                                event = StatEvent.CopyAddress(wallet.token.coin.name)
-                                            )
-                                        }
+                                        handleReceiveAddress(viewModel, wallet, view, navController)
                                     },
                                     onDisable = onDisable
                                 )
@@ -602,6 +561,52 @@ private fun handleContextMenuClick(
             onDisable(balanceViewItem)
         }
     }
+}
+
+private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: NavController) {
+    val address = viewModel.getReceiveAddress(wallet)
+    val receiveAllowedState = viewModel.getReceiveAllowedState()
+
+    when {
+        address == null -> showErrorAddressUnavailable(view)
+        receiveAllowedState is ReceiveAllowedState.BackupRequired -> showBackupRequiredDialog(wallet.account, navController)
+        else -> copyAddressAndShowSuccess(view, address, wallet)
+    }
+}
+
+private fun showErrorAddressUnavailable(view: View) {
+    HudHelper.showErrorMessage(view, R.string.Error)
+}
+
+private fun showBackupRequiredDialog(
+    account: Account,
+    navController: NavController
+) {
+    val text = Translator.getString(
+        R.string.Balance_Receive_BackupRequired_Description,
+        account.name
+    )
+    navController.slideFromBottom(
+        R.id.backupRequiredDialog,
+        BackupRequiredDialog.Input(account, text)
+    )
+    stat(
+        page = StatPage.Balance,
+        event = StatEvent.Open(StatPage.BackupRequired)
+    )
+}
+
+private fun copyAddressAndShowSuccess(
+    view: View,
+    address: String,
+    wallet: Wallet
+) {
+    TextHelper.copyText(address)
+    HudHelper.showSuccessMessage(view, R.string.Hud_Text_AddressCopied)
+    stat(
+        page = StatPage.Balance,
+        event = StatEvent.CopyAddress(wallet.token.coin.name)
+    )
 }
 
 @Composable
