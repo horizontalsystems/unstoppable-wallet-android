@@ -98,7 +98,7 @@ class SendMoneroViewModel(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
         addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.fee != null,
         showAddressInput = showAddressInput,
         fee = feeState.fee,
         feeInProgress = feeState.inProgress,
