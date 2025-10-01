@@ -164,7 +164,7 @@
     <string name="Market_Tab_Pairs">Пары</string>
     <string name="Market_Tab_Sectors">Секторы</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
-    <string name="Market_Tab_Earn">Заработать</string>
+    <string name="Market_Tab_Earn">Доход(APY)</string>
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Signals">Сигналы</string>
@@ -191,12 +191,12 @@
     <string name="MarketPlatformCoins_PlatformEcosystem">%s Экосистема</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s</string>
     <!--Market Global Metrics-->
-    <string name="MarketGlobalMetrics_TotalMarketCapShort">Общая капитализация</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Общ.кап.</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Общая капитализация</string>
-    <string name="MarketGlobalMetrics_Volume">Объём</string>
+    <string name="MarketGlobalMetrics_Volume">24ч объём</string>
     <string name="MarketGlobalMetrics_VolumeShort">Объём</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
-    <string name="MarketGlobalMetrics_EtfInflow">ETF приток</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют</string>
     <string name="MarketGlobalMetrics_VolumeDescription">24-часовой объем крипторынка</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Всего заблокировано (TVL) в DeFi</string>
@@ -581,7 +581,7 @@
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Вы можете оставить некоторую сумму в размере %s на балансе, чтобы оплачивать будущие транзакции.</string>
     <string name="EthereumTransaction_Error_ExecutionReverted">Непредвиденная ошибка: %s</string>
     <!--Swap-->
-    <string name="Swap">Обменять</string>
+    <string name="Swap">Обмен</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
     <string name="Swap_ToAmountTitle">Вы получите</string>
     <string name="Swap_TokenSelectorTitle">Выбрать</string>
@@ -814,7 +814,7 @@
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_Support">Поддержка</string>
-    <string name="Settings_VipSupport">VIP группа</string>
+    <string name="Settings_VipSupport">VIP тех.поддержка</string>
     <string name="Settings_BotSupport">Поддержка BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
@@ -1278,7 +1278,7 @@
     <string name="TorPage_Failed">Не удалось подключиться к Tor</string>
     <string name="Tor_TorIsActive">Tor активен</string>
     <!--Coin Page-->
-    <string name="Coin_Chart">Диаграмма</string>
+    <string name="Coin_Chart">График</string>
     <string name="Coin_Info">Информация о токене</string>
     <string name="Coin_Tab_Overview">Цена</string>
     <string name="Coin_Tab_Market">Рынки</string>

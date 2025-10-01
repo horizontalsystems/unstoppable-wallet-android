@@ -12,7 +12,7 @@
     <string name="Button_Next">İleri</string>
     <string name="Button_Enable">Etkinleştir</string>
     <string name="Button_Disable">Etkisizleştir</string>
-    <string name="Button_ScanQr">QR Kod Okuma</string>
+    <string name="Button_ScanQr">QR Kod</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Later">Sonra</string>

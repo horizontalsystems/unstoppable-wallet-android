@@ -13,7 +13,7 @@
     <string name="Button_Next">继续</string>
     <string name="Button_Enable">启用</string>
     <string name="Button_Disable">禁用</string>
-    <string name="Button_ScanQr">扫描二维码</string>
+    <string name="Button_ScanQr">QR</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Activate">激活</string>

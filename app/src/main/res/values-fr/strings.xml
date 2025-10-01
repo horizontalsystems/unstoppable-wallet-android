@@ -13,7 +13,7 @@
     <string name="Button_Next">Suivant</string>
     <string name="Button_Enable">Activer</string>
     <string name="Button_Disable">Désactiver</string>
-    <string name="Button_ScanQr">QR Code à scanner</string>
+    <string name="Button_ScanQr">QR Code</string>
     <string name="Button_Close">Fermer</string>
     <string name="Button_Ok">Ok</string>
     <string name="Button_Activate">Activer</string>

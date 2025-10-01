@@ -12,7 +12,7 @@
     <string name="Button_Next">다음</string>
     <string name="Button_Enable">활성화</string>
     <string name="Button_Disable">비활성화</string>
-    <string name="Button_ScanQr">QR 코드 스캔</string>
+    <string name="Button_ScanQr">QR</string>
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Activate">활성화</string>
