@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import android.view.View
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
@@ -18,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -146,7 +146,12 @@ fun BalanceCard(
                 itemHeight = with(density) { it.height.toDp() }
                 itemWidth = with(density) { it.width.toDp() }
             }
-            .indication(interactionSource, LocalIndication.current)
+            .indication(
+                interactionSource,
+                indication = ripple(
+                    color = ComposeAppTheme.colors.andy
+                )
+            )
             .pointerInput(true) {
                 detectTapGestures(
                     onLongPress = {
