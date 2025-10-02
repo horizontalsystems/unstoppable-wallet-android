@@ -108,7 +108,7 @@ class MainActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.contentHidden.collect { hidden ->
                     hideContent.visibility = if (hidden) View.VISIBLE else View.GONE
                     if (hidden) {
