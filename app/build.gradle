@@ -16,7 +16,7 @@ android {
         versionCode 145
         versionName "0.46.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resConfigs "de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh"
+        resourceConfigurations += ['de', 'es', 'en', 'fa', 'fr', 'ko', 'pt', 'pt-rBR', 'ru', 'tr', 'zh']
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas".toString())
@@ -161,8 +161,17 @@ android {
 
     packagingOptions {
         resources {
-            pickFirsts += ['META-INF/atomicfu.kotlin_module']
-            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE.md', 'META-INF/NOTICE.md']
+            pickFirsts += [
+                'META-INF/atomicfu.kotlin_module',
+                'META-INF/FastDoubleParser-LICENSE',
+                'META-INF/FastDoubleParser-NOTICE',
+                'META-INF/io.netty.versions.properties'
+            ]
+            excludes += [
+                'META-INF/INDEX.LIST',
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE.md'
+            ]
         }
         jniLibs {
             useLegacyPackaging true
@@ -235,7 +244,7 @@ dependencies {
     implementation 'androidx.glance:glance-appwidget:1.1.1'
 
     // Room
-    def room_version = '2.7.2'
+    def room_version = '2.8.1'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -259,7 +268,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.1.0'
-    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'com.google.code.gson:gson:2.13.2'
     implementation "androidx.biometric:biometric:$biometric_version"
 
     implementation 'com.atlassian.commonmark:commonmark:0.17.0'
@@ -269,7 +278,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     //Custom tabs, chrome
-    implementation "androidx.browser:browser:1.8.0"
+    implementation "androidx.browser:browser:1.9.0"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
@@ -285,7 +294,7 @@ dependencies {
     implementation("io.github.alexzhirkevich:qrose:1.0.1")
 
     // WorkManager Kotlin
-    def work_version = "2.10.2"
+    def work_version = "2.10.5"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
@@ -309,7 +318,7 @@ dependencies {
     // Zcash SDK
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation "cash.z.ecc.android:zcash-android-sdk:2.3.2"
-    implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
+    implementation("io.github.binance:binance-connector-java:3.4.1") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
 
@@ -329,7 +338,7 @@ dependencies {
     implementation 'com.github.unstoppabledomains:resolution-java:v7.1.0'
 
     // Ethereum Name Service
-    implementation "org.web3j:core:4.9.0"
+    implementation "org.web3j:core:5.0.1"
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
@@ -352,7 +361,7 @@ dependencies {
     ciImplementation project(':subscriptions-dev')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.activity:activity-compose:1.11.0'
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
@@ -367,8 +376,8 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
     //Material 3
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation "androidx.compose.material3:material3:1.4.0-rc01"
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation "androidx.compose.material3:material3:1.4.0"
 
     def coil_version = "2.7.0"
     implementation "io.coil-kt:coil-compose:$coil_version"

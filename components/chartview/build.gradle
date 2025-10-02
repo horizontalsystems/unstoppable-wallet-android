@@ -43,5 +43,5 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
     implementation "androidx.core:core-ktx:$core_ktx_version"
 
-    implementation "androidx.compose.runtime:runtime:1.7.5"
+    implementation "androidx.compose.runtime:runtime:1.9.2"
 }
