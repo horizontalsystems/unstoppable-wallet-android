@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -129,12 +128,14 @@ class MainActivity : BaseActivity() {
         viewModel.setIntent(intent)
 
         pinLockComposeView.setContent {
-            ComposeAppTheme {
-                PinUnlock(
-                    onSuccess = {
-                        showPinLockScreen = false
-                    }
-                )
+            if (showPinLockScreen) {
+                ComposeAppTheme {
+                    PinUnlock(
+                        onSuccess = {
+                            showPinLockScreen = false
+                        }
+                    )
+                }
             }
         }
 
@@ -144,12 +145,8 @@ class MainActivity : BaseActivity() {
     private fun observeLockState() {
         scope.launch {
             App.pinComponent.isLockedFlow.collect { isLocked ->
-                Log.e("MainActivity", "observeLockState isLocked: $isLocked")
-                pinLockComposeView.visibility = if (isLocked) {
-                    VISIBLE
-                } else {
-                    GONE
-                }
+                showPinLockScreen = isLocked
+                pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
             }
         }
     }
