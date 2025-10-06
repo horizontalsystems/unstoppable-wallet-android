@@ -6,8 +6,8 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,9 +44,6 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
                     }
                     BackgroundManagerState.EnterBackground -> {
                         didEnterBackground()
-                    }
-                    BackgroundManagerState.AllActivitiesDestroyed -> {
-                        //do nothing
                     }
                 }
             }

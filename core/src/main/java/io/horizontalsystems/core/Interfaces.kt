@@ -1,12 +1,11 @@
 package io.horizontalsystems.core
 
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 import javax.crypto.SecretKey
 
 interface ICoreApp {
-    var backgroundManager: BackgroundManager
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
     var keyStoreManager: IKeyStoreManager
@@ -34,9 +33,9 @@ interface ISystemInfoManager {
 interface IPinComponent {
     var isBiometricAuthEnabled: Boolean
     val isPinSet: Boolean
+    val isLockedFlow: StateFlow<Boolean>
     val isLocked: Boolean
-    val pinSetFlowable: Flowable<Unit>
-    val isLockedFlowable: StateFlow<Boolean>
+    val pinSetFlow: SharedFlow<Unit>
 
     fun willEnterForeground()
     fun didEnterBackground()

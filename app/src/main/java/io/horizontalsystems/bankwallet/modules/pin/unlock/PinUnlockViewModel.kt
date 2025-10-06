@@ -103,11 +103,22 @@ class PinUnlockViewModel(
     }
 
     fun unlocked() {
-        uiState = uiState.copy(unlocked = false)
+        resetState()
     }
 
     fun onShakeAnimationFinish() {
         uiState = uiState.copy(showShakeAnimation = false)
+    }
+
+    private fun resetState() {
+        attemptsLeft = null
+        enteredPin = ""
+        uiState = uiState.copy(
+            unlocked = false,
+            enteredCount = 0,
+            showShakeAnimation = false,
+            inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
+        )
     }
 
     private fun updateLockoutState() {

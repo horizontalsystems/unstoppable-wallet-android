@@ -8,7 +8,6 @@ import java.util.Locale
 abstract class CoreApp : Application() {
 
     companion object : ICoreApp {
-        override lateinit var backgroundManager: BackgroundManager
         override lateinit var encryptionManager: IEncryptionManager
         override lateinit var systemInfoManager: ISystemInfoManager
         override lateinit var keyStoreManager: IKeyStoreManager
