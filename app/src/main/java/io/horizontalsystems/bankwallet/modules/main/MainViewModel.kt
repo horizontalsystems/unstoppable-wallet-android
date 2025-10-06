@@ -132,7 +132,7 @@ class MainViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.pinSetFlowable.asFlow().collect {
+            pinComponent.pinSetFlow.collect {
                 updateSettingsBadge()
             }
         }

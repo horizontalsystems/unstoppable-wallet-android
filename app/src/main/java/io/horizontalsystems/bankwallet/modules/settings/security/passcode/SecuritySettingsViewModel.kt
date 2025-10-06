@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 
 class SecuritySettingsViewModel(
     private val systemInfoManager: ISystemInfoManager,
@@ -23,7 +22,7 @@ class SecuritySettingsViewModel(
 
     init {
         viewModelScope.launch {
-            pinComponent.pinSetFlowable.asFlow().collect {
+            pinComponent.pinSetFlow.collect {
                 pinEnabled = pinComponent.isPinSet
                 duressPinEnabled = pinComponent.isDuressPinSet()
                 emitState()

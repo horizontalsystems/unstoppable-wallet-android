@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -16,8 +18,6 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoVi
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionViewItemFactoryHelper
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hdwalletkit.Curve
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.BlockchainType

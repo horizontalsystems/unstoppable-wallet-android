@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
-import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
