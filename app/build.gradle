@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "io.horizontalsystems.bankwallet"
-        compileSdk compile_sdk_version
+        compileSdkVersion compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
         versionCode 145
@@ -338,7 +338,7 @@ dependencies {
     implementation 'com.github.unstoppabledomains:resolution-java:v7.1.0'
 
     // Ethereum Name Service
-    implementation "org.web3j:core:5.0.1"
+    implementation "org.web3j:core:4.9.0"
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
