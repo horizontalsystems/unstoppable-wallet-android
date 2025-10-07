@@ -104,6 +104,7 @@ fun ReceiveChooseCoinScreen(
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     },
+                    closeModule = { fragmentNavController.popBackStack() },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
             }
@@ -123,6 +124,7 @@ fun ReceiveChooseCoinScreen(
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     },
+                    closeModule = { fragmentNavController.popBackStack() },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
             }
@@ -138,6 +140,7 @@ fun ReceiveChooseCoinScreen(
                     navController = navController,
                     activeAccount = activeAccount,
                     fullCoin = fullCoin,
+                    closeModule = { fragmentNavController.popBackStack() },
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     }
@@ -148,12 +151,18 @@ fun ReceiveChooseCoinScreen(
 }
 
 private fun onSelectWallet(wallet: Wallet, fragmentNavController: NavController) {
-    fragmentNavController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet, R.id.receiveChooseCoinFragment))
+    fragmentNavController.slideFromRight(
+        R.id.receiveFragment,
+        ReceiveFragment.Input(wallet, R.id.receiveChooseCoinFragment)
+    )
 
     stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))
 }
 
-fun navigateBack(fragmentNavController: NavController, navController: NavHostController): () -> Unit = {
+fun navigateBack(
+    fragmentNavController: NavController,
+    navController: NavHostController
+): () -> Unit = {
     val result = navController.popBackStack()
     if (!result) {
         fragmentNavController.popBackStack()
