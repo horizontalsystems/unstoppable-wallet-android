@@ -36,7 +36,7 @@ class ConfiguredTokenInfoViewModel(
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.jettonUrl(type.address))
             }
             is TokenType.Asset -> {
-                ConfiguredTokenInfoType.Contract("${type.code}:${type.issuer}", token.blockchain.type.imageUrl, token.blockchain.assetUrl(type.code, type.issuer))
+                ConfiguredTokenInfoType.Contract("${type.code}-${type.issuer}", token.blockchain.type.imageUrl, token.blockchain.assetUrl(type.code, type.issuer))
             }
             is TokenType.Derived -> {
                 ConfiguredTokenInfoType.Bips(token.blockchain.name)
