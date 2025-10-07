@@ -25,10 +25,12 @@ class ReceiveTokenSelectViewModel(
     private val fullCoinsProvider: FullCoinsProvider
 ) : ViewModel() {
     private var fullCoins: List<FullCoin> = listOf()
+    private var searchQuery = ""
 
     var uiState by mutableStateOf(
         ReceiveTokenSelectUiState(
             fullCoins = fullCoins,
+            searchQuery = searchQuery,
         )
     )
 
@@ -40,6 +42,7 @@ class ReceiveTokenSelectViewModel(
     }
 
     fun updateFilter(q: String) {
+        searchQuery = q
         viewModelScope.launch {
             fullCoinsProvider.setQuery(q)
             refreshItems()
@@ -57,6 +60,7 @@ class ReceiveTokenSelectViewModel(
         viewModelScope.launch {
             uiState = ReceiveTokenSelectUiState(
                 fullCoins = fullCoins,
+                searchQuery = searchQuery,
             )
         }
     }
@@ -159,5 +163,6 @@ sealed interface CoinForReceiveType {
 }
 
 data class ReceiveTokenSelectUiState(
-    val fullCoins: List<FullCoin>
+    val fullCoins: List<FullCoin>,
+    val searchQuery: String,
 )
