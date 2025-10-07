@@ -298,7 +298,7 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.slideFromRight(R.id.receiveChooseCoinFragment)
+                                        navController.slideFromBottom(R.id.receiveChooseCoinFragment)
 
                                         stat(
                                             page = StatPage.Balance,
