@@ -128,14 +128,13 @@ class MainActivity : BaseActivity() {
         viewModel.setIntent(intent)
 
         pinLockComposeView.setContent {
-            if (showPinLockScreen) {
-                ComposeAppTheme {
-                    PinUnlock(
-                        onSuccess = {
-                            showPinLockScreen = false
-                        }
-                    )
-                }
+            ComposeAppTheme {
+                PinUnlock(
+                    showPinLockScreen = showPinLockScreen,
+                    onSuccess = {
+                        showPinLockScreen = false
+                    }
+                )
             }
         }
 
