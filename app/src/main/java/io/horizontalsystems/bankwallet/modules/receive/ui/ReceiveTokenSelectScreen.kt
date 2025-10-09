@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -58,6 +61,21 @@ fun ReceiveTokenSelectScreen(
     var searchQuery by remember { mutableStateOf(uiState.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }
 
+    val lazyListState = rememberSaveable(
+        fullCoins.size,
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+
+    LaunchedEffect(lazyListState.isScrollInProgress) {
+        if (lazyListState.isScrollInProgress) {
+            if (isSearchActive) {
+                isSearchActive = false
+            }
+        }
+    }
+
     HSScaffold(
         title = stringResource(id = R.string.Balance_Receive),
         menuItems = listOf(
@@ -80,7 +98,9 @@ fun ReceiveTokenSelectScreen(
                         icon = R.drawable.warning_filled_24
                     )
                 } else {
-                    LazyColumn {
+                    LazyColumn(
+                        state = lazyListState
+                    ) {
                         items(fullCoins) { fullCoin ->
                             ReceiveCoin(
                                 coinName = fullCoin.coin.name,
