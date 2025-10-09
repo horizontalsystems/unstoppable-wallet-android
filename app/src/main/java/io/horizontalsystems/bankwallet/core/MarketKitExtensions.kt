@@ -346,7 +346,32 @@ val BlockchainType.isEvm: Boolean
 
 fun BlockchainType.supports(accountType: AccountType): Boolean {
     return when (accountType) {
-        is AccountType.Mnemonic -> true
+        is AccountType.Mnemonic -> {
+            when (this) {
+                BlockchainType.ArbitrumOne,
+                BlockchainType.Avalanche,
+                BlockchainType.Base,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Dash,
+                BlockchainType.ECash,
+                BlockchainType.Ethereum,
+                BlockchainType.Fantom,
+                BlockchainType.Gnosis,
+                BlockchainType.Litecoin,
+                BlockchainType.Monero,
+                BlockchainType.Optimism,
+                BlockchainType.Polygon,
+                BlockchainType.Solana,
+                BlockchainType.Stellar,
+                BlockchainType.Ton,
+                BlockchainType.Tron,
+                BlockchainType.Zcash,
+                BlockchainType.ZkSync -> true
+                is BlockchainType.Unsupported -> false
+            }
+        }
         is AccountType.HdExtendedKey -> {
             val coinTypes = accountType.hdExtendedKey.coinTypes
             when (this) {
