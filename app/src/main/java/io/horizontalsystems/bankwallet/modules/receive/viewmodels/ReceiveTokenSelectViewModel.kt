@@ -7,22 +7,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class ReceiveTokenSelectViewModel(
     private val walletManager: IWalletManager,
     private val activeAccount: Account,
-    private val fullCoinsProvider: FullCoinsProvider
+    private val fullCoinsProvider: FullCoinsProvider,
+    private val adapterManager: IAdapterManager,
+    private val currencyManager: CurrencyManager,
+    private val marketKit: MarketKitWrapper
 ) : ViewModel() {
     private var fullCoins: List<FullCoin> = listOf()
     private var searchQuery = ""
@@ -52,7 +61,34 @@ class ReceiveTokenSelectViewModel(
     }
 
     private fun refreshItems() {
-        fullCoins = fullCoinsProvider.getItems()
+        val coins = fullCoinsProvider.getItems()
+
+        if (searchQuery.isEmpty()) {
+            val sortableItems = coins.map { fullCoin ->
+                val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
+
+                val totalFiatValue = eligibleTokens
+                    .mapNotNull { token -> walletManager.activeWallets.firstOrNull { it.token == token } }
+                    .map { wallet ->
+                        val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available ?: BigDecimal.ZERO
+                        getFiatValue(wallet.token, balance)?.value ?: BigDecimal.ZERO
+                    }
+                    .fold(BigDecimal.ZERO) { acc, value -> acc + value }
+
+                val secondarySortOrder = eligibleTokens.firstOrNull()?.blockchainType?.order ?: Int.MAX_VALUE
+
+                Triple(fullCoin, totalFiatValue, secondarySortOrder)
+            }
+
+            val sortedCoins = sortableItems.sortedWith(
+                compareByDescending<Triple<FullCoin, BigDecimal, Int>> { it.second } // Primary sort: by total fiat value
+                    .thenBy { it.third }
+            ).map { it.first }
+
+            fullCoins = sortedCoins
+        } else {
+            fullCoins = coins
+        }
     }
 
 
@@ -139,6 +175,25 @@ class ReceiveTokenSelectViewModel(
         return wallet
     }
 
+    private fun getFiatValue(token: Token, balance: BigDecimal?): CurrencyValue? {
+        return balance?.let {
+            getXRate(token)?.multiply(it)
+        }?.let { fiatBalance ->
+            CurrencyValue(currencyManager.baseCurrency, fiatBalance)
+        }
+    }
+
+    private fun getXRate(token: Token): BigDecimal? {
+        val currency = currencyManager.baseCurrency
+        return marketKit.coinPrice(token.coin.uid, currency.code)?.let {
+            if (it.expired) {
+                null
+            } else {
+                it.value
+            }
+        }
+    }
+
     class Factory(private val activeAccount: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -149,7 +204,10 @@ class ReceiveTokenSelectViewModel(
             return ReceiveTokenSelectViewModel(
                 App.walletManager,
                 activeAccount,
-                fullCoinsProvider
+                fullCoinsProvider,
+                App.adapterManager,
+                App.currencyManager,
+                App.marketKit,
             ) as T
         }
     }
