@@ -45,9 +45,10 @@ class EnterAddressViewModel(
     private var address: Address? = null
     private val canBeSendToAddress: Boolean
         get() = address != null && !addressValidationInProgress && addressValidationError == null
-    private var recentAddress: String? = recentAddressManager.getRecentAddress(token.blockchainType)
+    private val recentAddress: String? = recentAddressManager.getRecentAddress(token.blockchainType)
     private val contactNameAddresses =
         contactsRepository.getContactAddressesByBlockchain(token.blockchainType)
+            .sortedByDescending { it.contactAddress.address == recentAddress }
     private var addressValidationInProgress: Boolean = false
     private var addressValidationError: Throwable? = null
     private val availableCheckTypes = addressCheckManager.availableCheckTypes(token)
@@ -71,11 +72,6 @@ class EnterAddressViewModel(
 
     override fun createState() = EnterAddressUiState(
         canBeSendToAddress = canBeSendToAddress,
-        recentAddress = recentAddress,
-        recentContact = recentAddress?.let { recent ->
-            contactNameAddresses.find { it.contactAddress.address == recentAddress }
-                ?.let { SContact(it.name, recent) }
-        },
         contacts = contactNameAddresses.map { SContact(it.name, it.contactAddress.address) },
         value = value,
         inputState = inputState,
@@ -238,8 +234,6 @@ class EnterAddressViewModel(
 
 data class EnterAddressUiState(
     val canBeSendToAddress: Boolean,
-    val recentAddress: String?,
-    val recentContact: SContact?,
     val contacts: List<SContact>,
     val value: String,
     val inputState: DataState<Address>?,
