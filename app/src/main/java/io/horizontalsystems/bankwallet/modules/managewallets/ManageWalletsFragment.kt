@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -45,6 +46,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
@@ -109,6 +113,7 @@ private fun ManageWalletsScreen(
 
     HSScaffold(
         title = stringResource(id = R.string.ManageCoins_title),
+        onBack = { navController.popBackStack() },
         menuItems = if (viewModel.addTokenEnabled) {
             listOf(
                 MenuItem(
@@ -128,6 +133,18 @@ private fun ManageWalletsScreen(
         },
     ) {
         Column {
+            val tabItems: List<TabItem<SelectChainTab>> = uiState.tabs.map { chainTab ->
+                TabItem(
+                    title = chainTab.title,
+                    selected = chainTab == uiState.selectedTab,
+                    item = chainTab,
+                )
+            }
+            if (tabItems.isNotEmpty()) {
+                TabsTop(TabsTopType.Scrolled, tabItems) {
+                    viewModel.onTabSelected(it)
+                }
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
