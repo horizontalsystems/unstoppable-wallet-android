@@ -565,12 +565,18 @@ val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
 
 val Token.badge: String?
     get() = when (val tokenType = type) {
+        is TokenType.Native -> {
+            null
+        }
+
         is TokenType.Derived -> {
             tokenType.derivation.accountTypeDerivation.value.uppercase()
         }
+
         is TokenType.AddressTyped -> {
             tokenType.type.bitcoinCashCoinType.value.uppercase()
         }
+
         else -> {
             protocolType?.replaceFirstChar(Char::uppercase)
         }
