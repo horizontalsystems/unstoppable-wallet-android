@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 
@@ -98,6 +99,9 @@ fun AddressFormatCell(
                 title = title.hs,
                 subtitle = subtitle.hs,
             )
+        },
+        right = {
+            CellRightNavigation()
         },
         onClick = onClick
     )
