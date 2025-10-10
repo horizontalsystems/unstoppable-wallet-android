@@ -30,7 +30,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
-            title = stringResource(R.string.Balance_ChooseCoin),
+            title = stringResource(R.string.Balance_Send),
             onClickItem = {
                 val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
