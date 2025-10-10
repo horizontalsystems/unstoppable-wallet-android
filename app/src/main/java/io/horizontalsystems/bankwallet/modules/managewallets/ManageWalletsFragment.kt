@@ -1,21 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,10 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -44,18 +33,18 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
@@ -214,59 +203,28 @@ private fun CoinCell(
     onItemClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {
-    Column {
-        RowUniversal(
-            onClick = onItemClick,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalPadding = 0.dp
-        ) {
-            Image(
+    CellPrimary(
+        left = {
+            CellLeftImage(
                 painter = viewItem.imageSource.painter(),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
-                    .size(32.dp)
-                    .clip(CircleShape)
+                type = ImageType.Ellipse,
+                size = 32
             )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 12.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    body_leah(
-                        text = viewItem.title,
-                        maxLines = 1,
-                    )
-                    viewItem.label?.let { labelText ->
-                        Badge(
-                            text = labelText,
-                            modifier = Modifier.padding(start = 6.dp)
-                        )
-                    }
-                }
-                subhead2_grey(
-                    text = viewItem.subtitle,
-                    maxLines = 1,
-                    modifier = Modifier.padding(top = 1.dp)
-                )
-            }
-            Spacer(Modifier.width(12.dp))
-            if (viewItem.hasInfo) {
-                HsIconButton(onClick = onInfoClick) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_info_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-            }
-            HsSwitch(
-                modifier = Modifier.padding(0.dp),
+        },
+        middle = {
+            CellMiddleInfo(
+                title = viewItem.title.hs,
+                badge = viewItem.label?.hs,
+                subtitle = viewItem.subtitle.hs,
+            )
+        },
+        right = {
+            CellRightControlsSwitcher(
                 checked = viewItem.enabled,
-                onCheckedChange = { onItemClick.invoke() },
+                onInfoClick = if (viewItem.hasInfo) onInfoClick else null,
+                onCheckedChange = { onItemClick.invoke() }
             )
-        }
-        HsDivider()
-    }
+        },
+        onClick = onItemClick
+    )
 }
