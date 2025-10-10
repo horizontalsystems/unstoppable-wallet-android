@@ -41,7 +41,8 @@ class ManageWalletsService(
         get() = account?.type
 
     private var fullCoins = listOf<FullCoin>()
-    private var items = listOf<Item>()
+    var items = listOf<Item>()
+        private set
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
