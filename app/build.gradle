@@ -13,7 +13,7 @@ android {
         compileSdkVersion compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 145
+        versionCode 146
         versionName "0.46.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += ['de', 'es', 'en', 'fa', 'fr', 'ko', 'pt', 'pt-rBR', 'ru', 'tr', 'zh']
@@ -419,5 +419,10 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
+
+        // Force Ktor version for TonKit
+        force "io.ktor:ktor-utils:2.3.7"
+        force "io.ktor:ktor-io:2.3.7"
+        force "io.ktor:ktor-client-core:2.3.7"
     }
 }
