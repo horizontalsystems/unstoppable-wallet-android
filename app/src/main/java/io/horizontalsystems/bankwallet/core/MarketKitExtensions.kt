@@ -563,21 +563,20 @@ val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
         TokenType.AddressType.Type145 -> BitcoinCashCoinType.type145
     }
 
+private val noBadgeCoinCodes by lazy {
+    listOf("AVAX", "XLM", "DASH", "ZEC", "XMR", "XEC", "POL", "SOL", "XDAI", "FTM")
+}
+
 val Token.badge: String?
-    get() = when (val tokenType = type) {
-        is TokenType.Native -> {
+    get() {
+        val tokenType = type
+        return if (tokenType is TokenType.Native && noBadgeCoinCodes.contains(coin.code)) {
             null
-        }
-
-        is TokenType.Derived -> {
+        } else if (tokenType is TokenType.Derived) {
             tokenType.derivation.accountTypeDerivation.value.uppercase()
-        }
-
-        is TokenType.AddressTyped -> {
+        } else if (tokenType is TokenType.AddressTyped) {
             tokenType.type.bitcoinCashCoinType.value.uppercase()
-        }
-
-        else -> {
+        } else {
             protocolType?.replaceFirstChar(Char::uppercase)
         }
     }
