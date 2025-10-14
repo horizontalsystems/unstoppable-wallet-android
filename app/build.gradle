@@ -13,8 +13,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 144
-        versionName "0.45.1"
+        versionCode 145
+        versionName "0.45.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh"
 
@@ -410,5 +410,10 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
+
+        // Force Ktor version for TonKit
+        force "io.ktor:ktor-utils:2.3.7"
+        force "io.ktor:ktor-io:2.3.7"
+        force "io.ktor:ktor-client-core:2.3.7"
     }
 }
