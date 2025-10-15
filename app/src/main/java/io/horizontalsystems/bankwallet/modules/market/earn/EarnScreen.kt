@@ -140,6 +140,7 @@ fun MarketEarnScreen(
                                 stickyHeader {
                                     HeaderSorting(
                                         borderBottom = true,
+                                        backgroundColor = ComposeAppTheme.colors.lawrence
                                     ) {
                                         HSpacer(width = 16.dp)
                                         HSDropdownButton(
@@ -264,18 +265,16 @@ fun VaultList(
             items = items,
             key = { item -> item.address + item.protocolName }
         ) { item ->
-            BoxBordered(bottom = true) {
-                VaultItem(
-                    title = item.assetSymbol,
-                    subtitle = item.name,
-                    coinIconUrl = item.assetLogo,
-                    coinIconPlaceholder = R.drawable.coin_placeholder,
-                    value = item.apy,
-                    subvalue = item.tvl,
-                    label = item.blockchainName,
-                    onClick = { onCoinClick.invoke(item) },
-                )
-            }
+            VaultItem(
+                title = item.assetSymbol,
+                subtitle = item.name,
+                coinIconUrl = item.assetLogo,
+                coinIconPlaceholder = R.drawable.coin_placeholder,
+                value = item.apy,
+                subvalue = item.tvl,
+                label = item.blockchainName,
+                onClick = { onCoinClick.invoke(item) },
+            )
 
             HsDivider()
         }

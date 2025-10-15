@@ -45,7 +45,7 @@ fun MarketCoin(
                 onClick = onClick ?: { },
                 onLongClick = onLongClick
             )
-            .background(ComposeAppTheme.colors.tyler)
+            .background(ComposeAppTheme.colors.lawrence)
     ) {
         CellPrimary(
             left = {
