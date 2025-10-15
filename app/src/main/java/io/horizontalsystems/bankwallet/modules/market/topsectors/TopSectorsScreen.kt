@@ -93,7 +93,10 @@ fun TopSectorsScreen(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             stickyHeader {
-                                HeaderSorting(borderBottom = true) {
+                                HeaderSorting(
+                                    borderBottom = true,
+                                    backgroundColor = ComposeAppTheme.colors.lawrence
+                                ) {
                                     HSpacer(width = 16.dp)
                                     HSDropdownButton(
                                         variant = ButtonVariant.Secondary,

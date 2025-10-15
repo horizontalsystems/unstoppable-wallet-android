@@ -54,7 +54,6 @@ import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScree
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_andy
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_bran
@@ -83,7 +82,6 @@ fun MarketScreen(navController: NavController) {
                 Crossfade(uiState.marketGlobal, label = "") {
                     MetricsBoard(navController, it, uiState.currency)
                 }
-                HsDivider()
                 TabsSection(navController, tabs, uiState.selectedTab) { tab ->
                     viewModel.onSelect(tab)
                 }
@@ -157,7 +155,10 @@ fun TabsSection(
 
     HorizontalPager(
         state = pagerState,
-        userScrollEnabled = false
+        userScrollEnabled = false,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(ComposeAppTheme.colors.lawrence)
     ) { page ->
         when (tabs[page]) {
             Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navController) })
