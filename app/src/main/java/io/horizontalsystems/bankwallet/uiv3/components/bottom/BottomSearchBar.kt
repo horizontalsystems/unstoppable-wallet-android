@@ -48,6 +48,7 @@ fun BoxScope.BottomSearchBar(
     modifier: Modifier = Modifier,
     searchQuery: String,
     isSearchActive: Boolean,
+    keepCancelButton: Boolean = false,
     onActiveChange: (Boolean) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCloseSearch: () -> Unit = { },
@@ -90,7 +91,7 @@ fun BoxScope.BottomSearchBar(
         )
 
         // Show clear button when there's text OR when search is active but empty
-        if (searchQuery.isNotEmpty() || isSearchActive) {
+        if (keepCancelButton || searchQuery.isNotEmpty() || isSearchActive) {
             HSpacer(14.dp)
             HSIconButton(
                 size = ButtonSize.Small,
