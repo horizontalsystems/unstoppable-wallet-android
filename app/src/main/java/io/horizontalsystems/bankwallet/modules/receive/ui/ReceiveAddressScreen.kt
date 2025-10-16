@@ -122,7 +122,7 @@ fun ReceiveAddressScreen(
     onErrorClick: () -> Unit = {},
     slot1: @Composable () -> Unit = {},
     onBackPress: () -> Unit,
-    closeModule: () -> Unit,
+    closeModule: (() -> Unit)? = null,
 ) {
     val localView = LocalView.current
     val openAmountDialog = remember { mutableStateOf(false) }
@@ -154,9 +154,10 @@ fun ReceiveAddressScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 },
-                menuItems =  listOf(
+                menuItems = if (closeModule == null) emptyList() else listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Done),
+                        icon = R.drawable.ic_close,
                         onClick = closeModule
                     )
                 )
