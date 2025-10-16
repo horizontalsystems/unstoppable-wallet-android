@@ -1016,7 +1016,7 @@
     <string name="MoneroNodeSettings_TrustedTitle">节点首选项</string>
     <string name="MoneroNodeSettings_TrustedDescription">信任的节点——钱包信任选定的节点并在没有额外验证的情况下使用其数据。
         \n\n广播时即时显示为挂起的交易(粉刷同步) 但隐私和对节点的依赖性较低)。
-        \n\n\n Off -> 交易仅在网络确认后显示(较慢) 但更加安全和更加私人)。</string>
+        \n\n\n Off -&gt; 交易仅在网络确认后显示(较慢) 但更加安全和更加私人)。</string>
     <string name="MoneroNodeSettings_Trusted">信任的</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">在更改源后，钱包将必须重新同步自己。</string>
