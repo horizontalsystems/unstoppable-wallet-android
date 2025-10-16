@@ -956,6 +956,7 @@
     <string name="Appearance_HideMarketsTab">Märkte ausblenden</string>
     <string name="Appearance_HideMarketsTab_Tip">Markets Tab komplett ausblenden.</string>
     <string name="Appearance_HideBalanceTabButtons">Buttons ausblenden</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Sender, Empfangs- und Tauschtasten im Saldo ausblenden</string>
     <string name="Appearance_AmountRounding">Betrag Rundung</string>
     <string name="Appearance_AmountRounding_Tip">Runden Salden und Transaktionsbeträge anzeigen.</string>
     <string name="Appearance_BalanceAutoHide">Balance Tab</string>
