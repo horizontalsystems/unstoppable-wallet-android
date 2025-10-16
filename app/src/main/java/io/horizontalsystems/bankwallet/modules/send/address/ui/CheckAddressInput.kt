@@ -91,7 +91,7 @@ fun CheckAddressInput(
                     textStyle = ComposeAppTheme.typography.body
                 ),
                 singleLine = false,
-                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
                         Text(

@@ -237,7 +237,7 @@ fun RestorePhrase(
                             textStyle = ComposeAppTheme.typography.body
                         ),
                         maxLines = 6,
-                        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                         visualTransformation = {
                             try {
                                 val annotatedString = buildAnnotatedString {
