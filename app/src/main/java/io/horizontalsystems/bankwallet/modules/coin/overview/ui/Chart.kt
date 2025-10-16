@@ -288,11 +288,14 @@ fun Float.plainString(): String {
 @Composable
 fun Chart(
     chartViewModel: ChartViewModel,
+    modifier: Modifier = Modifier,
     onSelectChartInterval: ((HsTimePeriod?) -> Unit)? = null
 ) {
     val uiState = chartViewModel.uiState
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         var selectedPoint by remember { mutableStateOf<ChartModule.ChartHeaderView?>(null) }
 
         Crossfade(targetState = uiState.viewState) {
