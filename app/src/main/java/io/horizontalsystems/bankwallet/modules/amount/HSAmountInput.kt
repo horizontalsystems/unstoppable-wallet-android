@@ -167,7 +167,7 @@ fun HSAmountInput(
                         textStyle = ComposeAppTheme.typography.headline2
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                    cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                     decorationBox = { innerTextField ->
                         Row {
                             viewModel.inputPrefix?.let {

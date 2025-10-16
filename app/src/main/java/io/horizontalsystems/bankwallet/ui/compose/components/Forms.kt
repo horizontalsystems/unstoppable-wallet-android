@@ -146,7 +146,7 @@ fun FormsInput(
                     textStyle = textStyle
                 ),
                 singleLine = singleLine,
-                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
                         Text(
@@ -320,7 +320,7 @@ fun FormsInputPassword(
                     textStyle = textStyle
                 ),
                 singleLine = singleLine,
-                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
                         Text(
@@ -457,7 +457,7 @@ fun FormsInputMultiline(
                     color = textColor,
                     textStyle = textStyle
                 ),
-                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
                         Text(

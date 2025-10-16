@@ -623,7 +623,7 @@ fun AmountInputDialog(
                     innerTextField()
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
             )
             SideEffect {
                 focusRequester.requestFocus()

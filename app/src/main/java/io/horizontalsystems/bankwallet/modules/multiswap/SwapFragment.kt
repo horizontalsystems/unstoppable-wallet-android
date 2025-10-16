@@ -755,7 +755,7 @@ fun FiatAmountInput(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal
             ),
-            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
                     body_grey(text = "0")
@@ -858,7 +858,7 @@ fun AmountInput(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Decimal
         ),
-        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
                 headline1_grey(text = "0")
