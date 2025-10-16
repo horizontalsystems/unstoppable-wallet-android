@@ -43,6 +43,7 @@ class ReceiveFragment : BaseComposeFragment() {
                         ReceiveScreen(navController, wallet, it.receiveEntryPointDestId)
                     }
                 }
+
                 BlockchainType.Monero -> {
                     ReceiveMoneroScreen(navController, wallet, it.receiveEntryPointDestId)
                 }
@@ -80,7 +81,8 @@ class ReceiveFragment : BaseComposeFragment() {
 
 @Composable
 fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
-    val addressViewModel = viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet))
+    val addressViewModel =
+        viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet))
 
     val uiState = addressViewModel.uiState
     ReceiveAddressScreen(
@@ -121,12 +123,10 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
             }
         },
         onBackPress = { navController.popBackStack() },
-        closeModule = {
-            if (receiveEntryPointDestId == 0) {
-                navController.popBackStack()
-            } else {
-                navController.popBackStack(receiveEntryPointDestId, true)
-            }
+        closeModule = if (receiveEntryPointDestId == 0) {
+            null
+        } else {
+            { navController.popBackStack(receiveEntryPointDestId, true) }
         }
     )
 }

@@ -29,11 +29,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.CoinForReceiveType
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveTokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
@@ -78,13 +76,7 @@ fun ReceiveTokenSelectScreen(
 
     HSScaffold(
         title = stringResource(id = R.string.Balance_Receive),
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
-                onClick = onBackPress
-            )
-        )
+        onBack = onBackPress,
     ) {
         Column {
             Box(
