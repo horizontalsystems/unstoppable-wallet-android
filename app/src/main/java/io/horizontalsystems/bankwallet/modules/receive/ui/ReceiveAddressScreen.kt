@@ -23,7 +23,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -78,14 +77,12 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ErrorScreenWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsTextButton
@@ -107,6 +104,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -146,185 +144,172 @@ fun ReceiveAddressScreen(
         }
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = title,
-                navigationIcon = {
-                    HsBackButton(onClick = onBackPress)
-                },
-                menuItems = if (closeModule == null) emptyList() else listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Done),
-                        icon = R.drawable.ic_close,
-                        onClick = closeModule
-                    )
-                )
+    HSScaffold(
+        title = title,
+        onBack = onBackPress,
+        menuItems = if (closeModule == null) emptyList() else listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Done),
+                icon = R.drawable.ic_close,
+                onClick = closeModule
             )
-        }
+        )
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
-            Crossfade(uiState.viewState, label = "") { viewState ->
-                Column {
-                    when (viewState) {
-                        is ViewState.Error -> {
-                            ErrorScreenWithAction(
-                                text = stringResource(R.string.SyncError),
-                                icon = R.drawable.ic_warning_64,
+        Crossfade(uiState.viewState, label = "") { viewState ->
+            Column {
+                when (viewState) {
+                    is ViewState.Error -> {
+                        ErrorScreenWithAction(
+                            text = stringResource(R.string.SyncError),
+                            icon = R.drawable.ic_warning_64,
+                        ) {
+                            HsTextButton(
+                                onClick = onErrorClick,
                             ) {
-                                HsTextButton(
-                                    onClick = onErrorClick,
-                                ) {
-                                    captionSB_jacob(
-                                        text = stringResource(R.string.Button_Retry),
-                                    )
-                                }
+                                captionSB_jacob(
+                                    text = stringResource(R.string.Button_Retry),
+                                )
                             }
                         }
+                    }
 
-                        ViewState.Loading -> {
-                            Loading()
-                        }
+                    ViewState.Loading -> {
+                        Loading()
+                    }
 
-                        ViewState.Success -> {
+                    ViewState.Success -> {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState()),
+                        ) {
+                            VSpacer(12.dp)
+                            uiState.alertText?.let {
+                                WarningTextView(it)
+                            }
+
+                            if (uiState.watchAccount) {
+                                TextImportantWarning(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    text = stringResource(R.string.Balance_Receive_WatchAddressAlert),
+                                )
+                            }
+
+                            VSpacer(12.dp)
                             Column(
                                 modifier = Modifier
-                                    .weight(1f)
                                     .fillMaxWidth()
-                                    .verticalScroll(rememberScrollState()),
+                                    .padding(horizontal = 16.dp)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(ComposeAppTheme.colors.lawrence),
                             ) {
-                                VSpacer(12.dp)
-                                uiState.alertText?.let {
-                                    WarningTextView(it)
-                                }
-
-                                if (uiState.watchAccount) {
-                                    TextImportantWarning(
-                                        modifier = Modifier.padding(horizontal = 16.dp),
-                                        text = stringResource(R.string.Balance_Receive_WatchAddressAlert),
-                                    )
-                                }
-
-                                VSpacer(12.dp)
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp)
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .background(ComposeAppTheme.colors.lawrence),
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                TextHelper.copyText(uiState.uri)
-                                                HudHelper.showSuccessMessage(
-                                                    localView,
-                                                    R.string.Hud_Text_Copied
-                                                )
+                                        .clickable {
+                                            TextHelper.copyText(uiState.uri)
+                                            HudHelper.showSuccessMessage(
+                                                localView,
+                                                R.string.Hud_Text_Copied
+                                            )
 
-                                                stat(
-                                                    page = StatPage.Receive,
-                                                    event = StatEvent.Copy(StatEntity.ReceiveAddress)
-                                                )
-                                            },
-                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                            stat(
+                                                page = StatPage.Receive,
+                                                event = StatEvent.Copy(StatEntity.ReceiveAddress)
+                                            )
+                                        },
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    VSpacer(32.dp)
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(ComposeAppTheme.colors.white)
+                                            .size(224.dp),
+                                        contentAlignment = Alignment.Center
                                     ) {
-                                        VSpacer(32.dp)
-                                        Box(
-                                            modifier = Modifier
-                                                .clip(RoundedCornerShape(8.dp))
-                                                .background(ComposeAppTheme.colors.white)
-                                                .size(224.dp),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            QrCodeImage(uiState.uri)
-                                        }
-                                        VSpacer(24.dp)
-                                        subhead2_leah(
+                                        QrCodeImage(uiState.uri)
+                                    }
+                                    VSpacer(24.dp)
+                                    subhead2_leah(
+                                        modifier = Modifier.padding(horizontal = 46.dp),
+                                        text = uiState.address,
+                                        textAlign = TextAlign.Center,
+                                    )
+
+                                    val testNetBadge =
+                                        if (!uiState.mainNet) " (TestNet)" else ""
+                                    uiState.blockchainName?.let { blockchainName ->
+                                        VSpacer(12.dp)
+                                        subhead_grey(
                                             modifier = Modifier.padding(horizontal = 46.dp),
-                                            text = uiState.address,
+                                            text = stringResource(R.string.Balance_Network) + ": " + blockchainName + testNetBadge,
                                             textAlign = TextAlign.Center,
                                         )
-
-                                        val testNetBadge =
-                                            if (!uiState.mainNet) " (TestNet)" else ""
-                                        uiState.blockchainName?.let { blockchainName ->
-                                            VSpacer(12.dp)
-                                            subhead_grey(
-                                                modifier = Modifier.padding(horizontal = 46.dp),
-                                                text = stringResource(R.string.Balance_Network) + ": " + blockchainName + testNetBadge,
-                                                textAlign = TextAlign.Center,
-                                            )
-                                        }
-                                        uiState.addressFormat?.let { addressFormat ->
-                                            VSpacer(12.dp)
-                                            subhead_grey(
-                                                modifier = Modifier.padding(horizontal = 46.dp),
-                                                text = stringResource(R.string.Balance_Format) + ": " + addressFormat + testNetBadge,
-                                                textAlign = TextAlign.Center,
-                                            )
-                                        }
-                                        VSpacer(32.dp)
                                     }
-                                    val additionalItems = buildList {
-                                        addAll(uiState.additionalItems)
-                                        uiState.amountString?.let { amount ->
-                                            add(ReceiveModule.AdditionalData.Amount(amount))
-                                        }
-                                    }
-
-                                    if (additionalItems.isNotEmpty()) {
-                                        AdditionalDataSection(
-                                            items = additionalItems,
-                                            onClearAmount = {
-                                                setAmount(null)
-
-                                                stat(
-                                                    page = StatPage.Receive,
-                                                    event = StatEvent.RemoveAmount
-                                                )
-                                            },
-                                            showAccountNotActiveWarningDialog = {
-                                                isTronInfoVisible = true
-                                            }
+                                    uiState.addressFormat?.let { addressFormat ->
+                                        VSpacer(12.dp)
+                                        subhead_grey(
+                                            modifier = Modifier.padding(horizontal = 46.dp),
+                                            text = stringResource(R.string.Balance_Format) + ": " + addressFormat + testNetBadge,
+                                            textAlign = TextAlign.Center,
                                         )
                                     }
-
-                                    slot1.invoke()
+                                    VSpacer(32.dp)
+                                }
+                                val additionalItems = buildList {
+                                    addAll(uiState.additionalItems)
+                                    uiState.amountString?.let { amount ->
+                                        add(ReceiveModule.AdditionalData.Amount(amount))
+                                    }
                                 }
 
-                                VSpacer(24.dp)
+                                if (additionalItems.isNotEmpty()) {
+                                    AdditionalDataSection(
+                                        items = additionalItems,
+                                        onClearAmount = {
+                                            setAmount(null)
 
-                                ActionButtonsRow(
-                                    uri = uiState.uri,
-                                    watchAccount = uiState.watchAccount,
-                                    openAmountDialog = openAmountDialog,
-                                )
+                                            stat(
+                                                page = StatPage.Receive,
+                                                event = StatEvent.RemoveAmount
+                                            )
+                                        },
+                                        showAccountNotActiveWarningDialog = {
+                                            isTronInfoVisible = true
+                                        }
+                                    )
+                                }
 
-                                VSpacer(32.dp)
+                                slot1.invoke()
                             }
+
+                            VSpacer(24.dp)
+
+                            ActionButtonsRow(
+                                uri = uiState.uri,
+                                watchAccount = uiState.watchAccount,
+                                openAmountDialog = openAmountDialog,
+                            )
+
+                            VSpacer(32.dp)
                         }
                     }
                 }
             }
-            if (openAmountDialog.value) {
-                AmountInputDialog(
-                    initialAmount = uiState.amount,
-                    onDismissRequest = { openAmountDialog.value = false },
-                    onAmountConfirm = { amount ->
-                        setAmount(amount)
-                        openAmountDialog.value = false
+        }
+        if (openAmountDialog.value) {
+            AmountInputDialog(
+                initialAmount = uiState.amount,
+                onDismissRequest = { openAmountDialog.value = false },
+                onAmountConfirm = { amount ->
+                    setAmount(amount)
+                    openAmountDialog.value = false
 
-                        stat(page = StatPage.Receive, event = StatEvent.SetAmount)
-                    }
-                )
-            }
+                    stat(page = StatPage.Receive, event = StatEvent.SetAmount)
+                }
+            )
         }
     }
     if (isTronInfoVisible) {
