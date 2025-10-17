@@ -8,21 +8,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -31,6 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
@@ -44,20 +41,12 @@ fun MoneroSubaddressesScreen(
     params: SubaddressesParams,
     onBackPress: () -> Unit
 ) {
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(id = R.string.Balance_Receive_Subaddresses),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackPress)
-                }
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.Balance_Receive_Subaddresses),
+        onBack = onBackPress,
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
                 .fillMaxSize()
                 .background(ComposeAppTheme.colors.lawrence)
                 .verticalScroll(rememberScrollState()),
@@ -98,7 +87,6 @@ fun TransactionInfoAddressCell(
     transactionsCount: Int
 ) {
     val view = LocalView.current
-    val context = LocalContext.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
@@ -116,7 +104,10 @@ fun TransactionInfoAddressCell(
             )
             VSpacer(2.dp)
             captionSB_grey(
-                text = stringResource(R.string.Balance_Receive_SubaddressesTransactions, transactionsCount),
+                text = stringResource(
+                    R.string.Balance_Receive_SubaddressesTransactions,
+                    transactionsCount
+                ),
                 maxLines = 1
             )
         }
