@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -66,54 +65,52 @@ fun CoinMarketsScreen(
     var showExchangeTypeSelector by rememberSaveable { mutableStateOf(false) }
     val uiState = viewModel.uiState
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Crossfade(uiState.viewState, label = "") { viewItemState ->
-            when (viewItemState) {
-                ViewState.Loading -> {
-                    Loading()
-                }
+    Crossfade(uiState.viewState, label = "") { viewItemState ->
+        when (viewItemState) {
+            ViewState.Loading -> {
+                Loading()
+            }
 
-                is ViewState.Error -> {
-                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
-                }
+            is ViewState.Error -> {
+                ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+            }
 
-                ViewState.Success -> {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        if (uiState.items.isEmpty()) {
-                            ListEmptyView(
-                                text = stringResource(R.string.CoinPage_NoDataAvailable),
-                                icon = R.drawable.ic_no_data
-                            )
-                        } else {
-                            CoinMarketsMenu(
-                                exchangeTypeMenu = uiState.exchangeTypeMenu,
-                                verified = viewModel.verified,
-                                showExchangeTypeSelector = { showExchangeTypeSelector = true },
-                                onVerifiedEnabled = { verified ->
-                                    viewModel.setVerified(verified)
-                                    scrollToTopAfterUpdate = true
-                                }
-                            )
-                            CoinMarketList(uiState.items, scrollToTopAfterUpdate)
-                            if (scrollToTopAfterUpdate) {
-                                scrollToTopAfterUpdate = false
+            ViewState.Success -> {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    if (uiState.items.isEmpty()) {
+                        ListEmptyView(
+                            text = stringResource(R.string.CoinPage_NoDataAvailable),
+                            icon = R.drawable.ic_no_data
+                        )
+                    } else {
+                        CoinMarketsMenu(
+                            exchangeTypeMenu = uiState.exchangeTypeMenu,
+                            verified = viewModel.verified,
+                            showExchangeTypeSelector = { showExchangeTypeSelector = true },
+                            onVerifiedEnabled = { verified ->
+                                viewModel.setVerified(verified)
+                                scrollToTopAfterUpdate = true
                             }
+                        )
+                        CoinMarketList(uiState.items, scrollToTopAfterUpdate)
+                        if (scrollToTopAfterUpdate) {
+                            scrollToTopAfterUpdate = false
                         }
                     }
                 }
             }
         }
-        if (showExchangeTypeSelector) {
-            AlertGroup(
-                title = stringResource(R.string.CoinPage_MarketsVerifiedMenu_ExchangeType),
-                select = uiState.exchangeTypeMenu,
-                onSelect = {
-                    viewModel::setExchangeType.invoke(it)
-                    showExchangeTypeSelector = false
-                },
-                onDismiss = { showExchangeTypeSelector = false }
-            )
-        }
+    }
+    if (showExchangeTypeSelector) {
+        AlertGroup(
+            title = stringResource(R.string.CoinPage_MarketsVerifiedMenu_ExchangeType),
+            select = uiState.exchangeTypeMenu,
+            onSelect = {
+                viewModel::setExchangeType.invoke(it)
+                showExchangeTypeSelector = false
+            },
+            onDismiss = { showExchangeTypeSelector = false }
+        )
     }
 }
 
@@ -195,7 +192,7 @@ fun CoinMarketCell(
                 size = 32,
                 painter = rememberAsyncImagePainter(
                     model = iconUrl,
-                    error =painterResource(R.drawable.ic_platform_placeholder_24)
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),
             )
         },
@@ -212,7 +209,7 @@ fun CoinMarketCell(
                 subtitle = marketDataValueComponent(marketDataValue)
             )
         },
-        onClick =  tradeUrl?.let {
+        onClick = tradeUrl?.let {
             { LinkHelper.openLinkInAppBrowser(context, it) }
         }
     )

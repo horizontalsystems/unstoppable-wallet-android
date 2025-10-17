@@ -5,10 +5,8 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -21,13 +19,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellNews
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
 class CoinReportsFragment : BaseComposeFragment() {
@@ -61,22 +57,13 @@ private fun CoinReportsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val reportViewItems by viewModel.reportViewItemsLiveData.observeAsState()
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.CoinPage_Reports),
-                navigationIcon = {
-                    HsBackButton(onClick = onClickNavigation)
-                }
-            )
-        }
-    ) { padding ->
+    HSScaffold(
+        title = stringResource(R.string.CoinPage_Reports),
+        onBack = onClickNavigation,
+    ) {
         HSSwipeRefresh(
             refreshing = isRefreshing,
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             onRefresh = viewModel::refresh,
             content = {
                 Crossfade(viewState, label = "") { viewState ->
