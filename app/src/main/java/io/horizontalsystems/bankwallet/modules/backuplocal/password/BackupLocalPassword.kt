@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,14 +24,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -42,41 +39,44 @@ fun LocalBackupPasswordScreen(
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<BackupLocalPasswordViewModel>(factory = BackupLocalPasswordModule.Factory(backupType))
+    val viewModel = viewModel<BackupLocalPasswordViewModel>(
+        factory = BackupLocalPasswordModule.Factory(backupType)
+    )
 
     val view = LocalView.current
     val context = LocalContext.current
     var hidePassphrase by remember { mutableStateOf(true) }
     val uiState = viewModel.uiState
 
-    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        uri?.let {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                uiState.backupJson?.let { backupJson ->
-                    try {
-                        outputStream.bufferedWriter().use { bw ->
-                            bw.write(backupJson)
-                            bw.flush()
+    val backupLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            uri?.let {
+                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    uiState.backupJson?.let { backupJson ->
+                        try {
+                            outputStream.bufferedWriter().use { bw ->
+                                bw.write(backupJson)
+                                bw.flush()
 
-                            HudHelper.showSuccessMessage(
-                                contenView = view,
-                                resId = R.string.LocalBackup_BackupSaved,
-                                duration = SnackbarDuration.SHORT,
-                                icon = R.drawable.ic_download_24,
-                                iconTint = R.color.white
-                            )
+                                HudHelper.showSuccessMessage(
+                                    contenView = view,
+                                    resId = R.string.LocalBackup_BackupSaved,
+                                    duration = SnackbarDuration.SHORT,
+                                    icon = R.drawable.ic_download_24,
+                                    iconTint = R.color.white
+                                )
 
-                            viewModel.backupFinished()
+                                viewModel.backupFinished()
+                            }
+                        } catch (e: Throwable) {
+                            HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                         }
-                    } catch (e: Throwable) {
-                        HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                     }
                 }
+            } ?: run {
+                viewModel.backupCanceled()
             }
-        } ?: run {
-            viewModel.backupCanceled()
         }
-    }
 
     if (uiState.error != null) {
         Toast.makeText(App.instance, uiState.error, Toast.LENGTH_SHORT).show()
@@ -94,26 +94,16 @@ fun LocalBackupPasswordScreen(
         onFinish()
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.LocalBackup_SetPassword),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                }
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.LocalBackup_SetPassword),
+        onBack = onBackClick,
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column {
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
+                    .verticalScroll(rememberScrollState())
             ) {
-
                 InfoText(text = stringResource(R.string.LocalBackup_ProtextBackupWithPasswordInfo))
                 VSpacer(24.dp)
                 FormsInputPassword(
