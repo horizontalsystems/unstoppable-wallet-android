@@ -3,10 +3,8 @@ package io.horizontalsystems.bankwallet.modules.coin
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -26,10 +24,9 @@ import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScree
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
@@ -89,58 +86,49 @@ fun CoinTabs(
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = viewModel.fullCoin.coin.code,
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = buildList {
-                    if (viewModel.isWatchlistEnabled) {
-                        if (viewModel.isFavorite) {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
-                                    icon = R.drawable.ic_heart_filled_24,
-                                    tint = ComposeAppTheme.colors.jacob,
-                                    onClick = {
-                                        viewModel.onUnfavoriteClick()
+    HSScaffold(
+        title = viewModel.fullCoin.coin.code,
+        onBack = navController::popBackStack,
+        menuItems = buildList {
+            if (viewModel.isWatchlistEnabled) {
+                if (viewModel.isFavorite) {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
+                            icon = R.drawable.ic_heart_filled_24,
+                            tint = ComposeAppTheme.colors.jacob,
+                            onClick = {
+                                viewModel.onUnfavoriteClick()
 
-                                        stat(
-                                            page = StatPage.CoinPage,
-                                            event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid)
-                                        )
-                                    }
+                                stat(
+                                    page = StatPage.CoinPage,
+                                    event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid)
                                 )
-                            )
-                        } else {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.CoinPage_Favorite),
-                                    icon = R.drawable.ic_heart_24,
-                                    tint = ComposeAppTheme.colors.grey,
-                                    onClick = {
-                                        viewModel.onFavoriteClick()
+                            }
+                        )
+                    )
+                } else {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.CoinPage_Favorite),
+                            icon = R.drawable.ic_heart_24,
+                            tint = ComposeAppTheme.colors.grey,
+                            onClick = {
+                                viewModel.onFavoriteClick()
 
-                                        stat(
-                                            page = StatPage.CoinPage,
-                                            event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid)
-                                        )
-                                    }
+                                stat(
+                                    page = StatPage.CoinPage,
+                                    event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid)
                                 )
-                            )
-                        }
-                    }
+                            }
+                        )
+                    )
                 }
-            )
+            }
         }
-    ) { innerPaddings ->
+    ) {
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .navigationBarsPadding()
+            modifier = Modifier.navigationBarsPadding()
         ) {
             val selectedTab = tabs[pagerState.currentPage]
             val tabItems = tabs.map {
@@ -191,22 +179,13 @@ fun CoinTabs(
 
 @Composable
 fun CoinNotFound(coinUid: String, navController: NavController) {
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = coinUid,
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
-        },
-        content = {
-            ListEmptyView(
-                paddingValues = it,
-                text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),
-                icon = R.drawable.ic_not_available
-            )
-        }
-    )
+    HSScaffold(
+        title = coinUid,
+        onBack = navController::popBackStack,
+    ) {
+        ListEmptyView(
+            text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),
+            icon = R.drawable.ic_not_available
+        )
+    }
 }
