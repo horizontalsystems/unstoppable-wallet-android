@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -31,10 +30,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
 
 class FilterBlockchainFragment : BaseComposeFragment() {
@@ -62,14 +60,11 @@ class FilterBlockchainFragment : BaseComposeFragment() {
 fun FilterBlockchainScreen(navController: NavController, viewModel: TransactionsViewModel) {
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
+    HSScaffold(
+        title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
+        onBack = navController::popBackStack,
+    ) {
         Column {
-            AppBar(
-                title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
-                navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
-                }
-            )
             filterBlockchains?.let { blockchains ->
                 LazyColumn(
                     contentPadding = PaddingValues(bottom = 32.dp)
