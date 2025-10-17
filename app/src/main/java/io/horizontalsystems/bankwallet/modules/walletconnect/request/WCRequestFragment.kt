@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,9 +25,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransac
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signtransaction.WCSignEthereumTransactionRequestScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -36,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MessageToSign
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
@@ -72,7 +70,8 @@ class WCRequestFragment : BaseComposeFragment() {
 
     @Composable
     fun WcRequestEvm(navController: NavController) {
-        val wcRequestEvmViewModel = viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
+        val wcRequestEvmViewModel =
+            viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
         val composableScope = rememberCoroutineScope()
         when (val sessionRequestUI = wcRequestEvmViewModel.sessionRequestUi) {
             is SessionRequestUI.Content -> {
@@ -187,44 +186,41 @@ fun WCNewSignRequestScreen(
     onAllow: () -> Unit,
     onDecline: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    HSScaffold(
+        title = stringResource(R.string.WalletConnect_SignMessageRequest_Title),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = navController::popBackStack
+            )
+        )
     ) {
-        AppBar(
-            stringResource(R.string.WalletConnect_SignMessageRequest_Title),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = { navController.popBackStack() }
+        Column {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                VSpacer(12.dp)
+
+                MessageContent(
+                    sessionRequestUI.param,
+                    sessionRequestUI.peerUI.peerName,
+                    sessionRequestUI.chainName,
+                    sessionRequestUI.chainAddress,
                 )
-            )
-        )
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            VSpacer(12.dp)
 
-            MessageContent(
-                sessionRequestUI.param,
-                sessionRequestUI.peerUI.peerName,
-                sessionRequestUI.chainName,
-                sessionRequestUI.chainAddress,
-            )
+                VSpacer(24.dp)
+            }
 
-            VSpacer(24.dp)
+            ActionButtons(
+                onDecline = onDecline,
+                onAllow = onAllow
+            )
         }
-
-        ActionButtons(
-            onDecline = onDecline,
-            onAllow = onAllow
-        )
-
     }
-
 }
 
 @Composable

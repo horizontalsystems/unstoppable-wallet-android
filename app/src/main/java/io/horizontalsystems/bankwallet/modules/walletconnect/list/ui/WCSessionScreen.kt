@@ -6,15 +6,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -38,40 +39,44 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSessionsScreen(
     navController: NavController,
     deepLinkUri: String?
 ) {
     val context = LocalContext.current
-    val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     val viewModel = viewModel<WalletConnectListViewModel>(
         factory = WalletConnectListModule.Factory()
     )
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.setConnectionUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.setConnectionUri(
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                )
+            }
         }
-    }
 
     val uiState by viewModel.uiState.collectAsState(initial = WalletConnectListUiState())
 
     when (viewModel.connectionResult) {
         ConnectionResult.Error -> {
             LaunchedEffect(viewModel.connectionResult) {
-                coroutineScope.launch {
+                scope.launch {
                     delay(300)
-                    invalidUrlBottomSheetState.show()
+                    showBottomSheet = true
                 }
             }
             viewModel.onRouteHandled()
@@ -90,74 +95,84 @@ fun WCSessionsScreen(
         viewModel.refreshList()
     }
 
-    ModalBottomSheetLayout(
-        sheetState = invalidUrlBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
-            ConfirmationBottomSheet(
-                title = stringResource(R.string.WalletConnect_Title),
-                text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
-                iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                confirmText = stringResource(R.string.Button_TryAgain),
-                cautionType = Caution.Type.Warning,
-                cancelText = stringResource(R.string.Button_Cancel),
-                onConfirm = {
-                    coroutineScope.launch {
-                        invalidUrlBottomSheetState.hide()
-                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
-                    }
-                },
-                onClose = {
-                    coroutineScope.launch { invalidUrlBottomSheetState.hide() }
+    HSScaffold(
+        title = stringResource(R.string.WalletConnect_Title),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Info_Title),
+                icon = R.drawable.ic_info_24,
+                tint = ComposeAppTheme.colors.grey,
+                onClick = {
+                    FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
                 }
             )
-        }
+        )
     ) {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.WalletConnect_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            tint = ComposeAppTheme.colors.grey,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
-                            }
-                        )
+        Column {
+            Column(modifier = Modifier.weight(1f)) {
+                if (uiState.sessionViewItems.isEmpty() && uiState.pairingsNumber == 0) {
+                    ListEmptyView(
+                        text = stringResource(R.string.WalletConnect_NoConnection),
+                        icon = R.drawable.ic_wallet_connet_48
                     )
-                )
+                } else {
+                    WCSessionList(
+                        viewModel,
+                        navController
+                    )
+                }
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(modifier = Modifier.weight(1f)) {
-                    if (uiState.sessionViewItems.isEmpty() && uiState.pairingsNumber == 0) {
-                        ListEmptyView(
-                            text = stringResource(R.string.WalletConnect_NoConnection),
-                            icon = R.drawable.ic_wallet_connet_48
-                        )
-                    } else {
-                        WCSessionList(
-                            viewModel,
-                            navController
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.WalletConnect_NewConnect),
+                    onClick = {
+                        qrScannerLauncher.launch(
+                            QRScannerActivity.getScanQrIntent(
+                                context,
+                                true
+                            )
                         )
                     }
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.WalletConnect_NewConnect),
-                        onClick = { qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true)) }
-                    )
-                }
+                )
+            }
+        }
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState,
+                containerColor = ComposeAppTheme.colors.transparent
+            ) {
+                ConfirmationBottomSheet(
+                    title = stringResource(R.string.WalletConnect_Title),
+                    text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
+                    iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
+                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                    confirmText = stringResource(R.string.Button_TryAgain),
+                    cautionType = Caution.Type.Warning,
+                    cancelText = stringResource(R.string.Button_Cancel),
+                    onConfirm = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+
+                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                    },
+                    onClose = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    }
+                )
             }
         }
     }
