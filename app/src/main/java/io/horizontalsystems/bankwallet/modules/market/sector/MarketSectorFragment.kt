@@ -4,8 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,18 +33,16 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.platform.InfoBottomSheet
 import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.launch
 
@@ -96,34 +92,23 @@ fun SectorScreen(
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = viewModel.categoryName,
-                navigationIcon = {
-                    HsBackButton(onClick = onCloseButtonClick)
+    HSScaffold(
+        title = viewModel.categoryName,
+        onBack = onCloseButtonClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Info_Title),
+                icon = R.drawable.ic_info_24,
+                onClick = {
+                    coroutineScope.launch {
+                        infoModalBottomSheetState.show()
+                    }
+                    isInfoBottomSheetVisible = true
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
-                            isInfoBottomSheetVisible = true
-                        },
-                    )
-                )
             )
-        },
-    ) { innerPaddings ->
-        Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .navigationBarsPadding()
-        ) {
+        )
+    ) {
+        Column(Modifier.navigationBarsPadding()) {
             HSSwipeRefresh(
                 refreshing = uiState.isRefreshing,
                 onRefresh = {

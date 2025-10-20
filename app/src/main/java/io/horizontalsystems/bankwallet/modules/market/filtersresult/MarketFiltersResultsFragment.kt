@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,14 +29,12 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
@@ -84,18 +81,11 @@ private fun SearchResultsScreen(
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
-    Surface(
-        color = ComposeAppTheme.colors.tyler,
-        modifier = Modifier.navigationBarsPadding()
+    HSScaffold(
+        title = stringResource(R.string.Market_AdvancedSearch_Results),
+        onBack = navController::popBackStack,
     ) {
-        Column {
-            AppBar(
-                title = stringResource(R.string.Market_AdvancedSearch_Results),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-            )
-
+        Column(Modifier.navigationBarsPadding()) {
             Crossfade(uiState.viewState, label = "") { state ->
                 when (state) {
                     ViewState.Loading -> {
@@ -166,7 +156,8 @@ private fun SearchResultsScreen(
                                                     stat(
                                                         page = StatPage.AdvancedSearchResults,
                                                         event = StatEvent.OpenPremium(
-                                                            StatPremiumTrigger.TradingSignal)
+                                                            StatPremiumTrigger.TradingSignal
+                                                        )
                                                     )
                                                 } else {
                                                     viewModel.hideSignals()
@@ -199,7 +190,6 @@ private fun SearchResultsScreen(
                     }
                 )
             }
-
         }
     }
 }
