@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.earn.vault
 
 import android.os.Parcelable
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,15 +25,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -44,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
 class VaultFragment : BaseComposeFragment() {
@@ -86,68 +83,61 @@ private fun VaultScreen(
     chartViewModel: ChartViewModel,
     navController: NavController,
 ) {
-
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .background(color = ComposeAppTheme.colors.tyler)
-            .navigationBarsPadding()
+    HSScaffold(
+        title = uiState.vaultViewItem.assetSymbol,
+        onBack = navController::popBackStack,
     ) {
-        AppBar(
-            title = uiState.vaultViewItem.assetSymbol,
-            navigationIcon = {
-                HsBackButton(onClick = navController::popBackStack)
-            }
-        )
-
-        HSSwipeRefresh(
-            refreshing = uiState.isRefreshing,
-            onRefresh = {
-                chartViewModel.refresh()
-            }
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize()
+        Column(Modifier.navigationBarsPadding()) {
+            HSSwipeRefresh(
+                refreshing = uiState.isRefreshing,
+                onRefresh = {
+                    chartViewModel.refresh()
+                }
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                Column(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    item {
-                        VaultCard(
-                            uiState.vaultViewItem.name,
-                            uiState.vaultViewItem.assetLogo,
-                            uiState.vaultViewItem.rank
-                        )
-                    }
-                    item {
-                        Chart(chartViewModel)
-                    }
-                    item {
-                        VSpacer(16.dp)
-                        VaultDetails(uiState.vaultViewItem)
-                    }
-                    item {
-                        VSpacer(18.dp)
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Market_Vaults_OpenDapp),
-                            enabled = uiState.vaultViewItem.url != null,
-                            onClick = {
-                                uiState.vaultViewItem.url?.let {
-                                    LinkHelper.openLinkInAppBrowser(context, it)
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    ) {
+                        item {
+                            VaultCard(
+                                uiState.vaultViewItem.name,
+                                uiState.vaultViewItem.assetLogo,
+                                uiState.vaultViewItem.rank
+                            )
+                        }
+                        item {
+                            Chart(chartViewModel)
+                        }
+                        item {
+                            VSpacer(16.dp)
+                            VaultDetails(uiState.vaultViewItem)
+                        }
+                        item {
+                            VSpacer(18.dp)
+                            ButtonPrimaryDefault(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 16.dp, end = 16.dp),
+                                title = stringResource(R.string.Market_Vaults_OpenDapp),
+                                enabled = uiState.vaultViewItem.url != null,
+                                onClick = {
+                                    uiState.vaultViewItem.url?.let {
+                                        LinkHelper.openLinkInAppBrowser(context, it)
+                                    }
                                 }
-                            }
-                        )
-                        VSpacer(32.dp)
-                    }
-                    item {
-                        CellFooter("Powered by Vaults.fyi")
+                            )
+                            VSpacer(32.dp)
+                        }
+                        item {
+                            CellFooter("Powered by Vaults.fyi")
+                        }
                     }
                 }
             }

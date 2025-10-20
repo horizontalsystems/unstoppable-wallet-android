@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -54,12 +53,10 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -67,6 +64,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.coroutines.launch
 
 class MarketPlatformFragment : BaseComposeFragment() {
@@ -112,34 +110,23 @@ private fun PlatformScreen(
     var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = platform.name,
-                navigationIcon = {
-                    HsBackButton(onClick = onCloseButtonClick)
+    HSScaffold(
+        title = platform.name,
+        onBack = onCloseButtonClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Info_Title),
+                icon = R.drawable.ic_info_24,
+                onClick = {
+                    coroutineScope.launch {
+                        infoModalBottomSheetState.show()
+                    }
+                    isInfoBottomSheetVisible = true
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
-                            isInfoBottomSheetVisible = true
-                        },
-                    )
-                )
             )
-        },
-    ) { innerPaddings ->
-        Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .navigationBarsPadding()
-        ) {
+        )
+    ) {
+        Column(Modifier.navigationBarsPadding()) {
             HSSwipeRefresh(
                 refreshing = uiState.isRefreshing,
                 onRefresh = {
