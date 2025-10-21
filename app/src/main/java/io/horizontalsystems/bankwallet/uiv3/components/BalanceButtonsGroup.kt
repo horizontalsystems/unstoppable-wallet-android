@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun ButtonsGroup(content: @Composable RowScope.() -> Unit) {
+fun BalanceButtonsGroup(content: @Composable RowScope.() -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

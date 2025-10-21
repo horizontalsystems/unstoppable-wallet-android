@@ -78,8 +78,8 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
+import io.horizontalsystems.bankwallet.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
-import io.horizontalsystems.bankwallet.uiv3.components.ButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
@@ -280,7 +280,7 @@ fun BalanceItems(
 
             if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 item {
-                    ButtonsGroup {
+                    BalanceButtonsGroup {
                         if (accountViewItem.type.supportsWalletConnect) {
                             BalanceActionButton(
                                 variant = ButtonVariant.Primary,
