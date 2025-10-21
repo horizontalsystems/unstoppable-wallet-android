@@ -56,8 +56,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
-import io.horizontalsystems.bankwallet.uiv3.components.ButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
@@ -498,7 +498,7 @@ private fun ButtonsRow(
     navController: NavController,
     onClickReceive: () -> Unit
 ) {
-    ButtonsGroup {
+    BalanceButtonsGroup {
         BalanceActionButton(
             variant = ButtonVariant.Primary,
             icon = R.drawable.ic_balance_chart_24,

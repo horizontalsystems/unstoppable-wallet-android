@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 @Composable
 fun CellMiddleInfo(
     eyebrow: HSString? = null,
-    title: HSString,
+    title: HSString? = null,
     badge: HSString? = null,
     subtitleBadge: HSString? = null,
     subtitle: HSString? = null,
@@ -33,11 +33,13 @@ fun CellMiddleInfo(
             horizontalArrangement = spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = title.text,
-                style = ComposeAppTheme.typography.headline2,
-                color = title.color ?: ComposeAppTheme.colors.leah,
-            )
+            title?.let {
+                Text(
+                    text = it.text,
+                    style = ComposeAppTheme.typography.headline2,
+                    color = it.color ?: ComposeAppTheme.colors.leah,
+                )
+            }
 
             badge?.let {
                 Badge(text = it.text)
