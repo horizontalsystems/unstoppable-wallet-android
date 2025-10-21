@@ -11,9 +11,6 @@
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
-        android:id="@+id/sendEvmProcessingFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.send.evm.processing.SendEvmProcessingFragment"/>
-    <fragment
         android:id="@+id/sendEvmSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment" />
     <fragment
@@ -114,9 +111,6 @@
     <fragment
         android:id="@+id/baseCurrencySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment" />
-    <fragment
-        android:id="@+id/personalSupportFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.support.PersonalSupportFragment" />
     <fragment
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsFragment" />

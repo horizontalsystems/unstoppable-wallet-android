@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.faq
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -26,13 +25,11 @@ import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
@@ -64,57 +61,54 @@ private fun FaqScreen(
     viewModel: FaqViewModel = viewModel(factory = FaqModule.Factory())
 ) {
     val viewState = viewModel.viewState
-    Column(modifier = Modifier
-        .background(color = ComposeAppTheme.colors.tyler)
-        .navigationBarsPadding()
-    ) {
-        AppBar(
-            title = stringResource(R.string.Settings_Faq),
-            navigationIcon = {
-                HsBackButton(onClick = onCloseClick)
-            }
-        )
-        Crossfade(viewState) { viewState ->
-            when (viewState) {
-                ViewState.Loading -> {
-                    Loading()
-                }
 
-                is ViewState.Error -> {
-                    val s = when (val error = viewState.t) {
-                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
-                        is LocalizedException -> stringResource(error.errorTextRes)
-                        else -> stringResource(R.string.Hud_UnknownError, error)
+    HSScaffold(
+        title = stringResource(R.string.Settings_Faq),
+        onBack = onCloseClick,
+    ) {
+        Column(modifier = Modifier.navigationBarsPadding()) {
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    ViewState.Loading -> {
+                        Loading()
                     }
 
-                    ScreenMessageWithAction(s, R.drawable.ic_error_48)
-                }
-
-                ViewState.Success -> {
-                    Column {
-                        val tabItems =
-                            viewModel.sections.map {
-                                TabItem(
-                                    it.section,
-                                    it == viewModel.selectedSection,
-                                    it
-                                )
-                            }
-                        TabsTop(TabsTopType.Scrolled, tabItems) { tab ->
-                            viewModel.onSelectSection(tab)
+                    is ViewState.Error -> {
+                        val s = when (val error = viewState.t) {
+                            is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                            is LocalizedException -> stringResource(error.errorTextRes)
+                            else -> stringResource(R.string.Hud_UnknownError, error)
                         }
 
-                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            Spacer(Modifier.height(12.dp))
-                            CellUniversalLawrenceSection(viewModel.faqItems) { faq ->
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                    onClick = { onItemClick(faq) }
-                                ) {
-                                    subhead1_leah(text = faq.title)
+                        ScreenMessageWithAction(s, R.drawable.ic_error_48)
+                    }
+
+                    ViewState.Success -> {
+                        Column {
+                            val tabItems =
+                                viewModel.sections.map {
+                                    TabItem(
+                                        it.section,
+                                        it == viewModel.selectedSection,
+                                        it
+                                    )
                                 }
+                            TabsTop(TabsTopType.Scrolled, tabItems) { tab ->
+                                viewModel.onSelectSection(tab)
                             }
-                            Spacer(Modifier.height(32.dp))
+
+                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                                Spacer(Modifier.height(12.dp))
+                                CellUniversalLawrenceSection(viewModel.faqItems) { faq ->
+                                    RowUniversal(
+                                        modifier = Modifier.padding(horizontal = 16.dp),
+                                        onClick = { onItemClick(faq) }
+                                    ) {
+                                        subhead1_leah(text = faq.title)
+                                    }
+                                }
+                                Spacer(Modifier.height(32.dp))
+                            }
                         }
                     }
                 }

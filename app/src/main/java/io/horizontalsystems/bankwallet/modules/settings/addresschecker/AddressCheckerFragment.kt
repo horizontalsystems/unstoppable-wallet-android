@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,10 +24,8 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -36,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class AddressCheckerFragment : BaseComposeFragment() {
 
@@ -58,20 +56,13 @@ fun AddressCheckerScreen(
 ) {
     val viewModel = viewModel<AddressCheckerViewModel>(factory = AddressCheckerModule.Factory())
     val uiState = viewModel.uiState
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.SettingsAddressChecker_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onClose)
-                },
-            )
-        }
-    ) { paddingValues ->
+
+    HSScaffold(
+        title = stringResource(R.string.SettingsAddressChecker_Title),
+        onBack = onClose,
+    ) {
         Column(
             modifier = Modifier
-                .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
