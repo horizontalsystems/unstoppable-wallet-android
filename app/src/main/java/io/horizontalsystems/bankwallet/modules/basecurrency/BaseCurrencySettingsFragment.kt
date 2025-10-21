@@ -14,13 +14,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,18 +36,17 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.coroutines.launch
 
 class BaseCurrencySettingsFragment : BaseComposeFragment() {
@@ -56,6 +58,7 @@ class BaseCurrencySettingsFragment : BaseComposeFragment() {
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BaseCurrencyScreen(
     navController: NavController,
@@ -64,15 +67,15 @@ private fun BaseCurrencyScreen(
     )
 ) {
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden,
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
         confirmValueChange = {
-            if (it == ModalBottomSheetValue.Hidden) {
+            if (it == SheetValue.Hidden) {
                 viewModel.closeDisclaimer()
             }
             true
         }
     )
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     if (viewModel.closeScreen) {
         navController.popBackStack()
@@ -80,69 +83,72 @@ private fun BaseCurrencyScreen(
 
     if (viewModel.showDisclaimer) {
         LaunchedEffect(Unit) {
-            sheetState.show()
+            showBottomSheet = true
         }
     }
 
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
-            WarningBottomSheet(
-                text = stringResource(
-                    R.string.SettingsCurrency_DisclaimerText,
-                    viewModel.disclaimerCurrencies
-                ),
-                onCloseClick = {
-                    viewModel.closeDisclaimer()
-                    scope.launch { sheetState.hide() }
-                },
-                onOkClick = {
-                    viewModel.onAcceptDisclaimer()
-                    scope.launch { sheetState.hide() }
-                }
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.SettingsCurrency_Title),
+        onBack = navController::popBackStack,
     ) {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.SettingsCurrency_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .navigationBarsPadding()
+        ) {
+            VSpacer(12.dp)
+            CellUniversalLawrenceSection(viewModel.popularItems) { item ->
+                CurrencyCell(
+                    item.currency.code,
+                    item.currency.symbol,
+                    item.currency.flag,
+                    item.selected
+                ) { viewModel.onSelectBaseCurrency(item.currency) }
+            }
+            VSpacer(24.dp)
+            HeaderText(
+                stringResource(R.string.SettingsCurrency_Other)
+            )
+            CellUniversalLawrenceSection(viewModel.otherItems) { item ->
+                CurrencyCell(
+                    item.currency.code,
+                    item.currency.symbol,
+                    item.currency.flag,
+                    item.selected
+                ) { viewModel.onSelectBaseCurrency(item.currency) }
+            }
+            VSpacer(24.dp)
+        }
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState,
+                containerColor = ComposeAppTheme.colors.transparent
+            ) {
+                WarningBottomSheet(
+                    text = stringResource(
+                        R.string.SettingsCurrency_DisclaimerText,
+                        viewModel.disclaimerCurrencies
+                    ),
+                    onCloseClick = {
+                        viewModel.closeDisclaimer()
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    },
+                    onOkClick = {
+                        viewModel.onAcceptDisclaimer()
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
                     }
                 )
-            }
-        ) { paddingValues ->
-            Column(
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(paddingValues)
-                    .navigationBarsPadding()
-            ) {
-                VSpacer(12.dp)
-                CellUniversalLawrenceSection(viewModel.popularItems) { item ->
-                    CurrencyCell(
-                        item.currency.code,
-                        item.currency.symbol,
-                        item.currency.flag,
-                        item.selected
-                    ) { viewModel.onSelectBaseCurrency(item.currency) }
-                }
-                VSpacer(24.dp)
-                HeaderText(
-                    stringResource(R.string.SettingsCurrency_Other)
-                )
-                CellUniversalLawrenceSection(viewModel.otherItems) { item ->
-                    CurrencyCell(
-                        item.currency.code,
-                        item.currency.symbol,
-                        item.currency.flag,
-                        item.selected
-                    ) { viewModel.onSelectBaseCurrency(item.currency) }
-                }
-                VSpacer(24.dp)
             }
         }
     }
