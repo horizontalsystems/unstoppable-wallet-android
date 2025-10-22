@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains
 
 import android.os.Parcelable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,15 +27,14 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
@@ -74,7 +72,12 @@ private fun SelectBlockchainsScreen(
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {
-    val viewModel = viewModel<SelectBlockchainsViewModel>(factory = SelectBlockchainsModule.Factory(accountType, accountName))
+    val viewModel = viewModel<SelectBlockchainsViewModel>(
+        factory = SelectBlockchainsModule.Factory(
+            accountType,
+            accountName
+        )
+    )
 
     val view = LocalView.current
     val uiState = viewModel.uiState
@@ -96,28 +99,21 @@ private fun SelectBlockchainsScreen(
         }
     }
 
-    Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    HSScaffold(
+        title = stringResource(title),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Done),
+                onClick = viewModel::onClickWatch,
+                enabled = submitEnabled,
+                tint = ComposeAppTheme.colors.jacob
+            )
+        ),
     ) {
-        AppBar(
-            title = stringResource(title),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Done),
-                    onClick = viewModel::onClickWatch,
-                    enabled = submitEnabled,
-                    tint = ComposeAppTheme.colors.jacob
-                )
-            ),
-        )
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))

@@ -9,13 +9,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -36,11 +33,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -64,22 +62,21 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
             var selectedType by remember { mutableStateOf<MarketWidgetType?>(null) }
 
             ComposeAppTheme {
-                Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-                    AppBar(
-                        title = stringResource(R.string.WidgetList_Config_Title),
-                        navigationIcon = null,
-                        menuItems = listOf(MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { finish() }
-                        ))
-                    )
+                HSScaffold(
+                    title = stringResource(R.string.WidgetList_Config_Title),
+                    menuItems = listOf(
+                        MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { finish() }
+                    ))
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        Spacer(modifier = Modifier.height(12.dp))
+                        VSpacer(12.dp)
                         CellSingleLineLawrenceSection(MarketWidgetManager.getMarketWidgetTypes()) { type ->
                             Row(
                                 modifier = Modifier
@@ -105,20 +102,25 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                             }
                         }
                         if (manufacturer.equals(Build.MANUFACTURER, ignoreCase = true)) {
-                            Spacer(modifier = Modifier.height(24.dp))
+                            VSpacer(24.dp)
                             TextImportantWarning(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = stringResource(R.string.Widget_EnableAutostartWarning)
                             )
                         }
-                        Spacer(modifier = Modifier.height(24.dp))
+                        VSpacer(24.dp)
                     }
                 }
             }
         }
     }
 
-    private fun finishActivity(selectedType: MarketWidgetType, appWidgetId: Int, glanceId: GlanceId?, context: Context) {
+    private fun finishActivity(
+        selectedType: MarketWidgetType,
+        appWidgetId: Int,
+        glanceId: GlanceId?,
+        context: Context
+    ) {
         val scope = MainScope()
         scope.launch {
             glanceId?.let {

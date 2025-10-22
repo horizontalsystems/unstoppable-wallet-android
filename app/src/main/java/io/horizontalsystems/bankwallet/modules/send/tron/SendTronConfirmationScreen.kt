@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.tron
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,12 +40,9 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeRawWithViewState
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.MemoCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
@@ -58,7 +52,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddr
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -138,14 +132,10 @@ fun SendTronConfirmationScreen(
         }
     }
 
-    Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = stringResource(R.string.Send_Confirmation_Title),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            },
-            menuItems = listOf()
-        )
+    HSScaffold(
+        title = stringResource(R.string.Send_Confirmation_Title),
+        onBack = navController::popBackStack,
+    ) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -292,36 +282,12 @@ fun SendTronConfirmationScreen(
 }
 
 @Composable
-private fun InactiveAddressWarningItem(navController: NavController) {
-    val title = stringResource(R.string.Tron_AddressNotActive_Title)
-    val info = stringResource(R.string.Tron_AddressNotActive_Info)
-    RowUniversal(
-        modifier = Modifier
-            .clickable(
-                onClick = {
-                    navController.slideFromBottom(
-                        R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.Input(title, info)
-                    )
-                },
-                interactionSource = MutableInteractionSource(),
-                indication = null
-            )
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        subhead2_jacob(text = stringResource(R.string.Tron_AddressNotActive_Warning))
-
-        Image(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            painter = painterResource(id = R.drawable.ic_info_20),
-            contentDescription = ""
-        )
-    }
-}
-
-@Composable
-private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit, enabled: Boolean) {
+private fun SendButton(
+    modifier: Modifier,
+    sendResult: SendResult?,
+    onClickSend: () -> Unit,
+    enabled: Boolean
+) {
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(

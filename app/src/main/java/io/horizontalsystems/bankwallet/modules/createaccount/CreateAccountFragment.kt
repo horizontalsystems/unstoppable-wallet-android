@@ -6,15 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,13 +32,13 @@ import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -113,23 +110,19 @@ private fun CreateAccountIntroScreen(
         }
     }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column(Modifier.fillMaxSize()) {
-            AppBar(
-                title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = viewModel::createAccount,
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                ),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                },
-                backgroundColor = Color.Transparent
+    HSScaffold(
+        title = stringResource(R.string.ManageAccounts_CreateNewWallet),
+        onBack = onBackClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Create),
+                onClick = viewModel::createAccount,
+                tint = ComposeAppTheme.colors.jacob
             )
-            Spacer(Modifier.height(12.dp))
+        ),
+    ) {
+        Column {
+            VSpacer(12.dp)
 
             HeaderText(stringResource(id = R.string.ManageAccount_Name))
             FormsInput(
@@ -140,7 +133,7 @@ private fun CreateAccountIntroScreen(
                 onValueChange = viewModel::onChangeAccountName
             )
 
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
 
             CellSingleLineLawrenceSection {
                 Row(
@@ -167,7 +160,7 @@ private fun CreateAccountIntroScreen(
                 }
             }
 
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
         }
     }
 }

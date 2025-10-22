@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,19 +30,19 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
@@ -81,105 +79,98 @@ fun CreateAccountAdvancedScreen(
     var showMnemonicSizeSelectorDialog by remember { mutableStateOf(false) }
     var hidePassphrase by remember { mutableStateOf(true) }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        if (showMnemonicSizeSelectorDialog) {
-            MenuGroup(
-                title = stringResource(R.string.CreateWallet_Mnemonic),
-                items = viewModel.mnemonicKinds.map {
-                    MenuItemX(it.titleLong, it == viewModel.selectedKind, it)
-                },
-                onDismissRequest = {
-                    showMnemonicSizeSelectorDialog = false
-                },
-                onSelectItem = {
-                    viewModel.setMnemonicKind(it)
+    HSScaffold(
+        title = stringResource(R.string.CreateWallet_Advanced_Title),
+        onBack = onBackClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Create),
+                onClick = { viewModel.createAccount() },
+                tint = ComposeAppTheme.colors.jacob
+            )
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            VSpacer(12.dp)
+            HeaderText(stringResource(id = R.string.ManageAccount_Name))
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                initial = viewModel.accountName,
+                pasteEnabled = false,
+                hint = viewModel.defaultAccountName,
+                onValueChange = viewModel::onChangeAccountName
+            )
+            VSpacer(32.dp)
+            CellUniversalLawrenceSection(
+                listOf {
+                    MnemonicNumberCell(
+                        kind = viewModel.selectedKind,
+                        showMnemonicSizeSelectorDialog = {
+                            showMnemonicSizeSelectorDialog = true
+                        }
+                    )
                 }
             )
-        }
-        Column {
-            AppBar(
-                title = stringResource(R.string.CreateWallet_Advanced_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = { viewModel.createAccount() },
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                )
-            )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                HeaderText(stringResource(id = R.string.ManageAccount_Name))
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.accountName,
-                    pasteEnabled = false,
-                    hint = viewModel.defaultAccountName,
-                    onValueChange = viewModel::onChangeAccountName
+            VSpacer(32.dp)
+            CellUniversalLawrenceSection(listOf {
+                PassphraseCell(
+                    enabled = viewModel.passphraseEnabled,
+                    onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
                 )
-                Spacer(Modifier.height(32.dp))
-                CellUniversalLawrenceSection(
-                    listOf {
-                        MnemonicNumberCell(
-                            kind = viewModel.selectedKind,
-                            showMnemonicSizeSelectorDialog = {
-                                showMnemonicSizeSelectorDialog = true
-                            }
-                        )
+            })
+
+            if (viewModel.passphraseEnabled) {
+                VSpacer(24.dp)
+                FormsInputPassword(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.Passphrase),
+                    state = viewModel.passphraseState,
+                    onValueChange = viewModel::onChangePassphrase,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    hide = hidePassphrase,
+                    onToggleHide = {
+                        hidePassphrase = !hidePassphrase
                     }
                 )
-
-                Spacer(Modifier.height(32.dp))
-                CellUniversalLawrenceSection(listOf {
-                    PassphraseCell(
-                        enabled = viewModel.passphraseEnabled,
-                        onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
-                    )
-                })
-
-                if (viewModel.passphraseEnabled) {
-                    Spacer(Modifier.height(24.dp))
-                    FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        hint = stringResource(R.string.Passphrase),
-                        state = viewModel.passphraseState,
-                        onValueChange = viewModel::onChangePassphrase,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        hide = hidePassphrase,
-                        onToggleHide = {
-                            hidePassphrase = !hidePassphrase
-                        }
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        hint = stringResource(R.string.ConfirmPassphrase),
-                        state = viewModel.passphraseConfirmState,
-                        onValueChange = viewModel::onChangePassphraseConfirmation,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        hide = hidePassphrase,
-                        onToggleHide = {
-                            hidePassphrase = !hidePassphrase
-                        }
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    D1(
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                        text = stringResource(R.string.CreateWallet_PassphraseDescription)
-                    )
-                }
-                Spacer(Modifier.height(32.dp))
+                VSpacer(16.dp)
+                FormsInputPassword(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.ConfirmPassphrase),
+                    state = viewModel.passphraseConfirmState,
+                    onValueChange = viewModel::onChangePassphraseConfirmation,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    hide = hidePassphrase,
+                    onToggleHide = {
+                        hidePassphrase = !hidePassphrase
+                    }
+                )
+                VSpacer(12.dp)
+                D1(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    text = stringResource(R.string.CreateWallet_PassphraseDescription)
+                )
             }
+            VSpacer(32.dp)
         }
+    }
+    if (showMnemonicSizeSelectorDialog) {
+        MenuGroup(
+            title = stringResource(R.string.CreateWallet_Mnemonic),
+            items = viewModel.mnemonicKinds.map {
+                MenuItemX(it.titleLong, it == viewModel.selectedKind, it)
+            },
+            onDismissRequest = {
+                showMnemonicSizeSelectorDialog = false
+            },
+            onSelectItem = {
+                viewModel.setMnemonicKind(it)
+            }
+        )
     }
 }
 
