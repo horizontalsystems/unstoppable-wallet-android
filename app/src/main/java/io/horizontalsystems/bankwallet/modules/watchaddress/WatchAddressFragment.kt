@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,12 +27,12 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -89,45 +86,40 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
         )
     }
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = stringResource(R.string.ManageAccounts_WatchAddress),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            },
-            menuItems = buildList {
-                when (submitType) {
-                    is SubmitButtonType.Watch -> {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Done),
-                                onClick = viewModel::onClickWatch,
-                                enabled = submitType.enabled,
-                                tint = ComposeAppTheme.colors.jacob
-                            )
+    HSScaffold(
+        title = stringResource(R.string.ManageAccounts_WatchAddress),
+        onBack = navController::popBackStack,
+        menuItems = buildList {
+            when (submitType) {
+                is SubmitButtonType.Watch -> {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Done),
+                            onClick = viewModel::onClickWatch,
+                            enabled = submitType.enabled,
+                            tint = ComposeAppTheme.colors.jacob
                         )
-                    }
+                    )
+                }
 
-                    is SubmitButtonType.Next -> {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Next),
-                                onClick = viewModel::onClickNext,
-                                enabled = submitType.enabled
-                            )
+                is SubmitButtonType.Next -> {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Next),
+                            onClick = viewModel::onClickNext,
+                            enabled = submitType.enabled
                         )
-                    }
+                    )
                 }
             }
-        )
-
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(12.dp))
+            VSpacer(12.dp)
 
             HeaderText(stringResource(id = R.string.ManageAccount_Name))
             FormsInput(
@@ -137,7 +129,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 hint = viewModel.defaultAccountName,
                 onValueChange = viewModel::onEnterAccountName
             )
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
             FormsInputMultiline(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 initial = uiState.inputState?.dataOrNull,
@@ -179,7 +171,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 )
             }
 
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
         }
     }
 }

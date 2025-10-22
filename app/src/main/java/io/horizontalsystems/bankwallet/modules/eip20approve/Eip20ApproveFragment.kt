@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,9 +19,7 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
@@ -32,6 +29,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -71,19 +69,15 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
 
     val uiState = viewModel.uiState
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Swap_Approve_PageTitle),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
-                    )
-                )
+    HSScaffold(
+        title = stringResource(R.string.Swap_Approve_PageTitle),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = navController::popBackStack
             )
-        },
+        ),
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -101,12 +95,9 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                 )
             }
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             VSpacer(height = 12.dp)
 

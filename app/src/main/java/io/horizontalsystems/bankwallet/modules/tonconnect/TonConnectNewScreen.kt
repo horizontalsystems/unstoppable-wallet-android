@@ -4,13 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +33,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.DropDown
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -44,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
@@ -73,20 +70,15 @@ fun TonConnectNewScreen(
         }
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.TonConnect_Title),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+    HSScaffold(
+        title = stringResource(R.string.TonConnect_Title),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = { navController.popBackStack() }
             )
-        },
+        ),
         bottomBar = {
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
@@ -114,7 +106,7 @@ fun TonConnectNewScreen(
             }
         }
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column {
             Row(
                 modifier = Modifier.padding(
                     top = 12.dp,
@@ -170,7 +162,8 @@ fun TonConnectNewScreen(
                     add {
                         DropDownCell(
                             stringResource(R.string.TonConnect_Wallet),
-                            uiState.account?.name ?: stringResource(R.string.TonConnect_ChooseWallet),
+                            uiState.account?.name
+                                ?: stringResource(R.string.TonConnect_ChooseWallet),
                             enabled = true,
                             onSelect = {
                                 showSortTypeSelectorDialog = true
@@ -180,12 +173,13 @@ fun TonConnectNewScreen(
                 }
             )
 
-            Spacer(Modifier.height(12.dp))
+            VSpacer(12.dp)
 
             if (uiState.error != null) {
                 TextImportantError(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = uiState.error.message?.nullIfBlank() ?: uiState.error.javaClass.simpleName
+                    text = uiState.error.message?.nullIfBlank()
+                        ?: uiState.error.javaClass.simpleName
                 )
             } else {
                 TextImportantWarning(
@@ -194,7 +188,7 @@ fun TonConnectNewScreen(
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            VSpacer(24.dp)
         }
     }
 }

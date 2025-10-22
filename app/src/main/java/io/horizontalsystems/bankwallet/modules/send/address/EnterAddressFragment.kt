@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,10 +53,8 @@ import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -66,6 +63,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.subscriptions.core.AddressBlacklist
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -111,21 +109,13 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
     var checkTypeInfoBottomSheet by remember { mutableStateOf<AddressCheckType?>(null) }
 
     val uiState = viewModel.uiState
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Send_EnterAddress),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-            )
-        },
-    ) { innerPaddings ->
+
+    HSScaffold(
+        title = stringResource(R.string.Send_EnterAddress),
+        onBack = navController::popBackStack,
+    ) {
         Column(
-            modifier = Modifier
-                .padding(innerPaddings)
-                .windowInsetsPadding(WindowInsets.ime)
+            modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
         ) {
             Column(
                 modifier = Modifier

@@ -3,18 +3,14 @@ package io.horizontalsystems.bankwallet.modules.pin.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinConfirmViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
 fun PinConfirm(
@@ -28,23 +24,14 @@ fun PinConfirm(
         viewModel.unlocked()
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Unlock_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onCancel)
-                },
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.Unlock_Title),
+        onBack = onCancel,
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
+                .statusBarsPadding()
+                .navigationBarsPadding()
                 .fillMaxSize()
         ) {
             PinTopBlock(

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,14 +22,13 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import java.math.BigDecimal
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
@@ -56,62 +54,57 @@ private fun InfoScreen(
     categoryScores: Map<OverallScore, String>,
     navController: NavController
 ) {
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
+    HSScaffold(
+        title = "",
+        onBack = navController::popBackStack,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            InfoHeader(R.string.Coin_Analytics_OverallScore)
+            VSpacer(12.dp)
+            headline2_jacob(
+                modifier = Modifier.padding(horizontal = 32.dp),
+                text = stringResource(categoryTitle)
             )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                InfoHeader(R.string.Coin_Analytics_OverallScore)
-                VSpacer(12.dp)
-                headline2_jacob(
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                    text = stringResource(categoryTitle)
-                )
-                InfoTextBody(stringResource(description))
-                VSpacer(12.dp)
-                val items = buildList<@Composable () -> Unit> {
-                    categoryScores.forEach { (score, value) ->
-                        val color = when (score) {
-                            OverallScore.Excellent -> Color(0xFF05C46B)
-                            OverallScore.Good -> Color(0xFFFFA800)
-                            OverallScore.Fair -> Color(0xFFFF7A00)
-                            OverallScore.Poor -> Color(0xFFFF3D00)
-                        }
-                        add {
-                            RowUniversal(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                            ) {
-                                Image(
-                                    painter = painterResource(score.icon),
-                                    contentDescription = null
-                                )
-                                HSpacer(8.dp)
-                                Text(
-                                    text = stringResource(score.title).uppercase(),
-                                    style = ComposeAppTheme.typography.subhead,
-                                    color = color,
-                                )
-                                Spacer(Modifier.weight(1f))
-                                Text(
-                                    text = value,
-                                    style = ComposeAppTheme.typography.subhead,
-                                    color = color,
-                                )
-                            }
+            InfoTextBody(stringResource(description))
+            VSpacer(12.dp)
+            val items = buildList<@Composable () -> Unit> {
+                categoryScores.forEach { (score, value) ->
+                    val color = when (score) {
+                        OverallScore.Excellent -> Color(0xFF05C46B)
+                        OverallScore.Good -> Color(0xFFFFA800)
+                        OverallScore.Fair -> Color(0xFFFF7A00)
+                        OverallScore.Poor -> Color(0xFFFF3D00)
+                    }
+                    add {
+                        RowUniversal(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(score.icon),
+                                contentDescription = null
+                            )
+                            HSpacer(8.dp)
+                            Text(
+                                text = stringResource(score.title).uppercase(),
+                                style = ComposeAppTheme.typography.subhead,
+                                color = color,
+                            )
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                text = value,
+                                style = ComposeAppTheme.typography.subhead,
+                                color = color,
+                            )
                         }
                     }
                 }
-                CellUniversalLawrenceSection(items)
-                VSpacer(24.dp)
             }
+            CellUniversalLawrenceSection(items)
+            VSpacer(24.dp)
         }
     }
 }
