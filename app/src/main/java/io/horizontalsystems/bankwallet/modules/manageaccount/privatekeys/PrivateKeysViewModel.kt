@@ -38,6 +38,7 @@ class PrivateKeysViewModel(
             }
 
             is AccountType.EvmPrivateKey -> toHexString(accountType.key)
+            is AccountType.OxyraWatchAccount -> null
             else -> null
         }
 

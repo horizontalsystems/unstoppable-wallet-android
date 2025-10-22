@@ -278,6 +278,10 @@ val AccountType.statAccountType: String
         is AccountType.TronAddress -> {
             "tron_address"
         }
+
+        is AccountType.OxyraWatchAccount -> {
+            "oxyra_watch_account"
+        }
     }
 
 

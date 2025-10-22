@@ -165,7 +165,13 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Monero -> {
             tokenType is TokenType.Native
         }
-        is BlockchainType.Unsupported -> false
+        is BlockchainType.Unsupported -> {
+            if ((this as BlockchainType.Unsupported).uid == "oxyra") {
+                tokenType is TokenType.Native
+            } else {
+                false
+            }
+        }
     }
 
 val Blockchain.description: String
@@ -257,6 +263,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Tron -> R.drawable.tron_trc20
         BlockchainType.Ton -> R.drawable.the_open_network_jetton
         BlockchainType.Stellar -> R.drawable.stellar_asset
+        is BlockchainType.Unsupported -> if ((this as BlockchainType.Unsupported).uid == "oxyra") R.drawable.coin_placeholder else R.drawable.coin_placeholder
         else -> R.drawable.coin_placeholder
     }
 
@@ -283,7 +290,7 @@ val BlockchainType.title: String
     BlockchainType.Ton -> "Ton"
     BlockchainType.Stellar -> "Stellar"
     BlockchainType.Monero -> "Monero"
-    is BlockchainType.Unsupported -> this.uid
+        is BlockchainType.Unsupported -> if ((this as BlockchainType.Unsupported).uid == "oxyra") "Oxyra X" else (this as BlockchainType.Unsupported).uid
 }
 
 val BlockchainType.supportedNftTypes: List<NftType>
@@ -403,6 +410,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.MoneroWatchAccount ->
             this == BlockchainType.Monero
+
+        is AccountType.OxyraWatchAccount ->
+            this is BlockchainType.Unsupported && (this as BlockchainType.Unsupported).uid == "oxyra"
     }
 }
 
@@ -564,6 +574,13 @@ val BlockchainType.nativeTokenQueries: List<TokenQuery>
                 TokenQuery(this, TokenType.AddressTyped(it))
             }
         }
+        is BlockchainType.Unsupported -> {
+            if ((this as BlockchainType.Unsupported).uid == "oxyra") {
+                listOf(TokenQuery(this, TokenType.Native))
+            } else {
+                emptyList()
+            }
+        }
         else -> {
             listOf(TokenQuery(this, TokenType.Native))
         }
@@ -577,6 +594,13 @@ val BlockchainType.defaultTokenQuery: TokenQuery
         }
         BlockchainType.BitcoinCash -> {
             TokenQuery(this, TokenType.AddressTyped(TokenType.AddressType.Type145))
+        }
+        is BlockchainType.Unsupported -> {
+            if ((this as BlockchainType.Unsupported).uid == "oxyra") {
+                TokenQuery(this, TokenType.Native)
+            } else {
+                TokenQuery(this, TokenType.Native)
+            }
         }
         else -> {
             TokenQuery(this, TokenType.Native)
@@ -637,6 +661,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Ton,
         BlockchainType.Stellar,
         BlockchainType.Monero,
+        BlockchainType.Unsupported("oxyra"), // Custom Oxyra blockchain
     )
 
 val CoinPrice.diff: BigDecimal?

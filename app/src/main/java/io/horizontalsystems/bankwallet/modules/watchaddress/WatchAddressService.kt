@@ -101,6 +101,11 @@ class WatchAddressService(
                         add(TokenQuery(BlockchainType.Monero, TokenType.Native))
                     }
                 }
+                is AccountType.OxyraWatchAccount -> {
+                    if (BlockchainType.Unsupported("oxyra").supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Unsupported("oxyra"), TokenType.Native))
+                    }
+                }
             }
         }
 
@@ -121,6 +126,11 @@ class WatchAddressService(
         if (accountType is AccountType.MoneroWatchAccount) {
             val restoreSettings = RestoreSettings().apply { birthdayHeight = accountType.restoreHeight }
             restoreSettingsManager.save(restoreSettings, account, BlockchainType.Monero)
+        }
+
+        if (accountType is AccountType.OxyraWatchAccount) {
+            val restoreSettings = RestoreSettings().apply { birthdayHeight = accountType.restoreHeight }
+            restoreSettingsManager.save(restoreSettings, account, BlockchainType.Unsupported("oxyra"))
         }
 
         try {

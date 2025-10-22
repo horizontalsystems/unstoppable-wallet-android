@@ -69,6 +69,10 @@ class ProFeaturesAuthorizationManager(
                         AccountData(account.id, address)
                     }
 
+                    is AccountType.OxyraWatchAccount -> {
+                        AccountData(account.id, Address(account.type.address))
+                    }
+
                     else -> null
                 }
             }
@@ -108,6 +112,10 @@ class ProFeaturesAuthorizationManager(
 
             is AccountType.Mnemonic -> {
                 Signer.privateKey(account.type.seed, Chain.Ethereum)
+            }
+
+            is AccountType.OxyraWatchAccount -> {
+                throw Exception("OxyraWatchAccount does not support private key access")
             }
 
             else -> throw Exception("AccountType not supported")

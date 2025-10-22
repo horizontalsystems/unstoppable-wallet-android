@@ -122,6 +122,7 @@ class ManageAccountViewModel(
                 }
             }
             is AccountType.MoneroWatchAccount -> listOf()
+            is AccountType.OxyraWatchAccount -> listOf()
         }
     }
 

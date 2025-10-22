@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.JettonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
+import io.horizontalsystems.bankwallet.core.adapters.OxyraAdapter
+import io.horizontalsystems.bankwallet.core.adapters.OxyraNode
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
@@ -183,6 +185,18 @@ class AdapterFactory(
                     node = moneroNodeManager.currentNode
                 )
             }
+            is BlockchainType.Unsupported -> {
+                if (wallet.token.blockchainType.uid == "oxyra") {
+                OxyraAdapter.create(
+                    context = context,
+                    wallet = wallet,
+                    restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
+                    node = OxyraNode("monero.bad-abda.online", true) // Linux server without port
+                )
+                } else {
+                    null
+                }
+            }
 
             else -> null
         }
@@ -286,6 +300,14 @@ class AdapterFactory(
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(wallet.account)
             }
+            BlockchainType.Monero -> {
+                MoneroAdapter.clear(wallet.account.id)
+            }
+            is BlockchainType.Unsupported -> {
+                if (wallet.token.blockchainType.uid == "oxyra") {
+                    OxyraAdapter.clear(wallet.account.id)
+                }
+            }
             else -> Unit
         }
     }
@@ -313,6 +335,14 @@ class AdapterFactory(
             }
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Monero -> {
+                MoneroAdapter.clear(transactionSource.account.id)
+            }
+            is BlockchainType.Unsupported -> {
+                if (transactionSource.blockchain.type.uid == "oxyra") {
+                    OxyraAdapter.clear(transactionSource.account.id)
+                }
             }
             else -> Unit
         }

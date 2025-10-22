@@ -185,6 +185,29 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    data class OxyraWatchAccount(
+        val address: String,
+        val privateViewKey: String,
+        val restoreHeight: Long
+    ) : AccountType() {
+
+        val serialized: String
+            get() = "$address|$privateViewKey|$restoreHeight"
+
+        companion object {
+            fun fromSerialized(serialized: String): OxyraWatchAccount {
+                val split = serialized.split("|")
+                require(split.size == 3) { "Invalid Oxyra watch wallet serialization format" }
+                return OxyraWatchAccount(
+                    address = split[0],
+                    privateViewKey = split[1],
+                    restoreHeight = split[2].toLong()
+                )
+            }
+        }
+    }
+
+    @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         @IgnoredOnParcel
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
@@ -309,6 +332,7 @@ sealed class AccountType : Parcelable {
             is EvmPrivateKey -> "EVM Private Key"
             is StellarSecretKey -> "Stellar Secret Key"
             is MoneroWatchAccount -> "Monero Watch Wallet"
+            is OxyraWatchAccount -> "Oxyra Watch Wallet"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master -> "BIP32 Root Key"
@@ -347,6 +371,7 @@ sealed class AccountType : Parcelable {
             is StellarAddress -> this.address.shorten()
             is BitcoinAddress -> this.address.shorten()
             is MoneroWatchAccount -> this.address.shorten()
+            is OxyraWatchAccount -> this.address.shorten()
             else -> this.description
         }
 
@@ -372,6 +397,7 @@ sealed class AccountType : Parcelable {
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             is MoneroWatchAccount -> true
+            is OxyraWatchAccount -> true
             else -> false
         }
 
@@ -385,6 +411,7 @@ sealed class AccountType : Parcelable {
             is BitcoinAddress -> address
             is HdExtendedKey -> keySerialized
             is MoneroWatchAccount -> address
+            is OxyraWatchAccount -> address
             else -> null
         }
 

@@ -1,0 +1,102 @@
+{
+    "id": "oxyrax",
+    "name": "Oxyra X",
+    "symbol": "OXRX",
+    "decimals": 12,
+    "network": "mainnet",
+    
+    "rpc": {
+      "url": "https://monero.bad-abda.online/",
+      "port": 18081,
+      "zmq_port": 18082
+    },
+    
+    "explorer": {
+      "url": "https://explorer.oxyrax.io",
+      "tx_url": "https://explorer.oxyrax.io/tx/{txid}",
+      "block_url": "https://explorer.oxyrax.io/block/{height}"
+    },
+    
+    "network_params": {
+      "network_id": "6545-33ED-F322-47AB-BAC8-945A-A831-EB4F",
+      "network_id_raw": [101, 69, 51, 237, 243, 34, 71, 171, 186, 200, 148, 90, 168, 49, 235, 79],
+      "p2p_port": 18080,
+      "rpc_port": 18081,
+      "block_time_seconds": 120,
+      "unlock_blocks": 60,
+      "difficulty_target": 120,
+      "difficulty_window": 720
+    },
+    
+    "address_prefixes": {
+      "standard": 18,
+      "integrated": 19,
+      "subaddress": 42
+    },
+    
+    "genesis": {
+      "tx": "013c01ff00018080b0b1af8389d129020c0045d8c6ed4d609e90e19ec8d9e188b5cd03a4cf8bf94f126cc61796cb967f2101ad615f1095fd6f56e759a61fe1b73b73904ab4339869dd38211c27a08e4284d9",
+      "nonce": 10000,
+      "hash": "8539ba68b5157a156575d5164d1e5c46ad97cb88679a4e64235bfe5a2437953f"
+    },
+    
+    "supply": {
+      "total_coins": 3000000000,
+      "total_atomic_units": 3000000000000000000,
+      "emission_type": "premined",
+      "block_reward": 0
+    },
+    
+    "seed_nodes": [
+      "seeds.moneroseeds.se:18080",
+      "seeds.moneroseeds.ae.org:18080",
+      "seeds.moneroseeds.ch:18080",
+      "seeds.moneroseeds.li:18080"
+    ],
+    
+    "fees": {
+      "default_per_kb": 2000000000,
+      "per_byte": 300000,
+      "dust_threshold": 2000000000,
+      "priority_multipliers": {
+        "default": 1,
+        "unimportant": 1,
+        "normal": 1,
+        "elevated": 1,
+        "priority": 1
+      }
+    },
+    
+    "privacy_features": {
+      "ring_signatures": true,
+      "stealth_addresses": true,
+      "ringct": true,
+      "bulletproofs_plus": true,
+      "view_tags": true,
+      "min_ring_size": 16
+    },
+    
+    "wallet_rpc_methods": [
+      "get_balance",
+      "get_address",
+      "create_address",
+      "transfer",
+      "transfer_split",
+      "get_transfers",
+      "get_transfer_by_txid",
+      "incoming_transfers",
+      "query_key",
+      "make_integrated_address",
+      "split_integrated_address",
+      "get_height",
+      "validate_address",
+      "get_accounts",
+      "create_account",
+      "get_account_tags",
+      "set_account_tag_description",
+      "tag_accounts",
+      "untag_accounts"
+    ]
+  }
+  
+  

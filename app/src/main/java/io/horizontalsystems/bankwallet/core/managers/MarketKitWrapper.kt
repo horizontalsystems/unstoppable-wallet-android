@@ -16,12 +16,12 @@ import io.horizontalsystems.marketkit.models.NftTopCollection
 import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.Vault
+import java.math.BigDecimal
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.HttpException
 import retrofit2.Response
-import java.math.BigDecimal
 
 class MarketKitWrapper(
     context: Context,
@@ -68,7 +68,19 @@ class MarketKitWrapper(
 
     fun allCoins() = marketKit.allCoins()
 
-    fun token(query: TokenQuery) = marketKit.token(query)
+    fun token(query: TokenQuery): io.horizontalsystems.marketkit.models.Token? {
+        val marketKitToken = marketKit.token(query)
+        val customToken = if (marketKitToken == null) createCustomToken(query) else null
+        
+        // Debug logging
+        if (query.blockchainType is BlockchainType.Unsupported && query.blockchainType.uid == "oxyra") {
+            println("🔍 Oxyra Token Query: $query")
+            println("🔍 MarketKit Token: $marketKitToken")
+            println("🔍 Custom Token: $customToken")
+        }
+        
+        return marketKitToken ?: customToken
+    }
 
     fun tokens(queries: List<TokenQuery>) = marketKit.tokens(queries)
 
@@ -132,8 +144,23 @@ class MarketKitWrapper(
 
     fun refreshCoinPrices(currencyCode: String) = marketKit.refreshCoinPrices(currencyCode)
 
-    fun coinPrice(coinUid: String, currencyCode: String): CoinPrice? =
-        if (coinUid.isCustomCoin) null else marketKit.coinPrice(coinUid, currencyCode)
+    fun coinPrice(coinUid: String, currencyCode: String): CoinPrice? {
+        return when {
+            coinUid == "oxyrax" -> {
+                // Return mock price for Oxyra X
+                CoinPrice(
+                    coinUid = coinUid,
+                    currencyCode = currencyCode,
+                    value = BigDecimal("0.25"), // Mock price: $0.25 per OXRX
+                    diff24h = BigDecimal("5.2"), // Mock 24h change: +5.2%
+                    diff1d = BigDecimal("5.2"), // Mock 1d change: +5.2%
+                    timestamp = System.currentTimeMillis()
+                )
+            }
+            coinUid.isCustomCoin -> null
+            else -> marketKit.coinPrice(coinUid, currencyCode)
+        }
+    }
 
     fun coinPriceMap(coinUids: List<String>, currencyCode: String): Map<String, CoinPrice> {
         val coinUidsNoCustom = coinUids.removeCustomCoins()
@@ -314,6 +341,30 @@ class MarketKitWrapper(
 
     fun vault(address: String, currencyCode: String, periodType: HsTimePeriod): Single<Vault> {
         return requestWithAuthToken { marketKit.vaultSingle(address, currencyCode, periodType) }
+    }
+
+    // Custom token creation for unsupported blockchains
+    private fun createCustomToken(query: TokenQuery): io.horizontalsystems.marketkit.models.Token? {
+        return when {
+            query.blockchainType is BlockchainType.Unsupported && query.blockchainType.uid == "oxyra" -> {
+                // Create custom Oxyra token
+                io.horizontalsystems.marketkit.models.Token(
+                    coin = io.horizontalsystems.marketkit.models.Coin(
+                        uid = "oxyrax",
+                        name = "Oxyra X",
+                        code = "OXRX"
+                    ),
+                    blockchain = io.horizontalsystems.marketkit.models.Blockchain(
+                        type = query.blockchainType,
+                        name = "Oxyra X",
+                        eip3091url = null
+                    ),
+                    type = query.tokenType,
+                    decimals = 12
+                )
+            }
+            else -> null
+        }
     }
 
 }

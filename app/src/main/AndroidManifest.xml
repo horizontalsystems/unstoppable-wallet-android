@@ -20,6 +20,7 @@
         android:label="@string/App_Name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme.DayNight"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
         <receiver

@@ -32,6 +32,7 @@ class SelectBlockchainsViewModel(
 
         when (accountType) {
             is AccountType.MoneroWatchAccount,
+            is AccountType.OxyraWatchAccount,
             is AccountType.SolanaAddress,
             is AccountType.TronAddress,
             is AccountType.BitcoinAddress,

@@ -34,7 +34,8 @@ class AddTokenService(
         BlockchainType.Optimism,
         BlockchainType.Base,
         BlockchainType.ZkSync,
-        BlockchainType.Solana
+        BlockchainType.Solana,
+        BlockchainType.Unsupported("oxyra") // Oxyra blockchain
     )
 
     val blockchains = marketKit
@@ -55,6 +56,14 @@ class AddTokenService(
             }
             BlockchainType.Solana -> {
                 AddSolanaTokenBlockchainService.getInstance(blockchain)
+            }
+            is BlockchainType.Unsupported -> {
+                if (blockchain.type.uid == "oxyra") {
+                    // Oxyra doesn't support custom tokens, only native token
+                    throw TokenError.InvalidReference
+                } else {
+                    AddEvmTokenBlockchainService.getInstance(blockchain)
+                }
             }
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
