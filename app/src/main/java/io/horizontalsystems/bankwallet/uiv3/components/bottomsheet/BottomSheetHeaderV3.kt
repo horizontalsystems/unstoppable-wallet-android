@@ -12,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +26,7 @@ fun BottomSheetHeaderV3(
     image72: Painter? = null,
     image120: Painter? = null,
     image400: Painter? = null,
+    imageTint: Color = ComposeAppTheme.colors.grey,
     title: String,
 ) {
     Column(
@@ -45,7 +47,7 @@ fun BottomSheetHeaderV3(
                     .size(72.dp),
                 painter = it,
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = imageTint
             )
         }
 
@@ -56,7 +58,7 @@ fun BottomSheetHeaderV3(
                     .size(120.dp),
                 painter = it,
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = imageTint
             )
         }
 

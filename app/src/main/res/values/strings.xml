@@ -1864,6 +1864,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
     <string name="BalanceSyncError_Text">Sync error</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Failed to fetch data from the current source. You can retry or switch to a different sync source.</string>
+    <string name="BalanceSyncError_ErrorText">Failed to fetch data from the current source. Please try again later.</string>
 
     <!--Release notes-->
 
