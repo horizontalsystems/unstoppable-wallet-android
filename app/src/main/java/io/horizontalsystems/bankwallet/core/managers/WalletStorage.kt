@@ -27,26 +27,10 @@ class WalletStorage(
         return enabledWallets.mapNotNull { enabledWallet ->
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
-            // First try to find token in the tokens list
             tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
                 return@mapNotNull Wallet(token, account)
             }
 
-            // If not found, try to create custom token for unsupported blockchains
-            val customToken = marketKit.token(tokenQuery)
-            
-            // Debug logging for Oxyra
-            if (tokenQuery.blockchainType is io.horizontalsystems.marketkit.models.BlockchainType.Unsupported && 
-                tokenQuery.blockchainType.uid == "oxyra") {
-                println("🔍 WalletStorage - Oxyra TokenQuery: $tokenQuery")
-                println("🔍 WalletStorage - Custom Token: $customToken")
-            }
-            
-            if (customToken != null) {
-                return@mapNotNull Wallet(customToken, account)
-            }
-
-            // Fallback to legacy custom token creation
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
                 val coinUid = tokenQuery.customCoinUid
                 val blockchain = blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid } ?: return@mapNotNull null
