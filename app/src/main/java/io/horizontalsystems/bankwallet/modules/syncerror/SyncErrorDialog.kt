@@ -1,28 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.syncerror
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -30,13 +22,15 @@ import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
 class SyncErrorDialog : BaseComposableBottomSheetFragment() {
@@ -53,7 +47,7 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
                 navController.getInput<Input>()?.let { input ->
-                    SyncErrorScreen(navController, input.wallet, input.errorMessage ?: "")
+                    SyncErrorScreen(navController, input.wallet)
                 }
             }
         }
@@ -63,89 +57,80 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
     data class Input(val wallet: Wallet, val errorMessage: String?) : Parcelable
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error: String) {
+private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
-
-    val context = LocalContext.current
-    val view = LocalView.current
-    val clipboardManager = LocalClipboardManager.current
+    val text = if (viewModel.sourceChangeable) {
+        stringResource(R.string.BalanceSyncError_ChangableSourceErrorText)
+    } else {
+        stringResource(R.string.BalanceSyncError_ErrorText)
+    }
 
     ComposeAppTheme {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_attention_red_24),
-            title = stringResource(R.string.BalanceSyncError_Title),
-            onCloseClick = { navController.popBackStack() }
-        ) {
-
-            Spacer(Modifier.height(32.dp))
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                title = stringResource(R.string.BalanceSyncError_ButtonRetry),
-                onClick = {
-                    viewModel.retry()
-                    navController.popBackStack()
-                }
-            )
-            if (viewModel.sourceChangeable) {
-                Spacer(Modifier.height(12.dp))
-                ButtonPrimaryDefault(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
+        BottomSheetContent(
+            onDismissRequest = {
+                navController.popBackStack()
+            },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            buttons = {
+                HSButton(
+                    title = stringResource(R.string.BalanceSyncError_ButtonRetry),
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
                     onClick = {
+                        viewModel.retry()
                         navController.popBackStack()
-
-                        val blockchainWrapper = viewModel.blockchainWrapper
-                        when (blockchainWrapper) {
-                            is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
-                                navController.slideFromBottom(
-                                    R.id.btcBlockchainSettingsFragment,
-                                    blockchainWrapper.blockchain
-                                )
-                            }
-
-                            is SyncErrorModule.BlockchainWrapper.Evm -> {
-                                navController.slideFromBottom(R.id.evmNetworkFragment, blockchainWrapper.blockchain)
-                            }
-
-                            SyncErrorModule.BlockchainWrapper.Monero -> {
-                                navController.slideFromBottom(R.id.moneroNetworkFragment)
-                            }
-
-                            else -> {}
-                        }
                     }
                 )
-            }
-            Spacer(Modifier.height(12.dp))
-            ButtonPrimaryTransparent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                title = stringResource(R.string.BalanceSyncError_ButtonReport),
-                onClick = {
-                    navController.popBackStack()
+                if (viewModel.sourceChangeable) {
+                    HSButton(
+                        title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
+                        modifier = Modifier.fillMaxWidth(),
+                        style = ButtonStyle.Transparent,
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Medium,
+                        onClick = {
+                            navController.popBackStack()
 
-                    val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:")
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf(viewModel.reportEmail))
-                        putExtra(Intent.EXTRA_TEXT, error)
-                    }
+                            val blockchainWrapper = viewModel.blockchainWrapper
+                            when (blockchainWrapper) {
+                                is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
+                                    navController.slideFromBottom(
+                                        R.id.btcBlockchainSettingsFragment,
+                                        blockchainWrapper.blockchain
+                                    )
+                                }
 
-                    try {
-                        context.startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
-                        clipboardManager.setText(AnnotatedString(viewModel.reportEmail))
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_EmailAddressCopied)
-                    }
+                                is SyncErrorModule.BlockchainWrapper.Evm -> {
+                                    navController.slideFromBottom(
+                                        R.id.evmNetworkFragment,
+                                        blockchainWrapper.blockchain
+                                    )
+                                }
+
+                                SyncErrorModule.BlockchainWrapper.Monero -> {
+                                    navController.slideFromBottom(R.id.moneroNetworkFragment)
+                                }
+
+                                else -> {}
+                            }
+                        }
+                    )
                 }
-            )
-            Spacer(Modifier.height(32.dp))
-        }
+            },
+            content = {
+                BottomSheetHeaderV3(
+                    image72 = painterResource(R.drawable.warning_filled_24),
+                    imageTint = ComposeAppTheme.colors.lucian,
+                    title = stringResource(R.string.BalanceSyncError_Title)
+                )
+                TextBlock(
+                    text = text,
+                    textAlign = TextAlign.Center
+                )
+            }
+        )
     }
 }
 

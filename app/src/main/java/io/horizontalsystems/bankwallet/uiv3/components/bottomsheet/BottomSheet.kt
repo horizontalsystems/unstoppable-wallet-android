@@ -24,11 +24,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
-import io.horizontalsystems.bankwallet.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +41,7 @@ fun BottomSheet(
     sheetState: SheetState,
     warningFrameSlot: (@Composable () -> Unit)? = null,
     cellsGroupSlot: (@Composable ColumnScope.() -> Unit)? = null,
+    buttons: (@Composable ColumnScope.() -> Unit)? = null,
     infoText: String? = null,
 ) {
     ModalBottomSheet(
@@ -75,7 +79,71 @@ fun BottomSheet(
         infoText?.let {
             TextBlock(text = infoText)
         }
-        BalanceButtonsGroup {  }
+        buttons?.let {
+            ButtonsStack {
+                buttons()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetContent(
+    onDismissRequest: () -> Unit,
+    sheetState: SheetState,
+    buttons: (@Composable ColumnScope.() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState,
+        containerColor = ComposeAppTheme.colors.lawrence,
+        dragHandle = { }
+    ) {
+        content()
+        buttons?.let {
+            ButtonsStack {
+                buttons()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun Preview_BottomSheetContent() {
+    ComposeAppTheme {
+        BottomSheetContent(
+            onDismissRequest = {},
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            buttons = {
+                HSButton(
+                    title = "Connect",
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {  }
+                )
+                HSButton(
+                    title = "Cancel",
+                    modifier = Modifier.fillMaxWidth(),
+                    style = ButtonStyle.Transparent,
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Medium,
+                    onClick = {  }
+                )
+            },
+            content = {
+                BottomSheetHeaderV3(
+                    image72 = painterResource(R.drawable.warning_filled_24),
+                    title = "Title"
+                )
+                TextBlock(
+                    text = "By clicking connect, you allow this app to view your public address.",
+                    textAlign = TextAlign.Center
+                )
+            }
+        )
     }
 }
 
@@ -112,7 +180,22 @@ fun Preview_BottomSheet() {
                     )
                 }
             },
-            infoText = "By clicking connect, you allow this app to view your public address."
+            infoText = "By clicking connect, you allow this app to view your public address.",
+            buttons = {
+                HSButton(
+                    title = "Connect",
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {  }
+                )
+                HSButton(
+                    title = "Cancel",
+                    modifier = Modifier.fillMaxWidth(),
+                    style = ButtonStyle.Transparent,
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Medium,
+                    onClick = {  }
+                )
+            }
 
         )
     }
