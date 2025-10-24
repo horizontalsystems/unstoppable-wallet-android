@@ -1546,6 +1546,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Quelle ändern</string>
     <string name="BalanceSyncError_ButtonReport">Bericht</string>
     <string name="BalanceSyncError_Text">Sync-Fehler</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Sie können erneut versuchen oder zu einer anderen Sync-Quelle wechseln.</string>
+    <string name="BalanceSyncError_ErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Bitte versuchen Sie es später erneut.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">UNSTOPPABLEN JOIN</string>
     <string name="ProUsersInfo_UnstoppablePass">Unaufhaltsamer Pass</string>
