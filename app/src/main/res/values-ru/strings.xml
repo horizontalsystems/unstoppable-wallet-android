@@ -1539,6 +1539,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Изменить источник</string>
     <string name="BalanceSyncError_ButtonReport">Отчет</string>
     <string name="BalanceSyncError_Text">Ошибка синхронизации</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Не удалось получить данные из текущего источника. Вы можете повторить попытку или переключиться на другой источник синхронизации.</string>
+    <string name="BalanceSyncError_ErrorText">Не удалось получить данные из текущего источника. Пожалуйста, повторите попытку позже.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">ПРИСОЕДИНЯЙТЕСЬ</string>
     <string name="ProUsersInfo_UnstoppablePass">Неудержимый пропуск</string>
