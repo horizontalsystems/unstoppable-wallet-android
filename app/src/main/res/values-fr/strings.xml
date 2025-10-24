@@ -1539,6 +1539,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Changer la Source</string>
     <string name="BalanceSyncError_ButtonReport">Signaler</string>
     <string name="BalanceSyncError_Text">Erreur de synchronisation</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Impossible de récupérer les données de la source actuelle. Vous pouvez réessayer ou basculer vers une source de synchronisation différente.</string>
+    <string name="BalanceSyncError_ErrorText">Impossible de récupérer les données de la source actuelle. Veuillez réessayer plus tard.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">REJOIGNEZ LES UNSTOPPABLES</string>
     <string name="ProUsersInfo_UnstoppablePass">Passe Unstoppable</string>
