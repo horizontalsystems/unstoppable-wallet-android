@@ -1542,6 +1542,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Mudar a fonte</string>
     <string name="BalanceSyncError_ButtonReport">Reportar</string>
     <string name="BalanceSyncError_Text">Erro de sincronização</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Falha ao obter dados da fonte atual. Você pode tentar novamente ou alternar para uma fonte de sincronização diferente.</string>
+    <string name="BalanceSyncError_ErrorText">Falha ao buscar dados da fonte atual. Tente novamente mais tarde.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
     <string name="ProUsersInfo_UnstoppablePass">Senha Unstoppable</string>
