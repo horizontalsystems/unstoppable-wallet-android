@@ -1537,6 +1537,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Cambiar Origen</string>
     <string name="BalanceSyncError_ButtonReport">Reportar</string>
     <string name="BalanceSyncError_Text">Error de sincronización</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Error al recuperar los datos de la fuente actual. Puede volver a intentar o cambiar a una fuente de sincronización diferente.</string>
+    <string name="BalanceSyncError_ErrorText">Error al obtener los datos de la fuente actual. Inténtalo de nuevo más tarde.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">ÚNETE A UNSTOPPABLES</string>
     <string name="ProUsersInfo_UnstoppablePass">Pase imparable</string>
