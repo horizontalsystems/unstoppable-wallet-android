@@ -1537,6 +1537,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">更改源</string>
     <string name="BalanceSyncError_ButtonReport">报告</string>
     <string name="BalanceSyncError_Text">同步错误</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">无法从当前源获取数据。您可以重试或切换到不同的同步源。</string>
+    <string name="BalanceSyncError_ErrorText">无法从当前源获取数据。请稍后再试。</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">加入未加入的</string>
     <string name="ProUsersInfo_UnstoppablePass">不可阻止的通路</string>
