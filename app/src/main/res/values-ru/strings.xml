@@ -338,6 +338,7 @@
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
+    <string name="Balance_BlocksRemaining">Осталось блоков - %d</string>
     <string name="Balance_Sort_Balance">По балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать</string>
     <string name="Balance_Sort_Az">По названию</string>
