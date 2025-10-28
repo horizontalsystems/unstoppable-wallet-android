@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.StrokeCap
@@ -18,7 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
+import io.horizontalsystems.bankwallet.modules.balance.SyncingProgressType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.diffText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -114,7 +117,8 @@ private fun WalletIcon2(
         )
     )
 
-    val progress = viewItem.syncingProgress.progress
+    val syncingProgress = viewItem.syncingProgress
+    val progress = syncingProgress.progress
     val iconAlpha = if (progress == null) 1f else 0.5f
     val leah = ComposeAppTheme.colors.leah
     val andy = ComposeAppTheme.colors.andy
@@ -122,31 +126,51 @@ private fun WalletIcon2(
     Box(
         modifier = Modifier
             .drawBehind {
-                if (progress != null) {
-                    val progressF = progress.coerceAtLeast(10) / 100f
-                    val angle = 360f * progressF
+                when (syncingProgress.type) {
+                    SyncingProgressType.ProgressWithRing -> {
+                        val progressF = (progress ?: 0).coerceAtLeast(10) / 100f
+                        val angle = 360f * progressF
 
-                    inset(-1.dp.toPx()) {
-                        drawArc(
-                            color = andy,
-                            startAngle = 0f,
-                            sweepAngle = 360f,
-                            useCenter = false,
-                            style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
-                        )
-
-                        rotate(degrees = rotate) {
+                        inset(-1.dp.toPx()) {
                             drawArc(
-                                color = leah,
+                                color = andy,
                                 startAngle = 0f,
-                                sweepAngle = -angle,
+                                sweepAngle = 360f,
                                 useCenter = false,
                                 style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
                             )
+                            rotate(degrees = -90f) {
+                                drawArc(
+                                    color = leah,
+                                    startAngle = 0f,
+                                    sweepAngle = angle,
+                                    useCenter = false,
+                                    style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
+                                )
+                            }
                         }
                     }
+
+                    SyncingProgressType.Spinner -> {
+                        inset(-1.dp.toPx()) {
+                            rotate(degrees = rotate) {
+                                drawArc(
+                                    color = leah,
+                                    startAngle = 0f,
+                                    sweepAngle = -120f,
+                                    useCenter = false,
+                                    style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
+                                )
+                            }
+                        }
+                    }
+
+                    null -> {
+                        // Do nothing
+                    }
                 }
-            }
+            },
+        contentAlignment = Alignment.Center
     ) {
         IconCell(
             viewItem.failedIconVisible,
@@ -154,5 +178,12 @@ private fun WalletIcon2(
             iconAlpha,
             onClickSyncError
         )
+        if (syncingProgress.type == SyncingProgressType.ProgressWithRing) {
+            syncingProgress.progress?.let{
+                captionSB_leah(
+                    text = "${it}%",
+                )
+            }
+        }
     }
 }

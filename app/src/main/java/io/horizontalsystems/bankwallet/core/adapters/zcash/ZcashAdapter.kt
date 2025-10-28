@@ -362,7 +362,7 @@ class ZcashAdapter(
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
             Synchronizer.Status.SYNCING -> AdapterState.Syncing()
             Synchronizer.Status.SYNCED -> AdapterState.Synced
-            else -> syncState
+            Synchronizer.Status.INITIALIZING -> AdapterState.Connecting
         }
     }
 

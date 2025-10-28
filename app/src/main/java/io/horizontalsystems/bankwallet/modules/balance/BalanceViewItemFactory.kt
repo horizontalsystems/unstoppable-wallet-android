@@ -86,16 +86,38 @@ data class BalanceViewItem2(
 )
 
 data class DeemedValue<T>(val value: T, val dimmed: Boolean = false)
-data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
+enum class SyncingProgressType {
+    Spinner, ProgressWithRing
+}
+data class SyncingProgress(val type: SyncingProgressType?, val progress: Int?)
 
 class BalanceViewItemFactory {
 
     private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
-            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(blockchainType), false)
-            is AdapterState.SearchingTxs -> SyncingProgress(10, true)
-            else -> SyncingProgress(null, false)
+            is AdapterState.Syncing -> {
+                val progressValue = state.progress ?: getDefaultSyncingProgress(blockchainType)
+                if (state.progress != null && (blockchainType.isSyncWithProgress())) {
+                    SyncingProgress(SyncingProgressType.ProgressWithRing, progressValue)
+                } else {
+                    SyncingProgress(SyncingProgressType.Spinner, progressValue)
+                }
+            }
+            is AdapterState.Connecting -> SyncingProgress(SyncingProgressType.Spinner, 10)
+            is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner,10)
+            else -> SyncingProgress(null, null)
         }
+    }
+
+    private fun BlockchainType.isSyncWithProgress() = when (this) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash,
+        BlockchainType.Zcash,
+        BlockchainType.Monero -> true
+        else -> false
     }
 
     private fun getDefaultSyncingProgress(blockchainType: BlockchainType) = when (blockchainType) {
@@ -133,16 +155,13 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.progress != null) {
-                    Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
-                } else if (state.connecting) {
-                    Translator.getString(R.string.WalletConnect_Status_Connecting)
-                }
-                else {
-                    Translator.getString(R.string.Balance_Syncing)
+                when {
+                    state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
+                    state.progress != null -> Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
+                    else -> Translator.getString(R.string.Balance_Syncing)
                 }
             }
-
+            is AdapterState.Connecting -> Translator.getString(R.string.WalletConnect_Status_Connecting)
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
             else -> null
         }
