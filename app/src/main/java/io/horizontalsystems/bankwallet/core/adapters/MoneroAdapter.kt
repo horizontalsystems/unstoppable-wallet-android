@@ -205,10 +205,13 @@ fun Long.scaledDown(decimals: Int): BigDecimal {
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> AdapterState.NotSynced(error)
     is SyncState.Synced -> AdapterState.Synced
-    is SyncState.Connecting -> AdapterState.Syncing(connecting = true)
-    is SyncState.Syncing -> AdapterState.Syncing(progress?.let {
-        (it * 100).roundToInt().coerceAtMost(100)
-    })
+    is SyncState.Connecting -> AdapterState.Connecting
+    is SyncState.Syncing -> AdapterState.Syncing(
+        progress = progress?.let {
+            (it * 100).roundToInt().coerceAtMost(100)
+        },
+        blocksRemained = remainingBlocks
+    )
 }
 
 fun AccountType.toMoneroSeed() = when (this) {

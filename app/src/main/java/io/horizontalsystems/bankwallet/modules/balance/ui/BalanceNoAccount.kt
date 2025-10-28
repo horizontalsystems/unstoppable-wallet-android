@@ -26,8 +26,7 @@ fun BalanceNoAccount(navController: NavController) {
         CardsErrorMessageDefault(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(horizontal = 64.dp)
-            ,
+                .padding(horizontal = 64.dp),
             icon = painterResource(R.drawable.wallet_add_24),
             iconTint = ComposeAppTheme.colors.grey,
             buttonTitle = stringResource(R.string.ManageAccounts_CreateNewWallet),

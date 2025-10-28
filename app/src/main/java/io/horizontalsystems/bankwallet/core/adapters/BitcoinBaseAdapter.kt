@@ -268,7 +268,7 @@ abstract class BitcoinBaseAdapter(
                 val progress = (kitState.progress * 100).toInt()
                 val lastBlockDate = if (syncMode is BitcoinCore.SyncMode.Blockchair) null else kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
-                AdapterState.Syncing(progress, lastBlockDate)
+                AdapterState.Syncing(progress, lastBlockDate, kitState.blocksRemaining?.toLong())
             }
         }
     }
