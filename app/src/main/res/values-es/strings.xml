@@ -375,6 +375,9 @@
     <string name="Balance_Receive_Subaddresses">Subdirecciones</string>
     <string name="Balance_Receive_SubaddressesInfo">Las subdirecciones le permiten usar varias direcciones únicas dentro de una cartera para mayor comodidad y privacidad.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transacciones: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">¿previamente has poseído alguna moneda %s?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Sí, ya tengo</string>
+    <string name="Balance_Receive_IDontHave">No, no tengo</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Monto transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">El saldo transparente no puede ser utilizado en nuestra cartera por ahora. Pero este dinero puede ser gastado por otras billeteras con soporte de e-address</string>
