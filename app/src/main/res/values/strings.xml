@@ -448,6 +448,9 @@
     <string name="Balance_Receive_Subaddresses">Subadresses</string>
     <string name="Balance_Receive_SubaddressesInfo">Subaddresses let you use multiple unique addresses within one wallet for convenience and enhanced privacy.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transactions: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Have you previously owned any %s coins?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Yes, I already own</string>
+    <string name="Balance_Receive_IDontHave">No, I don\'t have</string>
 
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
