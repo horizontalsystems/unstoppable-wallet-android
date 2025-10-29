@@ -377,6 +377,9 @@
     <string name="Balance_Receive_Subaddresses">Субадреса</string>
     <string name="Balance_Receive_SubaddressesInfo">Подадреса позволяют вам использовать несколько уникальных адресов в одном кошельке для удобства и повышенной конфиденциальности.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Транзакции: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Вы уже владели любыми монетами %s?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Да, у меня уже есть</string>
+    <string name="Balance_Receive_IDontHave">Нет, у меня нет</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Прозрачный</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Прозрачная сумма</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Прозрачный баланс пока не может быть использован в нашем кошельке. Но эти деньги могут быть использованы другими кошельками с поддержкой адреса</string>
