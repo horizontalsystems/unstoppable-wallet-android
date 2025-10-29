@@ -374,6 +374,9 @@
     <string name="Balance_Receive_Subaddresses">子项</string>
     <string name="Balance_Receive_SubaddressesInfo">子地址让您在一个钱包内使用多个唯一地址来方便和增强隐私。</string>
     <string name="Balance_Receive_SubaddressesTransactions">交易: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">您以前是否拥有过任何 %s 硬币？</string>
+    <string name="Balance_Receive_YesAlreadyOwn">是的，我已经拥有了</string>
+    <string name="Balance_Receive_IDontHave">不，我没有</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">透明的</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
