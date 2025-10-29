@@ -13,12 +13,18 @@ import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -31,7 +37,10 @@ class ReceiveTokenSelectViewModel(
     private val fullCoinsProvider: FullCoinsProvider,
     private val adapterManager: IAdapterManager,
     private val currencyManager: CurrencyManager,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
+    private val moneroBirthdayProvider: MoneroBirthdayProvider,
+    private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
     private var fullCoins: List<FullCoin> = listOf()
     private var searchQuery = ""
@@ -70,12 +79,15 @@ class ReceiveTokenSelectViewModel(
                 val totalFiatValue = eligibleTokens
                     .mapNotNull { token -> walletManager.activeWallets.firstOrNull { it.token == token } }
                     .map { wallet ->
-                        val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available ?: BigDecimal.ZERO
+                        val balance =
+                            adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+                                ?: BigDecimal.ZERO
                         getFiatValue(wallet.token, balance)?.value ?: BigDecimal.ZERO
                     }
                     .fold(BigDecimal.ZERO) { acc, value -> acc + value }
 
-                val secondarySortOrder = eligibleTokens.firstOrNull()?.blockchainType?.order ?: Int.MAX_VALUE
+                val secondarySortOrder =
+                    eligibleTokens.firstOrNull()?.blockchainType?.order ?: Int.MAX_VALUE
 
                 Triple(fullCoin, totalFiatValue, secondarySortOrder)
             }
@@ -99,6 +111,43 @@ class ReceiveTokenSelectViewModel(
                 searchQuery = searchQuery,
             )
         }
+    }
+
+    fun shouldShowBottomSheet(fullCoin: FullCoin): Boolean {
+        val token = fullCoin.tokens.firstOrNull() ?: return false
+
+        if (token.blockchainType == BlockchainType.Zcash || token.blockchainType == BlockchainType.Monero) {
+            fullCoin.tokens.firstOrNull()?.let {
+                val activeWallets =
+                    walletManager.activeWallets.filter { it.coin == fullCoin.coin }
+                if (activeWallets.isEmpty()) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    suspend fun getWalletForCoinWithBirthday(
+        coin: FullCoin,
+        config: BirthdayHeightConfig
+    ): Wallet? {
+        val token = coin.tokens.first()
+
+        val settings = RestoreSettings()
+        settings.birthdayHeight = if (config.restoreAsNew) {
+            when (token.blockchainType) {
+                BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
+                BlockchainType.Monero -> moneroBirthdayProvider.restoreHeightForNewWallet()
+                else -> null
+            }
+        } else {
+            config.birthdayHeight?.toLongOrNull()
+        }
+
+        restoreSettingsManager.save(settings, activeAccount, token.blockchainType)
+
+        return getOrCreateWallet(token)
     }
 
     suspend fun getCoinForReceiveType(fullCoin: FullCoin): CoinForReceiveType? {
@@ -208,6 +257,9 @@ class ReceiveTokenSelectViewModel(
                 App.adapterManager,
                 App.currencyManager,
                 App.marketKit,
+                App.zcashBirthdayProvider,
+                App.moneroBirthdayProvider,
+                App.restoreSettingsManager
             ) as T
         }
     }
