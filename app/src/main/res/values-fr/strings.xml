@@ -375,6 +375,9 @@
     <string name="Balance_Receive_Subaddresses">Sous-adresses</string>
     <string name="Balance_Receive_SubaddressesInfo">Les sous-adresses vous permettent d\'utiliser plusieurs adresses uniques au sein d\'un portefeuille pour des raisons de commodité et une vie privée améliorée.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Opérations : %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Avez-vous déjà possédé des pièces %s?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Oui, je suis déjà propriétaire</string>
+    <string name="Balance_Receive_IDontHave">Non, je n\'ai pas</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparence</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Montant transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Le solde transparent ne peut pas être utilisé dans notre portefeuille pour le moment. Mais cet argent peut être dépensé par d\'autres portefeuilles avec le support des t-address</string>
