@@ -375,6 +375,9 @@
     <string name="Balance_Receive_Subaddresses">Sub-endereços</string>
     <string name="Balance_Receive_SubaddressesInfo">Subendereços permitem que você use vários endereços exclusivos dentro de uma carteira para conveniência e privacidade aprimorada.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transações: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Você já possuiu alguma moeda %s?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Sim, eu já possuo</string>
+    <string name="Balance_Receive_IDontHave">Não, eu não tenho</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
