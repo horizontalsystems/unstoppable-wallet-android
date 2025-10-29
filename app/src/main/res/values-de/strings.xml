@@ -375,6 +375,9 @@
     <string name="Balance_Receive_Subaddresses">Unteradressen</string>
     <string name="Balance_Receive_SubaddressesInfo">Mit Unteradressen können Sie mehrere eindeutige Adressen innerhalb einer Brieftasche für Komfort und verbesserte Privatsphäre verwenden.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transaktionen: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Hast du zuvor %s Münzen besessen?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Ja, ich besitze bereits</string>
+    <string name="Balance_Receive_IDontHave">Nein, ich habe nicht</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
