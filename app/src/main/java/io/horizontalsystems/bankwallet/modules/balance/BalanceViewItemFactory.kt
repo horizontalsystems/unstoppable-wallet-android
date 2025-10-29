@@ -176,7 +176,7 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null) {
+                if (state.lastBlockDate != null && state.blocksRemained == null ) {
                     Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"))
                 } else {
                     null
