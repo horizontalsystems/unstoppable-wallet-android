@@ -128,28 +128,6 @@ class ReceiveTokenSelectViewModel(
         return false
     }
 
-    suspend fun getWalletForCoinWithBirthday(
-        coin: FullCoin,
-        config: BirthdayHeightConfig
-    ): Wallet? {
-        val token = coin.tokens.first()
-
-        val settings = RestoreSettings()
-        settings.birthdayHeight = if (config.restoreAsNew) {
-            when (token.blockchainType) {
-                BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
-                BlockchainType.Monero -> moneroBirthdayProvider.restoreHeightForNewWallet()
-                else -> null
-            }
-        } else {
-            config.birthdayHeight?.toLongOrNull()
-        }
-
-        restoreSettingsManager.save(settings, activeAccount, token.blockchainType)
-
-        return getOrCreateWallet(token)
-    }
-
     suspend fun getCoinForReceiveType(fullCoin: FullCoin): CoinForReceiveType? {
         val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
@@ -205,11 +183,49 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
+    suspend fun getWalletForCoinWithBirthday(
+        coin: FullCoin,
+        config: BirthdayHeightConfig
+    ): Wallet? {
+        val token = coin.tokens.firstOrNull() ?: return null
+
+        val birthdayHeight = if (config.restoreAsNew) {
+            getBirthdayHeightForNewWallet(token.blockchainType)
+        } else {
+            config.birthdayHeight?.toLongOrNull()
+        }
+
+        if (birthdayHeight != null) {
+            val settings = RestoreSettings().apply {
+                this.birthdayHeight = birthdayHeight
+            }
+            restoreSettingsManager.save(settings, activeAccount, token.blockchainType)
+        }
+
+        return getOrCreateWallet(token)
+    }
+
     private suspend fun getOrCreateWallet(token: Token): Wallet {
-        return walletManager
-            .activeWallets
-            .find { it.token == token }
-            ?: createWallet(token)
+        walletManager.activeWallets.find { it.token == token }?.let {
+            return it
+        }
+
+        if (token.blockchainType == BlockchainType.Zcash || token.blockchainType == BlockchainType.Monero) {
+            if (restoreSettingsManager.settings(activeAccount, token.blockchainType).birthdayHeight == null) {
+                val settings = RestoreSettings().apply {
+                    birthdayHeight = getBirthdayHeightForNewWallet(token.blockchainType)
+                }
+                restoreSettingsManager.save(settings, activeAccount, token.blockchainType)
+            }
+        }
+
+        return createWallet(token)
+    }
+
+    private fun getBirthdayHeightForNewWallet(blockchainType: BlockchainType): Long? = when (blockchainType) {
+        BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
+        BlockchainType.Monero -> moneroBirthdayProvider.restoreHeightForNewWallet()
+        else -> null
     }
 
     private suspend fun createWallet(token: Token): Wallet {
