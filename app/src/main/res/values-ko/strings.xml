@@ -49,6 +49,7 @@
     <string name="Button_Apply">적용</string>
     <string name="Button_SetAmount">금액 설정</string>
     <string name="Button_ContinueAnyway">계속 진행하기</string>
+    <string name="Button_Approve">승인</string>
     <string name="Error_OutOfRange">%1$s 이하나 %2$s 이상이어야 합니다.</string>
     <string name="Error_NotInteger">잘못된 정수 숫자</string>
     <string name="Error">오류</string>
@@ -499,6 +500,7 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">페어링된 모든 dAps를 삭제하시겠습니까?</string>
     <string name="WalletConnect_Pairings_Delete">삭제</string>
     <string name="WalletConnect_DeleteAllPairs">모든 쌍 삭제</string>
+    <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -795,6 +797,8 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">주소 하나만 잘못 입력하면 암호화폐가 영원히 사라질 수 있습니다. Unstoppable은 수신자 주소의 의심스러운 패턴을 자동으로 스캔하고 최신 피싱 위협으로부터 방어하여 해커에게 자금을 보내는 것을 방지합니다. 사기성 거래가 발생하기 전에 차단하세요.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">위험하거나 제재 대상인 엔티티로부터 자신을 보호하세요. 블랙리스트 체커는 수신자 주소를 고위험 데이터베이스와 자동으로 대조하여 송금 전에 사기, 사기 및 제재 대상 엔티티를 표시합니다. 주소가 블랙리스트에 등록되어 있다면, 비용이 많이 드는 실수를 하기 전에 알 수 있습니다. 거래를 안전하게 하세요. 암호화폐를 깨끗하게 유지하세요. 규정을 준수하세요.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">진화의 일원이 되세요. VIP 그룹에 가입하여 기술 지원을 위해 저희 팀과 직접 연결하세요. 예정된 기능에 투표하고, 향후 업데이트에 대한 독점 미리보기를 받으세요. 당신의 의견이 중요합니다—차세대 암호화폐 지갑을 함께 만들어 나가세요.</string>
+    <string name="Premium_ScamProtection">사기 방지</string>
+    <string name="Premium_AdvancedSearch">고급 검색</string>
     <string name="Premium_HighlyRatedSecurity">높은 평가를 받는 보안, 탁월한 개인 정보 보호, 그리고 진정한 비수탁형 지갑.</string>
     <string name="Premium_ApprovedBy">다음 기관에서 승인 및 감사:</string>
     <string name="Premium_WhatUsersSay">사용자들의 평가:</string>
