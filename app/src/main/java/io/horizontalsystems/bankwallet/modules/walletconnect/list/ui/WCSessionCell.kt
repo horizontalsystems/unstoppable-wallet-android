@@ -48,7 +48,7 @@ fun WCSessionCell(
             .background(ComposeAppTheme.colors.lawrence)
             .clickable {
                 navController.slideFromBottom(
-                    R.id.wcSessionFragment,
+                    R.id.wcSessionBottomSheetDialog,
                     WCSessionModule.Input(session.sessionTopic)
                 )
             },

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,7 +52,14 @@ private fun Cell(
         Box(modifier = Modifier.weight(1f)) {
             middle.invoke()
         }
-        right?.invoke()
+        right?.let { rightContent ->
+            Box(
+                modifier = Modifier.widthIn(max = 200.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                rightContent()
+            }
+        }
     }
 }
 

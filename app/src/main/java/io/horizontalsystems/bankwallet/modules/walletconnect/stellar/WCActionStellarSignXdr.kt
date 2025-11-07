@@ -2,6 +2,11 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.stellar
 
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCActionState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -34,10 +39,20 @@ class WCActionStellarSignXdr(
 
     override fun createState(): WCActionState {
         val transaction = stellarKit.getTransaction(xdr)
+        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr)
+        App.accountManager.activeAccount?.name?.let { walletName ->
+            sectionViewItems += SectionViewItem(
+                listOf(ViewItem.Value(
+                    Translator.getString(R.string.Wallet_Title),
+                    walletName,
+                    ValueType.Regular
+                ))
+            )
+        }
 
         return WCActionState(
             runnable = true,
-            items = WCStellarHelper.getTransactionViewItems(transaction, xdr, peerName)
+            items = WCStellarHelper.getTransactionViewItems(transaction, xdr) + sectionViewItems
         )
     }
 

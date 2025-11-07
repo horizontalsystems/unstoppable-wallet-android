@@ -36,7 +36,7 @@ fun CellRightControlsButtonText(
         Text(
             text = text.text,
             style = ComposeAppTheme.typography.subheadSB,
-            color = text.color ?: ComposeAppTheme.colors.grey,
+            color = text.color ?: ComposeAppTheme.colors.leah,
         )
 
         val clickModifier = if (onIconClick != null) {

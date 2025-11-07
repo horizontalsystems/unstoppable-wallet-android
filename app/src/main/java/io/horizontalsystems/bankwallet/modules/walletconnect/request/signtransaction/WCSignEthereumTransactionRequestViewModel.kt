@@ -2,14 +2,12 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signtransa
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.evmfee.GasData
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -17,8 +15,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldNonce
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
@@ -82,16 +78,6 @@ class WCSignEthereumTransactionRequestViewModel(
             transactionData,
             null,
             evmKit.evmKit.decorate(transactionData)
-        ) + SectionViewItem(
-            buildList {
-                add(
-                    ViewItem.Value(
-                        Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
-                        dAppName,
-                        ValueType.Regular
-                    )
-                )
-            }
         )
 
         return items
