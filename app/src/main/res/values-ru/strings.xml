@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Всё равно продолжить</string>
     <string name="Button_CopyAddress">Копировать адрес</string>
     <string name="Button_HideCoin">Скрыть монету</string>
+    <string name="Button_Approve">Разрешить</string>
     <string name="Attention_Title">Внимание</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
@@ -568,9 +569,29 @@
     <string name="WalletConnect_Networks">Сети</string>
     <string name="WalletConnect_ConnectTo">Подключиться к %s</string>
     <string name="WalletConnect_ConnectedTo">Подключено к %s</string>
+    <string name="WalletConnect_Disconnect">Отключить %s</string>
     <string name="WalletConnect_WhiteListDeactivatedWarning">Защита от мошенничества отключена. Проверка домена недоступна. Обновите до Премиум, чтобы защитить от непроверенных или фишинговых сайтов.</string>
     <string name="WalletConnect_NotInWhiteListAlert">Этот веб-сайт не верифицирован и может привести к фишингу или потере средств. Подключение крайне не приветствуется.</string>
     <string name="WalletConnect_ConnectWarning">Нажав на кнопку \"Подключиться\", вы разрешите этому приложению просматривать свой публичный адрес.</string>
+    <string name="WalletConnect_Attention">Внимание!</string>
+    <string name="WalletConnect_Danger">Опасность!</string>
+    <string name="WalletConnect_Safe">Безопасный</string>
+    <string name="WalletConnect_Domain">Домен</string>
+    <string name="WalletConnect_Message">Сообщение</string>
+    <string name="WalletConnect_Checking">Проверка…</string>
+    <string name="WalletConnect_RequestFailed">Запрос не удался</string>
+    <string name="WalletConnect_AllowDapp">Разрешить %s</string>
+    <string name="WalletConnect_Value">Значение</string>
+    <string name="WalletConnect_TokenAllowance">Разрешение токена</string>
+    <string name="WalletConnect_ConfirmTransaction">Подтвердите транзакцию</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s сможет переместить эти жетоны от вашего имени.</string>
+    <string name="WalletConnect_RequestFailedDescription">Что-то пошло не так и запрос не может быть завершен</string>
+    <string name="WalletConnect_DisconnectWarning">Вы уверены, что хотите удалить это соединение?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Вы можете подключиться к поддельному сайту и потерять средства. Включите меня, чтобы оставаться защищенным.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Эта dApp не проверена. Подключение может поставить под угрозу ваши средства.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Я проверил это. Это приложение безопасно для подключения.</string>
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Requests">Запросы</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
@@ -660,6 +681,8 @@
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouApprove">Вы разрешаете</string>
     <string name="Approve_YouRevoke">Вы отменяете</string>
+    <string name="Approve_Allowance">Допустимая сумма</string>
+    <string name="Approve_Revoke">Отозвать сумму</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Разрешить</string>
     <string name="Swap_Approve_Info">Предоставьте разрешение смарт-контракту на торговлю токенами от вашего имени, указав разрешенную сумму. Это не влияет на ваш баланс, но влечет за собой небольшую комиссию за разрешение.\n\nПредварительное разрешение более высокой суммы для будущих сделок экономически выгоднее по сравнению с разрешением по запросу.</string>
@@ -911,6 +934,7 @@
     <string name="Premium_Subscribe">Подписаться</string>
     <string name="Premium_AddPromoCode">Ввести промокод</string>
     <string name="Premium_TryForFree">Попробовать БЕСПЛАТНО</string>
+    <string name="Premium_ViewAllFeatures">Просмотреть все возможности</string>
     <string name="Premium_Upgrade">Подписаться</string>
     <string name="Premium_Restore">Восстановить</string>
     <string name="Premium_Annually">Ежегодно</string>
@@ -945,6 +969,23 @@
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Защитите себя от рисковых и санкционированных контрагентов. Blacklist Checker автоматически проверяет адреса получателей по базам высокого риска, выявляя мошеннические схемы, fraudulent-транзакции и санкционированные объекты еще до отправки средств.Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Станьте частью эволюции. Присоединитесь к VIP-группе для прямого взаимодействия с нашей командой по технической поддержке. Голосуйте за предстоящие функции и получайте эксклюзивный предварительный доступ к будущим обновлениям. Ваш голос имеет значение — помогите сформировать криптокошелек нового поколения.</string>
     <string name="Premium_UpgradeFeature_MevProtection_BigDescription">Защита MEV</string>
+    <string name="Premium_DefenseSystem">Система защиты</string>
+    <string name="Premium_SecureSend">Безопасная отправка</string>
+    <string name="Premium_SecureSend_Description">Проверяет кошельки получателя для фишинга или мошенничества. Предупреждает вас перед отправкой на рискованные адреса.</string>
+    <string name="Premium_LossProtection">Защита от потерь</string>
+    <string name="Premium_LossProtection_Description">Останавливает ботов и атак на передний план во время подкачки. Сохраняет ваши транзакции честно и безопасно.</string>
+    <string name="Premium_ScamProtection">Scam-защита</string>
+    <string name="Premium_ScamProtection_Description">Перед подключением обнаруживает поддельные или вредоносные dApp. Предотвращает фишинг и защищает ваши активы.</string>
+    <string name="Premium_RobberyProtection">Защита от грабежа</string>
+    <string name="Premium_RobberyProtection_Description">Позволяет создать обманный кошелек с отдельным PIN-кодом. Сохраняет скрытые реальные активы в ситуациях повышенного риска.</string>
+    <string name="Premium_TokenInsights">Происхождение токена</string>
+    <string name="Premium_TokenInsights_Description">Показывает подробные данные по токенам – объем, ликвидность и тенденции. Помогает вам принять более эффективные инвестиционные решения.</string>
+    <string name="Premium_AdvancedSearch">Расширенный поиск</string>
+    <string name="Premium_AdvancedSearch_Description">Поиск токенов с фильтрами по объему, цепочке или сектору. Включает метрики деятельности CEX/DEX и списков.</string>
+    <string name="Premium_TradeSignals">Торговые сигналы</string>
+    <string name="Premium_TradeSignals_Description">Отправляет оповещения в реальном времени о торговых возможностях. Мгновенно повышает шансы на прибыль или риски рынка.</string>
+    <string name="Premium_PrioritySupport">Приоритетная поддержка</string>
+    <string name="Premium_PrioritySupport_Description">Предоставляет вам прямой доступ к приоритетной поддержке. Получите быструю личную помощь от Неостановимой команды.</string>
     <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_WhatUsersSay">Что говорят пользователи:</string>
