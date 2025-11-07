@@ -32,6 +32,7 @@
     <string name="Button_Copy">رونوشت</string>
     <string name="Button_Sign">نشانه</string>
     <string name="Button_Apply">درخواست دادن</string>
+    <string name="Button_Approve">تایید</string>
     <string name="Error">خطا</string>
     <string name="Any">هرکدام</string>
     <string name="SyncError">خطای همگام سازی دوباره امتحان کنید</string>
@@ -194,6 +195,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
     <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
+    <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
     <string name="EthereumTransaction_Error_Title">خطا</string>
