@@ -1,42 +1,31 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun MessageToSign(message: String) {
-    val localView = LocalView.current
     val interactionSource = remember { MutableInteractionSource() }
+    val formatted = formatJson(message)
+    val context = LocalContext.current
 
-    VSpacer(24.dp)
-    HeaderText(text = stringResource(id = R.string.WalletConnect_SignMessageRequest_ShowMessageTitle).uppercase())
-    CellUniversalLawrenceSection(buildList {
-        add {
-            val formatted = formatJson(message)
-            caption_leah(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        TextHelper.copyText(formatted)
-                        HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                    },
-                text = formatted
-            )
-        }
-    })
+    body_leah(
+        modifier = Modifier.clickable(
+            interactionSource = interactionSource,
+            indication = null
+        ) {
+            TextHelper.copyText(formatted)
+            Toast.makeText(context, R.string.Hud_Text_Copied, Toast.LENGTH_SHORT).show()
+        },
+        text = formatted
+    )
 }
 
 private fun formatJson(text: String): String {

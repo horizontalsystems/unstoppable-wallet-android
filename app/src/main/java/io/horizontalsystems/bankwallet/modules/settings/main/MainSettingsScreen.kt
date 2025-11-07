@@ -202,7 +202,7 @@ private fun SettingSections(
             )
         }, {
             HsSettingCell(
-                R.string.Settings_WalletConnect,
+                R.string.DAppConnection_Title,
                 R.drawable.ic_wallet_connect_20,
                 value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
                 counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),

@@ -56,7 +56,16 @@ class WCHandlerEvm(
             else -> method
         }
 
-        return MethodData(title, evmChain?.name ?: "")
+        val shortTitle = when (method) {
+            "personal_sign" -> "Sign"
+            "eth_sign" -> "Sign"
+            "eth_signTypedData" -> "Sign"
+            "eth_sendTransaction" -> "Approve"
+            "eth_signTransaction" -> "Sign"
+            else -> method
+        }
+
+        return MethodData(title, shortTitle, evmChain?.name ?: "")
     }
 
     override fun getAction(

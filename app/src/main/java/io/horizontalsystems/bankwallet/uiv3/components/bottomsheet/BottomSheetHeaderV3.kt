@@ -14,12 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 
 @Composable
 fun BottomSheetHeaderV3(
@@ -28,17 +32,20 @@ fun BottomSheetHeaderV3(
     image400: Painter? = null,
     imageTint: Color = ComposeAppTheme.colors.grey,
     title: String,
+    onCloseClick: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .padding(top = 8.dp, bottom = 12.dp)
-                .size(52.dp, 4.dp)
-                .background(ComposeAppTheme.colors.blade, RoundedCornerShape(50))
-        ) {  }
+        if (image400 == null) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 8.dp, bottom = 12.dp)
+                    .size(52.dp, 4.dp)
+                    .background(ComposeAppTheme.colors.blade, RoundedCornerShape(50))
+            ) { }
+        }
 
         image72?.let {
             Icon(
@@ -63,10 +70,26 @@ fun BottomSheetHeaderV3(
         }
 
         image400?.let {
-            Image(
-                painter = it,
-                contentDescription = null,
-            )
+            Box() {
+                Image(
+                    modifier = Modifier.fillMaxWidth(),
+                    painter = it,
+                    contentScale = ContentScale.FillWidth,
+                    contentDescription = null,
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.TopEnd)
+                ) {
+                    HSIconButton(
+                        icon = painterResource(id = R.drawable.ic_close),
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
+                        onClick = { onCloseClick?.invoke() }
+                    )
+                }
+            }
         }
 
         headline1_leah(

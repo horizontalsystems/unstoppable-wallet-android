@@ -71,6 +71,7 @@ data class WCSessionUiState(
     val blockchainTypes: List<BlockchainType>?,
     val whiteListState: WCWhiteListState,
     val hasSubscription: Boolean,
+    val closeDialog: Boolean,
 )
 
 enum class Status(val value: Int) {

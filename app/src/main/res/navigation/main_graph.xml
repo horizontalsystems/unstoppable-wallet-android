@@ -381,17 +381,17 @@
     <dialog
         android:id="@+id/addressRiskyBottomSheetAlert"
         android:name="io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert" />
+    <dialog
+        android:id="@+id/defenseSystemFeatureDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog" />
+    <dialog
+        android:id="@+id/wcSessionBottomSheetDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet" />
 
     <!--Wallet Connect-->
     <fragment
-        android:id="@+id/wcSessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionFragment"/>
-    <fragment
         android:id="@+id/wcNetworksFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCNetworksFragment"/>
-    <fragment
-        android:id="@+id/wcRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
     <fragment
         android:id="@+id/wcSendEvmTransactionSettings"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCEvmTransactionSettingsFragment"/>
@@ -440,4 +440,7 @@
     <fragment
         android:id="@+id/vaultsBlockchainsSelectorFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.earn.VaultBlockchainsSelectorFragment"/>
+    <dialog
+        android:id="@+id/wcRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
 </navigation>

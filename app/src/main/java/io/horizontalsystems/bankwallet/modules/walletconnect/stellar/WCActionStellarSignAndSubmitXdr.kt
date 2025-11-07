@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.stellar
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCActionState
@@ -19,7 +21,6 @@ import kotlinx.coroutines.launch
 
 class WCActionStellarSignAndSubmitXdr(
     private val paramsJsonStr: String,
-    private val peerName: String,
     private val stellarKit: StellarKit,
 ) : AbstractWCAction() {
 
@@ -30,6 +31,7 @@ class WCActionStellarSignAndSubmitXdr(
     private val token = App.marketKit.token(TokenQuery(BlockchainType.Stellar, TokenType.Native))!!
     private val sendTransactionService = SendTransactionServiceFactory.create(token)
     private var sendTransactionState = sendTransactionService.stateFlow.value
+    private val accountManager = App.accountManager
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -64,7 +66,16 @@ class WCActionStellarSignAndSubmitXdr(
     override fun createState(): WCActionState {
         val transaction = stellarKit.getTransaction(xdr)
 
-        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr, peerName)
+        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr)
+        accountManager.activeAccount?.name?.let { walletName ->
+            sectionViewItems += SectionViewItem(
+                listOf(ViewItem.Value(
+                    Translator.getString(R.string.Wallet_Title),
+                    walletName,
+                    ValueType.Regular
+                ))
+            )
+        }
         sendTransactionState.networkFee?.let { networkFee ->
             sectionViewItems += SectionViewItem(
                 listOf(ViewItem.Fee(networkFee))
