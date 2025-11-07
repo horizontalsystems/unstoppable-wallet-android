@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuar de todos modos</string>
     <string name="Button_CopyAddress">Copiar dirección</string>
     <string name="Button_HideCoin">Moneda de Piel</string>
+    <string name="Button_Approve">Aprobar</string>
     <string name="Attention_Title">Atención</string>
     <string name="Error_OutOfRange">No puede ser menor que %1$s o mayor que %2$s</string>
     <string name="Error_NotInteger">Número entero incorrecto</string>
@@ -566,9 +567,21 @@
     <string name="WalletConnect_Networks">Redes</string>
     <string name="WalletConnect_ConnectTo">Conectar a %s</string>
     <string name="WalletConnect_ConnectedTo">Conectado a %s</string>
+    <string name="WalletConnect_Disconnect">Desconectar %s</string>
     <string name="WalletConnect_WhiteListDeactivatedWarning">La protección de imagen está desactivada. La verificación de dominio no está disponible. Actualiza a Premium para protegerte contra sitios web no verificados o phishing.</string>
     <string name="WalletConnect_NotInWhiteListAlert">Este sitio web no está verificado y puede llevar a la suplantación de identidad o a la pérdida de fondos.</string>
     <string name="WalletConnect_ConnectWarning">Al hacer clic en conectar, permite que esta aplicación vea su dirección pública.</string>
+    <string name="WalletConnect_Attention">¡Atención!</string>
+    <string name="WalletConnect_Danger">¡Peligro!</string>
+    <string name="WalletConnect_Safe">Seguro</string>
+    <string name="WalletConnect_Domain">Dominio</string>
+    <string name="WalletConnect_Message">Mensaje</string>
+    <string name="WalletConnect_Checking">Comprobando…</string>
+    <string name="WalletConnect_RequestFailed">Solicitud fallida</string>
+    <string name="WalletConnect_AllowDapp">Permitir %s</string>
+    <string name="WalletConnect_Value">Valor</string>
+    <string name="WalletConnect_TokenAllowance">Permiso de Token</string>
+    <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -943,6 +956,8 @@
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protégete de entidades riesgosas y sancionadas. El Verificador de Lista Negra examina automáticamente las direcciones de destinatarios contra bases de datos de alto riesgo, marcando estafas, fraudes y entidades sancionadas antes de que envíes. Si una dirección está en la lista negra, lo sabrás antes de cometer un error costoso. Asegura tus transacciones. Mantén tu cripto limpio. Permanece conforme.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Sé parte de la evolución. Únete al Grupo VIP para conectarte directamente con nuestro equipo de soporte técnico. Vota por las próximas funciones y obtén una mirada exclusiva a las actualizaciones futuras. Tu voz importa—ayuda a dar forma a la cartera de criptomonedas de próxima generación.</string>
     <string name="Premium_UpgradeFeature_MevProtection_BigDescription">Protección MEV</string>
+    <string name="Premium_ScamProtection">Protección Antifraude</string>
+    <string name="Premium_AdvancedSearch">Búsqueda Avanzada</string>
     <string name="Premium_HighlyRatedSecurity">Seguridad altamente valorada, privacidad excepcional y una cartera verdaderamente no custodial.</string>
     <string name="Premium_ApprovedBy">Aprobado y Auditado Por:</string>
     <string name="Premium_WhatUsersSay">Lo que dicen los usuarios:</string>
