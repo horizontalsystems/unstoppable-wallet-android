@@ -581,7 +581,14 @@
     <string name="WalletConnect_AllowDapp">Autoriser %s</string>
     <string name="WalletConnect_Value">Valeur</string>
     <string name="WalletConnect_TokenAllowance">Allocation de jeton</string>
+    <string name="WalletConnect_ConfirmTransaction">Confirmer la transaction</string>
+    <string name="WalletConnect_RequestFailedDescription">Une erreur s\'est produite et la demande n\'a pas pu être complétée</string>
+    <string name="WalletConnect_DisconnectWarning">Êtes-vous sûr de vouloir supprimer cette connexion ?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Vous pouvez vous connecter à un faux site et perdre des fonds. Activez-moi pour rester protégé.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Ce dApp n\'est pas vérifié. La connexion peut mettre vos fonds en péril.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Je l\'ai vérifié. Cette dApp est sécurisée pour se connecter.</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Requests">Requêtes</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Avertissement</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -671,6 +678,8 @@
     <string name="Approve_Spender">Dépendant</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
     <string name="Approve_YouRevoke">Vous révoquez</string>
+    <string name="Approve_Allowance">Montant de l\'indemnité</string>
+    <string name="Approve_Revoke">Révoquer le montant</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Approuver</string>
     <string name="Swap_Approve_Info">Accorder l\'autorisation à un contrat intelligent pour effectuer des échanges de jetons en votre nom, en spécifiant le montant autorisé. Cela n\'affecte pas votre solde, mais entraîne de petits frais pour l\'approbation.\n\nPréapprouver un montant plus élevé pour les transactions futures est plus rentable que d\'approuver à la demande.</string>
@@ -922,6 +931,7 @@
     <string name="Premium_Subscribe">S\'abonner</string>
     <string name="Premium_AddPromoCode">Ajouter un code promo</string>
     <string name="Premium_TryForFree">Essayez GRATUITEMENT</string>
+    <string name="Premium_ViewAllFeatures">Voir toutes les fonctionnalités</string>
     <string name="Premium_Upgrade">Mettre à niveau</string>
     <string name="Premium_Restore">Restaurer</string>
     <string name="Premium_Annually">Annuellement</string>
@@ -956,8 +966,23 @@
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protégez-vous des entités à risque et sous sanctions. Le Vérificateur de Liste Noire filtre automatiquement les adresses des destinataires par rapport aux bases de données à haut risque, signalant les arnaques, fraudes et entités sanctionnées avant tout envoi. Si une adresse est sur liste noire, vous le saurez avant de commettre une erreur coûteuse. Sécurisez vos transactions. Gardez vos cryptos propres. Restez conforme.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Faites partie de l\'évolution. Rejoignez le Groupe VIP pour communiquer directement avec notre équipe de support technique. Votez pour les fonctionnalités à venir et obtenez un aperçu exclusif des futures mises à jour. Votre voix compte — aidez-nous à façonner le portefeuille crypto de nouvelle génération.</string>
     <string name="Premium_UpgradeFeature_MevProtection_BigDescription">Protection MEV</string>
+    <string name="Premium_DefenseSystem">Système de défense</string>
+    <string name="Premium_SecureSend">Envoi sécurisé</string>
+    <string name="Premium_SecureSend_Description">Vérifie les portefeuilles des destinataires pour l\'hameçonnage ou la fraude. Vous alerte avant d\'envoyer à des adresses risquées.</string>
+    <string name="Premium_LossProtection">Protection contre la perte</string>
+    <string name="Premium_LossProtection_Description">Arrête les bots et les attaques frontales pendant les swaps. Garde vos transactions équitables et sécurisées.</string>
     <string name="Premium_ScamProtection">Protection Anti-arnaques</string>
+    <string name="Premium_ScamProtection_Description">Détecte les faux dApps ou dApps malveillants avant la connexion. Empêche l\'hameçonnage et protège vos ressources.</string>
+    <string name="Premium_RobberyProtection">Protection contre le vol</string>
+    <string name="Premium_RobberyProtection_Description">Vous permet de créer un portefeuille de leurres avec un code PIN distinct. Garde les actifs réels cachés dans des situations à haut risque.</string>
+    <string name="Premium_TokenInsights">Aperçus du jeton</string>
+    <string name="Premium_TokenInsights_Description">Affiche les données de jeton détaillées – volume, liquidité et tendances. Vous aide à prendre des décisions d\'investissement plus intelligentes.</string>
     <string name="Premium_AdvancedSearch">Recherche Avancée</string>
+    <string name="Premium_AdvancedSearch_Description">Trouver des jetons avec des filtres par volume, chaîne ou secteur. Inclut des métriques pour l\'activité et les annonces CEX/DEX.</string>
+    <string name="Premium_TradeSignals">Échanger des signaux</string>
+    <string name="Premium_TradeSignals_Description">Envoie des alertes en temps réel sur les opportunités de trading. Souligne instantanément les chances de profit ou les risques de marché.</string>
+    <string name="Premium_PrioritySupport">Support prioritaire</string>
+    <string name="Premium_PrioritySupport_Description">Vous donne un accès direct au support prioritaire. Obtenez une aide personnelle et rapide de l\'équipe Unstoppable.</string>
     <string name="Premium_HighlyRatedSecurity">Sécurité hautement évaluée, confidentialité exceptionnelle et un portefeuille véritablement non-custodial.</string>
     <string name="Premium_ApprovedBy">Approuvé et audité par :</string>
     <string name="Premium_WhatUsersSay">Ce que disent les utilisateurs :</string>
