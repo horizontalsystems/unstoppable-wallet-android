@@ -581,7 +581,15 @@
     <string name="WalletConnect_AllowDapp">Erlaube %s</string>
     <string name="WalletConnect_Value">Wert</string>
     <string name="WalletConnect_TokenAllowance">Token-Erlaubnis</string>
+    <string name="WalletConnect_ConfirmTransaction">Transaktion bestätigen</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s wird in der Lage sein, diese Token in Ihrem Namen zu verschieben.</string>
+    <string name="WalletConnect_RequestFailedDescription">Etwas ist schief gelaufen und die Anfrage konnte nicht abgeschlossen werden</string>
+    <string name="WalletConnect_DisconnectWarning">Sind Sie sicher, dass Sie diese Verbindung entfernen möchten?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Du kannst dich mit einer gefälschten Website verbinden und Geld verlieren. Schalte mich ein, um geschützt zu bleiben.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Diese dApp ist nicht verifiziert. Verbinden kann Ihr Guthaben gefährden.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Ich habe es ausgewählt. Diese dApp ist sicher um sich zu verbinden.</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Requests">Anfragen</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>
@@ -671,6 +679,8 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Sie genehmigen</string>
     <string name="Approve_YouRevoke">Du widerrufen</string>
+    <string name="Approve_Allowance">Zulassungsbetrag</string>
+    <string name="Approve_Revoke">Betrag widerrufen</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Genehmigen</string>
     <string name="Swap_Approve_Info">Erteilen Sie in Ihrem Namen die Erlaubnis zu einem intelligenten Vertrag für den Token-Handel, der den zulässigen Betrag angibt. Kein Einfluss auf Ihr Guthaben, sondern erhebt eine geringe Zulassungsgebühr.\n\nVorabgenehmigung eines höheren Betrags für zukünftige Geschäfte ist kosteneffektiv im Vergleich zu On-Demand-Zulassungen.</string>
@@ -922,6 +932,7 @@
     <string name="Premium_Subscribe">Abonnieren</string>
     <string name="Premium_AddPromoCode">Promo-Code hinzufügen</string>
     <string name="Premium_TryForFree">KOSTENLOS testen</string>
+    <string name="Premium_ViewAllFeatures">Alle Funktionen anzeigen</string>
     <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_Restore">Wiederherstellen</string>
     <string name="Premium_Annually">Jährlich</string>
@@ -956,8 +967,23 @@
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der schwarze Listen-Checker prüft die Empfängeradressen automatisch auf hochriskante Datenbanken, meldet Betrügereien, Betrügereien und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der schwarzen Liste steht, wissen Sie, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Krypto sauber.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seien Sie Teil der Evolution. Treten Sie der VIP-Gruppe bei, um sich direkt mit unserem Team in Verbindung zu setzen, um technischen Support zu erhalten. Vote über kommende Funktionen und erhalte einen exklusiven ersten Blick auf zukünftige Updates. Deine Stimme zählt – hilf die nächste Krypto-Wallet zu formen.</string>
     <string name="Premium_UpgradeFeature_MevProtection_BigDescription">MEV-Schutz</string>
+    <string name="Premium_DefenseSystem">Abwehrsystem</string>
+    <string name="Premium_SecureSend">Sicher senden</string>
+    <string name="Premium_SecureSend_Description">Prüft die Empfänger Brieftaschen auf Phishing oder Betrug. Warnt Sie, bevor Sie an riskante Adressen senden.</string>
+    <string name="Premium_LossProtection">Verlustschutz</string>
+    <string name="Premium_LossProtection_Description">Stoppt Bots und front-laufende Angriffe während der Swaps. Hält Ihre Transaktionen fair und sicher.</string>
     <string name="Premium_ScamProtection">Scam-Schutz</string>
+    <string name="Premium_ScamProtection_Description">Erkennt gefälschte oder bösartige dApps vor der Verbindung. Verhindert Phishing und hält Ihre Assets sicher.</string>
+    <string name="Premium_RobberyProtection">Robbery-Schutz</string>
+    <string name="Premium_RobberyProtection_Description">Lässt Sie eine Köche Brieftasche mit einer separaten PIN erstellen. Bewahrt reale Vermögenswerte, die in Risikosituationen versteckt sind.</string>
+    <string name="Premium_TokenInsights">Token-Einblicke</string>
+    <string name="Premium_TokenInsights_Description">Zeigt detaillierte Kennzeichendaten – Volumen, Liquidität und Trends. Hilft bei intelligenteren Anlageentscheidungen.</string>
     <string name="Premium_AdvancedSearch">Erweiterte Suche</string>
+    <string name="Premium_AdvancedSearch_Description">Finde Tokens mit Filtern nach Volumen, Kette oder Sektor. Enthält Metriken für CEX/DEX Aktivitäten und Listings.</string>
+    <string name="Premium_TradeSignals">Handelssignale</string>
+    <string name="Premium_TradeSignals_Description">Sendet Echtzeit-Warnungen über Handelschancen. Stärkt sofort Gewinnchancen oder Marktrisiken.</string>
+    <string name="Premium_PrioritySupport">Vorrangiger Support</string>
+    <string name="Premium_PrioritySupport_Description">Gibt dir direkten Zugriff auf den prioritären Support. Erhalte schnelle persönliche Hilfe vom unaufhaltsamen Team.</string>
     <string name="Premium_HighlyRatedSecurity">Hervorragende Sicherheit, außergewöhnliche Privatsphäre und eine wahrhaft freigehaltene Brieftasche.</string>
     <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
     <string name="Premium_WhatUsersSay">Was Nutzer sagen:</string>
