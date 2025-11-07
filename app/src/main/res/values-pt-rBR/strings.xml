@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
     <string name="Button_CopyAddress">Copiar Endereço</string>
     <string name="Button_HideCoin">Ocultar moeda</string>
+    <string name="Button_Approve">Aprovar</string>
     <string name="Attention_Title">Atenção</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
@@ -566,9 +567,29 @@
     <string name="WalletConnect_Networks">Redes</string>
     <string name="WalletConnect_ConnectTo">Conectar a %s</string>
     <string name="WalletConnect_ConnectedTo">Conectado a %s</string>
+    <string name="WalletConnect_Disconnect">Desconectar %s</string>
     <string name="WalletConnect_WhiteListDeactivatedWarning">A Proteção de Scam está desativada. Verificação de domínio não está disponível. Atualize para a versão Premium para proteger contra sites não verificados ou phishing.</string>
     <string name="WalletConnect_NotInWhiteListAlert">Este site não é verificado e pode levar a phishing ou perda de fundos. Conectar é fortemente desencorajado.</string>
     <string name="WalletConnect_ConnectWarning">Ao clicar em conectar, você permite que este aplicativo veja seu endereço público.</string>
+    <string name="WalletConnect_Attention">Atenção!</string>
+    <string name="WalletConnect_Danger">Perigo!</string>
+    <string name="WalletConnect_Safe">Segura</string>
+    <string name="WalletConnect_Domain">Domínio</string>
+    <string name="WalletConnect_Message">mensagem</string>
+    <string name="WalletConnect_Checking">Verificando…</string>
+    <string name="WalletConnect_RequestFailed">Falha na solicitação</string>
+    <string name="WalletConnect_AllowDapp">Permitir %s</string>
+    <string name="WalletConnect_Value">Valor</string>
+    <string name="WalletConnect_TokenAllowance">Permitido de token</string>
+    <string name="WalletConnect_ConfirmTransaction">Confirmar transação</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s poderá mover esses tokens em seu nome.</string>
+    <string name="WalletConnect_RequestFailedDescription">Ocorreu um erro e a solicitação não pôde ser concluída</string>
+    <string name="WalletConnect_DisconnectWarning">Você tem certeza que deseja remover esta conexão?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Você pode se conectar a um site falso e perder fundos. Me ligue para ficar protegido.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Este dApp não está verificado. A conexão pode colocar seus fundos em risco.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Eu marcei. Este dApp é seguro para se conectar.</string>
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Requests">Solicitações</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erro</string>
@@ -658,6 +679,8 @@
     <string name="Approve_Spender">Gastador</string>
     <string name="Approve_YouApprove">Você concorda</string>
     <string name="Approve_YouRevoke">Você revoga</string>
+    <string name="Approve_Allowance">Valor da dedução</string>
+    <string name="Approve_Revoke">Revogar Valor</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Aprovar</string>
     <string name="Swap_Approve_Info">Conceda permissão a um contrato inteligente para negociar tokens em seu nome, especificando a quantidade permitida. Isso não afeta seu saldo, mas incorre em uma pequena taxa para aprovação.\n\nPré-aprovar uma quantidade maior para negociações futuras é mais econômico em comparação com aprovações sob demanda.</string>
@@ -909,6 +932,7 @@
     <string name="Premium_Subscribe">Assinar</string>
     <string name="Premium_AddPromoCode">Adicionar Código Promocional</string>
     <string name="Premium_TryForFree">Teste GRÁTIS</string>
+    <string name="Premium_ViewAllFeatures">Ver Todos os Recursos</string>
     <string name="Premium_Upgrade">Atualizar</string>
     <string name="Premium_Restore">Restaurar</string>
     <string name="Premium_Annually">Anualmente</string>
@@ -943,6 +967,23 @@
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Proteja-se de entidades arriscadas e sancionadas. A Verificação de Lista Negra verifica automaticamente os endereços dos destinatários em relação a bancos de dados de alto risco, sinalizando golpes, fraudes e entidades sancionadas antes de você enviar. Se um endereço estiver na lista negra, você saberá antes de cometer um erro caro. Proteja suas transações. Mantenha sua criptomoeda limpa. Mantenha a conformidade.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seja parte da evolução. Junte-se ao Grupo VIP para se conectar diretamente com nossa equipe de suporte técnico. Vote nas próximas funcionalidades e tenha uma prévia exclusiva das atualizações futuras. Sua voz importa—ajude a moldar a carteira de criptomoedas de próxima geração.</string>
     <string name="Premium_UpgradeFeature_MevProtection_BigDescription">Proteção MEV</string>
+    <string name="Premium_DefenseSystem">Sistema de defesa</string>
+    <string name="Premium_SecureSend">Envio seguro</string>
+    <string name="Premium_SecureSend_Description">Verifica as carteiras de destinatários por phishing ou fraude. Alertas antes de enviar para endereços arriscados.</string>
+    <string name="Premium_LossProtection">Proteção das Perdas</string>
+    <string name="Premium_LossProtection_Description">Interrompe bots e ataques frontais durante swaps. Mantém suas transações justas e seguras.</string>
+    <string name="Premium_ScamProtection">Proteção contra Fraudes</string>
+    <string name="Premium_ScamProtection_Description">Detecta aplicativos falsos ou maliciosos antes de se conectar. Impede o phishing e mantém seus ativos seguros.</string>
+    <string name="Premium_RobberyProtection">Proteção Robbery</string>
+    <string name="Premium_RobberyProtection_Description">Permite criar uma carteira ilusória com um PIN separado. Mantém ativos reais escondidos em situações de alto risco.</string>
+    <string name="Premium_TokenInsights">Insights de token</string>
+    <string name="Premium_TokenInsights_Description">Mostra dados detalhados do token - volume, liquidez e tendências. Ajuda você a tomar decisões de investimento mais inteligentes.</string>
+    <string name="Premium_AdvancedSearch">Busca Avançada</string>
+    <string name="Premium_AdvancedSearch_Description">Encontre tokens com filtros por volume, cadeia ou setor. Inclui métricas para atividade e listagens CEX/DEX.</string>
+    <string name="Premium_TradeSignals">Transações de Sinais</string>
+    <string name="Premium_TradeSignals_Description">Envia alertas em tempo real sobre oportunidades de negociação. Destaque as chances de lucro ou os riscos de mercado instantaneamente.</string>
+    <string name="Premium_PrioritySupport">Suporte Prioritário</string>
+    <string name="Premium_PrioritySupport_Description">Te dá acesso direto ao suporte prioritário. Obtenha ajuda rápida e pessoal da equipe Incessável.</string>
     <string name="Premium_HighlyRatedSecurity">Segurança altamente qualificada, privacidade excepcional e uma carteira verdadeiramente sem custódia.</string>
     <string name="Premium_ApprovedBy">Aprovado e Auditado Por:</string>
     <string name="Premium_WhatUsersSay">O que os usuários estão dizendo:</string>
