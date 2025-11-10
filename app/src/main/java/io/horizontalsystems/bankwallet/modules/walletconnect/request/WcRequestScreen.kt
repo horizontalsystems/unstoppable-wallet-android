@@ -67,7 +67,7 @@ fun WcRequestScreen(
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
         sheetState = sheetState
-    ) {
+    ) { snackbarActions ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -126,6 +126,9 @@ fun WcRequestScreen(
                             R.id.feeSettingsInfoDialog,
                             FeeSettingsInfoDialog.Input(feeText, feeInfoText)
                         )
+                    },
+                    onCopy = {
+                        snackbarActions.showSuccessMessage(it)
                     }
                 )
             }

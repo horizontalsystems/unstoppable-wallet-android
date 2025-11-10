@@ -31,7 +31,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -70,7 +69,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class WCRequestBottomSheet : BaseComposableBottomSheetFragment() {
@@ -107,11 +105,9 @@ fun WCRequestScreen(
     viewModel: WCSessionViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val view = LocalView.current
     val uiState = viewModel.uiState
     val buttonsStates = uiState.buttonStates
 
-    uiState.showError?.let { HudHelper.showErrorMessage(view, it) }
     val connectionTitleRes =
         if (uiState.connected) R.string.WalletConnect_ConnectedTo else R.string.WalletConnect_ConnectTo
     val connectedDAppName = stringResource(connectionTitleRes, uiState.peerMeta?.name ?: "")
@@ -119,7 +115,8 @@ fun WCRequestScreen(
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
         sheetState = sheetState
-    ) {
+    ) { snackbarActions ->
+        uiState.showError?.let { snackbarActions.showErrorMessage(it) }
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally

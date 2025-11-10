@@ -93,7 +93,7 @@ fun WCSendEthRequestScreen(
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
         sheetState = sheetState,
-    ) {
+    ) { snackbarActions ->
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -153,7 +153,8 @@ fun WCSendEthRequestScreen(
                             R.id.feeSettingsInfoDialog,
                             FeeSettingsInfoDialog.Input(feeText, feeInfoText)
                         )
-                    }
+                    },
+                    onCopy = { snackbarActions.showSuccessMessage(it) }
                 )
 
                 TitleValueCell(
@@ -200,11 +201,12 @@ fun WCSendEthRequestScreen(
                                 viewModel.confirm()
                                 logger.info("success")
 
-                                Toast.makeText(view.context, doneMessage, Toast.LENGTH_SHORT).show()
+                                snackbarActions.showSuccessMessage(doneMessage)
+
                                 delay(1200)
                             } catch (t: Throwable) {
                                 logger.warning("failed", t)
-                                Toast.makeText(view.context, t.message, Toast.LENGTH_SHORT).show()
+                                snackbarActions.showErrorMessage(t.message ?: "Error")
                             }
 
                             buttonEnabled = true
@@ -218,7 +220,11 @@ fun WCSendEthRequestScreen(
 }
 
 @Composable
-fun DataBlock(sections: List<SectionViewItem>, onInfoClick: () -> Unit) {
+fun DataBlock(
+    sections: List<SectionViewItem>,
+    onInfoClick: () -> Unit,
+    onCopy: (String) -> Unit
+) {
     sections.forEach { section ->
         section.viewItems.forEach { item ->
             when (item) {
@@ -247,8 +253,8 @@ fun DataBlock(sections: List<SectionViewItem>, onInfoClick: () -> Unit) {
                     item.coinAmount
                 )
 
-                is ViewItem.Address -> CopiableValueCell(item.title, item.value)
-                is ViewItem.Input -> CopiableValueCell(item.title, item.value)
+                is ViewItem.Address -> CopiableValueCell(item.title, item.value, onCopy)
+                is ViewItem.Input -> CopiableValueCell(item.title, item.value, onCopy)
                 is ViewItem.Fee -> FeeCell(
                     primaryValue = item.networkFee.primary.getFormatted(),
                     secondaryValue = item.networkFee.secondary?.getFormatted(),
@@ -266,6 +272,7 @@ fun DataBlock(sections: List<SectionViewItem>, onInfoClick: () -> Unit) {
 fun CopiableValueCell(
     title: String,
     value: String,
+    onCopy: ((String) -> Unit)? = null
 ) {
     val shortedValue = value.shorten()
     val copiedMessage = stringResource(R.string.Hud_Text_Copied)
@@ -284,7 +291,7 @@ fun CopiableValueCell(
                 iconTint = ComposeAppTheme.colors.leah
             ) {
                 TextHelper.copyText(value)
-                Toast.makeText(view.context, copiedMessage, Toast.LENGTH_SHORT).show()
+                onCopy?.invoke(copiedMessage)
             }
         },
     )
