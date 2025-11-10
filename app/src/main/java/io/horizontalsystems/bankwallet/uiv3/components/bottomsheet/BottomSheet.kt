@@ -5,14 +5,24 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +43,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,25 +99,111 @@ fun BottomSheet(
     }
 }
 
+interface SnackbarActions {
+
+    fun showSnackbar(message: String, duration: SnackbarDuration = SnackbarDuration.Short)
+
+    fun showErrorMessage(message: String)
+
+    fun showSuccessMessage(message: String)
+}
+
+class SnackbarActionsImpl(
+    private val snackbarHostState: SnackbarHostState,
+    private val scope: CoroutineScope
+) : SnackbarActions {
+
+    companion object {
+        const val ACTION_DEFAULT = "DEFAULT"
+        const val ACTION_ERROR = "ERROR"
+        const val ACTION_SUCCESS = "SUCCESS"
+    }
+
+    override fun showSnackbar(message: String, duration: SnackbarDuration) {
+        scope.launch {
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = duration,
+                actionLabel = ACTION_DEFAULT
+            )
+        }
+    }
+
+    override fun showErrorMessage(message: String) {
+        scope.launch {
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short,
+                actionLabel = ACTION_ERROR
+            )
+        }
+    }
+
+    override fun showSuccessMessage(message: String) {
+        scope.launch {
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short,
+                actionLabel = ACTION_SUCCESS
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContent(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     buttons: (@Composable ColumnScope.() -> Unit)? = null,
-    content: @Composable () -> Unit,
+    content: @Composable (snackbarActions: SnackbarActions) -> Unit,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val snackbarActions = remember(snackbarHostState, scope) {
+        SnackbarActionsImpl(snackbarHostState, scope)
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         containerColor = ComposeAppTheme.colors.lawrence,
         dragHandle = { }
     ) {
-        content()
-        buttons?.let {
-            ButtonsStack {
-                buttons()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                content(snackbarActions)
+
+                buttons?.let {
+                    ButtonsStack {
+                        buttons()
+                    }
+                }
             }
+
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
+                snackbar = { snackbarData: SnackbarData ->
+                    val actionLabel = snackbarData.visuals.actionLabel
+                    Snackbar(
+                        modifier = Modifier,
+                        containerColor = if (actionLabel == SnackbarActionsImpl.ACTION_ERROR) ComposeAppTheme.colors.redD else ComposeAppTheme.colors.greenD,
+                        contentColor = ComposeAppTheme.colors.white,
+                    ) {
+                        Text(snackbarData.visuals.message)
+                    }
+                }
+            )
         }
     }
 }
@@ -122,7 +220,7 @@ fun Preview_BottomSheetContent() {
                 HSButton(
                     title = "Connect",
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {  }
+                    onClick = { }
                 )
                 HSButton(
                     title = "Cancel",
@@ -130,7 +228,7 @@ fun Preview_BottomSheetContent() {
                     style = ButtonStyle.Transparent,
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
-                    onClick = {  }
+                    onClick = { }
                 )
             },
             content = {
@@ -185,7 +283,7 @@ fun Preview_BottomSheet() {
                 HSButton(
                     title = "Connect",
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {  }
+                    onClick = { }
                 )
                 HSButton(
                     title = "Cancel",
@@ -193,7 +291,7 @@ fun Preview_BottomSheet() {
                     style = ButtonStyle.Transparent,
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
-                    onClick = {  }
+                    onClick = { }
                 )
             }
 

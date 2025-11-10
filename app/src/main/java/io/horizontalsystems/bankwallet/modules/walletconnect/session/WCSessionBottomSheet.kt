@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,7 +34,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -106,14 +104,9 @@ fun WCSessionScreen(
     viewModel: WCSessionViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val context = LocalContext.current
     val uiState = viewModel.uiState
     val buttonsStates = uiState.buttonStates
 
-    uiState.showError?.let {
-        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        viewModel.errorShown()
-    }
     val connectionTitleRes =
         if (uiState.connected) R.string.WalletConnect_ConnectedTo else R.string.WalletConnect_ConnectTo
     val connectedDAppName = stringResource(connectionTitleRes, uiState.peerMeta?.name ?: "")
@@ -126,8 +119,12 @@ fun WCSessionScreen(
 
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
-        sheetState = sheetState
-    ) {
+        sheetState = sheetState,
+    ) { snackbarActions ->
+        uiState.showError?.let {
+            snackbarActions.showErrorMessage(it)
+            viewModel.errorShown()
+        }
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally

@@ -268,7 +268,7 @@ fun WCNewSignRequestScreen(
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
         sheetState = sheetState
-    ) {
+    ) { snackbarActions ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -319,7 +319,7 @@ fun WCNewSignRequestScreen(
                     .padding(vertical = 8.dp)
             ) {
                 sessionRequestUI.chainAddress?.let {
-                    DomainCell(it)
+                    DomainCell(it, { snackbarActions.showSuccessMessage(it)})
                 }
                 MessageCell(
                     message = sessionRequestUI.param,
@@ -388,8 +388,11 @@ fun MessageCell(
 }
 
 @Composable
-fun DomainCell(address: String) {
-    val view = LocalView.current
+fun DomainCell(
+    address: String,
+    onCopy: (String) -> Unit
+) {
+    val copyMessage = stringResource(R.string.Hud_Text_Copied)
 
     CellPrimary(
         middle = {
@@ -404,7 +407,7 @@ fun DomainCell(address: String) {
                 iconTint = ComposeAppTheme.colors.leah
             ) {
                 TextHelper.copyText(address)
-                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                onCopy.invoke(copyMessage)
             }
         },
     )
@@ -429,7 +432,7 @@ fun MessageBottomSheet(
                 onClick = onDismiss
             )
         },
-    ) {
+    ) { snackbarActions ->
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -455,7 +458,10 @@ fun MessageBottomSheet(
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
                     .padding(16.dp)
             ) {
-                MessageToSign(message)
+                MessageToSign(
+                    message,
+                    { snackbarActions.showSuccessMessage(it) }
+                )
             }
             VSpacer(16.dp)
         }

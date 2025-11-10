@@ -90,7 +90,7 @@ fun WCSignEthereumTransactionRequestScreen(
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
         sheetState = sheetState,
-    ) {
+    ) { snackbarActions ->
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -152,6 +152,9 @@ fun WCSignEthereumTransactionRequestScreen(
                             R.id.feeSettingsInfoDialog,
                             FeeSettingsInfoDialog.Input(feeText, feeInfoText)
                         )
+                    },
+                    onCopy = {
+                        snackbarActions.showSuccessMessage(it)
                     }
                 )
 
