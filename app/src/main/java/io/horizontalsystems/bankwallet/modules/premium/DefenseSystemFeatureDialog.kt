@@ -148,6 +148,7 @@ private fun DefenseSystemFeatureScreen(navController: NavController, feature: Pr
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     navController.popBackStack()
+                    navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
                 }
             )
             HSButton(
@@ -157,8 +158,8 @@ private fun DefenseSystemFeatureScreen(navController: NavController, feature: Pr
                 size = ButtonSize.Medium,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    navController.slideFromBottom(R.id.buySubscriptionFragment)
-//                    navController.popBackStack()
+                    navController.popBackStack()
+                    navController.slideFromBottom(R.id.buySubscriptionDialog)
                 }
             )
         }

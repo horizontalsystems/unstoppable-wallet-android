@@ -19,6 +19,7 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
     private var purchase: HSPurchase? = null
     private var error: Throwable? = null
     private var selectedIndex = 0
+    private var subscriptionId: String? = null
 
     override fun createState() = BuySubscriptionChoosePlanUiState(
         basePlans = basePlans,
@@ -26,18 +27,24 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
         error = error,
         purchase = purchase,
         selectedIndex = selectedIndex,
-        freeTrialPeriod = freeTrialPeriod
+        freeTrialPeriod = freeTrialPeriod,
+        subscriptionId = subscriptionId
     )
 
-    fun getBasePlans(subscriptionId: String) {
+    fun getBasePlans() {
         viewModelScope.launch {
+            val subscription = UserSubscriptionManager.getSubscriptions().firstOrNull()
+            subscriptionId = subscription?.id
+
             try {
-                basePlans = UserSubscriptionManager.getBasePlans(subscriptionId)
-                    .sortedByDescending { it.pricingPhases.last().numberOfDays }
+                subscriptionId?.let {
+                    basePlans = UserSubscriptionManager.getBasePlans(it)
+                        .sortedByDescending { it.pricingPhases.last().numberOfDays }
 
-                refreshFreeTrialPeriod()
+                    refreshFreeTrialPeriod()
 
-                emitState()
+                    emitState()
+                }
             } catch (e: Throwable) {
                 error = e
                 emitState()
@@ -91,7 +98,8 @@ data class BuySubscriptionChoosePlanUiState(
     val error: Throwable?,
     val purchase: HSPurchase?,
     val selectedIndex: Int,
-    val freeTrialPeriod: Period?
+    val freeTrialPeriod: Period?,
+    val subscriptionId: String?,
 ) {
     val choosePlanEnabled = !purchaseInProgress
 }

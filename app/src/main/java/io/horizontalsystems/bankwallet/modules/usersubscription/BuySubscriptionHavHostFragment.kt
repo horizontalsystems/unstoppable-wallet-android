@@ -10,11 +10,10 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
-import io.horizontalsystems.bankwallet.modules.usersubscription.ui.SelectSubscriptionScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
 
-class BuySubscriptionFragment : BaseComposeFragment() {
+class BuySubscriptionHavHostFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         SubscriptionNavHost(
@@ -40,15 +39,16 @@ fun SubscriptionNavHost(
         startDestination = "select_subscription",
     ) {
         composable("select_subscription") {
-            SelectSubscriptionScreen(
+            PremiumFeaturesScreen(
+                navController,
                 navHostController,
-                onCloseClick = onClose
+                onClose = onClose
             )
         }
         composablePopup("premium_subscribed_page") {
             PremiumSubscribedScreen(
                 onCloseClick = {
-                    navController.setNavigationResultX(BuySubscriptionFragment.Result())
+                    navController.setNavigationResultX(BuySubscriptionHavHostFragment.Result())
                     onClose()
                 }
             )

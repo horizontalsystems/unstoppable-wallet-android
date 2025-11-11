@@ -1,5 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.usersubscription.ui
+package io.horizontalsystems.bankwallet.modules.usersubscription
 
+import android.os.Bundle
+import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,6 +22,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,24 +44,90 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.bigDescriptionStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.iconRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
-import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionViewModel
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.ButtonPrimaryCustomColor
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.InfoBottomSheet
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.yellowGradient
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
+
+class PremiumFeaturesFragment : BaseFragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    val navController = findNavController()
+                    PremiumFeaturesScreen(
+                        navController = navController,
+                        navHostController = null,
+                        onClose = { navController.popBackStack() }
+                    )
+                }
+            }
+        }
+    }
+
+    @Parcelize
+    data class Input(val action: IPaidAction) : Parcelable
+
+    @Parcelize
+    class Result : Parcelable
+}
+
+class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    val navController = findNavController()
+                    PremiumFeaturesScreen(
+                        navController = navController,
+                        navHostController = null,
+                        onClose = { navController.popBackStack() }
+                    )
+                }
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectSubscriptionScreen(
+fun PremiumFeaturesScreen(
     navController: NavController,
-    onCloseClick: () -> Unit
+    navHostController: NavController?,
+    onClose: () -> Unit
 ) {
     val viewModel = viewModel<BuySubscriptionViewModel> {
         BuySubscriptionViewModel()
@@ -66,9 +139,9 @@ fun SelectSubscriptionScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val plansModalBottomSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val infoModalBottomSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isPlanSelectBottomSheetVisible by remember { mutableStateOf(false) }
     var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
     var infoBottomSheetAction: IPaidAction? = null
@@ -78,7 +151,7 @@ fun SelectSubscriptionScreen(
         topBar = {
             TitleCenteredTopBar(
                 title = stringResource(R.string.Premium_Title),
-                onCloseClick = onCloseClick
+                onCloseClick = onClose
             )
         }
     ) { paddingValues ->
@@ -166,16 +239,6 @@ fun SelectSubscriptionScreen(
                             tint = ComposeAppTheme.colors.leah
                         )
                     }
-                    VSpacer(24.dp)
-//                    subhead2_grey(
-//                        text = stringResource(R.string.Premium_WhatUsersSay),
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(horizontal = 32.dp),
-//                        textAlign = TextAlign.Center
-//                    )
-//                    VSpacer(16.dp)
-//                    ReviewSliderBlock()
                     VSpacer(52.dp)
                 }
             }
@@ -212,37 +275,39 @@ fun SelectSubscriptionScreen(
                         title = buttonTitle,
                         brush = yellowGradient,
                         onClick = {
-                            coroutineScope.launch {
-                                isPlanSelectBottomSheetVisible = true
-                                plansModalBottomSheetState.show()
+                            //when used in NavHost
+                            navHostController?.let {
+                                coroutineScope.launch {
+                                    isPlanSelectBottomSheetVisible = true
+                                    plansModalBottomSheetState.show()
+                                }
+                            } ?: run {
+                                onClose.invoke()
+                                navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
                             }
                         },
                     )
                     VSpacer(16.dp)
                 }
             }
-
-            if (isPlanSelectBottomSheetVisible && subscription != null) {
-                val view = LocalView.current
-                SubscriptionBottomSheet(
-                    modalBottomSheetState = plansModalBottomSheetState,
-                    subscription = subscription,
-                    navController = navController,
-                    hideBottomSheet = {
+            if (isPlanSelectBottomSheetVisible) {
+                SelectPlanBottomSheet(
+                    onDismiss = {
                         coroutineScope.launch {
                             plansModalBottomSheetState.hide()
+                            isPlanSelectBottomSheetVisible = false
                         }
-                        isPlanSelectBottomSheetVisible = false
                     },
-                    onError = {
+                    onPurchase = {
                         coroutineScope.launch {
                             plansModalBottomSheetState.hide()
+                            isPlanSelectBottomSheetVisible = false
                         }
-                        isPlanSelectBottomSheetVisible = false
-                        HudHelper.showErrorMessage(view, it.message ?: "Error")
+                        navHostController?.navigate("premium_subscribed_page")
                     }
                 )
             }
+
             if (isInfoBottomSheetVisible) {
                 infoBottomSheetAction?.let {
                     InfoBottomSheet(
@@ -285,9 +350,12 @@ private fun ActionText() {
 
 @Preview
 @Composable
-private fun SelectSubscriptionScreenPreview() {
+private fun PremiumFeaturesScreenPreview() {
     ComposeAppTheme {
         val ctx = LocalContext.current
-        SelectSubscriptionScreen(navController = NavController(ctx)) {}
+        PremiumFeaturesScreen(
+            navController = NavController(ctx),
+            navHostController = null
+        ) {}
     }
 }
