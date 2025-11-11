@@ -165,9 +165,9 @@
     <fragment
         android:id="@+id/coinReportsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
- <fragment
-     android:id="@+id/coinDetectorsFragment"
-     android:name="io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment" />
+    <fragment
+        android:id="@+id/coinDetectorsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment" />
     <fragment
         android:id="@+id/setPinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.SetPinFragment" />
@@ -345,6 +345,9 @@
     <fragment
         android:id="@+id/кeyAccountInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
+    <fragment
+        android:id="@+id/buySubscriptionFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment"/>
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
@@ -387,6 +390,12 @@
     <dialog
         android:id="@+id/wcSessionBottomSheetDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet" />
+    <dialog
+        android:id="@+id/premiumSubscribedDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedDialog" />
+    <dialog
+        android:id="@+id/buySubscriptionDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog"/>
 
     <!--Wallet Connect-->
     <fragment
@@ -416,9 +425,9 @@
     <dialog
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
-    <fragment
-        android:id="@+id/buySubscriptionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionFragment"/>
+    <dialog
+        android:id="@+id/selectSubscriptionPlanDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.SelectPlanDialog"/>
     <fragment
         android:id="@+id/activateTokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenFragment"/>

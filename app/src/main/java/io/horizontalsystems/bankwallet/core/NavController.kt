@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
-import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionFragment
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -64,9 +64,9 @@ fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
     if (UserSubscriptionManager.isActionAllowed(paidAction)) {
         block.invoke()
     } else {
-        slideFromBottomForResult<BuySubscriptionFragment.Result>(
+        slideFromBottomForResult<BuySubscriptionHavHostFragment.Result>(
             R.id.buySubscriptionFragment,
-            BuySubscriptionFragment.Input(paidAction)
+            BuySubscriptionHavHostFragment.Input(paidAction)
         ) {
             block.invoke()
         }
