@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
@@ -19,7 +20,8 @@ import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
-    private val adapterManager: IAdapterManager
+    private val adapterManager: IAdapterManager,
+    private val isTransparentAddress: Boolean,
 ) : ViewModelUiState<ReceiveModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
@@ -99,7 +101,7 @@ class ReceiveAddressViewModel(
     private suspend fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
-            address = adapter.receiveAddress
+            address = getReceiveAddress(adapter, isTransparentAddress)
             addressUriService.setAddress(address)
             usedAddresses = adapter.usedAddresses(false)
             usedChangeAddresses = adapter.usedAddresses(true)
@@ -116,6 +118,17 @@ class ReceiveAddressViewModel(
             viewState = ViewState.Error(NullPointerException())
         }
         emitState()
+    }
+
+    private fun getReceiveAddress(
+        adapter: IReceiveAdapter,
+        transparentAddress: Boolean
+    ): String {
+        return if (transparentAddress && adapter.receiveAddressTransparent != null) {
+            adapter.receiveAddressTransparent ?: ""
+        } else {
+            adapter.receiveAddress
+        }
     }
 
     private fun getAdditionalData(): List<AdditionalData> {

@@ -262,6 +262,9 @@
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment" />
     <fragment
+        android:id="@+id/receiveSelectZcashAddressTypeFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectFragment" />
+    <fragment
         android:id="@+id/btcUsedAddressesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.BtcUsedAddressesFragment" />
     <fragment

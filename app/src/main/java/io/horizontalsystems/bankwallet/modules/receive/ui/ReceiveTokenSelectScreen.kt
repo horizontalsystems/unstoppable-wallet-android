@@ -64,6 +64,7 @@ fun ReceiveTokenSelectScreen(
     onMultipleAddressesClick: (String) -> Unit,
     onMultipleDerivationsClick: (String) -> Unit,
     onMultipleBlockchainsClick: (String) -> Unit,
+    onMultipleZcashAddressTypeClick: (Wallet) -> Unit,
     onCoinClick: (Wallet) -> Unit,
     onBackPress: () -> Unit,
 ) {
@@ -134,6 +135,7 @@ fun ReceiveTokenSelectScreen(
                                             onMultipleAddressesClick,
                                             onMultipleDerivationsClick,
                                             onMultipleBlockchainsClick,
+                                            onMultipleZcashAddressTypeClick,
                                             onCoinClick
                                         )
                                     }
@@ -192,6 +194,7 @@ fun ReceiveTokenSelectScreen(
                                 onMultipleAddressesClick,
                                 onMultipleDerivationsClick,
                                 onMultipleBlockchainsClick,
+                                onMultipleZcashAddressTypeClick,
                                 onCoinClick
                             )
                             bottomSheetFullCoin = null
@@ -212,6 +215,7 @@ private fun processCoinClick(
     onMultipleAddressesClick: (String) -> Unit,
     onMultipleDerivationsClick: (String) -> Unit,
     onMultipleBlockchainsClick: (String) -> Unit,
+    onMultipleZcashAddressTypeClick: (Wallet) -> Unit,
     onCoinClick: (Wallet) -> Unit
 ) {
     when (type) {
@@ -225,6 +229,10 @@ private fun processCoinClick(
 
         CoinForReceiveType.MultipleBlockchains -> onMultipleBlockchainsClick(
             fullCoin.coin.uid
+        )
+
+        is CoinForReceiveType.MultipleZcashAddressTypes -> onMultipleZcashAddressTypeClick(
+            type.wallet
         )
 
         is CoinForReceiveType.Single -> {

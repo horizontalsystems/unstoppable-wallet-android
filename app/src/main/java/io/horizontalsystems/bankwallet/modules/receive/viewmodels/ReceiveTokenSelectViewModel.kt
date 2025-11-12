@@ -134,7 +134,12 @@ class ReceiveTokenSelectViewModel(
         return when {
             eligibleTokens.isEmpty() -> null
             eligibleTokens.size == 1 -> {
-                CoinForReceiveType.Single(getOrCreateWallet(eligibleTokens.first()))
+                val wallet = getOrCreateWallet(eligibleTokens.first())
+                if (eligibleTokens.first().blockchainType == BlockchainType.Zcash) {
+                    CoinForReceiveType.MultipleZcashAddressTypes(wallet)
+                } else {
+                    CoinForReceiveType.Single(wallet)
+                }
             }
 
             eligibleTokens.all { it.type is TokenType.Derived } -> {
@@ -283,6 +288,7 @@ class ReceiveTokenSelectViewModel(
 
 sealed interface CoinForReceiveType {
     data class Single(val wallet: Wallet) : CoinForReceiveType
+    data class MultipleZcashAddressTypes(val wallet: Wallet) : CoinForReceiveType
     object MultipleDerivations : CoinForReceiveType
     object MultipleAddressTypes : CoinForReceiveType
     object MultipleBlockchains : CoinForReceiveType
