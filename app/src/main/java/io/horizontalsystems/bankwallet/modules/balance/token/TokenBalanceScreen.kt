@@ -41,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
+import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
@@ -69,6 +70,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 
 
@@ -139,7 +141,17 @@ fun TokenBalanceScreen(
         val onClickReceive = {
             try {
                 val wallet = viewModel.getWalletForReceive()
-                navController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet))
+                if (wallet.token.blockchainType == BlockchainType.Zcash) {
+                    navController.slideFromRight(
+                        R.id.receiveSelectZcashAddressTypeFragment,
+                        ZcashAddressTypeSelectFragment.Input(wallet)
+                    )
+                } else {
+                    navController.slideFromRight(
+                        R.id.receiveFragment,
+                        ReceiveFragment.Input(wallet)
+                    )
+                }
 
                 stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
             } catch (e: BackupRequiredError) {

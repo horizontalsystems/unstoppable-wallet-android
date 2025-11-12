@@ -11,10 +11,13 @@ import java.math.BigDecimal
 
 object ReceiveModule {
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val isTransparentAddress: Boolean,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveAddressViewModel(wallet, App.adapterManager) as T
+            return ReceiveAddressViewModel(wallet, App.adapterManager, isTransparentAddress) as T
         }
     }
 

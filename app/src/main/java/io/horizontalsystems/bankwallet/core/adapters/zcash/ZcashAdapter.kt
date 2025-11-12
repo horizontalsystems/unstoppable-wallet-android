@@ -90,6 +90,8 @@ class ZcashAdapter(
 
     override val receiveAddress: String
 
+    override val receiveAddressTransparent: String?
+
     override val isMainNet: Boolean = true
 
     init {
@@ -132,6 +134,7 @@ class ZcashAdapter(
 
         zcashAccount = runBlocking { synchronizer.getAccounts().first() }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
+        receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
         transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, synchronizer as SdkSynchronizer)
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError

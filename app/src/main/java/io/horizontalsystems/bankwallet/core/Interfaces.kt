@@ -323,6 +323,9 @@ interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
+    val receiveAddressTransparent: String?
+        get() = null
+
     suspend fun isAddressActive(address: String): Boolean {
         return true
     }
