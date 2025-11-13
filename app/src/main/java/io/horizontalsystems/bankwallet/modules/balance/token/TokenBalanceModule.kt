@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionSyncState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsRateRepository
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 
 class TokenBalanceModule {
 
@@ -68,4 +69,18 @@ class TokenBalanceModule {
         val showRetryButton: Boolean = false,
         val showChangeSourceButton: Boolean = false,
     )
+
+    data class ButtonAction(
+        val title: String,
+        val buttonVariant: ButtonVariant = ButtonVariant.Secondary,
+        val onClick: () -> Unit
+    )
+
+    data class BottomSheetContent(
+        val icon: Int,
+        val title: String,
+        val description: String,
+        val buttons: List<ButtonAction> = emptyList()
+    )
+
 }

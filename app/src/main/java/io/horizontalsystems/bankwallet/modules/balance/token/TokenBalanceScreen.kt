@@ -1,13 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -17,11 +21,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -37,6 +45,8 @@ import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
+import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.BottomSheetContent
+import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.ButtonAction
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -50,16 +60,17 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
@@ -68,7 +79,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIco
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
@@ -103,6 +116,7 @@ fun TokenBalanceScreen(
                 loading -> {
                     add(MenuItemLoading)
                 }
+
                 uiState.failedIconVisible -> {
                     add(
                         MenuItem(
@@ -376,61 +390,65 @@ private fun TokenBalanceHeader(
 private fun LockedBalanceSection(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
-    showBottomSheet: (BottomSheetContent) -> Unit = { _ -> },
+    showBottomSheet: (BottomSheetContent) -> Unit,
     hideBottomSheet: () -> Unit
 ) {
-    if (balanceViewItem.lockedValues.isNotEmpty()) {
-        balanceViewItem.lockedValues.forEach { lockedValue ->
-            val infoTitle = lockedValue.infoTitle.getString()
-            val infoText = lockedValue.info.getString()
-            val actionButtonTitle: String?
-            val onClickActionButton: (() -> Unit)?
+    balanceViewItem.lockedValues.forEach { lockedValue ->
+        val infoTitle = lockedValue.infoTitle.getString()
+        val infoText = lockedValue.info.getString()
 
-            if (lockedValue is ZcashLockedValue) {
-                actionButtonTitle =
-                    stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield)
-                onClickActionButton = {
-                    hideBottomSheet.invoke()
-
-                    navController.slideFromRight(
-                        R.id.shieldZcash,
-                        ShieldZcashFragment.Input(
-                            balanceViewItem.wallet,
-                            R.id.tokenBalanceFragment
-                        )
-                    )
-                }
-            } else {
-                actionButtonTitle = null
-                onClickActionButton = null
+        val (icon, buttons) = when (lockedValue) {
+            is ZcashLockedValue -> {
+                val zcashButtons = listOf(
+                    ButtonAction(
+                        title = stringResource(R.string.Button_Cancel),
+                        onClick = { hideBottomSheet() }
+                    ),
+                    ButtonAction(
+                        title = stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield),
+                        buttonVariant = ButtonVariant.Primary,
+                        onClick = {
+                            hideBottomSheet()
+                            navController.slideFromRight(
+                                R.id.shieldZcash,
+                                ShieldZcashFragment.Input(
+                                    balanceViewItem.wallet,
+                                    R.id.tokenBalanceFragment
+                                )
+                            )
+                        }
+                    ),
+                )
+                Pair(R.drawable.ic_shield_off_24, zcashButtons)
             }
 
-            LockedBalanceCell(
-                title = lockedValue.title.getString(),
-                lockedAmount = lockedValue.coinValue,
-                balanceHidden = balanceViewItem.balanceHidden
-            ) {
-                showBottomSheet.invoke(
-                    BottomSheetContent(
-                        icon = R.drawable.ic_info_24,
-                        title = infoTitle,
-                        description = infoText,
-                        actionButtonTitle = actionButtonTitle,
-                        onClickActionButton = onClickActionButton
+            else -> {
+                val buttons = listOf(
+                    ButtonAction(
+                        title = stringResource(R.string.Button_Understand),
+                        onClick = { hideBottomSheet() }
                     )
                 )
+                Pair(R.drawable.book_24, buttons)
             }
+        }
+
+        LockedBalanceCell(
+            title = lockedValue.title.getString(),
+            lockedAmount = lockedValue.coinValue,
+            balanceHidden = balanceViewItem.balanceHidden
+        ) {
+            showBottomSheet.invoke(
+                BottomSheetContent(
+                    icon = icon,
+                    title = infoTitle,
+                    description = infoText,
+                    buttons = buttons
+                )
+            )
         }
     }
 }
-
-data class BottomSheetContent(
-    val icon: Int,
-    val title: String,
-    val description: String,
-    val actionButtonTitle: String? = null,
-    val onClickActionButton: (() -> Unit)? = null
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -439,40 +457,67 @@ fun InfoBottomSheet(
     hideBottomSheet: () -> Unit,
     bottomSheetState: SheetState
 ) {
-    ModalBottomSheet(
+    BottomSheetContent(
         onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        sheetState = bottomSheetState
     ) {
-        BottomSheetHeader(
-            iconPainter = painterResource(content.icon),
-            title = content.title,
-            titleColor = ComposeAppTheme.colors.leah,
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
-            onCloseClick = hideBottomSheet
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
+            Box(
                 modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 24.dp)
+                    .padding(top = 8.dp, bottom = 12.dp)
+                    .size(52.dp, 4.dp)
+                    .background(ComposeAppTheme.colors.blade, RoundedCornerShape(50))
+            ) { }
+            Box(
+                modifier = Modifier
                     .fillMaxWidth()
+                    .height(96.dp),
+                contentAlignment = Alignment.Center
             ) {
-                body_bran(
-                    text = content.description,
+                Icon(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
+                        .padding(top = 16.dp)
+                        .size(72.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    painter = painterResource(content.icon),
+                    tint = ComposeAppTheme.colors.grey,
+                    contentDescription = null,
                 )
-                VSpacer(56.dp)
-                content.actionButtonTitle?.let {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = content.actionButtonTitle,
-                        onClick = content.onClickActionButton ?: {}
-                    )
-                    VSpacer(32.dp)
-                }
-
             }
+            VSpacer(16.dp)
+            headline1_leah(
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .fillMaxWidth(),
+                text = content.title,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            VSpacer(8.dp)
+            body_grey(
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .fillMaxWidth(),
+                text = content.description,
+                textAlign = TextAlign.Center,
+            )
+            VSpacer(16.dp)
+            ButtonsGroupHorizontal {
+                content.buttons.forEach { button ->
+                    HSButton(
+                        title = button.title,
+                        variant = button.buttonVariant,
+                        size = ButtonSize.Medium,
+                        modifier = Modifier.weight(1f),
+                        onClick = button.onClick
+                    )
+                }
+            }
+            VSpacer(16.dp)
         }
     }
 }
@@ -566,5 +611,30 @@ private fun ButtonsRow(
                 },
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun InfoBottomSheetPreview() {
+    val bottomSheetState = rememberModalBottomSheetState()
+    val content = BottomSheetContent(
+        icon = R.drawable.ic_shield_off_24,
+        title = "Title",
+        description = "Description",
+        buttons = listOf(
+            ButtonAction(
+                title = "Button 1",
+                onClick = {}
+            ),
+        )
+    )
+    ComposeAppTheme {
+        InfoBottomSheet(
+            content,
+            hideBottomSheet = {},
+            bottomSheetState,
+        )
     }
 }
