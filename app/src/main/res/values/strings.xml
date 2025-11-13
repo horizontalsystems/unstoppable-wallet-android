@@ -457,7 +457,7 @@
 
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparent balance can\'t be used in our wallet for now. But this money can be spend by other wallets with t-address supports</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
     <string name="Balance_Zcash_Unified">Unified</string>
     <string name="Balance_Zcash_UnifiedDescription">Use for personal and private transfers between wallets.</string>
