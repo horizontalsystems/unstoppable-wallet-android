@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
@@ -396,7 +397,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
 
             tokenIn.blockchainType == BlockchainType.Solana -> {
-                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr)
+                SendTransactionData.Solana.WithRawTransaction(rawTransactionStr.hexToByteArray())
             }
 
             else -> throw IllegalArgumentException("Swapping ${tokenIn.blockchainType} not supported")
