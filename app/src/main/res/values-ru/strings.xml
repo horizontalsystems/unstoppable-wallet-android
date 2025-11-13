@@ -351,6 +351,8 @@
     <string name="Balance_NetworkSelectDescription">Выберите сеть для получения адреса.</string>
     <string name="Balance_Receive_AddressFormatDescription">Выберите формат для предоставления адреса для получения.</string>
     <string name="Balance_Receive_AddressFormat">Формат адреса</string>
+    <string name="Balance_Receive_AddressType">Тип адреса</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">Выберите, как вы хотите получить Zcash.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Формат Cash Address предпочтителен для получения Bitcoin Cash (BCH) из-за улучшенного пользовательского опыта и совместимости. Однако, оба формата адреса могут использоваться взаимозаменяемо для получения BCH, независимо от формата адреса отправителя.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Формат Native SegWit предпочтителен в Биткойне для повышения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут использоваться взаимозаменяемо для получения BTC независимо от формата адреса отправителя, что обеспечивает бесперебойные транзакции между различными типами монет.</string>
     <string name="Balance_Receive_Account">Аккаунт</string>
@@ -383,8 +385,12 @@
     <string name="Balance_Receive_IDontHave">Нет, у меня нет</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Прозрачный</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Прозрачная сумма</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Прозрачный баланс пока не может быть использован в нашем кошельке. Но эти деньги могут быть использованы другими кошельками с поддержкой адреса</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Баланс ZEC хранится в прозрачном адресе. Чтобы использовать его без остановок, он должен быть защищен от полной конфиденциальности.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
+    <string name="Balance_Zcash_Unified">Единый</string>
+    <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
+    <string name="Balance_Zcash_Transparent">Прозрачный</string>
+    <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или служб, не поддерживающих единые адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <!--Send-->
