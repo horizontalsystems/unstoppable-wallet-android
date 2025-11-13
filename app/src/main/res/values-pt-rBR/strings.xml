@@ -349,6 +349,8 @@
     <string name="Balance_NetworkSelectDescription">Escolha rede para receber um endereço.</string>
     <string name="Balance_Receive_AddressFormatDescription">Escolha um formato para fornecer um endereço a receber.</string>
     <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
+    <string name="Balance_Receive_AddressType">Tipo de endereço</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">Escolha como você deseja receber Zcash.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">O formato de endereço em dinheiro é preferido para receber Bitcoin Cash (BCH) devido à sua experiência e compatibilidade melhoradas. No entanto, ambos os formatos de endereço podem ser usados internamente para receber BCH, independentemente do formato de endereço do remetente.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">O formato SegWit Nativo é preferido em Bitcoin para melhorar a taxa de transferência e a segurança. Todos os formatos de endereço (Taproot, SegWit, Legacy) podem ser usados intermudanças para receber BTC independentemente do formato de endereço do remetente, permitindo transações ininterruptas entre diferentes tipos de moedas.</string>
     <string name="Balance_Receive_Account">Conta</string>
@@ -381,8 +383,12 @@
     <string name="Balance_Receive_IDontHave">Não, eu não tenho</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Você tem um saldo ZEC guardado em um endereço transparente. Para usá-lo em Unstoppable, ele deve ser protegido por total privacidade.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudos</string>
+    <string name="Balance_Zcash_Unified">Unificado</string>
+    <string name="Balance_Zcash_UnifiedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
+    <string name="Balance_Zcash_Transparent">Transparente</string>
+    <string name="Balance_Zcash_TransparentDescription">Use para receber de trocas ou serviços que não suportam endereços unificados.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <!--Send-->
