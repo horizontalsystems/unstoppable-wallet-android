@@ -30,7 +30,7 @@ object SwapHelper {
     fun getSendingAddressForToken(token: Token): String? {
         val blockchainType = token.blockchainType
 
-        if (blockchainType.isEvm || blockchainType == BlockchainType.Solana) {
+        if (blockchainType.isEvm || blockchainType == BlockchainType.Solana || blockchainType == BlockchainType.Tron) {
             App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
                 return it.receiveAddress
             }

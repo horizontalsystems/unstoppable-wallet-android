@@ -29,6 +29,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.hexStringToByteArray
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -109,6 +110,7 @@ object UnstoppableProvider : IMultiSwapProvider {
                     BlockchainType.Ethereum,
                     BlockchainType.Optimism,
                     BlockchainType.Polygon,
+                    BlockchainType.Tron,
                         -> {
                         val tokenType = if (!token.address.isNullOrBlank()) {
                             TokenType.Eip20(token.address)
@@ -139,7 +141,6 @@ object UnstoppableProvider : IMultiSwapProvider {
                         assets.addAll(tokens.map { Asset(token.identifier, it) })
                     }
 
-//                    BlockchainType.Tron -> TODO()
                     BlockchainType.Solana -> {
                         val tokenType = if (!token.address.isNullOrBlank()) {
                             TokenType.Spl(token.address)
@@ -357,7 +358,16 @@ object UnstoppableProvider : IMultiSwapProvider {
                     )
                 }
             }
-//            BlockchainType.Tron -> TODO()
+            BlockchainType.Tron -> {
+                if (bestRoute.tx != null) {
+                    val rawTransaction = APIClient.gson.fromJson(
+                        bestRoute.tx,
+                        CreatedTransaction::class.java
+                    )
+
+                    return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
+                }
+            }
 //            BlockchainType.Zcash -> TODO()
             else -> Unit
         }
