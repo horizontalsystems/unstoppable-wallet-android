@@ -90,15 +90,13 @@ object UnstoppableProvider : IMultiSwapProvider {
         "thorchain-1" to null
     )
 
-    private var assets = listOf<Asset>()
+    private var assetsMap = mapOf<Token, Asset>()
 
     override suspend fun start() {
-        val assets = mutableListOf<Asset>()
-
         val providers = listOf("NEAR", "ONEINCH", "THORCHAIN")
 
-        providers.forEach {
-            val tokens = unstoppableAPI.tokens(it).tokens
+        providers.forEach { provider ->
+            val tokens = unstoppableAPI.tokens(provider).tokens
             for (token in tokens) {
                 val blockchainType = blockchainTypes[token.chainId] ?: continue
 
@@ -119,7 +117,7 @@ object UnstoppableProvider : IMultiSwapProvider {
                         }
 
                         App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                            assets.add(Asset(token.identifier, it))
+                            registerAsset(it, token.identifier, provider)
                         }
                     }
 
@@ -138,7 +136,9 @@ object UnstoppableProvider : IMultiSwapProvider {
                         }
 
                         val tokens = App.marketKit.tokens(nativeTokenQueries)
-                        assets.addAll(tokens.map { Asset(token.identifier, it) })
+                        tokens.forEach {
+                            registerAsset(it, token.identifier, provider)
+                        }
                     }
 
                     BlockchainType.Solana -> {
@@ -149,15 +149,30 @@ object UnstoppableProvider : IMultiSwapProvider {
                         }
 
                         App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                            assets.add(Asset(token.identifier, it))
+                            registerAsset(it, token.identifier, provider)
                         }
                     }
                     else -> null
                 }
             }
         }
+    }
 
-        this.assets = assets
+    private fun registerAsset(
+        token: Token,
+        identifier: String,
+        provider: String
+    ) {
+        val providers = mutableListOf(provider)
+
+        assetsMap[token]?.let {
+            providers.addAll(it.providers)
+        }
+
+        assetsMap = buildMap {
+            putAll(assetsMap)
+            put(token, Asset(identifier, providers))
+        }
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
@@ -166,7 +181,10 @@ object UnstoppableProvider : IMultiSwapProvider {
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return assets.any { it.token == tokenFrom } && assets.any { it.token == tokenTo }
+        val tokenFromProviders = assetsMap[tokenFrom]?.providers ?: return false
+        val tokenToProviders = assetsMap[tokenTo]?.providers ?: return false
+
+        return tokenFromProviders.intersect(tokenToProviders).isNotEmpty()
     }
 
     override suspend fun fetchQuote(
@@ -233,8 +251,8 @@ object UnstoppableProvider : IMultiSwapProvider {
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         includeTx: Boolean
     ): UnstoppableAPI.Response.Quote.Route {
-        val assetIn = assets.first { it.token == tokenIn }
-        val assetOut = assets.first { it.token == tokenOut }
+        val assetIn = assetsMap[tokenIn]!!
+        val assetOut = assetsMap[tokenOut]!!
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         val sourceAddress = if (includeTx) {
@@ -251,6 +269,7 @@ object UnstoppableProvider : IMultiSwapProvider {
                 sellAsset = assetIn.identifier,
                 buyAsset = assetOut.identifier,
                 sellAmount = amountIn.toPlainString(),
+                providers = assetIn.providers.intersect(assetOut.providers),
                 slippage = slippage.toInt(),
                 destinationAddress = destination,
                 sourceAddress = sourceAddress,
@@ -375,7 +394,7 @@ object UnstoppableProvider : IMultiSwapProvider {
         throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
 
-    data class Asset(val identifier: String, val token: Token)
+    data class Asset(val identifier: String, val providers: List<String>)
 }
 
 interface UnstoppableAPI {
@@ -394,6 +413,7 @@ interface UnstoppableAPI {
             val sellAsset: String,
             val buyAsset: String,
             val sellAmount: String,
+            val providers: Set<String>,
             val slippage: Int,
             val destinationAddress: String,
             val sourceAddress: String?,
