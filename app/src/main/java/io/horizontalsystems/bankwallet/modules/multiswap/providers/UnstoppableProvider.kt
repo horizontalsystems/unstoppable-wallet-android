@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import android.util.Base64
 import com.google.gson.JsonElement
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.derivation
+import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
@@ -138,7 +140,17 @@ object UnstoppableProvider : IMultiSwapProvider {
                     }
 
 //                    BlockchainType.Tron -> TODO()
-//                    BlockchainType.Solana -> TODO()
+                    BlockchainType.Solana -> {
+                        val tokenType = if (!token.address.isNullOrBlank()) {
+                            TokenType.Spl(token.address)
+                        } else {
+                            TokenType.Native
+                        }
+
+                        App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
+                            assets.add(Asset(token.identifier, it))
+                        }
+                    }
                     else -> null
                 }
             }
@@ -173,9 +185,6 @@ object UnstoppableProvider : IMultiSwapProvider {
             settingRecipient.value,
             false
         )
-
-//        Log.e("AAA", "bestRoute.tx: ${bestRoute.tx}")
-
 
         val cautions = mutableListOf<HSCaution>()
 
@@ -227,6 +236,15 @@ object UnstoppableProvider : IMultiSwapProvider {
         val assetOut = assets.first { it.token == tokenOut }
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
+        val sourceAddress = if (includeTx) {
+            SwapHelper.getSendingAddressForToken(tokenIn)
+        } else {
+            // In this case only NEAR needs sourceAddress. It uses it as refundAddress
+            // refundAddress is not checked for its balance, so it can be any valid user address
+            // So getReceiveAddressForToken used since it gives non null address compared to getSendingAddressForToken
+            SwapHelper.getReceiveAddressForToken(tokenIn)
+        }
+
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
                 sellAsset = assetIn.identifier,
@@ -234,7 +252,7 @@ object UnstoppableProvider : IMultiSwapProvider {
                 sellAmount = amountIn.toPlainString(),
                 slippage = slippage.toInt(),
                 destinationAddress = destination,
-                sourceAddress = SwapHelper.getReceiveAddressForToken(tokenIn),
+                sourceAddress = sourceAddress,
                 includeTx = includeTx
             )
         )
@@ -303,30 +321,25 @@ object UnstoppableProvider : IMultiSwapProvider {
         tokenOut: Token
     ): SendTransactionData {
         val blockchainType = tokenIn.blockchainType
-        when (blockchainType) {
-            BlockchainType.ArbitrumOne,
-            BlockchainType.Avalanche,
-            BlockchainType.Base,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Ethereum,
-            BlockchainType.Optimism,
-            BlockchainType.Polygon -> {
-                if (bestRoute.tx?.isJsonObject == true) {
-                    val jsonObject = bestRoute.tx.asJsonObject
-                    val transactionData = TransactionData(
-                        to = Address(jsonObject["to"].asString),
-                        value = BigInteger(jsonObject["value"].asString),
-                        input = (jsonObject["data"].asString).hexStringToByteArray()
-                    )
 
-                    return SendTransactionData.Evm(
-                        transactionData = transactionData,
-                        gasLimit = jsonObject["gas"].asString.hexStringToByteArray().toLong(),
-                        feesMap = mapOf()
-                    )
-                }
+        if (blockchainType.isEvm) {
+            if (bestRoute.tx?.isJsonObject == true) {
+                val jsonObject = bestRoute.tx.asJsonObject
+                val transactionData = TransactionData(
+                    to = Address(jsonObject["to"].asString),
+                    value = BigInteger(jsonObject["value"].asString),
+                    input = (jsonObject["data"].asString).hexStringToByteArray()
+                )
+
+                return SendTransactionData.Evm(
+                    transactionData = transactionData,
+                    gasLimit = jsonObject["gas"].asString.hexStringToByteArray().toLong(),
+                    feesMap = mapOf()
+                )
             }
+        }
 
+        when (blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
             BlockchainType.Litecoin,
@@ -334,16 +347,22 @@ object UnstoppableProvider : IMultiSwapProvider {
 
             }
 
-            BlockchainType.Zcash,
-                -> {
+            BlockchainType.Solana -> {
+                if (bestRoute.tx?.isJsonPrimitive == true) {
+                    return SendTransactionData.Solana.WithRawTransaction(
+                        Base64.decode(
+                            bestRoute.tx.asString,
+                            Base64.DEFAULT
+                        )
+                    )
+                }
             }
-
 //            BlockchainType.Tron -> TODO()
-//            BlockchainType.Solana -> TODO()
+//            BlockchainType.Zcash -> TODO()
             else -> Unit
         }
 
-        throw IllegalArgumentException()
+        throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
 
     data class Asset(val identifier: String, val token: Token)
