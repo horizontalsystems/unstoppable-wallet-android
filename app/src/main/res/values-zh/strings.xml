@@ -348,6 +348,8 @@
     <string name="Balance_NetworkSelectDescription">选择要接收地址的网络。</string>
     <string name="Balance_Receive_AddressFormatDescription">选择要接收的地址的格式。</string>
     <string name="Balance_Receive_AddressFormat">地址格式</string>
+    <string name="Balance_Receive_AddressType">地址类型</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">选择您想要如何接收Zcash</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">现金地址格式更适合接收比特币现金(BCH)，因为它提高了用户体验和兼容性。 然而，无论发件人的地址格式如何，两种地址格式都可以互换地用于接收BCCH。</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">本机SegWit格式是比特币中为了改进输送和安全性而偏爱的。 所有地址格式 (Taproot, SegWit, Legacy) 可以互换使用来接收BTC ，而不论发送者的地址格式。 启用跨越不同种类的无缝交易。</string>
     <string name="Balance_Receive_Account">账户</string>
@@ -380,8 +382,12 @@
     <string name="Balance_Receive_IDontHave">不，我没有</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">透明的</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">您的 ZEC 余额保持在一个透明的地址中。要在不可阻挡的情况下使用它，它必须被保护为完全隐私。</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
+    <string name="Balance_Zcash_Unified">统一的</string>
+    <string name="Balance_Zcash_UnifiedDescription">用于钱包之间的个人和私人转账。</string>
+    <string name="Balance_Zcash_Transparent">透明的</string>
+    <string name="Balance_Zcash_TransparentDescription">用于接收来自交易所或不支持统一地址的服务。</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <!--Send-->
