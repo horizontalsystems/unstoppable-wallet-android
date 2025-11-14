@@ -41,9 +41,10 @@ object UnstoppableProvider : IMultiSwapProvider {
     override val icon = R.drawable.ic_unstoppable_icon_20
     override val priority = 0
 
-    private val unstoppableAPI: UnstoppableAPI =
-        APIClient.retrofit("https://swap-api.unstoppable.money/", 60)
-            .create(UnstoppableAPI::class.java)
+    private val unstoppableAPI = APIClient.build(
+        "https://swap-api.unstoppable.money/",
+        mapOf("x-api-key" to "79a24bddb8b1768dbb2662e136aca9006baa6d4e3e6d761219b2ab4279a42bb4")
+    ).create(UnstoppableAPI::class.java)
 
     private val blockchainTypes = mapOf(
         //AVAX:43114
