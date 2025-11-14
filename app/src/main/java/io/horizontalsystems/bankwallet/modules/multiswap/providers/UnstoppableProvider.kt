@@ -91,7 +91,7 @@ object UnstoppableProvider : IMultiSwapProvider {
     private var assetsMap = mapOf<Token, Asset>()
 
     override suspend fun start() {
-        val providers = listOf("NEAR", "ONEINCH", "THORCHAIN")
+        val providers = unstoppableAPI.providers().map { it.provider }
 
         providers.forEach { provider ->
             val tokens = unstoppableAPI.tokens(provider).tokens
@@ -396,6 +396,9 @@ object UnstoppableProvider : IMultiSwapProvider {
 }
 
 interface UnstoppableAPI {
+    @GET("providers")
+    suspend fun providers(): List<Response.Provider>
+
     @GET("tokens")
     suspend fun tokens(
         @Query("provider") provider: String
@@ -420,6 +423,10 @@ interface UnstoppableAPI {
     }
 
     object Response {
+        data class Provider(
+            val provider: String
+        )
+
         data class Tokens(
             val tokens: List<Token>
         )
