@@ -61,6 +61,7 @@ val Token.swappable: Boolean
         BlockchainType.Stellar,
         BlockchainType.Solana,
         BlockchainType.Tron,
+        BlockchainType.Zcash,
             -> true
 
         else -> false
