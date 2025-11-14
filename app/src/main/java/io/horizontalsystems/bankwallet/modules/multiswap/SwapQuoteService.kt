@@ -44,6 +44,7 @@ class SwapQuoteService {
     private var tokenIn: Token? = null
     private var tokenOut: Token? = null
     private var quoting = false
+    private var initializing = true
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: IMultiSwapProvider? = null
     private var error: Throwable? = null
@@ -54,6 +55,7 @@ class SwapQuoteService {
             amountIn = amountIn,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
+            initializing = initializing,
             quoting = quoting,
             quotes = quotes,
             preferredProvider = preferredProvider,
@@ -75,6 +77,11 @@ class SwapQuoteService {
                 Log.d("AAA", "error on starting ${it.id}, $e", e)
             }
         }
+
+        initializing = false
+        emitState()
+
+        runQuotation()
     }
 
     private fun emitState() {
@@ -83,6 +90,7 @@ class SwapQuoteService {
                 amountIn = amountIn,
                 tokenIn = tokenIn,
                 tokenOut = tokenOut,
+                initializing = initializing,
                 quoting = quoting,
                 quotes = quotes,
                 preferredProvider = preferredProvider,
@@ -100,6 +108,8 @@ class SwapQuoteService {
         error = null
 
         emitState()
+
+        if (initializing) return
 
         val tokenIn = tokenIn
         val tokenOut = tokenOut
@@ -240,6 +250,7 @@ class SwapQuoteService {
         val amountIn: BigDecimal?,
         val tokenIn: Token?,
         val tokenOut: Token?,
+        val initializing: Boolean,
         val quoting: Boolean,
         val quotes: List<SwapProviderQuote>,
         val preferredProvider: IMultiSwapProvider?,
