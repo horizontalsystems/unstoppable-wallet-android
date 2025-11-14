@@ -38,6 +38,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
 
     private var networkFee: SendModule.AmountData? = null
     private var sendTransactionData: SendTransactionData.Tron? = null
+    private var loading = true
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -84,6 +85,8 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     }
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
+        loading = false
+
         check(data is SendTransactionData.Tron)
 
         sendTransactionData = data
@@ -122,7 +125,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
         networkFee = networkFee,
         cautions = listOf(),
         sendable = sendTransactionData != null || (amountState.canBeSend && feeState.canBeSend && addressState.canBeSend),
-        loading = false,
+        loading = loading,
         fields = listOf(),
         extraFees = extraFees
     )
