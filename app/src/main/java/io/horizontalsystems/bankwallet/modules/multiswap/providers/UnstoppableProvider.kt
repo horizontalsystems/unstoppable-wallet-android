@@ -5,8 +5,10 @@ import com.google.gson.JsonElement
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
+import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteThorChain
@@ -120,27 +122,25 @@ object UnstoppableProvider : IMultiSwapProvider {
                         }
                     }
 
-                    // uncomment this section when getSendTransactionData is implemented for these blockchain types
-                    //
-                    // BlockchainType.Bitcoin,
-                    // BlockchainType.BitcoinCash,
-                    // BlockchainType.Litecoin,
-                    // BlockchainType.Zcash,
-                    //     -> {
-                    //     var nativeTokenQueries = blockchainType.nativeTokenQueries
-                    //
-                    //     // filter out taproot for ltc
-                    //     if (blockchainType == BlockchainType.Litecoin) {
-                    //         nativeTokenQueries = nativeTokenQueries.filterNot {
-                    //             it.tokenType.derivation == TokenType.Derivation.Bip86
-                    //         }
-                    //     }
-                    //
-                    //     val tokens = App.marketKit.tokens(nativeTokenQueries)
-                    //     tokens.forEach {
-                    //         registerAsset(it, token.identifier, provider)
-                    //     }
-                    // }
+                    BlockchainType.Bitcoin,
+                    BlockchainType.BitcoinCash,
+                    BlockchainType.Litecoin,
+                    BlockchainType.Zcash,
+                        -> {
+                        var nativeTokenQueries = blockchainType.nativeTokenQueries
+
+                        // filter out taproot for ltc
+                        if (blockchainType == BlockchainType.Litecoin) {
+                            nativeTokenQueries = nativeTokenQueries.filterNot {
+                                it.tokenType.derivation == TokenType.Derivation.Bip86
+                            }
+                        }
+
+                        val tokens = App.marketKit.tokens(nativeTokenQueries)
+                        tokens.forEach {
+                            registerAsset(it, token.identifier, provider)
+                        }
+                    }
 
                     BlockchainType.Solana -> {
                         val tokenType = if (!token.address.isNullOrBlank()) {
@@ -182,6 +182,15 @@ object UnstoppableProvider : IMultiSwapProvider {
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
+        val sendNotSupported = listOf(
+            BlockchainType.Bitcoin,
+            BlockchainType.BitcoinCash,
+            BlockchainType.Litecoin,
+            BlockchainType.Zcash
+        )
+
+        if (sendNotSupported.contains(tokenFrom.blockchainType)) return false
+
         val tokenFromProviders = assetsMap[tokenFrom]?.providers ?: return false
         val tokenToProviders = assetsMap[tokenTo]?.providers ?: return false
 
@@ -354,7 +363,7 @@ object UnstoppableProvider : IMultiSwapProvider {
 
                 return SendTransactionData.Evm(
                     transactionData = transactionData,
-                    gasLimit = jsonObject["gas"].asString.hexStringToByteArray().toLong(),
+                    gasLimit = jsonObject["gas"]?.asString?.hexStringToByteArray()?.toLong(),
                     feesMap = mapOf()
                 )
             }
