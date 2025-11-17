@@ -849,8 +849,6 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">CÜZDANLARI İZLE</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Her cüzdan için kurtarma ifadelerini güvenli bir şekilde yedekleyin. Uygulama arızalanırsa fonlara yeniden erişmenin tek yolu budur.</string>
-    <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <!--Setting_Contact-->
