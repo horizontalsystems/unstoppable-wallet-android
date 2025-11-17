@@ -71,42 +71,42 @@ enum class PremiumFeature(
     SecureSend(
         R.string.Premium_SecureSend,
         R.string.Premium_SecureSend_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_secure_send
     ),
     LossProtection(
         R.string.Premium_LossProtection,
         R.string.Premium_LossProtection_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_loss_protection
     ),
     ScamProtection(
         R.string.Premium_ScamProtection,
         R.string.Premium_ScamProtection_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_scam_protection
     ),
     RobberyProtection(
         R.string.Premium_RobberyProtection,
         R.string.Premium_RobberyProtection_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_robbery_protection
     ),
     TokenInsights(
         R.string.Premium_TokenInsights,
         R.string.Premium_TokenInsights_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_token_insights
     ),
     AdvancedSearch(
         R.string.Premium_AdvancedSearch,
         R.string.Premium_AdvancedSearch_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_advanced_search
     ),
     TradeSignals(
         R.string.Premium_TradeSignals,
         R.string.Premium_TradeSignals_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_trade_signals
     ),
     PrioritySupport(
         R.string.Premium_PrioritySupport,
         R.string.Premium_PrioritySupport_Description,
-        R.drawable.oi_pikir
+        R.drawable.defense_priority_support
     );
 }
 
