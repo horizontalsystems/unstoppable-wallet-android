@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
@@ -8,10 +9,12 @@ import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +35,7 @@ class ReceiveAddressViewModel(
     private var accountActive = true
     private var blockchainName: String? = null
     private var addressFormat: String? = null
+    private var addressType: String? = null
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
     private val addressUriService = AddressUriService(wallet.token)
@@ -74,6 +78,7 @@ class ReceiveAddressViewModel(
         uri = addressUriState.uri,
         blockchainName = blockchainName,
         addressFormat = addressFormat,
+        addressType = addressType,
         watchAccount = watchAccount,
         additionalItems = getAdditionalData(),
         amount = amount,
@@ -92,7 +97,12 @@ class ReceiveAddressViewModel(
             }
 
             else -> {
-                blockchainName = wallet.token.blockchain.name
+                if (wallet.token.blockchainType == BlockchainType.Zcash) {
+                    addressType =
+                        Translator.getString(if (isTransparentAddress) R.string.Balance_Zcash_Transparent else R.string.Balance_Zcash_Unified)
+                } else {
+                    blockchainName = wallet.token.blockchain.name
+                }
             }
         }
         emitState()
