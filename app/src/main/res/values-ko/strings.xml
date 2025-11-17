@@ -903,8 +903,6 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">지갑</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">관찰 주소</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">지갑별 복구 문구를 안전하게 백업합니다. 앱이 오작동하는 경우 자금에 다시 액세스할 수 있는 유일한 방법입니다.</string>
-    <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <!--Setting_Contact-->
