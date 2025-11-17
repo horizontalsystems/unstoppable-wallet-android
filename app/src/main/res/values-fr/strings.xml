@@ -1118,8 +1118,11 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Sauvegarde sécurisée des phrases de récupération pour chaque portefeuille. C\'est le seul moyen de récupérer l\'accès aux fonds si l\'application ne fonctionne pas.</string>
-    <string name="SettingsTerms_DisablingPin">La désactivation du code PIN (code) sur le smartphone supprime tous les portefeuilles de l\'application. Des phrases de récupération seront nécessaires pour restaurer l\'accès aux fonds.</string>
+    <string name="SettingsTerms_Backup">Sauvegardez en toute sécurité la phrase de récupération pour chaque portefeuille. C\'est le seul moyen de récupérer l\'accès à vos fonds si l\'application est supprimée, perdue ou malfonctionnelle. Personne ne peut la restaurer pour vous.</string>
+    <string name="SettingsTerms_DisablingPin">La désactivation du code PIN (ou mot de passe) de votre smartphone supprime tous les portefeuilles de l\'application. Vous aurez besoin de vos phrases de récupération pour restaurer l\'accès.</string>
+    <string name="SettingsTerms_PrivacyNotice">L\'application n\'espionne pas ou ne collecte pas de données sur vos balances ou vos transactions - nous ne savons même pas combien de personnes l\'utilisent. Il ne suit que les modèles d\'utilisation anonymes (pages ouvertes, boutons appuyés) pour améliorer la convivialité. Vous pouvez désactiver cette option dans Paramètres → Confidentialité.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">Dans le cadre de son modèle de monétisation, l\'application gagne de petites commissions grâce aux swaps DEX exécutés dans le portefeuille. Cela nous aide à rester indépendants, open source, et sans argent VC.</string>
+    <string name="SettingsTerms_OpenSource">L\'application est un code source ouvert vérifiable, avec tout le code source publié en ligne. Tout ce qui est indiqué ci-dessus peut être vérifié publiquement par n\'importe qui.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Soyez Unstoppable</string>
