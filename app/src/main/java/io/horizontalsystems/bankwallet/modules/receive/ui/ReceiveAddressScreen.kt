@@ -256,6 +256,14 @@ fun ReceiveAddressScreen(
                                             textAlign = TextAlign.Center,
                                         )
                                     }
+                                    uiState.addressType?.let { addressType ->
+                                        VSpacer(12.dp)
+                                        subhead_grey(
+                                            modifier = Modifier.padding(horizontal = 46.dp),
+                                            text = stringResource(R.string.Balance_Receive_AddressType) + ": " + addressType + testNetBadge,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                    }
                                     VSpacer(32.dp)
                                 }
                                 val additionalItems = buildList {

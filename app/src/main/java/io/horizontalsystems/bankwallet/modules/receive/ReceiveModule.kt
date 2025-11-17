@@ -34,6 +34,7 @@ object ReceiveModule {
         abstract val address: String
         abstract val mainNet: Boolean
         abstract val blockchainName: String?
+        abstract val addressType: String?
         abstract val addressFormat: String?
         abstract val additionalItems: List<AdditionalData>
         abstract val watchAccount: Boolean
@@ -50,6 +51,7 @@ object ReceiveModule {
         val showTronAlert: Boolean,
         override val uri: String,
         override val blockchainName: String?,
+        override val addressType: String?,
         override val addressFormat: String?,
         override val watchAccount: Boolean,
         override val additionalItems: List<AdditionalData>,

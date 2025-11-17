@@ -138,5 +138,6 @@ data class ReceiveStellarAssetUiState(
 ) : ReceiveModule.AbstractUiState() {
     override val additionalItems = listOf<AdditionalData>()
     override val addressFormat = null
+    override val addressType = null
     override val alertText = null
 }
