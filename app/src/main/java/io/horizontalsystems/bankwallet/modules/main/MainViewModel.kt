@@ -112,7 +112,7 @@ class MainViewModel(
             syncNavigation()
         }
 
-        termsManager.termsAcceptedSignalFlow.collectWith(viewModelScope) {
+        termsManager.termsAcceptedSharedFlow.collectWith(viewModelScope) {
             updateSettingsBadge()
         }
 

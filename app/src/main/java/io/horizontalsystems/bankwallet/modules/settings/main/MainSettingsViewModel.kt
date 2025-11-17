@@ -87,7 +87,7 @@ class MainSettingsViewModel(
         }
 
         viewModelScope.launch {
-            termsManager.termsAcceptedSignalFlow.collect {
+            termsManager.termsAcceptedSharedFlow.collect {
                 emitState()
             }
         }

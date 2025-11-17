@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.terms
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,50 +12,53 @@ class TermsViewModel(private val termsManager: ITermsManager) : ViewModel() {
 
     private val terms by termsManager::terms
 
-    private var checkedTerms = mutableListOf<TermsModule.TermType>().also {
-        if(termsManager.allTermsAccepted) {
-            it.addAll(terms)
-        }
-    }
+    private var checkedTerms by mutableStateOf(setOf<TermsModule.TermType>())
 
-    val readOnlyState  = termsManager.allTermsAccepted
+    val readOnlyState = termsManager.allTermsAccepted
 
     var closeWithTermsAgreed by mutableStateOf(false)
         private set
 
-    var termsViewItems by mutableStateOf(getViewItems())
-        private set
+    val termsViewItems by derivedStateOf {
+        terms.map { termType ->
+            TermViewItem(termType, checkedTerms.contains(termType))
+        }
+    }
 
-    var buttonEnabled by mutableStateOf(buttonEnabled())
-        private set
+    val buttonEnabled by derivedStateOf {
+        checkedTerms.containsAll(terms)
+    }
 
-    var buttonVisible by mutableStateOf(!readOnlyState)
-        private set
+    var isAcceptButtonVisible by mutableStateOf(!readOnlyState)
 
-
-    fun onTapTerm(termType: TermsModule.TermType, checked: Boolean) {
-        if (checked) {
-            checkedTerms.add(termType)
+    init {
+        val initialCheckedTerms = if (readOnlyState) {
+            terms.toSet()
         } else {
-            checkedTerms.remove(termType)
+            terms.filter { term ->
+                termsManager.checkedTermIds.contains(term.key)
+            }.toSet()
         }
 
-        termsViewItems = getViewItems()
-        buttonEnabled = buttonEnabled()
+        checkedTerms = initialCheckedTerms
+    }
+
+    fun onTapTerm(termType: TermsModule.TermType, checked: Boolean) {
+        checkedTerms = if (checked) {
+            checkedTerms + termType
+        } else {
+            checkedTerms - termType
+        }
     }
 
     fun onAgreeClick() {
-        termsManager.acceptTerms()
-        closeWithTermsAgreed = true
+        if (buttonEnabled) {
+            termsManager.acceptTerms()
+            closeWithTermsAgreed = true
+        }
     }
 
-    fun closedWithTermsAgreed() {
+    fun onTermsAgreedConsumed() {
         closeWithTermsAgreed = false
     }
-
-    private fun getViewItems() =
-        terms.map { termType -> TermViewItem(termType, checkedTerms.any { it == termType }) }
-
-    private fun buttonEnabled() = termsViewItems.all { it.checked }
-
 }
