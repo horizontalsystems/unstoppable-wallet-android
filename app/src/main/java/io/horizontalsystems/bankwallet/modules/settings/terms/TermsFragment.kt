@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -59,11 +60,12 @@ fun TermsScreen(
     viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
 ) {
 
-    if (viewModel.closeWithTermsAgreed) {
-        viewModel.closedWithTermsAgreed()
-
-        navController.setNavigationResultX(TermsFragment.Result(true))
-        navController.popBackStack()
+    LaunchedEffect(viewModel.closeWithTermsAgreed) {
+        if (viewModel.closeWithTermsAgreed) {
+            navController.setNavigationResultX(TermsFragment.Result(true))
+            navController.popBackStack()
+            viewModel.onTermsAgreedConsumed()
+        }
     }
 
     HSScaffold(
@@ -117,7 +119,7 @@ fun TermsScreen(
                 Spacer(Modifier.height(60.dp))
             }
 
-            if (viewModel.buttonVisible) {
+            if (viewModel.isAcceptButtonVisible) {
                 ButtonsGroupWithShade {
                     ButtonPrimaryYellow(
                         modifier = Modifier

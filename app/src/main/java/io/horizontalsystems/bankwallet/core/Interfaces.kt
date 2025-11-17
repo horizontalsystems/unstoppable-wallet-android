@@ -107,6 +107,7 @@ interface ILocalStorage {
     var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
+    var checkedTerms: List<String>
     var mainShowedOnce: Boolean
     var notificationId: String?
     var notificationServerTime: Long
@@ -143,6 +144,7 @@ interface ILocalStorage {
     var priceChangeInterval: PriceChangeInterval
     val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
     var donateUsLastShownDate: Long?
+    var lastMigrationVersion: Int?
 
     fun clear()
 }
@@ -562,9 +564,10 @@ interface ICoinManager {
 }
 
 interface ITermsManager {
-    val termsAcceptedSignalFlow: Flow<Boolean>
+    val termsAcceptedSharedFlow: SharedFlow<Boolean>
     val terms: List<TermsModule.TermType>
     val allTermsAccepted: Boolean
+    val checkedTermIds: List<String>
     fun acceptTerms()
 }
 

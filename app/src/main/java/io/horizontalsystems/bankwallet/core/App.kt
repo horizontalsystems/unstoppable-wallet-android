@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.MigrationManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.NetworkManager
@@ -125,6 +126,7 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.security.MessageDigest
@@ -628,6 +630,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                     BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()
                 }
             }
+        }
+
+        coroutineScope.launch(Dispatchers.IO) {
+            delay(3000)
+            val termsManager = TermsManager(localStorage)
+            val migrationManager = MigrationManager(localStorage, termsManager)
+            migrationManager.runMigrations()
         }
     }
 }

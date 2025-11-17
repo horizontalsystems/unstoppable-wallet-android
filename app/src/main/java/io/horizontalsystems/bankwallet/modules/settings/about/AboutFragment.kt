@@ -91,7 +91,6 @@ private fun SettingSections(
 ) {
 
     val context = LocalContext.current
-    val termsShowAlert = viewModel.termsShowAlert
 
     CellUniversalLawrenceSection(
         listOf {
@@ -125,7 +124,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_Terms,
                 R.drawable.ic_terms_20,
-                showAlert = termsShowAlert,
+                showAlert = viewModel.termsShowAlert,
                 onClick = {
                     navController.navigate(TermsPage)
 
