@@ -1118,8 +1118,11 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">战利品</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">观看战利品</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
-    <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
+    <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。 这是在应用程序被删除、丢失或故障的情况下重新获得您资金的唯一途径。没有人可以为您恢复它。</string>
+    <string name="SettingsTerms_DisablingPin">禁用您的智能手机解锁 PIN (或密码) 擦除所有钱包。您将需要恢复短语来恢复访问。</string>
+    <string name="SettingsTerms_PrivacyNotice">应用没有间接或收集关于您的余额或交易的数据 — — 我们甚至不知道有多少人使用它。 它只跟踪匿名使用模式(打开的页面、点击的按钮)以提高可用性。您可以在设置 -> 隐私中关闭此功能。</string>
+    <string name="SettingsTerms_MonetizationDisclosure">作为其货币化模型的一部分，应用程序从钱包内执行的DEX交换器中赚取小佣金。 这有助于我们保持独立和公开的来源，并且没有VC资金。</string>
+    <string name="SettingsTerms_OpenSource">应用程序是可验证的开源，所有源代码都在线发布。上面所述的一切都可以由任何人公开验证。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">不可阻止的</string>
