@@ -1119,8 +1119,11 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CARTEIRAS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ASSISTA CARTEIRAS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Frases de recuperação de backup seguros para cada carteira. É a única maneira de recuperar o acesso a fundos se o aplicativo não funcionar.</string>
-    <string name="SettingsTerms_DisablingPin">Desabilitando o PIN (código) no smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para restaurar o acesso aos fundos.</string>
+    <string name="SettingsTerms_Backup">Faça um backup seguro da frase de recuperação para cada carteira. É a única maneira de recuperar o acesso a seus fundos se o aplicativo for excluído, perdido ou mal funcionamento. Ninguém pode restaurá-lo para você.</string>
+    <string name="SettingsTerms_DisablingPin">Desativar o PIN de desbloqueio do seu smartphone elimina todas as carteiras do aplicativo. Você precisará de suas frases de recuperação para restaurar o acesso.</string>
+    <string name="SettingsTerms_PrivacyNotice">O aplicativo não espiona nem coleta dados sobre seus saldos ou transações. Nem sabemos quantas pessoas o usam. Ele apenas rastreia padrões de uso anônimos (páginas abertas, botões tocados) para melhorar a usabilidade. Você pode desligar isso em Configurações → Privacidade.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">Como parte do modelo de monetização, o aplicativo ganha pequenas comissões de swaps de DEX executados dentro da carteira. Isso nos ajuda a manter um código aberto, independente e livre de dinheiro de VC.</string>
+    <string name="SettingsTerms_OpenSource">O aplicativo é de código aberto de forma verificável, com todo o código-fonte publicado online. Tudo o que é descrito acima pode ser verificado publicamente por qualquer pessoa.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartilhar</string>
     <string name="SettingsShare_Text">Seja Unstoppable</string>
