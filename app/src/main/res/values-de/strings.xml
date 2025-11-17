@@ -1123,8 +1123,11 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETE</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WALLETTE WALLETZEN</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Sicheres Backup der Wiederherstellungsausdrücke für jede Wallet. Dies ist die einzige Möglichkeit, den Zugriff auf Gelder zurückzugewinnen, wenn die App nicht funktioniert.</string>
-    <string name="SettingsTerms_DisablingPin">Das Deaktivieren der PIN (Code) auf dem Smartphone löscht alle Brieftaschen aus der App. Wiederherstellungs-Phrasen werden benötigt, um den Zugriff auf Gelder wiederherzustellen.</string>
+    <string name="SettingsTerms_Backup">Sichern Sie die Wiederherstellungsphrase für jede Wallet. Es ist die einzige Möglichkeit, den Zugriff auf Ihr Geld zurückzugewinnen, wenn die App gelöscht, verloren geht oder Fehlfunktionen auftreten. Niemand kann es für Sie wiederherstellen.</string>
+    <string name="SettingsTerms_DisablingPin">Das Deaktivieren der PIN (oder des Passwortes) Ihres Smartphones löscht alle Wallets aus der App. Sie benötigen Ihre Wiederherstellungsphrasen, um den Zugriff wiederherzustellen.</string>
+    <string name="SettingsTerms_PrivacyNotice">Die App spioniert oder sammelt keine Daten über Ihr Guthaben oder Ihre Transaktionen - wir wissen nicht einmal, wie viele Menschen es nutzen. Es verfolgt nur anonyme Nutzungsmuster (geöffnete Seiten, getappte Schaltfläche), um die Benutzerfreundlichkeit zu verbessern. Sie können dies unter Einstellungen → Privatsphäre deaktivieren.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">Als Teil ihres Monetarisierungsmodells verdient die App kleine Provisionen von DEX-Swaps, die innerhalb der Brieftasche ausgeführt werden. Dies hilft uns, unabhängig zu bleiben, Open Source und frei von VC-Geld.</string>
+    <string name="SettingsTerms_OpenSource">Die App ist nachprüfbar Open Source, mit dem gesamten online veröffentlichten Quellcode. Alles oben angeführte kann von jedem öffentlich überprüft werden.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unaufhaltsam sein</string>
