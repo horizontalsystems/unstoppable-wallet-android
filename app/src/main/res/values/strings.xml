@@ -646,8 +646,8 @@
     <string name="WalletConnect_Url" translatable="false">URL</string>
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
-    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
-    <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
+    <string name="WalletConnect_Reconnect_Hint">Unable to connect using this link. Please double-check it and try again.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Invalid URL</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>

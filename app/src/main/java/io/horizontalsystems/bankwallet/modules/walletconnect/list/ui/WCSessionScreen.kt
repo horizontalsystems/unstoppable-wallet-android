@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -27,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,11 +38,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
@@ -61,7 +57,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
@@ -174,11 +172,8 @@ fun WCSessionsScreen(
             }
         }
         if (showInvalidUrlBottomSheet) {
-            InvalidUrlBottomSheet(
+            WCInvalidUrlBottomSheet(
                 sheetState = sheetState,
-                onDismiss = {
-                    showInvalidUrlBottomSheet = false
-                },
                 onConfirm = {
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                         if (!sheetState.isVisible) {
@@ -188,7 +183,7 @@ fun WCSessionsScreen(
 
                     qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                 },
-                onClose = {
+                onDismiss = {
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                         if (!sheetState.isVisible) {
                             showInvalidUrlBottomSheet = false
@@ -216,28 +211,39 @@ fun WCSessionsScreen(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun InvalidUrlBottomSheet(
+fun WCInvalidUrlBottomSheet(
     sheetState: SheetState,
-    onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    onClose: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
-    ModalBottomSheet(
+    BottomSheetContent(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
-        ConfirmationBottomSheet(
-            title = stringResource(R.string.WalletConnect_Title),
-            text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
-            iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-            confirmText = stringResource(R.string.Button_TryAgain),
-            cautionType = Caution.Type.Warning,
-            cancelText = stringResource(R.string.Button_Cancel),
-            onConfirm = onConfirm,
-            onClose = onClose
-        )
+        Column() {
+            BottomSheetHeaderV3(
+                image72 = painterResource(R.drawable.warning_filled_24),
+                imageTint = ComposeAppTheme.colors.lucian,
+                title = stringResource(R.string.WalletConnect_Error_InvalidUrl)
+            )
+            TextBlock(
+                text = stringResource(R.string.WalletConnect_Reconnect_Hint),
+                textAlign = TextAlign.Center
+            )
+            ButtonsGroupHorizontal {
+                HSButton(
+                    title = stringResource(R.string.Button_Cancel),
+                    modifier = Modifier.weight(1f),
+                    variant = ButtonVariant.Secondary,
+                    onClick = onDismiss
+                )
+                HSButton(
+                    title = stringResource(R.string.Button_TryAgain),
+                    modifier = Modifier.weight(1f),
+                    onClick = onConfirm
+                )
+            }
+        }
     }
 }
 
