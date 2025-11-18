@@ -918,7 +918,7 @@
     <string name="Premium_UpgradeFeature_TokenInsights">Analítica de Tokens</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Búsqueda Avanzada</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Señales y Tendencias</string>
-    <string name="Premium_UpgradeFeature_RobberProtection">Modo Coacción</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection">Modo Coacción</string>
     <string name="Premium_UpgradeFeature_SecureSend">Protección Antifraude</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Verificación de Lista Negra</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Grupo VIP</string>
@@ -926,7 +926,7 @@
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Acceso a listas top-100 según criterios clave</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrado multinivel con múltiples parámetros</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoreo automático de tendencias del mercado para tus tokens</string>
-    <string name="Premium_UpgradeFeature_RobberProtection_Description">Seguridad inteligente de fondos durante amenazas físicas</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Seguridad inteligente de fondos durante amenazas físicas</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Protección automática eficaz contra fraudes y ataques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantía de legalidad para tus operaciones con criptomonedas</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acceso al equipo de la cartera para soporte técnico rápido.</string>
@@ -934,7 +934,7 @@
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Tu herramienta todo en uno para análisis profundo. Navega por listas curadas de los 250 mejores tokens basadas en volumen de trading, liquidez en exchanges, comportamiento de holders y tendencias on-chain—todo de un vistazo. Filtra, analiza y mantente a la vanguardia.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Elimina el ruido y concéntrate en tokens de alto potencial con precisión. Usa la Búsqueda Avanzada para filtrar miles de tokens por volumen de trading, blockchain, capitalización de mercado, tendencias de precios, sector y rendimiento—y más. Potente, preciso y diseñado para el descubrimiento.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Nunca más pierdas una oportunidad de trading. Observador de Tendencias ofrece alertas en tiempo real impulsadas por análisis técnico avanzado, ayudándote a identificar tendencias, detectar breakouts y evitar obstáculos antes de que ocurran. Actúa rápido, opera con inteligencia y maximiza las ganancias.</string>
-    <string name="Premium_UpgradeFeature_RobberProtection_BigDescription">Tu cripto. Tu seguridad. El Modo Coacción te permite crear múltiples configuraciones alternativas de cartera, cada una con un PIN separado, proporcionando una ruta de escape oculta en situaciones de alto riesgo. Si te obligan a desbloquear tu cartera, simplemente usa el PIN de coacción para acceder a una cartera secundaria sin exponer activos críticos. Tus fondos reales permanecen ocultos. Tu seguridad permanece intacta.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Tu cripto. Tu seguridad. El Modo Coacción te permite crear múltiples configuraciones alternativas de cartera, cada una con un PIN separado, proporcionando una ruta de escape oculta en situaciones de alto riesgo. Si te obligan a desbloquear tu cartera, simplemente usa el PIN de coacción para acceder a una cartera secundaria sin exponer activos críticos. Tus fondos reales permanecen ocultos. Tu seguridad permanece intacta.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Una dirección incorrecta, y tu cripto se pierde para siempre. Unstoppable escanea automáticamente las direcciones de destinatarios en busca de patrones sospechosos y te defiende contra las últimas amenazas de phishing, evitando que envíes fondos a un hacker. Bloquea transferencias fraudulentas antes de que ocurran.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Protégete de entidades riesgosas y sancionadas. El Verificador de Lista Negra examina automáticamente las direcciones de destinatarios contra bases de datos de alto riesgo, marcando estafas, fraudes y entidades sancionadas antes de que envíes. Si una dirección está en la lista negra, lo sabrás antes de cometer un error costoso. Asegura tus transacciones. Mantén tu cripto limpio. Permanece conforme.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Sé parte de la evolución. Únete al Grupo VIP para conectarte directamente con nuestro equipo de soporte técnico. Vota por las próximas funciones y obtén una mirada exclusiva a las actualizaciones futuras. Tu voz importa—ayuda a dar forma a la cartera de criptomonedas de próxima generación.</string>

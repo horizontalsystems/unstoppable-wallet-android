@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 
 @Composable
 fun CellMiddleInfo(
@@ -42,7 +43,12 @@ fun CellMiddleInfo(
             }
 
             badge?.let {
-                Badge(text = it.text)
+                val textColor = if (it.color == ComposeAppTheme.colors.remus) ComposeAppTheme.colors.lawrence else ComposeAppTheme.colors.leah
+                BadgeText(
+                    text = it.text,
+                    background = it.color ?: ComposeAppTheme.colors.blade,
+                    textColor = textColor,
+                )
             }
         }
 
