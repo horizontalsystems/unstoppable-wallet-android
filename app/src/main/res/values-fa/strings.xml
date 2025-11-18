@@ -179,8 +179,6 @@
     <!--WalletConnect-->
     <string name="WalletConnect_Status">وضعیت</string>
     <string name="WalletConnect_Approve_Hint">با کلیک کردن بر روی اتصال، به این برنامه اجازه می دهید آدرس عمومی شما را مشاهده کند. این مرحله امنیتی مهمی برای محافظت از داده های شما در برابر خطرات احتمالی کلاهبرداری است.</string>
-    <string name="WalletConnect_Reconnect_Hint">برقراری ارتباط ناموفق بود. دوباره سعی کنید وصل شوید.</string>
-    <string name="WalletConnect_Error_InvalidUrl">آدرس URL نامعتبر است</string>
     <string name="WalletConnect_Status_Offline">آفلاین</string>
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
