@@ -46,21 +46,21 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.bigDescriptionStringRes
-import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.iconRes
-import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
-import io.horizontalsystems.bankwallet.modules.usersubscription.ui.ButtonPrimaryCustomColor
-import io.horizontalsystems.bankwallet.modules.usersubscription.ui.InfoBottomSheet
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
-import io.horizontalsystems.bankwallet.modules.usersubscription.ui.yellowGradient
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
@@ -134,17 +134,12 @@ fun PremiumFeaturesScreen(
     }
 
     val uiState = viewModel.uiState
-    val subscription = uiState.subscription
     val hasFreeTrial = uiState.hasFreeTrial
 
     val coroutineScope = rememberCoroutineScope()
     val plansModalBottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val infoModalBottomSheetState =
-        rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isPlanSelectBottomSheetVisible by remember { mutableStateOf(false) }
-    var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
-    var infoBottomSheetAction: IPaidAction? = null
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -181,66 +176,72 @@ fun PremiumFeaturesScreen(
                 VSpacer(24.dp)
                 ActionText()
                 VSpacer(24.dp)
-                if (subscription != null) {
-                    Column(
-                        modifier = Modifier.clip(RoundedCornerShape(16.dp))
-                    ) {
-                        PlanItems(
-                            items = subscription.actions,
-                            onItemClick = { action ->
-                                infoBottomSheetAction = action
-                                coroutineScope.launch {
-                                    isInfoBottomSheetVisible = true
-                                    infoModalBottomSheetState.show()
-                                }
-                            }
-                        )
-                    }
-                    VSpacer(32.dp)
-                    headline2_leah(
-                        text = stringResource(R.string.Premium_HighlyRatedSecurity),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
-                    )
-                    VSpacer(24.dp)
-                    Image(
-                        painter = painterResource(id = R.drawable.security_rate_image),
+                uiState.defenseSystemFeatures
+                FeaturesSection(
+                    navController = navController,
+                    icon = R.drawable.defense_gradient_filled_24,
+                    title = stringResource(R.string.Premium_DefenseSystem),
+                    features = uiState.defenseSystemFeatures,
+                )
+
+                FeaturesSection(
+                    navController = navController,
+                    icon = R.drawable.market_gradient_filled_24,
+                    title = stringResource(R.string.Premium_MarketInsights),
+                    features = uiState.marketInsightsFeatures,
+                )
+
+                FeaturesSection(
+                    navController = navController,
+                    icon = R.drawable.heart_gradient_filled_24,
+                    title = stringResource(R.string.Premium_Vip),
+                    features = uiState.vipFeatures,
+                )
+
+                VSpacer(32.dp)
+                headline2_leah(
+                    text = stringResource(R.string.Premium_HighlyRatedSecurity),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                )
+                VSpacer(24.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.security_rate_image),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(112.dp)
+                        .fillMaxWidth()
+                )
+                subhead2_grey(
+                    text = stringResource(R.string.Premium_ApprovedBy),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+                Row(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.bitcoin_logo),
                         contentDescription = null,
-                        modifier = Modifier
-                            .height(112.dp)
-                            .fillMaxWidth()
+                        tint = ComposeAppTheme.colors.leah
                     )
-                    subhead2_grey(
-                        text = stringResource(R.string.Premium_ApprovedBy),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp, vertical = 16.dp),
-                        textAlign = TextAlign.Center
+                    Icon(
+                        painter = painterResource(id = R.drawable.wallet_scrutiny_logo),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.leah
                     )
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.bitcoin_logo),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.wallet_scrutiny_logo),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.certik_logo),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah
-                        )
-                    }
-                    VSpacer(52.dp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.certik_logo),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.leah
+                    )
                 }
+                VSpacer(52.dp)
             }
             val buttonTitle = if (hasFreeTrial) {
                 stringResource(R.string.Premium_TryForFree)
@@ -270,10 +271,11 @@ fun PremiumFeaturesScreen(
                         .padding(horizontal = 24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ButtonPrimaryCustomColor(
-                        modifier = Modifier.fillMaxWidth(),
+                    HSButton(
                         title = buttonTitle,
-                        brush = yellowGradient,
+                        variant = ButtonVariant.Primary,
+                        size = ButtonSize.Medium,
+                        modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             //when used in NavHost
                             navHostController?.let {
@@ -285,10 +287,10 @@ fun PremiumFeaturesScreen(
                                 onClose.invoke()
                                 navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
                             }
-                        },
+                        }
                     )
-                    VSpacer(16.dp)
                 }
+                VSpacer(16.dp)
             }
             if (isPlanSelectBottomSheetVisible) {
                 SelectPlanBottomSheet(
@@ -307,25 +309,31 @@ fun PremiumFeaturesScreen(
                     }
                 )
             }
-
-            if (isInfoBottomSheetVisible) {
-                infoBottomSheetAction?.let {
-                    InfoBottomSheet(
-                        icon = it.iconRes,
-                        title = stringResource(it.titleStringRes),
-                        description = stringResource(it.bigDescriptionStringRes),
-                        bottomSheetState = infoModalBottomSheetState,
-                        hideBottomSheet = {
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.hide()
-                            }
-                            infoBottomSheetAction = null
-                            isInfoBottomSheetVisible = false
-                        }
-                    )
-                }
-            }
         }
+    }
+}
+
+@Composable
+fun FeaturesSection(
+    navController: NavController,
+    icon: Int,
+    title: String,
+    features: List<IPaidAction>
+) {
+    SectionHeader(title = title, icon)
+    Column(
+        modifier = Modifier.clip(RoundedCornerShape(16.dp))
+    ) {
+        PlanItems(
+            items = features,
+            onItemClick = { action ->
+                val feature = PremiumFeature.getFeature(action)
+                navController.slideFromBottom(
+                    R.id.defenseSystemFeatureDialog,
+                    DefenseSystemFeatureDialog.Input(feature)
+                )
+            }
+        )
     }
 }
 

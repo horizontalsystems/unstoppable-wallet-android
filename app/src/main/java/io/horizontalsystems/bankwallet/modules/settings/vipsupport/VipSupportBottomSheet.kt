@@ -80,7 +80,7 @@ private fun VipSupportView(
     onRequestClicked: () -> Unit
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.prem_vip_support_24),
+        iconPainter = painterResource(R.drawable.prem_message_24),
         title = stringResource(R.string.Settings_VipSupport),
         onCloseClick = close,
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)

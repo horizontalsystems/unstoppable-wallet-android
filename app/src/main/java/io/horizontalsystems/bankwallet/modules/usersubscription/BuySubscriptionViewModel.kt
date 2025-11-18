@@ -2,13 +2,31 @@ package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.LossProtection
+import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.RobberyProtection
+import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.Subscription
+import io.horizontalsystems.subscriptions.core.TokenInsights
+import io.horizontalsystems.subscriptions.core.TradeSignals
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
 class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     private var subscription: Subscription? = null
     private var hasFreeTrial = false
+    private val defenseSystemFeatures = listOf(
+        SecureSend, ScamProtection, LossProtection, RobberyProtection,
+    )
+    private val marketInsightsFeatures = listOf(
+        TokenInsights, AdvancedSearch, TradeSignals
+    )
+
+    private val vipFeatures = listOf(PrioritySupport)
+
 
     init {
         viewModelScope.launch {
@@ -20,7 +38,9 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     }
 
     override fun createState() = BuySubscriptionUiState(
-        subscription = subscription,
+        defenseSystemFeatures = defenseSystemFeatures,
+        marketInsightsFeatures = marketInsightsFeatures,
+        vipFeatures = vipFeatures,
         hasFreeTrial = hasFreeTrial,
     )
 
@@ -38,6 +58,8 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
 }
 
 data class BuySubscriptionUiState(
-    val subscription: Subscription?,
+    val defenseSystemFeatures: List<IPaidAction>,
+    val marketInsightsFeatures: List<IPaidAction>,
+    val vipFeatures: List<IPaidAction>,
     val hasFreeTrial: Boolean
 )

@@ -71,8 +71,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.subscriptions.core.AddressBlacklist
-import io.horizontalsystems.subscriptions.core.VIPSupport
+import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.PrioritySupport
 
 @Composable
 fun SettingsScreen(
@@ -338,7 +338,7 @@ private fun SettingSections(
                 if (isFDroidBuild) {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
                 } else {
-                    navController.paidAction(VIPSupport) {
+                    navController.paidAction(PrioritySupport) {
                         openVipSupport.invoke()
                     }
                 }
@@ -355,7 +355,7 @@ private fun SettingSections(
             icon = R.drawable.ic_radar_24,
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
-                navController.paidAction(AddressBlacklist) {
+                navController.paidAction(ScamProtection) {
                     navController.slideFromRight(R.id.addressCheckerFragment)
                 }
                 stat(

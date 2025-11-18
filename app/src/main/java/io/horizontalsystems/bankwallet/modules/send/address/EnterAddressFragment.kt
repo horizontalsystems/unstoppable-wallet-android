@@ -64,7 +64,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.subscriptions.core.AddressBlacklist
+import io.horizontalsystems.subscriptions.core.ScamProtection
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -147,7 +147,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                         uiState.checkResults,
                     ) { checkType ->
                         if (uiState.checkResults.any { it.value.checkResult == AddressCheckResult.NotAllowed }) {
-                            navController.paidAction(AddressBlacklist) {
+                            navController.paidAction(ScamProtection) {
                                 viewModel.onEnterAddress(uiState.value)
                             }
                             stat(
