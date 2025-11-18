@@ -49,9 +49,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHo
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
@@ -175,7 +175,6 @@ fun WCSendEthRequestScreen(
                     )
                 }
             }
-            VSpacer(16.dp)
             ButtonsGroupHorizontal {
                 HSButton(
                     title = stringResource(R.string.Button_Reject),
@@ -277,14 +276,13 @@ fun CopiableValueCell(
     val shortedValue = value.shorten()
     val copiedMessage = stringResource(R.string.Hud_Text_Copied)
 
-    CellPrimary(
+    CellSecondary(
         middle = {
             CellMiddleInfo(
                 subtitle = title.hs,
             )
         },
         right = {
-            val view = LocalView.current
             CellRightControlsButtonText(
                 text = shortedValue.hs,
                 icon = painterResource(id = R.drawable.copy_filled_24),
@@ -303,7 +301,7 @@ fun FeeCell(
     secondaryValue: String?,
     onInfoClick: () -> Unit
 ) {
-    CellPrimary(
+    CellSecondary(
         middle = {
             CellMiddleInfoTextIcon(
                 text = stringResource(R.string.Send_Fee).hs,
