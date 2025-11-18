@@ -98,8 +98,8 @@ enum class PremiumFeature(
         R.drawable.defense_scam_protection
     ),
     RobberyProtectionFeature(
-        R.string.Premium_UpgradeFeature_RobberProtection,
-        R.string.Premium_UpgradeFeature_RobberProtection_BigDescription,
+        R.string.Premium_UpgradeFeature_RobberyProtection,
+        R.string.Premium_UpgradeFeature_RobberyProtection_BigDescription,
         R.drawable.defense_robbery_protection
     ),
     TokenInsightsFeature(

@@ -22,7 +22,7 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals
-            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberProtection
+            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection
             SecureSend -> R.string.Premium_UpgradeFeature_SecureSend
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport
@@ -35,7 +35,7 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_Description
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_Description
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_Description
-            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberProtection_Description
+            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection_Description
             SecureSend -> R.string.Premium_UpgradeFeature_SecureSend_Description
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection_Description
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport_Description

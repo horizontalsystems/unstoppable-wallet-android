@@ -920,7 +920,7 @@
     <string name="Premium_UpgradeFeature_TokenInsights">Аналитика</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Сигналы и тренды</string>
-    <string name="Premium_UpgradeFeature_RobberProtection">Режим Duress</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection">Режим Duress</string>
     <string name="Premium_UpgradeFeature_SecureSend">Scam-защита</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Blacklist проверка</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP группа</string>
@@ -928,7 +928,7 @@
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Авто-мониторинг рыночных трендов для ваших токенов</string>
-    <string name="Premium_UpgradeFeature_RobberProtection_Description">Умная безопасность средств при физической угрозе</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Умная безопасность средств при физической угрозе</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Эффективная авто-защита против скам и фишинг-атак</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Гарантия легальности ваших крипто-операций</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Быстрый и удобный доступ к команде.</string>
@@ -936,7 +936,7 @@
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокого анализа. Просматривайте подборку Top 250 токенов на основе объема торгов, ликвидности бирж, поведения держателей и трендов в сети — все в одном месте. Фильтруйте, анализируйте и оставайтесь впереди.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отфильтруйте ненужное и очно сфокусируйтесь на токенах с высоким потенциалом. Используйте расширенный поиск для фильтрации тысяч токенов по объему торгов, блокчейну, капитализации, ценовым трендам, сектору и эффективности — и не только. Мощный, точный инструмент для поиска.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Не упускайте выгодные торговые возможности. Функция отслеживания трендов отправляет уведомления в режиме реального времени, основанные на сложном техническом анализе. Она поможет вам распознавать тенденции, видеть прорывы рынка и обходить подводные камни до того, как они возникнут. Реагируйте оперативно, ведите торговлю с умом и увеличивайте свою прибыль.</string>
-    <string name="Premium_UpgradeFeature_RobberProtection_BigDescription">Ваша криптовалюта. Ваша безопасность. Инновационный режим принуждения — это ваша невидимая страховка в критических ситуациях. Создавайте несколько версий вашего кошелька, каждую с уникальным PIN-кодом, обеспечивая себе секретный запасной выход при возникновении угрозы. Столкнулись с принуждением разблокировать ваш кошелек? Просто введите специальный PIN-код и получите доступ к запасному кошельку, оставляя ваши основные активы полностью защищенными и невидимыми. Ваши реальные средства в безопасности. Ваше спокойствие — бесценно.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ваша криптовалюта. Ваша безопасность. Инновационный режим принуждения — это ваша невидимая страховка в критических ситуациях. Создавайте несколько версий вашего кошелька, каждую с уникальным PIN-кодом, обеспечивая себе секретный запасной выход при возникновении угрозы. Столкнулись с принуждением разблокировать ваш кошелек? Просто введите специальный PIN-код и получите доступ к запасному кошельку, оставляя ваши основные активы полностью защищенными и невидимыми. Ваши реальные средства в безопасности. Ваше спокойствие — бесценно.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Один неверный адрес, и ваша крипта потеряна навсегда. Unstoppable автоматически проверяет адреса получателей на подозрительные шаблоны и защищает от новейших фишинговых угроз, предотвращая отправку средств хакерам. Блокируйте мошеннические переводы до того, как они произойдут.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Защитите себя от рисковых и санкционированных контрагентов. Blacklist Checker автоматически проверяет адреса получателей по базам высокого риска, выявляя мошеннические схемы, fraudulent-транзакции и санкционированные объекты еще до отправки средств.Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Станьте частью эволюции. Присоединитесь к VIP-группе для прямого взаимодействия с нашей командой по технической поддержке. Голосуйте за предстоящие функции и получайте эксклюзивный предварительный доступ к будущим обновлениям. Ваш голос имеет значение — помогите сформировать криптокошелек нового поколения.</string>
