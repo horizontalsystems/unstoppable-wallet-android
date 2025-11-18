@@ -62,8 +62,8 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
@@ -247,15 +247,15 @@ private fun ActionButtons(
 fun WalletCell(
     name: String,
 ) {
-    CellPrimary(
+    CellSecondary(
         middle = {
             CellMiddleInfo(
-                title = stringResource(R.string.Wallet_Title).hs,
+                eyebrow = stringResource(R.string.Wallet_Title).hs,
             )
         },
         right = {
             CellRightInfo(
-                title = name.hs,
+                titleSubheadSb = name.hs,
             )
         },
     )
@@ -265,7 +265,7 @@ fun WalletCell(
 fun NetworkCell(
     blockchainTypes: List<BlockchainType>?,
 ) {
-    CellPrimary(
+    CellSecondary(
         middle = {
             CellMiddleInfo(
                 title = stringResource(R.string.WalletConnect_Networks).hs,
@@ -444,7 +444,7 @@ fun DefenseSystemMessage(
         )
     }
 
-    CellPrimary(
+    CellSecondary(
         left = {
             Image(
                 painter = painterResource(R.drawable.ic_defense_shield_20),

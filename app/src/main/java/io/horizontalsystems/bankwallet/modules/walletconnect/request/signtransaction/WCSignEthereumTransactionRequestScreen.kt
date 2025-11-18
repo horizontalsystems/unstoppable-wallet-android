@@ -174,9 +174,7 @@ fun WCSignEthereumTransactionRequestScreen(
                         }
                     )
                 }
-
             }
-            VSpacer(16.dp)
             ButtonsGroupHorizontal {
                 HSButton(
                     title = stringResource(R.string.Button_Reject),

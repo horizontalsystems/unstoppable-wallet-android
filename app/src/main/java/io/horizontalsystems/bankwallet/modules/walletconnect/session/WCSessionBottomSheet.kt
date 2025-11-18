@@ -12,7 +12,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,6 +48,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
@@ -61,8 +61,8 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
@@ -177,10 +177,7 @@ fun WCSessionScreen(
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
                     .padding(vertical = 8.dp)
             ) {
-                TitleValueCell(
-                    stringResource(R.string.Wallet_Title),
-                    uiState.peerMeta?.accountName ?: ""
-                )
+                WalletCell(uiState.peerMeta?.accountName ?: "")
                 NetworkCell(
                     blockchainTypes = uiState.blockchainTypes
                 )
@@ -189,7 +186,7 @@ fun WCSessionScreen(
             TextBlock(
                 text = stringResource(R.string.WalletConnect_ConnectWarning),
             )
-            VSpacer(24.dp)
+            VSpacer(16.dp)
             DefenseSystemMessage(
                 activated = uiState.hasSubscription,
                 whiteListState = uiState.whiteListState,
@@ -260,7 +257,7 @@ fun TitleValueCell(
     value: String,
     secondaryValue: String? = null,
 ) {
-    CellPrimary(
+    CellSecondary(
         middle = {
             CellMiddleInfo(
                 subtitle = title.hs,
@@ -279,7 +276,7 @@ fun TitleValueCell(
 fun NetworkCell(
     blockchainTypes: List<BlockchainType>?,
 ) {
-    CellPrimary(
+    CellSecondary(
         middle = {
             CellMiddleInfo(
                 subtitle = stringResource(R.string.WalletConnect_Networks).hs,
@@ -459,7 +456,7 @@ fun DefenseSystemMessage(
     }
 
     Row(
-        modifier = Modifier.padding(paddingValues = PaddingValues(16.dp)),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
