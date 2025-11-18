@@ -80,7 +80,6 @@ fun TransactionsScreen(
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Title),
-        onBack = navController::popBackStack,
         menuItems = buildList {
             if (syncing) {
                 add(MenuItemLoading)
