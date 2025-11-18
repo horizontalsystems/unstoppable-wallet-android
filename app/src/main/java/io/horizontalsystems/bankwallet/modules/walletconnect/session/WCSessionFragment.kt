@@ -55,7 +55,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderAndy
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionIsolated
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -182,7 +182,7 @@ fun WCSessionPage(
 
                 val pendingRequests = uiState.pendingRequests
                 if (pendingRequests.isNotEmpty()) {
-                    SectionHeader(stringResource(R.string.WalletConnect_PendingRequests))
+                    SectionHeaderAndy(stringResource(R.string.WalletConnect_PendingRequests))
                     SectionIsolated(
                         modifier = Modifier.padding(horizontal = 16.dp)
                     ) {

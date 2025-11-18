@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -17,13 +16,11 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
@@ -34,6 +31,15 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.LossProtection
+import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.RobberyProtection
+import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
+import io.horizontalsystems.subscriptions.core.TokenInsights
+import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 
 class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
@@ -48,18 +54,26 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                val feature: PremiumFeature = navController.getInput()
+                val input: Input = navController.getInput()
                     ?: run {
                         navController.popBackStack()
                         return@setContent
                     }
 
                 ComposeAppTheme {
-                    DefenseSystemFeatureScreen(navController, feature)
+                    DefenseSystemFeatureScreen(
+                        navController,
+                        input.feature,
+                        input.showAllFeaturesButton
+                    )
                 }
             }
         }
     }
+
+    @Parcelize
+    data class Input(val feature: PremiumFeature, val showAllFeaturesButton: Boolean = false) :
+        Parcelable
 }
 
 @Parcelize
@@ -68,51 +82,70 @@ enum class PremiumFeature(
     val descriptionRes: Int,
     val imageRes: Int,
 ) : Parcelable {
-    SecureSend(
-        R.string.Premium_SecureSend,
-        R.string.Premium_SecureSend_Description,
+    SecureSendFeature(
+        R.string.Premium_UpgradeFeature_SecureSend,
+        R.string.Premium_UpgradeFeature_SecureSend_BigDescription,
         R.drawable.defense_secure_send
     ),
-    LossProtection(
-        R.string.Premium_LossProtection,
-        R.string.Premium_LossProtection_Description,
+    LossProtectionFeature(
+        R.string.Premium_UpgradeFeature_LossProtection,
+        R.string.Premium_UpgradeFeature_LossProtection_BigDescription,
         R.drawable.defense_loss_protection
     ),
-    ScamProtection(
-        R.string.Premium_ScamProtection,
-        R.string.Premium_ScamProtection_Description,
+    ScamProtectionFeature(
+        R.string.Premium_UpgradeFeature_ScamProtection,
+        R.string.Premium_UpgradeFeature_ScamProtection_BigDescription,
         R.drawable.defense_scam_protection
     ),
-    RobberyProtection(
-        R.string.Premium_RobberyProtection,
-        R.string.Premium_RobberyProtection_Description,
+    RobberyProtectionFeature(
+        R.string.Premium_UpgradeFeature_RobberProtection,
+        R.string.Premium_UpgradeFeature_RobberProtection_BigDescription,
         R.drawable.defense_robbery_protection
     ),
-    TokenInsights(
-        R.string.Premium_TokenInsights,
-        R.string.Premium_TokenInsights_Description,
+    TokenInsightsFeature(
+        R.string.Premium_UpgradeFeature_TokenInsights,
+        R.string.Premium_UpgradeFeature_TokenInsights_BigDescription,
         R.drawable.defense_token_insights
     ),
-    AdvancedSearch(
-        R.string.Premium_AdvancedSearch,
-        R.string.Premium_AdvancedSearch_Description,
+    AdvancedSearchFeature(
+        R.string.Premium_UpgradeFeature_AdvancedSearch,
+        R.string.Premium_UpgradeFeature_AdvancedSearch_BigDescription,
         R.drawable.defense_advanced_search
     ),
-    TradeSignals(
-        R.string.Premium_TradeSignals,
-        R.string.Premium_TradeSignals_Description,
+    TradeSignalsFeature(
+        R.string.Premium_UpgradeFeature_TradeSignals,
+        R.string.Premium_UpgradeFeature_TradeSignals_BigDescription,
         R.drawable.defense_trade_signals
     ),
-    PrioritySupport(
-        R.string.Premium_PrioritySupport,
-        R.string.Premium_PrioritySupport_Description,
+    PrioritySupportFeature(
+        R.string.Premium_UpgradeFeature_PrioritySupport,
+        R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
         R.drawable.defense_priority_support
     );
+
+    companion object {
+        fun getFeature(paidAction: IPaidAction) = when (paidAction) {
+            TokenInsights -> TokenInsightsFeature
+            AdvancedSearch -> AdvancedSearchFeature
+            TradeSignals -> TradeSignalsFeature
+            RobberyProtection -> RobberyProtectionFeature
+            SecureSend -> SecureSendFeature
+            ScamProtection -> ScamProtectionFeature
+            PrioritySupport -> PrioritySupportFeature
+            LossProtection -> LossProtectionFeature
+            else -> throw IllegalArgumentException("Unknown paid action")
+        }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DefenseSystemFeatureScreen(navController: NavController, feature: PremiumFeature) {
+private fun DefenseSystemFeatureScreen(
+    navController: NavController,
+    feature: PremiumFeature,
+    showAllFeaturesButton: Boolean
+) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     BottomSheetContent(
@@ -129,13 +162,6 @@ private fun DefenseSystemFeatureScreen(navController: NavController, feature: Pr
                     navController.popBackStack()
                 }
             )
-            subhead_grey(
-                text = stringResource(R.string.Premium_DefenseSystem),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                textAlign = TextAlign.Center
-            )
             TextBlock(
                 text = stringResource(feature.descriptionRes),
                 textAlign = TextAlign.Center
@@ -151,17 +177,19 @@ private fun DefenseSystemFeatureScreen(navController: NavController, feature: Pr
                     navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
                 }
             )
-            HSButton(
-                title = stringResource(R.string.Premium_ViewAllFeatures),
-                style = ButtonStyle.Transparent,
-                variant = ButtonVariant.Secondary,
-                size = ButtonSize.Medium,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    navController.popBackStack()
-                    navController.slideFromBottom(R.id.buySubscriptionDialog)
-                }
-            )
+            if (showAllFeaturesButton) {
+                HSButton(
+                    title = stringResource(R.string.Premium_ViewAllFeatures),
+                    style = ButtonStyle.Transparent,
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Medium,
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        navController.popBackStack()
+                        navController.slideFromBottom(R.id.buySubscriptionDialog)
+                    }
+                )
+            }
         }
     }
 }

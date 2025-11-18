@@ -15,11 +15,11 @@ object UserSubscriptionManager {
                 TokenInsights,
                 AdvancedSearch,
                 TradeSignals,
-                DuressMode,
-                AddressPhishing,
-                AddressBlacklist,
-                VIPSupport,
-                MevProtection,
+                RobberyProtection,
+                SecureSend,
+                ScamProtection,
+                PrioritySupport,
+                LossProtection,
             )
         ),
     )

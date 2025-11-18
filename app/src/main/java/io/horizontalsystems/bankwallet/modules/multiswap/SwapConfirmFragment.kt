@@ -60,7 +60,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.subscriptions.core.MevProtection
+import io.horizontalsystems.subscriptions.core.LossProtection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -272,7 +272,7 @@ fun SwapConfirmScreen(navController: NavController) {
                     HsSwitch(
                         checked = uiState.mevProtectionEnabled,
                         onCheckedChange = {
-                            navController.paidAction(MevProtection) {
+                            navController.paidAction(LossProtection) {
                                 viewModel.toggleMevProtection(it)
                             }
                         }

@@ -44,6 +44,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionButtonStates
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionModule
@@ -184,7 +185,7 @@ fun WCRequestScreen(
                 onActivateClick = {
                     navController.slideFromBottom(
                         R.id.defenseSystemFeatureDialog,
-                        PremiumFeature.SecureSend
+                        DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature, true)
                     )
                 }
             )

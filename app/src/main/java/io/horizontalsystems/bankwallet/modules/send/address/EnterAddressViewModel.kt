@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.subscriptions.core.AddressBlacklist
+import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -137,7 +137,7 @@ class EnterAddressViewModel(
                     checkResults = mapOf()
                     emitState()
                 } else if (addressCheckEnabled) {
-                    if (UserSubscriptionManager.isActionAllowed(AddressBlacklist)) {
+                    if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
                         checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
                         emitState()
 
