@@ -382,6 +382,7 @@
     <string name="Balance_Receive_YesAlreadyOwn">Sim, eu já possuo</string>
     <string name="Balance_Receive_IDontHave">Não, eu não tenho</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparente</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">ZEC transparente detectado</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Você tem um saldo ZEC guardado em um endereço transparente. Para usá-lo em Unstoppable, ele deve ser protegido por total privacidade.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudos</string>
