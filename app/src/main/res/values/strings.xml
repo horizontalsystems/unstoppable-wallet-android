@@ -1578,7 +1578,8 @@
 
     <!-- Address Format Settings List -->
 
-    <string name="AddressFormatSettings_Description">Select address format for receiving payments. A correct format should be chosen when restoring an existing wallet.</string>
+    <string name="AddressFormatSettings_Description">Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
+    <string name="AddressFormatSettings_Subtitle">Select address format for the coin.</string>
 
     <!-- Coin Platforms -->
 

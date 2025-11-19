@@ -5,12 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.description
-import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.title
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import kotlinx.coroutines.launch
@@ -41,15 +37,13 @@ class BlockchainTokensViewModel(
         val selectedTokenIndexes = request.enabledTokens.map { request.tokens.indexOf(it) }
 
         val config = BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
             title = blockchain.name,
-            description = Translator.getString(R.string.AddressFormatSettings_Description),
             selectedIndexes = selectedTokenIndexes,
             allowEmpty = request.allowEmpty,
             viewItems = request.tokens.map { token ->
                 BottomSheetSelectorViewItem(
-                    title = token.type.title,
-                    subtitle = token.type.description,
+                    title = token.type.description,
+                    subtitle = token.type.title,
                 )
             }
         )
