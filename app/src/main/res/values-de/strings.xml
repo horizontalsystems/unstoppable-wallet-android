@@ -382,6 +382,7 @@
     <string name="Balance_Receive_YesAlreadyOwn">Ja, ich besitze bereits</string>
     <string name="Balance_Receive_IDontHave">Nein, ich habe nicht</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Transparente ZEC erkannt</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Sie haben ein ZEC-Guthaben in einer transparenten Adresse. Um es in unaufhaltsam zu verwenden, muss es zum Schutz der Privatsphäre geschützt sein.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Schild</string>
