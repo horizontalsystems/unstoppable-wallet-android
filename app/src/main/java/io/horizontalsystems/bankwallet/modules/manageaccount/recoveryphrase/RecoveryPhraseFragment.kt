@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +30,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -63,7 +61,7 @@ private fun RecoveryPhraseScreen(
 
     val view = LocalView.current
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     HSScaffold(
@@ -108,38 +106,31 @@ private fun RecoveryPhraseScreen(
             }
         }
         if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
+            ConfirmCopyBottomSheet(
                 sheetState = sheetState,
-                containerColor = ComposeAppTheme.colors.transparent
-            ) {
-                ConfirmCopyBottomSheet(
-                    onConfirm = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-
-                        TextHelper.copyText(viewModel.words.joinToString(" "))
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-
-                        stat(
-                            page = StatPage.RecoveryPhrase,
-                            event = StatEvent.Copy(StatEntity.RecoveryPhrase)
-                        )
-                    },
-                    onCancel = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                onConfirm = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showBottomSheet = false
                         }
                     }
-                )
-            }
+
+                    TextHelper.copyText(viewModel.words.joinToString(" "))
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                    stat(
+                        page = StatPage.RecoveryPhrase,
+                        event = StatEvent.Copy(StatEntity.RecoveryPhrase)
+                    )
+                },
+                onDismiss = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showBottomSheet = false
+                        }
+                    }
+                }
+            )
         }
     }
 }
