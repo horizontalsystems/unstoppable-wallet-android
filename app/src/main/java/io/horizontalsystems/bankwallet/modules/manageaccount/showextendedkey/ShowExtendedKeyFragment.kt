@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -113,7 +112,7 @@ private fun ShowExtendedKeyScreen(
 
     val view = LocalView.current
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     HSScaffold(
@@ -256,35 +255,28 @@ private fun ShowExtendedKeyScreen(
             }
         }
         if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
+            ConfirmCopyBottomSheet(
                 sheetState = sheetState,
-                containerColor = ComposeAppTheme.colors.transparent
-            ) {
-                ConfirmCopyBottomSheet(
-                    onConfirm = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                        TextHelper.copyText(viewModel.extendedKey)
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                        showBottomSheet = false
-
-                        viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
-                    },
-                    onCancel = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                onConfirm = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showBottomSheet = false
                         }
                     }
-                )
-            }
+                    TextHelper.copyText(viewModel.extendedKey)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                    showBottomSheet = false
+
+                    viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
+                },
+                onDismiss = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showBottomSheet = false
+                        }
+                    }
+                }
+            )
         }
     }
 }
