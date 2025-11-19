@@ -381,6 +381,7 @@
     <string name="Balance_Receive_YesAlreadyOwn">是的，我已经拥有了</string>
     <string name="Balance_Receive_IDontHave">不，我没有</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">透明的</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">检测到透明ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">您的 ZEC 余额保持在一个透明的地址中。要在不可阻挡的情况下使用它，它必须被保护为完全隐私。</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
