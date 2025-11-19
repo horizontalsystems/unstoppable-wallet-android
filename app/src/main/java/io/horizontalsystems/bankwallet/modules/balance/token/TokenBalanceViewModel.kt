@@ -16,17 +16,19 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
+import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceViewModel(
-    private val wallet: Wallet,
+    val wallet: Wallet,
     private val balanceService: TokenBalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val transactionsService: TokenTransactionsService,
@@ -47,6 +49,8 @@ class TokenBalanceViewModel(
     private var failedErrorMessage: String? = null
     private var waringMessage: String? = null
     private var loadingTransactions = true
+    private var showZecTransparentAmountWarning = false
+    private var transparentAmountWarningShown = false
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -93,6 +97,7 @@ class TokenBalanceViewModel(
         failedErrorMessage = failedErrorMessage,
         error = error,
         warningMessage = waringMessage,
+        showZecTransparentAmountDetectedWarning = showZecTransparentAmountWarning,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -134,8 +139,20 @@ class TokenBalanceViewModel(
             }
         )
 
+        if (wallet.token.blockchainType == BlockchainType.Zcash) {
+            updateZecTransparentAmountDetectedWarning(balanceViewItem)
+        }
+
         updateErrorState()
         emitState()
+    }
+
+    private fun updateZecTransparentAmountDetectedWarning(balanceViewItem: BalanceViewItem) {
+        if (!showZecTransparentAmountWarning && !transparentAmountWarningShown && balanceViewItem.syncingProgress.progress == null) {
+            showZecTransparentAmountWarning = balanceViewItem.lockedValues.any {
+                it is ZcashLockedValue
+            }
+        }
     }
 
     private fun updateErrorState() {
@@ -184,6 +201,11 @@ class TokenBalanceViewModel(
 
     fun toggleBalanceVisibility() {
         balanceHiddenManager.toggleBalanceHidden()
+    }
+
+    fun transparentZecAmountWarningShown() {
+        transparentAmountWarningShown = true
+        emitState()
     }
 
     override fun onCleared() {
