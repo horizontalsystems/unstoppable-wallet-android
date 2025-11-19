@@ -61,6 +61,7 @@ class TokenBalanceModule {
         val error: TokenBalanceError? = null,
         val failedErrorMessage: String?,
         val warningMessage: String?,
+        val showZecTransparentAmountDetectedWarning: Boolean,
     )
 
     data class TokenBalanceError(
