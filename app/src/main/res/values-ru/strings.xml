@@ -384,6 +384,7 @@
     <string name="Balance_Receive_YesAlreadyOwn">Да, у меня уже есть</string>
     <string name="Balance_Receive_IDontHave">Нет, у меня нет</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Прозрачный</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Обнаружен прозрачный ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Прозрачная сумма</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Баланс ZEC хранится в прозрачном адресе. Чтобы использовать его без остановок, он должен быть защищен от полной конфиденциальности.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
