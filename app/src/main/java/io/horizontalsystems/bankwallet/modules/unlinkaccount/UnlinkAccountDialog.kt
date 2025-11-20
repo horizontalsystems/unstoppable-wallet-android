@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -41,6 +40,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -122,7 +122,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                     confirmations.forEachIndexed { index, item ->
                         CellSecondary(
                             left = {
-                                HsCheckbox(
+                                HSSelector(
                                     checked = item.confirmed,
                                     onCheckedChange = {
                                         viewModel.toggleConfirm(item)
