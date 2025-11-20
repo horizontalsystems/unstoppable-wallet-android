@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
@@ -27,6 +26,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSwitcher
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -56,11 +56,14 @@ fun BottomSheetSelectorMultiple(
                 enabled = config.allowEmpty || selected.isNotEmpty()
             )
         }
-    ){
+    ) {
         BottomSheetHeaderV3(
             title = config.title
         )
-        TextBlock(text = stringResource(R.string.AddressFormatSettings_Subtitle), textAlign = TextAlign.Center)
+        TextBlock(
+            text = stringResource(R.string.AddressFormatSettings_Subtitle),
+            textAlign = TextAlign.Center
+        )
 
         Column(
             modifier = Modifier
@@ -91,7 +94,7 @@ fun BottomSheetSelectorMultiple(
                         )
                     },
                     right = {
-                        HsSwitch(
+                        HSSwitcher(
                             modifier = Modifier.padding(start = 5.dp),
                             checked = selected.contains(index),
                             onCheckedChange = { checked ->
