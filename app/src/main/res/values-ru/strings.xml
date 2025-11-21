@@ -531,7 +531,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Невозможно отправить 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Аккаунт не активен</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Новым кошелькам TRON требуется депозит как минимум 1 TRX для активации. Неактивные кошельки могут принимать и хранить токены, но не будут корректировать балансы до момента активации.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Для активации новым кошелькам TRON требуется не менее 1 TRX. До этого они могут получать токены, но не будут показывать правильные балансы.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Новое соединение</string>
     <string name="TonConnect_Error_InvalidUrl">Неверный URL-адрес</string>
@@ -806,7 +806,8 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Не удается заменить</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
-    <string name="Info_Reserved_Title">Зарезервировано</string>
+    <string name="Info_LockTime_NoDateDescription">Отправитель отправил эти средства с блокировкой траты, срок действия которой истекает на указанную дату.\n\nНе волнуйтесь, полученные биткойны уже вашы, но до истечения периода блокировки вы не можете тратить их в сети Bitcoin.</string>
+    <string name="Info_Reserved_Title">Заблокированный баланс</string>
     <string name="Info_Reserved_Description">Stellar сеть блокирует 1 XLM для активации кошелька и 0.5 XLM в качестве резерва для каждого токена, активированного в вашем кошельке.</string>
     <string name="Info_Reserved_CurrentlyLocked">Сейчас заблокирован:</string>
     <string name="Info_Reserved_WalletAction">Активация кошелька</string>
@@ -1304,7 +1305,8 @@
     <string name="AddEvmToken_Bep2NotFound">Символ BEP2 не найден</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Адрес контракта не найден в %s блокчейне </string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">Выберите формат адреса для получения средств. Правильный формат должен быть выбран при восстановлении существующего кошелька.</string>
+    <string name="AddressFormatSettings_Description">Перейдите к рекомендованному параметру если не уверен. При восстановлении существующего кошелька следует выбрать правильный формат.</string>
+    <string name="AddressFormatSettings_Subtitle">Выберите формат адреса для монеты.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Нативный</string>
     <!-- Blockchain Settings -->
