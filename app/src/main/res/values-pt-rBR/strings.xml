@@ -529,7 +529,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">Não é possível transferir TRX para si mesmo</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Não é possível transferir 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Conta Não Ativa</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON requerem um depósito mínimo de 1 TRX para se tornarem ativas. Carteiras inativas podem armazenar e receber tokens, mas não atualizarão os saldos até serem ativadas.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON precisam de pelo menos 1 TRX para ativar. Até lá, elas receberão tokens mas não mostrarão saldos corretos.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Nova Conexão</string>
     <string name="TonConnect_Error_InvalidUrl">Endereço URL Inválido</string>
@@ -804,7 +804,7 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Incapaz de substituir</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
-    <string name="Info_Reserved_Title">Reservado</string>
+    <string name="Info_Reserved_Title">Saldo Bloqueado</string>
     <string name="Info_Reserved_Description">A rede Stellar bloqueia 1 XLM para ativar a carteira e 0.5 XLM como uma reserva para cada token ativado na sua carteira.</string>
     <string name="Info_Reserved_CurrentlyLocked">Bloqueado atualmente:</string>
     <string name="Info_Reserved_WalletAction">Ativação da carteira</string>
@@ -1307,7 +1307,8 @@
     <string name="AddEvmToken_Bep2NotFound">Símbolo BEP2 não encontrado</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Endereço do contrato não encontrado em %s blockchain</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">Selecione o formato de endereço para receber pagamentos. Um formato correto deve ser escolhido quando restaurar uma carteira existente.</string>
+    <string name="AddressFormatSettings_Description">Prossiga com a opção recomendada se não tiver certeza. Um formato correto deve ser escolhido ao restaurar uma carteira existente.</string>
+    <string name="AddressFormatSettings_Subtitle">Selecione o formato de endereço para a moeda.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativo</string>
     <!-- Blockchain Settings -->
