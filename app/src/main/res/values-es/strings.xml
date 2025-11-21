@@ -529,7 +529,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">No se puede transferir TRX a ti mismo</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">No se puede transferir 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Cuenta No Activa</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Las nuevas billeteras TRON requieren un depósito de al menos 1 TRX para activarse. Las billeteras inactivas pueden mantener y recibir tokens, pero no corregirán los saldos hasta que se activen.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Las nuevas carteras TRON necesitan al menos 1 TRX para activar. Hasta entonces, pueden recibir fichas pero no mostrarán los balances correctos.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Nueva Conexión</string>
     <string name="TonConnect_Error_InvalidUrl">Dirección URL inválida</string>
@@ -804,7 +804,8 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">No se puede reemplazar</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">El remitente envió estos fondos con un bloqueo del gasto que expirará %s.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
-    <string name="Info_Reserved_Title">Reservado</string>
+    <string name="Info_LockTime_NoDateDescription">El remitente envió estos fondos con un bloqueo de gasto que expirará en la fecha indicada.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que caduque el período de bloqueo no se puede gastar en la red de Bitcoin.</string>
+    <string name="Info_Reserved_Title">Saldo bloqueado</string>
     <string name="Info_Reserved_Description">La red Stellar bloquea 1 XLM para activar el monedero y 0.5 XLM como una reserva para cada token activado en su cartera.</string>
     <string name="Info_Reserved_CurrentlyLocked">Actualmente bloqueado:</string>
     <string name="Info_Reserved_WalletAction">Activación del monedero</string>
@@ -1302,7 +1303,8 @@
     <string name="AddEvmToken_Bep2NotFound">Símbolo BEP2 no encontrado</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Dirección del contrato no encontrada en la cadena de bloques %s</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">Seleccione el formato de dirección para recibir pagos. Debe elegirse un formato correcto cuando se restaure una cartera existente.</string>
+    <string name="AddressFormatSettings_Description">Proceda con la opción recomendada si no está segura. Debe elegirse un formato correcto al restaurar una cartera existente.</string>
+    <string name="AddressFormatSettings_Subtitle">Seleccione el formato de dirección para la moneda.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativa</string>
     <!-- Blockchain Settings -->
