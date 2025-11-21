@@ -399,7 +399,7 @@ private fun TokenBalanceHeader(
 
             title = balanceViewItem.primaryValue.value.hs(color = color)
             body =
-                (balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: "").hs(
+                (balanceViewItem.syncingTextValue ?: balanceViewItem.secondaryValue?.value ?: "").hs(
                     color = color
                 )
         }
