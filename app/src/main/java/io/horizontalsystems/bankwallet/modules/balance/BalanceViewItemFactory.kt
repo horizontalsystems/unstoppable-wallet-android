@@ -55,17 +55,25 @@ data class WarningText(
 
 open class LockedValue(
     val title: TranslatableString,
-    val infoTitle: TranslatableString,
     val info: TranslatableString,
     val coinValue: DeemedValue<String>
 )
 
 class ZcashLockedValue(
     title: TranslatableString,
-    infoTitle: TranslatableString,
     info: TranslatableString,
     coinValue: DeemedValue<String>
-) : LockedValue(title, infoTitle, info, coinValue)
+) : LockedValue(title, info, coinValue)
+
+class StellarLockedValue(
+    title: TranslatableString,
+    info: TranslatableString,
+    coinValue: DeemedValue<String>,
+    val lockedValues: List<StellarAssetLockedValue>
+) : LockedValue(title, info, coinValue)
+
+data class StellarAssetLockedValue(val title: String, val value: String)
+
 
 @Immutable
 data class BalanceViewItem2(
@@ -245,9 +253,8 @@ class BalanceViewItemFactory {
             )?.let {
                 add(
                     LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_LockedAmount_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_LockTime_Title),
-                        info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
+                        title = TranslatableString.ResString(R.string.Info_LockTime_Title),
+                        info = TranslatableString.ResString(R.string.Info_LockTime_NoDateDescription),
                         coinValue = it
                     )
                 )
@@ -261,8 +268,7 @@ class BalanceViewItemFactory {
             )?.let {
                 add(
                     LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_ProcessingBalance_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
+                        title = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
                         info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
                         coinValue = it
                     )
@@ -277,8 +283,7 @@ class BalanceViewItemFactory {
             )?.let {
                 add(
                     LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_NotRelayedAmount_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
+                        title = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
                         info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
                         coinValue = it
                     )
@@ -291,21 +296,26 @@ class BalanceViewItemFactory {
                 wallet.decimal,
                 wallet.token
             )?.let {
-                var info = TranslatableString.ResString(R.string.Info_Reserved_Description).toString()
-                info += "\n\n"
-                info += TranslatableString.ResString(R.string.Info_Reserved_CurrentlyLocked).toString()
+                val locked = mutableListOf<StellarAssetLockedValue>()
+                val info = TranslatableString.ResString(R.string.Info_Reserved_Description).toString()
 
-                info += "\n1 XLM - " + TranslatableString.ResString(R.string.Info_Reserved_WalletAction).toString()
+                locked.add(
+                    StellarAssetLockedValue(
+                        Translator.getString(R.string.Info_Reserved_WalletAction),
+                        "1 XLM"
+                    )
+                )
+
                 item.balanceData.stellarAssets.forEach {
-                    info += "\n0.5 XLM - ${it.code}"
+                    locked.add(StellarAssetLockedValue(it.code, "0.5 XLM"))
                 }
 
                 add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_Reserved_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_Reserved_Title),
+                    StellarLockedValue(
+                        title = TranslatableString.ResString(R.string.Info_Reserved_Title),
                         info = TranslatableString.PlainString(info),
-                        coinValue = it
+                        coinValue = it,
+                        lockedValues = locked
                     )
                 )
             }
@@ -319,8 +329,7 @@ class BalanceViewItemFactory {
                 )?.let {
                     add(
                         ZcashLockedValue(
-                            title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Title),
-                            infoTitle = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
+                            title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
                             info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
                             coinValue = it
                         )

@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceCache
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.balance.StellarAssetLockedValue
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordRepository
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSyncStateRepository
@@ -81,7 +82,8 @@ class TokenBalanceModule {
         val icon: Int,
         val title: String,
         val description: String,
-        val buttons: List<ButtonAction> = emptyList()
+        val buttons: List<ButtonAction> = emptyList(),
+        val stellarLockedValues: List<StellarAssetLockedValue>? = null
     )
 
 }

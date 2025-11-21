@@ -948,8 +948,9 @@
 
     <string name="Info_LockTime_Title" translatable="false">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
+    <string name="Info_LockTime_NoDateDescription">The sender sent these funds with a spending lock that will expire on the shown date.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
 
-    <string name="Info_Reserved_Title">Reserved</string>
+    <string name="Info_Reserved_Title">Locked Balance</string>
     <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
     <string name="Info_Reserved_CurrentlyLocked">Currently locked:</string>
     <string name="Info_Reserved_WalletAction">Wallet activation</string>
