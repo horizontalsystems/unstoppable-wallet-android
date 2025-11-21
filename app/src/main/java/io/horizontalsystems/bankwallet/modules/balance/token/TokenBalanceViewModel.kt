@@ -133,22 +133,26 @@ class TokenBalanceViewModel(
             setReceiveAddressForWatchAccount()
         }
 
+        if (wallet.token.blockchainType == BlockchainType.Zcash) {
+            updateZecTransparentAmountDetectedWarning(balanceViewItem)
+        }
+
         this.balanceViewItem = balanceViewItem.copy(
             primaryValue = balanceViewItem.primaryValue?.let {
                 it.copy(value = it.value + " " + balanceViewItem.wallet.coin.code)
             }
         )
 
-        if (wallet.token.blockchainType == BlockchainType.Zcash) {
-            updateZecTransparentAmountDetectedWarning(balanceViewItem)
-        }
-
         updateErrorState()
         emitState()
     }
 
     private fun updateZecTransparentAmountDetectedWarning(balanceViewItem: BalanceViewItem) {
-        if (!showZecTransparentAmountWarning && !transparentAmountWarningShown && balanceViewItem.syncingProgress.progress == null) {
+        if (!showZecTransparentAmountWarning
+            && !transparentAmountWarningShown
+            && this.balanceViewItem?.syncingProgress?.progress != null //it was syncing, but now sync completed
+            && balanceViewItem.syncingProgress.progress == null
+        ) {
             showZecTransparentAmountWarning = balanceViewItem.lockedValues.any {
                 it is ZcashLockedValue
             }

@@ -1,17 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -21,14 +18,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -45,9 +40,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
+import io.horizontalsystems.bankwallet.modules.balance.LockedValue
+import io.horizontalsystems.bankwallet.modules.balance.StellarLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
-import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.BottomSheetContent
-import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.ButtonAction
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -65,25 +60,26 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
@@ -97,26 +93,12 @@ fun TokenBalanceScreen(
     navController: NavController
 ) {
     val uiState = viewModel.uiState
-    var bottomSheetContent by remember { mutableStateOf<BottomSheetContent?>(null) }
+    var bottomSheetContent by remember { mutableStateOf<LockedValue?>(null) }
     val coroutineScope = rememberCoroutineScope()
-    val infoModalBottomSheetState =
+    val bottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
-    val zecTransparentAmountTitle =
-        stringResource(R.string.Balance_Zcash_UnshieldedBalanceDetected_Info_Title)
-    val zecTransparentAmountDescription =
-        stringResource(R.string.Balance_Zcash_UnshieldedBalance_Info_Description)
-    val zecTransparentAmountButtons = createZcashButtons(
-        hideBottomSheet = {
-            bottomSheetContent = null
-            coroutineScope.launch {
-                infoModalBottomSheetState.hide()
-            }
-        },
-        navController = navController,
-        wallet = viewModel.wallet
-    )
 
     LaunchedEffect(uiState.failedIconVisible) {
         if (uiState.failedIconVisible) {
@@ -126,13 +108,14 @@ fun TokenBalanceScreen(
 
     LaunchedEffect(uiState.showZecTransparentAmountDetectedWarning) {
         if (uiState.showZecTransparentAmountDetectedWarning) {
-            bottomSheetContent = BottomSheetContent(
-                icon = R.drawable.ic_shield_off_24,
-                title = zecTransparentAmountTitle,
-                description = zecTransparentAmountDescription,
-                buttons = zecTransparentAmountButtons
+            bottomSheetContent = ZcashLockedValue(
+                title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalanceDetected_Info_Title),
+                info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
+                coinValue = DeemedValue("", false)
             )
-
+            coroutineScope.launch {
+                bottomSheetState.show()
+            }
             viewModel.transparentZecAmountWarningShown()
         }
     }
@@ -227,13 +210,7 @@ fun TokenBalanceScreen(
                         showBottomSheet = { content ->
                             bottomSheetContent = content
                             coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
-                        },
-                        hideBottomSheet = {
-                            bottomSheetContent = null
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.hide()
+                                bottomSheetState.show()
                             }
                         },
                         onClickReceive = onClickReceive,
@@ -248,7 +225,8 @@ fun TokenBalanceScreen(
                                 },
                                 right = {
                                     CellRightNavigation(
-                                        subtitle = receiveAddress.shorten().hs(color = ComposeAppTheme.colors.leah)
+                                        subtitle = receiveAddress.shorten()
+                                            .hs(color = ComposeAppTheme.colors.leah)
                                     )
                                 },
                                 backgroundColor = ComposeAppTheme.colors.tyler,
@@ -300,17 +278,60 @@ fun TokenBalanceScreen(
             }
         }
     }
-    bottomSheetContent?.let { info ->
-        InfoBottomSheet(
-            content = info,
-            bottomSheetState = infoModalBottomSheetState,
-            hideBottomSheet = {
-                coroutineScope.launch {
-                    infoModalBottomSheetState.hide()
-                }
-                bottomSheetContent = null
+    bottomSheetContent?.let { lockedValue ->
+        when (lockedValue) {
+            is StellarLockedValue -> {
+                StellarLockedBalanceBottomSheet(
+                    sheetState = bottomSheetState,
+                    stellarLockedValue = lockedValue,
+                    onClose = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                        bottomSheetContent = null
+                    }
+                )
             }
-        )
+
+            is ZcashLockedValue -> {
+                ZcashLockedBalanceBottomSheet(
+                    sheetState = bottomSheetState,
+                    wallet = viewModel.wallet,
+                    title = lockedValue.title.getString(),
+                    info = lockedValue.info.getString(),
+                    onShieldClick = { wallet ->
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                        bottomSheetContent = null
+                        navController.slideFromRight(
+                            R.id.shieldZcash,
+                            ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
+                        )
+                    },
+                    onClose = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                        bottomSheetContent = null
+                    }
+                )
+            }
+
+            else -> {
+                InfoBottomSheet(
+                    lockedValue = lockedValue,
+                    bottomSheetState = bottomSheetState,
+                    hideBottomSheet = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                        bottomSheetContent = null
+                    }
+                )
+            }
+        }
+
     }
 
 }
@@ -350,8 +371,7 @@ private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
     viewModel: TokenBalanceViewModel,
-    showBottomSheet: (BottomSheetContent) -> Unit = { _ -> },
-    hideBottomSheet: () -> Unit,
+    showBottomSheet: (LockedValue) -> Unit = { _ -> },
     onClickReceive: () -> Unit,
     loading: Boolean
 ) {
@@ -378,7 +398,10 @@ private fun TokenBalanceHeader(
             }
 
             title = balanceViewItem.primaryValue.value.hs(color = color)
-            body = (balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: "").hs(color = color)
+            body =
+                (balanceViewItem.syncingLineText ?: balanceViewItem.secondaryValue?.value ?: "").hs(
+                    color = color
+                )
         }
 
         CardsElementAmountText(
@@ -408,9 +431,7 @@ private fun TokenBalanceHeader(
 
         LockedBalanceSection(
             balanceViewItem = balanceViewItem,
-            navController = navController,
             showBottomSheet = showBottomSheet,
-            hideBottomSheet = hideBottomSheet
         )
     }
 }
@@ -418,154 +439,154 @@ private fun TokenBalanceHeader(
 @Composable
 private fun LockedBalanceSection(
     balanceViewItem: BalanceViewItem,
-    navController: NavController,
-    showBottomSheet: (BottomSheetContent) -> Unit,
-    hideBottomSheet: () -> Unit
+    showBottomSheet: (LockedValue) -> Unit,
 ) {
     balanceViewItem.lockedValues.forEach { lockedValue ->
-        val infoTitle = lockedValue.infoTitle.getString()
-        val infoText = lockedValue.info.getString()
 
         when (lockedValue) {
             is ZcashLockedValue -> {
-                val zcashButtons =
-                    createZcashButtons(hideBottomSheet, navController, balanceViewItem.wallet)
                 LockedBalanceZcashCell(
                     title = lockedValue.title.getString(),
                     lockedAmount = lockedValue.coinValue,
                     balanceHidden = balanceViewItem.balanceHidden,
                 ) {
-                    showBottomSheet(
-                        BottomSheetContent(
-                            icon = R.drawable.ic_shield_off_24,
-                            title = infoTitle,
-                            description = infoText,
-                            buttons = zcashButtons
-                        )
-                    )
+                    showBottomSheet(lockedValue)
                 }
             }
 
             else -> {
-                val defaultButtons = listOf(
-                    ButtonAction(
-                        title = stringResource(R.string.Button_Understand),
-                        onClick = { hideBottomSheet() }
-                    )
-                )
                 LockedBalanceCell(
                     title = lockedValue.title.getString(),
                     lockedAmount = lockedValue.coinValue,
                     balanceHidden = balanceViewItem.balanceHidden,
                 ) {
-                    showBottomSheet(
-                        BottomSheetContent(
-                            icon = R.drawable.book_24,
-                            title = infoTitle,
-                            description = infoText,
-                            buttons = defaultButtons
-                        )
-                    )
+                    showBottomSheet(lockedValue)
                 }
             }
         }
     }
 }
 
-@Composable
-private fun createZcashButtons(
-    hideBottomSheet: () -> Unit,
-    navController: NavController,
-    wallet: Wallet
-): List<ButtonAction> {
-    return listOf(
-        ButtonAction(
-            title = stringResource(R.string.Button_Cancel),
-            onClick = { hideBottomSheet() }
-        ),
-        ButtonAction(
-            title = stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield),
-            buttonVariant = ButtonVariant.Primary,
-            onClick = {
-                hideBottomSheet()
-                navController.slideFromRight(
-                    R.id.shieldZcash,
-                    ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
-                )
-            }
-        ),
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoBottomSheet(
-    content: BottomSheetContent,
+    lockedValue: LockedValue,
     hideBottomSheet: () -> Unit,
     bottomSheetState: SheetState
 ) {
     BottomSheetContent(
         onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState
+        sheetState = bottomSheetState,
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Button_Understand),
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = hideBottomSheet
+            )
+        }
     ) {
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.book_24),
+            title = lockedValue.title.getString()
+        )
+        TextBlock(
+            text = lockedValue.info.getString(),
+            textAlign = TextAlign.Center
+        )
+        VSpacer(16.dp)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ZcashLockedBalanceBottomSheet(
+    sheetState: SheetState,
+    wallet: Wallet,
+    title: String ,
+    info: String,
+    onShieldClick: (Wallet) -> Unit,
+    onClose: () -> Unit
+) {
+    BottomSheetContent(
+        onDismissRequest = onClose,
+        sheetState = sheetState
+    ) {
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.ic_shield_off_24),
+            title = title
+        )
+        TextBlock(
+            text = info,
+            textAlign = TextAlign.Center
+        )
+        VSpacer(16.dp)
+        ButtonsGroupHorizontal {
+            HSButton(
+                title = stringResource(R.string.Button_Cancel),
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.weight(1f),
+                onClick = onClose
+            )
+            HSButton(
+                title = stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield),
+                variant = ButtonVariant.Primary,
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    onShieldClick(wallet)
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StellarLockedBalanceBottomSheet(
+    sheetState: SheetState,
+    stellarLockedValue: StellarLockedValue,
+    onClose: () -> Unit
+) {
+    BottomSheetContent(
+        onDismissRequest = onClose,
+        sheetState = sheetState,
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Button_Close),
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onClose
+            )
+        }
+    ) {
+        BottomSheetHeaderV3(
+            title = stringResource(R.string.Info_Reserved_Title)
+        )
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+                .padding(vertical = 8.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 8.dp, bottom = 12.dp)
-                    .size(52.dp, 4.dp)
-                    .background(ComposeAppTheme.colors.blade, RoundedCornerShape(50))
-            ) { }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(96.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .size(72.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    painter = painterResource(content.icon),
-                    tint = ComposeAppTheme.colors.grey,
-                    contentDescription = null,
+            stellarLockedValue.lockedValues.forEach { item ->
+                CellSecondary(
+                    middle = {
+                        CellMiddleInfo(
+                            eyebrow = item.title.hs
+                        )
+                    },
+                    right = {
+                        CellRightInfo(
+                            title = item.value.hs
+                        )
+                    }
                 )
             }
-            VSpacer(16.dp)
-            headline1_leah(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .fillMaxWidth(),
-                text = content.title,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            VSpacer(8.dp)
-            body_grey(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .fillMaxWidth(),
-                text = content.description,
-                textAlign = TextAlign.Center,
-            )
-            VSpacer(16.dp)
-            ButtonsGroupHorizontal {
-                content.buttons.forEach { button ->
-                    HSButton(
-                        title = button.title,
-                        variant = button.buttonVariant,
-                        size = ButtonSize.Medium,
-                        modifier = Modifier.weight(1f),
-                        onClick = button.onClick
-                    )
-                }
-            }
-            VSpacer(16.dp)
         }
+        TextBlock(
+            text = stringResource(R.string.Info_Reserved_Description),
+        )
     }
 }
 
@@ -696,20 +717,15 @@ private fun ButtonsRow(
 @Composable
 private fun InfoBottomSheetPreview() {
     val bottomSheetState = rememberModalBottomSheetState()
-    val content = BottomSheetContent(
-        icon = R.drawable.ic_shield_off_24,
-        title = "Title",
-        description = "Description",
-        buttons = listOf(
-            ButtonAction(
-                title = "Button 1",
-                onClick = {}
-            ),
-        )
+    val lockedValue = LockedValue(
+        title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalanceDetected_Info_Title),
+        info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
+        coinValue = DeemedValue("", false)
     )
+
     ComposeAppTheme {
         InfoBottomSheet(
-            content,
+            lockedValue,
             hideBottomSheet = {},
             bottomSheetState,
         )
