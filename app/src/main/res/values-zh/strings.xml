@@ -528,7 +528,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">无法将 TRX 转移给自己</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">无法传输 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">帐户未激活</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">新的TRON钱包需要至少1TRX的存款才能激活。 非活动钱包可以持有并接收代币，但在激活之前不会纠正余额。</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">新的 TRON 钱包至少需要 1 TRX 才能激活。在此之前，他们可以获得令牌，但不会显示正确的余额。</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">新连接</string>
     <string name="TonConnect_Error_InvalidUrl">无效的URL地址</string>
@@ -803,7 +803,7 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">无法替换</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的加密货币已经属于您，但在锁定期限结束前，您无法在网络上消费它们。</string>
-    <string name="Info_Reserved_Title">保留</string>
+    <string name="Info_Reserved_Title">锁定余额</string>
     <string name="Info_Reserved_Description">Stellar 网络锁定了 1 XLM 以激活钱包和 0.5 XLM 作为您钱包中激活的每个令牌的储备。</string>
     <string name="Info_Reserved_CurrentlyLocked">当前锁定：</string>
     <string name="Info_Reserved_WalletAction">激活钱包</string>
@@ -1301,7 +1301,8 @@
     <string name="AddEvmToken_Bep2NotFound">找不到 BEP2 符号</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">选择接收付款的地址格式。恢复现有钱包时应选择正确的格式。</string>
+    <string name="AddressFormatSettings_Description">如果不确定的话，继续使用推荐选项。恢复现有钱包时应选择正确的格式。</string>
+    <string name="AddressFormatSettings_Subtitle">选择地址格式的硬币。</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">原生</string>
     <!-- Blockchain Settings -->
