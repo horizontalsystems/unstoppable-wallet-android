@@ -247,6 +247,7 @@ interface IWordsManager {
 sealed class AdapterState {
     object Synced : AdapterState()
     object Connecting : AdapterState()
+    data class Downloading(val progress: Int? = null) : AdapterState()
     data class Syncing(
         val progress: Int? = null,
         val lastBlockDate: Date? = null,
@@ -259,6 +260,7 @@ sealed class AdapterState {
         return when (this) {
             is Synced -> "Synced"
             is Connecting -> "Connecting"
+            is Downloading -> "Downloading"
             is Syncing -> "Syncing ${progress?.let { "${it * 100}" } ?: ""} lastBlockDate: $lastBlockDate"
             is SearchingTxs -> "SearchingTxs count: $count"
             is NotSynced -> "NotSynced ${error.javaClass.simpleName} - message: ${error.message}"

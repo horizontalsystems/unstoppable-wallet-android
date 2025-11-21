@@ -370,7 +370,7 @@ class ZcashAdapter(
     }
 
     private fun onDownloadProgress(progress: PercentDecimal) {
-        syncState = AdapterState.Syncing(progress.toPercentage())
+        syncState = AdapterState.Downloading(progress.toPercentage())
     }
 
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {

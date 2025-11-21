@@ -36,17 +36,7 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean,
     val warning: WarningText?,
     val balanceHidden: Boolean
-) {
-    val syncingLineText = syncingTextValue?.let {
-        buildString {
-            append(syncingTextValue)
-
-            syncedUntilTextValue?.let {
-                append(" - $syncedUntilTextValue")
-            }
-        }
-    }
-}
+)
 
 data class WarningText(
     val title: TranslatableString,
@@ -111,6 +101,10 @@ class BalanceViewItemFactory {
                     SyncingProgress(SyncingProgressType.Spinner, progressValue)
                 }
             }
+            is AdapterState.Downloading -> {
+                val progressValue = state.progress ?: getDefaultSyncingProgress(blockchainType)
+                SyncingProgress(SyncingProgressType.ProgressWithRing, progressValue)
+            }
             is AdapterState.Connecting -> SyncingProgress(SyncingProgressType.Spinner, 10)
             is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner,10)
             else -> SyncingProgress(null, null)
@@ -156,7 +150,7 @@ class BalanceViewItemFactory {
         is BlockchainType.Unsupported -> 0
     }
 
-    private fun getSyncingText(state: AdapterState?): String? {
+    private fun getSyncingText(state: AdapterState?, syncedUntil: String?, withDetails: Boolean = false): String? {
         if (state == null) {
             return null
         }
@@ -165,8 +159,23 @@ class BalanceViewItemFactory {
             is AdapterState.Syncing -> {
                 when {
                     state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
-                    state.progress != null -> Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
+                    state.progress != null && state.progress > 0 -> {
+                        val text = Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
+                        if (syncedUntil != null) {
+                            "$text - $syncedUntil"
+                        } else {
+                            text
+                        }
+                    }
                     else -> Translator.getString(R.string.Balance_Syncing)
+                }
+            }
+            is AdapterState.Downloading -> {
+                if (withDetails) {
+                    val progressValue = state.progress ?: 10
+                    Translator.getString(R.string.Balance_Downloading) + " " + progressValue.toString() + "%"
+                } else {
+                    Translator.getString(R.string.Balance_Downloading)
                 }
             }
             is AdapterState.Connecting -> Translator.getString(R.string.WalletConnect_Status_Connecting)
@@ -344,6 +353,8 @@ class BalanceViewItemFactory {
             Translator.getString(R.string.Hud_Text_NoInternet)
         }
 
+        val syncedUntil = getSyncedUntilText(state)
+
         return BalanceViewItem(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -351,8 +362,8 @@ class BalanceViewItemFactory {
             lockedValues = lockedValues,
             exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
-            syncingTextValue = getSyncingText(state),
-            syncedUntilTextValue = getSyncedUntilText(state),
+            syncingTextValue = getSyncingText(state, syncedUntil, true),
+            syncedUntilTextValue = syncedUntil,
             failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
@@ -393,6 +404,8 @@ class BalanceViewItemFactory {
             Translator.getString(R.string.Hud_Text_NoInternet)
         }
 
+        val syncedUntil = getSyncedUntilText(state)
+
         return BalanceViewItem2(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -400,8 +413,8 @@ class BalanceViewItemFactory {
             exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
             diff = latestRate?.diff?.let { DeemedValue(it, latestRate.expired) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
-            syncingTextValue = getSyncingText(state),
-            syncedUntilTextValue = getSyncedUntilText(state),
+            syncingTextValue = getSyncingText(state, syncedUntil),
+            syncedUntilTextValue = syncedUntil,
             failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             badge = wallet.badge,
             errorMessage = errorMessage,
