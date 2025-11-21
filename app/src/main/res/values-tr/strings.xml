@@ -418,7 +418,6 @@
     <string name="Tron_SelfSendTrxNotAllowed">TRX kendinize aktarılamıyor</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">0 %s aktarılamıyor</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Hesap aktif değil</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Yeni TRON cüzdanları aktif hale gelmek için en az 1 TRX yatırılmasını gerektirir. Aktif olmayan cüzdanlar, tokenları alabilir ve saklayabilir, ancak etkinleştirilene kadar bakiyeleri güncellemez.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Yeni bağlantı</string>
     <string name="TonConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
@@ -997,7 +996,6 @@
     <string name="AddEvmToken_Bep2NotFound">BEP2 sembolü bulunamadı</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Sözleşme adresi %s blockchain\'de bulunamadı</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">Ödemeleri almak için adres biçimini seçin. Mevcut bir cüzdanı geri yüklerken doğru bir format seçilmelidir.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Yerel</string>
     <!-- Blockchain Settings -->
