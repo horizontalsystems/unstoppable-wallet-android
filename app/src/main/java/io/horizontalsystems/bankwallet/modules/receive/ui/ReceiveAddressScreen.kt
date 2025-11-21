@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +23,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -79,14 +76,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ErrorScreenWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsTextButton
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -102,9 +97,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -126,11 +125,8 @@ fun ReceiveAddressScreen(
     val openAmountDialog = remember { mutableStateOf(false) }
     val tronAlertSheetState =
         androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val tronInfoSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var isTronAlertVisible by remember { mutableStateOf(false) }
-    var isTronInfoVisible by remember { mutableStateOf(false) }
 
     if (uiState is ReceiveModule.UiState) {
         LaunchedEffect(uiState.showTronAlert) {
@@ -285,7 +281,7 @@ fun ReceiveAddressScreen(
                                             )
                                         },
                                         showAccountNotActiveWarningDialog = {
-                                            isTronInfoVisible = true
+                                            isTronAlertVisible = true
                                         }
                                     )
                                 }
@@ -320,21 +316,8 @@ fun ReceiveAddressScreen(
             )
         }
     }
-    if (isTronInfoVisible) {
-        TronInfoBottomSheet(
-            title = stringResource(R.string.Tron_AddressNotActive_Title),
-            text = stringResource(R.string.Tron_AddressNotActive_Info),
-            hideBottomSheet = {
-                scope.launch { tronInfoSheetState.hide() }
-                isTronInfoVisible = false
-            },
-            bottomSheetState = tronInfoSheetState
-        )
-    }
     if (isTronAlertVisible) {
         TronAlertBottomSheet(
-            title = stringResource(R.string.Tron_AddressNotActive_Title),
-            text = stringResource(R.string.Tron_AddressNotActive_Info),
             hideBottomSheet = {
                 scope.launch { tronAlertSheetState.hide() }
                 isTronAlertVisible = false
@@ -652,63 +635,30 @@ fun AmountInputDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TronAlertBottomSheet(
-    title: String,
-    text: String,
     hideBottomSheet: () -> Unit,
     bottomSheetState: SheetState,
 ) {
-    ModalBottomSheet(
+    BottomSheetContent(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
-    ) {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_attention_24),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-            title = title,
-            onCloseClick = hideBottomSheet
-        ) {
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = text
-            )
-
-            VSpacer(12.dp)
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+        buttons = {
+            HSButton(
                 title = stringResource(R.string.Button_Understand),
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth(),
                 onClick = hideBottomSheet
             )
-            Spacer(Modifier.height(32.dp))
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TronInfoBottomSheet(
-    title: String,
-    text: String,
-    hideBottomSheet: () -> Unit,
-    bottomSheetState: SheetState,
-) {
-    ModalBottomSheet(
-        onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_info_24),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
-            title = title,
-            onCloseClick = hideBottomSheet
-        ) {
-            InfoText(text)
-
-            Spacer(Modifier.height(64.dp))
-        }
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.warning_filled_24),
+            imageTint = ComposeAppTheme.colors.jacob,
+            title = stringResource(R.string.Tron_TokenPage_AddressNotActive_Title)
+        )
+        TextBlock(
+            text = stringResource(R.string.Tron_TokenPage_AddressNotActive_Info),
+            textAlign = TextAlign.Center
+        )
     }
 }
 
