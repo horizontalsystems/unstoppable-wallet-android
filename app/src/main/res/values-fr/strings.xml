@@ -529,7 +529,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer TRX à vous-même</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Impossible de transférer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Compte non actif</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON nécessitent un dépôt d\'au moins 1 TRX pour devenir actifs. Les portefeuilles inactifs peuvent contenir et recevoir des jetons mais ne corrigeront pas les soldes tant qu\'ils ne seront pas activés.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON ont besoin d\'au moins 1 TRX pour être activés. D\'ici là, ils peuvent recevoir des jetons mais ne montreront pas les bons soldes.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Nouvelle connexion</string>
     <string name="TonConnect_Error_InvalidUrl">Adresse URL invalide</string>
@@ -803,7 +803,8 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Impossible de remplacer</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
-    <string name="Info_Reserved_Title">Réservé</string>
+    <string name="Info_LockTime_NoDateDescription">L\'expéditeur a envoyé ces fonds avec un verrou de dépense qui expirera à la date affichée.\n\nPas de soucis, les Bitcoins reçus sont déjà les vôtres, mais jusqu\'à ce que la période de verrouillage expire, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
+    <string name="Info_Reserved_Title">Solde verrouillé</string>
     <string name="Info_Reserved_Description">Le réseau Stellar verrouille 1 XLM pour activer le portefeuille et 0.5 XLM comme réserve pour chaque jeton activé dans votre portefeuille.</string>
     <string name="Info_Reserved_CurrentlyLocked">Actuellement verrouillé :</string>
     <string name="Info_Reserved_WalletAction">Activation du portefeuille</string>
@@ -1303,7 +1304,8 @@
     <string name="AddEvmToken_Bep2NotFound">Symbole BEP2 introuvable</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Adresse du contrat introuvable dans la blockchain %s</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">Sélectionnez le format d\'adresse pour la réception des paiements. Un format correct doit être choisi lors de la restauration d\'un portefeuille existant.</string>
+    <string name="AddressFormatSettings_Description">Poursuivez avec l\'option recommandée si vous n\'êtes pas sûr. Un format correct doit être choisi lors de la restauration d\'un portefeuille existant.</string>
+    <string name="AddressFormatSettings_Subtitle">Sélectionnez le format d\'adresse pour la pièce.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Natif</string>
     <!-- Blockchain Settings -->
