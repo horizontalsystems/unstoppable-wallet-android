@@ -529,7 +529,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">TRX kann nicht auf sich selbst übertragen werden</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Kann 0 %s nicht übertragen</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Konto nicht aktiv</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Neue TRON Wallets erfordern eine Anzahlung von mindestens 1 TRX, um aktiv zu werden. Inaktive Brieftaschen können Token halten und empfangen, werden aber erst nach Aktivierung korrigiert.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Neue TRON Wallets benötigen mindestens 1 TRX zum Aktivieren. Bis dahin können sie Token empfangen, aber keine korrekten Salden anzeigen.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Neue Verbindung</string>
     <string name="TonConnect_Error_InvalidUrl">Ungültige URL Adresse</string>
@@ -804,7 +804,8 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Ersetzen nicht möglich</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Der Absender hat dieses Guthaben mit einem Ausgabesperre gesendet, der auf %sablaufen wird.\n\nKeine Sorge, die erhaltenen Bitcoins sind bereits deiner, aber bis die Sperrfrist abläuft, können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
-    <string name="Info_Reserved_Title">Reserviert</string>
+    <string name="Info_LockTime_NoDateDescription">Der Absender hat dieses Guthaben mit einem Ausgabesperre gesendet, der am angezeigten Datum ablaufen wird.\n\nKeine Sorge, die erhaltenen Bitcoins sind bereits deiner, aber bis die Sperrfrist abläuft, können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
+    <string name="Info_Reserved_Title">Gesperrter Kontostand</string>
     <string name="Info_Reserved_Description">Das Stellar Netzwerk sperrt 1 XLM, um die Brieftasche und 0.5 XLM als Reserve für jedes in Ihrer Brieftasche aktivierte Token zu aktivieren.</string>
     <string name="Info_Reserved_CurrentlyLocked">Derzeit gesperrt:</string>
     <string name="Info_Reserved_WalletAction">Wallet-Aktivierung</string>
@@ -1311,7 +1312,8 @@
     <string name="AddEvmToken_Bep2NotFound">BEP2-Symbol nicht gefunden</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Vertragsadresse nicht in %s Blockchain gefunden</string>
     <!-- Address Format Settings List -->
-    <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für den Empfang von Zahlungen. Beim Wiederherstellen einer bestehenden Wallet sollte ein korrektes Format gewählt werden.</string>
+    <string name="AddressFormatSettings_Description">Bei Unsicherheit mit der empfohlenen Option fortfahren. Beim Wiederherstellen einer bestehenden Wallet sollte ein korrektes Format gewählt werden.</string>
+    <string name="AddressFormatSettings_Subtitle">Wählen Sie das Adressformat für die Münze.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativ</string>
     <!-- Blockchain Settings -->
