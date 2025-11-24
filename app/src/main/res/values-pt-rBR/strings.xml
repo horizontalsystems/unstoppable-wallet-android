@@ -335,6 +335,7 @@
     <string name="Balance_SyncedUntil">até %s</string>
     <string name="Balance_Syncing">Sincronizando...</string>
     <string name="Balance_SearchingTransactions">Procurando transações...</string>
+    <string name="Balance_Downloading">Baixando…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando… %s%%</string>
     <string name="Balance_BlocksRemaining">Blocos restantes - %d</string>
