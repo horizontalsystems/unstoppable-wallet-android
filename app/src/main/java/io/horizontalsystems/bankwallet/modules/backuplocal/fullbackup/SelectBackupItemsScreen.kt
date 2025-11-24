@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
@@ -75,7 +76,7 @@ fun SelectBackupItemsScreen(
                                 ) {
 
                                     Column(modifier = Modifier.weight(1f)) {
-                                        body_leah(text = wallet.name)
+                                        headline2_leah(text = wallet.name)
                                         if (wallet.backupRequired) {
                                             subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
                                         } else {

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -27,6 +28,7 @@ class SwapViewModel(
     private val fiatServiceOut: FiatService,
     private val timerService: TimerService,
     private val networkAvailabilityService: NetworkAvailabilityService,
+    private val defaultTokenService: SwapDefaultTokenService,
     tokenIn: Token?
 ) : ViewModelUiState<SwapUiState>() {
 
@@ -41,8 +43,13 @@ class SwapViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
+    private var cautionViewItems = listOf<CautionViewItem>()
 
     init {
+        viewModelScope.launch {
+            quoteService.start()
+        }
+
         viewModelScope.launch {
             networkAvailabilityService.stateFlow.collect {
                 handleUpdatedNetworkState(it)
@@ -65,7 +72,7 @@ class SwapViewModel(
         }
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
-                fiatAmountInputEnabled = it.coinPrice != null
+                fiatAmountInputEnabled = it.coinPrice != null && !it.coinPrice.expired
                 fiatAmountIn = it.fiatAmount
                 quoteService.setAmount(it.amount)
                 priceImpactService.setFiatAmountIn(fiatAmountIn)
@@ -89,12 +96,18 @@ class SwapViewModel(
                 emitState()
             }
         }
+        viewModelScope.launch {
+            defaultTokenService.stateFlow.collect {
+                it.tokenOut?.let { quoteService.setTokenOut(it) }
+            }
+        }
 
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
         networkAvailabilityService.start(viewModelScope)
         tokenIn?.let {
             quoteService.setTokenIn(it)
+            defaultTokenService.setTokenIn(it)
         }
     }
 
@@ -121,7 +134,8 @@ class SwapViewModel(
         timeout = timerState.timeout,
         timeRemainingProgress = timerState.remaining?.let { remaining ->
             remaining / quoteLifetime.toFloat()
-        }
+        },
+        cautions = cautionViewItems
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -152,6 +166,8 @@ class SwapViewModel(
         fiatServiceIn.setAmount(quoteState.amountIn)
         fiatServiceOut.setToken(quoteState.tokenOut)
         fiatServiceOut.setAmount(quoteState.quote?.amountOut)
+
+        cautionViewItems = quoteState.quote?.cautions?.map(HSCaution::toCautionViewItem) ?: listOf()
 
         emitState()
 
@@ -227,6 +243,7 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
+                SwapDefaultTokenService(App.marketKit),
                 tokenIn
             ) as T
         }
@@ -254,7 +271,8 @@ data class SwapUiState(
     val fiatPriceImpactLevel: PriceImpactLevel?,
     val timeRemaining: Long?,
     val timeout: Boolean,
-    val timeRemainingProgress: Float?
+    val timeRemainingProgress: Float?,
+    val cautions: List<CautionViewItem>,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting

@@ -129,7 +129,6 @@ fun SendBitcoinScreen(
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
@@ -161,7 +160,6 @@ fun SendBitcoinScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
                         icon = R.drawable.ic_manage_2,
-                        tint = ComposeAppTheme.colors.jacob,
                         onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
                     ),
                 )

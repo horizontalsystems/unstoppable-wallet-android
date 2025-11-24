@@ -111,7 +111,7 @@ class TopSectorsViewModel(
                 )
             },
             changeValue = item.diff?.let {
-                MarketDataValue.DiffNew(Value.Percent(it))
+                MarketDataValue.Diff(Value.Percent(it))
             },
             coin1 = item.topCoins[0],
             coin2 = item.topCoins[1],
@@ -148,8 +148,8 @@ class TopSectorsViewModel(
 
         stat(
             page = StatPage.Markets,
-            section = StatSection.Pairs,
-            event = StatEvent.Refresh
+            event = StatEvent.Refresh,
+            section = StatSection.Pairs
         )
     }
 

@@ -66,7 +66,7 @@ fun AmountCell(
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = coinAmount,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = coinAmountColor,
             )
 
@@ -101,6 +101,7 @@ fun AmountCellTV(
         coinAmount = coinAmountString(
             value = transactionValue.decimalValue?.abs(),
             coinCode = transactionValue.coinCode,
+            coinDecimals = transactionValue.decimals,
             sign = coinAmountSign.sign()
         ),
         coinAmountColor = coinAmountColor.color(),
@@ -143,7 +144,7 @@ enum class AmountColor {
     @Composable
     fun color() = when (this) {
         Positive -> ComposeAppTheme.colors.remus
-        Negative -> ComposeAppTheme.colors.lucian
+        Negative -> ComposeAppTheme.colors.leah
         Neutral -> ComposeAppTheme.colors.leah
     }
 }

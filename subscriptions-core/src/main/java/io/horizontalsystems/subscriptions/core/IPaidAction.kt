@@ -25,3 +25,6 @@ object AddressBlacklist : IPaidAction
 
 @Parcelize
 object VIPSupport : IPaidAction
+
+@Parcelize
+object MevProtection : IPaidAction

@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NotSupportedDerivedType
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
+import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
 class RestorePrivateKeyViewModel(
@@ -64,6 +65,10 @@ class RestorePrivateKeyViewModel(
         if (isValidEthereumPrivateKey(textCleaned)) {
             val privateKey = Signer.privateKey(textCleaned)
             return AccountType.EvmPrivateKey(privateKey)
+        }
+
+        if (StellarKit.isValidSecretKey(textCleaned)) {
+            return AccountType.StellarSecretKey(textCleaned)
         }
 
         try {

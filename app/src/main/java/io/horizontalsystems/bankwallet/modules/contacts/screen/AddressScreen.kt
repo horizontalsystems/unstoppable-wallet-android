@@ -82,6 +82,7 @@ fun AddressScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Done),
                             enabled = uiState.doneEnabled,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = {
                                 uiState.addressState?.dataOrNull?.let {
                                     onDone(ContactAddress(uiState.blockchain, it.hex))

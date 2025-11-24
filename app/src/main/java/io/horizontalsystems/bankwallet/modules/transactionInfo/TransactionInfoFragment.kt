@@ -156,7 +156,10 @@ fun TransactionInfoSection(
                                     {
                                         navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it))
 
-                                        stat(page = StatPage.TransactionInfo, event = StatEvent.OpenCoin(it))
+                                        stat(
+                                            page = StatPage.TransactionInfo,
+                                            event = StatEvent.OpenCoin(it)
+                                        )
                                     }
                                 }
                             )
@@ -204,13 +207,25 @@ fun TransactionInfoSection(
                                 blockchainType = viewItem.blockchainType,
                                 navController = navController,
                                 onCopy = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Copy(StatEntity.Address))
+                                    stat(
+                                        page = StatPage.TransactionInfo,
+                                        event = StatEvent.Copy(StatEntity.Address),
+                                        section = viewItem.statSection
+                                    )
                                 },
                                 onAddToExisting = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                                    stat(
+                                        page = StatPage.TransactionInfo,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                        section = viewItem.statSection
+                                    )
                                 },
                                 onAddToNew = {
-                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                                    stat(
+                                        page = StatPage.TransactionInfo,
+                                        event = StatEvent.Open(StatPage.ContactNew),
+                                        section = viewItem.statSection
+                                    )
                                 }
                             )
                         }

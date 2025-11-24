@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -53,8 +53,8 @@ fun BottomSheetSelectorMultiple(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
             ) {
                 config.viewItems.forEachIndexed { index, item ->
                     val onClick = if (item.copyableString != null) {
@@ -83,7 +83,7 @@ fun BottomSheetSelectorMultiple(
                                 )
                             }
                             Column(modifier = Modifier.padding(vertical = 12.dp)) {
-                                body_leah(text = item.title)
+                                headline2_leah(text = item.title)
                                 subhead2_grey(text = item.subtitle)
                             }
                             Spacer(modifier = Modifier.weight(1f))

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -28,6 +29,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExte
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -74,6 +76,7 @@ class TransactionInfoService(
             val coinUids = mutableListOf<String?>()
 
             val txCoinTypes = when (val tx = transactionRecord) {
+                is StellarTransactionRecord -> listOf(tx.mainValue?.coinUid, tx.fee?.coinUid)
                 is TonTransactionRecord -> buildList {
                     add(tx.mainValue?.coinUid)
                     add(tx.fee.coinUid)
@@ -152,6 +155,9 @@ class TransactionInfoService(
                     tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
+                }
+                is ZcashShieldingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
                 }
                 else -> emptyList()
             }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueParcelable
@@ -55,6 +56,7 @@ object CoinAnalyticsModule {
         val sectionTitle: Int? = null,
         val sectionDescription: String? = null,
         val showFooterDivider: Boolean = true,
+        val statTrigger: StatPremiumTrigger?,
     )
 
 

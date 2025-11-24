@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,12 +31,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import java.net.UnknownHostException
 
 class GuidesFragment : BaseComposeFragment() {
@@ -92,7 +93,7 @@ fun GuidesScreen(navController: NavController) {
                     if (selectedCategory != null) {
                         Column {
                             val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
-                            ScrollableTabs(tabItems) { tab ->
+                            TabsTop(TabsTopType.Scrolled, tabItems) { tab ->
                                 viewModel.onSelectCategory(tab)
                             }
                             val listState = rememberSaveable(
@@ -152,10 +153,7 @@ fun GuidesScreen(navController: NavController) {
                                         }
                                         if (lastSection) {
                                             item {
-                                                Divider(
-                                                    thickness = 1.dp,
-                                                    color = ComposeAppTheme.colors.steel10
-                                                )
+                                                HsDivider()
                                             }
                                         }
                                     }

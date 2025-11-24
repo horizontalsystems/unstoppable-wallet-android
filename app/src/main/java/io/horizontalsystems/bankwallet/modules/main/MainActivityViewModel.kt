@@ -1,16 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.DAppRequestEntityWrapper
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
@@ -19,6 +18,10 @@ import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
 import io.horizontalsystems.tonkit.models.SignTransaction
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -34,11 +37,11 @@ class MainActivityViewModel(
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
     val tcSendRequest = MutableLiveData<SignTransaction?>()
-    val tcDappRequest = MutableLiveData<DAppRequestEntity?>()
+    val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
 
-    private val _contentHidden = MutableLiveData(true)
-    val contentHidden: LiveData<Boolean> = _contentHidden
+    private val _contentHidden = MutableStateFlow(false)
+    val contentHidden: StateFlow<Boolean> = _contentHidden.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -62,8 +65,8 @@ class MainActivityViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.isLockedFlowable.collect {
-                _contentHidden.postValue(it)
+            pinComponent.isLockedFlowable.collect { locked ->
+                _contentHidden.update { locked }
             }
         }
     }
@@ -98,10 +101,6 @@ class MainActivityViewModel(
         if (accountManager.isAccountsEmpty && !localStorage.mainShowedOnce) {
             throw MainScreenValidationError.Welcome()
         }
-
-        if (pinComponent.isLocked) {
-            throw MainScreenValidationError.Unlock()
-        }
     }
 
     fun onNavigatedToMain() {
@@ -117,7 +116,7 @@ class MainActivityViewModel(
     }
 
     fun onResume() {
-        _contentHidden.postValue(pinComponent.isLocked)
+        _contentHidden.update { pinComponent.isLocked }
     }
 
     class Factory : ViewModelProvider.Factory {

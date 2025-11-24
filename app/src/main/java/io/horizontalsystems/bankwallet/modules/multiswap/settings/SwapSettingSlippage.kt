@@ -12,13 +12,12 @@ import java.math.BigDecimal
 
 data class SwapSettingSlippage(
     val settings: Map<String, Any?>,
-    val defaultSlippage: BigDecimal
+    val defaultSlippage: BigDecimal,
+    val readOnly: Boolean = false
 ) : ISwapSetting {
     override val id = "slippage"
 
-    val value = settings[id] as? BigDecimal
-
-    fun valueOrDefault() = value ?: defaultSlippage
+    val value = settings[id] as? BigDecimal ?: defaultSlippage
 
     @Composable
     override fun GetContent(
@@ -43,7 +42,8 @@ data class SwapSettingSlippage(
             viewModel.inputFieldPlaceholder,
             viewModel.initialValue,
             viewModel.inputButtons,
-            error
+            error,
+            readOnly
         ) {
             viewModel.onChangeText(it)
 

@@ -35,7 +35,7 @@ fun HSSwipeRefresh(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(topPadding.dp),
-            backgroundColor = ComposeAppTheme.colors.claude,
+            backgroundColor = ComposeAppTheme.colors.blade,
             contentColor = ComposeAppTheme.colors.leah,
             scale = true
         )

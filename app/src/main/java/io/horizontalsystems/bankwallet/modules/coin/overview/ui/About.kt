@@ -41,7 +41,7 @@ fun About(text: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             DescriptionMarkdown(

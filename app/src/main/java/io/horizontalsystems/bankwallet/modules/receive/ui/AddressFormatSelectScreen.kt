@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.receive.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,14 +17,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
@@ -47,25 +48,27 @@ fun AddressFormatSelectScreen(
         Column(
             modifier = Modifier
                 .padding(it)
+                .fillMaxSize()
+                .background(ComposeAppTheme.colors.lawrence)
                 .verticalScroll(rememberScrollState())
         ) {
             InfoText(
-                text = stringResource(R.string.Balance_Receive_AddressFormatDescription)
+                modifier = Modifier.background(ComposeAppTheme.colors.tyler),
+                text = stringResource(R.string.Balance_Receive_AddressFormatDescription),
+                paddingBottom = 32.dp
             )
-            VSpacer(20.dp)
-            CellUniversalLawrenceSection(addressFormatItems) { item ->
-                SectionUniversalItem {
-                    AddressFormatCell(
-                        title = item.title,
-                        subtitle = item.subtitle,
-                        onClick = {
-                            onSelect.invoke(item.wallet)
-                        }
-                    )
-                }
+            addressFormatItems.forEach { item ->
+                AddressFormatCell(
+                    title = item.title,
+                    subtitle = item.subtitle,
+                    onClick = {
+                        onSelect.invoke(item.wallet)
+                    }
+                )
+                HsDivider()
             }
             VSpacer(32.dp)
-            TextImportantWarning(
+            TextAttention(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = description
             )
@@ -87,7 +90,7 @@ fun AddressFormatCell(
                 .weight(1f)
                 .padding(start = 16.dp)
         ) {
-            body_leah(text = title)
+            headline2_leah(text = title)
             subhead2_grey(text = subtitle)
         }
         Icon(

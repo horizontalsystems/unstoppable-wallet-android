@@ -4,14 +4,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import java.math.BigDecimal
 
@@ -76,7 +86,7 @@ fun HSAmountInput(
     val borderColor = when (caution?.type) {
         HSCaution.Type.Error -> ComposeAppTheme.colors.red50
         HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -120,8 +130,8 @@ fun HSAmountInput(
     Column(modifier = modifier) {
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence),
         ) {
             Row(
@@ -209,10 +219,7 @@ fun HSAmountInput(
                 }
             }
 
-            Divider(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                color = ComposeAppTheme.colors.steel10
-            )
+            HsDivider(modifier = Modifier.padding(horizontal = 8.dp))
 
             Row(
                 modifier = Modifier
@@ -228,8 +235,8 @@ fun HSAmountInput(
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = hint ?: stringResource(R.string.NotAvailable),
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = if (hint == null) ComposeAppTheme.colors.grey50 else hintTextColor,
+                    style = ComposeAppTheme.typography.subheadR,
+                    color = if (hint == null) ComposeAppTheme.colors.andy else hintTextColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

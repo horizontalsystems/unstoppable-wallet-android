@@ -6,8 +6,6 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
-import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
@@ -19,7 +17,6 @@ import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.asFlow
 
 class MainSettingsViewModel(
     private val backupManager: IBackupManager,
@@ -30,9 +27,11 @@ class MainSettingsViewModel(
     private val wcManager: WCManager,
     private val accountManager: IAccountManager,
     private val appConfigProvider: AppConfigProvider,
-    private val languageManager: LanguageManager,
-    private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<MainSettingUiState>() {
+
+    val fdroidSupportLink by lazy {
+        appConfigProvider.simplexSupportChat
+    }
 
     val appVersion: String
         get() {
@@ -48,12 +47,6 @@ class MainSettingsViewModel(
 
     val walletConnectSupportState: WCManager.SupportState
         get() = wcManager.getWalletConnectSupportState()
-
-    private val currentLanguageDisplayName: String
-        get() = languageManager.currentLanguageName
-
-    private val baseCurrencyCode: String
-        get() = currencyManager.baseCurrency.code
 
     private val appWebPageLink = appConfigProvider.appWebPageLink
     private val hasNonStandardAccount: Boolean
@@ -105,11 +98,7 @@ class MainSettingsViewModel(
                 syncCounter()
             }
         }
-        viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-                emitState()
-            }
-        }
+
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect {
                 showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
@@ -122,8 +111,6 @@ class MainSettingsViewModel(
 
     override fun createState(): MainSettingUiState {
         return MainSettingUiState(
-            currentLanguage = currentLanguageDisplayName,
-            baseCurrencyCode = baseCurrencyCode,
             appWebPageLink = appWebPageLink,
             hasNonStandardAccount = hasNonStandardAccount,
             allBackedUp = allBackedUp,
@@ -151,8 +138,6 @@ class MainSettingsViewModel(
 }
 
 data class MainSettingUiState(
-    val currentLanguage: String,
-    val baseCurrencyCode: String,
     val appWebPageLink: String,
     val hasNonStandardAccount: Boolean,
     val allBackedUp: Boolean,

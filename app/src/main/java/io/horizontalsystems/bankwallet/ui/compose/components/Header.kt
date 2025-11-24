@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -14,12 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,31 +31,30 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun HeaderStick(
     borderTop: Boolean = false,
+    borderBottom: Boolean = false,
     text: String,
+    color: Color = ComposeAppTheme.colors.tyler,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ComposeAppTheme.colors.tyler)
+            .height(55.dp)
+            .background(color)
     ) {
         if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
         }
 
-        Row(
+        subheadSB_andy(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            subhead1_grey(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                text = text,
-                maxLines = 1,
-            )
+                .align(Alignment.BottomStart)
+                .padding(start = 16.dp, bottom = 12.dp),
+            text = text,
+            maxLines = 1,
+        )
+
+        if (borderBottom) {
+            HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
         }
     }
 }
@@ -103,23 +103,15 @@ fun HeaderSorting(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp)
+            .height(52.dp)
             .background(ComposeAppTheme.colors.tyler)
     ) {
         if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
         }
 
         if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
         }
 
         Row(
@@ -133,7 +125,9 @@ fun HeaderSorting(
 }
 
 @Composable
-fun PremiumHeader() {
+fun PremiumHeader(
+    @StringRes  title: Int = R.string.Premium_Title,
+) {
     Row(
         modifier = Modifier
             .padding(horizontal = 32.dp)
@@ -150,7 +144,7 @@ fun PremiumHeader() {
             contentDescription = null,
         )
         subhead1_jacob(
-            text = stringResource(R.string.Premium_Title),
+            text = stringResource(title),
             maxLines = 1
         )
     }

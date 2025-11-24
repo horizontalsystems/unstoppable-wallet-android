@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 object WCSessionModule {
@@ -16,11 +17,13 @@ object WCSessionModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return WCSessionViewModel(
-                App.wcSessionManager,
-                App.connectivityManager,
-                App.accountManager.activeAccount,
-                sessionTopic,
-                App.evmBlockchainManager
+                sessionManager = App.wcSessionManager,
+                connectivityManager = App.connectivityManager,
+                account = App.accountManager.activeAccount,
+                topic = sessionTopic,
+                wcManager = App.wcManager,
+                networkManager = App.networkManager,
+                appConfigProvider = App.appConfigProvider
             ) as T
         }
     }
@@ -42,40 +45,32 @@ data class WCSessionButtonStates(
     val remove: WCButtonState,
 )
 
-data class WCBlockchain(
-    val chainId: Int,
-    val name: String,
-    val address: String,
-) {
-    val chainNamespace = "eip155"
-
-    override fun equals(other: Any?): Boolean {
-        return other is WCBlockchain && this.chainId == other.chainId
-    }
-
-    override fun hashCode(): Int {
-        return chainId.hashCode()
-    }
-
-    fun getAccount() = "$chainNamespace:$chainId:$address"
-}
-
 data class WCRequestViewItem(
-    val requestId: Long,
     val title: String,
     val subtitle: String,
     val request: Wallet.Model.SessionRequest
 )
 
+enum class WCWhiteListState {
+    NotInWhiteList,
+    InWhiteList,
+    Error,
+    InProgress
+}
+
 data class WCSessionUiState(
     val peerMeta: PeerMetaItem?,
     val closeEnabled: Boolean,
     val connecting: Boolean,
+    val connected: Boolean,
     val buttonStates: WCSessionButtonStates?,
     val hint: String?,
     val showError: String?,
     val status: Status?,
-    val pendingRequests: List<WCRequestViewItem>
+    val pendingRequests: List<WCRequestViewItem>,
+    val blockchainTypes: List<BlockchainType>?,
+    val whiteListState: WCWhiteListState,
+    val hasSubscription: Boolean,
 )
 
 enum class Status(val value: Int) {

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,11 +22,15 @@ class SendBitcoinAmountService(
     private var amountCaution: HSCaution? = null
 
     private var minimumSendAmount: BigDecimal? = null
+    private var userMinimumSendAmount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var validAddress: Address? = null
     private var memo: String? = null
     private var feeRate: Int? = null
     private var pluginData: Map<Byte, IPluginData>? = null
+
+    private var changeToFirstInput = false
+    private var utxoFilters = UtxoFilters()
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -41,8 +46,8 @@ class SendBitcoinAmountService(
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution
 
-        val canBeSend = tmpAmount != null
-            && tmpAmount > BigDecimal.ZERO
+        val canBeSend = availableBalance != null
+            && tmpAmount != null && tmpAmount > BigDecimal.ZERO
             && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
 
         _stateFlow.update {
@@ -56,7 +61,17 @@ class SendBitcoinAmountService(
     }
 
     private fun refreshAvailableBalance() {
-        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, memo, customUnspentOutputs, pluginData) }
+        availableBalance = feeRate?.let {
+            adapter.availableBalance(
+                it,
+                validAddress?.hex,
+                memo,
+                customUnspentOutputs,
+                pluginData,
+                changeToFirstInput,
+                utxoFilters
+            )
+        }
     }
 
     private fun refreshMinimumSendAmount() {
@@ -64,12 +79,15 @@ class SendBitcoinAmountService(
     }
 
     private fun validateAmount() {
-        amountCaution = amountValidator.validate(
-            amount,
-            coinCode,
-            availableBalance ?: BigDecimal.ZERO,
-            minimumSendAmount,
-        )
+        availableBalance?.let {
+            val mins = listOfNotNull(minimumSendAmount, userMinimumSendAmount)
+            amountCaution = amountValidator.validate(
+                amount,
+                coinCode,
+                it,
+                mins.maxOrNull(),
+            )
+        }
     }
 
     fun setAmount(amount: BigDecimal?) {
@@ -101,6 +119,34 @@ class SendBitcoinAmountService(
 
     fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
         this.pluginData = pluginData
+
+        refreshAvailableBalance()
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setUserMinimumSendAmount(userMinimumSendAmount: Int?) {
+        this.userMinimumSendAmount = userMinimumSendAmount?.let {
+            adapter.satoshiToBTC(it.toLong())
+        }
+
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setChangeToFirstInput(changeToFirstInput: Boolean) {
+        this.changeToFirstInput = changeToFirstInput
+
+        refreshAvailableBalance()
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setUtxoFilters(utxoFilters: UtxoFilters) {
+        this.utxoFilters = utxoFilters
 
         refreshAvailableBalance()
         validateAmount()

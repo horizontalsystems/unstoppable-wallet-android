@@ -27,12 +27,16 @@ class AddressUri(
     }
 
     val amount: BigDecimal?
-        get() = value<BigDecimal>(Field.Amount) ?: value(Field.Value)
+        get() = value<BigDecimal>(Field.Amount) ?: value(Field.Value) ?: value(Field.TxAmount)
 
+    val memo: String?
+        get() = value(Field.TxDescription)
 
     enum class Field(val value: String) {
         Amount("amount"),
         Value("value"),
+        TxAmount("tx_amount"),
+        TxDescription("tx_description"),
         Label("label"),
         Message("message"),
         BlockchainUid("blockchain_uid"),
@@ -40,10 +44,16 @@ class AddressUri(
 
         companion object {
             fun amountField(blockchainType: BlockchainType): Field {
-                return if (EvmBlockchainManager.blockchainTypes.contains(blockchainType)) {
-                    Value
-                } else {
-                    Amount
+                return when {
+                    EvmBlockchainManager.blockchainTypes.contains(blockchainType) -> {
+                        Value
+                    }
+                    blockchainType == BlockchainType.Monero -> {
+                        TxAmount
+                    }
+                    else -> {
+                        Amount
+                    }
                 }
             }
         }

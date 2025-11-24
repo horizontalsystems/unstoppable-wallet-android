@@ -163,6 +163,12 @@ class SolanaKitManager(
         }
     }
 
+    fun getAddress(accountType: AccountType) = when (accountType) {
+        is AccountType.Mnemonic -> Signer.address(accountType.seed)
+        is AccountType.SolanaAddress -> accountType.address
+        else -> throw UnsupportedAccountException()
+    }
+
 }
 
 class SolanaKitWrapper(val solanaKit: SolanaKit, val signer: Signer?)

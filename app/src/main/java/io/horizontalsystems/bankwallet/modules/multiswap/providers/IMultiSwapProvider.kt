@@ -10,9 +10,10 @@ import java.math.BigDecimal
 interface IMultiSwapProvider {
     val id: String
     val title: String
-    val url: String
     val icon: Int
     val priority: Int
+
+    suspend fun start() = Unit
 
     fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
         return tokenFrom.blockchainType == tokenTo.blockchainType &&
@@ -32,6 +33,7 @@ interface IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
-        sendTransactionSettings: SendTransactionSettings?
+        sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote
     ) : ISwapFinalQuote
 }

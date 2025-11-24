@@ -13,9 +13,11 @@
     <string name="Button_Next">继续</string>
     <string name="Button_Enable">启用</string>
     <string name="Button_Disable">禁用</string>
-    <string name="Button_ScanQr">扫描二维码</string>
+    <string name="Button_ScanQr">QR</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
+    <string name="Button_Activate">激活</string>
+    <string name="Button_Later">稍后</string>
     <string name="Button_Done">完成</string>
     <string name="Button_Retry">重试</string>
     <string name="Button_Change">更改</string>
@@ -48,12 +50,17 @@
     <string name="Button_Apply">应用</string>
     <string name="Button_SetAmount">设定金额</string>
     <string name="Button_ContinueAnyway">仍然繼續</string>
+    <string name="Button_CopyAddress">复制地址</string>
+    <string name="Button_HideCoin">隐藏硬币</string>
+    <string name="Attention_Title">注意事项</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
+    <string name="Error_AssetNotEnabled">收件人尚未启用 %s，因此他们无法收到它。</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">任何</string>
     <string name="SyncError">同步错误。请再试一次</string>
+    <string name="Search_NotFounded">未找到</string>
     <string name="Keyboard">键盘</string>
     <string name="AccountRecovery_Note">备注</string>
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
@@ -80,7 +87,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只使用支持的符号： <![CDATA[A-Z a-z 0-9 \' " & / ? ！: ; 。 ，~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
-    <string name="CreateWallet_PassphraseDescription">密码为钱包添加一个额外的安全层。要恢复这个钱包，用户既需要密码，也需要密码。\n\n密码也使得用户可以轻松地使用单一的密钥但不同的密码来拥有许多多币钱包。</string>
+    <string name="CreateWallet_PassphraseDescription">密码为钱包提供了额外的一层安全保护。 hen 恢复受密码保护的钱包，用户必须同时提供恢复短语和密码。\n\n密码还允许用户只要使用不同的密码，就可以从同一个mnemonic创建多个独立的多币钱包。</string>
     <!--Languages-->
     <string name="Language_English">汉语</string>
     <string name="Language_Japanese">日语</string>
@@ -116,7 +123,8 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="SelectContacts_All">所有</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
-    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_BirthdayHeight_Invalid">生日高度无效</string>
+    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
     <string name="Restore_ZCash_RestoreAsNew">恢复为新的</string>
@@ -125,11 +133,6 @@
     <string name="Restore_ZCash_OldWallet">现有钱包</string>
     <string name="Restore_ZCash_OldWallet_Description">有交易</string>
     <string name="Restore_ZCash_SlowSyncWarningText">初始化与区块链的同步可以消耗大量的网络流量。</string>
-    <string name="ImportCexAccount_SelectCex">选择CEX</string>
-    <string name="ImportCexAccount_SelectCexDescription">选择您想要连接的中央交易所。</string>
-    <string name="ImportCexAccountBinance_Description">请提供 API 密钥和 API 密钥链接您的交换。</string>
-    <string name="ImportCexAccountBinance_ApiKey">API 密钥</string>
-    <string name="ImportCexAccountBinance_SecretKey">密钥</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">市值</string>
@@ -137,6 +140,7 @@
     <string name="Market_Field_PriceDiff">价格</string>
     <string name="Market_Title">市场</string>
     <string name="Market_Search">查询</string>
+    <string name="Market_All">所有</string>
     <string name="Market_Search_Sections_RecentTitle">过去的</string>
     <string name="Market_Search_Sections_PopularTitle">热门</string>
     <string name="Market_FilterSection_MarketParameters">市场参数</string>
@@ -148,6 +152,7 @@
     <string name="Market_Field_HighestVolume">成交量由高到低</string>
     <string name="Market_Field_LowestVolume">成交量由低到高</string>
     <string name="Market_Sort_PopupTitle">排序</string>
+    <string name="Market_Filter_PopupTitle">筛选方式</string>
     <string name="Market_BtcDominance">BTC市场占比</string>
     <string name="Market_SeeAll">更多</string>
     <string name="Market_PoweredByApi">由 CoinGeko API 支持</string>
@@ -157,10 +162,11 @@
     <string name="Market_Tab_Pairs">配对标点</string>
     <string name="Market_Tab_Sectors">行业</string>
     <string name="Market_Tab_Watchlist">关注</string>
+    <string name="Market_Tab_Earn">收入</string>
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_TopCoins">前列代币</string>
     <string name="Market_Signals">信号</string>
-    <string name="Market_Volume">Volume</string>
+    <string name="Market_Volume">音量</string>
     <string name="Market_MarketCap">市值</string>
     <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">下面的信号是基于Bollinger Bands 和 RSI 技术价格指标的近似值。 最近30天。这些信号是算法，可以经常改变。</string>
@@ -173,8 +179,8 @@
     <string name="Market_Signal_Warning">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="Market_Signal_TurnOn">打开</string>
     <string name="Market_Top_100">前100名</string>
-    <string name="Market_Top_200">Top 200</string>
-    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_200">前 200</string>
+    <string name="Market_Top_300">前 300</string>
     <string name="Market_Top_500">前500名</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
@@ -183,8 +189,10 @@
     <string name="MarketPlatformCoins_PlatformEcosystem">%s 星系</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 链上所有协议的市场上限</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">总市值</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
     <string name="MarketGlobalMetrics_Volume">24小时交易量</string>
+    <string name="MarketGlobalMetrics_VolumeShort">24小时交易量</string>
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF 输入</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值</string>
@@ -201,6 +209,9 @@
     <string name="MarketEtf_Inflow">流入</string>
     <string name="MarketEtf_Outflow">外向流</string>
     <string name="MarketEtf_TotalNetAssets">净资产总额</string>
+    <string name="MarketEtf_BitcoinEtf">比特币ETF</string>
+    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
+    <string name="MarketEtf_EtfDescription">所有 %s ETF的净流入，包括以现货和未来为基础的基金。</string>
     <!--Market Search-->
     <string name="EmptyResults">未发现结果</string>
     <string name="Market_Filters">高级搜索</string>
@@ -220,6 +231,8 @@
     <string name="Market_Filter_OutperformedBtc">跑赢BTC</string>
     <string name="Market_Filter_OutperformedEth">跑赢ETH</string>
     <string name="Market_Filter_OutperformedBnb">跑赢BNB</string>
+    <string name="Market_Filter_OutperformedGold">优秀金币</string>
+    <string name="Market_Filter_OutperformedSnp">Outperformance S&amp;P 500</string>
     <string name="Market_Filter_PriceCloseTo">關閉價格</string>
     <string name="Market_Filter_PriceCloseToAth">接近历史最高价</string>
     <string name="Market_Filter_PriceCloseToAtl">接近历史最低价</string>
@@ -278,19 +291,42 @@
     <string name="Market_Filter_TimePeriod_3M">3月</string>
     <string name="Market_Filter_TimePeriod_6M">6月</string>
     <string name="Market_Filter_TimePeriod_1Y">1年</string>
+    <string name="Market_Filter_TimePeriod_2Y">2 年</string>
+    <string name="Market_Filter_TimePeriod_3Y">3 年</string>
+    <string name="Market_Filter_TimePeriod_4Y">4 年</string>
+    <string name="Market_Filter_TimePeriod_5Y">5 年</string>
     <string name="Market_Sorting_Manual">手册</string>
     <string name="Market_Sorting_Gainers">涨幅最大者</string>
     <string name="Market_Sorting_Losers">跌幅最大者</string>
     <string name="Market_Sorting_HighestCap">市值由高到低</string>
     <string name="Market_Sorting_LowestCap">市值由低到高</string>
     <string name="Market_Filters_Select">選擇 %d</string>
+    <!--Vaults-->
+    <string name="Market_Vaults_WantToUnlockPremium">探索最好的 DeFi 标记返回，全部在一个地方。</string>
+    <string name="Market_Vaults_UnlockPremium">解锁高级版</string>
+    <string name="Market_Vaults_Sorting_APY">最大APY</string>
+    <string name="Market_Vaults_Sorting_TVL">最高TVL</string>
+    <string name="Market_Vaults_Filter_AllAssets">所有资产</string>
+    <string name="Market_Vaults_Filter_AllChains">所有链接</string>
+    <string name="Market_Vaults_Filter_ETHYield">ETH收率</string>
+    <string name="Market_Vaults_Filter_USDYield">美元收益</string>
+    <string name="Market_Vaults_OpenDapp">打开 dapp</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d 链接</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
+    <string name="Market_Vaults_Vault_Network">網絡</string>
+    <string name="Market_Vaults_Vault_Protocol">Protocol</string>
+    <string name="Market_Vaults_Vault_UnderlyingToken">底部令牌</string>
+    <string name="Market_Vaults_Vault_Holders">持有者</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">多链</string>
     <!--Balance-->
+    <string name="Wallet_Title">钱包</string>
     <string name="Balance_Withdraw">提取</string>
     <string name="Balance_Title">余额</string>
     <string name="Balance_Send">发送​​</string>
+    <string name="Balance_ChooseCoin">选择代币</string>
     <string name="Balance_Deposit">接收</string>
     <string name="Balance_Receive">接收</string>
     <string name="Balance_Address">地址</string>
@@ -327,9 +363,21 @@
     <string name="Balance_Receive_UsedAddresses">已使用地址</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 地址用于隐私和安全。以下是此钱包中已使用的地址列表。</string>
     <string name="Balance_Receive_ReceiveAddresses">接收地址</string>
+    <string name="Balance_ReceiveAddress">接收地址</string>
     <string name="Balance_Receive_ChangeAddresses">找零地址</string>
     <string name="Balance_SendHint_CoinName">代币图片</string>
     <string name="Balance_ReceiveHint_Search">查询</string>
+    <string name="Balance_Receive_ActivationRequired">要接收地址，您需要激活令牌。这是Satellar网络所需要的。</string>
+    <string name="Balance_Receive_Trustline">信任线</string>
+    <string name="Balance_Reserved_Title">保留</string>
+    <string name="Balance_WalletAddress">钱包地址</string>
+    <string name="Balance_Receive_Subaddresses">子项</string>
+    <string name="Balance_Receive_SubaddressesInfo">子地址让您在一个钱包内使用多个唯一地址来方便和增强隐私。</string>
+    <string name="Balance_Receive_SubaddressesTransactions">交易: %s</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Title">透明的</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <!--Send-->
@@ -337,7 +385,7 @@
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
     <string name="Send_Fee">费用</string>
-    <string name="Send_Fee_Info">区块链要求用户在发送交易时支付网络费用。当大量交易在网络上进行时，这笔费用将更高。</string>
+    <string name="Send_Fee_Info">区块链上处理此交易的估计成本。</string>
     <string name="Send_Button_Paste">粘帖</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Advanced">高级</string>
@@ -371,7 +419,7 @@
     <string name="Send_Address_Error_Detected">已檢測</string>
     <string name="Send_Address_Error_Clear">清除</string>
     <string name="Send_Address_AddressCheck">地址檢查</string>
-    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck">钓鱼检查</string>
     <string name="Send_Address_PhishingCheck_Info1">分析提供的目標地址是否存在潛在釣魚風險。</string>
     <string name="Send_Address_PhishingCheck_Info2">清除：未檢測到可疑活動。</string>
     <string name="Send_Address_PhishingCheck_Info3">已檢測：似乎有人可能試圖誘騙您向錯誤地址發送資金。除非絕對確定地址正確，否則請勿繼續。考慮先發送小額測試交易。</string>
@@ -379,7 +427,7 @@
     <string name="Send_Address_BlacklistCheck_Info1">檢查目標地址是否列在官方或非官方黑名單上。</string>
     <string name="Send_Address_BlacklistCheck_Info2">清除：無黑名單標記。</string>
     <string name="Send_Address_BlacklistCheck_Info3">已檢測：該地址已被列入黑名單，可能與法律或安全風險相關。請謹慎操作。許多加密貨幣交易所會限制與曾經與黑名單地址互動的錢包進行存款或提款的用戶。請謹記這一點。</string>
-    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck">制裁检查</string>
     <string name="Send_Address_SanctionCheck_Info1">使用來自Chainalysis.com的數據，驗證接收者的地址是否受國際制裁。</string>
     <string name="Send_Address_SanctionCheck_Info2">清除：未檢測到制裁。</string>
     <string name="Send_Address_SanctionCheck_Info3">已檢測：存在潛在法律風險。在某些司法管轄區，與此地址的交易可能受到限制或被視為非法。</string>
@@ -423,6 +471,9 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">已用nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">使用此nonce执行的交易已存在。</string>
     <!-- Fee Settings -->
+    <string name="Fee_Total">总费用</string>
+    <string name="Fee_OutboundFee">出站费用</string>
+    <string name="Fee_LiquidityFee">流动费用</string>
     <string name="FeeSettings_NetworkFee">网络费</string>
     <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
     <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
@@ -441,7 +492,9 @@
     <string name="FeeSettings_Overpricing">当前设置的交易费用高于处理此交易所需的费用。</string>
     <string name="FeeSettings_FeeRate">费率(SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">这是击中下2个区块的推荐值</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.\n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.\n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.\n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.\n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
+    <string name="FeeSettings_FeeRate_Info">当发送交易时，您必须支付网络费用。网络变得更加繁忙，收费越高。
+        \n\n不可阻挡的钱包建议提供最佳费用以帮助您在合理的时间内确认交易。 您可以增加或减少这个值。
+        \n\n设置收费太低可能会导致您的交易被长期搁置，甚至被拒绝。 为了更快的确认，请使用更高的费用。</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币和Etherum区块链都要求用户在发送交易时支付网络费用。当区块链上发生大量交易时费用较高；而区块链空闲时费用较低。</string>
@@ -480,11 +533,13 @@
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <string name="WalletConnect_NewConnect">新连接</string>
+    <string name="WalletConnect_SendTransactionRequest_Title">发送交易</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">发送​​</string>
     <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
     <string name="WalletConnect_Error_NoWallet">您需要先创建或导入钱包才能使用 WaletConnect。</string>
-    <string name="WalletConnect_Error_NeedBackup">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
+    <string name="WalletConnect_Error_NeedBackup">创建恢复短语和相关密码的备份。 如果您的手机丢失、被盗或损坏，这些将允许您恢复您的钱包。</string>
     <string name="WalletConnect_Error_UnsupportedChainId">不支持的Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">没有合适的帐户</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">没有合适的 evm 套件</string>
@@ -495,7 +550,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">请求找不到错误</string>
     <string name="WalletConnect_NoConnection">您没有任何已连接的dapps</string>
     <string name="WalletConnect_PendingRequests">待处理请求</string>
-    <string name="WalletConnect_ActiveWallet">激活钱包</string>
+    <string name="WalletConnect_ActiveWallet">钱包</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
     <string name="WalletConnect_Pairings">货币对</string>
@@ -504,6 +559,12 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
     <string name="WalletConnect_Pairings_Delete">删除</string>
     <string name="WalletConnect_DeleteAllPairs">删除所有对</string>
+    <string name="WalletConnect_Networks">网络</string>
+    <string name="WalletConnect_ConnectTo">连接到 %s</string>
+    <string name="WalletConnect_ConnectedTo">已连接到 %s</string>
+    <string name="WalletConnect_WhiteListDeactivatedWarning">Scam 保护功能已停用。域名验证不可用。升级到高级版以保护免受未验证或钓鱼网站之害。</string>
+    <string name="WalletConnect_NotInWhiteListAlert">此网站未经过核实，可能导致网络钓鱼或资金流失。连接被强烈阻止。</string>
+    <string name="WalletConnect_ConnectWarning">点击连接，允许此应用查看您的公共地址。</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -558,14 +619,18 @@
     <string name="Swap_Confirm_Title">确认</string>
     <string name="SwapConfirm_QuoteExpired">报价已过期</string>
     <string name="SwapConfirm_FetchingFinalQuote">正在获取最终报价</string>
+    <string name="SwapWarning_SlippageNotApplicable_Title">翻转不可用</string>
+    <string name="SwapWarning_SlippageNotApplicable_Description">适用于此报价的最小滑块是 %s%%</string>
+    <string name="SwapWarning_SlippageNotAvailable_Title">无翻转控制</string>
+    <string name="SwapWarning_SlippageNotAvailable_Description">跨链互换取决于第三方的流动性和延迟，这可能影响到最后数额。</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">掉期设置</string>
     <string name="SwapSettings_SlippageTitle">无效滑点</string>
-    <string name="SwapSettings_SlippageDescription">如果价格的不利变化超出此百分比，您的交易将退回。</string>
+    <string name="SwapSettings_SlippageDescription">如果价格超过这个百分比，转换将不会通过。</string>
     <string name="SwapSettings_DeadlineTitle">交易截止日期</string>
     <string name="SwapSettings_DeadlineDescription">如果您交易的待定时间多于此时间，您的交易将退回。</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
-    <string name="SwapSettings_RecipientAddressDescription">在兑换操作之后，金额将转移至指定地址</string>
+    <string name="SwapSettings_RecipientAddressDescription">交换的金额将被发送到指定地址。</string>
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
     <string name="SwapSettings_Error_DeadlineZero">没有截止日期</string>
@@ -576,29 +641,38 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">无效的 %s 地址</string>
     <string name="SwapSettings_Warning_UnusualSlippage">您的交易可能提前完成</string>
     <!-- Swap Confirmation -->
+    <string name="ActivationRequired_DialogTitle">激活令牌</string>
+    <string name="ActivationRequired_DialogDescription">若要接收 %s，您需要激活令牌。Stellar 网络需要为每个令牌建立信任线。 没有它，你的钱包就不能收到 %s ——交易将被拒绝，资金将不会交付。</string>
+    <string name="Activate_YouActivate">您已激活</string>
+    <string name="Activate_Activating">正在激活</string>
+    <string name="Activate_AlreadyActive_Title">已经激活</string>
+    <string name="Activate_AlreadyActive_Description">令牌已经激活。</string>
+    <string name="Activate_InsufficientBalance_Title">可用额度不足</string>
+    <string name="Activate_InsufficientBalance_Description">您没有足够的 XLM 余额来激活这个令牌。</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">您可以交换 %s，或者您需要撤销并批准新的金额</string>
     <string name="Approve_Spender">消费人</string>
     <string name="Approve_YouApprove">您批准</string>
     <string name="Approve_YouRevoke">您已取消</string>
     <!--Swap Unlock Access-->
-    <string name="Swap_Unlock_PageTitle">解锁访问</string>
-    <string name="Swap_Unlock_Subtitle">允许访问以下金额</string>
-    <string name="Swap_Unlock_Info">授权智能合约代表您进行代币交易，并指定允许的金额。这不会影响您的余额，但需要支付少量费用以进行批准。\n\n预先批准较高金额用于未来交易比按需批准更具成本效益。</string>
-    <string name="Swap_Unlock_Unlimited">无限</string>
+    <string name="Swap_Approve_PageTitle">批准</string>
+    <string name="Swap_Approve_Info">授权智能合约代表您进行代币交易，并指定允许的金额。这不会影响您的余额，但需要支付少量费用以进行批准。\n\n预先批准较高金额用于未来交易比按需批准更具成本效益。</string>
+    <string name="Swap_Approve_Unlimited">无限</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">补贴</string>
-    <string name="SwapInfo_AllowanceDescription">当执行令牌交换时，交易所可以代表用户花费的金额。 在进行实际互换交易之前，需要先确定足够的备抵。</string>
+    <string name="SwapInfo_AllowanceDescription">允许是您允许交易所代表您进行交换的金额。 在交换之前，您首先需要批准一项备抵交易。</string>
     <string name="SwapInfo_PriceImpactTitle">价格影响</string>
     <string name="SwapInfo_PriceImpactDescription">预期价格和显示价格的偏差通常会增加互兑金额。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易</string>
-    <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
+    <string name="Transactions_EmptyList">尚无待处理或过去的交易。</string>
     <string name="Transactions_WaitForSync">请等待同步结束。</string>
     <string name="Transactions_Pending">待处理</string>
     <string name="Transactions_Receive">已收到</string>
+    <string name="Transactions_AccountCreated">帐户已创建</string>
+    <string name="Transactions_ChangeTrust">更改信任度</string>
     <string name="Transactions_Completed">已完成</string>
     <string name="Transactions_Processing">正在处理</string>
     <string name="Transactions_Send">已发送</string>
@@ -607,11 +681,15 @@
     <string name="Transactions_Approve">批准</string>
     <string name="Transactions_Swap">已交换</string>
     <string name="Transactions_Failed">失败</string>
+    <string name="Transactions_Transfer">转帐</string>
+    <string name="Transactions_Shield">盾牌</string>
+    <string name="Transactions_Unshield">取消盾</string>
     <string name="Transactions_ContractCall">合约调用</string>
     <string name="Transactions_ExternalContractCall">外部呼叫</string>
     <string name="Transactions_ContractCreation">合约创建</string>
     <string name="Transactions_ContractDeploy">部署合约</string>
     <string name="Transactions_To">接收人%s</string>
+    <string name="Transactions_By">由 %s</string>
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited_CoinCode">无限%s</string>
     <string name="Transaction_Unlimited">无限</string>
@@ -629,7 +707,11 @@
     <string name="Transactions_Swaps">掉期交易</string>
     <string name="Transactions_Approvals">批准</string>
     <string name="Transactions_Unknown">未知交易</string>
+    <string name="Transactions_OperationType">操作类型</string>
+    <string name="Transactions_OperationType_ChangeTrust">更改信任度</string>
+    <string name="Transactions_OperationType_CreateAccount">创建帐户</string>
     <string name="Transactions_TonTransaction">TON交易</string>
+    <string name="Transactions_StellarTransaction">恒星交易</string>
     <string name="Transactions_Unknown_Description">无法解析交易</string>
     <string name="Transactions_Multiple">多种</string>
     <string name="Transactions_Filter">筛选器</string>
@@ -688,6 +770,10 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">无法替换</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的加密货币已经属于您，但在锁定期限结束前，您无法在网络上消费它们。</string>
+    <string name="Info_Reserved_Title">保留</string>
+    <string name="Info_Reserved_Description">Stellar 网络锁定了 1 XLM 以激活钱包和 0.5 XLM 作为您钱包中激活的每个令牌的储备。</string>
+    <string name="Info_Reserved_CurrentlyLocked">当前锁定：</string>
+    <string name="Info_Reserved_WalletAction">激活钱包</string>
     <string name="Info_NotRelayed_Title">广播</string>
     <string name="Info_NotRelayed_Description">此金额的交易已广播，但尚未被网络接受。</string>
     <string name="Info_ProcessingBalance_Title">处理金额</string>
@@ -717,12 +803,15 @@
     <string name="Settings_AppStatus">应用状态</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
+    <string name="Settings_LaunchScreen_Tip">选择默认打开哪个屏幕。</string>
     <string name="Settings_Appearance">外观</string>
+    <string name="Settings_AppSettings">应用设置</string>
     <string name="Settings_Subscription">訂閱</string>
     <string name="Settings_Contact_ViaTelegram">通过 Telegram</string>
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_Support">支持</string>
     <string name="Settings_VipSupport">貴賓群組</string>
     <string name="Settings_BotSupport">BOT 支持</string>
     <string name="Settings_JoinUnstoppables_Description">通过独家视频学习和掌握加密。非正式地了解我们。成为第一个看看我们正在工作的事情。</string>
@@ -730,14 +819,14 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
     <string name="Settings_PersonalSupport_Account">账户</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@用户名</string>
     <string name="Settings_PersonalSupport_Requested">已申请</string>
     <string name="Settings_PersonalSupport_Request">请求</string>
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
     <string name="Settings_PersonalSupport_Requestfailed">请求失败</string>
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
     <string name="Settings_VipSupport_StartChat">加入貴賓群組</string>
-    <string name="Settings_VipSupport_Description">獲得專屬訪問我們的貴賓群組的權限，高級用戶和Unstoppable錢包團隊在此協作。接收直接協助、討論未來更新，並幫助塑造錢包的發展。</string>
+    <string name="Settings_VipSupport_Description">加入我们的 VIP 组以获得直接支持，参与关于即将进行的更新的讨论，并且更密切地连接到无法阻挡的团队。</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
     <string name="Settings_GetYourTokens">获取代币</string>
@@ -745,17 +834,59 @@
     <string name="Settings_DonateWith">捐赠方式</string>
     <string name="Settings_Donate_GetAddress">捐款地址</string>
     <string name="Settings_Donate_Addresses">地址</string>
+    <string name="Settings_Donate_DonationAddresses">捐款地址</string>
     <string name="Settings_Donate_OrSelectCoinToDonate">或选择一种币进行捐赠</string>
+    <string name="Settings_CryptoQuiz">加密测试</string>
     <string name="SettingsSecurity_AutoLock_Immediate">即时的</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 分钟</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 分钟</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 分钟</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 分钟</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
-    <!--Premium Banner-->
+    <string name="Mev_Protection">MEV 保护</string>
+    <!--Address Checker-->
+    <string name="SettingsAddressChecker_Title">地址检查器</string>
+    <string name="SettingsAddressChecker_RecipientCheck">收件人检查</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">在发送前扫描收件人地址以获取安全风险。</string>
+    <string name="SettingsAddressChecker_CheckAddress">检查地址</string>
+    <string name="SettingsAddressChecker_SelectBlockchain">选择Blockchain</string>
+    <string name="SettingsAddressChecker_SelectCoin">选择硬币</string>
+    <string name="SettingsAddressChecker_OnSubject">在 %s</string>
+    <string name="SettingsAddressChecker_SanctionsCheck">制裁检查</string>
+    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
+    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
+    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis 是一个区块链分析平台，它提供跟踪、调查和评估加密货币地址风险的工具。 它有助于查明与制裁、欺诈和其他非法活动有关的问题。</string>
+    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
+    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit 是一个安全平台，用户可以检查钱包地址的风险，如制裁和黑名单状态。 它有助于用户避免与潜在的恶意或被阻止的地址发生交互。</string>
+    <string name="SettingsAddressChecker_TetherBlacklistDescription">允许您验证钱包地址是否为Tether (UDT) 黑名单。 如果一个地址被黑名单，任何与之相关的 USDT 代币都可以被冻结，使其无法访问和不可转让。 此检查可帮助用户避免与高风险或受限制的地址发生交互作用。</string>
+    <string name="SettingsAddressChecker_UsdcBlacklistDescription">允许您检查一个钱包地址是否被 USDC 发行商(Circle)黑名单。 黑名单上的地址可能因为遵守规定、欺诈或管制原因而冻结美国国防军的持有量。 使用这种检查可以减少向被冻结或可疑的钱包发送资金的风险。</string>
+    <string name="SettingsAddressChecker_PyusdBlacklistDescription">提供一种方法来验证钱包地址是否是由 PayPal 发行的 PYUSD 黑名单上的。 在黑名单上的地址持有的资金可能被冻结和无法使用，主要是出于法律或安全考虑。 这个工具有助于确保交易更安全和符合客户关系管理系统。</string>
+    <string name="SettingsAddressChecker_InvalidAddress">您输入的地址似乎是无效的。请重新检查轮胎或格式问题，然后重试。</string>
+    <!--Banners-->
     <string name="SettingsBanner_Premium">高級版</string>
     <string name="SettingsBanner_PremiumBannerDescription">使用高級版功能升級您的體驗！</string>
     <string name="SettingsBanner_PremiumTryFee">免費試用</string>
+    <string name="SettingsBanner_GameDescription">通过测试，完成任务，赚取代币！</string>
+    <string name="SettingsBanner_BePartOfTheFuture">成为私人融资未来的一部分</string>
+    <string name="SettingsBanner_SupportTheProject">支持项目！</string>
+    <!--Why Donate Page-->
+    <string name="SettingsBanner_DonateTitle">支持不可阻挡的移动</string>
+    <string name="SettingsBanner_DonateSubtitle">成为私人融资未来的一部分</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“不可阻挡的钱包从第一天起就是免费的，无广告和开源的——它将继续这样做。”</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">通过加入不可阻挡的移动，您可以申请开放和私人金融：</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">不可阻止的钱包团队</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">您的支持不仅仅是关于解锁功能 — — 这是对所有人隐私、自由和开放访问权限的承诺。</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">它有助于使钱包免费、安全和真正独立——对你和全世界成千上万依靠钱包的人来说是如此。</string>
+    <string name="SettingsBanner_DonateExclusivelyOnFDroid">仅在 F-Droid 上</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">不可阻挡的钱包给你高级功能——没有订阅，没有限制：</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">关于令牌的完整分析和数据</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">隐私模式 &amp; 冒险模式</string>
+    <string name="SettingsBanner_DonateFeatureSignals">充满信心的贸易信号</string>
+    <string name="SettingsBanner_DonateFeatureAddress">地址黑名单检查</string>
+    <string name="SettingsBanner_DonateFeatureAdvanced">高级资产搜索和过滤器</string>
+    <string name="SettingsBanner_DonateFeaturePriority">优先获得支助</string>
+    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">每一点支持都很重要。</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">通过支持不可阻挡的钱包，您可以帮助我们成长、改善和保持独立。</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">已啟用</string>
     <string name="SettingsSubscription_GetPremium">成为付费会员</string>
@@ -764,6 +895,7 @@
     <string name="SettingsSubscription_SubscriptionInfo">下次付款日期：%s。您可以在管理訂閱部分管理您的訂閱。</string>
     <string name="SettingsSubscription_ManageSubscription">管理訂閱</string>
     <string name="Period_Days">%s 天</string>
+    <string name="Premium_TitleForDroid">高级版 (F-Droid免费)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">高級版</string>
     <string name="Premium_ChoosePlanForYou">選擇方案</string>
@@ -783,7 +915,6 @@
     <string name="Premium_UpgradeText">使用高級版功能升級您的體驗！</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
-
     <string name="Premium_UpgradeFeature_TokenInsights">代幣分析</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">進階搜尋</string>
     <string name="Premium_UpgradeFeature_TradeSignals">信號與趨勢</string>
@@ -791,7 +922,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">詐騙防護</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">黑名單檢查</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP群組</string>
-
+    <string name="Premium_UpgradeFeature_MevProtection">MEV 保护</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">按關鍵標準獲取前100名列表</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">自動監控您代幣的市場趨勢</string>
@@ -799,7 +930,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">有效自動防護詐騙和釣魚攻擊</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">確保您的加密貨幣操作合法性</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">直接聯繫錢包團隊獲取快速技術支援。</string>
-
+    <string name="Premium_UpgradeFeature_MevProtection_Description">MEV 保护</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">您的一站式深度分析工具。瀏覽根據交易量、交易所流動性、持有者行為和鏈上趨勢策劃的前250名代幣列表—一目了然。篩選、分析並保持領先。</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">摒棄雜訊，精準鎖定高潛力代幣。使用進階搜尋功能，通過交易量、區塊鏈、市值、價格趨勢、行業和表現等條件篩選數千種代幣。強大、精準且專為發現而設計。</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">不再錯過任何交易機會。觀察趨勢提供由先進技術分析驅動的實時警報，幫助您在趨勢發生前識別、發現突破點並避免陷阱。快速行動，智能交易，最大化收益。</string>
@@ -807,22 +938,32 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">一個錯誤的地址，您的加密貨幣將永遠消失。Unstoppable自動掃描接收地址的可疑模式，防禦最新的網絡釣魚威脅，防止您向駭客發送資金。在詐騙交易發生前阻止它們。</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">保護自己免受風險和受制裁實體的侵害。黑名單檢查自動對照高風險數據庫篩選接收地址，在您發送前標記詐騙、欺詐和受制裁實體。如果一個地址被列入黑名單，您將在犯下代價高昂的錯誤前知道。保護您的交易。保持您的加密貨幣清潔。保持合規。</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">成為進化的一部分。加入 VIP 群組，直接與我們的團隊連接獲取技術支援。對即將推出的功能進行投票，搶先獨家了解未來更新。您的聲音很重要——幫助塑造下一代加密貨幣錢包。</string>
-
+    <string name="Premium_UpgradeFeature_MevProtection_BigDescription">MEV 保护</string>
     <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
     <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
     <string name="Premium_WhatUsersSay">用戶評價：</string>
     <string name="Premium_SubscriptionPeriod_Month">月</string>
     <string name="Premium_SubscriptionPeriod_Year">年</string>
+    <string name="Premium_SubscriptionPeriod_Annually">年度</string>
+    <string name="Premium_SubscriptionPeriod_Monthly">月度</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">SVE 31%</string>
     <string name="Appearance_MarketsTab">市场标签</string>
     <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_AppIcon">应用图标</string>
-    <string name="Appearance_BalanceValue">余额值</string>
+    <string name="Appearance_BalanceValue">金币余额</string>
+    <string name="Appearance_BalanceValue_Tip">显示加密或纤维中突出显示的余额。</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_HideMarketsTab">隐藏市场</string>
+    <string name="Appearance_HideMarketsTab_Tip">完全隐藏市场选项卡。</string>
     <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
-    <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
-    <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡，不管先前的偏好设置。</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">在余额中隐藏发送、接收和交换按钮</string>
+    <string name="Appearance_AmountRounding">四舍五入量</string>
+    <string name="Appearance_AmountRounding_Tip">显示四舍五入余额和交易金额。</string>
+    <string name="Appearance_BalanceAutoHide">Balance Tab</string>
+    <string name="Appearance_BalanceAutoHide_Description">从平衡选项卡隐藏发送、接收和交换按钮。</string>
     <string name="Appearance_PriceChangeInterval">价格变化 %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">选择代币价格变动显示的时间段。</string>
+    <string name="Appearance_HideButtonsInfo">“隐藏按钮”配置隐藏平衡选项卡上的发送、接收和交换按钮。</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
@@ -849,12 +990,12 @@
     <string name="BackupManager_AppSettingsTitle">应用设置</string>
     <string name="BackupManager_AppSettingsDescription">语言、 货币、 外观 ...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable 不收集暴露您私人信息的个人数据，例如币余额或地址。虽然我们收集了一些用户界面使用统计数据，但这仅用于了解我们的用户群和应用程序使用趋势。如果您希望，可以禁用此功能。</string>
+    <string name="Privacy_Information">不可阻挡的不是\n无法收集个人数据，例如您的余额或钱包地址。我们只使用匿名数据来改进应用程序。</string>
     <string name="Privacy_BulletedText1">钱包没有收集任何个人数据。</string>
     <string name="Privacy_BulletedText2">我们没有用户账户或存储用户数据的数据库。</string>
-    <string name="Privacy_BulletedText3">如果允许，钱包将与不可阻挡团队分享应用程序使用习惯。这是为了了解我们的用户正在使用哪些功能（或未使用）。作为一个关注隐私的应用程序，我们需要一种评估我们努力的方式，如果没有这个，我们就无法知道我们构建的功能是否被使用。</string>
+    <string name="Privacy_BulletedText3">如果允许，钱包将与无法阻止的团队分享应用使用习惯。 这是为了了解我们的用户正在使用(或没有)哪些功能。 作为一个以隐私为重点的应用程序，我们需要有某种方法来评估我们的努力，没有这种方法，我们就不知道我们构建的功能是否正在被使用。</string>
     <string name="ShareUiData">共享界面数据</string>
-    <string name="ShareUiDataDescription">此設置允許您禁用UI/UX分析並確保完全的隱私性。</string>
+    <string name="ShareUiDataDescription">此设置允许您关闭分析并保持您的活动完全隐私。</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">添加新的</string>
@@ -865,6 +1006,18 @@
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">添加节点</string>
+    <string name="AddMoneroNode_NodeUrl">节点网址</string>
+    <string name="AddMoneroNode_Username">用户名(可选)</string>
+    <string name="AddMoneroNode_Pasword">密码(可选)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">此网址的节点已存在</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">节点首选项</string>
+    <string name="MoneroNodeSettings_TrustedDescription">信任的节点——钱包信任选定的节点并在没有额外验证的情况下使用其数据。
+        \n\n广播时即时显示为挂起的交易(粉刷同步) 但隐私和对节点的依赖性较低)。
+        \n\n\n Off -> 交易仅在网络确认后显示(较慢) 但更加安全和更加私人)。</string>
+    <string name="MoneroNodeSettings_Trusted">信任的</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">在更改源后，钱包将必须重新同步自己。</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">通过交易为恢复钱包选择数据源。</string>
@@ -883,13 +1036,13 @@
     <string name="SettingsSecurity_SetDuressPin">设置压力模式</string>
     <string name="SettingsSecurity_EditDuressPin">编辑货币密码</string>
     <string name="SettingsSecurity_DisableDuressPin">禁用冒险密码</string>
-    <string name="SettingsSecurity_DuressPinDescription">专用模式用于在胁迫下使选定的钱包安全。</string>
+    <string name="SettingsSecurity_DuressPinDescription">在胁迫情况下保护选定钱包的特殊模式。</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动本钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
+    <string name="SettingsSecurity_SortingBip69Short">确定性</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
@@ -916,13 +1069,10 @@
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">观看战利品</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
-    <string name="SettingsTerms_PrivateKeys">钱包恢复短语在安装过程中在设备上随机生成，并且不存储在其他地方。</string>
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
-    <string name="SettingsTerms_JailBraking">使用过时的 OS，安装来自未知来源的应用可能危及资金安全。</string>
-    <string name="SettingsTerms_Bugs">这个应用程序的代码可能会出现未发现的软件问题，可能导致应用程序故障。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">不可阻止的</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系我们</string>
     <!--Setting_Notifications-->
@@ -941,6 +1091,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">没有网络</string>
     <string name="Hud_Text_Copied">已复制</string>
+    <string name="Hud_Text_AddressCopied">地址已复制</string>
     <string name="Hud_Text_Created">已创建</string>
     <string name="Hud_Text_Restored">已恢复</string>
     <string name="Hud_Text_AddressAdded">地址已添加</string>
@@ -980,7 +1131,7 @@
     <string name="ImportWallet_BackupFile">从文件</string>
     <string name="ImportWallet_BackupFile_Description">从备份文件导入.</string>
     <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入。</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入钱包。</string>
     <string name="ImportWallet_ExchangeWallet">来自Exchange 钱包</string>
     <string name="ImportWallet_ExchangeWallet_Description">在集中交易所上连接到钱包。</string>
     <string name="ImportWallet_WarningInvalidJson">无效的 Json 文件</string>
@@ -991,11 +1142,15 @@
     <string name="ImportBackupFile_EnterPassword_Description">输入备份密码以导入您的钱包。</string>
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
-    <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="WatchWallet">观看钱包</string>
+    <string name="Watch_Address_Hint">粘贴您的地址 (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) 或 XPUB</string>
     <string name="Watch_Address_Watch">观察</string>
+    <string name="Watch_ViewKey">私人视图密钥</string>
+    <string name="Watch_BirthdayHeight">还原高度</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
     <string name="Watch_Error_InvalidAddressFormat">不支持的地址格式</string>
+    <string name="Watch_Monero_Warning">Monero 监视钱包只显示收到的交易。显示的余额可能不正确。</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
@@ -1024,7 +1179,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">不复制</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">备份钱包</string>
-    <string name="BackupRecoveryPhrase_Description">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
+    <string name="BackupRecoveryPhrase_Description">创建恢复短语和相关密码的备份。 如果您的手机丢失、被盗或损坏，这些将允许您恢复您的钱包。</string>
     <string name="BackupRecoveryPhrase_ManualBackup">进行手动备份</string>
     <string name="BackupRecoveryPhrase_LocalBackup">本地备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
@@ -1042,31 +1197,45 @@
     <string name="LocalBackup_Term1">我的理解是，备份设备被盗或损坏将导致备份丢失，进而导致钱包丢失。</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">恢复码</string>
-    <string name="RecoveryPhrase_Description">按正确顺序写下这些单词，并将其保留在一个安全的地方</string>
+    <string name="RecoveryPhrase_Description">写下这些单词以保证它们的安全。</string>
     <string name="RecoveryPhrase_ShowPhrase">点击显示恢复密语</string>
     <string name="RecoveryPhrase_Verify">验证</string>
     <string name="RecoveryPhrase_CopyWarning_Title">复制的风险</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM 私钥</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
+    <!-- Stellar Secret Key -->
+    <string name="StellarSecretKey_Title">恒星秘密密钥</string>
+    <string name="StellarSecretKey_ShowSecretKey">点击以显示密钥</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <string name="Bip32RootKey">BIP32 根密钥</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
     <string name="ExtendedKey_AccountInfo">待办</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">私钥</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
-    <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
-    <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">授予此钱包内EVM网络上资产的全部控制权（如Etherum、BNB Smart Chain、Polygon、Avalanche）。</string>
+    <string name="PrivateKeys_StellarSecretKey">恒星秘密密钥</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">在这个钱包内完全控制着Satellar网络上的资产。</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">钱包的主密钥对所有衍生账户和资产都具有完全控制权。</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">账户扩展私钥</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">在这个钱包中授予对比特币和其他基于 UTXO的资产的完全控制权(例如Litecoin、比特币Cash、Dash)。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
+    <string name="PrivateKeys_MoneroPrivateKey">单声道私钥</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">对这个钱包内的Monero (XMR)资产给予完全控制，包括使用资金的能力。</string>
+    <string name="MoneroKeyType">类型</string>
+    <string name="MoneroKeyType_Spend">支出</string>
+    <string name="MoneroKeyType_View">查看</string>
+    <string name="MoneroKeyType_Private">单声道私钥</string>
+    <string name="MoneroKeyType_Public">Monero 公钥</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">公钥</string>
     <string name="PublicKeys_EvmAddress">EVM 地址</string>
     <string name="PublicKeys_EvmAddress_Description">允许只读监视持有Etherum、 Binance Smart Chain和其他基于 EVM 的区块链的钱包。</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">允许只读监视持有比特币和其他基于 UTXO 的加密钱包(即Liteco、 比特币现金、 破折号等)。</string>
+    <string name="PublicKeys_MoneroPublicKey">Monero 公钥</string>
+    <string name="PublicKeys_MoneroPublicKeyDescription">允许只读监视持有Monero (XMR)资产的钱包而不允许使用支出。</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">验证</string>
     <string name="RecoveryPhraseVerify_Description">从你的钱包恢复短语中选择两个请求的单词</string>
@@ -1098,6 +1267,7 @@
     <!-- Blockchain Settings -->
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018年之前常用</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
+    <!-- Nym VPN -->
     <!-- Tor -->
     <string name="Tor_Connection_Enable">启用Tor</string>
     <string name="Tor_Connection_Disable">禁用Tor</string>
@@ -1106,6 +1276,7 @@
     <string name="TorPage_Failed">Tor 연결 실패</string>
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <!--Coin Page-->
+    <string name="Coin_Chart">图表</string>
     <string name="Coin_Info">硬币信息</string>
     <string name="Coin_Tab_Overview">行情</string>
     <string name="Coin_Tab_Market">市场</string>
@@ -1155,11 +1326,21 @@
     <string name="CoinPage_NoData">无数据</string>
     <string name="CoinPage_NoDataAvailable">没有可用数据</string>
     <string name="CoinPage_AddToWallet">加入钱包</string>
+    <string name="CoinPage_ROI_Title">相对更改 vs %s</string>
+    <string name="CoinPage_ROI_Vs">vs</string>
+    <string name="CoinPage_ROI_SelectCoins">选择硬币</string>
     <string name="CoinPage_InWallet">已在钱包</string>
     <string name="CoinPage_Favorite">喜爱的</string>
     <string name="CoinPage_Unfavorite">不喜欢</string>
-    <string name="CoinPage_Performance_Week">1周</string>
-    <string name="CoinPage_Performance_Month">1月</string>
+    <string name="CoinPage_Performance_Day1">日</string>
+    <string name="CoinPage_Performance_Week1">1周</string>
+    <string name="CoinPage_Performance_Week2">2 周</string>
+    <string name="CoinPage_Performance_Month1">1月</string>
+    <string name="CoinPage_Performance_Month3">3月</string>
+    <string name="CoinPage_Performance_Month6">6月</string>
+    <string name="CoinPage_Performance_Year1">1年</string>
+    <string name="CoinPage_Performance_Year2">2 年</string>
+    <string name="CoinPage_Performance_Year5">5 年</string>
     <string name="CoinPage_ShowMore">显示更多</string>
     <string name="CoinPage_ShowLess">显示更多</string>
     <string name="CoinPage_LaunchDate">起始日期</string>
@@ -1184,7 +1365,12 @@
     <string name="CoinPage_AiGeneratedText">这是一个基于给定的加密货币所提供的参考材料生成的 AI 描述。它可能包含错误。</string>
     <string name="CoinPage_MarketsLabel_Verified">验证</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">已验证</string>
+    <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">交易类型</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">所有</string>
+    <string name="ROI_SelectCoin_Title">选择硬币</string>
+    <string name="ROI_SelectCoin_SelectAssets">选择资源</string>
+    <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">只能选择 %s 硬币</string>
+    <string name="ROI_Period_N">期间 %s</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">图表显示了过去一年内该代币在主要中心化交易所的日交易量变化。</string>
     <string name="CoinAnalytics_CexVolume_Info3">代币的排名基于过去30天内在主要中心化交易所的交易量。</string>
@@ -1288,8 +1474,8 @@
     <string name="TechnicalAdvice_IndicatorsDisclaimer">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="TechnicalAdvice_OverBought">已购买过期的</string>
     <string name="TechnicalAdvice_OverSold">超价</string>
-    <string name="TechnicalAdvice_Down">down</string>
-    <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_Down">向下</string>
+    <string name="TechnicalAdvice_Up">上</string>
     <string name="TechnicalAdvice_OverMain">资产的行动是有风险的。</string>
     <string name="TechnicalAdvice_OverIndicators_SignalDate">从 %s 开始</string>
     <string name="TechnicalAdvice_OverIndicators">资产不属于Bollinger频道和 %s。</string>
@@ -1350,9 +1536,10 @@
     <string name="BalanceSyncError_ButtonRetry">重试</string>
     <string name="BalanceSyncError_ButtonChangeSource">更改源</string>
     <string name="BalanceSyncError_ButtonReport">报告</string>
+    <string name="BalanceSyncError_Text">同步错误</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">加入未加入的</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">不可阻止的通路</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
     <string name="ProUsersInfo_Features_DesLiquidity">DEX 流动性和等级</string>
@@ -1422,17 +1609,9 @@
     <string name="Contacts_DiscardChanges">放弃更改</string>
     <string name="Contacts_KeepEditing">继续编辑</string>
     <string name="Contacts_DiscardChanges_Warning">您确定要放弃此新更改吗？</string>
-    <string name="Contacts_NoContacts">您没有已添加的联系人</string>
+    <string name="Contacts_NoContacts">尚未添加联系人</string>
     <string name="Contacts_ActionMore">更多</string>
     <string name="Contacts_Error_DefinedAddress">此地址已用于 %s</string>
     <string name="Contacts_Error_DefinedName">该名称已存在</string>
     <string name="Hud_Text_Connected">已连接</string>
-    <!--Cex Deposit Module-->
-    <string name="Cex_ChooseCoin">选择代币</string>
-    <string name="Cex_ChooseNetwork">选择网络</string>
-    <string name="Cex_ChooseNetwork_Description">选择一个网络并获得一个地址存取。</string>
-    <string name="Cex_SelectCoin_Search">名称或代码</string>
-    <string name="CexDeposit_Title">存款 %s</string>
-    <string name="Cex_Error_FailedToConnectApiKey">连接您的 API 密钥失败</string>
-    <!--Cex Withdraw Module-->
 </resources>

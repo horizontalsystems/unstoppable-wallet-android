@@ -12,10 +12,12 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.BitcoinAddress
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.MoneroWatchAddress
 import io.horizontalsystems.bankwallet.entities.tokenType
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -31,10 +33,14 @@ class WatchAddressViewModel(
     private var submitButtonType: SubmitButtonType = SubmitButtonType.Next(false)
     private var type = Type.Unsupported
     private var address: Address? = null
+    private var viewKey: String? = null
+    private var birthdayHeight: Long? = null
     private var xPubKey: String? = null
     private var accountType: AccountType? = null
     private var accountNameEdited = false
     private var inputState: DataState<String>? = null
+    private var viewKeyState: DataState<String>? = null
+    private var birthdayHeightState: DataState<String>? = null
     private var parseAddressJob: Job? = null
 
     val defaultAccountName = watchAddressService.nextWatchAccountName()
@@ -47,7 +53,10 @@ class WatchAddressViewModel(
         submitButtonType = submitButtonType,
         accountType = accountType,
         accountName = accountName,
-        inputState = inputState
+        inputState = inputState,
+        addressType = type,
+        viewKeyState = viewKeyState,
+        birthdayHeightState = birthdayHeightState
     )
 
     fun onEnterAccountName(v: String) {
@@ -59,10 +68,17 @@ class WatchAddressViewModel(
         parseAddressJob?.cancel()
         address = null
         xPubKey = null
+        type = Type.Unsupported
+        viewKey = null
+        birthdayHeight = null
+        viewKeyState = null
+        birthdayHeightState = null
 
         if (v.isBlank()) {
             inputState = null
-            accountName = defaultAccountName
+            if (!accountNameEdited) {
+                accountName = defaultAccountName
+            }
             syncSubmitButtonType()
             emitState()
         } else {
@@ -85,7 +101,15 @@ class WatchAddressViewModel(
                         val parsedAddress = handler.parseAddress(vTrimmed)
                         ensureActive()
                         withContext(Dispatchers.Main) {
-                            setAddress(parsedAddress)
+                            if (parsedAddress is MoneroWatchAddress) {
+                                setAddress(parsedAddress)
+                                onEnterViewKey(parsedAddress.viewKey)
+                                parsedAddress.height?.let {
+                                    onEnterBirthdayHeight(parsedAddress.height.toString())
+                                }
+                            } else {
+                                setAddress(parsedAddress)
+                            }
                         }
                     } catch (t: Throwable) {
                         ensureActive()
@@ -100,6 +124,60 @@ class WatchAddressViewModel(
         }
     }
 
+    fun onEnterViewKey(key: String) {
+        val address = address
+        if (address == null) {
+            inputState = DataState.Error(UnsupportedAddress)
+            syncSubmitButtonType()
+            emitState()
+            return
+        }
+
+        if (key.trim().isEmpty()) {
+            viewKey = null
+            viewKeyState = null
+            syncSubmitButtonType()
+            emitState()
+            return
+        }
+
+        viewKeyState = DataState.Loading
+        emitState()
+
+        try {
+            MoneroKit.validatePrivateViewKey(key, address.hex)
+            viewKeyState = DataState.Success(key)
+            viewKey = key
+        } catch (ex: Exception) {
+            viewKeyState = DataState.Error(ex)
+        }
+
+        syncSubmitButtonType()
+        emitState()
+    }
+
+
+    fun onEnterBirthdayHeight(height: String) {
+        if (height.trim().isEmpty()) {
+            birthdayHeight = null
+            birthdayHeightState = null
+            syncSubmitButtonType()
+            emitState()
+            return
+        }
+
+        birthdayHeightState = DataState.Loading
+        val convertedHeight = height.toLongOrNull()
+        if (convertedHeight == null) {
+            birthdayHeightState = DataState.Error(Exception(Translator.getString(R.string.Restore_BirthdayHeight_Invalid)))
+        } else {
+            birthdayHeightState = DataState.Success(height)
+            birthdayHeight = convertedHeight
+        }
+        syncSubmitButtonType()
+        emitState()
+    }
+
     private fun setAddress(address: Address) {
         this.address = address
         if (!accountNameEdited) {
@@ -107,7 +185,7 @@ class WatchAddressViewModel(
         }
 
         type = addressType(address)
-        inputState = DataState.Success(address.hex)
+        inputState = DataState.Success(address.domain ?: address.hex)
 
         syncSubmitButtonType()
         emitState()
@@ -156,7 +234,8 @@ class WatchAddressViewModel(
         BlockchainType.Solana -> Type.SolanaAddress
         BlockchainType.Tron -> Type.TronAddress
         BlockchainType.Ton -> Type.TonAddress
-
+        BlockchainType.Stellar -> Type.StellarAddress
+        BlockchainType.Monero -> Type.MoneroAddress
         BlockchainType.Zcash,
         is BlockchainType.Unsupported,
         null -> Type.Unsupported
@@ -183,7 +262,10 @@ class WatchAddressViewModel(
             accountCreated = true
             emitState()
 
-            stat(page = StatPage.WatchWallet, event = StatEvent.WatchWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.WatchWallet,
+                event = StatEvent.WatchWallet(accountType.statAccountType)
+            )
         } catch (_: Exception) {
 
         }
@@ -197,6 +279,8 @@ class WatchAddressViewModel(
             Type.TronAddress -> SubmitButtonType.Watch(address != null)
             Type.BitcoinAddress -> SubmitButtonType.Watch(address != null)
             Type.TonAddress -> SubmitButtonType.Watch(address != null)
+            Type.StellarAddress -> SubmitButtonType.Watch(address != null)
+            Type.MoneroAddress -> SubmitButtonType.Watch(address != null && viewKey != null)
             Type.Unsupported -> SubmitButtonType.Watch(false)
         }
     }
@@ -213,8 +297,17 @@ class WatchAddressViewModel(
                 throw IllegalStateException("Unsupported address type")
             }
         }
+
         Type.TonAddress -> address?.let {
             AccountType.TonAddress(it.hex)
+        }
+
+        Type.StellarAddress -> address?.let {
+            AccountType.StellarAddress(it.hex)
+        }
+
+        Type.MoneroAddress -> address?.let {
+            AccountType.MoneroWatchAccount(it.hex, viewKey!!, birthdayHeight ?: 1)
         }
 
         Type.Unsupported -> throw IllegalStateException("Unsupported address type")
@@ -227,6 +320,8 @@ class WatchAddressViewModel(
         XPubKey,
         BitcoinAddress,
         TonAddress,
+        StellarAddress,
+        MoneroAddress,
         Unsupported
     }
 }
@@ -236,7 +331,10 @@ data class WatchAddressUiState(
     val submitButtonType: SubmitButtonType,
     val accountType: AccountType?,
     val accountName: String?,
-    val inputState: DataState<String>?
+    val inputState: DataState<String>?,
+    val addressType: WatchAddressViewModel.Type,
+    val viewKeyState: DataState<String>?,
+    val birthdayHeightState: DataState<String>?
 )
 
 sealed class SubmitButtonType {

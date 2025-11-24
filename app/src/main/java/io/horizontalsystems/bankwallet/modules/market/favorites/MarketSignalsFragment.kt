@@ -93,7 +93,7 @@ fun MarketSignalsScreen(navController: NavController) {
                             RowUniversal(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .then(Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)),
+                                    .then(Modifier.sectionItemBorder(0.5.dp, ComposeAppTheme.colors.blade, 12.dp, position)),
                             ) {
                                 Box(
                                     modifier = Modifier

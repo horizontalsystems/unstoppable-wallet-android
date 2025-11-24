@@ -10,11 +10,13 @@ class LockManager(
     private val localStorage: ILocalStorage
 ) {
 
-    var isLocked: Boolean = true
+    val pinSet by pinManager::isPinSet
+    var isLocked: Boolean = false
         private set
     private val lockTimeout = 60L
     private var appLastVisitTime: Long = 0
-    private var keepUnlocked = false
+    var keepUnlocked = false
+        private set
 
     fun didEnterBackground() {
         if (isLocked) {

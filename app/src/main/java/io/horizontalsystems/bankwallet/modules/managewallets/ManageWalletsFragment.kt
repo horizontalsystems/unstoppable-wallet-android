@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,10 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -39,9 +35,11 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -79,10 +77,13 @@ private fun ManageWalletsScreen(
 ) {
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
 
-    if (restoreSettingsViewModel.openZcashConfigure != null) {
-        restoreSettingsViewModel.zcashConfigureOpened()
+    restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
+        restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromBottomForResult<ZcashConfigure.Result>(R.id.zcashConfigure) {
+        navController.slideFromBottomForResult<BirthdayHeightConfig.Result>(
+            resId = R.id.zcashConfigure,
+            input = token
+        ) {
             if (it.config != null) {
                 restoreSettingsViewModel.onEnter(it.config)
             } else {
@@ -103,11 +104,14 @@ private fun ManageWalletsScreen(
                 listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
-                        icon = R.drawable.ic_add_yellow,
+                        icon = R.drawable.ic_add_24,
                         onClick = {
                             navController.slideFromRight(R.id.addTokenFragment)
 
-                            stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.AddToken))
+                            stat(
+                                page = StatPage.CoinManager,
+                                event = StatEvent.Open(StatPage.AddToken)
+                            )
                         }
                     ))
             } else {
@@ -129,10 +133,7 @@ private fun ManageWalletsScreen(
                 LazyColumn {
                     item {
                         Spacer(modifier = Modifier.height(12.dp))
-                        Divider(
-                            thickness = 1.dp,
-                            color = ComposeAppTheme.colors.steel10,
-                        )
+                        HsDivider()
                     }
                     items(it) { viewItem ->
                         CoinCell(
@@ -141,17 +142,29 @@ private fun ManageWalletsScreen(
                                 if (viewItem.enabled) {
                                     viewModel.disable(viewItem.item)
 
-                                    stat(page = StatPage.CoinManager, event = StatEvent.DisableToken(viewItem.item))
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.DisableToken(viewItem.item)
+                                    )
                                 } else {
                                     viewModel.enable(viewItem.item)
 
-                                    stat(page = StatPage.CoinManager, event = StatEvent.EnableToken(viewItem.item))
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.EnableToken(viewItem.item)
+                                    )
                                 }
                             },
                             onInfoClick = {
-                                navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
+                                navController.slideFromBottom(
+                                    R.id.configuredTokenInfo,
+                                    viewItem.item
+                                )
 
-                                stat(page = StatPage.CoinManager, event = StatEvent.OpenTokenInfo(viewItem.item))
+                                stat(
+                                    page = StatPage.CoinManager,
+                                    event = StatEvent.OpenTokenInfo(viewItem.item)
+                                )
                             }
                         )
                     }
@@ -195,24 +208,10 @@ private fun CoinCell(
                         maxLines = 1,
                     )
                     viewItem.label?.let { labelText ->
-                        Box(
-                            modifier = Modifier
-                                .padding(start = 6.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.jeremy)
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(
-                                    start = 4.dp,
-                                    end = 4.dp,
-                                    bottom = 1.dp
-                                ),
-                                text = labelText,
-                                color = ComposeAppTheme.colors.bran,
-                                style = ComposeAppTheme.typography.microSB,
-                                maxLines = 1,
-                            )
-                        }
+                        Badge(
+                            text = labelText,
+                            modifier = Modifier.padding(start = 6.dp)
+                        )
                     }
                 }
                 subhead2_grey(
@@ -237,10 +236,7 @@ private fun CoinCell(
                 onCheckedChange = { onItemClick.invoke() },
             )
         }
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-        )
+        HsDivider()
     }
 }
 

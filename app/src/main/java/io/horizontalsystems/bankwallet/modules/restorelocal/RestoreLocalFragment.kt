@@ -50,7 +50,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigureScreen
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -64,10 +64,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -110,7 +111,13 @@ private fun RestoreLocalNavHost(
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName, statPage))
+    val viewModel = viewModel<RestoreLocalViewModel>(
+        factory = RestoreLocalModule.Factory(
+            backupJsonString,
+            fileName,
+            statPage
+        )
+    )
     NavHost(
         navController = navController,
         startDestination = "restore_local",
@@ -137,18 +144,38 @@ private fun RestoreLocalNavHost(
         composablePage("restore_select_coins") {
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
-                openZCashConfigure = { navController.navigate("zcash_configure") },
+                openBirthdayHeightConfigure = { token ->
+                    when (token.blockchainType) {
+                        BlockchainType.Zcash -> navController.navigate("zcash_configure")
+                        BlockchainType.Monero -> navController.navigate("monero_configure")
+                        else -> Unit
+                    }
+                },
                 onBackClick = { navController.popBackStack() }
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
         composablePopup("zcash_configure") {
-            ZcashConfigureScreen(
+            BirthdayHeightConfigScreen(
+                blockchainType = BlockchainType.Zcash,
                 onCloseWithResult = { config ->
-                    mainViewModel.setZCashConfig(config)
+                    mainViewModel.setBirthdayHeightConfig(config)
                     navController.popBackStack()
                 },
                 onCloseClick = {
-                    mainViewModel.cancelZCashConfig = true
+                    mainViewModel.cancelBirthdayHeightConfig = true
+                    navController.popBackStack()
+                }
+            )
+        }
+        composablePopup("monero_configure") {
+            BirthdayHeightConfigScreen(
+                blockchainType = BlockchainType.Monero,
+                onCloseWithResult = { config ->
+                    mainViewModel.setBirthdayHeightConfig(config)
+                    navController.popBackStack()
+                },
+                onCloseClick = {
+                    mainViewModel.cancelBirthdayHeightConfig = true
                     navController.popBackStack()
                 }
             )
@@ -187,14 +214,24 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
-            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                App.instance,
+                error.message ?: error.javaClass.simpleName,
+                Toast.LENGTH_LONG
+            ).show()
             onBackClick.invoke()
         }
     }
 
     LaunchedEffect(uiState.showSelectCoins) {
         uiState.showSelectCoins?.let { accountType ->
-            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true, statPage)
+            mainViewModel.setAccountData(
+                accountType,
+                viewModel.accountName,
+                uiState.manualBackup,
+                true,
+                statPage
+            )
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
@@ -298,7 +335,11 @@ private fun BackupFileItems(
 
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
-            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                App.instance,
+                error.message ?: error.javaClass.simpleName,
+                Toast.LENGTH_LONG
+            ).show()
             onBackClick.invoke()
         }
     }
@@ -358,19 +399,25 @@ private fun BackupFileItems(
         ) {
             LazyColumn(modifier = Modifier.padding(it)) {
                 item {
-                    InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
+                    InfoText(
+                        text = stringResource(R.string.BackupManager_BackupFileContents),
+                        paddingBottom = 32.dp
+                    )
                 }
 
                 if (walletBackupViewItems.isNotEmpty()) {
                     item {
                         HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                        CellUniversalLawrenceSection(items = walletBackupViewItems, showFrame = true) { walletBackupViewItem ->
+                        CellUniversalLawrenceSection(
+                            items = walletBackupViewItems,
+                            showFrame = true
+                        ) { walletBackupViewItem ->
                             RowUniversal(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                             ) {
 
                                 Column(modifier = Modifier.weight(1f)) {
-                                    body_leah(text = walletBackupViewItem.name)
+                                    headline2_leah(text = walletBackupViewItem.name)
                                     if (walletBackupViewItem.backupRequired) {
                                         subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
                                     } else {

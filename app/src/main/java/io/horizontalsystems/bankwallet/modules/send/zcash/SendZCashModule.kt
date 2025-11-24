@@ -18,7 +18,7 @@ object SendZCashModule {
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
-            (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
+            App.adapterManager.getAdapterForWallet<ISendZcashAdapter>(wallet) ?: throw IllegalStateException("SendZcashAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import io.horizontalsystems.bankwallet.core.providers.CexAssetRaw
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_31_32
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_32_33
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_33_34
@@ -38,6 +37,11 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_59_60
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_60_61
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_61_62
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_62_63
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_63_64
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_64_65
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_65_66
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_66_67
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_67_68
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -46,6 +50,7 @@ import io.horizontalsystems.bankwallet.entities.EvmAddressLabel
 import io.horizontalsystems.bankwallet.entities.EvmMethodLabel
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.bankwallet.entities.LogEntry
+import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
 import io.horizontalsystems.bankwallet.entities.RecentAddress
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.bankwallet.entities.SpamAddress
@@ -66,7 +71,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 63, exportSchema = false, entities = [
+@Database(version = 68, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -86,20 +91,19 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     EvmMethodLabel::class,
     SyncerState::class,
     TokenAutoEnabledBlockchain::class,
-    CexAssetRaw::class,
     ChartIndicatorSetting::class,
     Pin::class,
     StatRecord::class,
     SpamAddress::class,
     SpamScanState::class,
     RecentAddress::class,
+    MoneroNodeRecord::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun chartIndicatorSettingsDao(): ChartIndicatorSettingsDao
-    abstract fun cexAssetsDao(): CexAssetsDao
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun enabledWalletsCacheDao(): EnabledWalletsCacheDao
     abstract fun accountsDao(): AccountsDao
@@ -119,6 +123,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun statsDao(): StatsDao
     abstract fun spamAddressDao(): SpamAddressDao
     abstract fun recentAddressDao(): RecentAddressDao
+    abstract fun moneroNodeDao(): MoneroNodeDao
 
     companion object {
 
@@ -168,6 +173,11 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_60_61,
                             Migration_61_62,
                             Migration_62_63,
+                            Migration_63_64,
+                            Migration_64_65,
+                            Migration_65_66,
+                            Migration_66_67,
+                            Migration_67_68,
                     )
                     .build()
         }

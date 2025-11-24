@@ -51,13 +51,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
@@ -225,10 +225,10 @@ private fun ShowExtendedKeyScreen(
                     }
 
                     if (showPurposeSelectorDialog) {
-                        SelectorDialogCompose(
+                        MenuGroup(
                             title = stringResource(R.string.ExtendedKey_Purpose),
                             items = viewModel.purposes.map {
-                                SelectorItem(it.name, it == viewModel.purpose, it)
+                                MenuItemX(it.name, it == viewModel.purpose, it)
                             },
                             onDismissRequest = {
                                 showPurposeSelectorDialog = false
@@ -239,10 +239,10 @@ private fun ShowExtendedKeyScreen(
                         )
                     }
                     if (showBlockchainSelectorDialog) {
-                        SelectorDialogCompose(
+                        MenuGroup(
                             title = stringResource(R.string.ExtendedKey_Blockchain),
                             items = viewModel.blockchains.map {
-                                SelectorItem(it.name, it == viewModel.blockchain, it)
+                                MenuItemX(it.name, it == viewModel.blockchain, it)
                             },
                             onDismissRequest = {
                                 showBlockchainSelectorDialog = false
@@ -253,10 +253,10 @@ private fun ShowExtendedKeyScreen(
                         )
                     }
                     if (showAccountSelectorDialog) {
-                        SelectorDialogCompose(
+                        MenuGroup(
                             title = stringResource(R.string.ExtendedKey_Account),
                             items = viewModel.accounts.map {
-                                SelectorItem(it.toString(), it == viewModel.account, it)
+                                MenuItemX(it.toString(), it == viewModel.account, it)
                             },
                             onDismissRequest = {
                                 showAccountSelectorDialog = false
@@ -286,7 +286,7 @@ private fun ShowExtendedKeyScreen(
 }
 
 @Composable
-private fun MenuItem(
+fun MenuItem(
     title: String,
     value: String,
     infoButtonClick: (() -> Unit)? = null,

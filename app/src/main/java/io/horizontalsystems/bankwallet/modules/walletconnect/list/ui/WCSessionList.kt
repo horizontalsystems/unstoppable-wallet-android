@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -132,7 +133,7 @@ private fun LazyListScope.WCSection(
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                                tint = Color.Gray,
+                                tint = ComposeAppTheme.colors.grey,
                                 contentDescription = "delete",
                             )
                         }
@@ -159,9 +160,9 @@ private fun LazyListScope.WCSection(
 }
 
 fun getShape(itemsCount: Int, index: Int): Shape = when {
-    itemsCount == 1 -> RoundedCornerShape(12.dp)
-    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
-    0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
+    itemsCount == 1 -> RoundedCornerShape(16.dp)
+    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp)
+    0 == index -> RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp)
     else -> RoundedCornerShape(0.dp)
 }
 

@@ -66,7 +66,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsPeriodsScrollableTabRow
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondaryTransparent
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TabPeriod
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
@@ -75,7 +74,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.chartview.ChartViewType
+import io.horizontalsystems.chartview.models.ChartVolumeType
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.launch
@@ -94,7 +95,7 @@ fun HsChartLineHeader(
 
     RowUniversal(
         modifier = Modifier
-            .height(64.dp)
+            .height(72.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
@@ -126,7 +127,7 @@ fun HsChartLineHeader(
                     Text(
                         modifier = Modifier.alignByBaseline(),
                         text = formatValueAsDiff(diff),
-                        style = ComposeAppTheme.typography.subhead1,
+                        style = ComposeAppTheme.typography.subhead,
                         color = diffColor(diff.raw())
                     )
                 }
@@ -145,7 +146,7 @@ fun HsChartLineHeader(
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(R.string.CoinPage_Volume),
+                            text = stringResource(extraData.type.titleResId),
                             textAlign = TextAlign.End
                         )
                         subhead2_grey(
@@ -174,7 +175,7 @@ fun HsChartLineHeader(
                                 HSpacer(width = 4.dp)
                                 Text(
                                     text = formatValueAsDiff(diff),
-                                    style = ComposeAppTheme.typography.subhead2,
+                                    style = ComposeAppTheme.typography.subheadR,
                                     color = diffColor(diff.raw())
                                 )
                             }
@@ -183,7 +184,7 @@ fun HsChartLineHeader(
                 }
 
                 is ChartModule.ChartHeaderExtraData.Indicators -> {
-                    val styleSubhead = ComposeAppTheme.typography.subhead2
+                    val styleSubhead = ComposeAppTheme.typography.subheadR
                     Column(
                         modifier = Modifier.width(IntrinsicSize.Max),
                         horizontalAlignment = Alignment.End
@@ -211,7 +212,8 @@ fun HsChartLineHeader(
                                     textSize = textLayoutResult.size
                                     textSize?.let { size ->
                                         if (size.width > MAX_WIDTH) {
-                                            textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                            textStyle =
+                                                textStyle.copy(fontSize = textStyle.fontSize * 0.9)
                                         } else {
                                             readyToDraw = true
                                         }
@@ -221,7 +223,13 @@ fun HsChartLineHeader(
                         }
 
                         if (extraData.rsi != null) {
-                            subhead2_jacob(text = App.numberFormatter.formatFiatShort(extraData.rsi.toBigDecimal(), "", 8))
+                            subhead2_jacob(
+                                text = App.numberFormatter.formatFiatShort(
+                                    extraData.rsi.toBigDecimal(),
+                                    "",
+                                    8
+                                )
+                            )
                         } else if (extraData.macd != null) {
                             val macd = extraData.macd
                             Row {
@@ -231,7 +239,8 @@ fun HsChartLineHeader(
                                 Text(
                                     text = buildAnnotatedString {
                                         macd.histogramValue?.let { value ->
-                                            val color = if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+                                            val color =
+                                                if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
                                             withStyle(style = SpanStyle(color = color)) {
                                                 append(value.plainString())
                                                 append(" ")
@@ -255,7 +264,8 @@ fun HsChartLineHeader(
                                         textSize = textLayoutResult.size
                                         textSize?.let { size ->
                                             if (size.width > MAX_WIDTH) {
-                                                textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                                textStyle =
+                                                    textStyle.copy(fontSize = textStyle.fontSize * 0.9)
                                             } else {
                                                 readyToDraw = true
                                             }
@@ -322,7 +332,8 @@ fun Chart(
                     Column {
                         HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
 
-                        val loadingModifier = if (uiState.loading) Modifier.alpha(0.5f) else Modifier
+                        val loadingModifier =
+                            if (uiState.loading) Modifier.alpha(0.5f) else Modifier
                         Box(
                             modifier = loadingModifier.fillMaxWidth()
                         ) {
@@ -425,7 +436,7 @@ fun PriceVolChart(
                 .drawBehind {
                     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                     drawLine(
-                        color = colors.steel10,
+                        color = colors.blade,
                         start = Offset(0f, size.height),
                         end = Offset(size.width, size.height),
                         pathEffect = pathEffect
@@ -522,7 +533,7 @@ fun PriceVolChart(
                         .drawBehind {
                             val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                             drawLine(
-                                color = colors.steel10,
+                                color = colors.blade,
                                 start = Offset(0f, 0f),
                                 end = Offset(size.width, 0f),
                                 pathEffect = pathEffect
@@ -551,7 +562,7 @@ fun PriceVolChart(
                                         val pathEffect =
                                             PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                                         drawLine(
-                                            color = colors.steel10,
+                                            color = colors.blade,
                                             start = Offset(0f, size.height),
                                             end = Offset(size.width, size.height),
                                             pathEffect = pathEffect
@@ -586,7 +597,7 @@ fun PriceVolChart(
                                         val pathEffect =
                                             PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                                         drawLine(
-                                            color = colors.steel10,
+                                            color = colors.blade,
                                             start = Offset(0f, 0f),
                                             end = Offset(size.width, 0f),
                                             pathEffect = pathEffect
@@ -644,7 +655,7 @@ fun PriceVolChart(
                                 maxKey = volumeBarsState.endTimestamp,
                                 minValue = volumeBarsState.minValue,
                                 maxValue = volumeBarsState.maxValue,
-                                color = ComposeAppTheme.colors.steel20,
+                                color = ComposeAppTheme.colors.blade,
                                 selectedItemKey = null
                             )
                         }
@@ -732,3 +743,9 @@ fun <T> ChartTab(modifier: Modifier = Modifier, tabItems: List<TabItem<T>>, onSe
         }
     }
 }
+
+val ChartVolumeType.titleResId: Int
+    get() = when (this) {
+        ChartVolumeType.Volume -> R.string.CoinPage_Volume
+        ChartVolumeType.Tvl -> R.string.Market_Vaults_ChartTvl
+    }

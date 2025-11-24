@@ -42,7 +42,7 @@ fun SuggestionsBar(
                             color = if (selectEnabled) {
                                 ComposeAppTheme.colors.leah
                             } else {
-                                ComposeAppTheme.colors.grey50
+                                ComposeAppTheme.colors.andy
                             },
                         )
                     }
@@ -53,7 +53,7 @@ fun SuggestionsBar(
                     tint = if (deleteEnabled) {
                         ComposeAppTheme.colors.leah
                     } else {
-                        ComposeAppTheme.colors.grey50
+                        ComposeAppTheme.colors.andy
                     },
                     onClick = onDelete
                 )

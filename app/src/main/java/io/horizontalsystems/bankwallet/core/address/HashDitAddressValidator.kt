@@ -1,4 +1,4 @@
-import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
+
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Address
@@ -12,7 +12,7 @@ class HashDitAddressValidator(
     apiKey: String,
     private val evmBlockchainManager: EvmBlockchainManager
 ) {
-    private val supportedBlockchainTypes = listOf(BlockchainType.Ethereum, BlockchainType.BinanceSmartChain, BlockchainType.Polygon)
+    val supportedBlockchainTypes = listOf(BlockchainType.Ethereum, BlockchainType.BinanceSmartChain, BlockchainType.Polygon)
 
     private val apiService by lazy {
         APIClient.build(
@@ -21,15 +21,16 @@ class HashDitAddressValidator(
         ).create(HashDitApi::class.java)
     }
 
-    suspend fun check(address: Address, token: Token): AddressCheckResult {
-        if (!supports(token)) return AddressCheckResult.NotSupported
+    suspend fun isClear(address: Address, token: Token): Boolean {
+        return isClear(address, token.blockchainType)
+    }
 
-        val chain = evmBlockchainManager.getChain(token.blockchainType)
+    suspend fun isClear(address: Address, blockchainType: BlockchainType): Boolean {
+        if (!supportedBlockchainTypes.contains(blockchainType)) throw UnsupportedBlockchainType()
+
+        val chain = evmBlockchainManager.getChain(blockchainType)
         val response = apiService.transactionSecurity(TransactionSecurityData(chain.id, address.hex))
-        return if (response.data.risk_level < 4)
-            AddressCheckResult.Clear
-        else
-            AddressCheckResult.Detected
+        return response.data.risk_level < 4
     }
 
     fun supports(token: Token): Boolean {
@@ -66,3 +67,5 @@ class HashDitAddressValidator(
     }
 
 }
+
+class UnsupportedBlockchainType : Exception()

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains
 import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,14 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,8 +29,10 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -111,7 +108,8 @@ private fun SelectBlockchainsScreen(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Done),
                     onClick = viewModel::onClickWatch,
-                    enabled = submitEnabled
+                    enabled = submitEnabled,
+                    tint = ComposeAppTheme.colors.jacob
                 )
             ),
         )
@@ -123,10 +121,7 @@ private fun SelectBlockchainsScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                Divider(
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
-                )
+                HsDivider()
             }
             items(blockchainViewItems) { viewItem ->
                 CellMultilineClear(
@@ -153,24 +148,10 @@ private fun SelectBlockchainsScreen(
                                     maxLines = 1,
                                 )
                                 viewItem.label?.let { labelText ->
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(start = 6.dp)
-                                            .clip(RoundedCornerShape(4.dp))
-                                            .background(ComposeAppTheme.colors.jeremy)
-                                    ) {
-                                        Text(
-                                            modifier = Modifier.padding(
-                                                start = 4.dp,
-                                                end = 4.dp,
-                                                bottom = 1.dp
-                                            ),
-                                            text = labelText,
-                                            color = ComposeAppTheme.colors.bran,
-                                            style = ComposeAppTheme.typography.microSB,
-                                            maxLines = 1,
-                                        )
-                                    }
+                                    Badge(
+                                        text = labelText,
+                                        modifier = Modifier.padding(start = 6.dp)
+                                    )
                                 }
                             }
                             subhead2_grey(

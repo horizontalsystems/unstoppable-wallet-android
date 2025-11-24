@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -45,21 +45,24 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun ManageWalletsScreen(
     mainViewModel: RestoreViewModel,
-    openZCashConfigure: () -> Unit,
+    openBirthdayHeightConfigure: (Token) -> Unit,
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
@@ -89,19 +92,19 @@ fun ManageWalletsScreen(
     val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
     val restored = viewModel.restored
 
-    mainViewModel.zCashConfig?.let { config ->
+    mainViewModel.birthdayHeightConfig?.let { config ->
         restoreSettingsViewModel.onEnter(config)
-        mainViewModel.setZCashConfig(null)
+        mainViewModel.setBirthdayHeightConfig(null)
     }
 
-    if (mainViewModel.cancelZCashConfig) {
+    if (mainViewModel.cancelBirthdayHeightConfig) {
         restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-        mainViewModel.cancelZCashConfig = false
+        mainViewModel.cancelBirthdayHeightConfig = false
     }
 
-    if (restoreSettingsViewModel.openZcashConfigure != null) {
-        restoreSettingsViewModel.zcashConfigureOpened()
-        openZCashConfigure.invoke()
+    restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
+        restoreSettingsViewModel.birthdayHeightConfigOpened()
+        openBirthdayHeightConfigure.invoke(token)
 
         stat(page = StatPage.RestoreSelect, event = StatEvent.Open(StatPage.BirthdayInput))
     }
@@ -136,6 +139,7 @@ fun ManageWalletsScreen(
     }
 
     ModalBottomSheetLayout(
+        modifier = Modifier.systemBarsPadding(),
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
@@ -163,7 +167,8 @@ fun ManageWalletsScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Restore),
                             onClick = { viewModel.onRestore() },
-                            enabled = doneButtonEnabled
+                            enabled = doneButtonEnabled,
+                            tint = ComposeAppTheme.colors.jacob
                         )
                     ),
                 )
@@ -176,10 +181,7 @@ fun ManageWalletsScreen(
             ) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
-                    Divider(
-                        thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10,
-                    )
+                    HsDivider()
                 }
                 coinItems?.let {
                     items(it) { viewItem ->
@@ -230,6 +232,10 @@ fun ManageWalletsScreen(
                             }
                         }
                     }
+                }
+
+                item {
+                    VSpacer(height = 32.dp)
                 }
             }
         }

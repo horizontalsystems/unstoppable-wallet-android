@@ -4,6 +4,7 @@ import androidx.annotation.CallSuper
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.chartview.ChartViewType
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
@@ -15,6 +16,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
+import java.math.BigDecimal
 import java.util.Optional
 
 abstract class AbstractChartService {
@@ -68,6 +70,25 @@ abstract class AbstractChartService {
         this.chartInterval = chartInterval
 
         fetchItems()
+    }
+
+    open fun chartPointsDiff(items: List<ChartPoint>): BigDecimal {
+        val values = items.map { it.value }
+        if (values.isEmpty()) {
+            return BigDecimal.ZERO
+        }
+
+        val firstValue = values.find { it != 0f }
+        val lastValue = values.last()
+        if (lastValue == 0f || firstValue == null) {
+            return BigDecimal.ZERO
+        }
+
+        return try {
+            ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
+        } catch (e: Exception) {
+            BigDecimal.ZERO
+        }
     }
 
     fun refresh() {

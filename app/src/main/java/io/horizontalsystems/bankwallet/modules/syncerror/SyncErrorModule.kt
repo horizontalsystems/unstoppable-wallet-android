@@ -22,12 +22,9 @@ object SyncErrorModule {
         }
     }
 
-    data class BlockchainWrapper(
-        val blockchain: Blockchain,
-        val type: Type
-    ) {
-        enum class Type {
-            Bitcoin, Evm
-        }
+    sealed class BlockchainWrapper {
+        data class Bitcoin(val blockchain: Blockchain) : BlockchainWrapper()
+        data class Evm(val blockchain: Blockchain) : BlockchainWrapper()
+        object Monero : BlockchainWrapper()
     }
 }

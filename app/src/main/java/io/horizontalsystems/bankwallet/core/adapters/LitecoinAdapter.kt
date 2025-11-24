@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.UsedAddress
+import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.purpose
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -12,13 +13,11 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.litecoinkit.LitecoinKit
 import io.horizontalsystems.litecoinkit.LitecoinKit.NetworkType
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
-import java.math.BigDecimal
 
 class LitecoinAdapter(
         override val kit: LitecoinKit,
@@ -37,12 +36,6 @@ class LitecoinAdapter(
     init {
         kit.listener = this
     }
-
-    //
-    // BitcoinBaseAdapter
-    //
-
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // LitecoinKit Listener
@@ -84,9 +77,6 @@ class LitecoinAdapter(
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
     }
-
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
 
     override val blockchainType = BlockchainType.Litecoin
 
@@ -144,6 +134,38 @@ class LitecoinAdapter(
 
         fun clear(walletId: String) {
             LitecoinKit.clear(App.instance, NetworkType.MainNet, walletId)
+        }
+
+        fun firstAddress(accountType: AccountType, tokenType: TokenType) : String {
+            when (accountType) {
+                is AccountType.Mnemonic -> {
+                    val seed = accountType.seed
+                    val derivation = tokenType.derivation ?: throw IllegalArgumentException()
+
+                    val address = LitecoinKit.firstAddress(
+                        seed,
+                        derivation.purpose,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.HdExtendedKey -> {
+                    val key = accountType.hdExtendedKey
+                    val derivation = tokenType.derivation ?: throw IllegalArgumentException()
+                    val address = LitecoinKit.firstAddress(
+                        key,
+                        derivation.purpose,
+                        NetworkType.MainNet
+                    )
+
+                    return address.stringValue
+                }
+                is AccountType.BitcoinAddress -> {
+                    return accountType.address
+                }
+                else -> throw UnsupportedAccountException()
+            }
         }
     }
 }

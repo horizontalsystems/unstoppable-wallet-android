@@ -53,7 +53,9 @@ class SendEvmConfirmationViewModel(
 
         sendTransactionService.start(viewModelScope)
 
-        sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+        viewModelScope.launch {
+            sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+        }
     }
 
     override fun createState() = SendEvmConfirmationUiState(

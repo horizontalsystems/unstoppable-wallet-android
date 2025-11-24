@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -98,11 +98,7 @@ fun UtxoExpertModeScreen(
                         .height(62.dp)
                         .fillMaxWidth()
                 ){
-                    Divider(
-                        modifier = Modifier.fillMaxWidth(),
-                        thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10
-                    )
+                    HsDivider(modifier = Modifier.fillMaxWidth())
                     Row(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
@@ -210,9 +206,9 @@ private fun UtxoCell(
     bottomRoundedCorners: Boolean
 ) {
     val shape = when {
-        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(12.dp)
-        topRoundedCorners -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(16.dp)
+        topRoundedCorners -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
         else -> RoundedCornerShape(0.dp)
     }
     Box(

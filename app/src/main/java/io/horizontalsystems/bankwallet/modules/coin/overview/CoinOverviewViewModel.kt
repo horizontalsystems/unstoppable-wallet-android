@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
+import io.horizontalsystems.bankwallet.core.assetUrl
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.eip20TokenUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -60,7 +61,7 @@ class CoinOverviewViewModel(
             field = value
             showHudMessage = value
         }
-    private var fullCoin = service.fullCoin
+    val fullCoin = service.fullCoin
     private var activeAccount = accountManager.activeAccount
     private var activeWallets = walletManager.activeWallets
 
@@ -154,6 +155,24 @@ class CoinOverviewViewModel(
                         && token.blockchainType.supports(accountTypeNotWatch)
 
                 when (val tokenType = token.type) {
+                    is TokenType.Asset -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        val id = "${tokenType.code}:${tokenType.issuer}"
+
+                        items.add(
+                            TokenVariant(
+                                value = id.shorten(),
+                                copyValue = id,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.assetUrl(tokenType.code, tokenType.issuer),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
                     is TokenType.Jetton -> {
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.token == token }

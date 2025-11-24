@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.DropDownCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
@@ -40,14 +41,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaul
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
-fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequestEntity) {
+fun TonConnectNewScreen(
+    navController: NavController,
+    requestEntity: DAppRequestEntity,
+    onResult: (Boolean) -> Unit,
+) {
     val viewModel = viewModel<TonConnectNewViewModel>(initializer = {
         TonConnectNewViewModel(requestEntity)
     })
@@ -88,14 +93,22 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
-                        onClick = viewModel::connect,
+                        onClick = {
+                            navController.authorizedAction {
+                                viewModel.connect()
+                                onResult.invoke(true)
+                            }
+                        },
                         enabled = uiState.connectEnabled
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Cancel),
-                        onClick = viewModel::reject
+                        onClick = {
+                            viewModel.reject()
+                            onResult.invoke(false)
+                        }
                     )
                 }
             }
@@ -131,10 +144,10 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
 
             var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
             if (showSortTypeSelectorDialog) {
-                SelectorDialogCompose(
+                MenuGroup(
                     title = stringResource(R.string.TonConnect_ChooseWallet),
                     items = uiState.accounts.map { account ->
-                        SelectorItem(
+                        MenuItemX(
                             title = account.name,
                             selected = account == uiState.account,
                             item = account,

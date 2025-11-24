@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import com.google.gson.Strictness
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -13,7 +14,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.Url
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -53,6 +59,13 @@ class NetworkManager : INetworkManager {
     override suspend fun registerApp(userId: String, referralCode: String)
             : MiniAppRegisterService.RegisterAppResponse {
         return MiniAppRegisterService.service().registerApp(userId, referralCode)
+    }
+
+    override suspend fun getWCWhiteList(
+        host: String,
+        path: String
+    ): List<ServiceWCWhitelist.WCWhiteList> {
+        return ServiceWCWhitelist.service(host).getWhiteList(path)
     }
 }
 
@@ -146,6 +159,24 @@ object MiniAppRegisterService {
     )
 }
 
+object ServiceWCWhitelist {
+    fun service(apiURL: String): WCWhiteListAPI {
+        return APIClient.retrofit(apiURL, 60)
+            .create(WCWhiteListAPI::class.java)
+    }
+
+    interface WCWhiteListAPI {
+        @GET
+        @Headers("Content-Type: application/json")
+        suspend fun getWhiteList(@Url path: String): List<WCWhiteList>
+    }
+
+    data class WCWhiteList(
+        val name: String,
+        val url: String
+    )
+}
+
 object APIClient {
 
     private val logger = HttpLoggingInterceptor().apply {
@@ -177,7 +208,8 @@ object APIClient {
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(
-                GsonConverterFactory.create(GsonBuilder().setLenient().create())
+                GsonConverterFactory
+                    .create(GsonBuilder().setStrictness(Strictness.LENIENT).create())
             )
             .build()
     }
@@ -186,6 +218,11 @@ object APIClient {
     val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(logger)
         .build()
+
+    val gson by lazy {
+        val gsonBuilder = GsonBuilder().setStrictness(Strictness.LENIENT)
+        gsonBuilder.create()
+    }
 
     fun retrofit(apiURL: String, timeout: Long = 60, isSafeCall: Boolean = true): Retrofit {
 
@@ -197,13 +234,11 @@ object APIClient {
         if (!isSafeCall) // if host name cannot be verified, has no or self signed certificate, do unsafe request
             setUnsafeSocketFactory(httpClient)
 
-        val gsonBuilder = GsonBuilder().setLenient()
-
         return Retrofit.Builder()
             .baseUrl(apiURL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(httpClient.build())
             .build()
     }

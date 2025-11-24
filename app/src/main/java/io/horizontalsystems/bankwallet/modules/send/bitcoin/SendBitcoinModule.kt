@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 object SendBitcoinModule {
     @Suppress("UNCHECKED_CAST")
@@ -18,7 +19,7 @@ object SendBitcoinModule {
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
-            (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
+            App.adapterManager.getAdapterForWallet<ISendBitcoinAdapter>(wallet) ?: throw IllegalStateException("SendBitcoinAdapter is null")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
@@ -55,5 +56,12 @@ object SendBitcoinModule {
         Auto,
         Manual
     }
+
+    val BlockchainType.rbfSupported: Boolean
+        get() = when (this) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin -> true
+            else -> false
+        }
 
 }

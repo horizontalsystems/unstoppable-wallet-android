@@ -23,12 +23,12 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -72,18 +72,18 @@ fun AddressCell(
 
                 stat(
                     page = statPage,
-                    section = statSection,
-                    event = StatEvent.Copy(StatEntity.Address)
+                    event = StatEvent.Copy(StatEntity.Address),
+                    section = statSection
                 )
             }
         )
     }
 
     if (showSaveAddressDialog) {
-        SelectorDialogCompose(
+        MenuGroup(
             title = stringResource(R.string.Contacts_AddAddress),
             items = ContactsModule.AddAddressAction.entries.map {
-                SelectorItem(stringResource(it.title), false, it)
+                MenuItemX(stringResource(it.title), false, it)
             },
             onDismissRequest = {
                 showSaveAddressDialog = false
@@ -94,8 +94,8 @@ fun AddressCell(
                         ContactsModule.AddAddressAction.AddToNewContact -> {
                             stat(
                                 page = statPage,
-                                section = statSection,
-                                event = StatEvent.Open(StatPage.ContactNew)
+                                event = StatEvent.Open(StatPage.ContactNew),
+                                section = statSection
                             )
                             ContactsFragment.Input(
                                 Mode.AddAddressToNewContact(
@@ -108,8 +108,8 @@ fun AddressCell(
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
                             stat(
                                 page = statPage,
-                                section = statSection,
-                                event = StatEvent.Open(StatPage.ContactAddToExisting)
+                                event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                section = statSection
                             )
                             ContactsFragment.Input(
                                 Mode.AddAddressToExistingContact(

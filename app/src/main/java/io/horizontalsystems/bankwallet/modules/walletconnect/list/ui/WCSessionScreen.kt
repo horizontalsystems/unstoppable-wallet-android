@@ -126,6 +126,7 @@ fun WCSessionsScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Info_Title),
                             icon = R.drawable.ic_info_24,
+                            tint = ComposeAppTheme.colors.grey,
                             onClick = {
                                 FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
                             }

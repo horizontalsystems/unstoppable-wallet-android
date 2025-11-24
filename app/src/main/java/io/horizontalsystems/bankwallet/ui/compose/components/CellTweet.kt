@@ -3,7 +3,18 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -99,7 +110,7 @@ private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
     Column(Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(8.dp))
-        .background(ComposeAppTheme.colors.steel10)
+        .background(ComposeAppTheme.colors.blade)
         .padding(12.dp)
     ) {
         Text(
@@ -125,7 +136,7 @@ private fun TweetText(text: String, entities: List<Extractor.Entity>) {
             spanStyles = spanStyles,
         ),
         color = ComposeAppTheme.colors.leah,
-        style = ComposeAppTheme.typography.subhead2
+        style = ComposeAppTheme.typography.subheadR
     )
 }
 
@@ -141,7 +152,7 @@ private fun TweetTitle(tweet: TweetViewItem) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            body_leah(text = tweet.title)
+            headline2_leah(text = tweet.title)
             Spacer(modifier = Modifier.height(3.dp))
             caption_grey(text = tweet.subtitle)
         }
@@ -204,10 +215,10 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
             val color = if (option.votes == maxVotes) {
                 ComposeAppTheme.colors.laguna
             } else {
-                ComposeAppTheme.colors.steel20
+                ComposeAppTheme.colors.blade
             }
             val textColor = if (option.votes == maxVotes) {
-                ComposeAppTheme.colors.claude
+                ComposeAppTheme.colors.blade
             } else {
                 ComposeAppTheme.colors.leah
             }
@@ -216,7 +227,7 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
                     .height(28.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(ComposeAppTheme.colors.steel10)
+                    .background(ComposeAppTheme.colors.blade)
             ) {
                 Spacer(
                     modifier = Modifier

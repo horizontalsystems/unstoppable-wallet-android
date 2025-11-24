@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ProvideTextStyle
@@ -61,11 +60,11 @@ import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionM
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.title
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults.buttonColors
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -89,7 +88,7 @@ val yellowGradient = Brush.horizontalGradient(
 )
 
 val steelBrush = Brush.horizontalGradient(
-    colors = listOf(Steel20, Steel20)
+    colors = listOf(Color(0x336E7899), Color(0x336E7899))
 )
 
 @Composable
@@ -180,7 +179,7 @@ fun SelectSubscriptionBottomSheet(
             Text(
                 text = bottomText,
                 color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
             )
@@ -219,13 +218,13 @@ fun SubscriptionOption(
     onClick: () -> Unit
 ) {
     val borderColor =
-        if (isSelected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20
+        if (isSelected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.blade
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, borderColor, shape = RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(12.dp))
+            .border(0.5.dp, borderColor, shape = RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
@@ -244,7 +243,7 @@ fun SubscriptionOption(
                     ) {
                         Text(
                             text = badgeText,
-                            color = ComposeAppTheme.colors.claude,
+                            color = ComposeAppTheme.colors.blade,
                             style = ComposeAppTheme.typography.microSB,
                         )
                     }
@@ -272,10 +271,12 @@ fun ColumnScope.PlanItems(
             icon = item.iconRes,
             title = item.titleStringRes,
             subtitle = item.descriptionStringRes,
+            first = index == 0,
+            last = index == items.size - 1,
             click = { onItemClick(item) }
         )
         if (index < items.size - 1) {
-            Divider(color = ComposeAppTheme.colors.steel20)
+            HsDivider()
         }
     }
 }
@@ -285,15 +286,20 @@ fun PremiumFeatureItem(
     icon: Int,
     title: Int,
     subtitle: Int,
+    first: Boolean,
+    last: Boolean,
     click: () -> Unit = {}
 ) {
+    val topPadding = if (first) 16.dp else 12.dp
+    val bottomPadding = if (last) 16.dp else 12.dp
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .clickable { click() }
-            .background(ComposeAppTheme.colors.steel10)
-            .padding(vertical = 12.dp, horizontal = 16.dp)
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(horizontal = 16.dp)
+            .padding(top = topPadding, bottom = bottomPadding)
     ) {
         Icon(
             painter = painterResource(icon),
@@ -414,7 +420,7 @@ fun TitleCenteredTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.ic_close),
                 contentDescription = "close button",
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.grey,
             )
         }
     }
@@ -434,7 +440,7 @@ fun ColoredTextSecondaryButton(
             backgroundColor = ComposeAppTheme.colors.transparent,
             contentColor = color,
             disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             Text(

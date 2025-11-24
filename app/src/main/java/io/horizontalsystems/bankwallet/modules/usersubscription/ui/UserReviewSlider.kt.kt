@@ -38,7 +38,7 @@ fun ReviewSlider(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .background(ComposeAppTheme.colors.steel10),
+            .background(ComposeAppTheme.colors.blade),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         VSpacer(24.dp)

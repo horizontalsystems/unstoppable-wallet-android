@@ -3,9 +3,13 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.network.Network
+import io.horizontalsystems.tronkit.transaction.Fee
 import io.horizontalsystems.tronkit.transaction.Signer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +19,7 @@ import java.math.BigInteger
 abstract class BaseTronAdapter(
     tronKitWrapper: TronKitWrapper,
     val decimal: Int
-) : IAdapter, IBalanceAdapter, IReceiveAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendTronAdapter {
 
     val tronKit = tronKitWrapper.tronKit
     protected val signer: Signer? = tronKitWrapper.signer
@@ -41,11 +45,31 @@ abstract class BaseTronAdapter(
 
     // ISendTronAdapter
 
-    suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
+    override suspend fun estimateFee(contract: Contract): List<Fee> {
+        return tronKit.estimateFee(contract)
+    }
+
+    override suspend fun estimateFee(transaction: CreatedTransaction): List<Fee> {
+        return tronKit.estimateFee(transaction)
+    }
+
+    override suspend fun send(contract: Contract, feeLimit: Long?) {
+        if (signer == null) throw Exception()
+
+        tronKit.send(contract, signer, feeLimit)
+    }
+
+    override suspend fun send(createdTransaction: CreatedTransaction) {
+        if (signer == null) throw Exception()
+
+        tronKit.send(createdTransaction, signer)
+    }
+
+    override suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
         tronKit.isAccountActive(address)
     }
 
-    fun isOwnAddress(address: Address): Boolean {
+    override fun isOwnAddress(address: Address): Boolean {
         return address == tronKit.address
     }
 

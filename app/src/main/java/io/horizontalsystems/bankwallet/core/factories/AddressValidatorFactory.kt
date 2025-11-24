@@ -1,37 +1,32 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
-import io.horizontalsystems.bankwallet.core.ISendTronAdapter
-import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.address.BitcoinAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.EvmAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.SolanaAddressValidator
+import io.horizontalsystems.bankwallet.modules.send.address.StellarAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.TonAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.TronAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.ZcashAddressValidator
+import io.horizontalsystems.bankwallet.modules.send.address.MoneroAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 
 object AddressValidatorFactory {
 
-    fun get(wallet: Wallet): EnterAddressValidator {
-        val adapter = App.adapterManager.getAdapterForWallet(wallet)
-
-        return when (wallet.token.blockchainType) {
+    fun get(token: Token): EnterAddressValidator {
+        return when (token.blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
             BlockchainType.ECash,
             BlockchainType.Litecoin,
             BlockchainType.Dash -> {
-                val sendAdapter = (adapter as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendAdapter is null")
-                BitcoinAddressValidator(sendAdapter)
+                BitcoinAddressValidator(token, App.adapterManager)
             }
 
             BlockchainType.Zcash -> {
-                val sendAdapter = (adapter as? ISendZcashAdapter) ?: throw IllegalStateException("SendAdapter is null")
-                ZcashAddressValidator(sendAdapter)
+                ZcashAddressValidator(token, App.adapterManager)
             }
 
             BlockchainType.Ethereum,
@@ -52,15 +47,22 @@ object AddressValidatorFactory {
             }
 
             BlockchainType.Tron -> {
-                val sendAdapter = (adapter as? ISendTronAdapter) ?: throw IllegalStateException("SendAdapter is null")
-                TronAddressValidator(sendAdapter, wallet.token)
+                TronAddressValidator(token, App.adapterManager)
             }
 
             BlockchainType.Ton -> {
                 TonAddressValidator()
             }
 
-            is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${wallet.token.blockchainType}")
+            is BlockchainType.Stellar -> {
+                StellarAddressValidator(token)
+            }
+
+            is BlockchainType.Monero -> {
+                MoneroAddressValidator()
+            }
+
+            is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${token.blockchainType}")
         }
     }
 

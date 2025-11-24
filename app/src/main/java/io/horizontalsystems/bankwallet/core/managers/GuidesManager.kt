@@ -13,18 +13,18 @@ import java.util.*
 
 object GuidesManager {
 
-    private val guidesUrl = App.appConfigProvider.guidesUrl
+    private val eduUrl = App.appConfigProvider.eduUrl
 
     private val gson = GsonBuilder()
             .setDateFormat("yyyy-MM-dd")
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(Guide::class.java, GuideDeserializer(guidesUrl))
+            .registerTypeAdapter(Guide::class.java, GuideDeserializer(eduUrl))
             .create()
 
     fun getGuideCategories(): Single<Array<GuideCategoryMultiLang>> {
         return Single.fromCallable {
             val request = Request.Builder()
-                    .url(guidesUrl)
+                    .url(eduUrl)
                     .build()
 
             val response = OkHttpClient().newCall(request).execute()

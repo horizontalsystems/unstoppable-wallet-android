@@ -127,7 +127,7 @@ class ManageWalletsService(
     }
 
     private fun hasInfo(token: Token, enabled: Boolean) = when (token.type) {
-        is TokenType.Native -> token.blockchainType is BlockchainType.Zcash && enabled
+        is TokenType.Native -> token.blockchainType in listOf(BlockchainType.Zcash, BlockchainType.Monero) && enabled
         is TokenType.Derived,
         is TokenType.AddressTyped,
         is TokenType.Eip20,

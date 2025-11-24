@@ -6,7 +6,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 object UniswapProvider : BaseUniswapProvider() {
     override val id = "uniswap"
     override val title = "Uniswap"
-    override val url = "https://uniswap.org/"
     override val icon = R.drawable.uniswap
     override val priority = 0
 

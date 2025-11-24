@@ -43,7 +43,6 @@ class TokenBalanceService(
             wallet = wallet,
             balanceData = balanceAdapterRepository.balanceData(wallet),
             state = balanceAdapterRepository.state(wallet),
-            sendAllowed = balanceAdapterRepository.sendAllowed(wallet),
             coinPrice = latestRates[wallet.coin.uid],
             warning = balanceAdapterRepository.warning(wallet)
         )
@@ -75,7 +74,6 @@ class TokenBalanceService(
         balanceItem = balanceItem?.copy(
             balanceData = balanceAdapterRepository.balanceData(wallet),
             state = balanceAdapterRepository.state(wallet),
-            sendAllowed = balanceAdapterRepository.sendAllowed(wallet)
         )
     }
 

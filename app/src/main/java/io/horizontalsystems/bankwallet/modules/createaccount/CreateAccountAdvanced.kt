@@ -43,10 +43,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hdwalletkit.Language
 import kotlinx.coroutines.delay
@@ -71,7 +71,10 @@ fun CreateAccountAdvancedScreen(
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
 
-            stat(page = StatPage.NewWalletAdvanced, event = StatEvent.CreateWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.NewWalletAdvanced,
+                event = StatEvent.CreateWallet(accountType.statAccountType)
+            )
         }
     }
 
@@ -80,10 +83,10 @@ fun CreateAccountAdvancedScreen(
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         if (showMnemonicSizeSelectorDialog) {
-            SelectorDialogCompose(
+            MenuGroup(
                 title = stringResource(R.string.CreateWallet_Mnemonic),
                 items = viewModel.mnemonicKinds.map {
-                    SelectorItem(it.titleLong, it == viewModel.selectedKind, it)
+                    MenuItemX(it.titleLong, it == viewModel.selectedKind, it)
                 },
                 onDismissRequest = {
                     showMnemonicSizeSelectorDialog = false
@@ -103,6 +106,7 @@ fun CreateAccountAdvancedScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Create),
                         onClick = { viewModel.createAccount() },
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 )
             )

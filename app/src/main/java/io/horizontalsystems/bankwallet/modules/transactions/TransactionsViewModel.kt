@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
@@ -37,6 +38,7 @@ class TransactionsViewModel(
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
+    private val localStorage: ILocalStorage,
 ) : ViewModelUiState<TransactionsUiState>() {
 
     var tmpTransactionRecordToShow: TransactionRecord? = null
@@ -131,6 +133,12 @@ class TransactionsViewModel(
             balanceHiddenManager.balanceHiddenFlow.collect {
                 transactionViewItem2Factory.updateCache()
                 handleUpdatedItems(service.itemsFlow.value)
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            localStorage.amountRoundingEnabledFlow.collect{
+                service.reload()
             }
         }
     }
@@ -252,6 +260,7 @@ data class TransactionViewItem(
                 BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32
                 BlockchainType.Tron -> R.drawable.logo_chain_tron_trx_32
                 BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
+                BlockchainType.Stellar -> R.drawable.logo_chain_stellar_trx_32
                 else -> null
             }
         }

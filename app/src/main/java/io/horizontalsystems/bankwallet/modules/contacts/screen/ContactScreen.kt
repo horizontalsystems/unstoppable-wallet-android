@@ -56,8 +56,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.SnackbarDuration
@@ -167,6 +167,7 @@ fun ContactScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Save),
                             enabled = uiState.saveEnabled,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = viewModel::onSave
                         )
                     )
@@ -369,7 +370,7 @@ private fun ContactAddress(
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
-            body_leah(text = addressViewItem.blockchain.name)
+            headline2_leah(text = addressViewItem.blockchain.name)
             subhead2_grey(text = addressViewItem.contactAddress.address)
         }
         Spacer(Modifier.width(9.dp))

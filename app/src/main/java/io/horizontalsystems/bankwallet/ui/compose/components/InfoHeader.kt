@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,13 +25,10 @@ fun InfoH1(text: String) {
     ){
         Text(
             text = text,
-            style = ComposeAppTheme.typography.title2,
+            style = ComposeAppTheme.typography.title2М,
             color = ComposeAppTheme.colors.leah
         )
         Spacer(Modifier.height(8.dp))
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.grey50
-        )
+        HsDivider()
     }
 }

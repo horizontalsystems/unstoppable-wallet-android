@@ -78,7 +78,10 @@ private fun RecoveryPhraseScreen(
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
 
-                        stat(page = StatPage.RecoveryPhrase, event = StatEvent.Copy(StatEntity.RecoveryPhrase))
+                        stat(
+                            page = StatPage.RecoveryPhrase,
+                            event = StatEvent.Copy(StatEntity.RecoveryPhrase)
+                        )
                     }
                 },
                 onCancel = {

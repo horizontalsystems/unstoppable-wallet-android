@@ -18,6 +18,13 @@ open class Address(
         get() = domain ?: hex
 }
 
+@Parcelize
+class MoneroWatchAddress(
+    val address: String,
+    val viewKey: String,
+    val height: Long?
+): Address(address, blockchainType = BlockchainType.Monero)
+
 class BitcoinAddress(
     hex: String,
     domain: String?,
@@ -55,6 +62,8 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Fantom,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Stellar,
+        BlockchainType.Monero,
         is BlockchainType.Unsupported,
         null -> TokenType.Unsupported("", "")
     }

@@ -28,8 +28,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.BoxBorderedTop
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -131,7 +131,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                 amountColor = ComposeAppTheme.colors.leah
             )
 
-            BoxBorderedTop {
+            BoxBordered(top = true) {
                 TransactionInfoAddressCell(
                     title = stringResource(R.string.Approve_Spender),
                     value = uiState.spenderAddress,
@@ -142,7 +142,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
             }
 
             uiState.contact?.let {
-                BoxBorderedTop {
+                BoxBordered(top = true) {
                     TransactionInfoContactCell(it.name)
                 }
             }

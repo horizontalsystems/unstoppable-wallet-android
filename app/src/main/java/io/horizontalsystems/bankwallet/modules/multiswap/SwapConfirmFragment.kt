@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -33,7 +36,9 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -41,9 +46,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -51,6 +60,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.subscriptions.core.MevProtection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -87,11 +97,17 @@ fun SwapConfirmScreen(navController: NavController) {
 
     val uiState = viewModel.uiState
 
+    val onClickSettings = if (uiState.hasSettings) {
+        {
+            navController.slideFromRight(R.id.swapTransactionSettings)
+        }
+    } else {
+        null
+    }
+
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
-        onClickSettings = {
-            navController.slideFromRight(R.id.swapTransactionSettings)
-        },
+        onClickSettings = onClickSettings,
         onClickClose = null,
         buttonsSlot = {
             if (uiState.loading) {
@@ -215,6 +231,54 @@ fun SwapConfirmScreen(navController: NavController) {
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
             )
+            uiState.extraFees.forEach { (type: FeeType, feeAmountData) ->
+                DataFieldFeeTemplate(
+                    navController = navController,
+                    primary = feeAmountData.primary.getFormattedPlain(),
+                    secondary = feeAmountData.secondary?.getFormattedPlain() ?: "---",
+                    title = stringResource(type.stringResId),
+                    infoText = null
+                )
+            }
+        }
+
+        uiState.totalFee?.let { totalFee ->
+            VSpacer(height = 16.dp)
+            SectionUniversalLawrence {
+                SwapInfoRow(
+                    borderTop = true,
+                    title = stringResource(id = R.string.Fee_Total),
+                    value = totalFee.getFormattedFull(),
+                )
+            }
+        }
+
+        if (uiState.mevProtectionAvailable) {
+            VSpacer(16.dp)
+
+            PremiumHeader()
+
+            SectionPremiumUniversalLawrence {
+                CellUniversal {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = R.drawable.ic_shield_24),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.jacob
+                    )
+                    HSpacer(width = 16.dp)
+                    body_leah(text = stringResource(R.string.Mev_Protection))
+                    HFillSpacer(minWidth = 8.dp)
+                    HsSwitch(
+                        checked = uiState.mevProtectionEnabled,
+                        onCheckedChange = {
+                            navController.paidAction(MevProtection) {
+                                viewModel.toggleMevProtection(it)
+                            }
+                        }
+                    )
+                }
+            }
         }
 
         if (uiState.cautions.isNotEmpty()) {
@@ -290,7 +354,7 @@ fun TokenRowPure(
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = amountFormatted ?: "---",
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = amountColor,
             )
             fiatAmount?.let {
@@ -323,7 +387,7 @@ fun TokenRowUnlimited(
         Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = "∞ ${token.coin.code}",
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = amountColor,
             )
             VSpacer(height = 1.dp)

@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -85,7 +87,28 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         )
                     )
 
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.AccountExtendedPublicKey))
+                    stat(
+                        page = StatPage.PublicKeys,
+                        event = StatEvent.Open(StatPage.AccountExtendedPublicKey)
+                    )
+                }
+            }
+
+            viewModel.viewState.moneroKeys?.let { moneroKeys ->
+                    KeyActionItem(
+                    title = stringResource(id = R.string.PublicKeys_MoneroPublicKey),
+                    description = stringResource(id = R.string.PublicKeys_MoneroPublicKeyDescription),
+                ) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.showMoneroKeyFragment,
+                            ShowMoneroKeyFragment.Input(moneroKeys)
+                        )
+                        stat(
+                            page = StatPage.PublicKeys,
+                            event = StatEvent.Open(StatPage.MoneroPublicKey)
+                        )
+                    }
                 }
             }
         }

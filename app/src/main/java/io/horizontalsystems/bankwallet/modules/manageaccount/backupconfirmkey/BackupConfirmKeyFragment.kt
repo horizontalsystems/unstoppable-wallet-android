@@ -95,7 +95,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
                     ComposeAppTheme.colors.yellow50
                 } else {
-                    ComposeAppTheme.colors.steel20
+                    ComposeAppTheme.colors.blade
                 }
 
                 Row(
@@ -103,8 +103,8 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                         .fillMaxWidth()
                         .height(44.dp)
                         .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(1.dp, borderColor, RoundedCornerShape(16.dp))
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

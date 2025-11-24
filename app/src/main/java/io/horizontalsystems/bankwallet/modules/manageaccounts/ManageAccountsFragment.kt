@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -36,7 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
@@ -63,7 +64,11 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
         navController.popBackStack()
     }
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+    Column(
+        modifier = Modifier
+            .systemBarsPadding()
+            .background(color = ComposeAppTheme.colors.tyler)
+    ) {
         AppBar(
             title = stringResource(R.string.ManageAccounts_Title),
             navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
@@ -95,18 +100,27 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         navController.navigateWithTermsAccepted {
                             navController.slideFromRight(R.id.createAccountFragment, args)
 
-                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
+                            stat(
+                                page = StatPage.ManageWallets,
+                                event = StatEvent.Open(StatPage.NewWallet)
+                            )
                         }
                     },
                     ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
                         navController.slideFromRight(R.id.importWalletFragment, args)
 
-                        stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
+                        stat(
+                            page = StatPage.ManageWallets,
+                            event = StatEvent.Open(StatPage.ImportWallet)
+                        )
                     },
                     ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
                         navController.slideFromRight(R.id.watchAddressFragment, args)
 
-                        stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
+                        stat(
+                            page = StatPage.ManageWallets,
+                            event = StatEvent.Open(StatPage.WatchWallet)
+                        )
                     }
                 )
                 CellUniversalLawrenceSection(actions) {
@@ -148,7 +162,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 }
             )
             Column(modifier = Modifier.weight(1f)) {
-                body_leah(text = accountViewItem.title)
+                headline2_leah(text = accountViewItem.title)
                 if (accountViewItem.backupRequired) {
                     subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
                 } else if (accountViewItem.migrationRequired) {

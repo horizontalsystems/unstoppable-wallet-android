@@ -28,6 +28,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 sealed class IMenuItem
 
+data object MenuItemLoading : IMenuItem()
+
 data class MenuItemTimeoutIndicator(
     val progress: Float
 ) : IMenuItem()
@@ -80,7 +82,6 @@ fun AppBar(
     title: String? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
-    showSpinner: Boolean = false,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     val titleComposable: @Composable () -> Unit = {
@@ -97,7 +98,6 @@ fun AppBar(
         title = titleComposable,
         navigationIcon = navigationIcon,
         menuItems = menuItems,
-        showSpinner = showSpinner,
         backgroundColor = backgroundColor
     )
 }
@@ -108,7 +108,7 @@ fun AppBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
-    showSpinner: Boolean = false,
+    stateIcon: @Composable (() -> Unit)? = null,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
@@ -124,14 +124,15 @@ fun AppBar(
             }
         },
         actions = {
-            if (showSpinner) {
-                CircularProgressIndicator(
+            stateIcon?.let{
+                Box(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
                         .size(24.dp),
-                    color = ComposeAppTheme.colors.jacob,
-                    strokeWidth = 2.dp
-                )
+                    contentAlignment = Alignment.Center
+                ) {
+                    it()
+                }
             }
             menuItems.forEach { menuItem ->
                 when (menuItem) {
@@ -149,7 +150,7 @@ fun AppBar(
                                 CircularProgressIndicator(
                                     progress = 1f,
                                     modifier = Modifier.size(16.dp),
-                                    color = ComposeAppTheme.colors.steel20,
+                                    color = ComposeAppTheme.colors.blade,
                                     strokeWidth = 1.5.dp
                                 )
                                 CircularProgressIndicator(
@@ -157,12 +158,14 @@ fun AppBar(
                                     modifier = Modifier
                                         .size(16.dp)
                                         .scale(scaleX = -1f, scaleY = 1f),
-                                    color = ComposeAppTheme.colors.jacob,
+                                    color = ComposeAppTheme.colors.grey,
                                     strokeWidth = 1.5.dp
                                 )
                             }
                         }
                     }
+
+                    is MenuItemLoading -> TODO()
                 }
             }
         },
@@ -171,14 +174,14 @@ fun AppBar(
 }
 
 @Composable
-private fun MenuItemSimple(menuItem: MenuItem) {
+fun MenuItemSimple(menuItem: MenuItem) {
     val color = if (menuItem.enabled) {
         if (menuItem.tint == Color.Unspecified)
-            ComposeAppTheme.colors.jacob
+            ComposeAppTheme.colors.grey
         else
             menuItem.tint
     } else {
-        ComposeAppTheme.colors.grey50
+        ComposeAppTheme.colors.andy
     }
 
     val icon = menuItem.icon

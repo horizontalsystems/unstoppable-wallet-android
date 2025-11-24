@@ -86,8 +86,8 @@ class TopPairsViewModel(
 
         stat(
             page = StatPage.Markets,
-            section = StatSection.Pairs,
-            event = StatEvent.Refresh
+            event = StatEvent.Refresh,
+            section = StatSection.Pairs
         )
 
     }
@@ -106,8 +106,8 @@ class TopPairsViewModel(
 
         stat(
             page = StatPage.Markets,
-            section = StatSection.Pairs,
-            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume)
+            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume),
+            section = StatSection.Pairs
         )
     }
 

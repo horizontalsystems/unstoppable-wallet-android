@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
@@ -33,7 +34,7 @@ class SendTonViewModel(
     val feeToken: Token,
     val adapter: ISendTonAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendTonAmountService,
+    private val amountService: SendAmountService,
     private val addressService: SendTonAddressService,
     private val feeService: SendTonFeeService,
     val coinMaxAllowedDecimals: Int,
@@ -162,7 +163,7 @@ class SendTonViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         feeService.setAmount(amountState.amount)

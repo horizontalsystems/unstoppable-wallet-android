@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.subjects.PublishSubject
@@ -101,11 +100,7 @@ class BalanceService(
         allBalanceItems.addAll(sorted)
 
         _balanceItemsFlow.update {
-            if (accountManager.activeAccount?.type is AccountType.Cex) {
-                null
-            } else {
-                getBalanceItems()
-            }
+            getBalanceItems()
         }
     }
 
@@ -117,7 +112,6 @@ class BalanceService(
             allBalanceItems[i] = balanceItem.copy(
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet),
-                sendAllowed = adapterRepository.sendAllowed(balanceItem.wallet),
             )
         }
 
@@ -133,7 +127,6 @@ class BalanceService(
             allBalanceItems[indexOfFirst] = itemToUpdate.copy(
                 balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet),
-                sendAllowed = adapterRepository.sendAllowed(wallet),
             )
 
             sortAndEmitItems()
@@ -167,7 +160,6 @@ class BalanceService(
                 wallet = wallet,
                 balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet),
-                sendAllowed = adapterRepository.sendAllowed(wallet),
                 coinPrice = latestRates[wallet.coin.uid]
             )
         }

@@ -60,18 +60,32 @@ class TonConnectSendRequestViewModel(
             return
         }
 
-        val connectionAccountId = signTransaction?.dApp?.accountId
-        val requestAccountId = sendRequestEntity.fromAccountId
+        try{
+            sendRequestEntity.network
+        } catch (e: Exception) {
+            error = TonConnectSendRequestError.InvalidData("Invalid network")
+            responseBadRequest(sendRequestEntity)
+            return
+        }
 
-        if (requestAccountId != null && connectionAccountId != null && !requestAccountId.equalsAddress(connectionAccountId)) {
-            error = TonConnectSendRequestError.InvalidData("Invalid \"from\" address. Specified wallet address not connected to this app.")
-
+        validateFromAddress(
+            sendRequestEntity,
+            signTransaction?.dApp?.accountId
+        )?.let { validationError ->
+            error = validationError
             responseBadRequest(sendRequestEntity)
             return
         }
 
         if (validUntilIsInvalid(sendRequestEntity)) {
             error = TonConnectSendRequestError.InvalidData("Invalid validUntil field")
+
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
+        if (requestExpired(sendRequestEntity)) {
+            error = TonConnectSendRequestError.InvalidData("Field validUntil has expired")
 
             responseBadRequest(sendRequestEntity)
             return
@@ -84,7 +98,7 @@ class TonConnectSendRequestViewModel(
                 responseBadRequest(sendRequestEntity)
                 return
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             error = TonConnectSendRequestError.InvalidData("Failed to parse messages")
             responseBadRequest(sendRequestEntity)
             return
@@ -108,7 +122,7 @@ class TonConnectSendRequestViewModel(
         if (account == null) {
             error = TonConnectSendRequestError.AccountNotFound()
             return
-        } else if (account != accountManager.activeAccount){
+        } else if (account != accountManager.activeAccount) {
             error = TonConnectSendRequestError.DifferentAccount("Incorrect account selected")
             responseBadRequest(sendRequestEntity)
             return
@@ -122,7 +136,7 @@ class TonConnectSendRequestViewModel(
         }
 
         val accountBalance = tonKitWrapper.tonKit.account?.balance
-        if (accountBalance != null){
+        if (accountBalance != null) {
             val totalSentAmount = sendRequestEntity.messages.sumOf { it.amount }
             if (totalSentAmount > accountBalance){
                 error = TonConnectSendRequestError.InvalidData("Transaction amount exceeds available balance")
@@ -157,6 +171,31 @@ class TonConnectSendRequestViewModel(
         tonTransactionRecord = tonTransactionConverter?.createTransactionRecord(tonEvent)
     }
 
+    /**
+     * Validates that the 'from' address in the request matches the connected account address.
+     * @return null if valid, or an error if invalid
+     */
+    private fun validateFromAddress(
+        sendRequestEntity: SendRequestEntity,
+        connectionAccountId: String?
+    ): TonConnectSendRequestError? {
+        val requestAccountId = try {
+            sendRequestEntity.fromAccountId
+        } catch (e: Exception) {
+            return TonConnectSendRequestError.InvalidData("Invalid \"from\" address")
+        }
+
+        if (requestAccountId != null && connectionAccountId != null
+            && !requestAccountId.equalsAddress(connectionAccountId)
+        ) {
+            return TonConnectSendRequestError.InvalidData(
+                "Invalid \"from\" address. Specified wallet address not connected to this app."
+            )
+        }
+
+        return null
+    }
+
     private fun isTestnet(sendRequestEntity: SendRequestEntity): Boolean {
         return sendRequestEntity.network == TonNetwork.TESTNET
     }
@@ -178,19 +217,27 @@ class TonConnectSendRequestViewModel(
 
     private fun validUntilIsInvalid(sendRequestEntity: SendRequestEntity): Boolean {
         return try {
-            val result = sendRequestEntity.validUntil
-            if (result == 0L) {
-                throw IllegalArgumentException("Invalid validUntil")
-            }
+            sendRequestEntity.validUntil
             false
         } catch (e: IllegalArgumentException) {
             true
         }
     }
 
+    private fun requestExpired(sendRequestEntity: SendRequestEntity): Boolean {
+        return sendRequestEntity.validUntil < System.currentTimeMillis() / 1000
+    }
+
     fun confirm() {
         val sendRequestEntity = sendRequestEntity ?: return
         val tonWallet = tonWallet ?: return
+
+        if (requestExpired(sendRequestEntity)) {
+            viewModelScope.launch(Dispatchers.Default) {
+                responseBadRequest(sendRequestEntity)
+            }
+            throw IllegalArgumentException("Field validUntil has expired")
+        }
 
         viewModelScope.launch(Dispatchers.Default) {
             val boc = transactionSigner.sign(sendRequestEntity, tonWallet)

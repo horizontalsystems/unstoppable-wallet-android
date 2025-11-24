@@ -46,6 +46,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_bran
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -213,7 +214,7 @@ private fun TopWalletCell(item: MajorHolderItem) {
         )
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
-            body_leah(text = item.sharePercent)
+            headline2_leah(text = item.sharePercent)
             VSpacer(1.dp)
             subhead2_grey(text = item.balance)
         }

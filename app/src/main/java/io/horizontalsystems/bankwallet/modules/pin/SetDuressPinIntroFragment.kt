@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -33,10 +32,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class SetDuressPinIntroFragment : BaseComposeFragment() {
@@ -76,7 +76,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+                    .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
             ) {
                 if (viewModel.biometricAuthSupported) {
                     NotesCell(
@@ -123,11 +123,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
 private fun NotesCell(icon: Painter, title: String, description: String, borderTop: Boolean = false) {
     Box {
         if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
         }
 
         RowUniversal(
@@ -141,7 +137,7 @@ private fun NotesCell(icon: Painter, title: String, description: String, borderT
             )
             HSpacer(width = 16.dp)
             Column {
-                body_leah(text = title)
+                headline2_leah(text = title)
                 VSpacer(height = 1.dp)
                 subhead2_grey(text = description)
             }

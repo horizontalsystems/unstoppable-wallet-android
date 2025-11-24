@@ -185,13 +185,25 @@ fun SendTronConfirmationScreen(
                             blockchainType = blockchainType,
                             navController = navController,
                             onCopy = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
+                                stat(
+                                    page = StatPage.SendConfirmation,
+                                    event = StatEvent.Copy(StatEntity.Address),
+                                    section = StatSection.AddressTo
+                                )
                             },
                             onAddToExisting = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                                stat(
+                                    page = StatPage.SendConfirmation,
+                                    event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                    section = StatSection.AddressTo
+                                )
                             },
                             onAddToNew = {
-                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                                stat(
+                                    page = StatPage.SendConfirmation,
+                                    event = StatEvent.Open(StatPage.ContactNew),
+                                    section = StatSection.AddressTo
+                                )
                             }
                         )
                     }

@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.market.etf
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -13,12 +11,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -47,10 +46,10 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartTab
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.GraphicLine
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -60,14 +59,13 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.GraphicBarsWithNegative
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoin
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversalFixedHeight
@@ -79,6 +77,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
@@ -95,100 +99,140 @@ class EtfFragment : BaseComposeFragment() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EtfPage(
     viewModel: EtfViewModel,
-    navController: NavController,
+    navController: NavController
+) {
+    val tabs = EtfModule.EtfTab.entries
+    var selectedTab by remember { mutableStateOf(EtfModule.EtfTab.BtcTab) }
+    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
+
+    LaunchedEffect(key1 = selectedTab, block = {
+        pagerState.scrollToPage(selectedTab.ordinal)
+    })
+    val tabItems = tabs.map {
+        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+    }
+
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                )
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+        ) {
+            TabsTop(TabsTopType.Fitted, tabItems) {
+                selectedTab = it
+            }
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false
+            ) { page ->
+                EtfByChain(tabs[page], viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun EtfByChain(
+    tab: EtfModule.EtfTab,
+    viewModel: EtfViewModel,
 ) {
     val uiState = viewModel.uiState
-    val title = stringResource(id = R.string.MarketEtf_Title)
-    val description = stringResource(id = R.string.MarketEtf_Description)
+    val description = stringResource(id = R.string.MarketEtf_EtfDescription, tab.chainName)
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        Modifier
-            .background(color = ComposeAppTheme.colors.tyler)
-            .navigationBarsPadding()
+    LaunchedEffect(tab.key) {
+        viewModel.loadData(tab.key)
+    }
+
+    HSSwipeRefresh(
+        refreshing = uiState.isRefreshing,
+        onRefresh = {
+            viewModel.refresh()
+        }
     ) {
-        AppBar(
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = {
-                        navController.popBackStack()
-                    }
-                )
-            )
-        )
+        Crossfade(uiState.viewState, label = "") { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
 
-        HSSwipeRefresh(
-            refreshing = uiState.isRefreshing,
-            onRefresh = {
-                viewModel.refresh()
-            }
-        ) {
-            Crossfade(uiState.viewState, label = "") { viewState ->
-                when (viewState) {
-                    ViewState.Loading -> {
-                        Loading()
-                    }
+                is ViewState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.SyncError),
+                        viewModel::onErrorClick
+                    )
+                }
 
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.SyncError),
-                            viewModel::onErrorClick
-                        )
-                    }
-
-                    ViewState.Success -> {
-                        val listState = hsRememberLazyListState(
-                            2,
-                            uiState.sortBy,
-                            uiState.timeDuration
-                        )
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            state = listState,
-                            contentPadding = PaddingValues(bottom = 32.dp),
-                        ) {
-                            item {
-                                DescriptionCard(
-                                    title,
-                                    description,
-                                    ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/ETF_bitcoin@3x.png")
+                ViewState.Success -> {
+                    val listState = hsRememberLazyListState(
+                        2,
+                        uiState.sortBy,
+                        uiState.listTimePeriod
+                    )
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = listState,
+                        contentPadding = PaddingValues(bottom = 32.dp),
+                    ) {
+                        item {
+                            DescriptionCard(
+                                null,
+                                description,
+                                ImageSource.Remote(tab.headerImage)
+                            )
+                        }
+                        item {
+                            ChartEtf(uiState.chartDataLoading, uiState.etfPoints, uiState.currency)
+                            VSpacer(height = 8.dp)
+                            ChartTab(
+                                tabItems = uiState.chartTabs,
+                            ) { tab ->
+                                viewModel.onSelectChartInterval(tab)
+                            }
+                        }
+                        stickyHeader {
+                            HeaderSorting(borderBottom = true, borderTop = true) {
+                                HSpacer(width = 16.dp)
+                                HSDropdownButton(
+                                    variant = ButtonVariant.Secondary,
+                                    title = stringResource(uiState.sortBy.titleResId),
+                                    onClick = {
+                                        openSortingSelector = true
+                                    },
                                 )
+                                HSpacer(width = 8.dp)
+                                HSDropdownButton(
+                                    variant = ButtonVariant.Secondary,
+                                    title = stringResource(uiState.listTimePeriod.titleResId),
+                                    onClick = {
+                                        openPeriodSelector = true
+                                    },
+                                )
+                                HSpacer(width = 16.dp)
                             }
-                            item {
-                                ChartEtf(uiState.chartDataLoading, uiState.etfPoints, uiState.currency)
-                            }
-                            stickyHeader {
-                                HeaderSorting(borderBottom = true, borderTop = true) {
-                                    HSpacer(width = 16.dp)
-                                    ButtonSecondaryWithIcon(
-                                        modifier = Modifier.height(28.dp),
-                                        onClick = {
-                                            openSortingSelector = true
-                                        },
-                                        title = stringResource(uiState.sortBy.titleResId),
-                                        iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                                    )
-                                    HSpacer(width = 8.dp)
-                                    ButtonSecondaryWithIcon(
-                                        modifier = Modifier.height(28.dp),
-                                        onClick = {
-                                            openPeriodSelector = true
-                                        },
-                                        title = stringResource(uiState.timeDuration.titleResId),
-                                        iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                                    )
-                                    HSpacer(width = 16.dp)
-                                }
-                            }
-                            items(uiState.viewItems) { viewItem ->
-                                MarketCoinClear(
+                        }
+                        items(uiState.viewItems) { viewItem ->
+                            BoxBordered(bottom = true) {
+                                MarketCoin(
                                     title = viewItem.title,
                                     subtitle = viewItem.subtitle,
                                     coinIconUrl = viewItem.iconUrl,
@@ -206,13 +250,16 @@ fun EtfPage(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.CoinPage_Period,
-            select = Select(uiState.timeDuration, viewModel.timeDurations),
+            title = stringResource(R.string.CoinPage_Period),
+            select = Select(uiState.listTimePeriod, EtfListTimePeriod.entries),
             onSelect = { selected ->
                 viewModel.onSelectTimeDuration(selected)
                 openPeriodSelector = false
 
-                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.GlobalMetricsEtf,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                )
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -221,13 +268,16 @@ fun EtfPage(
     }
     if (openSortingSelector) {
         AlertGroup(
-            title = R.string.Market_Sort_PopupTitle,
+            title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortBy, viewModel.sortByOptions),
             onSelect = { selected ->
                 viewModel.onSelectSortBy(selected)
                 openSortingSelector = false
 
-                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.GlobalMetricsEtf,
+                    event = StatEvent.SwitchSortType(selected.statSortType)
+                )
             },
             onDismiss = {
                 openSortingSelector = false
@@ -273,17 +323,12 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
         etfPoints.lastOrNull()
     }
 
-    val totalInflow = etfPoint?.totalInflow
     val dailyInflow = etfPoint?.dailyInflow
     val totalAssets = etfPoint?.totalAssets
     val dateStr = if (isSelected) {
         etfPoint?.date?.let { DateHelper.getFullDate(it) }
     } else {
         null
-    }
-
-    val totalInflowStr = totalInflow?.let {
-        App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
     }
 
     val dailyInflowStr = dailyInflow?.let {
@@ -315,13 +360,13 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
 
     Column {
         ChartHeader(
-            mainValue = totalInflowStr,
+            mainValue = totalAssetsStr,
             mainValueStyleLarge = !isSelected,
             mainSubvalue = dateStr,
             secondaryValue = dailyInflowStr,
             secondaryValuePositive = dailyInflowPositive,
-            tertiaryTitle = stringResource(id = R.string.MarketEtf_TotalNetAssets),
-            tertiaryValue = totalAssetsStr
+            tertiaryTitle = "",
+            tertiaryValue = null
         )
 
         val loadingModifier = if (loading) Modifier.alpha(0.5f) else Modifier
@@ -341,12 +386,12 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                             .padding(horizontal = 8.dp)
                     ) {
                         val color = if (isSelected) {
-                            ComposeAppTheme.colors.grey50
+                            ComposeAppTheme.colors.andy
                         } else {
                             ComposeAppTheme.colors.remus
                         }
                         val colorNegative = if (isSelected) {
-                            ComposeAppTheme.colors.grey50
+                            ComposeAppTheme.colors.andy
                         } else {
                             ComposeAppTheme.colors.lucian
                         }
@@ -360,7 +405,7 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                         GraphicLine(
                             modifier = Modifier.matchParentSize(),
                             data = dataTotalInflow,
-                            color = ComposeAppTheme.colors.grey50,
+                            color = ComposeAppTheme.colors.andy,
                             selectedItemKey = selectedKey
                         )
                         GraphicPointer(
@@ -461,7 +506,7 @@ private fun ChartLabelBottom(labelBottom: String) {
                 val pathEffect =
                     PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                 drawLine(
-                    color = colors.steel10,
+                    color = colors.blade,
                     start = Offset(0f, 0f),
                     end = Offset(size.width, 0f),
                     pathEffect = pathEffect
@@ -487,7 +532,7 @@ private fun ChartLabelTop(
             .drawBehind {
                 val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                 drawLine(
-                    color = colors.steel10,
+                    color = colors.blade,
                     start = Offset(0f, size.height),
                     end = Offset(size.width, size.height),
                     pathEffect = pathEffect
@@ -510,7 +555,10 @@ private fun ChartHeader(
     tertiaryTitle: String,
     tertiaryValue: String?,
 ) {
-    CellUniversalFixedHeight(height = 64.dp) {
+    CellUniversalFixedHeight(
+        borderTop = false,
+        height = 64.dp
+    ) {
         Column {
             Row {
                 mainValue?.let {

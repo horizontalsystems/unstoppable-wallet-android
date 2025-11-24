@@ -92,7 +92,10 @@ class TvlViewModel(
     fun onToggleTvlDiffType() {
         tvlDiffType = if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
 
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField(tvlDiffType.statType))
+        stat(
+            page = StatPage.GlobalMetricsTvlInDefi,
+            event = StatEvent.ToggleTvlField(tvlDiffType.statType)
+        )
     }
 
     fun onClickChainSelector() {

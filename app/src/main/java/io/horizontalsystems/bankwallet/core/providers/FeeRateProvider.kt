@@ -16,7 +16,8 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
                 ethEvmUrl = appConfig.blocksDecodedEthereumRpc,
                 ethEvmAuth = null,
                 bscEvmUrl = FeeProviderConfig.defaultBscEvmUrl(),
-                mempoolSpaceUrl = appConfig.mempoolSpaceUrl
+                mempoolSpaceUrl = appConfig.mempoolSpaceUrl,
+                blockCypherUrl = appConfig.blockCypherUrl
             )
         )
     }

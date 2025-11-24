@@ -97,7 +97,10 @@ private fun ImportWalletScreen(
                                 )
                             )
 
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromFiles))
+                            stat(
+                                page = StatPage.ImportWallet,
+                                event = StatEvent.Open(StatPage.ImportWalletFromFiles)
+                            )
                         }
                     }
                 } catch (e: Throwable) {
@@ -160,7 +163,10 @@ private fun ImportWalletScreen(
                                 ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
                             )
 
-                            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
+                            stat(
+                                page = StatPage.ImportWallet,
+                                event = StatEvent.Open(StatPage.ImportWalletFromKey)
+                            )
                         }
                     }
                 )
@@ -171,20 +177,6 @@ private fun ImportWalletScreen(
                     icon = R.drawable.ic_download_24,
                     onClick = {
                         restoreLauncher.launch(arrayOf("application/json"))
-                    }
-                )
-                VSpacer(12.dp)
-                ImportOption(
-                    title = stringResource(R.string.ImportWallet_ExchangeWallet),
-                    description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
-                    icon = R.drawable.icon_link_24,
-                    onClick = {
-                        navController.slideFromBottom(
-                            R.id.importCexAccountFragment,
-                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
-                        )
-
-                        stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromExchangeWallet))
                     }
                 )
                 VSpacer(12.dp)

@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,11 +24,18 @@ class MarketPlatformViewModel(
         SortingField.TopLosers,
     )
 
-    private var sortingField: SortingField = SortingField.HighestCap
+    val periods = listOf(
+        TimeDuration.OneDay,
+        TimeDuration.SevenDay,
+        TimeDuration.ThirtyDay,
+        TimeDuration.ThreeMonths,
+    )
+
+    private var sortingField: SortingField = SortingField.TopGainers
     private var viewState: ViewState = ViewState.Loading
     private var viewItems: List<MarketViewItem> = listOf()
-    private var cache: List<MarketItem> = emptyList()
     private var isRefreshing = false
+    private var timePeriod = periods.first()
 
     init {
         sync()
@@ -38,6 +45,7 @@ class MarketPlatformViewModel(
         viewItems = viewItems,
         viewState = viewState,
         sortingField = sortingField,
+        timePeriod = timePeriod,
         isRefreshing = isRefreshing,
     )
 
@@ -64,27 +72,25 @@ class MarketPlatformViewModel(
         sync()
     }
 
+    fun onTimePeriodSelect(timePeriod: TimeDuration) {
+        this.timePeriod = timePeriod
+
+        viewModelScope.launch {
+            sync()
+        }
+    }
+
     private fun sync(forceRefresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (!forceRefresh && cache.isNotEmpty()) {
-                viewItems = cache
-                    .sort(sortingField)
-                    .map { item ->
-                        marketViewItem(item)
-                    }
-                viewState = ViewState.Success
-                emitState()
-            } else {
-                fetchFromRepository(forceRefresh)
-            }
+            fetchFromRepository(forceRefresh)
         }
     }
 
     private suspend fun fetchFromRepository(forceRefresh: Boolean) {
         try {
-            viewItems = repository.get(sortingField, forceRefresh)?.map {
+            viewItems = repository.get(sortingField, timePeriod, forceRefresh).map {
                 marketViewItem(it)
-            } ?: listOf()
+            }
 
             viewState = ViewState.Success
         } catch (e: Throwable) {
@@ -114,5 +120,6 @@ data class MarketPlatformUiState(
     val viewItems: List<MarketViewItem>,
     val viewState: ViewState,
     val sortingField: SortingField,
+    val timePeriod: TimeDuration,
     val isRefreshing: Boolean,
 )

@@ -76,7 +76,7 @@ fun HidableContent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
             .clickable(enabled = hideScreenText != null, onClick = {
                 hidden = !hidden
                 onToggleHidden?.invoke()
@@ -190,7 +190,7 @@ fun PassphraseCell(passphrase: String, hidden: Boolean) {
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Spacer(Modifier.weight(1f))
-                    C2(text = if (hidden) "*****" else passphrase)
+                    C2(text = if (hidden) "* * *" else passphrase)
                 }
             })
         Spacer(Modifier.height(32.dp))
@@ -209,7 +209,7 @@ fun SeedPhraseList(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },

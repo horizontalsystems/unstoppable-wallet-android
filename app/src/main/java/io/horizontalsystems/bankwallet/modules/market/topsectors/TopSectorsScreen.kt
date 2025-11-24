@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,7 +34,6 @@ import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -44,10 +42,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketDataValueComponent
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.marketDataValueComponent
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.marketkit.models.CoinCategory
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -92,35 +95,36 @@ fun TopSectorsScreen(
                             stickyHeader {
                                 HeaderSorting(borderBottom = true) {
                                     HSpacer(width = 16.dp)
-                                    OptionController(
-                                        uiState.sortingField.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.sortingField.titleResId),
+                                        onClick = {
                                             openSortingSelector = true
                                         }
                                     )
                                     HSpacer(width = 12.dp)
-                                    OptionController(
-                                        uiState.timePeriod.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.timePeriod.titleResId),
+                                        onClick = {
                                             openPeriodSelector = true
                                         }
                                     )
                                     HSpacer(width = 16.dp)
                                 }
                             }
-                            itemsIndexed(uiState.items) { i, item ->
-                                TopSectorItem(
-                                    item,
-                                    borderBottom = true
-                                ) { coinCategory ->
-                                    navController.slideFromRight(
-                                        R.id.marketCategoryFragment,
-                                        coinCategory
-                                    )
+                            itemsIndexed(uiState.items) { _, item ->
+                                BoxBordered(bottom = true) {
+                                    TopSectorItem(item) { coinCategory ->
+                                        navController.slideFromRight(
+                                            R.id.marketSectorFragment,
+                                            coinCategory
+                                        )
+                                    }
                                 }
                             }
                             item {
-                                VSpacer(height = 32.dp)
+                                VSpacer(height = 72.dp)
                             }
                         }
                     }
@@ -131,15 +135,15 @@ fun TopSectorsScreen(
     //Dialogs
     if (openPeriodSelector) {
         AlertGroup(
-            R.string.CoinPage_Period,
+            stringResource(R.string.CoinPage_Period),
             Select(uiState.timePeriod, viewModel.periods),
             { selected ->
                 viewModel.onTimePeriodSelect(selected)
                 openPeriodSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchPeriod(selected.statPeriod)
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Platforms
                 )
             },
             { openPeriodSelector = false }
@@ -147,15 +151,15 @@ fun TopSectorsScreen(
     }
     if (openSortingSelector) {
         AlertGroup(
-            R.string.Market_Sort_PopupTitle,
+            stringResource(R.string.Market_Sort_PopupTitle),
             Select(uiState.sortingField, viewModel.sortingOptions),
             { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
                 stat(
                     page = StatPage.Markets,
-                    section = StatSection.Platforms,
-                    event = StatEvent.SwitchSortType(selected.statSortType)
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                    section = StatSection.Platforms
                 )
             },
             { openSortingSelector = false }
@@ -166,51 +170,43 @@ fun TopSectorsScreen(
 @Composable
 fun TopSectorItem(
     viewItem: TopSectorViewItem,
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
     onItemClick: (CoinCategory) -> Unit,
 ) {
-    SectionItemBorderedRowUniversalClear(
-        borderTop = borderTop,
-        borderBottom = borderBottom,
-        onClick = { onItemClick(viewItem.coinCategory) }
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .width(76.dp)
-        ) {
-            val iconModifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(ComposeAppTheme.colors.tyler)
+    CellPrimary(
+        left = {
+            Box(
+                modifier = Modifier.width(76.dp)
+            ) {
+                val iconModifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.tyler)
 
-            CoinImage(
-                coin = viewItem.coin3.coin,
-                modifier = iconModifier.align(Alignment.TopEnd)
+                CoinImage(
+                    coin = viewItem.coin3.coin,
+                    modifier = iconModifier.align(Alignment.TopEnd)
+                )
+                CoinImage(
+                    coin = viewItem.coin2.coin,
+                    modifier = iconModifier.align(Alignment.TopCenter)
+                )
+                CoinImage(
+                    coin = viewItem.coin1.coin,
+                    modifier = iconModifier.align(Alignment.TopStart)
+                )
+            }
+        },
+        middle = {
+            CellMiddleInfo(
+                title = viewItem.coinCategory.name.hs,
             )
-            CoinImage(
-                coin = viewItem.coin2.coin,
-                modifier = iconModifier.align(Alignment.TopCenter)
+        },
+        right = {
+            CellRightInfo(
+                title = viewItem.marketCapValue?.hs ?: "n/a".hs,
+                subtitle = marketDataValueComponent(viewItem.changeValue)
             )
-            CoinImage(
-                coin = viewItem.coin1.coin,
-                modifier = iconModifier.align(Alignment.TopStart)
-            )
-        }
-        body_leah(
-            text = viewItem.coinCategory.name,
-            modifier = Modifier.weight(1f)
-        )
-        Column(
-            horizontalAlignment = Alignment.End
-        ) {
-            body_leah(
-                text = viewItem.marketCapValue ?: "n/a",
-                maxLines = 1,
-            )
-            VSpacer(3.dp)
-            MarketDataValueComponent(viewItem.changeValue)
-        }
-    }
+        },
+        onClick = { onItemClick(viewItem.coinCategory) }
+    )
 }

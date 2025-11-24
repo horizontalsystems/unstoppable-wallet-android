@@ -106,7 +106,10 @@ private fun CreateAccountIntroScreen(
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
 
-            stat(page = StatPage.NewWallet, event = StatEvent.CreateWallet(accountType.statAccountType))
+            stat(
+                page = StatPage.NewWallet,
+                event = StatEvent.CreateWallet(accountType.statAccountType)
+            )
         }
     }
 
@@ -117,7 +120,8 @@ private fun CreateAccountIntroScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Create),
-                        onClick = viewModel::createAccount
+                        onClick = viewModel::createAccount,
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 ),
                 navigationIcon = {
@@ -145,7 +149,10 @@ private fun CreateAccountIntroScreen(
                         .clickable {
                             openCreateAdvancedScreen.invoke()
 
-                            stat(page = StatPage.NewWallet, event = StatEvent.Open(StatPage.NewWalletAdvanced))
+                            stat(
+                                page = StatPage.NewWallet,
+                                event = StatEvent.Open(StatPage.NewWalletAdvanced)
+                            )
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,

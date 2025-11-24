@@ -17,7 +17,7 @@ import java.net.UnknownHostException
 class MarketFiltersViewModel(val service: MarketFiltersService) :
     ViewModelUiState<MarketFiltersUiState>() {
 
-    private var coinListSet: CoinList = CoinList.Top200
+    private var coinListSet: CoinList = CoinList.Top100
     private var period = FilterViewItemWrapper(
         Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
         TimePeriod.TimePeriod_1D,
@@ -32,6 +32,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     private var outperformedBtcOn = false
     private var outperformedEthOn = false
     private var outperformedBnbOn = false
+    private var outperformedGoldOn = false
+    private var outperformedSnpOn = false
     private var listedOnTopExchangesOn = false
     private var solidCexOn = false
     private var solidDexOn = false
@@ -44,6 +46,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     private var buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
     private var errorMessage: TranslatableString? = null
     private var sectors: List<SectorItem> = listOf()
+    private var resetEnabled = false
 
     private var reloadDataJob: Job? = null
 
@@ -92,6 +95,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         outperformedBtcOn = outperformedBtcOn,
         outperformedEthOn = outperformedEthOn,
         outperformedBnbOn = outperformedBnbOn,
+        outperformedGoldOn = outperformedGoldOn,
+        outperformedSnpOn = outperformedSnpOn,
         selectedBlockchainsValue = selectedBlockchainsValue,
         selectedBlockchains = selectedBlockchains,
         blockchainOptions = blockchainOptions,
@@ -104,6 +109,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         solidDexOn = solidDexOn,
         goodDistributionOn = goodDistributionOn,
         filterTradingSignal = filterTradingSignal,
+        resetEnabled = resetEnabled,
     )
 
     fun reset() {
@@ -117,6 +123,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         outperformedBtcOn = false
         outperformedEthOn = false
         outperformedBnbOn = false
+        outperformedGoldOn = false
+        outperformedSnpOn = false
         listedOnTopExchangesOn = false
         solidCexOn = false
         solidDexOn = false
@@ -127,18 +135,21 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
 
         selectedSectors = listOf(FilterViewItemWrapper.getAny())
         service.sectorIds = emptyList()
-        coinListSet = CoinList.Top200
-        service.coinCount = CoinList.Top200.itemsCount
+        coinListSet = CoinList.Top100
+        service.coinCount = CoinList.Top100.itemsCount
+        resetEnabled = false
         reloadDataWithSpinner()
     }
 
     fun updateCoinList(value: CoinList) {
         coinListSet = value
         service.coinCount = value.itemsCount
+        resetEnabled = true
         reloadDataWithSpinner()
     }
 
     fun setSectors(sectorItems: List<FilterViewItemWrapper<SectorItem?>>) {
+        resetEnabled = true
         if (sectorItems.isEmpty()) {
             selectedSectors = listOf(FilterViewItemWrapper.getAny())
             service.sectorIds = emptyList()
@@ -158,6 +169,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     }
 
     fun updatePriceCloseTo(value: PriceCloseTo?) {
+        resetEnabled = true
         priceCloseTo = value
 
         emitState()
@@ -165,72 +177,98 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     }
 
     fun updateMarketCap(value: FilterViewItemWrapper<Range?>) {
+        resetEnabled = true
         marketCap = value
         emitState()
         reloadData()
     }
 
     fun updateVolume(value: FilterViewItemWrapper<Range?>) {
+        resetEnabled = true
         volume = value
         emitState()
         reloadData()
     }
 
     fun updatePeriod(value: FilterViewItemWrapper<TimePeriod>) {
+        resetEnabled = true
         period = value
         emitState()
         reloadData()
     }
 
     fun updateTradingSignal(value: FilterViewItemWrapper<FilterTradingSignal?>) {
+        resetEnabled = true
         filterTradingSignal = value
         emitState()
         reloadData()
     }
 
     fun updatePriceChange(value: FilterViewItemWrapper<PriceChange?>) {
+        resetEnabled = true
         priceChange = value
         emitState()
         reloadData()
     }
 
     fun updateOutperformedBtcOn(checked: Boolean) {
+        resetEnabled = true
         outperformedBtcOn = checked
         emitState()
         reloadData()
     }
 
     fun updateOutperformedEthOn(checked: Boolean) {
+        resetEnabled = true
         outperformedEthOn = checked
         emitState()
         reloadData()
     }
 
     fun updateOutperformedBnbOn(checked: Boolean) {
+        resetEnabled = true
         outperformedBnbOn = checked
         emitState()
         reloadData()
     }
 
+    fun updateOutperformedGoldOn(checked: Boolean) {
+        resetEnabled = true
+        outperformedGoldOn = checked
+        emitState()
+        reloadData()
+    }
+
+    fun updateOutperformedSnpOn(checked: Boolean) {
+        resetEnabled = true
+        outperformedSnpOn = checked
+        emitState()
+        reloadData()
+    }
+
     fun updateListedOnTopExchangesOn(checked: Boolean) {
+        resetEnabled = true
         listedOnTopExchangesOn = checked
         emitState()
         reloadData()
     }
 
     fun updateSolidCexOn(checked: Boolean) {
+        resetEnabled = true
         solidCexOn = checked
         emitState()
         reloadData()
     }
 
     fun updateSolidDexOn(checked: Boolean) {
+        resetEnabled = true
         solidDexOn = checked
         emitState()
         reloadData()
     }
 
     fun updateGoodDistributionOn(checked: Boolean) {
+        resetEnabled = true
         goodDistributionOn = checked
         emitState()
         reloadData()
@@ -243,12 +281,14 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     }
 
     fun onBlockchainCheck(blockchain: Blockchain) {
+        resetEnabled = true
         selectedBlockchains += blockchain
         updateSelectedBlockchains()
         reloadData()
     }
 
     fun onBlockchainUncheck(blockchain: Blockchain) {
+        resetEnabled = true
         selectedBlockchains -= blockchain
         updateSelectedBlockchains()
         reloadData()
@@ -265,6 +305,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
                 service.filterOutperformedBtcOn = outperformedBtcOn
                 service.filterOutperformedEthOn = outperformedEthOn
                 service.filterOutperformedBnbOn = outperformedBnbOn
+                service.filterOutperformedGoldOn = outperformedGoldOn
+                service.filterOutperformedSnpOn = outperformedSnpOn
                 service.filterListedOnTopExchanges = listedOnTopExchangesOn
                 service.filterSolidCex = solidCexOn
                 service.filterSolidDex = solidDexOn
@@ -273,6 +315,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
                 service.filterPriceCloseToAtl = priceCloseTo == PriceCloseTo.Atl
                 service.filterBlockchains = selectedBlockchains
                 service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
+
+                if ((outperformedSnpOn || outperformedGoldOn) && service.goldPriceChanges == null) {
+                    service.setStockPriceChanges()
+                }
 
                 val numberOfItems = service.fetchNumberOfItems()
 
@@ -328,6 +374,8 @@ data class MarketFiltersUiState(
     val outperformedBtcOn: Boolean,
     val outperformedEthOn: Boolean,
     val outperformedBnbOn: Boolean,
+    val outperformedGoldOn: Boolean,
+    val outperformedSnpOn: Boolean,
     val selectedBlockchainsValue: String?,
     val selectedBlockchains: List<Blockchain>,
     val blockchainOptions: List<BlockchainViewItem>,
@@ -338,5 +386,6 @@ data class MarketFiltersUiState(
     val listedOnTopExchangesOn: Boolean,
     val solidCexOn: Boolean,
     val solidDexOn: Boolean,
-    val goodDistributionOn: Boolean
+    val goodDistributionOn: Boolean,
+    val resetEnabled: Boolean
 )

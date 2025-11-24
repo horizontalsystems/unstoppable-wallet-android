@@ -70,7 +70,7 @@ fun FormsInputAddress(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -84,8 +84,8 @@ fun FormsInputAddress(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 44.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -113,7 +113,7 @@ fun FormsInputAddress(
                             hint,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            color = ComposeAppTheme.colors.grey50,
+                            color = ComposeAppTheme.colors.andy,
                             style = ComposeAppTheme.typography.body
                         )
                     }
