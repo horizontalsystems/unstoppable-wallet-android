@@ -318,10 +318,12 @@ open class BalanceData(
     val minimumBalance: BigDecimal = BigDecimal.ZERO,
     val stellarAssets: List<StellarAsset.Asset> = listOf()
 ) {
-    val total get() = available + timeLocked + notRelayed + pending + minimumBalance
+    open val total get() = available + timeLocked + notRelayed + pending + minimumBalance
 }
 
-class ZcashBalanceData(available: BigDecimal, pending: BigDecimal, val unshielded: BigDecimal): BalanceData(available, pending = pending)
+class ZcashBalanceData(available: BigDecimal, pending: BigDecimal, val unshielded: BigDecimal): BalanceData(available, pending = pending){
+    override val total get() = available + pending + unshielded
+}
 
 interface IReceiveAdapter {
     val receiveAddress: String
