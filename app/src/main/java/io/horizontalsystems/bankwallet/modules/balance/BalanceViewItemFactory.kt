@@ -269,19 +269,21 @@ class BalanceViewItemFactory {
                 )
             }
 
-            lockedCoinValue(
-                state,
-                item.balanceData.pending,
-                wallet.decimal,
-                wallet.token
-            )?.let {
-                add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
-                        info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
-                        coinValue = it
+            if (wallet.token.blockchainType != BlockchainType.Zcash) {
+                lockedCoinValue(
+                    state,
+                    item.balanceData.pending,
+                    wallet.decimal,
+                    wallet.token
+                )?.let {
+                    add(
+                        LockedValue(
+                            title = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
+                            info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
+                            coinValue = it
+                        )
                     )
-                )
+                }
             }
 
             lockedCoinValue(
