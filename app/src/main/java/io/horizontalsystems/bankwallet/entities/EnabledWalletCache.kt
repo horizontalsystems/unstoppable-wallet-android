@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
-import java.math.BigDecimal
 
 @Entity(
     primaryKeys = ["tokenQueryId", "accountId"],
@@ -19,6 +19,5 @@ import java.math.BigDecimal
 data class EnabledWalletCache(
     val tokenQueryId: String,
     val accountId: String,
-    val balance: BigDecimal,
-    val balanceLocked: BigDecimal,
+    val balanceData: BalanceData?,
 )

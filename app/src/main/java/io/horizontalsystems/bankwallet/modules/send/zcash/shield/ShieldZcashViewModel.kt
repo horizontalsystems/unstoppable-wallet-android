@@ -52,8 +52,10 @@ class ShieldZcashViewModel(
     }
 
     fun getConfirmationData(): SendConfirmationData {
+        val unshielded = adapter.balanceData?.unshielded ?: throw IllegalStateException()
+
         return SendConfirmationData(
-            amount = adapter.balanceData.unshielded,
+            amount = unshielded,
             fee = null,
             address = null,
             contact = null,

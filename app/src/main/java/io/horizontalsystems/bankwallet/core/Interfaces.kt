@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.os.Parcelable
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
@@ -306,23 +307,31 @@ interface IBalanceAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
 
-    val balanceData: BalanceData
+    val balanceData: BalanceData?
     val balanceUpdatedFlowable: Flowable<Unit>
 }
 
-open class BalanceData(
+data class BalanceData(
     val available: BigDecimal,
     val timeLocked: BigDecimal = BigDecimal.ZERO,
     val notRelayed: BigDecimal = BigDecimal.ZERO,
     val pending: BigDecimal = BigDecimal.ZERO,
     val minimumBalance: BigDecimal = BigDecimal.ZERO,
-    val stellarAssets: List<StellarAsset.Asset> = listOf()
+    val stellarAssets: List<StellarAsset.Asset> = listOf(),
+    val unshielded: BigDecimal = BigDecimal.ZERO
 ) {
-    open val total get() = available + timeLocked + notRelayed + pending + minimumBalance
-}
+    val total: BigDecimal
+        get() = available + timeLocked + notRelayed + pending + minimumBalance + unshielded
 
-class ZcashBalanceData(available: BigDecimal, pending: BigDecimal, val unshielded: BigDecimal): BalanceData(available, pending = pending){
-    override val total get() = available + pending + unshielded
+    fun serialize(gson: Gson): String {
+        return gson.toJson(this)
+    }
+
+    companion object {
+        fun deserialize(v: String, gson: Gson): BalanceData? {
+            return gson.fromJson(v, BalanceData::class.java)
+        }
+    }
 }
 
 interface IReceiveAdapter {
