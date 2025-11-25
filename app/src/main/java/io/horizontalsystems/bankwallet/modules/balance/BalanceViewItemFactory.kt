@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ZcashBalanceData
 import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.swappable
@@ -331,21 +330,19 @@ class BalanceViewItemFactory {
                 )
             }
 
-            if (item.balanceData is ZcashBalanceData) {
-                lockedCoinValue(
-                    state,
-                    item.balanceData.unshielded,
-                    wallet.decimal,
-                    wallet.token
-                )?.let {
-                    add(
-                        ZcashLockedValue(
-                            title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
-                            info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
-                            coinValue = it
-                        )
+            lockedCoinValue(
+                state,
+                item.balanceData.unshielded,
+                wallet.decimal,
+                wallet.token
+            )?.let {
+                add(
+                    ZcashLockedValue(
+                        title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
+                        info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
+                        coinValue = it
                     )
-                }
+                )
             }
         }
 

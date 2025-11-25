@@ -28,6 +28,7 @@ import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -35,7 +36,6 @@ import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.core.ZcashBalanceData
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -111,7 +111,7 @@ class ZcashAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override var balanceData: ZcashBalanceData = ZcashBalanceData(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO)
+    override var balanceData: BalanceData? = null
 
     val statusInfo: Map<String, Any>
         get() {
@@ -232,7 +232,7 @@ class ZcashAdapter(
         "https://blockchair.com/zcash/transaction/$transactionHash"
 
     override val availableBalance: BigDecimal
-        get() = balanceData.available
+        get() = balanceData?.available ?: BigDecimal.ZERO
 
     override val fee: BigDecimal
         get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)
@@ -368,7 +368,7 @@ class ZcashAdapter(
         val balancePending = balance.pending.convertZatoshiToZec(decimalCount)
         val balanceUnshielded = balance.unshielded.convertZatoshiToZec(decimalCount)
 
-        balanceData = ZcashBalanceData(balanceAvailable, balancePending, balanceUnshielded)
+        balanceData = BalanceData(balanceAvailable, balancePending, unshielded = balanceUnshielded)
 
         balanceUpdatedSubject.onNext(Unit)
     }
