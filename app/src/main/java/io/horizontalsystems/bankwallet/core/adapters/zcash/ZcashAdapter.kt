@@ -66,7 +66,7 @@ class ZcashAdapter(
     private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
-    private var accountBirthday = 0L
+    private val accountBirthday: Long?
     private val existingWallet = localStorage.zcashAccountIds.contains(wallet.account.id)
     private val confirmationsThreshold = 10
     private val decimalCount = 8
@@ -94,6 +94,52 @@ class ZcashAdapter(
 
     override val isMainNet: Boolean = true
 
+    private var syncState: AdapterState = AdapterState.Syncing()
+        set(value) {
+            if (value != field) {
+                field = value
+                adapterStateUpdatedSubject.onNext(Unit)
+            }
+        }
+
+    override val debugInfo: String
+        get() = ""
+
+    override val balanceState: AdapterState
+        get() = syncState
+
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override var balanceData: ZcashBalanceData = ZcashBalanceData(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO)
+
+    val statusInfo: Map<String, Any>
+        get() {
+            val statusInfo = LinkedHashMap<String, Any>()
+            statusInfo["Last Block Info"] = lastBlockInfo ?: ""
+            statusInfo["Sync State"] = syncState
+            statusInfo["Birthday Height"] = accountBirthday ?: 0
+            return statusInfo
+        }
+
+    override val balanceUpdatedFlowable: Flowable<Unit>
+        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val explorerTitle: String
+        get() = "blockchair.com"
+
+    override val transactionsState: AdapterState
+        get() = syncState
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val lastBlockInfo: LastBlockInfo?
+        get() = synchronizer.latestHeight?.value?.toInt()?.let { LastBlockInfo(it) }
+
+    override val lastBlockUpdatedFlowable: Flowable<Unit>
+        get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     init {
         val walletInitMode = if (existingWallet) {
             WalletInitMode.ExistingWallet
@@ -116,9 +162,7 @@ class ZcashAdapter(
                 }
         }
 
-        birthday?.value?.let {
-            accountBirthday = it
-        }
+        accountBirthday = birthday?.value
 
         synchronizer = Synchronizer.newBlocking(
             context = context,
@@ -140,14 +184,6 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
-    private var syncState: AdapterState = AdapterState.Syncing()
-        set(value) {
-            if (value != field) {
-                field = value
-                adapterStateUpdatedSubject.onNext(Unit)
-            }
-        }
-
     override fun start() {
         subscribe(synchronizer as SdkSynchronizer)
         if (!existingWallet) {
@@ -161,57 +197,6 @@ class ZcashAdapter(
 
     override fun refresh() {
     }
-
-    override val debugInfo: String
-        get() = ""
-
-    override val balanceState: AdapterState
-        get() = syncState
-
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    override val balanceData: ZcashBalanceData
-        get() = ZcashBalanceData(balanceAvailable, balancePending, balanceUnshielded)
-
-    val statusInfo: Map<String, Any>
-        get() {
-            val statusInfo = LinkedHashMap<String, Any>()
-            statusInfo["Last Block Info"] = lastBlockInfo ?: ""
-            statusInfo["Sync State"] = syncState
-            statusInfo["Birthday Height"] = accountBirthday
-            return statusInfo
-        }
-
-    private val accountBalance: AccountBalance?
-        get() = synchronizer.walletBalances.value?.get(zcashAccount.accountUuid)
-
-    private val balanceAvailable: BigDecimal
-        get() = accountBalance?.available.convertZatoshiToZec(decimalCount)
-
-    private val balancePending: BigDecimal
-        get() = accountBalance?.pending.convertZatoshiToZec(decimalCount)
-
-    private val balanceUnshielded: BigDecimal
-        get() = accountBalance?.unshielded.convertZatoshiToZec(decimalCount)
-
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    override val explorerTitle: String
-        get() = "blockchair.com"
-
-    override val transactionsState: AdapterState
-        get() = syncState
-
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    override val lastBlockInfo: LastBlockInfo?
-        get() = synchronizer.latestHeight?.value?.toInt()?.let { LastBlockInfo(it) }
-
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
@@ -247,7 +232,7 @@ class ZcashAdapter(
         "https://blockchair.com/zcash/transaction/$transactionHash"
 
     override val availableBalance: BigDecimal
-        get() = balanceAvailable
+        get() = balanceData.available
 
     override val fee: BigDecimal
         get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)
@@ -378,7 +363,13 @@ class ZcashAdapter(
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
-    private fun onBalance(balance: AccountBalance?) {
+    private fun onBalance(balance: AccountBalance) {
+        val balanceAvailable = balance.available.convertZatoshiToZec(decimalCount)
+        val balancePending = balance.pending.convertZatoshiToZec(decimalCount)
+        val balanceUnshielded = balance.unshielded.convertZatoshiToZec(decimalCount)
+
+        balanceData = ZcashBalanceData(balanceAvailable, balancePending, balanceUnshielded)
+
         balanceUpdatedSubject.onNext(Unit)
     }
 
