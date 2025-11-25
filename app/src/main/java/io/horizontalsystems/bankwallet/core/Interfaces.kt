@@ -324,7 +324,8 @@ data class BalanceData(
         get() = available + timeLocked + notRelayed + pending + minimumBalance + unshielded
 
     fun serialize(gson: Gson): String {
-        return gson.toJson(this)
+        // no need to cache stellarAssets in cache, so we exclude it
+        return gson.toJson(this.copy(stellarAssets = listOf()))
     }
 
     companion object {
