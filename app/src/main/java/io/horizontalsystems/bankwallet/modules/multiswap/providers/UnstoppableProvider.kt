@@ -40,7 +40,7 @@ import java.math.BigInteger
 object UnstoppableProvider : IMultiSwapProvider {
     override val id = "unstoppable"
     override val title = "Unstoppable"
-    override val icon = R.drawable.ic_unstoppable_icon_20
+    override val icon = R.drawable.unstoppable
     override val priority = 0
 
     private val unstoppableAPI = APIClient.build(
