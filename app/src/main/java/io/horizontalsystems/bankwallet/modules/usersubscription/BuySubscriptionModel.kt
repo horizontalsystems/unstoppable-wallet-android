@@ -74,11 +74,38 @@ object BuySubscriptionModel {
     }
 
     fun BasePlan.badge(): String? {
-        return when (pricingPhases.last().period.years) {
-            1 -> Translator.getString(R.string.Premium_SubscriptionPeriod_AnnuallySave)
+        return when {
+            pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_AnnuallySave)
+            pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_MonthlySave)
             else -> null
         }
     }
+
+    val BasePlan.noteAmount: String?
+        get() {
+            return when {
+                pricingPhases.last().period.years > 0 -> "299.9"
+                pricingPhases.last().period.months > 0 -> "24.9"
+                else -> null
+            }
+        }
+
+    val BasePlan.noteText: String?
+        get() {
+            return when {
+                pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerYear)
+                pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerMonth)
+                else -> null
+            }
+        }
+
+    val BasePlan.gradientBadge: Boolean
+        get() {
+            return when {
+                pricingPhases.last().period.years > 0 -> true
+                else -> false
+            }
+        }
 
     //billing periods: P1M, P3M, P6M, P1Y
     private fun PricingPhase.period(): String {
