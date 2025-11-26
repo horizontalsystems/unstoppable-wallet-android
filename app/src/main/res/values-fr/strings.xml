@@ -643,6 +643,7 @@
     <string name="Swap_Approving">Approbation</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Citation</string>
+    <string name="Swap_Initializing">Initialisation en cours</string>
     <string name="Swap_Providers">Fournisseurs</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
