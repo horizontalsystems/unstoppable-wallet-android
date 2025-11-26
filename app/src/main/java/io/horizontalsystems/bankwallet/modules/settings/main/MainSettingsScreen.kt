@@ -50,9 +50,8 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.banners.BlackFridayBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
-import io.horizontalsystems.bankwallet.modules.settings.banners.GameBanner
-import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.bankwallet.modules.settings.vipsupport.VipSupportBottomSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
@@ -71,8 +70,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.ScamProtection
 
 @Composable
 fun SettingsScreen(
@@ -118,7 +117,7 @@ private fun SettingSections(
     val banners = buildList<@Composable () -> Unit> {
         if (uiState.showPremiumBanner) {
             add {
-                SubscriptionBanner(
+                BlackFridayBanner(
                     onClick = {
                         navController.slideFromBottom(R.id.buySubscriptionFragment)
                         stat(
@@ -137,13 +136,6 @@ private fun SettingSections(
                     }
                 )
             }
-        }
-        add {
-            GameBanner(
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot/app")
-                }
-            )
         }
     }
 

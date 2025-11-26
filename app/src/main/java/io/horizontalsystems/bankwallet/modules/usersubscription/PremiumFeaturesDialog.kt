@@ -167,7 +167,7 @@ fun PremiumFeaturesScreen(
             ) {
                 VSpacer(24.dp)
                 Image(
-                    painter = painterResource(id = R.drawable.prem_star_launch),
+                    painter = painterResource(id = R.drawable.blackfriday_200),
                     contentDescription = null,
                     modifier = Modifier
                         .height(200.dp)
@@ -340,7 +340,7 @@ fun FeaturesSection(
 @Composable
 private fun ActionText() {
     val text = highlightText(
-        text = stringResource(R.string.Premium_UpgradeText),
+        text = stringResource(R.string.Premium_Banner_BlackFridayText),
         textColor = ComposeAppTheme.colors.leah,
         highlightPart = stringResource(R.string.Premium_Title),
         highlightColor = ComposeAppTheme.colors.jacob
