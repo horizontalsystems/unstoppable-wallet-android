@@ -644,6 +644,7 @@
     <string name="Swap_Approving">Aprovando</string>
     <string name="Swap_Swapping">Trocando</string>
     <string name="Swap_Quoting">Cotação</string>
+    <string name="Swap_Initializing">Inicializando</string>
     <string name="Swap_Providers">Provedores</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
