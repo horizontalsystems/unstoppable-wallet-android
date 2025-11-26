@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionSyncState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsRateRepository
+import java.math.BigDecimal
 
 class TokenBalanceModule {
 
@@ -47,6 +48,7 @@ class TokenBalanceModule {
                 App.accountManager,
                 App.adapterManager,
                 App.connectivityManager,
+                App.localStorage,
             ) as T
         }
     }
@@ -60,7 +62,7 @@ class TokenBalanceModule {
         val error: TokenBalanceError? = null,
         val failedErrorMessage: String?,
         val warningMessage: String?,
-        val showZecTransparentAmountDetectedWarning: Boolean,
+        val alertUnshieldedBalance: BigDecimal?,
     )
 
     data class TokenBalanceError(

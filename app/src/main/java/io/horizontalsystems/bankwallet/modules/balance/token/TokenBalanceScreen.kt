@@ -82,6 +82,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -106,17 +107,18 @@ fun TokenBalanceScreen(
         }
     }
 
-    LaunchedEffect(uiState.showZecTransparentAmountDetectedWarning) {
-        if (uiState.showZecTransparentAmountDetectedWarning) {
+    LaunchedEffect(uiState.alertUnshieldedBalance) {
+        if (uiState.alertUnshieldedBalance != null) {
             bottomSheetContent = ZcashLockedValue(
                 title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalanceDetected_Info_Title),
                 info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
                 coinValue = DeemedValue("", false)
             )
             coroutineScope.launch {
+                delay(300)
                 bottomSheetState.show()
             }
-            viewModel.transparentZecAmountWarningShown()
+            viewModel.transparentZecAmountWarningShown(uiState.alertUnshieldedBalance)
         }
     }
 
