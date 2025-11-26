@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
@@ -16,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
-import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -26,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import java.math.BigDecimal
 
 class TokenBalanceViewModel(
     val wallet: Wallet,
@@ -37,6 +39,7 @@ class TokenBalanceViewModel(
     private val accountManager: IAccountManager,
     private val adapterManager: IAdapterManager,
     private val connectivityManager: ConnectivityManager,
+    private val localStorage: ILocalStorage,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -49,8 +52,7 @@ class TokenBalanceViewModel(
     private var failedErrorMessage: String? = null
     private var waringMessage: String? = null
     private var loadingTransactions = true
-    private var showZecTransparentAmountWarning = false
-    private var transparentAmountWarningShown = false
+    private var alertUnshieldedBalance: BigDecimal? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -97,7 +99,7 @@ class TokenBalanceViewModel(
         failedErrorMessage = failedErrorMessage,
         error = error,
         warningMessage = waringMessage,
-        showZecTransparentAmountDetectedWarning = showZecTransparentAmountWarning,
+        alertUnshieldedBalance = alertUnshieldedBalance,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -134,7 +136,7 @@ class TokenBalanceViewModel(
         }
 
         if (wallet.token.blockchainType == BlockchainType.Zcash) {
-            updateZecTransparentAmountDetectedWarning(balanceViewItem)
+            handleZcashBalanceUpdate(balanceItem)
         }
 
         this.balanceViewItem = balanceViewItem.copy(
@@ -147,16 +149,26 @@ class TokenBalanceViewModel(
         emitState()
     }
 
-    private fun updateZecTransparentAmountDetectedWarning(balanceViewItem: BalanceViewItem) {
-        if (!showZecTransparentAmountWarning
-            && !transparentAmountWarningShown
-            && this.balanceViewItem?.syncingProgress?.progress != null //it was syncing, but now sync completed
-            && balanceViewItem.syncingProgress.progress == null
-        ) {
-            showZecTransparentAmountWarning = balanceViewItem.lockedValues.any {
-                it is ZcashLockedValue
+    private fun handleZcashBalanceUpdate(balanceItem: BalanceModule.BalanceItem) {
+        if (balanceItem.state == AdapterState.Synced) {
+            val unshielded = balanceItem.balanceData.unshielded
+            val lastAlertedUnshieldedBalance = getLastAlertedUnshieldedBalance(wallet)
+
+            if (lastAlertedUnshieldedBalance == null || lastAlertedUnshieldedBalance.compareTo(unshielded) != 0) {
+                alertUnshieldedBalance = unshielded
             }
         }
+    }
+
+    private fun getLastAlertedUnshieldedBalance(wallet: Wallet) : BigDecimal? {
+        return localStorage.zcashUnshieldedBalanceAlerts.get(wallet.account.id)
+    }
+
+    private fun setLastAlertedUnshieldedBalance(
+        wallet: Wallet,
+        unshielded: BigDecimal
+    ) {
+        localStorage.zcashUnshieldedBalanceAlerts = localStorage.zcashUnshieldedBalanceAlerts + mapOf(wallet.account.id to unshielded)
     }
 
     private fun updateErrorState() {
@@ -207,8 +219,10 @@ class TokenBalanceViewModel(
         balanceHiddenManager.toggleBalanceHidden()
     }
 
-    fun transparentZecAmountWarningShown() {
-        transparentAmountWarningShown = true
+    fun transparentZecAmountWarningShown(alertUnshieldedBalance: BigDecimal) {
+        setLastAlertedUnshieldedBalance(wallet, alertUnshieldedBalance)
+        this.alertUnshieldedBalance = null
+
         emitState()
     }
 

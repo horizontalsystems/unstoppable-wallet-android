@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -34,6 +35,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.util.UUID
 
 class LocalStorageManager(
@@ -103,6 +105,17 @@ class LocalStorageManager(
     override val marketSignalsStateChangedFlow = _marketSignalsStateChangedFlow
 
     private val gson by lazy { Gson() }
+
+    override var zcashUnshieldedBalanceAlerts: Map<String, BigDecimal>
+        get() {
+            val jsonStr = preferences.getString("zcashUnshieldedBalanceAlerts", null) ?: return mapOf()
+            val type = object : TypeToken<Map<String, BigDecimal>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit { putString("zcashUnshieldedBalanceAlerts", jsonStr) }
+        }
 
     override var chartIndicatorsEnabled: Boolean
         get() = preferences.getBoolean("chartIndicatorsEnabled", false)

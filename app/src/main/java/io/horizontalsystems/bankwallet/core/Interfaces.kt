@@ -79,6 +79,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var zcashUnshieldedBalanceAlerts: Map<String, BigDecimal>
     var selectedPeriods: List<HsTimePeriod>
     var roiPerformanceCoins: List<PerformanceCoin>
     var marketSearchRecentCoinUids: List<String>
