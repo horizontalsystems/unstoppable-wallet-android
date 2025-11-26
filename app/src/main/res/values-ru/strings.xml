@@ -646,6 +646,7 @@
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_Quoting">Котировка</string>
+    <string name="Swap_Initializing">Инициализация</string>
     <string name="Swap_Providers">Провайдеры</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
