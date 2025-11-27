@@ -710,7 +710,6 @@
     <!--Premium Screens-->
     <string name="Premium_ChoosePlanForYou">Planı seçin</string>
     <string name="Premium_EnjoyFreePeriod">İlk %s ÜCRETSİZ olarak kullanın.</string>
-    <string name="Premium_CancelSubscriptionInfo">Aboneliğinizi istediğiniz zaman iptal edebilirsiniz.</string>
     <string name="Premium_GetFreePeriod">%s ÜCRETSİZ Alın</string>
     <string name="Premium_Subscribe">Abone Ol</string>
     <string name="Premium_AddPromoCode">Promosyon Kodu Ekle</string>
