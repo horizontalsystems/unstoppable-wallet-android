@@ -935,7 +935,7 @@
     <string name="Premium_Title">高級版</string>
     <string name="Premium_ChoosePlanForYou">選擇方案</string>
     <string name="Premium_EnjoyFreePeriod">享受前 %s 免費。</string>
-    <string name="Premium_CancelSubscriptionInfo">您可以隨時取消您的訂閱。</string>
+    <string name="Premium_CancelSubscriptionInfo">取消任意时间</string>
     <string name="Premium_GetFreePeriod">免費獲取 %s</string>
     <string name="Premium_Subscribe">訂閱</string>
     <string name="Premium_AddPromoCode">添加優惠碼</string>
@@ -949,6 +949,7 @@
     <string name="Premium_YouHaveActivatedPlan">您已啟用 %s 方案。</string>
     <string name="Premium_GoToApp">前往應用程式</string>
     <string name="Premium_UpgradeText">使用高級版功能升級您的體驗！</string>
+    <string name="Premium_Banner_BlackFridayText">通过我们年度最大的折扣升级到高级版</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
     <string name="Premium_UpgradeFeature_TokenInsights">令牌洞见度</string>
@@ -981,11 +982,15 @@
     <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
     <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
     <string name="Premium_WhatUsersSay">用戶評價：</string>
+    <string name="Premium_BlackFridayOfferEnds">黑色星期五报价于12月7日结束</string>
     <string name="Premium_SubscriptionPeriod_Month">月</string>
     <string name="Premium_SubscriptionPeriod_Year">年</string>
     <string name="Premium_SubscriptionPeriod_Annually">年度</string>
     <string name="Premium_SubscriptionPeriod_Monthly">月度</string>
-    <string name="Premium_SubscriptionPeriod_AnnuallySave">SVE 31%</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">保存50%</string>
+    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
+    <string name="Premium_SubscriptionPeriod_PerYear">每年</string>
+    <string name="Premium_SubscriptionPeriod_PerMonth">每个月</string>
     <string name="Appearance_MarketsTab">市场标签</string>
     <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_AppIcon">应用图标</string>
