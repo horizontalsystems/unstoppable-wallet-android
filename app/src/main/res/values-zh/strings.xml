@@ -312,12 +312,10 @@
     <string name="Market_Vaults_Filter_USDYield">美元收益</string>
     <string name="Market_Vaults_OpenDapp">打开 dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d 链接</string>
-    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">網絡</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">底部令牌</string>
     <string name="Market_Vaults_Vault_Holders">持有者</string>
-    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">多链</string>
@@ -334,6 +332,7 @@
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
+    <string name="Balance_Downloading">正在下载…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_Sort_Balance">余额</string>
@@ -347,6 +346,8 @@
     <string name="Balance_NetworkSelectDescription">选择要接收地址的网络。</string>
     <string name="Balance_Receive_AddressFormatDescription">选择要接收的地址的格式。</string>
     <string name="Balance_Receive_AddressFormat">地址格式</string>
+    <string name="Balance_Receive_AddressType">地址类型</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">选择您想要如何接收Zcash</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">现金地址格式更适合接收比特币现金(BCH)，因为它提高了用户体验和兼容性。 然而，无论发件人的地址格式如何，两种地址格式都可以互换地用于接收BCCH。</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">本机SegWit格式是比特币中为了改进输送和安全性而偏爱的。 所有地址格式 (Taproot, SegWit, Legacy) 可以互换使用来接收BTC ，而不论发送者的地址格式。 启用跨越不同种类的无缝交易。</string>
     <string name="Balance_Receive_Account">账户</string>
@@ -374,10 +375,17 @@
     <string name="Balance_Receive_Subaddresses">子项</string>
     <string name="Balance_Receive_SubaddressesInfo">子地址让您在一个钱包内使用多个唯一地址来方便和增强隐私。</string>
     <string name="Balance_Receive_SubaddressesTransactions">交易: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">您以前是否拥有过任何 %s 硬币？</string>
+    <string name="Balance_Receive_YesAlreadyOwn">是的，我已经拥有了</string>
+    <string name="Balance_Receive_IDontHave">不，我没有</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">透明的</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">检测到透明ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
+    <string name="Balance_Zcash_Unified">统一的</string>
+    <string name="Balance_Zcash_UnifiedDescription">用于钱包之间的个人和私人转账。</string>
+    <string name="Balance_Zcash_TransparentDescription">用于接收来自交易所或不支持统一地址的服务。</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <!--Send-->
@@ -562,9 +570,29 @@
     <string name="WalletConnect_Networks">网络</string>
     <string name="WalletConnect_ConnectTo">连接到 %s</string>
     <string name="WalletConnect_ConnectedTo">已连接到 %s</string>
+    <string name="WalletConnect_Disconnect">断开连接 %s</string>
     <string name="WalletConnect_WhiteListDeactivatedWarning">Scam 保护功能已停用。域名验证不可用。升级到高级版以保护免受未验证或钓鱼网站之害。</string>
     <string name="WalletConnect_NotInWhiteListAlert">此网站未经过核实，可能导致网络钓鱼或资金流失。连接被强烈阻止。</string>
     <string name="WalletConnect_ConnectWarning">点击连接，允许此应用查看您的公共地址。</string>
+    <string name="WalletConnect_Attention">注意！</string>
+    <string name="WalletConnect_Danger">危险！</string>
+    <string name="WalletConnect_Safe">安全</string>
+    <string name="WalletConnect_Domain">域</string>
+    <string name="WalletConnect_Message">留言</string>
+    <string name="WalletConnect_Checking">正在检查…</string>
+    <string name="WalletConnect_RequestFailed">请求失败</string>
+    <string name="WalletConnect_AllowDapp">允许 %s</string>
+    <string name="WalletConnect_Value">值</string>
+    <string name="WalletConnect_TokenAllowance">令牌允许</string>
+    <string name="WalletConnect_ConfirmTransaction">确认交易</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s 将能够代表您移动这些令牌。</string>
+    <string name="WalletConnect_RequestFailedDescription">出了错，请求无法完成</string>
+    <string name="WalletConnect_DisconnectWarning">您确定要删除此连接吗？</string>
+    <string name="WalletConnect_DefenseMessage_Warning">您可能会连接到虚假网站并丢失资金。请将我开启以保持保护。</string>
+    <string name="WalletConnect_DefenseMessage_Danger">此 dApp 未验证。连接可能会使您的资金面临风险。</string>
+    <string name="WalletConnect_DefenseMessage_Safe">我检查了它。这个dapp 是安全的连接。</string>
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Requests">请求</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -611,6 +639,7 @@
     <string name="Swap_Approving">审批中</string>
     <string name="Swap_Swapping">交易中...</string>
     <string name="Swap_Quoting">引述</string>
+    <string name="Swap_Initializing">正在初始化</string>
     <string name="Swap_Providers">服务提供商</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
@@ -654,6 +683,8 @@
     <string name="Approve_Spender">消费人</string>
     <string name="Approve_YouApprove">您批准</string>
     <string name="Approve_YouRevoke">您已取消</string>
+    <string name="Approve_Allowance">津贴金额</string>
+    <string name="Approve_Revoke">撤销金额</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">批准</string>
     <string name="Swap_Approve_Info">授权智能合约代表您进行代币交易，并指定允许的金额。这不会影响您的余额，但需要支付少量费用以进行批准。\n\n预先批准较高金额用于未来交易比按需批准更具成本效益。</string>
@@ -905,6 +936,7 @@
     <string name="Premium_Subscribe">訂閱</string>
     <string name="Premium_AddPromoCode">添加優惠碼</string>
     <string name="Premium_TryForFree">免費試用</string>
+    <string name="Premium_ViewAllFeatures">查看所有功能</string>
     <string name="Premium_Upgrade">升級</string>
     <string name="Premium_Restore">恢复自</string>
     <string name="Premium_Annually">年度</string>
@@ -913,6 +945,7 @@
     <string name="Premium_YouHaveActivatedPlan">您已啟用 %s 方案。</string>
     <string name="Premium_GoToApp">前往應用程式</string>
     <string name="Premium_UpgradeText">使用高級版功能升級您的體驗！</string>
+    <string name="Premium_Banner_BlackFridayText">通过我们年度最大的折扣升级到高级版</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
     <string name="Premium_UpgradeFeature_TokenInsights">代幣分析</string>
@@ -922,7 +955,7 @@
     <string name="Premium_UpgradeFeature_SecureSend">詐騙防護</string>
     <string name="Premium_UpgradeFeature_ScamProtection">黑名單檢查</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP群組</string>
-    <string name="Premium_UpgradeFeature_MevProtection">MEV 保护</string>
+    <string name="Premium_UpgradeFeature_LossProtection">丢失保护</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">按關鍵標準獲取前100名列表</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">自動監控您代幣的市場趨勢</string>
@@ -939,14 +972,21 @@
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">保護自己免受風險和受制裁實體的侵害。黑名單檢查自動對照高風險數據庫篩選接收地址，在您發送前標記詐騙、欺詐和受制裁實體。如果一個地址被列入黑名單，您將在犯下代價高昂的錯誤前知道。保護您的交易。保持您的加密貨幣清潔。保持合規。</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">成為進化的一部分。加入 VIP 群組，直接與我們的團隊連接獲取技術支援。對即將推出的功能進行投票，搶先獨家了解未來更新。您的聲音很重要——幫助塑造下一代加密貨幣錢包。</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">MEV 保护</string>
+    <string name="Premium_DefenseSystem">防御系统</string>
+    <string name="Premium_MarketInsights">市场洞察力</string>
+    <string name="Premium_Vip">VIP</string>
     <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
     <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
     <string name="Premium_WhatUsersSay">用戶評價：</string>
+    <string name="Premium_BlackFridayOfferEnds">黑色星期五报价于12月7日结束</string>
     <string name="Premium_SubscriptionPeriod_Month">月</string>
     <string name="Premium_SubscriptionPeriod_Year">年</string>
     <string name="Premium_SubscriptionPeriod_Annually">年度</string>
     <string name="Premium_SubscriptionPeriod_Monthly">月度</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">SVE 31%</string>
+    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
+    <string name="Premium_SubscriptionPeriod_PerYear">每年</string>
+    <string name="Premium_SubscriptionPeriod_PerMonth">每个月</string>
     <string name="Appearance_MarketsTab">市场标签</string>
     <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_AppIcon">应用图标</string>
@@ -1016,7 +1056,7 @@
     <string name="MoneroNodeSettings_TrustedTitle">节点首选项</string>
     <string name="MoneroNodeSettings_TrustedDescription">信任的节点——钱包信任选定的节点并在没有额外验证的情况下使用其数据。
         \n\n广播时即时显示为挂起的交易(粉刷同步) 但隐私和对节点的依赖性较低)。
-        \n\n\n Off -> 交易仅在网络确认后显示(较慢) 但更加安全和更加私人)。</string>
+        \n\n\n Off -&gt; 交易仅在网络确认后显示(较慢) 但更加安全和更加私人)。</string>
     <string name="MoneroNodeSettings_Trusted">信任的</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">在更改源后，钱包将必须重新同步自己。</string>
@@ -1070,6 +1110,9 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
+    <string name="SettingsTerms_PrivacyNotice">应用没有间接或收集关于您的余额或交易的数据 — — 我们甚至不知道有多少人使用它。 它只跟踪匿名使用模式(打开的页面、点击的按钮)以提高可用性。您可以在设置 -> 隐私中关闭此功能。</string>
+    <string name="SettingsTerms_MonetizationDisclosure">作为其货币化模型的一部分，应用程序从钱包内执行的DEX交换器中赚取小佣金。 这有助于我们保持独立和公开的来源，并且没有VC资金。</string>
+    <string name="SettingsTerms_OpenSource">应用程序是可验证的开源，所有源代码都在线发布。上面所述的一切都可以由任何人公开验证。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">不可阻止的</string>
@@ -1262,6 +1305,7 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Description">选择接收付款的地址格式。恢复现有钱包时应选择正确的格式。</string>
+    <string name="AddressFormatSettings_Subtitle">选择地址格式的硬币。</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">原生</string>
     <!-- Blockchain Settings -->
@@ -1537,6 +1581,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">更改源</string>
     <string name="BalanceSyncError_ButtonReport">报告</string>
     <string name="BalanceSyncError_Text">同步错误</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">无法从当前源获取数据。您可以重试或切换到不同的同步源。</string>
+    <string name="BalanceSyncError_ErrorText">无法从当前源获取数据。请稍后再试。</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">加入未加入的</string>
     <string name="ProUsersInfo_UnstoppablePass">不可阻止的通路</string>
