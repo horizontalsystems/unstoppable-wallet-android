@@ -939,7 +939,7 @@
     <string name="Premium_Title">Премиум</string>
     <string name="Premium_ChoosePlanForYou">Выберите план</string>
     <string name="Premium_EnjoyFreePeriod">Наслаждайтесь первым %s БЕСПЛАТНО.</string>
-    <string name="Premium_CancelSubscriptionInfo">Вы можете отменить подписку в любое время.</string>
+    <string name="Premium_CancelSubscriptionInfo">Отменить в любое время</string>
     <string name="Premium_GetFreePeriod">Получите %s БЕСПЛАТНО</string>
     <string name="Premium_Subscribe">Подписаться</string>
     <string name="Premium_AddPromoCode">Ввести промокод</string>
@@ -953,6 +953,7 @@
     <string name="Premium_YouHaveActivatedPlan">Вы активировали план %s.</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
     <string name="Premium_UpgradeText">Откройте новые возможности с Премиум-доступом!</string>
+    <string name="Premium_Banner_BlackFridayText">Обновите до Премиум с нашими крупнейшими скидками года</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Происхождение токена</string>
@@ -985,11 +986,15 @@
     <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_WhatUsersSay">Что говорят пользователи:</string>
+    <string name="Premium_BlackFridayOfferEnds">Черная пятница заканчивается 7 декабря</string>
     <string name="Premium_SubscriptionPeriod_Month">месяц</string>
     <string name="Premium_SubscriptionPeriod_Year">год</string>
     <string name="Premium_SubscriptionPeriod_Annually">Ежегодно</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Ежемесячно</string>
-    <string name="Premium_SubscriptionPeriod_AnnuallySave">Сэкономьте 31%</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">Сэкономьте 50%</string>
+    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
+    <string name="Premium_SubscriptionPeriod_PerYear">в год</string>
+    <string name="Premium_SubscriptionPeriod_PerMonth">в месяц</string>
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
