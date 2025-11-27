@@ -758,7 +758,6 @@
     <string name="Premium_Title">프리미엄</string>
     <string name="Premium_ChoosePlanForYou">플랜 선택하기</string>
     <string name="Premium_EnjoyFreePeriod">첫 %s 무료로 이용하세요.</string>
-    <string name="Premium_CancelSubscriptionInfo">언제든지 구독을 취소할 수 있습니다.</string>
     <string name="Premium_GetFreePeriod">%s 무료로 받기</string>
     <string name="Premium_Subscribe">구독하기</string>
     <string name="Premium_AddPromoCode">프로모 코드 추가</string>
