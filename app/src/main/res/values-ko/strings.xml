@@ -499,6 +499,7 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">페어링된 모든 dAps를 삭제하시겠습니까?</string>
     <string name="WalletConnect_Pairings_Delete">삭제</string>
     <string name="WalletConnect_DeleteAllPairs">모든 쌍 삭제</string>
+    <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
