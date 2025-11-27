@@ -14,6 +14,7 @@ import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import java.time.Period
+import kotlin.math.ceil
 
 object BuySubscriptionModel {
 
@@ -81,11 +82,15 @@ object BuySubscriptionModel {
         }
     }
 
+    //Black Friday discounts
+    //Yearly 50%
+    //Monthly 20%
     val BasePlan.noteAmount: String?
         get() {
+            val phase = pricingPhases.last()
             return when {
-                pricingPhases.last().period.years > 0 -> "299.9"
-                pricingPhases.last().period.months > 0 -> "24.9"
+                phase.period.years > 0 -> getOriginalPrice(phase, 50.toDouble())
+                phase.period.months > 0 -> getOriginalPrice(phase, 20.toDouble())
                 else -> null
             }
         }
@@ -106,6 +111,19 @@ object BuySubscriptionModel {
                 else -> false
             }
         }
+
+    fun getOriginalPrice(phase: PricingPhase, discountPercent: Double): String {
+        val currencySymbol = phase.formattedPrice.takeWhile { !it.isDigit() }
+        val discountedPrice = phase.priceAmountMicros / 1_000_000.0
+
+        val originalPrice = discountedPrice / (1 - discountPercent / 100)
+
+        val rounded = ceil(originalPrice * 10) / 10.0
+
+        val priceStr =  rounded.toString().trimEnd('0').trimEnd('.')
+
+        return currencySymbol + priceStr
+    }
 
     //billing periods: P1M, P3M, P6M, P1Y
     private fun PricingPhase.period(): String {
