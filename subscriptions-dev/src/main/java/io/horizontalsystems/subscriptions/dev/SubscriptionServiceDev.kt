@@ -59,7 +59,7 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
                         PricingPhase(
                             formattedPrice = "$10.00",
                             billingPeriod = "P1M",
-                            priceAmountMicros = 10L,
+                            priceAmountMicros = 10000000L,
                             priceCurrencyCode = "USD"
                         )
                     ),
@@ -71,7 +71,7 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
                         PricingPhase(
                             formattedPrice = "$100.00",
                             billingPeriod = "P1Y",
-                            priceAmountMicros = 100L,
+                            priceAmountMicros = 100000000L,
                             priceCurrencyCode = "USD"
                         )
                     ),
