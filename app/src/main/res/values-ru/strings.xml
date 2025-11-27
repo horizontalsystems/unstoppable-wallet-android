@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Всё равно продолжить</string>
     <string name="Button_CopyAddress">Копировать адрес</string>
     <string name="Button_HideCoin">Скрыть монету</string>
+    <string name="Button_Approve">Разрешить</string>
     <string name="Attention_Title">Внимание</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
@@ -314,10 +315,12 @@
     <string name="Market_Vaults_Filter_USDYield">Выход в USD</string>
     <string name="Market_Vaults_OpenDapp">Открыть dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d цепочки</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Сеть</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Базовый токен</string>
     <string name="Market_Vaults_Vault_Holders">Держатели</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Мультичейн</string>
@@ -388,6 +391,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
     <string name="Balance_Zcash_Unified">Единый</string>
     <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
+    <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или служб, не поддерживающих единые адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
