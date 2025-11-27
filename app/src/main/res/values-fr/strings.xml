@@ -936,7 +936,7 @@
     <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Choisir le plan</string>
     <string name="Premium_EnjoyFreePeriod">Profitez des premiers %s GRATUITS.</string>
-    <string name="Premium_CancelSubscriptionInfo">Vous pouvez annuler votre abonnement à tout moment.</string>
+    <string name="Premium_CancelSubscriptionInfo">Annuler à tout moment</string>
     <string name="Premium_GetFreePeriod">Obtenez %s GRATUIT</string>
     <string name="Premium_Subscribe">S\'abonner</string>
     <string name="Premium_AddPromoCode">Ajouter un code promo</string>
@@ -950,6 +950,7 @@
     <string name="Premium_YouHaveActivatedPlan">Vous avez activé le plan %s.</string>
     <string name="Premium_GoToApp">Aller à l\'App</string>
     <string name="Premium_UpgradeText">Améliorez votre expérience avec les fonctionnalités Premium !</string>
+    <string name="Premium_Banner_BlackFridayText">Passez à la version Premium avec notre plus grande réduction de l\'année</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Profitez de toute la puissance de l\'application.</string>
     <string name="Premium_SelectSubscription">Sélectionner l\'abonnement</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Aperçus du jeton</string>
@@ -982,11 +983,15 @@
     <string name="Premium_HighlyRatedSecurity">Sécurité hautement évaluée, confidentialité exceptionnelle et un portefeuille véritablement non-custodial.</string>
     <string name="Premium_ApprovedBy">Approuvé et audité par :</string>
     <string name="Premium_WhatUsersSay">Ce que disent les utilisateurs :</string>
+    <string name="Premium_BlackFridayOfferEnds">L\'offre Black Friday se termine le 7 décembre</string>
     <string name="Premium_SubscriptionPeriod_Month">mois</string>
     <string name="Premium_SubscriptionPeriod_Year">année</string>
     <string name="Premium_SubscriptionPeriod_Annually">Annuellement</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Mensuellement</string>
-    <string name="Premium_SubscriptionPeriod_AnnuallySave">ÉCONOMISEZ 31%</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">ÉCONOMISEZ 50%</string>
+    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
+    <string name="Premium_SubscriptionPeriod_PerYear">par an</string>
+    <string name="Premium_SubscriptionPeriod_PerMonth">par mois</string>
     <string name="Appearance_MarketsTab">TAB DES MARCHÉS</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
