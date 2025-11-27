@@ -457,6 +457,7 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Eşleştirilmiş tüm dAps\'leri silmek istiyor musunuz?</string>
     <string name="WalletConnect_Pairings_Delete">Sil</string>
     <string name="WalletConnect_DeleteAllPairs">Hepsini sil</string>
+    <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Uyarı</string>
     <string name="EthereumTransaction_Error_Title">Hata</string>
