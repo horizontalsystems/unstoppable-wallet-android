@@ -1137,7 +1137,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Robbery Protection</string>
     <string name="Premium_UpgradeFeature_SecureSend">Secure Send</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Scam Protection</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">VIP Group</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">VIP Support</string>
     <string name="Premium_UpgradeFeature_LossProtection">Loss Protection</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Full analytics and data about tokens.</string>
@@ -1155,7 +1155,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Your crypto. Your security. Duress Mode lets you create multiple alternate wallet setups, each with a separate PIN, providing a hidden escape route in high-risk situations. If forced to unlock your wallet, simply use the duress PIN to access a secondary wallet with no critical assets exposed. Your real funds stay hidden. Your security stays intact.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Checks recipient wallets for phishing or fraud. Alerts you before sending to risky addresses.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Protect yourself from risky and sanctioned entities. Blacklist Checker automatically screens recipient addresses against high-risk databases, flagging scams, frauds, and sanctioned entities before you send. If an address is blacklisted, you’ll know before making a costly mistake. Secure your transactions. Keep your crypto clean. Stay compliant.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Be part of the evolution. Join the VIP Group to connect directly with our team for tech support. Vote on upcoming features, and get an exclusive first look at future updates. Your voice matters—help shape the next-gen crypto wallet.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Get priority access to our team. Chat directly with Unstoppable support for faster help, early insights, and guidance on upcoming features. Your feedback drives the evolution of the wallet — and we’re here to support you every step of the way.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Stops bots and front-running attacks during swaps. Keeps your transactions fair and secure.</string>
 
     <string name="Premium_DefenseSystem">Defense System</string>
