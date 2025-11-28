@@ -69,19 +69,21 @@ class SwapQuoteService {
     private var quotingJob: Job? = null
     private var settings: Map<String, Any?> = mapOf()
 
-    suspend fun start() {
-        allProviders.forEach {
-            try {
-                it.start()
-            } catch (e: Throwable) {
-                Log.d("AAA", "error on starting ${it.id}, $e", e)
+    fun start() {
+        coroutineScope.launch {
+            allProviders.forEach {
+                try {
+                    it.start()
+                } catch (e: Throwable) {
+                    Log.d("AAA", "error on starting ${it.id}, $e", e)
+                }
             }
+
+            initializing = false
+            emitState()
+
+            runQuotation()
         }
-
-        initializing = false
-        emitState()
-
-        runQuotation()
     }
 
     private fun emitState() {

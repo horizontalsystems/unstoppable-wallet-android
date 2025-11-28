@@ -46,9 +46,7 @@ class SwapViewModel(
     private var cautionViewItems = listOf<CautionViewItem>()
 
     init {
-        viewModelScope.launch {
-            quoteService.start()
-        }
+        quoteService.start()
 
         viewModelScope.launch {
             networkAvailabilityService.stateFlow.collect {
