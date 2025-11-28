@@ -41,6 +41,8 @@ import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHolder
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -302,7 +304,10 @@ private fun AnalyticsPreviewBlock(
             }
         },
         onClick = {
-            navController.slideFromBottom(R.id.buySubscriptionFragment)
+            navController.slideFromBottom(
+                R.id.defenseSystemFeatureDialog,
+                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature, true)
+            )
             stat(
                 page = StatPage.CoinAnalytics,
                 event = StatEvent.OpenPremium(block.statTrigger ?: StatPremiumTrigger.Other)
