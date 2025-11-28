@@ -1129,6 +1129,7 @@
     <string name="Premium_Banner_BlackFridayText">Upgrade to Premium with our biggest discount of the year</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Enjoy the full power of the app.</string>
     <string name="Premium_SelectSubscription">Select Subscription</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">One purchase unlocks all Premium features.</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights">Token Insights</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
