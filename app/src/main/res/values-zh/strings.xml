@@ -955,7 +955,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">脅迫模式</string>
     <string name="Premium_UpgradeFeature_SecureSend">詐騙防護</string>
     <string name="Premium_UpgradeFeature_ScamProtection">黑名單檢查</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">VIP群組</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">VIP 支持</string>
     <string name="Premium_UpgradeFeature_LossProtection">丢失保护</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">按關鍵標準獲取前100名列表</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
@@ -971,7 +971,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">您的加密貨幣。您的安全。脅迫模式讓您創建多個備用錢包設置，每個都有單獨的PIN碼，在高風險情況下提供隱藏的逃生路線。如果被迫解鎖您的錢包，只需使用脅迫PIN碼訪問次要錢包，不會暴露關鍵資產。您的真實資金保持隱藏。您的安全完好無損。</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">一個錯誤的地址，您的加密貨幣將永遠消失。Unstoppable自動掃描接收地址的可疑模式，防禦最新的網絡釣魚威脅，防止您向駭客發送資金。在詐騙交易發生前阻止它們。</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">保護自己免受風險和受制裁實體的侵害。黑名單檢查自動對照高風險數據庫篩選接收地址，在您發送前標記詐騙、欺詐和受制裁實體。如果一個地址被列入黑名單，您將在犯下代價高昂的錯誤前知道。保護您的交易。保持您的加密貨幣清潔。保持合規。</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">成為進化的一部分。加入 VIP 群組，直接與我們的團隊連接獲取技術支援。對即將推出的功能進行投票，搶先獨家了解未來更新。您的聲音很重要——幫助塑造下一代加密貨幣錢包。</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">获得优先访问我们团队的权限。直接与不可阻挡的支持聊天以获得更快的帮助、早期洞察力和即将到来的功能指导。 你的反馈推动钱包的进化——我们在这里支持你走路的每一步。</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">MEV 保护</string>
     <string name="Premium_DefenseSystem">防御系统</string>
     <string name="Premium_MarketInsights">市场洞察力</string>
