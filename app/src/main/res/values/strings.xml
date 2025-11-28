@@ -1012,7 +1012,7 @@
     <string name="Settings_Twitter" translatable="false">Twitter</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_Support">Support</string>
-    <string name="Settings_VipSupport">VIP Group</string>
+    <string name="Settings_VipSupport">VIP Support</string>
     <string name="Settings_BotSupport">BOT Support</string>
     <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 

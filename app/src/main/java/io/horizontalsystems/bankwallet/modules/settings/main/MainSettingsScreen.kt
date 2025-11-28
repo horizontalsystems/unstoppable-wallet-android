@@ -20,10 +20,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,7 +49,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.settings.banners.BlackFridayBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
-import io.horizontalsystems.bankwallet.modules.settings.vipsupport.VipSupportBottomSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -78,7 +73,6 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
-    var isVipSupportVisible by remember { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -91,16 +85,10 @@ fun SettingsScreen(
                 SettingSections(
                     viewModel = viewModel,
                     navController = navController,
-                    openVipSupport = {
-                        isVipSupportVisible = true
-                    })
+                    )
                 SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
             }
         }
-        VipSupportBottomSheet(
-            isBottomSheetVisible = isVipSupportVisible,
-            close = { isVipSupportVisible = false }
-        )
     }
 }
 
@@ -108,7 +96,6 @@ fun SettingsScreen(
 private fun SettingSections(
     viewModel: MainSettingsViewModel,
     navController: NavController,
-    openVipSupport: () -> Unit
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -331,7 +318,7 @@ private fun SettingSections(
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
                 } else {
                     navController.paidAction(PrioritySupport) {
-                        openVipSupport.invoke()
+                        LinkHelper.openLinkInAppBrowser(context, viewModel.vipSupportLink)
                     }
                 }
 
