@@ -951,7 +951,6 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Mode Contrainte</string>
     <string name="Premium_UpgradeFeature_SecureSend">Protection Anti-arnaques</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Vérification Liste Noire</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">Groupe VIP</string>
     <string name="Premium_UpgradeFeature_LossProtection">Protection contre la perte</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Accès aux listes top-100 selon des critères clés</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrage multi-niveaux sur plusieurs paramètres</string>
@@ -967,7 +966,6 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Vos cryptos. Votre sécurité. Le Mode sous Contrainte vous permet de créer plusieurs configurations alternatives de portefeuille, chacune avec un code PIN distinct, offrant une échappatoire cachée dans les situations à haut risque. Si vous êtes forcé de déverrouiller votre portefeuille, utilisez simplement le code PIN de contrainte pour accéder à un portefeuille secondaire sans exposer vos actifs critiques. Vos fonds réels restent cachés. Votre sécurité reste intacte.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Une seule adresse erronée, et vos cryptos disparaissent à jamais. Unstoppable analyse automatiquement les adresses des destinataires pour détecter les modèles suspects et vous protège contre les dernières menaces d\'hameçonnage, vous empêchant d\'envoyer des fonds à un pirate informatique. Bloquez les transferts frauduleux avant qu\'ils ne se produisent.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Protégez-vous des entités à risque et sous sanctions. Le Vérificateur de Liste Noire filtre automatiquement les adresses des destinataires par rapport aux bases de données à haut risque, signalant les arnaques, fraudes et entités sanctionnées avant tout envoi. Si une adresse est sur liste noire, vous le saurez avant de commettre une erreur coûteuse. Sécurisez vos transactions. Gardez vos cryptos propres. Restez conforme.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Faites partie de l\'évolution. Rejoignez le Groupe VIP pour communiquer directement avec notre équipe de support technique. Votez pour les fonctionnalités à venir et obtenez un aperçu exclusif des futures mises à jour. Votre voix compte — aidez-nous à façonner le portefeuille crypto de nouvelle génération.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Protection MEV</string>
     <string name="Premium_DefenseSystem">Système de défense</string>
     <string name="Premium_MarketInsights">Aperçus du marché</string>
