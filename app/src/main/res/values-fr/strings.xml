@@ -840,7 +840,7 @@
     <string name="Settings_AutoLock">Verrouillage automatique</string>
     <string name="Settings_JoinUnstoppables">Soyez Unstoppable</string>
     <string name="Settings_Support">Soutien</string>
-    <string name="Settings_VipSupport">GROUPE VIP</string>
+    <string name="Settings_VipSupport">Support VIP</string>
     <string name="Settings_BotSupport">Support BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Apprenez et maîtrisez les crypto-monnaies grâce à des vidéos exclusives. Faites connaissance avec nous de manière informelle. Soyez les premiers à voir les projets sur lesquels nous travaillons.</string>
     <string name="Settings_PersonalSupport">Assistance Personnelle</string>
@@ -944,6 +944,7 @@
     <string name="Premium_Banner_BlackFridayText">Passez à la version Premium avec notre plus grande réduction de l\'année</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Profitez de toute la puissance de l\'application.</string>
     <string name="Premium_SelectSubscription">Sélectionner l\'abonnement</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Un seul achat débloque toutes les fonctionnalités Premium.</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Analytique</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Recherche Avancée</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Signaux et Tendances</string>
