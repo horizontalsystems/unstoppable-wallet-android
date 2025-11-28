@@ -32,6 +32,9 @@ class MainSettingsViewModel(
     val fdroidSupportLink by lazy {
         appConfigProvider.simplexSupportChat
     }
+    val vipSupportLink by lazy {
+        appConfigProvider.telegramSupportChat
+    }
 
     val appVersion: String
         get() {
