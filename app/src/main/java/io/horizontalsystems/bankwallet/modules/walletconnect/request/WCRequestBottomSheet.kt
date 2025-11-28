@@ -185,7 +185,7 @@ fun WCRequestScreen(
                 onActivateClick = {
                     navController.slideFromBottom(
                         R.id.defenseSystemFeatureDialog,
-                        DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature, true)
+                        DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature, true)
                     )
                 }
             )
