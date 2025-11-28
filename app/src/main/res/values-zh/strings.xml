@@ -843,7 +843,7 @@
     <string name="Settings_AutoLock">自动锁定</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_Support">支持</string>
-    <string name="Settings_VipSupport">貴賓群組</string>
+    <string name="Settings_VipSupport">VIP 支持</string>
     <string name="Settings_BotSupport">BOT 支持</string>
     <string name="Settings_JoinUnstoppables_Description">通过独家视频学习和掌握加密。非正式地了解我们。成为第一个看看我们正在工作的事情。</string>
     <string name="Settings_PersonalSupport">个人支持</string>
@@ -948,6 +948,7 @@
     <string name="Premium_Banner_BlackFridayText">通过我们年度最大的折扣升级到高级版</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">一次购买将解锁所有高级功能。</string>
     <string name="Premium_UpgradeFeature_TokenInsights">代幣分析</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">進階搜尋</string>
     <string name="Premium_UpgradeFeature_TradeSignals">信號與趨勢</string>
@@ -1110,7 +1111,7 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
-    <string name="SettingsTerms_PrivacyNotice">应用没有间接或收集关于您的余额或交易的数据 — — 我们甚至不知道有多少人使用它。 它只跟踪匿名使用模式(打开的页面、点击的按钮)以提高可用性。您可以在设置 -> 隐私中关闭此功能。</string>
+    <string name="SettingsTerms_PrivacyNotice">应用没有间接或收集关于您的余额或交易的数据 — — 我们甚至不知道有多少人使用它。 它只跟踪匿名使用模式(打开的页面、点击的按钮)以提高可用性。您可以在设置 -&gt; 隐私中关闭此功能。</string>
     <string name="SettingsTerms_MonetizationDisclosure">作为其货币化模型的一部分，应用程序从钱包内执行的DEX交换器中赚取小佣金。 这有助于我们保持独立和公开的来源，并且没有VC资金。</string>
     <string name="SettingsTerms_OpenSource">应用程序是可验证的开源，所有源代码都在线发布。上面所述的一切都可以由任何人公开验证。</string>
     <!--Setting_Tell Friends-->

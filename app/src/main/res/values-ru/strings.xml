@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Всё равно продолжить</string>
     <string name="Button_CopyAddress">Копировать адрес</string>
     <string name="Button_HideCoin">Скрыть монету</string>
+    <string name="Button_Approve">Разрешить</string>
     <string name="Attention_Title">Внимание</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
@@ -314,10 +315,12 @@
     <string name="Market_Vaults_Filter_USDYield">Выход в USD</string>
     <string name="Market_Vaults_OpenDapp">Открыть dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d цепочки</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Сеть</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Базовый токен</string>
     <string name="Market_Vaults_Vault_Holders">Держатели</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Мультичейн</string>
@@ -388,6 +391,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
     <string name="Balance_Zcash_Unified">Единый</string>
     <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
+    <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или служб, не поддерживающих единые адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
@@ -847,7 +851,7 @@
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_Support">Поддержка</string>
-    <string name="Settings_VipSupport">VIP тех.поддержка</string>
+    <string name="Settings_VipSupport">VIP тех. поддержка</string>
     <string name="Settings_BotSupport">Поддержка BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
@@ -914,7 +918,7 @@
     <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Это помогает нам оставаться независимыми, защищая тысячи людей, которые отказываются идти на компромиссы в вопросах конфиденциальности</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Доступно только на F-Droid</string>
     <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Функции с приоритетом конфиденциальности — без отслеживания и ограничений.</string>
-    <string name="SettingsBanner_DonateFeatureFullAnalytics">Аналитика токенов в сети и вне её</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Доступ к топ-100 спискам по ключевым критериям</string>
     <string name="SettingsBanner_DonateFeaturePrivacy">Режим Duress Mode и дополнительная безопасность</string>
     <string name="SettingsBanner_DonateFeatureSignals">Продвинутая защита от фишинга</string>
     <string name="SettingsBanner_DonateFeatureAddress">Проверка черного списка адресов</string>
@@ -949,34 +953,39 @@
     <string name="Premium_YouHaveActivatedPlan">Вы активировали план %s.</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
     <string name="Premium_UpgradeText">Откройте новые возможности с Премиум-доступом!</string>
-    <string name="Premium_Banner_BlackFridayText">Обновите до Премиум с нашими крупнейшими скидками года</string>
+    <string name="Premium_Banner_BlackFridayText">Обновитесь до Премиум с нашей самой большой скидкой года</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Одна покупка открывает все премиум-функции.</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Аналитика</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Сигналы и тренды</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Режим Duress</string>
-    <string name="Premium_UpgradeFeature_SecureSend">Scam-защита</string>
-    <string name="Premium_UpgradeFeature_ScamProtection">Blacklist проверка</string>
+    <string name="Premium_UpgradeFeature_SecureSend">Безопасная отправка</string>
+    <string name="Premium_UpgradeFeature_ScamProtection">Scam-защита</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP группа</string>
     <string name="Premium_UpgradeFeature_LossProtection">Защита от потерь</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Авто-мониторинг рыночных трендов для ваших токенов</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Умная безопасность средств при физической угрозе</string>
-    <string name="Premium_UpgradeFeature_SecureSend_Description">Эффективная авто-защита против скам и фишинг-атак</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_Description">Гарантия легальности ваших крипто-операций</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Сохраняет средства, если вас заставили открыть приложение.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Предупреждает о рискованных адресах.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Сообщает, если сайт dApp - фальшивый.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Быстрый и удобный доступ к команде.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Защита MEV</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокого анализа. Просматривайте подборку Top 250 токенов на основе объема торгов, ликвидности бирж, поведения держателей и трендов в сети — все в одном месте. Фильтруйте, анализируйте и оставайтесь впереди.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отфильтруйте ненужное и очно сфокусируйтесь на токенах с высоким потенциалом. Используйте расширенный поиск для фильтрации тысяч токенов по объему торгов, блокчейну, капитализации, ценовым трендам, сектору и эффективности — и не только. Мощный, точный инструмент для поиска.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Не упускайте выгодные торговые возможности. Функция отслеживания трендов отправляет уведомления в режиме реального времени, основанные на сложном техническом анализе. Она поможет вам распознавать тенденции, видеть прорывы рынка и обходить подводные камни до того, как они возникнут. Реагируйте оперативно, ведите торговлю с умом и увеличивайте свою прибыль.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ваша криптовалюта. Ваша безопасность. Инновационный режим принуждения — это ваша невидимая страховка в критических ситуациях. Создавайте несколько версий вашего кошелька, каждую с уникальным PIN-кодом, обеспечивая себе секретный запасной выход при возникновении угрозы. Столкнулись с принуждением разблокировать ваш кошелек? Просто введите специальный PIN-код и получите доступ к запасному кошельку, оставляя ваши основные активы полностью защищенными и невидимыми. Ваши реальные средства в безопасности. Ваше спокойствие — бесценно.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Один неверный адрес, и ваша крипта потеряна навсегда. Unstoppable автоматически проверяет адреса получателей на подозрительные шаблоны и защищает от новейших фишинговых угроз, предотвращая отправку средств хакерам. Блокируйте мошеннические переводы до того, как они произойдут.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Защитите себя от рисковых и санкционированных контрагентов. Blacklist Checker автоматически проверяет адреса получателей по базам высокого риска, выявляя мошеннические схемы, fraudulent-транзакции и санкционированные объекты еще до отправки средств.Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">Блокирует действия ботов, ворующих средства во время свапов.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокой аналитики.
+Просматривайте отобранные списки топ-250 токенов на основе торгового объёма, ликвидности на биржах, поведения держателей и ончейн-трендов - всё в одном месте. Фильтруйте, анализируйте и оставайтесь на шаг впереди</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отбросьте лишний шум и сосредоточьтесь на токенах с высоким потенциалом. Используйте расширенный поиск, чтобы отфильтровать тысячи токенов по торговому объёму, блокчейну, рыночной капитализации, ценовым трендам, сектору и эффективности - и не только. Мощный, точный инструмент, созданный для поиска новых возможностей.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Больше никаких упущенных возможностей для торговли.
+Watch Trends отправляет уведомления в реальном времени, основанные на продвинутом техническом анализе, помогая вовремя замечать тренды, определять пробои и избегать рисков до того, как они возникнут. Действуйте быстро, торгуйте умно и максимизируйте прибыль.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ваша крипта. Ваша безопасность. Режим принуждения (Duress Mode) позволяет создавать несколько альтернативных конфигураций кошелька - каждая со своим собственным PIN-кодом. Это обеспечивает скрытый выход в экстренных ситуациях. Если вас заставят разблокировать кошелёк, просто используйте PIN режима принуждения - он откроет вторичный кошелёк без доступа к вашим основным активам. Ваши реальные средства останутся в безопасности и скрыты. Ваша защита останется надёжной.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса получателей на фишинг и мошенничество.
+Предупреждает перед отправкой средств на подозрительные адреса.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Защитите себя от рискованных и санкционированных адресов.
+Проверка по чёрным спискам (Blacklist Checker) автоматически сверяет адреса получателей с базами данных высокого риска, выявляя мошеннические, подозрительные и санкционированные адреса до отправки транзакции. Если адрес находится в чёрном списке - вы узнаете об этом заранее и избежите дорогостоящей ошибки. Обеспечьте безопасность своих переводов.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Станьте частью эволюции. Присоединитесь к VIP-группе для прямого взаимодействия с нашей командой по технической поддержке. Голосуйте за предстоящие функции и получайте эксклюзивный предварительный доступ к будущим обновлениям. Ваш голос имеет значение — помогите сформировать криптокошелек нового поколения.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Защита MEV</string>
-    <string name="Premium_DefenseSystem">Система Обороны</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Останавливает ботов и атак на передний план во время подкачки. Сохраняет ваши транзакции честно и безопасно.</string>
+    <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Рынки</string>
     <string name="Premium_Vip">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
@@ -1112,11 +1121,12 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">КОШЕЛЬКИ</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ПРОСМОТР КОШЕЛЬКА</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение не работает.</string>
-    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода разблокировки на смартфоне удаляет все кошельки из приложения. Для восстановления доступа к средствам потребуется восстановление фраз.</string>
-    <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах или транзакциях - мы даже не знаем, сколько людей используют их. Он отслеживает только анонимные шаблоны использования (страницы открыты, кнопки нажаты) для улучшения удобства использования. Вы можете отключить это в Настройках → Приватность.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">В рамках модели монетизации приложение заработало небольшие комиссионные от DEX выводов, выполненных в кошельке. Это помогает нам оставаться независимым, открытым исходным кодом и свободным от денег VC.</string>
-    <string name="SettingsTerms_OpenSource">Приложение проверяется с открытым исходным кодом и все исходные тексты публикуются в Интернете. Всё, о чем говорилось выше, может быть публично подтверждено кем угодно.</string>
+    <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение будет удалено, утеряно или выйдет из строя. Никто не сможет восстановить её за вас.</string>
+    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода (или пароля) разблокировки телефона полностью удалит все кошельки из приложения. Вам потребуется фраза восстановления, чтобы вернуть доступ.</string>
+    <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах и транзакциях - мы даже не знаем, сколько людей им пользуется.
+Оно фиксирует только анонимную статистику использования (открытые страницы, нажатия кнопок), чтобы улучшать интерфейс. Это можно отключить в Настройки → Конфиденциальность.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">В рамках своей модели монетизации приложение получает небольшие комиссии с DEX-свапов, выполненных внутри кошелька. Это помогает нам оставаться независимыми, открытым исходным кодом и без венчурного финансирования.</string>
+    <string name="SettingsTerms_OpenSource">Приложение имеет открытый исходный код, и всё, что указано выше, может быть публично проверено любым пользователем.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
