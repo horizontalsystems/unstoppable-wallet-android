@@ -954,7 +954,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Modo de Coação</string>
     <string name="Premium_UpgradeFeature_SecureSend">Proteção contra Fraudes</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Verificação de Lista Negra</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">Grupo VIP</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">Suporte VIP</string>
     <string name="Premium_UpgradeFeature_LossProtection">Proteção das Perdas</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Acesso às listas top-100 por critérios-chave</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtragem multinível em múltiplos parâmetros</string>
@@ -970,7 +970,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Sua cripto. Sua segurança. O Modo Coação permite que você crie várias configurações de carteira alternativas, cada uma com um PIN separado, fornecendo uma rota de fuga oculta em situações de alto risco. Se for forçado a desbloquear sua carteira, basta usar o PIN de coação (alternativo) para acessar uma carteira secundária sem ativos críticos expostos. Seus fundos reais permanecem ocultos. Sua segurança permanece intacta.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Um endereço errado e sua cripto se vai para sempre. A Unstoppable verifica automaticamente os endereços dos destinatários em busca de padrões suspeitos e defende contra as últimas ameaças de phishing, impedindo que você envie fundos para um hacker. Bloqueie transferências fraudulentas antes que elas aconteçam.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Proteja-se de entidades arriscadas e sancionadas. A Verificação de Lista Negra verifica automaticamente os endereços dos destinatários em relação a bancos de dados de alto risco, sinalizando golpes, fraudes e entidades sancionadas antes de você enviar. Se um endereço estiver na lista negra, você saberá antes de cometer um erro caro. Proteja suas transações. Mantenha sua criptomoeda limpa. Mantenha a conformidade.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Seja parte da evolução. Junte-se ao Grupo VIP para se conectar diretamente com nossa equipe de suporte técnico. Vote nas próximas funcionalidades e tenha uma prévia exclusiva das atualizações futuras. Sua voz importa—ajude a moldar a carteira de criptomoedas de próxima geração.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Tenha prioridade no acesso à nossa equipe. Converse diretamente com suporte Iparável para obter ajuda mais rápida, dicas e orientações em próximas funcionalidades. O seu feedback conduz à evolução da carteira — e estamos aqui para te apoiar a cada passo do caminho.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Proteção MEV</string>
     <string name="Premium_DefenseSystem">Sistema de defesa</string>
     <string name="Premium_MarketInsights">Insights de mercado</string>

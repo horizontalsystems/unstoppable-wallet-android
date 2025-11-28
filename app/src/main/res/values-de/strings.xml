@@ -949,7 +949,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Duress-Modus</string>
     <string name="Premium_UpgradeFeature_SecureSend">Scam-Schutz</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Blacklist-Prüfung</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">VIP-Gruppe</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">VIP Support</string>
     <string name="Premium_UpgradeFeature_LossProtection">Verlustschutz</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Zugriff auf Top-100 Listen nach Schlüsselkriterien</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Mehrere Ebenen filtern über mehrere Parameter</string>
@@ -965,7 +965,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ihr Krypto. Ihre Sicherheit. Mit dem Duress Mode können Sie mehrere alternative Wallet-Setups mit jeweils separater PIN erstellen, die eine versteckte Fluchtroute in hochriskanten Situationen bietet. Wenn Sie Ihre Brieftasche entsperren müssen, verwenden Sie einfach die erzwungene PIN, um auf eine sekundäre Brieftasche zuzugreifen, die keine kritischen Dateien enthüllt. Ihr echtes Geld bleibt verborgen. Ihre Sicherheit bleibt intakt.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Eine falsche Adresse und Ihre Kryptographie ist für immer verschwunden. Unaufhaltsam scannt die Empfängeradressen automatisch nach verdächtigen Mustern und verteidigt sich gegen die neuesten Phishing-Bedrohungen, was verhindert, dass Sie Geld an einen Hacker schicken. Blockieren Sie betrügerische Überweisungen, bevor sie passieren.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der schwarze Listen-Checker prüft die Empfängeradressen automatisch auf hochriskante Datenbanken, meldet Betrügereien, Betrügereien und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der schwarzen Liste steht, wissen Sie, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Krypto sauber.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Seien Sie Teil der Evolution. Treten Sie der VIP-Gruppe bei, um sich direkt mit unserem Team in Verbindung zu setzen, um technischen Support zu erhalten. Vote über kommende Funktionen und erhalte einen exklusiven ersten Blick auf zukünftige Updates. Deine Stimme zählt – hilf die nächste Krypto-Wallet zu formen.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Erhalten Sie bevorzugten Zugriff auf unser Team. Chatten Sie direkt mit unaufhaltsamem Support für schnellere Hilfe, frühzeitige Einblicke und Anleitung zu kommenden Features. Ihr Feedback treibt die Entwicklung der Brieftasche an – und wir sind hier, um Sie in jedem Schritt des Weges zu unterstützen.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">MEV-Schutz</string>
     <string name="Premium_DefenseSystem">Abwehrsystem</string>
     <string name="Premium_MarketInsights">Markteinsichten</string>

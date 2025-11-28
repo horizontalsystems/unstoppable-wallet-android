@@ -732,7 +732,6 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Tehdit Modu</string>
     <string name="Premium_UpgradeFeature_SecureSend">Dolandırıcılık Koruması</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Kara Liste Kontrolü</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">VIP Grubu</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Önemli kriterlere göre ilk 100 listelerine erişim</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Çoklu parametreler üzerinden çok seviyeli filtreleme</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Tokenleriniz için piyasa trendlerinin otomatik takibi</string>
@@ -746,7 +745,6 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Sizin kripto paranız. Sizin güvenliğiniz. Baskı Modu, her biri ayrı PIN ile birden fazla alternatif cüzdan kurulumu oluşturmanıza olanak tanır ve yüksek riskli durumlarda gizli bir kaçış yolu sağlar. Cüzdanınızın kilidini açmaya zorlanırsanız, kritik varlıklarınızı ifşa etmeden ikincil bir cüzdana erişmek için baskı PIN\'ini kullanmanız yeterlidir. Gerçek fonlarınız gizli kalır. Güvenliğiniz bozulmaz.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Yanlış bir adres ve kripto paranız sonsuza dek kaybolabilir. Unstoppable, alıcı adresleri şüpheli kalıplar için otomatik olarak tarar ve en son oltalama tehditlerine karşı savunma sağlayarak fonlarınızı bir bilgisayar korsanına göndermenizi önler. Gerçekleşmeden önce sahte transferleri engelleyin.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Kendinizi riskli ve yaptırım uygulanan kuruluşlardan koruyun. Kara Liste Kontrolcüsü, göndermeden önce alıcı adresleri yüksek riskli veritabanlarına karşı otomatik olarak tarar ve dolandırıcılık, sahtekarlık ve yaptırım uygulanan kuruluşları işaretler. Bir adres kara listeye alınmışsa, maliyetli bir hata yapmadan önce bileceksiniz. İşlemlerinizi güvence altına alın. Kripto paranızı temiz tutun. Uyumlu kalın.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Seja parte da evolução. Junte-se ao Grupo VIP para se conectar diretamente com nossa equipe de suporte técnico. Vote nas próximas funcionalidades e tenha uma prévia exclusiva das atualizações futuras. Sua voz importa—ajude a moldar a carteira de criptomoedas de próxima geração.</string>
     <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
     <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
     <string name="Premium_WhatUsersSay">Kullanıcılar ne diyor:</string>
