@@ -5,8 +5,10 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -16,17 +18,17 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
@@ -166,6 +168,19 @@ private fun DefenseSystemFeatureScreen(
                 text = stringResource(feature.descriptionRes),
                 textAlign = TextAlign.Center
             )
+            if (showAllFeaturesButton) {
+                subhead1_jacob(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.popBackStack()
+                            navController.slideFromBottom(R.id.buySubscriptionDialog)
+                        }
+                        .padding(horizontal = 32.dp, vertical = 12.dp),
+                    text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
         ButtonsStack {
             HSButton(
@@ -177,19 +192,6 @@ private fun DefenseSystemFeatureScreen(
                     navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
                 }
             )
-            if (showAllFeaturesButton) {
-                HSButton(
-                    title = stringResource(R.string.Premium_ViewAllFeatures),
-                    style = ButtonStyle.Transparent,
-                    variant = ButtonVariant.Secondary,
-                    size = ButtonSize.Medium,
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        navController.popBackStack()
-                        navController.slideFromBottom(R.id.buySubscriptionDialog)
-                    }
-                )
-            }
         }
     }
 }
