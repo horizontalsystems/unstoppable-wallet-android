@@ -366,7 +366,11 @@ class ZcashAdapter(
         val balancePending = balance.pending.convertZatoshiToZec(decimalCount)
         val balanceUnshielded = balance.unshielded.convertZatoshiToZec(decimalCount)
 
-        balanceData = BalanceData(balanceAvailable, balancePending, unshielded = balanceUnshielded)
+        balanceData = BalanceData(
+            available = balanceAvailable,
+            pending = balancePending,
+            unshielded = balanceUnshielded
+        )
 
         balanceUpdatedSubject.onNext(Unit)
     }
