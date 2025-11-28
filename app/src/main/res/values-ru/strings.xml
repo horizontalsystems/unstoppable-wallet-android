@@ -953,7 +953,7 @@
     <string name="Premium_YouHaveActivatedPlan">Вы активировали план %s.</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
     <string name="Premium_UpgradeText">Откройте новые возможности с Премиум-доступом!</string>
-    <string name="Premium_Banner_BlackFridayText">Обновите до Премиум с нашими крупнейшими скидками года</string>
+    <string name="Premium_Banner_BlackFridayText">Обновите до Премиум с нашей самой большой скидкой года</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Одна покупка открывает все премиум-функции.</string>
@@ -981,7 +981,7 @@
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Защитите себя от рисковых и санкционированных контрагентов. Blacklist Checker автоматически проверяет адреса получателей по базам высокого риска, выявляя мошеннические схемы, fraudulent-транзакции и санкционированные объекты еще до отправки средств.Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Станьте частью эволюции. Присоединитесь к VIP-группе для прямого взаимодействия с нашей командой по технической поддержке. Голосуйте за предстоящие функции и получайте эксклюзивный предварительный доступ к будущим обновлениям. Ваш голос имеет значение — помогите сформировать криптокошелек нового поколения.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Защита MEV</string>
-    <string name="Premium_DefenseSystem">Система Обороны</string>
+    <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Рынки</string>
     <string name="Premium_Vip">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
@@ -1117,11 +1117,12 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">КОШЕЛЬКИ</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ПРОСМОТР КОШЕЛЬКА</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение не работает.</string>
-    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода разблокировки на смартфоне удаляет все кошельки из приложения. Для восстановления доступа к средствам потребуется восстановление фраз.</string>
-    <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах или транзакциях - мы даже не знаем, сколько людей используют их. Он отслеживает только анонимные шаблоны использования (страницы открыты, кнопки нажаты) для улучшения удобства использования. Вы можете отключить это в Настройках → Приватность.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">В рамках модели монетизации приложение заработало небольшие комиссионные от DEX выводов, выполненных в кошельке. Это помогает нам оставаться независимым, открытым исходным кодом и свободным от денег VC.</string>
-    <string name="SettingsTerms_OpenSource">Приложение проверяется с открытым исходным кодом и все исходные тексты публикуются в Интернете. Всё, о чем говорилось выше, может быть публично подтверждено кем угодно.</string>
+    <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение будет удалено, утеряно или выйдет из строя. Никто не сможет восстановить её за вас.</string>
+    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода (или пароля) разблокировки телефона полностью удалит все кошельки из приложения. Вам потребуется фраза восстановления, чтобы вернуть доступ.</string>
+    <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах и транзакциях - мы даже не знаем, сколько людей им пользуется.
+Оно фиксирует только анонимную статистику использования (открытые страницы, нажатия кнопок), чтобы улучшать интерфейс. Это можно отключить в Настройки → Конфиденциальность.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">В рамках своей модели монетизации приложение получает небольшие комиссии с DEX-свапов, выполненных внутри кошелька. Это помогает нам оставаться независимыми, открытым исходным кодом и без венчурного финансирования.</string>
+    <string name="SettingsTerms_OpenSource">Приложение имеет открытый исходный код, и всё, что указано выше, может быть публично проверено любым пользователем.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
