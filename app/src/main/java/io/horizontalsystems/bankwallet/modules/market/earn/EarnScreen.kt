@@ -61,7 +61,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
-import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -127,12 +127,12 @@ fun MarketEarnScreen(
                                     protocolName = viewItem.protocolName,
                                     assetLogo = viewItem.assetLogo
                                 )
-                                navController.paidAction(AdvancedSearch) {
+                                navController.paidAction(TokenInsights) {
                                     navController.slideFromRight(R.id.vaultFragment, input)
                                 }
                             },
                             onGetPremiumClick = {
-                                navController.paidAction(AdvancedSearch) {
+                                navController.paidAction(TokenInsights) {
                                     //refresh page
                                 }
                             },
@@ -202,7 +202,7 @@ fun MarketEarnScreen(
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
                 openFilterSelector = false
-                navController.paidAction(AdvancedSearch) {
+                navController.paidAction(TokenInsights) {
                     scrollToTopAfterUpdate = true
                     viewModel.onFilterBySelected(selected)
                 }
@@ -218,7 +218,7 @@ fun MarketEarnScreen(
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
                 openPeriodSelector = false
-                navController.paidAction(AdvancedSearch) {
+                navController.paidAction(TokenInsights) {
                     scrollToTopAfterUpdate = true
                     viewModel.onApyPeriodSelected(selected)
                 }
@@ -234,7 +234,7 @@ fun MarketEarnScreen(
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->
                 openSortingSelector = false
-                navController.paidAction(AdvancedSearch) {
+                navController.paidAction(TokenInsights) {
                     scrollToTopAfterUpdate = true
                     viewModel.onSortingSelected(selected)
                 }

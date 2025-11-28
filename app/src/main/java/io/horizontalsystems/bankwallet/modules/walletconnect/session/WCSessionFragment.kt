@@ -32,7 +32,7 @@ import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.NetworksCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.ScamProtection
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.ScamProtectionCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WalletName
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -158,7 +158,7 @@ fun WCSessionPage(
 
                 val composableItems = mutableListOf<@Composable () -> Unit>().apply {
                     add {
-                        ScamProtection(
+                        ScamProtectionCell(
                             activated = uiState.hasSubscription,
                             whiteListState = uiState.whiteListState,
                             navController = navController

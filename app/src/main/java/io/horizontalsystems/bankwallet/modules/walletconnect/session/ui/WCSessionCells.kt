@@ -32,7 +32,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.ScamProtection
 
 @Composable
 fun BlockchainCell(
@@ -54,7 +54,7 @@ fun BlockchainCell(
 }
 
 @Composable
-fun ScamProtection(
+fun ScamProtectionCell(
     activated: Boolean,
     whiteListState: WCWhiteListState,
     navController: NavController,
@@ -103,7 +103,7 @@ fun ScamProtection(
             }
         },
         onClick = {
-            navController.paidAction(AdvancedSearch) {
+            navController.paidAction(ScamProtection) {
                 //show info bottom sheet
             }
         }

@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.parcelize.Parcelize
 
 class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
@@ -128,7 +128,7 @@ private fun FilterByBlockchainsScreen(
                             blockchain = item,
                             checked = item in selectedBlockchains,
                         ) {
-                            navController.paidAction(AdvancedSearch) {
+                            navController.paidAction(TokenInsights) {
                                 if (item in selectedBlockchains) {
                                     selectedBlockchains.remove(item)
                                 } else {

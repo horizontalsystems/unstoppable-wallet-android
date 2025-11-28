@@ -66,7 +66,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremium
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.subscriptions.core.PrioritySupport
-import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
@@ -334,7 +334,7 @@ private fun SettingSections(
             icon = R.drawable.ic_radar_24,
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
-                navController.paidAction(ScamProtection) {
+                navController.paidAction(SecureSend) {
                     navController.slideFromRight(R.id.addressCheckerFragment)
                 }
                 stat(
