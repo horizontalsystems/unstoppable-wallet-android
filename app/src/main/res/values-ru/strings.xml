@@ -851,7 +851,7 @@
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_Support">Поддержка</string>
-    <string name="Settings_VipSupport">VIP тех.поддержка</string>
+    <string name="Settings_VipSupport">Поддержка VIP</string>
     <string name="Settings_BotSupport">Поддержка BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
@@ -956,6 +956,7 @@
     <string name="Premium_Banner_BlackFridayText">Обновите до Премиум с нашими крупнейшими скидками года</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Одна покупка открывает все премиум-функции.</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Аналитика</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Сигналы и тренды</string>
