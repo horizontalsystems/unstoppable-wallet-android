@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -150,7 +151,7 @@ class TokenBalanceViewModel(
     }
 
     private fun handleZcashBalanceUpdate(balanceItem: BalanceModule.BalanceItem) {
-        if (balanceItem.state == AdapterState.Synced) {
+        if (balanceItem.state == AdapterState.Synced && balanceItem.balanceData.unshielded > ZcashAdapter.minimalShieldThreshold) {
             val unshielded = balanceItem.balanceData.unshielded
             val lastAlertedUnshieldedBalance = getLastAlertedUnshieldedBalance(wallet)
 

@@ -86,8 +86,6 @@ class ZcashAdapter(
 
     private val zcashAccount: Account
 
-    private val minimalShieldThreshold: BigDecimal = BigDecimal("0.0004") // minimal transparent balance to shielding
-
     override val receiveAddress: String
 
     override val receiveAddressTransparent: String?
@@ -454,6 +452,8 @@ class ZcashAdapter(
     }
 
     companion object {
+        val minimalShieldThreshold = BigDecimal("0.0004") // minimal transparent balance to shielding
+
         private const val ALIAS_PREFIX = "zcash_"
 
         private fun getValidAliasFromAccountId(accountId: String): String {
