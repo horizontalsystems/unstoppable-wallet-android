@@ -30,6 +30,7 @@ fun BottomSheetHeaderV3(
     image72: Painter? = null,
     image120: Painter? = null,
     image400: Painter? = null,
+    image400Background: Painter? = null,
     imageTint: Color = ComposeAppTheme.colors.grey,
     title: String,
     onCloseClick: (() -> Unit)? = null
@@ -69,11 +70,19 @@ fun BottomSheetHeaderV3(
             )
         }
 
-        image400?.let {
+        image400?.let { image ->
             Box() {
+                image400Background?.let { background ->
+                    Image(
+                        modifier = Modifier.fillMaxWidth(),
+                        painter = background,
+                        contentScale = ContentScale.FillWidth,
+                        contentDescription = null,
+                    )
+                }
                 Image(
                     modifier = Modifier.fillMaxWidth(),
-                    painter = it,
+                    painter = image,
                     contentScale = ContentScale.FillWidth,
                     contentDescription = null,
                 )
