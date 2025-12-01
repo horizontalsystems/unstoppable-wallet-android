@@ -2,13 +2,15 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
@@ -18,23 +20,37 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
-import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var hideContent: View
+    private lateinit var pinLockComposeView: ComposeView
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val viewModel by viewModels<MainActivityViewModel> {
         MainActivityViewModel.Factory()
     }
 
+    private var showPinLockScreen by mutableStateOf(false)
+
     override fun onResume() {
         super.onResume()
         validate()
         viewModel.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -48,7 +64,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-        hideContent = findViewById(R.id.hideContent)
+
+        pinLockComposeView = findViewById(R.id.pinLockComposeView)
 
         val navHost =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -72,9 +89,23 @@ class MainActivity : BaseActivity() {
                     is Wallet.Model.SessionRequest -> {
                         navController.slideFromBottom(R.id.wcRequestFragment)
                     }
+
                     is Wallet.Model.SessionProposal -> {
-                        navController.slideFromBottom(R.id.wcSessionFragment)
+                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
                     }
+
+                    is Wallet.Model.Error -> {
+                        navHost.view?.let {
+                            HudHelper.showErrorMessage(it, wcEvent.throwable.message ?: "Error")
+                        }
+                    }
+
+                    is Wallet.Model.SettledSessionResponse.Result -> {
+                        navHost.view?.let {
+                            HudHelper.showSuccessMessage(it, getString(R.string.Hud_Text_Connected))
+                        }
+                    }
+
                     else -> {}
                 }
 
@@ -107,18 +138,29 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.contentHidden.collect { hidden ->
-                    hideContent.visibility = if (hidden) View.VISIBLE else View.GONE
-                    if (hidden) {
-                        LockScreenActivity.start(this@MainActivity)
+        viewModel.setIntent(intent)
+
+        pinLockComposeView.setContent {
+            ComposeAppTheme {
+                PinUnlock(
+                    showPinLockScreen = showPinLockScreen,
+                    onSuccess = {
+                        showPinLockScreen = false
                     }
-                }
+                )
             }
         }
 
-        viewModel.setIntent(intent)
+        observeLockState()
+    }
+
+    private fun observeLockState() {
+        scope.launch {
+            App.pinComponent.isLockedFlow.collect { isLocked ->
+                showPinLockScreen = isLocked
+                pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
+            }
+        }
     }
 
     private fun closeAfterDelay() {

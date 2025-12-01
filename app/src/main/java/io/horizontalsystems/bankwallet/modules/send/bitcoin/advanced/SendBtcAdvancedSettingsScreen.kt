@@ -12,13 +12,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -39,11 +41,9 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -55,9 +55,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendBtcAdvancedSettingsScreen(
     fragmentNavController: NavController,
@@ -80,168 +82,163 @@ fun SendBtcAdvancedSettingsScreen(
     val viewModel: SendBtcAdvancedSettingsViewModel =
         viewModel(factory = SendBtcAdvancedSettingsModule.Factory(blockchainType))
 
-    val coroutineScope = rememberCoroutineScope()
-    val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val uiState = viewModel.uiState
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = modalBottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                BottomSheetTransactionOrderSelector(
-                    items = uiState.transactionSortOptions,
-                    onSelect = { mode ->
-                        viewModel.setTransactionMode(mode)
+        HSScaffold(
+            title = stringResource(R.string.Send_Advanced),
+            onBack = navController::popBackStack,
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Reset),
+                    onClick = {
+                        sendBitcoinViewModel.reset()
+                        viewModel.reset()
                     },
-                    onCloseClick = {
-                        coroutineScope.launch {
-                            modalBottomSheetState.hide()
-                        }
+                    tint = ComposeAppTheme.colors.jacob
+                )
+            )
+        ) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+
+                VSpacer(12.dp)
+                CellUniversalLawrenceSection(
+                    listOf {
+                        HSFeeRaw(
+                            coinCode = wallet.coin.code,
+                            coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
+                            fee = sendUiState.fee,
+                            amountInputType = amountInputType,
+                            rate = rate,
+                            navController = fragmentNavController
+                        )
                     }
                 )
-            },
-        ) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                topBar = {
-                    AppBar(
-                        title = stringResource(R.string.Send_Advanced),
-                        navigationIcon = {
-                            HsBackButton(onClick = { navController.popBackStack() })
+
+                if (feeRateVisible) {
+                    VSpacer(24.dp)
+                    EvmSettingsInput(
+                        title = stringResource(R.string.FeeSettings_FeeRate),
+                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                        value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                        decimals = 0,
+                        caution = feeRateCaution,
+                        navController = fragmentNavController,
+                        onValueChange = {
+                            sendBitcoinViewModel.updateFeeRate(it.toInt())
                         },
-                        menuItems = listOf(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Reset),
-                                onClick = {
-                                    sendBitcoinViewModel.reset()
-                                    viewModel.reset()
-                                },
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        )
+                        onClickIncrement = {
+                            sendBitcoinViewModel.incrementFeeRate()
+                        },
+                        onClickDecrement = {
+                            sendBitcoinViewModel.decrementFeeRate()
+                        }
+                    )
+                    InfoText(
+                        text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                     )
                 }
-            ) { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .verticalScroll(rememberScrollState())
-                ) {
 
-                    VSpacer(12.dp)
-                    CellUniversalLawrenceSection(
-                        listOf {
-                            HSFeeRaw(
-                                coinCode = wallet.coin.code,
-                                coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
-                                fee = sendUiState.fee,
-                                amountInputType = amountInputType,
-                                rate = rate,
-                                navController = fragmentNavController
-                            )
-                        }
-                    )
-
-                    if (feeRateVisible) {
-                        VSpacer(24.dp)
-                        EvmSettingsInput(
-                            title = stringResource(R.string.FeeSettings_FeeRate),
-                            info = stringResource(R.string.FeeSettings_FeeRate_Info),
-                            value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-                            decimals = 0,
-                            caution = feeRateCaution,
-                            navController = fragmentNavController,
-                            onValueChange = {
-                                sendBitcoinViewModel.updateFeeRate(it.toInt())
-                            },
-                            onClickIncrement = {
-                                sendBitcoinViewModel.incrementFeeRate()
-                            },
-                            onClickDecrement = {
-                                sendBitcoinViewModel.decrementFeeRate()
-                            }
-                        )
-                        InfoText(
-                            text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
-                        )
+                if (uiState.transactionSortingSupported) {
+                    VSpacer(24.dp)
+                    TransactionDataSortSettings(
+                        navController,
+                        wallet.coin.code,
+                        viewModel.uiState.transactionSortTitle,
+                    ) {
+                        showBottomSheet = true
                     }
+                }
 
-                    if (uiState.transactionSortingSupported) {
-                        VSpacer(24.dp)
-                        TransactionDataSortSettings(
-                            navController,
-                            wallet.coin.code,
-                            viewModel.uiState.transactionSortTitle,
-                        ) {
-                            coroutineScope.launch {
-                                modalBottomSheetState.show()
-                            }
-                        }
-                    }
-
-                    if (lockTimeEnabled) {
-                        VSpacer(32.dp)
-                        CellUniversalLawrenceSection(
-                            listOf {
-                                HSHodlerInput(
-                                    lockTimeIntervals = lockTimeIntervals,
-                                    lockTimeInterval = lockTimeInterval,
-                                    onSelect = {
-                                        sendBitcoinViewModel.onEnterLockTimeInterval(it)
-                                    }
-                                )
-                            }
-                        )
-                        InfoText(
-                            text = stringResource(R.string.Send_Hodler_Description),
-                        )
-                    }
-
+                if (lockTimeEnabled) {
                     VSpacer(32.dp)
                     CellUniversalLawrenceSection(
                         listOf {
-                            UtxoSwitch(
-                                enabled = uiState.utxoExpertModeEnabled,
-                                onChange = { viewModel.setUtxoExpertMode(it) }
+                            HSHodlerInput(
+                                lockTimeIntervals = lockTimeIntervals,
+                                lockTimeInterval = lockTimeInterval,
+                                onSelect = {
+                                    sendBitcoinViewModel.onEnterLockTimeInterval(it)
+                                }
                             )
                         }
                     )
                     InfoText(
-                        text = stringResource(R.string.Send_Utxo_Description),
+                        text = stringResource(R.string.Send_Hodler_Description),
                     )
+                }
 
-                    if (uiState.rbfVisible) {
-                        VSpacer(32.dp)
-                        CellUniversalLawrenceSection(
-                            listOf {
-                                RbfSwitch(
-                                    enabled = uiState.rbfEnabled,
-                                    onChange = { viewModel.setRbfEnabled(it) }
-                                )
-                            }
-                        )
-                        InfoText(
-                            text = stringResource(R.string.Send_Rbf_Description),
+                VSpacer(32.dp)
+                CellUniversalLawrenceSection(
+                    listOf {
+                        UtxoSwitch(
+                            enabled = uiState.utxoExpertModeEnabled,
+                            onChange = { viewModel.setUtxoExpertMode(it) }
                         )
                     }
+                )
+                InfoText(
+                    text = stringResource(R.string.Send_Utxo_Description),
+                )
 
+                if (uiState.rbfVisible) {
+                    VSpacer(32.dp)
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            RbfSwitch(
+                                enabled = uiState.rbfEnabled,
+                                onChange = { viewModel.setRbfEnabled(it) }
+                            )
+                        }
+                    )
                     InfoText(
                         text = stringResource(R.string.Send_Rbf_Description),
                     )
+                }
 
-                    feeRateCaution?.let {
-                        FeeRateCaution(
-                            modifier = Modifier.padding(
-                                start = 16.dp,
-                                end = 16.dp,
-                                top = 12.dp
-                            ),
-                            feeRateCaution = it
-                        )
-                    }
+                InfoText(
+                    text = stringResource(R.string.Send_Rbf_Description),
+                )
 
-                    VSpacer(32.dp)
+                feeRateCaution?.let {
+                    FeeRateCaution(
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            top = 12.dp
+                        ),
+                        feeRateCaution = it
+                    )
+                }
+
+                VSpacer(32.dp)
+            }
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState,
+                    containerColor = ComposeAppTheme.colors.transparent
+                ) {
+                    BottomSheetTransactionOrderSelector(
+                        items = uiState.transactionSortOptions,
+                        onSelect = { mode ->
+                            viewModel.setTransactionMode(mode)
+                        },
+                        onCloseClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -372,7 +369,10 @@ private fun TransactionDataSortSettings(
         }
     )
     InfoText(
-        text = stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription, coinCode),
+        text = stringResource(
+            R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription,
+            coinCode
+        ),
     )
 }
 

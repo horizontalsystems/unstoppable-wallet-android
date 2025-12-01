@@ -47,6 +47,8 @@ class TokenBalanceService(
             null -> TokenNotEnabled()
             is AdapterState.SearchingTxs -> WalletSyncing()
             is AdapterState.Syncing -> WalletSyncing()
+            is AdapterState.Downloading -> WalletSyncing()
+            is AdapterState.Connecting -> WalletSyncing()
             is AdapterState.NotSynced -> WalletNotSynced()
             AdapterState.Synced -> {
                 if (amount > balance) {

@@ -61,6 +61,7 @@ val Token.swappable: Boolean
         BlockchainType.Stellar,
         BlockchainType.Solana,
         BlockchainType.Tron,
+        BlockchainType.Zcash,
             -> true
 
         else -> false
@@ -197,7 +198,7 @@ val Blockchain.description: String
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
 fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
-fun Blockchain.assetUrl(code: String, issuer: String) = "https://stellarchain.io/assets/$code-$issuer"
+fun Blockchain.assetUrl(code: String, issuer: String) = "https://stellar.expert/explorer/public/asset/$code-$issuer"
 
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
@@ -346,7 +347,32 @@ val BlockchainType.isEvm: Boolean
 
 fun BlockchainType.supports(accountType: AccountType): Boolean {
     return when (accountType) {
-        is AccountType.Mnemonic -> true
+        is AccountType.Mnemonic -> {
+            when (this) {
+                BlockchainType.ArbitrumOne,
+                BlockchainType.Avalanche,
+                BlockchainType.Base,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Dash,
+                BlockchainType.ECash,
+                BlockchainType.Ethereum,
+                BlockchainType.Fantom,
+                BlockchainType.Gnosis,
+                BlockchainType.Litecoin,
+                BlockchainType.Monero,
+                BlockchainType.Optimism,
+                BlockchainType.Polygon,
+                BlockchainType.Solana,
+                BlockchainType.Stellar,
+                BlockchainType.Ton,
+                BlockchainType.Tron,
+                BlockchainType.Zcash,
+                BlockchainType.ZkSync -> true
+                is BlockchainType.Unsupported -> false
+            }
+        }
         is AccountType.HdExtendedKey -> {
             val coinTypes = accountType.hdExtendedKey.coinTypes
             when (this) {
@@ -538,15 +564,20 @@ val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
         TokenType.AddressType.Type145 -> BitcoinCashCoinType.type145
     }
 
+private val noBadgeCoinCodes by lazy {
+    listOf("AVAX", "XLM", "DASH", "ZEC", "XMR", "XEC", "POL", "SOL", "XDAI", "FTM")
+}
+
 val Token.badge: String?
-    get() = when (val tokenType = type) {
-        is TokenType.Derived -> {
+    get() {
+        val tokenType = type
+        return if (tokenType is TokenType.Native && noBadgeCoinCodes.contains(coin.code)) {
+            null
+        } else if (tokenType is TokenType.Derived) {
             tokenType.derivation.accountTypeDerivation.value.uppercase()
-        }
-        is TokenType.AddressTyped -> {
+        } else if (tokenType is TokenType.AddressTyped) {
             tokenType.type.bitcoinCashCoinType.value.uppercase()
-        }
-        else -> {
+        } else {
             protocolType?.replaceFirstChar(Char::uppercase)
         }
     }

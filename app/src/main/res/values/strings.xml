@@ -59,6 +59,7 @@
     <string name="Button_ContinueAnyway">Continue Anyway</string>
     <string name="Button_CopyAddress">Copy Address</string>
     <string name="Button_HideCoin">Hide Coin</string>
+    <string name="Button_Approve">Approve</string>
 
     <string name="Attention_Title">Attention</string>
 
@@ -407,8 +408,10 @@
     <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_SearchingTransactions">Searching transactions…</string>
+    <string name="Balance_Downloading">Downloading…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
+    <string name="Balance_BlocksRemaining">Blocks Remaining - %d</string>
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
@@ -420,6 +423,8 @@
     <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
     <string name="Balance_Receive_AddressFormatDescription">Choose a format for providing an address to receive.</string>
     <string name="Balance_Receive_AddressFormat">Address Format</string>
+    <string name="Balance_Receive_AddressType">Address Type</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">Choose how you want to receive Zcash.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">The Cash Address format is preferred for receiving Bitcoin Cash (BCH) due to its improved user experience and compatibility. However, both address formats can be used interchangeably to receive BCH, regardless of the sender\'s address format.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">The Native SegWit format is preferred in Bitcoin for improved throughput and security. All address formats (Taproot, SegWit, Legacy) can be used interchangeably to receive BTC regardless of the sender\'s address format, enabling seamless transactions across different coin types.</string>
     <string name="Balance_Receive_Account">Account</string>
@@ -447,11 +452,19 @@
     <string name="Balance_Receive_Subaddresses">Subadresses</string>
     <string name="Balance_Receive_SubaddressesInfo">Subaddresses let you use multiple unique addresses within one wallet for convenience and enhanced privacy.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transactions: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Have you previously owned any %s coins?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Yes, I already own</string>
+    <string name="Balance_Receive_IDontHave">No, I don\'t have</string>
 
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Detected Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparent balance can\'t be used in our wallet for now. But this money can be spend by other wallets with t-address supports</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
+    <string name="Balance_Zcash_Unified">Unified</string>
+    <string name="Balance_Zcash_UnifiedDescription">Use for personal and private transfers between wallets.</string>
+    <string name="Balance_Zcash_Transparent">Transparent</string>
+    <string name="Balance_Zcash_TransparentDescription">Use for receiving from exchanges or services that don’t support unified addresses.</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
@@ -619,7 +632,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Cannot transfer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Account Not Active</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">New TRON wallets require a deposit of at least 1 TRX to become active. Inactive wallets can hold and receive tokens but won’t correct balances until activated.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">New TRON wallets need at least 1 TRX to activate. Until then, they can receive tokens but won’t show correct balances.</string>
 
     <!--TonConnect-->
     <string name="TonConnect_Title" translatable="false">Ton Connect</string>
@@ -635,8 +648,8 @@
     <string name="WalletConnect_Url" translatable="false">URL</string>
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
-    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
-    <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
+    <string name="WalletConnect_Reconnect_Hint">Unable to connect using this link. Please double-check it and try again.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Invalid URL</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
@@ -671,9 +684,32 @@
     <string name="WalletConnect_Networks">Networks</string>
     <string name="WalletConnect_ConnectTo">Connect to %s</string>
     <string name="WalletConnect_ConnectedTo">Connected to %s</string>
+    <string name="WalletConnect_Disconnect">Disconnect %s</string>
     <string name="WalletConnect_WhiteListDeactivatedWarning">Scam Protection is deactivated. Domain verification is unavailable. Upgrade to Premium to protect against unverified or phishing websites.</string>
     <string name="WalletConnect_NotInWhiteListAlert">This website is not verified and may lead to phishing or loss of funds. Connecting is strongly discouraged.</string>
     <string name="WalletConnect_ConnectWarning">By clicking connect, you allow this app to view your public address.</string>
+    <string name="WalletConnect_Attention">Attention!</string>
+    <string name="WalletConnect_Danger">Danger!</string>
+    <string name="WalletConnect_Safe">Safe</string>
+    <string name="WalletConnect_Domain">Domain</string>
+    <string name="WalletConnect_Message">Message</string>
+    <string name="WalletConnect_Checking">Checking…</string>
+    <string name="WalletConnect_RequestFailed">Request Failed</string>
+    <string name="WalletConnect_AllowDapp">Allow %s</string>
+    <string name="WalletConnect_Value">Value</string>
+    <string name="WalletConnect_TokenAllowance">Token Allowance</string>
+    <string name="WalletConnect_ConfirmTransaction">Confirm Transaction</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s will be able to move these tokens on your behalf.</string>
+    <string name="WalletConnect_RequestFailedDescription">Something went wrong and the request couldn’t be completed</string>
+    <string name="WalletConnect_DisconnectWarning">Are you sure you want to remove this connection?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">You may connect to a fake site and lose funds. Turn me on to stay protected.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">This dApp is not verified. Connecting may put your funds at risk.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">I checked it. This dApp is secure to connect.</string>
+
+
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Title" translatable="false">DApp Connection</string>
+    <string name="DAppConnection_Requests">Requests</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
@@ -725,6 +761,7 @@
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Quoting</string>
+    <string name="Swap_Initializing">Initializing</string>
     <string name="Swap_Providers">Providers</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -775,6 +812,8 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">You Approve</string>
     <string name="Approve_YouRevoke">You Revoke</string>
+    <string name="Approve_Allowance">Allowance Amount</string>
+    <string name="Approve_Revoke">Revoke Amount</string>
 
 
     <!--Swap Unlock Access-->
@@ -911,8 +950,9 @@
 
     <string name="Info_LockTime_Title" translatable="false">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
+    <string name="Info_LockTime_NoDateDescription">The sender sent these funds with a spending lock that will expire on the shown date.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
 
-    <string name="Info_Reserved_Title">Reserved</string>
+    <string name="Info_Reserved_Title">Locked Balance</string>
     <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
     <string name="Info_Reserved_CurrentlyLocked">Currently locked:</string>
     <string name="Info_Reserved_WalletAction">Wallet activation</string>
@@ -972,7 +1012,7 @@
     <string name="Settings_Twitter" translatable="false">Twitter</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_Support">Support</string>
-    <string name="Settings_VipSupport">VIP Group</string>
+    <string name="Settings_VipSupport">VIP Support</string>
     <string name="Settings_BotSupport">BOT Support</string>
     <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 
@@ -1072,11 +1112,12 @@
     <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Choose the plan</string>
     <string name="Premium_EnjoyFreePeriod">Enjoy the first %s FREE.</string>
-    <string name="Premium_CancelSubscriptionInfo">You can cancel your subscription at any time.</string>
+    <string name="Premium_CancelSubscriptionInfo">Cancel any time</string>
     <string name="Premium_GetFreePeriod">Get %s FREE</string>
     <string name="Premium_Subscribe">Subscribe</string>
     <string name="Premium_AddPromoCode">Add Promo Code</string>
     <string name="Premium_TryForFree">Try for FREE</string>
+    <string name="Premium_ViewAllFeatures">View All Features</string>
     <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_Restore">Restore</string>
     <string name="Premium_Annually">Annually</string>
@@ -1085,45 +1126,55 @@
     <string name="Premium_YouHaveActivatedPlan">You have activated the %s plan.</string>
     <string name="Premium_GoToApp">Go to App</string>
     <string name="Premium_UpgradeText">Upgrade your experience with Premium features!</string>
+    <string name="Premium_Banner_BlackFridayText">Upgrade to Premium with our biggest discount of the year</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Enjoy the full power of the app.</string>
     <string name="Premium_SelectSubscription">Select Subscription</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">One purchase unlocks all Premium features.</string>
 
-    <string name="Premium_UpgradeFeature_TokenInsights">Analytics</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Token Insights</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
-    <string name="Premium_UpgradeFeature_TradeSignals">Signals and Trends</string>
-    <string name="Premium_UpgradeFeature_DuressMode">Duress Mode</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing">Scam Protection</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist Check</string>
-    <string name="Premium_UpgradeFeature_VipSupport">VIP Group</string>
-    <string name="Premium_UpgradeFeature_MevProtection">MEV Protection</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Trade Signals</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection">Robbery Protection</string>
+    <string name="Premium_UpgradeFeature_SecureSend">Secure Send</string>
+    <string name="Premium_UpgradeFeature_ScamProtection">Scam Protection</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">VIP Support</string>
+    <string name="Premium_UpgradeFeature_LossProtection">Loss Protection</string>
 
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Access to top-100 lists by key criteria</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Multi-level filtering across multiple parameters</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Auto-monitoring of market trends for your tokens</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">Smart fund security during physical threats</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Effective auto-protection against scams and phishing attacks</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Guarantee of legality for your crypto operations</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">Access to wallet team for quick tech support.</string>
-    <string name="Premium_UpgradeFeature_MevProtection_Description">MEV Protection</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Full analytics and data about tokens.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Custom filters for token searches.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Signals for confident trading.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Protects funds if you’re forced to open the app.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Warns you about risky addresses.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Lets you know if a dApp site is fake.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_Description">Direct chat.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">Stops bots from stealing in swaps.</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Your all-in-one tool for deep analysis. Browse curated Top 250 token lists based on trading volume, exchange liquidity, holder behavior, and on-chain trends—all at a glance. Filter, analyze, and stay ahead.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Ditch the noise and zero in on high-potential tokens with precision. Use Advanced Search to filter through thousands of tokens by trading volume, blockchain, market cap, price trends, sector, and performance—and more. Powerful, accurate, and built for discovery.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Never miss a trading opportunity again. Watch Trends delivers real-time alerts powered by advanced technical analysis, helping you identify trends, spot breakouts, and avoid pitfalls before they happen. Act fast, trade smart, and maximize gains.</string>
-    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Your crypto. Your security. Duress Mode lets you create multiple alternate wallet setups, each with a separate PIN, providing a hidden escape route in high-risk situations. If forced to unlock your wallet, simply use the duress PIN to access a secondary wallet with no critical assets exposed. Your real funds stay hidden. Your security stays intact.</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">One wrong address, and your crypto is gone forever. Unstoppable automatically scans recipient addresses for suspicious patterns and defends against the latest phishing threats, preventing you from sending funds to a hacker. Block fraudulent transfers before they happen.</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protect yourself from risky and sanctioned entities. Blacklist Checker automatically screens recipient addresses against high-risk databases, flagging scams, frauds, and sanctioned entities before you send. If an address is blacklisted, you’ll know before making a costly mistake. Secure your transactions. Keep your crypto clean. Stay compliant.</string>
-    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Be part of the evolution. Join the VIP Group to connect directly with our team for tech support. Vote on upcoming features, and get an exclusive first look at future updates. Your voice matters—help shape the next-gen crypto wallet.</string>
-    <string name="Premium_UpgradeFeature_MevProtection_BigDescription">MEV Protection</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Your crypto. Your security. Duress Mode lets you create multiple alternate wallet setups, each with a separate PIN, providing a hidden escape route in high-risk situations. If forced to unlock your wallet, simply use the duress PIN to access a secondary wallet with no critical assets exposed. Your real funds stay hidden. Your security stays intact.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Checks recipient wallets for phishing or fraud. Alerts you before sending to risky addresses.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Protect yourself from risky and sanctioned entities. Blacklist Checker automatically screens recipient addresses against high-risk databases, flagging scams, frauds, and sanctioned entities before you send. If an address is blacklisted, you’ll know before making a costly mistake. Secure your transactions. Keep your crypto clean. Stay compliant.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Get priority access to our team. Chat directly with Unstoppable support for faster help, early insights, and guidance on upcoming features. Your feedback drives the evolution of the wallet — and we’re here to support you every step of the way.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Stops bots and front-running attacks during swaps. Keeps your transactions fair and secure.</string>
+
+    <string name="Premium_DefenseSystem">Defense System</string>
+    <string name="Premium_MarketInsights">Market Insights</string>
+    <string name="Premium_Vip">VIP</string>
 
     <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
     <string name="Premium_ApprovedBy">Approved and Audited By:</string>
     <string name="Premium_WhatUsersSay">What users are saying:</string>
+    <string name="Premium_BlackFridayOfferEnds">Black Friday offer ends on December 7</string>
 
     <string name="Premium_SubscriptionPeriod_Month">month</string>
     <string name="Premium_SubscriptionPeriod_Year">year</string>
     <string name="Premium_SubscriptionPeriod_Annually">Annually</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Monthly</string>
-    <string name="Premium_SubscriptionPeriod_AnnuallySave">SAVE 31%</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">SAVE 50%</string>
+    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
+    <string name="Premium_SubscriptionPeriod_PerYear">per year</string>
+    <string name="Premium_SubscriptionPeriod_PerMonth">per month</string>
 
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
@@ -1279,8 +1330,11 @@
 
     <!--Setting_Terms-->
 
-    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
-    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_Backup">Securely back up the recovery phrase for each wallet. It’s the only way to regain access to your funds if the app is deleted, lost, or malfunctions. No one can restore it for you.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling your smartphone’s unlock PIN (or passcode) wipes all wallets from the app. You’ll need your recovery phrases to restore access.</string>
+    <string name="SettingsTerms_PrivacyNotice">The app doesn’t spy or collect data about your balances or transactions - we don’t even know how many people use it. It only tracks anonymous usage patterns (pages opened, buttons tapped) to improve usability. You can turn this off in Settings → Privacy.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">As part of its monetization model, the app earns small commissions from DEX swaps executed within the wallet. This helps us stay independent, open source, and free of VC money.</string>
+    <string name="SettingsTerms_OpenSource">The app is verifiably open source, with all source code published online. Everything stated above can be publicly verified by anyone.</string>
 
     <!--Setting_Tell Friends-->
 
@@ -1533,7 +1587,8 @@
 
     <!-- Address Format Settings List -->
 
-    <string name="AddressFormatSettings_Description">Select address format for receiving payments. A correct format should be chosen when restoring an existing wallet.</string>
+    <string name="AddressFormatSettings_Description">Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
+    <string name="AddressFormatSettings_Subtitle">Select address format for the coin.</string>
 
     <!-- Coin Platforms -->
 
@@ -1864,6 +1919,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
     <string name="BalanceSyncError_Text">Sync error</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Failed to fetch data from the current source. You can retry or switch to a different sync source.</string>
+    <string name="BalanceSyncError_ErrorText">Failed to fetch data from the current source. Please try again later.</string>
 
     <!--Release notes-->
 

@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin
 
 import android.os.Parcelable
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,16 +39,14 @@ import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -131,149 +128,147 @@ class ResendBitcoinFragment : BaseComposeFragment() {
             }
         }
 
-        Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(uiState.titleResId),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf()
-            )
-
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 106.dp)
-            ) {
-                VSpacer(height = 12.dp)
-                val topSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        SectionTitleCell(
-                            stringResource(R.string.Send_Confirmation_YouSend),
-                            uiState.coin.name,
-                            R.drawable.ic_arrow_up_right_12
-                        )
-                    }
-                    add {
-                        val coinAmount = App.numberFormatter.formatCoinFull(
-                            uiState.amount,
-                            uiState.coin.code,
-                            uiState.coinMaxAllowedDecimals
-                        )
-
-                        val currencyAmount = uiState.coinRate?.let { rate ->
-                            rate.copy(value = uiState.amount.times(rate.value))
-                                .getFormattedFull()
+        HSScaffold(
+            title = stringResource(uiState.titleResId),
+            onBack = navController::popBackStack,
+        ) {
+            Column {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .weight(1f)
+                        .padding(bottom = 106.dp)
+                ) {
+                    VSpacer(height = 12.dp)
+                    val topSectionItems = buildList<@Composable () -> Unit> {
+                        add {
+                            SectionTitleCell(
+                                stringResource(R.string.Send_Confirmation_YouSend),
+                                uiState.coin.name,
+                                R.drawable.ic_arrow_up_right_12
+                            )
                         }
+                        add {
+                            val coinAmount = App.numberFormatter.formatCoinFull(
+                                uiState.amount,
+                                uiState.coin.code,
+                                uiState.coinMaxAllowedDecimals
+                            )
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
-                    }
-                    add {
-                        TransactionInfoAddressCell(
-                            title = stringResource(uiState.addressTitleResId),
-                            value = uiState.address.hex,
-                            showAdd = uiState.contact == null,
-                            blockchainType = uiState.blockchainType,
-                            navController = navController,
-                            onCopy = {
-                                stat(
-                                    page = StatPage.Resend,
-                                    event = StatEvent.Copy(StatEntity.Address),
-                                    section = StatSection.AddressTo
-                                )
-                            },
-                            onAddToExisting = {
-                                stat(
-                                    page = StatPage.Resend,
-                                    event = StatEvent.Open(StatPage.ContactAddToExisting),
-                                    section = StatSection.AddressTo
-                                )
-                            },
-                            onAddToNew = {
-                                stat(
-                                    page = StatPage.Resend,
-                                    event = StatEvent.Open(StatPage.ContactNew),
-                                    section = StatSection.AddressTo
-                                )
+                            val currencyAmount = uiState.coinRate?.let { rate ->
+                                rate.copy(value = uiState.amount.times(rate.value))
+                                    .getFormattedFull()
                             }
-                        )
-                    }
-                    uiState.contact?.let {
+
+                            ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
+                        }
                         add {
-                            TransactionInfoContactCell(name = it.name)
+                            TransactionInfoAddressCell(
+                                title = stringResource(uiState.addressTitleResId),
+                                value = uiState.address.hex,
+                                showAdd = uiState.contact == null,
+                                blockchainType = uiState.blockchainType,
+                                navController = navController,
+                                onCopy = {
+                                    stat(
+                                        page = StatPage.Resend,
+                                        event = StatEvent.Copy(StatEntity.Address),
+                                        section = StatSection.AddressTo
+                                    )
+                                },
+                                onAddToExisting = {
+                                    stat(
+                                        page = StatPage.Resend,
+                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                        section = StatSection.AddressTo
+                                    )
+                                },
+                                onAddToNew = {
+                                    stat(
+                                        page = StatPage.Resend,
+                                        event = StatEvent.Open(StatPage.ContactNew),
+                                        section = StatSection.AddressTo
+                                    )
+                                }
+                            )
+                        }
+                        uiState.contact?.let {
+                            add {
+                                TransactionInfoContactCell(name = it.name)
+                            }
+                        }
+                        if (uiState.lockTimeInterval != null) {
+                            add {
+                                HSHodler(lockTimeInterval = uiState.lockTimeInterval)
+                            }
+                        }
+
+                        add {
+                            TitleAndValueCell(
+                                title = stringResource(R.string.TransactionInfoOptions_Rbf_ReplacedTransactions),
+                                value = uiState.replacedTransactionHashes.size.toString()
+                            )
+                        }
+
+                    }
+
+                    CellUniversalLawrenceSection(topSectionItems)
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    val bottomSectionItems = buildList<@Composable () -> Unit> {
+                        add {
+                            HSFeeRaw(
+                                coinCode = uiState.feeCoin.code,
+                                coinDecimal = uiState.coinMaxAllowedDecimals,
+                                fee = uiState.fee,
+                                amountInputType = AmountInputType.COIN,
+                                rate = uiState.coinRate,
+                                navController = navController
+                            )
                         }
                     }
-                    if (uiState.lockTimeInterval != null) {
-                        add {
-                            HSHodler(lockTimeInterval = uiState.lockTimeInterval)
+
+                    CellUniversalLawrenceSection(bottomSectionItems)
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    EvmSettingsInput(
+                        title = stringResource(R.string.TransactionInfoOptions_Rbf_FeeTitle),
+                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                        value = uiState.minFee.toBigDecimal(),
+                        decimals = 0,
+                        caution = uiState.feeCaution,
+                        navController = navController,
+                        onValueChange = {
+                            resendViewModel.setMinFee(it.toLong())
+                        },
+                        onClickIncrement = {
+                            resendViewModel.incrementMinFee()
+                        },
+                        onClickDecrement = {
+                            resendViewModel.decrementMinFee()
                         }
-                    }
-
-                    add {
-                        TitleAndValueCell(
-                            title = stringResource(R.string.TransactionInfoOptions_Rbf_ReplacedTransactions),
-                            value = uiState.replacedTransactionHashes.size.toString()
-                        )
-                    }
-
-                }
-
-                CellUniversalLawrenceSection(topSectionItems)
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRaw(
-                            coinCode = uiState.feeCoin.code,
-                            coinDecimal = uiState.coinMaxAllowedDecimals,
-                            fee = uiState.fee,
-                            amountInputType = AmountInputType.COIN,
-                            rate = uiState.coinRate,
-                            navController = navController
-                        )
-                    }
-                }
-
-                CellUniversalLawrenceSection(bottomSectionItems)
-
-                Spacer(modifier = Modifier.height(24.dp))
-                EvmSettingsInput(
-                    title = stringResource(R.string.TransactionInfoOptions_Rbf_FeeTitle),
-                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
-                    value = uiState.minFee.toBigDecimal(),
-                    decimals = 0,
-                    caution = uiState.feeCaution,
-                    navController = navController,
-                    onValueChange = {
-                        resendViewModel.setMinFee(it.toLong())
-                    },
-                    onClickIncrement = {
-                        resendViewModel.incrementMinFee()
-                    },
-                    onClickDecrement = {
-                        resendViewModel.decrementMinFee()
-                    }
-                )
-
-                uiState.feeCaution?.let {
-                    FeeRateCaution(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp),
-                        feeRateCaution = it
                     )
-                }
-            }
 
-            Spacer(modifier = Modifier.weight(1f))
-            ResendButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                titleResId = uiState.sendButtonTitleResId,
-                error =  uiState.feeCaution?.type == HSCaution.Type.Error,
-                sendResult = uiState.sendResult,
-                onClickSend = resendViewModel::onClickSend
-            )
+                    uiState.feeCaution?.let {
+                        FeeRateCaution(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp),
+                            feeRateCaution = it
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+                ResendButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                    titleResId = uiState.sendButtonTitleResId,
+                    error = uiState.feeCaution?.type == HSCaution.Type.Error,
+                    sendResult = uiState.sendResult,
+                    onClickSend = resendViewModel::onClickSend
+                )
+            }
         }
     }
 

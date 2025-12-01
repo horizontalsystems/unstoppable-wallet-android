@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.adapters.BaseTonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
-import io.horizontalsystems.bankwallet.core.adapters.TonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -304,7 +304,7 @@ class AppStatusViewModel(
 
         walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
             ?.let { wallet ->
-                adapterManager.getAdapterForWallet<TonAdapter>(wallet)?.let { adapter ->
+                adapterManager.getAdapterForWallet<BaseTonAdapter>(wallet)?.let { adapter ->
                     val title = if (blocks.isEmpty()) "Blockchain Status" else null
                     val block = getBlockchainInfoBlock(title, "Ton", adapter.statusInfo)
                     blocks.add(block)

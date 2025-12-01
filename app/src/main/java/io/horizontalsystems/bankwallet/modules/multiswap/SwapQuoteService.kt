@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.QuickSwapProv
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableProvider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,12 +37,14 @@ class SwapQuoteService {
         ThorChainProvider,
         MayaProvider,
         AllBridgeProvider,
+        UnstoppableProvider,
     )
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
     private var tokenOut: Token? = null
     private var quoting = false
+    private var initializing = true
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: IMultiSwapProvider? = null
     private var error: Throwable? = null
@@ -52,6 +55,7 @@ class SwapQuoteService {
             amountIn = amountIn,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
+            initializing = initializing,
             quoting = quoting,
             quotes = quotes,
             preferredProvider = preferredProvider,
@@ -65,13 +69,20 @@ class SwapQuoteService {
     private var quotingJob: Job? = null
     private var settings: Map<String, Any?> = mapOf()
 
-    suspend fun start() {
-        allProviders.forEach {
-            try {
-                it.start()
-            } catch (e: Throwable) {
-                Log.d("AAA", "error on starting ${it.id}, $e", e)
+    fun start() {
+        coroutineScope.launch {
+            allProviders.forEach {
+                try {
+                    it.start()
+                } catch (e: Throwable) {
+                    Log.d("AAA", "error on starting ${it.id}, $e", e)
+                }
             }
+
+            initializing = false
+            emitState()
+
+            runQuotation()
         }
     }
 
@@ -81,6 +92,7 @@ class SwapQuoteService {
                 amountIn = amountIn,
                 tokenIn = tokenIn,
                 tokenOut = tokenOut,
+                initializing = initializing,
                 quoting = quoting,
                 quotes = quotes,
                 preferredProvider = preferredProvider,
@@ -98,6 +110,8 @@ class SwapQuoteService {
         error = null
 
         emitState()
+
+        if (initializing) return
 
         val tokenIn = tokenIn
         val tokenOut = tokenOut
@@ -238,6 +252,7 @@ class SwapQuoteService {
         val amountIn: BigDecimal?,
         val tokenIn: Token?,
         val tokenOut: Token?,
+        val initializing: Boolean,
         val quoting: Boolean,
         val quotes: List<SwapProviderQuote>,
         val preferredProvider: IMultiSwapProvider?,

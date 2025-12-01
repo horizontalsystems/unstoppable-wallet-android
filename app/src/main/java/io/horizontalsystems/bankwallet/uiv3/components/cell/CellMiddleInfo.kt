@@ -9,11 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 
 @Composable
 fun CellMiddleInfo(
     eyebrow: HSString? = null,
-    title: HSString,
+    title: HSString? = null,
     badge: HSString? = null,
     subtitleBadge: HSString? = null,
     subtitle: HSString? = null,
@@ -33,14 +34,21 @@ fun CellMiddleInfo(
             horizontalArrangement = spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = title.text,
-                style = ComposeAppTheme.typography.headline2,
-                color = title.color ?: ComposeAppTheme.colors.leah,
-            )
+            title?.let {
+                Text(
+                    text = it.text,
+                    style = ComposeAppTheme.typography.headline2,
+                    color = it.color ?: ComposeAppTheme.colors.leah,
+                )
+            }
 
             badge?.let {
-                Badge(text = it.text)
+                val textColor = if (it.color == ComposeAppTheme.colors.remus) ComposeAppTheme.colors.lawrence else ComposeAppTheme.colors.leah
+                BadgeText(
+                    text = it.text,
+                    background = it.color ?: ComposeAppTheme.colors.blade,
+                    textColor = textColor,
+                )
             }
         }
 

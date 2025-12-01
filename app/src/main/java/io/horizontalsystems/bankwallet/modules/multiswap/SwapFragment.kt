@@ -24,7 +24,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -73,7 +72,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapPro
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -82,7 +80,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -98,6 +95,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -200,35 +198,24 @@ private fun SwapScreenInner(
 
     val quote = uiState.quote
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Swap),
-                navigationIcon = {
-                    HsBackButton(onClick = onClickClose)
-                },
-                menuItems = buildList {
-                    uiState.timeRemainingProgress?.let { timeRemainingProgress ->
-                        add(
-                            MenuItemTimeoutIndicator(timeRemainingProgress)
-                        )
-                    }
-                }
-            )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+    HSScaffold(
+        title = stringResource(R.string.Swap),
+        onBack = onClickClose,
+        menuItems = buildList {
+            uiState.timeRemainingProgress?.let { timeRemainingProgress ->
+                add(
+                    MenuItemTimeoutIndicator(timeRemainingProgress)
+                )
+            }
+        }
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
         var amountInputHasFocus by remember { mutableStateOf(false) }
 
-        Box(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 VSpacer(height = 12.dp)
                 SwapInput(
@@ -280,6 +267,18 @@ private fun SwapScreenInner(
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
                             title = stringResource(R.string.Swap_Quoting),
+                            enabled = false,
+                            loadingIndicator = true,
+                            onClick = {}
+                        )
+                    }
+
+                    SwapStep.Initializing -> {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.Swap_Initializing),
                             enabled = false,
                             loadingIndicator = true,
                             onClick = {}
@@ -450,8 +449,7 @@ fun PriceImpactField(
                         },
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    )
-                ,
+                    ),
                 painter = painterResource(id = R.drawable.ic_info_20),
                 contentDescription = ""
             )
@@ -755,7 +753,7 @@ fun FiatAmountInput(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal
             ),
-            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
                     body_grey(text = "0")
@@ -858,7 +856,7 @@ fun AmountInput(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Decimal
         ),
-        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
                 headline1_grey(text = "0")

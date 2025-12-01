@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,15 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -36,18 +31,17 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
-import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
@@ -62,10 +56,10 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     val context = LocalContext.current
-    val modalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState()
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    var isWCInvalidUrlBottomSheetVisible by remember { mutableStateOf(false) }
 
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -84,10 +78,10 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
     when (viewModel.connectionResult) {
         WalletConnectListViewModel.ConnectionResult.Error -> {
             LaunchedEffect(viewModel.connectionResult) {
-                coroutineScope.launch {
+                scope.launch {
                     delay(300)
-                    modalBottomSheetState.show()
-                    isBottomSheetVisible = true
+                    sheetState.show()
+                    isWCInvalidUrlBottomSheetVisible = true
                 }
             }
             viewModel.onHandleRoute()
@@ -96,8 +90,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
         else -> Unit
     }
 
-
-    BackupAlert(navController)
+    BackupRequiredAlert(navController)
     val uiState = viewModel.uiState
 
     HSScaffold(
@@ -169,37 +162,26 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             }
         }
     }
-    if (isBottomSheetVisible) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                isBottomSheetVisible = false
-            },
-            sheetState = modalBottomSheetState,
-            containerColor = ComposeAppTheme.colors.transparent
-        ) {
-            ConfirmationBottomSheet(
-                title = stringResource(R.string.WalletConnect_Title),
-                text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
-                iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                confirmText = stringResource(R.string.Button_TryAgain),
-                cautionType = Caution.Type.Warning,
-                cancelText = stringResource(R.string.Button_Cancel),
-                onConfirm = {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                        isBottomSheetVisible = false
-                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
-                    }
-                },
-                onClose = {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                        isBottomSheetVisible = false
+    if (isWCInvalidUrlBottomSheetVisible) {
+        WCInvalidUrlBottomSheet(
+            sheetState = sheetState,
+            onConfirm = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        isWCInvalidUrlBottomSheetVisible = false
                     }
                 }
-            )
-        }
+
+                qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+            },
+            onDismiss = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        isWCInvalidUrlBottomSheetVisible = false
+                    }
+                }
+            }
+        )
     }
 }
 

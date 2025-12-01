@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
-import io.horizontalsystems.subscriptions.core.DuressMode
+import io.horizontalsystems.subscriptions.core.RobberyProtection
 
 @Composable
 fun DuressPasscodeBlock(
@@ -56,7 +56,7 @@ fun DuressPasscodeBlock(
                 )
             },
             onClick = {
-                navController.paidAction(DuressMode) {
+                navController.paidAction(RobberyProtection) {
                     if (uiState.pinEnabled) {
                         navController.authorizedAction {
                             if (uiState.duressPinEnabled) {

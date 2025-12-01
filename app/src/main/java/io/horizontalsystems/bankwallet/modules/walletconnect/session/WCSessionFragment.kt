@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,11 +32,9 @@ import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.NetworksCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.ScamProtection
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.ScamProtectionCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WalletName
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -48,6 +45,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
@@ -57,7 +55,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderAndy
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionIsolated
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -110,21 +108,137 @@ fun WCSessionPage(
         if (uiState.connected) R.string.WalletConnect_ConnectedTo else R.string.WalletConnect_ConnectTo
     val connectedDAppName = stringResource(connectionTitleRes, uiState.peerMeta?.name ?: "")
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.WalletConnect_Title),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+    HSScaffold(
+        title = stringResource(R.string.WalletConnect_Title),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = navController::popBackStack
             )
-        },
-        bottomBar = {
+        )
+    ) {
+        Column {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(96.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+                        painter = rememberAsyncImagePainter(
+                            model = uiState.peerMeta?.icon,
+                            error = painterResource(R.drawable.ic_platform_placeholder_24)
+                        ),
+                        contentDescription = null,
+                    )
+                }
+                headline1_leah(
+                    text = connectedDAppName,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                subhead_grey(
+                    text = uiState.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: "",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                VSpacer(24.dp)
+
+                val composableItems = mutableListOf<@Composable () -> Unit>().apply {
+                    add {
+                        ScamProtectionCell(
+                            activated = uiState.hasSubscription,
+                            whiteListState = uiState.whiteListState,
+                            navController = navController
+                        )
+                    }
+                    add {
+                        WalletName(uiState.peerMeta?.accountName ?: "")
+                    }
+                    add {
+                        NetworksCell(
+                            blockchainTypes = uiState.blockchainTypes,
+                            onClick = {
+                                navController.slideFromBottom(
+                                    R.id.wcNetworksFragment,
+                                    WCNetworksFragment.Input(uiState.blockchainTypes ?: emptyList())
+                                )
+                            }
+                        )
+                    }
+                }
+
+                val pendingRequests = uiState.pendingRequests
+                if (pendingRequests.isNotEmpty()) {
+                    SectionHeaderAndy(stringResource(R.string.WalletConnect_PendingRequests))
+                    SectionIsolated(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        pendingRequests.forEachIndexed { index, item ->
+                            CellPrimary(
+                                middle = {
+                                    CellMiddleInfo(
+                                        title = item.title.hs,
+                                        subtitle = item.subtitle.hs,
+                                    )
+                                },
+                                right = {
+                                    CellRightNavigation()
+                                },
+                                onClick = {
+                                    viewModel.setRequestToOpen(item.request)
+                                    navController.slideFromBottom(R.id.wcRequestFragment)
+                                }
+                            )
+                            if (index < pendingRequests.size - 1) {
+                                HsDivider()
+                            }
+                        }
+                    }
+                    VSpacer(16.dp)
+                }
+
+                AlertMessage(uiState)
+
+                SectionIsolated(
+                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                ) {
+                    composableItems.forEachIndexed { index, item ->
+                        item.invoke()
+                        if (index < composableItems.size - 1) {
+                            HsDivider()
+                        }
+                    }
+                }
+
+                if (!uiState.connected) {
+                    TextBlock(
+                        stringResource(R.string.WalletConnect_ConnectWarning)
+                    )
+                    VSpacer(12.dp)
+                }
+
+                uiState.hint?.let {
+                    VSpacer(12.dp)
+                    TextImportantWarning(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = it
+                    )
+                }
+                VSpacer(24.dp)
+            }
             buttonsStates?.let { buttons ->
                 ActionButtons(
                     buttons = buttons,
@@ -133,127 +247,6 @@ fun WCSessionPage(
                     onCancelClick = { viewModel.rejectProposal() }
                 )
             }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(96.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(4.dp)),
-                    painter = rememberAsyncImagePainter(
-                        model = uiState.peerMeta?.icon,
-                        error = painterResource(R.drawable.ic_platform_placeholder_24)
-                    ),
-                    contentDescription = null,
-                )
-            }
-            headline1_leah(
-                text = connectedDAppName,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
-            )
-            subhead_grey(
-                text = uiState.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: "",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-            VSpacer(24.dp)
-
-            val composableItems = mutableListOf<@Composable () -> Unit>().apply {
-                add {
-                    ScamProtection(
-                        activated = uiState.hasSubscription,
-                        whiteListState = uiState.whiteListState,
-                        navController = navController
-                    )
-                }
-                add {
-                    WalletName(uiState.peerMeta?.accountName ?: "")
-                }
-                add {
-                    NetworksCell(
-                        blockchainTypes = uiState.blockchainTypes,
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.wcNetworksFragment,
-                                WCNetworksFragment.Input(uiState.blockchainTypes ?: emptyList())
-                            )
-                        }
-                    )
-                }
-            }
-
-            val pendingRequests = uiState.pendingRequests
-            if (pendingRequests.isNotEmpty()) {
-                SectionHeader(stringResource(R.string.WalletConnect_PendingRequests))
-                SectionIsolated(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    pendingRequests.forEachIndexed { index, item ->
-                        CellPrimary(
-                            middle = {
-                                CellMiddleInfo(
-                                    title = item.title.hs,
-                                    subtitle = item.subtitle.hs,
-                                )
-                            },
-                            right = {
-                                CellRightNavigation()
-                            },
-                            onClick = {
-                                viewModel.setRequestToOpen(item.request)
-                                navController.slideFromBottom(R.id.wcRequestFragment)
-                            }
-                        )
-                        if (index < pendingRequests.size - 1) {
-                            HsDivider()
-                        }
-                    }
-                }
-                VSpacer(16.dp)
-            }
-
-            AlertMessage(uiState)
-
-            SectionIsolated(
-                modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            ) {
-                composableItems.forEachIndexed { index, item ->
-                    item.invoke()
-                    if (index < composableItems.size - 1) {
-                        HsDivider()
-                    }
-                }
-            }
-
-            if(!uiState.connected) {
-                TextBlock(
-                    stringResource(R.string.WalletConnect_ConnectWarning)
-                )
-                VSpacer(12.dp)
-            }
-
-            uiState.hint?.let {
-                VSpacer(12.dp)
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = it
-                )
-            }
-            VSpacer(24.dp)
         }
     }
 }

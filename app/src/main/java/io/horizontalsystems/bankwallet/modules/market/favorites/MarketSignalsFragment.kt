@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -35,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.sectionItemBorder
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import kotlinx.parcelize.Parcelize
 
@@ -50,27 +49,22 @@ class MarketSignalsFragment : BaseComposeFragment() {
 
 @Composable
 fun MarketSignalsScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Market_Signals),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
-                    )
-                ),
+    HSScaffold(
+        title = stringResource(R.string.Market_Signals),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = navController::popBackStack
             )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler
+        ),
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column {
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
-
                 item {
                     InfoText(
                         text = stringResource(R.string.Market_Signal_Description),

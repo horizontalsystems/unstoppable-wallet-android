@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,8 +14,7 @@ import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.CrossSlide
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
 fun PinSet(
@@ -33,21 +30,15 @@ fun PinSet(
         viewModel.finished()
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        topBar = {
-            AppBar(
-                title = title,
-                navigationIcon = {
-                    HsBackButton(onClick = onBackPress)
-                }
-            )
-        }
+    HSScaffold(
+        title = title,
+        onBack = onBackPress,
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column(
+            modifier = Modifier
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -66,6 +57,7 @@ fun PinSet(
                                 enteredCount = viewModel.uiState.enteredCount,
                             )
                         }
+
                         PinSetModule.SetStage.Confirm -> {
                             PinTopBlock(
                                 title = stringResource(R.string.PinSet_ConfirmInfo),

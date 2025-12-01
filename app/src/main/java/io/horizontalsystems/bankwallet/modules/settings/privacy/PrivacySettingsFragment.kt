@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.privacy
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,8 +29,6 @@ import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorS
 import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -42,6 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlin.system.exitProcess
 
 class PrivacySettingsFragment : BaseComposeFragment() {
@@ -121,21 +117,14 @@ fun PrivacyScreen(
         torViewModel.appRestarted()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .background(ComposeAppTheme.colors.tyler)
+    HSScaffold(
+        title = stringResource(R.string.Settings_Privacy),
+        onBack = navController::popBackStack,
     ) {
-        AppBar(
-            title = stringResource(R.string.Settings_Privacy),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            }
-        )
         Column(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxSize()
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState())
         ) {
             VSpacer(12.dp)
@@ -178,8 +167,6 @@ fun PrivacyScreen(
                 text = stringResource(R.string.NymVpn_Description),
             )
         }
-
-        Spacer(Modifier.height(28.dp))
     }
 }
 

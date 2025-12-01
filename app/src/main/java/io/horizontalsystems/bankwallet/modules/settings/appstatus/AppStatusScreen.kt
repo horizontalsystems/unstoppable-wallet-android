@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -27,18 +28,17 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -52,70 +52,62 @@ fun AppStatusScreen(
     val localView = LocalView.current
     val context = LocalContext.current
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Settings_AppStatus),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.Settings_AppStatus),
+        onBack = navController::popBackStack,
     ) {
-        Column(Modifier.padding(it)) {
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(R.string.Button_Copy),
-                        onClick = {
-                            uiState.appStatusAsText?.let {
-                                clipboardManager.setText(AnnotatedString(it))
-                                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                ButtonPrimaryYellow(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.Button_Copy),
+                    onClick = {
+                        uiState.appStatusAsText?.let {
+                            clipboardManager.setText(AnnotatedString(it))
+                            HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
 
-                                stat(
-                                    page = StatPage.AppStatus,
-                                    event= StatEvent.Copy(StatEntity.Status)
-                                )
-                            }
+                            stat(
+                                page = StatPage.AppStatus,
+                                event = StatEvent.Copy(StatEntity.Status)
+                            )
                         }
-                    )
-                    HSpacer(8.dp)
-                    ButtonPrimaryDefault(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(R.string.Button_Share),
-                        onClick = {
-                            uiState.appStatusAsText?.let {
-                                ShareCompat.IntentBuilder(context)
-                                    .setType("text/plain")
-                                    .setText(it)
-                                    .startChooser()
+                    }
+                )
+                HSpacer(8.dp)
+                ButtonPrimaryDefault(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.Button_Share),
+                    onClick = {
+                        uiState.appStatusAsText?.let {
+                            ShareCompat.IntentBuilder(context)
+                                .setType("text/plain")
+                                .setText(it)
+                                .startChooser()
 
-                                stat(
-                                    page = StatPage.AppStatus,
-                                    event= StatEvent.Share(StatEntity.Status)
-                                )
-                            }
+                            stat(
+                                page = StatPage.AppStatus,
+                                event = StatEvent.Share(StatEntity.Status)
+                            )
                         }
-                    )
-                }
-                uiState.blockViewItems.forEach { blockData ->
-                    StatusBlock(
-                        sectionTitle = blockData.title,
-                        contentItems = blockData.content,
-                    )
-                }
-                VSpacer(32.dp)
+                    }
+                )
             }
+            uiState.blockViewItems.forEach { blockData ->
+                StatusBlock(
+                    sectionTitle = blockData.title,
+                    contentItems = blockData.content,
+                )
+            }
+            VSpacer(32.dp)
         }
     }
 }

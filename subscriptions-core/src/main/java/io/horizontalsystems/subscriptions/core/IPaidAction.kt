@@ -15,16 +15,16 @@ object AdvancedSearch : IPaidAction
 object TradeSignals : IPaidAction
 
 @Parcelize
-object DuressMode : IPaidAction
+object RobberyProtection : IPaidAction
 
 @Parcelize
-object AddressPhishing : IPaidAction
+object SecureSend : IPaidAction
 
 @Parcelize
-object AddressBlacklist : IPaidAction
+object ScamProtection : IPaidAction
 
 @Parcelize
-object VIPSupport : IPaidAction
+object LossProtection : IPaidAction
 
 @Parcelize
-object MevProtection : IPaidAction
+object PrioritySupport : IPaidAction

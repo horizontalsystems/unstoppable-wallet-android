@@ -1,17 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,12 +33,11 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaut
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.settings.SendBtcSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
@@ -208,85 +202,75 @@ fun SendBtcFeeSettingsScreen(
 ) {
     val uiState = viewModel.uiState
 
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
+    HSScaffold(
+        title = stringResource(R.string.SendEvmSettings_Title),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                enabled = uiState.resetEnabled,
+                tint = ComposeAppTheme.colors.jacob,
+                onClick = {
+                    viewModel.reset()
+                }
+            )
+        )
     ) {
-        AppBar(
-            title = stringResource(R.string.SendEvmSettings_Title),
-            navigationIcon = {
-                HsIconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_left_24),
-                        contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+        ) {
+            VSpacer(12.dp)
+            CellUniversalLawrenceSection(
+                listOf {
+                    HSFeeRaw(
+                        coinCode = viewModel.token.coin.code,
+                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+                        fee = uiState.fee,
+                        amountInputType = AmountInputType.COIN,
+                        rate = uiState.rate,
+                        navController = navController
                     )
                 }
-            },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Reset),
-                    enabled = uiState.resetEnabled,
-                    tint = ComposeAppTheme.colors.jacob,
-                    onClick = {
-                        viewModel.reset()
+            )
+
+            if (viewModel.feeRateChangeable) {
+                VSpacer(24.dp)
+                EvmSettingsInput(
+                    title = stringResource(R.string.FeeSettings_FeeRate),
+                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                    value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                    decimals = 0,
+                    caution = uiState.feeRateCaution,
+                    navController = navController,
+                    onValueChange = {
+                        viewModel.updateFeeRate(it.toInt())
+                    },
+                    onClickIncrement = {
+                        viewModel.incrementFeeRate()
+                    },
+                    onClickDecrement = {
+                        viewModel.decrementFeeRate()
                     }
                 )
-            )
-        )
-
-        VSpacer(12.dp)
-        CellUniversalLawrenceSection(
-            listOf {
-                HSFeeRaw(
-                    coinCode = viewModel.token.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fee = uiState.fee,
-                    amountInputType = AmountInputType.COIN,
-                    rate = uiState.rate,
-                    navController = navController
+                InfoText(
+                    text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                 )
             }
-        )
 
-        if (viewModel.feeRateChangeable) {
-            VSpacer(24.dp)
-            EvmSettingsInput(
-                title = stringResource(R.string.FeeSettings_FeeRate),
-                info = stringResource(R.string.FeeSettings_FeeRate_Info),
-                value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-                decimals = 0,
-                caution = uiState.feeRateCaution,
-                navController = navController,
-                onValueChange = {
-                    viewModel.updateFeeRate(it.toInt())
-                },
-                onClickIncrement = {
-                    viewModel.incrementFeeRate()
-                },
-                onClickDecrement = {
-                    viewModel.decrementFeeRate()
-                }
-            )
-            InfoText(
-                text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
-            )
+            uiState.feeRateCaution?.let {
+                FeeRateCaution(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 12.dp
+                    ),
+                    feeRateCaution = it
+                )
+            }
+
+            VSpacer(32.dp)
         }
-
-        uiState.feeRateCaution?.let {
-            FeeRateCaution(
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 12.dp
-                ),
-                feeRateCaution = it
-            )
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
     }
-
 }

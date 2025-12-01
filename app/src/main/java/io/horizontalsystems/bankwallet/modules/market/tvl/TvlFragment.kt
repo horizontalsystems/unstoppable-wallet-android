@@ -39,15 +39,15 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.marketDataValueComponent
 import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
-import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
@@ -82,41 +82,42 @@ class TvlFragment : BaseComposeFragment() {
             HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)
         }
     }
+}
 
-    @OptIn(ExperimentalFoundationApi::class)
-    @Composable
-    private fun TvlScreen(
-        tvlViewModel: TvlViewModel,
-        chartViewModel: TvlChartViewModel,
-        navController: NavController,
-        onCoinClick: (String?) -> Unit
-    ) {
-        val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
-        val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
-        val tvlData by tvlViewModel.tvlLiveData.observeAsState()
-        val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
-        val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
-        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(
-            SelectorDialogState.Closed
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TvlScreen(
+    tvlViewModel: TvlViewModel,
+    chartViewModel: TvlChartViewModel,
+    navController: NavController,
+    onCoinClick: (String?) -> Unit
+) {
+    val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
+    val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
+    val tvlData by tvlViewModel.tvlLiveData.observeAsState()
+    val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
+    val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
+    val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(
+        SelectorDialogState.Closed
+    )
+
+    HSScaffold(
+        title = "",
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = {
+                    navController.popBackStack()
+                }
+            )
         )
-
+    ) {
         Column(
             modifier = Modifier
-                .background(color = ComposeAppTheme.colors.tyler)
+                .fillMaxSize()
                 .navigationBarsPadding()
         ) {
-            AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
-            )
-
             HSSwipeRefresh(
                 refreshing = isRefreshing,
                 onRefresh = {
@@ -149,7 +150,9 @@ class TvlFragment : BaseComposeFragment() {
 
                             LazyColumn(
                                 state = listState,
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(ComposeAppTheme.colors.lawrence),
                                 contentPadding = PaddingValues(bottom = 32.dp),
                             ) {
                                 item {
@@ -162,7 +165,10 @@ class TvlFragment : BaseComposeFragment() {
                                     }
                                 }
                                 item {
-                                    Chart(chartViewModel = chartViewModel) {
+                                    Chart(
+                                        modifier = Modifier.background(ComposeAppTheme.colors.tyler),
+                                        chartViewModel = chartViewModel
+                                    ) {
                                         tvlViewModel.onSelectChartInterval(it)
                                     }
                                 }
@@ -180,27 +186,26 @@ class TvlFragment : BaseComposeFragment() {
                                     }
 
                                     items(tvlData.coinTvlViewItems) { item ->
-                                        BoxBordered(bottom = true) {
-                                            DefiMarket(
-                                                item.name,
-                                                item.chain,
-                                                item.iconUrl,
-                                                item.iconPlaceholder,
-                                                item.tvl,
-                                                when (tvlDiffType) {
-                                                    TvlDiffType.Percent -> item.tvlChangePercent?.let {
-                                                        MarketDataValue.Diff(Value.Percent(item.tvlChangePercent))
-                                                    }
+                                        DefiMarket(
+                                            item.name,
+                                            item.chain,
+                                            item.iconUrl,
+                                            item.iconPlaceholder,
+                                            item.tvl,
+                                            when (tvlDiffType) {
+                                                TvlDiffType.Percent -> item.tvlChangePercent?.let {
+                                                    MarketDataValue.Diff(Value.Percent(item.tvlChangePercent))
+                                                }
 
-                                                    TvlDiffType.Currency -> item.tvlChangeAmount?.let {
-                                                        MarketDataValue.Diff(Value.Currency(item.tvlChangeAmount))
-                                                    }
+                                                TvlDiffType.Currency -> item.tvlChangeAmount?.let {
+                                                    MarketDataValue.Diff(Value.Currency(item.tvlChangeAmount))
+                                                }
 
-                                                    else -> null
-                                                },
-                                                item.rank
-                                            ) { onCoinClick(item.coinUid) }
-                                        }
+                                                else -> null
+                                            },
+                                            item.rank
+                                        ) { onCoinClick(item.coinUid) }
+                                        HsDivider()
                                     }
                                 }
                             }
@@ -228,85 +233,89 @@ class TvlFragment : BaseComposeFragment() {
             }
         }
     }
+}
 
-    @Composable
-    private fun TvlMenu(
-        chainSelect: Select<TvlModule.Chain>,
-        sortDescending: Boolean,
-        tvlDiffType: TvlDiffType?,
-        onClickChainSelector: () -> Unit,
-        onToggleSortType: () -> Unit,
-        onToggleTvlDiffType: () -> Unit
+@Composable
+private fun TvlMenu(
+    chainSelect: Select<TvlModule.Chain>,
+    sortDescending: Boolean,
+    tvlDiffType: TvlDiffType?,
+    onClickChainSelector: () -> Unit,
+    onToggleSortType: () -> Unit,
+    onToggleTvlDiffType: () -> Unit
+) {
+    HeaderSorting(
+        borderBottom = true,
+        borderTop = true,
+        backgroundColor = ComposeAppTheme.colors.lawrence
     ) {
-        HeaderSorting(borderBottom = true, borderTop = true) {
-            HSpacer(16.dp)
-            HSDropdownButton(
-                variant = ButtonVariant.Secondary,
-                onClick = onClickChainSelector,
-                title = chainSelect.selected.title.getString(),
-            )
+        HSpacer(16.dp)
+        HSDropdownButton(
+            variant = ButtonVariant.Secondary,
+            onClick = onClickChainSelector,
+            title = chainSelect.selected.title.getString(),
+        )
+        HSpacer(8.dp)
+        HSButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            title = stringResource(R.string.Market_TVL),
+            icon = painterResource(if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
+            onClick = onToggleSortType
+        )
+        tvlDiffType?.let {
             HSpacer(8.dp)
-            HSButton(
+            HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                title = stringResource(R.string.Market_TVL),
-                icon = painterResource(if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
-                onClick = onToggleSortType
+                icon = painterResource(if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20),
+                onClick = { onToggleTvlDiffType() }
             )
-            tvlDiffType?.let {
-                HSpacer(8.dp)
-                HSIconButton(
-                    variant = ButtonVariant.Secondary,
-                    size = ButtonSize.Small,
-                    icon = painterResource(if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20),
-                    onClick = { onToggleTvlDiffType() }
-                )
-            }
-            HSpacer(width = 16.dp)
         }
+        HSpacer(width = 16.dp)
     }
+}
 
-    @Composable
-    private fun DefiMarket(
-        name: String,
-        chain: TranslatableString,
-        iconUrl: String,
-        iconPlaceholder: Int?,
-        tvl: CurrencyValue,
-        marketDataValue: MarketDataValue?,
-        label: String? = null,
-        onClick: (() -> Unit)? = null
-    ) {
-        CellPrimary(
-            left = {
-                CellLeftImage(
-                    type = ImageType.Rectangle,
-                    size = 32,
-                    painter = rememberAsyncImagePainter(
-                        model = iconUrl,
-                        error = iconPlaceholder?.let { alternativeUrl ->
-                            rememberAsyncImagePainter(
-                                model = alternativeUrl,
-                                error = painterResource(R.drawable.ic_platform_placeholder_24)
-                            )
-                        } ?: painterResource(R.drawable.ic_platform_placeholder_24)
-                    ),
-                )
-            },
-            middle = {
-                CellMiddleInfo(
-                    title = name.hs,
-                    subtitle = chain.getString().hs,
-                    subtitleBadge = label?.hs,
-                )
-            },
-            right = {
-                CellRightInfo(
-                    title = tvl.getFormattedShort().hs,
-                    subtitle = marketDataValueComponent(marketDataValue)
-                )
-            },
-            onClick = onClick
-        )
-    }
+@Composable
+private fun DefiMarket(
+    name: String,
+    chain: TranslatableString,
+    iconUrl: String,
+    iconPlaceholder: Int?,
+    tvl: CurrencyValue,
+    marketDataValue: MarketDataValue?,
+    label: String? = null,
+    onClick: (() -> Unit)? = null
+) {
+    CellPrimary(
+        left = {
+            CellLeftImage(
+                type = ImageType.Rectangle,
+                size = 32,
+                painter = rememberAsyncImagePainter(
+                    model = iconUrl,
+                    error = iconPlaceholder?.let { alternativeUrl ->
+                        rememberAsyncImagePainter(
+                            model = alternativeUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_24)
+                        )
+                    } ?: painterResource(R.drawable.ic_platform_placeholder_24)
+                ),
+            )
+        },
+        middle = {
+            CellMiddleInfo(
+                title = name.hs,
+                subtitle = chain.getString().hs,
+                subtitleBadge = label?.hs,
+            )
+        },
+        right = {
+            CellRightInfo(
+                title = tvl.getFormattedShort().hs,
+                subtitle = marketDataValueComponent(marketDataValue)
+            )
+        },
+        onClick = onClick
+    )
 }

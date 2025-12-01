@@ -39,7 +39,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_andy
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 
@@ -48,6 +48,7 @@ fun BoxScope.BottomSearchBar(
     modifier: Modifier = Modifier,
     searchQuery: String,
     isSearchActive: Boolean,
+    keepCancelButton: Boolean = false,
     onActiveChange: (Boolean) -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCloseSearch: () -> Unit = { },
@@ -90,7 +91,7 @@ fun BoxScope.BottomSearchBar(
         )
 
         // Show clear button when there's text OR when search is active but empty
-        if (searchQuery.isNotEmpty() || isSearchActive) {
+        if (keepCancelButton || searchQuery.isNotEmpty() || isSearchActive) {
             HSpacer(14.dp)
             HSIconButton(
                 size = ButtonSize.Small,
@@ -172,7 +173,7 @@ fun FloatingSearchBar(
                 singleLine = true,
                 decorationBox = { innerTextField ->
                     if (searchQuery.isEmpty()) {
-                        body_andy(stringResource(R.string.Balance_ReceiveHint_Search))
+                        body_grey(stringResource(R.string.Balance_ReceiveHint_Search))
                     }
                     innerTextField()
                 },
@@ -194,7 +195,7 @@ fun FloatingSearchBar(
                 }
             }
         } else {
-            body_andy(
+            body_grey(
                 text = stringResource(R.string.Balance_ReceiveHint_Search),
                 modifier = Modifier
                     .fillMaxWidth()

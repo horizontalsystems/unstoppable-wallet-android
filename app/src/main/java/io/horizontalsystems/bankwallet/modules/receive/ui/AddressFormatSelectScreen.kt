@@ -3,60 +3,67 @@ package io.horizontalsystems.bankwallet.modules.receive.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 
 @Composable
 fun AddressFormatSelectScreen(
     addressFormatItems: List<AddressFormatItem>,
     description: String,
     onSelect: (Wallet) -> Unit,
+    closeModule: () -> Unit,
     onBackPress: () -> Unit
 ) {
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Balance_Receive_AddressFormat),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackPress)
-                },
-                menuItems = listOf()
+    HSScaffold(
+        title = stringResource(R.string.Balance_Receive_AddressFormat),
+        onBack = onBackPress,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = closeModule
             )
-        }
+        )
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
                 .fillMaxSize()
                 .background(ComposeAppTheme.colors.lawrence)
                 .verticalScroll(rememberScrollState())
         ) {
-            InfoText(
-                modifier = Modifier.background(ComposeAppTheme.colors.tyler),
-                text = stringResource(R.string.Balance_Receive_AddressFormatDescription),
-                paddingBottom = 32.dp
-            )
+            Column(
+                modifier = Modifier
+                    .background(ComposeAppTheme.colors.tyler)
+                    .fillMaxWidth()
+            ) {
+                TextBlock(
+                    stringResource(R.string.Balance_Receive_AddressFormatDescription)
+                )
+                VSpacer(20.dp)
+            }
+
             addressFormatItems.forEach { item ->
                 AddressFormatCell(
                     title = item.title,
@@ -68,9 +75,13 @@ fun AddressFormatSelectScreen(
                 HsDivider()
             }
             VSpacer(32.dp)
-            TextAttention(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = description
+            AlertCard(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                format = AlertFormat.Structured,
+                type = AlertType.Caution,
+                text = description,
             )
         }
     }
@@ -82,24 +93,18 @@ fun AddressFormatCell(
     subtitle: String,
     onClick: (() -> Unit)? = null
 ) {
-    RowUniversal(
+    CellPrimary(
+        middle = {
+            CellMiddleInfo(
+                title = title.hs,
+                subtitle = subtitle.hs,
+            )
+        },
+        right = {
+            CellRightNavigation()
+        },
         onClick = onClick
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
-        ) {
-            headline2_leah(text = title)
-            subhead2_grey(text = subtitle)
-        }
-        Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
-    }
+    )
 }
 
 data class AddressFormatItem(val title: String, val subtitle: String, val wallet: Wallet)

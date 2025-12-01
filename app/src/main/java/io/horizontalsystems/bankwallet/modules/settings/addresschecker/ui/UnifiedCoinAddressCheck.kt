@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -19,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -52,10 +52,8 @@ import io.horizontalsystems.bankwallet.modules.settings.addresschecker.IssueType
 import io.horizontalsystems.bankwallet.modules.settings.addresschecker.UnifiedAddressCheckerViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -64,6 +62,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,27 +80,20 @@ fun UnifiedAddressCheckScreen(
 
     val uiState = viewModel.uiState
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Send_EnterAddress),
-                navigationIcon = {
-                    HsBackButton(onClick = onClose)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClose
-                    )
-                )
+    HSScaffold(
+        title = stringResource(R.string.Send_EnterAddress),
+        onBack = onClose,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = onClose
             )
-        },
-    ) { innerPaddings ->
+        )
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPaddings)
+                .navigationBarsPadding()
                 .windowInsetsPadding(WindowInsets.ime)
         ) {
             Column(

@@ -69,6 +69,7 @@ class WCRequestEvmViewModel(
                 method = sessionRequest.request.method,
                 chainName = chainName,
                 chainAddress = chainAddress,
+                walletName = accountManager.activeAccount?.name ?: ""
             )
         } ?: SessionRequestUI.Initial
     }
@@ -208,6 +209,7 @@ sealed class SessionRequestUI {
         val method: String,
         val chainName: String?,
         val chainAddress: String?,
+        val walletName: String,
     ) : SessionRequestUI()
 }
 

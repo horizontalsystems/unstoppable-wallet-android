@@ -41,7 +41,8 @@ class ManageWalletsService(
         get() = account?.type
 
     private var fullCoins = listOf<FullCoin>()
-    private var items = listOf<Item>()
+    var items = listOf<Item>()
+        private set
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -132,7 +133,8 @@ class ManageWalletsService(
         is TokenType.AddressTyped,
         is TokenType.Eip20,
         is TokenType.Spl,
-        is TokenType.Jetton -> true
+        is TokenType.Jetton,
+        is TokenType.Asset -> true
         else -> false
     }
 

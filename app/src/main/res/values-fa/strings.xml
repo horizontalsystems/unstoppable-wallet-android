@@ -194,6 +194,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
     <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
+    <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
     <string name="EthereumTransaction_Error_Title">خطا</string>

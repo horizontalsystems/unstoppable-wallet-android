@@ -196,12 +196,10 @@ class BottomSheetSelectorMultipleDialog(
     }
 
     data class Config(
-        val icon: ImageSource,
         val title: String,
         val selectedIndexes: List<Int>,
         val viewItems: List<BottomSheetSelectorViewItem>,
         val descriptionTitle: String? = null,
-        val description: String? = null,
         val allowEmpty: Boolean = false
     ) {
         val uuid = UUID.randomUUID().toString()

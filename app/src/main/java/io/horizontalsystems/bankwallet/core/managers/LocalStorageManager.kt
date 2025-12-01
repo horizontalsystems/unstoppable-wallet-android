@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -34,6 +35,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.util.UUID
 
 class LocalStorageManager(
@@ -62,6 +64,7 @@ class LocalStorageManager(
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val TERMS_AGREED = "terms_agreed"
+    private val CHECKED_TERMS = "checked_terms"
     private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
@@ -92,6 +95,7 @@ class LocalStorageManager(
     private val STATS_SYNC_TIME = "stats_sync_time"
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
+    private val LAST_MIGRATION_VERSION = "last_migration_version"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
@@ -101,6 +105,17 @@ class LocalStorageManager(
     override val marketSignalsStateChangedFlow = _marketSignalsStateChangedFlow
 
     private val gson by lazy { Gson() }
+
+    override var zcashUnshieldedBalanceAlerts: Map<String, BigDecimal>
+        get() {
+            val jsonStr = preferences.getString("zcashUnshieldedBalanceAlerts", null) ?: return mapOf()
+            val type = object : TypeToken<Map<String, BigDecimal>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit { putString("zcashUnshieldedBalanceAlerts", jsonStr) }
+        }
 
     override var chartIndicatorsEnabled: Boolean
         get() = preferences.getBoolean("chartIndicatorsEnabled", false)
@@ -388,7 +403,13 @@ class LocalStorageManager(
     override var termsAccepted: Boolean
         get() = preferences.getBoolean(TERMS_AGREED, false)
         set(value) {
-            preferences.edit().putBoolean(TERMS_AGREED, value).apply()
+            preferences.edit().putBoolean(TERMS_AGREED, value).commit()
+        }
+
+    override var checkedTerms: List<String>
+        get() = preferences.getString(CHECKED_TERMS, null)?.split(",") ?: listOf()
+        set(value) {
+            preferences.edit().putString(CHECKED_TERMS, value.joinToString(",")).apply()
         }
 
     override var currentMarketTab: MarketModule.Tab?
@@ -611,6 +632,14 @@ class LocalStorageManager(
         set(value) {
             value?.let {
                 preferences.edit().putLong("donate_us_last_shown_time", it).apply()
+            }
+        }
+
+    override var lastMigrationVersion: Int?
+        get() = if (preferences.contains(LAST_MIGRATION_VERSION)) preferences.getInt(LAST_MIGRATION_VERSION, 0) else null
+        set(value) {
+            value?.let {
+                preferences.edit().putInt(LAST_MIGRATION_VERSION, it).apply()
             }
         }
 }

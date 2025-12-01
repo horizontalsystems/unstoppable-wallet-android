@@ -97,7 +97,7 @@ fun ChooseContactScreen(
                                 }
                                 innerTextField()
                             },
-                            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                         )
                         SideEffect {
                             focusRequester.requestFocus()

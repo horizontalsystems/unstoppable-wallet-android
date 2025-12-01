@@ -27,6 +27,18 @@ object SwapHelper {
         return trc20Adapter.allowance(spenderAddress)
     }
 
+    fun getSendingAddressForToken(token: Token): String? {
+        val blockchainType = token.blockchainType
+
+        if (blockchainType.isEvm || blockchainType == BlockchainType.Solana || blockchainType == BlockchainType.Tron) {
+            App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
+                return it.receiveAddress
+            }
+        }
+
+        return null
+    }
+
     fun getReceiveAddressForToken(token: Token): String {
         val blockchainType = token.blockchainType
 

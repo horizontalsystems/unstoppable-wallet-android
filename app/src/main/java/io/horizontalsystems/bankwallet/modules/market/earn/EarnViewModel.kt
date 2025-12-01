@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Apy
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Vault
-import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -55,7 +55,7 @@ class MarketEarnViewModel(
     private var marketDataJob: Job? = null
     private var filterBy: EarnModule.FilterBy = EarnModule.FilterBy.AllAssets
     private val hasPremium: Boolean
-        get() = UserSubscriptionManager.isActionAllowed(AdvancedSearch)
+        get() = UserSubscriptionManager.isActionAllowed(TokenInsights)
 
     private var baseCurrency = currencyManager.baseCurrency
 

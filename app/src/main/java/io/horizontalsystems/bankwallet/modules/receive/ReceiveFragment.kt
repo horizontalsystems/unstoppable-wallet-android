@@ -40,9 +40,10 @@ class ReceiveFragment : BaseComposeFragment() {
                     if (token.type is TokenType.Asset) {
                         ReceiveStellarAssetScreen(navController, wallet, it.receiveEntryPointDestId)
                     } else if (token.type == TokenType.Native) {
-                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId)
+                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
                     }
                 }
+
                 BlockchainType.Monero -> {
                     ReceiveMoneroScreen(navController, wallet, it.receiveEntryPointDestId)
                 }
@@ -67,20 +68,30 @@ class ReceiveFragment : BaseComposeFragment() {
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
                 else -> {
-                    ReceiveScreen(navController, wallet, it.receiveEntryPointDestId)
+                    ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
                 }
             }
         }
     }
 
     @Parcelize
-    data class Input(val wallet: Wallet, val receiveEntryPointDestId: Int = 0) : Parcelable
+    data class Input(
+        val wallet: Wallet,
+        val receiveEntryPointDestId: Int = 0,
+        val isTransparentAddress: Boolean = false
+    ) : Parcelable
 
 }
 
 @Composable
-fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
-    val addressViewModel = viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet))
+fun ReceiveScreen(
+    navController: NavController,
+    wallet: Wallet,
+    receiveEntryPointDestId: Int,
+    isTransparentAddress: Boolean,
+) {
+    val addressViewModel =
+        viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet, isTransparentAddress))
 
     val uiState = addressViewModel.uiState
     ReceiveAddressScreen(
@@ -121,12 +132,10 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
             }
         },
         onBackPress = { navController.popBackStack() },
-        closeModule = {
-            if (receiveEntryPointDestId == 0) {
-                navController.popBackStack()
-            } else {
-                navController.popBackStack(receiveEntryPointDestId, true)
-            }
+        closeModule = if (receiveEntryPointDestId == 0) {
+            null
+        } else {
+            { navController.popBackStack(receiveEntryPointDestId, true) }
         }
     )
 }

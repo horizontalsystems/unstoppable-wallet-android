@@ -40,8 +40,8 @@ class RateAppManager(
 
         for (wallet in walletManager.activeWallets) {
             val adapter = adapterManager.getBalanceAdapterForWallet(wallet)
-            adapter?.let {
-                balance = it.balanceData.available
+            adapter?.balanceData?.available?.let {
+                balance = it
             }
 
             if (balance > BigDecimal.ZERO)

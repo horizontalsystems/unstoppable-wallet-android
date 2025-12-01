@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,16 +15,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
 fun LocalBackupTermsScreen(
@@ -34,18 +31,11 @@ fun LocalBackupTermsScreen(
 ) {
     var termChecked by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.LocalBackup_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                },
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.LocalBackup_Title),
+        onBack = onBackClick,
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column {
             Column(modifier = Modifier.weight(1f)) {
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),

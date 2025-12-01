@@ -8,10 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCRequestViewItem
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,12 +27,13 @@ import kotlinx.coroutines.launch
 
 class WalletConnectListViewModel(
     private val wcSessionManager: WCSessionManager,
-    private val evmBlockchainManager: EvmBlockchainManager,
+    private val wcManager: WCManager,
 ) : ViewModel() {
     enum class ConnectionResult {
         Success, Error
     }
 
+    private var pendingRequests = listOf<WCRequestViewItem>()
     private var pendingRequestCountMap = mutableMapOf<String, Int>()
     private var pairingsNumber = 0
     private var showError: String? = null
@@ -72,6 +74,10 @@ class WalletConnectListViewModel(
 
     fun refreshList() {
         _refreshFlow.tryEmit(Unit)
+    }
+
+    fun setRequestToOpen(request: Wallet.Model.SessionRequest) {
+        WCDelegate.sessionRequestEvent = request
     }
 
     fun setConnectionUri(uri: String) {
@@ -132,10 +138,11 @@ class WalletConnectListViewModel(
             WalletConnectListModule.SessionViewItem(
                 sessionTopic = session.topic,
                 title = session.metaData?.name ?: "",
-                subtitle = App.wcManager.getChainNames(session.namespaces).joinToString(),
+                subtitle = session.metaData?.url?.let { TextHelper.getCleanedUrl(it) } ?: "",
                 url = session.metaData?.url ?: "",
                 imageUrl = session.metaData?.icons?.lastOrNull(),
                 pendingRequestsCount = pendingRequestCountMap[session.topic] ?: 0,
+                requests = getPendingRequestViewItems(session.topic)
             )
         }
         return sessionItems
@@ -151,8 +158,9 @@ class WalletConnectListViewModel(
     private fun syncPendingRequestsCountMap() {
         viewModelScope.launch(Dispatchers.IO) {
             wcSessionManager.sessions.forEach { session ->
-                val pendingRequests = Web3Wallet.getPendingListOfSessionRequests(session.topic)
-                pendingRequestCountMap[session.topic] = pendingRequests.size
+                val requests = Web3Wallet.getPendingListOfSessionRequests(session.topic)
+                pendingRequestCountMap[session.topic] = requests.size
+                pendingRequests = getPendingRequestViewItems(session.topic)
             }
             _refreshFlow.tryEmit(Unit)
         }
@@ -160,6 +168,18 @@ class WalletConnectListViewModel(
 
     private fun getPairingCount(): Int {
         return CoreClient.Pairing.getPairings().size
+    }
+
+    private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
+        return Web3Wallet.getPendingListOfSessionRequests(topic).map { request ->
+            val methodData = wcManager.getMethodData(request)
+
+            WCRequestViewItem(
+                title = methodData?.shortTitle ?: "Unsupported",
+                subtitle = methodData?.network ?: "",
+                request = request
+            )
+        }
     }
 }
 

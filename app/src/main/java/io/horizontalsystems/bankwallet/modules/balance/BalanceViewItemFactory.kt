@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ZcashBalanceData
 import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.swappable
@@ -36,17 +35,7 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean,
     val warning: WarningText?,
     val balanceHidden: Boolean
-) {
-    val syncingLineText = syncingTextValue?.let {
-        buildString {
-            append(syncingTextValue)
-
-            syncedUntilTextValue?.let {
-                append(" - $syncedUntilTextValue")
-            }
-        }
-    }
-}
+)
 
 data class WarningText(
     val title: TranslatableString,
@@ -55,17 +44,25 @@ data class WarningText(
 
 open class LockedValue(
     val title: TranslatableString,
-    val infoTitle: TranslatableString,
     val info: TranslatableString,
     val coinValue: DeemedValue<String>
 )
 
 class ZcashLockedValue(
     title: TranslatableString,
-    infoTitle: TranslatableString,
     info: TranslatableString,
     coinValue: DeemedValue<String>
-) : LockedValue(title, infoTitle, info, coinValue)
+) : LockedValue(title, info, coinValue)
+
+class StellarLockedValue(
+    title: TranslatableString,
+    info: TranslatableString,
+    coinValue: DeemedValue<String>,
+    val lockedValues: List<StellarAssetLockedValue>
+) : LockedValue(title, info, coinValue)
+
+data class StellarAssetLockedValue(val title: String, val value: String)
+
 
 @Immutable
 data class BalanceViewItem2(
@@ -86,16 +83,42 @@ data class BalanceViewItem2(
 )
 
 data class DeemedValue<T>(val value: T, val dimmed: Boolean = false)
-data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
+enum class SyncingProgressType {
+    Spinner, ProgressWithRing
+}
+data class SyncingProgress(val type: SyncingProgressType?, val progress: Int?)
 
 class BalanceViewItemFactory {
 
     private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
-            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(blockchainType), false)
-            is AdapterState.SearchingTxs -> SyncingProgress(10, true)
-            else -> SyncingProgress(null, false)
+            is AdapterState.Syncing -> {
+                val progressValue = state.progress ?: getDefaultSyncingProgress(blockchainType)
+                if (state.progress != null && (blockchainType.isSyncWithProgress())) {
+                    SyncingProgress(SyncingProgressType.ProgressWithRing, progressValue)
+                } else {
+                    SyncingProgress(SyncingProgressType.Spinner, progressValue)
+                }
+            }
+            is AdapterState.Downloading -> {
+                val progressValue = state.progress ?: getDefaultSyncingProgress(blockchainType)
+                SyncingProgress(SyncingProgressType.ProgressWithRing, progressValue)
+            }
+            is AdapterState.Connecting -> SyncingProgress(SyncingProgressType.Spinner, 10)
+            is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner,10)
+            else -> SyncingProgress(null, null)
         }
+    }
+
+    private fun BlockchainType.isSyncWithProgress() = when (this) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash,
+        BlockchainType.Zcash,
+        BlockchainType.Monero -> true
+        else -> false
     }
 
     private fun getDefaultSyncingProgress(blockchainType: BlockchainType) = when (blockchainType) {
@@ -126,23 +149,35 @@ class BalanceViewItemFactory {
         is BlockchainType.Unsupported -> 0
     }
 
-    private fun getSyncingText(state: AdapterState?): String? {
+    private fun getSyncingText(state: AdapterState?, syncedUntil: String?, withDetails: Boolean = false): String? {
         if (state == null) {
             return null
         }
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.progress != null) {
-                    Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
-                } else if (state.connecting) {
-                    Translator.getString(R.string.WalletConnect_Status_Connecting)
-                }
-                else {
-                    Translator.getString(R.string.Balance_Syncing)
+                when {
+                    state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
+                    state.progress != null && state.progress > 0 -> {
+                        val text = Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
+                        if (syncedUntil != null) {
+                            "$text - $syncedUntil"
+                        } else {
+                            text
+                        }
+                    }
+                    else -> Translator.getString(R.string.Balance_Syncing)
                 }
             }
-
+            is AdapterState.Downloading -> {
+                if (withDetails) {
+                    val progressValue = state.progress ?: 10
+                    Translator.getString(R.string.Balance_Downloading) + " " + progressValue.toString() + "%"
+                } else {
+                    Translator.getString(R.string.Balance_Downloading)
+                }
+            }
+            is AdapterState.Connecting -> Translator.getString(R.string.WalletConnect_Status_Connecting)
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
             else -> null
         }
@@ -157,7 +192,7 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null) {
+                if (state.lastBlockDate != null && state.blocksRemained == null ) {
                     Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"))
                 } else {
                     null
@@ -226,28 +261,28 @@ class BalanceViewItemFactory {
             )?.let {
                 add(
                     LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_LockedAmount_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_LockTime_Title),
-                        info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
+                        title = TranslatableString.ResString(R.string.Info_LockTime_Title),
+                        info = TranslatableString.ResString(R.string.Info_LockTime_NoDateDescription),
                         coinValue = it
                     )
                 )
             }
 
-            lockedCoinValue(
-                state,
-                item.balanceData.pending,
-                wallet.decimal,
-                wallet.token
-            )?.let {
-                add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_ProcessingBalance_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
-                        info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
-                        coinValue = it
+            if (wallet.token.blockchainType != BlockchainType.Zcash) {
+                lockedCoinValue(
+                    state,
+                    item.balanceData.pending,
+                    wallet.decimal,
+                    wallet.token
+                )?.let {
+                    add(
+                        LockedValue(
+                            title = TranslatableString.ResString(R.string.Info_ProcessingBalance_Title),
+                            info = TranslatableString.ResString(R.string.Info_ProcessingBalance_Description),
+                            coinValue = it
+                        )
                     )
-                )
+                }
             }
 
             lockedCoinValue(
@@ -258,8 +293,7 @@ class BalanceViewItemFactory {
             )?.let {
                 add(
                     LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_NotRelayedAmount_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
+                        title = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
                         info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
                         coinValue = it
                     )
@@ -272,41 +306,43 @@ class BalanceViewItemFactory {
                 wallet.decimal,
                 wallet.token
             )?.let {
-                var info = TranslatableString.ResString(R.string.Info_Reserved_Description).toString()
-                info += "\n\n"
-                info += TranslatableString.ResString(R.string.Info_Reserved_CurrentlyLocked).toString()
+                val locked = mutableListOf<StellarAssetLockedValue>()
+                val info = TranslatableString.ResString(R.string.Info_Reserved_Description).toString()
 
-                info += "\n1 XLM - " + TranslatableString.ResString(R.string.Info_Reserved_WalletAction).toString()
+                locked.add(
+                    StellarAssetLockedValue(
+                        Translator.getString(R.string.Info_Reserved_WalletAction),
+                        "1 XLM"
+                    )
+                )
+
                 item.balanceData.stellarAssets.forEach {
-                    info += "\n0.5 XLM - ${it.code}"
+                    locked.add(StellarAssetLockedValue(it.code, "0.5 XLM"))
                 }
 
                 add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Balance_Reserved_Title),
-                        infoTitle = TranslatableString.ResString(R.string.Info_Reserved_Title),
+                    StellarLockedValue(
+                        title = TranslatableString.ResString(R.string.Info_Reserved_Title),
                         info = TranslatableString.PlainString(info),
-                        coinValue = it
+                        coinValue = it,
+                        lockedValues = locked
                     )
                 )
             }
 
-            if (item.balanceData is ZcashBalanceData) {
-                lockedCoinValue(
-                    state,
-                    item.balanceData.unshielded,
-                    wallet.decimal,
-                    wallet.token
-                )?.let {
-                    add(
-                        ZcashLockedValue(
-                            title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Title),
-                            infoTitle = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
-                            info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
-                            coinValue = it
-                        )
+            lockedCoinValue(
+                state,
+                item.balanceData.unshielded,
+                wallet.decimal,
+                wallet.token
+            )?.let {
+                add(
+                    ZcashLockedValue(
+                        title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Title),
+                        info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
+                        coinValue = it
                     )
-                }
+                )
             }
         }
 
@@ -316,6 +352,8 @@ class BalanceViewItemFactory {
             Translator.getString(R.string.Hud_Text_NoInternet)
         }
 
+        val syncedUntil = getSyncedUntilText(state)
+
         return BalanceViewItem(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -323,8 +361,8 @@ class BalanceViewItemFactory {
             lockedValues = lockedValues,
             exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
-            syncingTextValue = getSyncingText(state),
-            syncedUntilTextValue = getSyncedUntilText(state),
+            syncingTextValue = getSyncingText(state, syncedUntil, true),
+            syncedUntilTextValue = syncedUntil,
             failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
@@ -365,6 +403,8 @@ class BalanceViewItemFactory {
             Translator.getString(R.string.Hud_Text_NoInternet)
         }
 
+        val syncedUntil = getSyncedUntilText(state)
+
         return BalanceViewItem2(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -372,8 +412,8 @@ class BalanceViewItemFactory {
             exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
             diff = latestRate?.diff?.let { DeemedValue(it, latestRate.expired) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
-            syncingTextValue = getSyncingText(state),
-            syncedUntilTextValue = getSyncedUntilText(state),
+            syncingTextValue = getSyncingText(state, syncedUntil),
+            syncedUntilTextValue = syncedUntil,
             failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             badge = wallet.badge,
             errorMessage = errorMessage,

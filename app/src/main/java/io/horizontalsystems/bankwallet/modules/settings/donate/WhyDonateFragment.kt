@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,7 +28,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -38,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadR_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class WhyDonateFragment : BaseComposeFragment() {
 
@@ -62,18 +61,12 @@ fun WhyDonateView(
     onClose: () -> Unit
 ) {
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            TitleCenteredTopBar(
-                title = "",
-                onCloseClick = onClose
-            )
-        }
-    ) { paddingValues ->
+    HSScaffold(
+        title = "",
+        onBack = onClose,
+    ) {
         Box(
             modifier = Modifier
-                .padding(paddingValues)
                 .navigationBarsPadding()
                 .fillMaxSize()
         ) {
@@ -82,7 +75,6 @@ fun WhyDonateView(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 70.dp)
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(

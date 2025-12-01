@@ -36,7 +36,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,7 +84,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BoxTyler44
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -96,7 +94,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CustomKeyboardWarni
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -105,6 +102,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
@@ -125,7 +123,8 @@ fun RestorePhrase(
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
-    val statPage = if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
+    val statPage =
+        if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
@@ -134,14 +133,16 @@ fun RestorePhrase(
     var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
     val keyboardState by observeKeyboardState()
 
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-            viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+                textState =
+                    textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+                viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+            }
         }
-    }
 
     val borderColor = if (uiState.error != null) {
         ComposeAppTheme.colors.red50
@@ -150,36 +151,28 @@ fun RestorePhrase(
     }
 
     val coroutineScope = rememberCoroutineScope()
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(
-                    R.string.ManageAccounts_ImportWallet
-                ),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Next),
-                        onClick = viewModel::onProceed,
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                )
+    HSScaffold(
+        title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(
+            R.string.ManageAccounts_ImportWallet
+        ),
+        onBack = onBackClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Next),
+                onClick = viewModel::onProceed,
+                tint = ComposeAppTheme.colors.jacob
             )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        )
     ) {
         Box(
             modifier = Modifier
-                .padding(it)
                 .fillMaxSize()
                 .imePadding()
         ) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Spacer(Modifier.height(12.dp))
+                VSpacer(12.dp)
 
                 HeaderText(stringResource(id = R.string.ManageAccount_Name))
                 FormsInput(
@@ -189,11 +182,11 @@ fun RestorePhrase(
                     hint = viewModel.defaultName,
                     onValueChange = viewModel::onEnterName
                 )
-                Spacer(Modifier.height(32.dp))
+                VSpacer(32.dp)
 
                 if (advanced) {
                     RestoreByMenu(restoreMenuViewModel)
-                    Spacer(Modifier.height(32.dp))
+                    VSpacer(32.dp)
                 }
 
                 Column(
@@ -237,7 +230,7 @@ fun RestorePhrase(
                             textStyle = ComposeAppTheme.typography.body
                         ),
                         maxLines = 6,
-                        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                         visualTransformation = {
                             try {
                                 val annotatedString = buildAnnotatedString {
@@ -278,7 +271,8 @@ fun RestorePhrase(
                                 modifier = Modifier.padding(end = 16.dp),
                                 icon = R.drawable.ic_delete_20,
                                 onClick = {
-                                    textState = textState.copy(text = "", selection = TextRange(0))
+                                    textState =
+                                        textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
 
                                     stat(
@@ -328,7 +322,7 @@ fun RestorePhrase(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                    VSpacer(4.dp)
                 }
 
                 uiState.error?.let { errorText ->
@@ -389,7 +383,7 @@ fun RestorePhrase(
                         }
                     }
 
-                    Spacer(Modifier.height(32.dp))
+                    VSpacer(72.dp)
                 }
             }
 

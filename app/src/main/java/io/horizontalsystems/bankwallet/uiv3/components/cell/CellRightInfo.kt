@@ -9,7 +9,8 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun CellRightInfo(
     eyebrow: HSString? = null,
-    title: HSString,
+    title: HSString? = null,
+    titleSubheadSb: HSString? = null,
     subtitle: HSString? = null,
     description: HSString? = null,
 ) {
@@ -21,16 +22,24 @@ fun CellRightInfo(
                 color = it.color ?: ComposeAppTheme.colors.grey,
             )
         }
-
-        Text(
-            text = title.text,
-            style = ComposeAppTheme.typography.headline2,
-            color = when {
-                title.color != null -> title.color
-                title.dimmed -> ComposeAppTheme.colors.andy
-                else -> ComposeAppTheme.colors.leah
-            },
-        )
+        title?.let {
+            Text(
+                text = title.text,
+                style = ComposeAppTheme.typography.headline2,
+                color = when {
+                    title.color != null -> title.color
+                    title.dimmed -> ComposeAppTheme.colors.andy
+                    else -> ComposeAppTheme.colors.leah
+                },
+            )
+        }
+        titleSubheadSb?.let {
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.subheadSB,
+                color = it.color ?: ComposeAppTheme.colors.leah,
+            )
+        }
 
         subtitle?.let {
             Text(

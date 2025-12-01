@@ -74,6 +74,11 @@ class FullCoinsProvider(
 
         return fullCoins
             .sortedByFilter(tmpQuery ?: "")
+            .filter { fullCoin ->
+                fullCoin.tokens.any { token ->
+                    token.blockchainType.supports(activeAccount.type)
+                }
+            }
             .sortedByDescending { fullCoin ->
                 activeWallets.any { it.coin == fullCoin.coin }
             }

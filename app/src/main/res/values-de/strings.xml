@@ -251,10 +251,6 @@
     <string name="Market_Filter_RiskToTrade">Riskant</string>
     <string name="Market_Filter_ATH_Description">(Alle Zeiten hoch)</string>
     <string name="Market_Filter_ATL_Description">(Alle Zeiten niedrig)</string>
-    <string name="Market_Filter_Top_100">Top 100</string>
-    <string name="Market_Filter_Top_200">Top 200</string>
-    <string name="Market_Filter_Top_300">Top 300</string>
-    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_Top_2000">Top 2000</string>
@@ -312,12 +308,10 @@
     <string name="Market_Vaults_Filter_USDYield">USD Rendite</string>
     <string name="Market_Vaults_OpenDapp">Öffne dap</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d Ketten</string>
-    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Netzwerk</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Unteres Token</string>
     <string name="Market_Vaults_Vault_Holders">Halter</string>
-    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Mehrere Ketten</string>
@@ -334,8 +328,10 @@
     <string name="Balance_SyncedUntil">bis %s</string>
     <string name="Balance_Syncing">Synchronisiere…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
+    <string name="Balance_Downloading">Herunterladen…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Synchronisiere… %s%%</string>
+    <string name="Balance_BlocksRemaining">Verbleibende Blöcke - %d</string>
     <string name="Balance_Sort_Balance">Guthaben</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
     <string name="Balance_Sort_Az">Name</string>
@@ -347,6 +343,8 @@
     <string name="Balance_NetworkSelectDescription">Wählen Sie das Netzwerk aus, um eine Adresse zu erhalten.</string>
     <string name="Balance_Receive_AddressFormatDescription">Wählen Sie ein Format für die Angabe einer Adresse, die empfangen werden soll.</string>
     <string name="Balance_Receive_AddressFormat">Adressformat</string>
+    <string name="Balance_Receive_AddressType">Adresstyp</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">Wählen Sie, wie Sie Zcash erhalten möchten.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Das Cash Address Format wird bevorzugt für den Erhalt von Bitcoin Cash (BCH) aufgrund seiner verbesserten Benutzerfreundlichkeit und Kompatibilität bevorzugt. Beide Adressformate können jedoch unabhängig vom Adressformat des Absenders austauschbar genutzt werden, um BCH zu empfangen.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Das Native SegWit Format wird in Bitcoin bevorzugt für einen verbesserten Durchsatz und mehr Sicherheit. Alle Adressformate (Taproot, SegWit, Legacy) können unabhängig vom Adressformat des Absenders zum Empfang von BTC verwendet werden ermöglicht nahtlose Transaktionen über verschiedene Münztypen.</string>
     <string name="Balance_Receive_Account">Konto</string>
@@ -374,10 +372,17 @@
     <string name="Balance_Receive_Subaddresses">Unteradressen</string>
     <string name="Balance_Receive_SubaddressesInfo">Mit Unteradressen können Sie mehrere eindeutige Adressen innerhalb einer Brieftasche für Komfort und verbesserte Privatsphäre verwenden.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transaktionen: %s</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Hast du zuvor %s Münzen besessen?</string>
+    <string name="Balance_Receive_YesAlreadyOwn">Ja, ich besitze bereits</string>
+    <string name="Balance_Receive_IDontHave">Nein, ich habe nicht</string>
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Transparente ZEC erkannt</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Schild</string>
+    <string name="Balance_Zcash_Unified">Einheitlich</string>
+    <string name="Balance_Zcash_UnifiedDescription">Für private und private Überweisungen zwischen Brieftaschen verwenden.</string>
+    <string name="Balance_Zcash_TransparentDescription">Verwenden Sie zum Empfangen von Börsen oder Diensten, die keine einheitlichen Adressen unterstützen.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <!--Send-->
@@ -522,7 +527,6 @@
     <string name="TonConnect_NewConnect">Neue Verbindung</string>
     <string name="TonConnect_Error_InvalidUrl">Ungültige URL Adresse</string>
     <string name="TonConnect_Unnamed">Unbenannt</string>
-    <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Wallet auswählen</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
@@ -550,7 +554,6 @@
     <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
     <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
-    <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Brieftyp %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
     <string name="WalletConnect_Pairings">Pairings</string>
@@ -562,9 +565,29 @@
     <string name="WalletConnect_Networks">Netzwerke</string>
     <string name="WalletConnect_ConnectTo">Mit %s verbinden</string>
     <string name="WalletConnect_ConnectedTo">Verbunden mit %s</string>
+    <string name="WalletConnect_Disconnect">Verbindung trennen %s</string>
     <string name="WalletConnect_WhiteListDeactivatedWarning">Scam-Schutz ist deaktiviert. Domain-Verifizierung ist nicht verfügbar. Upgrade auf Premium, um vor nicht verifizierten oder Phishing-Websites zu schützen.</string>
     <string name="WalletConnect_NotInWhiteListAlert">Diese Website ist nicht verifiziert und kann zu Phishing oder Verlust von Mitteln führen. Verbinden wird dringend verhindert.</string>
     <string name="WalletConnect_ConnectWarning">Wenn Sie auf eine Verbindung klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen.</string>
+    <string name="WalletConnect_Attention">Achtung!</string>
+    <string name="WalletConnect_Danger">Gefahr!</string>
+    <string name="WalletConnect_Safe">Sicher</string>
+    <string name="WalletConnect_Domain">Domäne</string>
+    <string name="WalletConnect_Message">Nachricht</string>
+    <string name="WalletConnect_Checking">Überprüfe…</string>
+    <string name="WalletConnect_RequestFailed">Anfrage fehlgeschlagen</string>
+    <string name="WalletConnect_AllowDapp">Erlaube %s</string>
+    <string name="WalletConnect_Value">Wert</string>
+    <string name="WalletConnect_TokenAllowance">Token-Erlaubnis</string>
+    <string name="WalletConnect_ConfirmTransaction">Transaktion bestätigen</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s wird in der Lage sein, diese Token in Ihrem Namen zu verschieben.</string>
+    <string name="WalletConnect_RequestFailedDescription">Etwas ist schief gelaufen und die Anfrage konnte nicht abgeschlossen werden</string>
+    <string name="WalletConnect_DisconnectWarning">Sind Sie sicher, dass Sie diese Verbindung entfernen möchten?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Du kannst dich mit einer gefälschten Website verbinden und Geld verlieren. Schalte mich ein, um geschützt zu bleiben.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Diese dApp ist nicht verifiziert. Verbinden kann Ihr Guthaben gefährden.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Ich habe es ausgewählt. Diese dApp ist sicher um sich zu verbinden.</string>
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Requests">Anfragen</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>
@@ -611,6 +634,7 @@
     <string name="Swap_Approving">Genehmigung</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Zitieren</string>
+    <string name="Swap_Initializing">Initialisiere</string>
     <string name="Swap_Providers">Anbieter</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max.)</string>
@@ -654,6 +678,8 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Sie genehmigen</string>
     <string name="Approve_YouRevoke">Du widerrufen</string>
+    <string name="Approve_Allowance">Zulassungsbetrag</string>
+    <string name="Approve_Revoke">Betrag widerrufen</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Genehmigen</string>
     <string name="Swap_Approve_Info">Erteilen Sie in Ihrem Namen die Erlaubnis zu einem intelligenten Vertrag für den Token-Handel, der den zulässigen Betrag angibt. Kein Einfluss auf Ihr Guthaben, sondern erhebt eine geringe Zulassungsgebühr.\n\nVorabgenehmigung eines höheren Betrags für zukünftige Geschäfte ist kosteneffektiv im Vergleich zu On-Demand-Zulassungen.</string>
@@ -721,7 +747,6 @@
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Sie haben keine passenden Kontakte </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktionsinfo</string>
-    <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Date">Datum</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Service</string>
@@ -729,7 +754,6 @@
     <string name="TransactionInfo_ContactName">Kontaktname</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
-    <string name="TransactionInfo_Spender">Spender</string>
     <string name="TransactionInfo_LockedUntil">Gesperrt bis %s</string>
     <string name="TransactionInfo_UnlockedAt">Freigeschaltet ab %s</string>
     <string name="TransactionInfo_RecipientHash">Empfänger</string>
@@ -770,6 +794,7 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Ersetzen nicht möglich</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Der Absender hat dieses Guthaben mit einem Ausgabesperre gesendet, der auf %sablaufen wird.\n\nKeine Sorge, die erhaltenen Bitcoins sind bereits deiner, aber bis die Sperrfrist abläuft, können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
+    <string name="Info_LockTime_NoDateDescription">Der Absender hat dieses Guthaben mit einem Ausgabesperre gesendet, der am angezeigten Datum ablaufen wird.\n\nKeine Sorge, die erhaltenen Bitcoins sind bereits deiner, aber bis die Sperrfrist abläuft, können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
     <string name="Info_Reserved_Title">Reserviert</string>
     <string name="Info_Reserved_Description">Das Stellar Netzwerk sperrt 1 XLM, um die Brieftasche und 0.5 XLM als Reserve für jedes in Ihrer Brieftasche aktivierte Token zu aktivieren.</string>
     <string name="Info_Reserved_CurrentlyLocked">Derzeit gesperrt:</string>
@@ -812,7 +837,7 @@
     <string name="Settings_AutoLock">Auto-Sperren</string>
     <string name="Settings_JoinUnstoppables">Schließen Sie unaufhaltsam an</string>
     <string name="Settings_Support">Unterstützung</string>
-    <string name="Settings_VipSupport">VIP Gruppe</string>
+    <string name="Settings_VipSupport">VIP Support</string>
     <string name="Settings_BotSupport">BOT-Unterstützung</string>
     <string name="Settings_JoinUnstoppables_Description">Lernen Sie Kryptographie über exklusive Videos. Lernen Sie uns informell kennen. Sei der Erste, der Dinge sieht, an denen wir arbeiten.</string>
     <string name="Settings_PersonalSupport">Persönlicher Support</string>
@@ -905,6 +930,7 @@
     <string name="Premium_Subscribe">Abonnieren</string>
     <string name="Premium_AddPromoCode">Promo-Code hinzufügen</string>
     <string name="Premium_TryForFree">KOSTENLOS testen</string>
+    <string name="Premium_ViewAllFeatures">Alle Funktionen anzeigen</string>
     <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_Restore">Wiederherstellen</string>
     <string name="Premium_Annually">Jährlich</string>
@@ -913,40 +939,49 @@
     <string name="Premium_YouHaveActivatedPlan">Du hast das %s Paket aktiviert.</string>
     <string name="Premium_GoToApp">Gehe zu App</string>
     <string name="Premium_UpgradeText">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>
+    <string name="Premium_Banner_BlackFridayText">Upgrade auf Premium mit unserem größten Rabatt des Jahres</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Genießen Sie die volle Kraft der App.</string>
     <string name="Premium_SelectSubscription">Abonnement auswählen</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Bei einem Kauf werden alle Premium-Funktionen freigeschaltet.</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Analytik</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Erweiterte Suche</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Signale und Trends</string>
-    <string name="Premium_UpgradeFeature_DuressMode">Duress-Modus</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing">Scam-Schutz</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist-Prüfung</string>
-    <string name="Premium_UpgradeFeature_VipSupport">VIP-Gruppe</string>
-    <string name="Premium_UpgradeFeature_MevProtection">MEV-Schutz</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection">Duress-Modus</string>
+    <string name="Premium_UpgradeFeature_SecureSend">Scam-Schutz</string>
+    <string name="Premium_UpgradeFeature_ScamProtection">Blacklist-Prüfung</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">VIP Support</string>
+    <string name="Premium_UpgradeFeature_LossProtection">Verlustschutz</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Zugriff auf Top-100 Listen nach Schlüsselkriterien</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Mehrere Ebenen filtern über mehrere Parameter</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Automatische Überwachung der Markttrends für Ihre Tokens</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">Smart Fondssicherheit bei physischen Bedrohungen</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Effektiver Auto-Schutz gegen Betrug und Phishing-Angriffe</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Garantie der Rechtmäßigkeit für Ihre Kryptooperationen</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">Zugang zum Brieftaschen-Team für schnellen technischen Support.</string>
-    <string name="Premium_UpgradeFeature_MevProtection_Description">MEV-Schutz</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Smart Fondssicherheit bei physischen Bedrohungen</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Effektiver Auto-Schutz gegen Betrug und Phishing-Angriffe</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie der Rechtmäßigkeit für Ihre Kryptooperationen</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_Description">Zugang zum Brieftaschen-Team für schnellen technischen Support.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">MEV-Schutz</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ihr All-In-One-Werkzeug für eine gründliche Analyse. Durchsuchen Sie kuratierte Top 250 Tokenlisten basierend auf Handelsvolumen, Börsenliquidität, Halterungsverhalten und On-Ketten-Trends – alles auf einen Blick. Filtern, analysieren und halten Sie voraus.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Schalten Sie das Rauschen und Null mit Präzision auf Token mit hohem Potential. Benutzen Sie die erweiterte Suche, um Tausende von Tokens nach Handelsvolumen, Blockchain, Marktkappe, Preistrends, Branche und Leistung zu filtern – und mehr. Leistungsstark, präzise und zur Entdeckung gebaut.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Verpassen Sie nie wieder eine Handelsmöglichkeit. Watch Trends liefert Echtzeit-Alarme mit moderner technischer Analyse, die Ihnen helfen, Trends, Spot-Ausbrüche zu erkennen und Fallstricke zu vermeiden, bevor diese passieren. Tun Sie schnell, handeln Sie intelligent und maximieren Sie die Gewinne.</string>
-    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Ihr Krypto. Ihre Sicherheit. Mit dem Duress Mode können Sie mehrere alternative Wallet-Setups mit jeweils separater PIN erstellen, die eine versteckte Fluchtroute in hochriskanten Situationen bietet. Wenn Sie Ihre Brieftasche entsperren müssen, verwenden Sie einfach die erzwungene PIN, um auf eine sekundäre Brieftasche zuzugreifen, die keine kritischen Dateien enthüllt. Ihr echtes Geld bleibt verborgen. Ihre Sicherheit bleibt intakt.</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Eine falsche Adresse und Ihre Kryptographie ist für immer verschwunden. Unaufhaltsam scannt die Empfängeradressen automatisch nach verdächtigen Mustern und verteidigt sich gegen die neuesten Phishing-Bedrohungen, was verhindert, dass Sie Geld an einen Hacker schicken. Blockieren Sie betrügerische Überweisungen, bevor sie passieren.</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der schwarze Listen-Checker prüft die Empfängeradressen automatisch auf hochriskante Datenbanken, meldet Betrügereien, Betrügereien und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der schwarzen Liste steht, wissen Sie, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Krypto sauber.</string>
-    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seien Sie Teil der Evolution. Treten Sie der VIP-Gruppe bei, um sich direkt mit unserem Team in Verbindung zu setzen, um technischen Support zu erhalten. Vote über kommende Funktionen und erhalte einen exklusiven ersten Blick auf zukünftige Updates. Deine Stimme zählt – hilf die nächste Krypto-Wallet zu formen.</string>
-    <string name="Premium_UpgradeFeature_MevProtection_BigDescription">MEV-Schutz</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ihr Krypto. Ihre Sicherheit. Mit dem Duress Mode können Sie mehrere alternative Wallet-Setups mit jeweils separater PIN erstellen, die eine versteckte Fluchtroute in hochriskanten Situationen bietet. Wenn Sie Ihre Brieftasche entsperren müssen, verwenden Sie einfach die erzwungene PIN, um auf eine sekundäre Brieftasche zuzugreifen, die keine kritischen Dateien enthüllt. Ihr echtes Geld bleibt verborgen. Ihre Sicherheit bleibt intakt.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Eine falsche Adresse und Ihre Kryptographie ist für immer verschwunden. Unaufhaltsam scannt die Empfängeradressen automatisch nach verdächtigen Mustern und verteidigt sich gegen die neuesten Phishing-Bedrohungen, was verhindert, dass Sie Geld an einen Hacker schicken. Blockieren Sie betrügerische Überweisungen, bevor sie passieren.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der schwarze Listen-Checker prüft die Empfängeradressen automatisch auf hochriskante Datenbanken, meldet Betrügereien, Betrügereien und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der schwarzen Liste steht, wissen Sie, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Krypto sauber.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Erhalten Sie bevorzugten Zugriff auf unser Team. Chatten Sie direkt mit unaufhaltsamem Support für schnellere Hilfe, frühzeitige Einblicke und Anleitung zu kommenden Features. Ihr Feedback treibt die Entwicklung der Brieftasche an – und wir sind hier, um Sie in jedem Schritt des Weges zu unterstützen.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">MEV-Schutz</string>
+    <string name="Premium_DefenseSystem">Abwehrsystem</string>
+    <string name="Premium_MarketInsights">Markteinsichten</string>
+    <string name="Premium_Vip">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Hervorragende Sicherheit, außergewöhnliche Privatsphäre und eine wahrhaft freigehaltene Brieftasche.</string>
     <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
     <string name="Premium_WhatUsersSay">Was Nutzer sagen:</string>
+    <string name="Premium_BlackFridayOfferEnds">Black Friday-Angebot endet am 7. Dezember</string>
     <string name="Premium_SubscriptionPeriod_Month">monat</string>
     <string name="Premium_SubscriptionPeriod_Year">jahr</string>
     <string name="Premium_SubscriptionPeriod_Annually">Jährlich</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Monatlich</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">31% SPAREN</string>
+    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
+    <string name="Premium_SubscriptionPeriod_PerYear">pro Jahr</string>
+    <string name="Premium_SubscriptionPeriod_PerMonth">pro Monat</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">APP ICON</string>
@@ -956,6 +991,7 @@
     <string name="Appearance_HideMarketsTab">Märkte ausblenden</string>
     <string name="Appearance_HideMarketsTab_Tip">Markets Tab komplett ausblenden.</string>
     <string name="Appearance_HideBalanceTabButtons">Buttons ausblenden</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Sender, Empfangs- und Tauschtasten im Saldo ausblenden</string>
     <string name="Appearance_AmountRounding">Betrag Rundung</string>
     <string name="Appearance_AmountRounding_Tip">Runden Salden und Transaktionsbeträge anzeigen.</string>
     <string name="Appearance_BalanceAutoHide">Balance Tab</string>
@@ -1073,6 +1109,9 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Sicheres Backup der Wiederherstellungsausdrücke für jede Wallet. Dies ist die einzige Möglichkeit, den Zugriff auf Gelder zurückzugewinnen, wenn die App nicht funktioniert.</string>
     <string name="SettingsTerms_DisablingPin">Das Deaktivieren der PIN (Code) auf dem Smartphone löscht alle Brieftaschen aus der App. Wiederherstellungs-Phrasen werden benötigt, um den Zugriff auf Gelder wiederherzustellen.</string>
+    <string name="SettingsTerms_PrivacyNotice">Die App spioniert oder sammelt keine Daten über Ihr Guthaben oder Ihre Transaktionen - wir wissen nicht einmal, wie viele Menschen es nutzen. Es verfolgt nur anonyme Nutzungsmuster (geöffnete Seiten, getappte Schaltfläche), um die Benutzerfreundlichkeit zu verbessern. Sie können dies unter Einstellungen → Privatsphäre deaktivieren.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">Als Teil ihres Monetarisierungsmodells verdient die App kleine Provisionen von DEX-Swaps, die innerhalb der Brieftasche ausgeführt werden. Dies hilft uns, unabhängig zu bleiben, Open Source und frei von VC-Geld.</string>
+    <string name="SettingsTerms_OpenSource">Die App ist nachprüfbar Open Source, mit dem gesamten online veröffentlichten Quellcode. Alles oben angeführte kann von jedem öffentlich überprüft werden.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unaufhaltsam sein</string>
@@ -1160,7 +1199,6 @@
     <string name="Watch_Error_InvalidAddressFormat">Adressformat wird nicht unterstützt</string>
     <string name="Watch_Monero_Warning">Monero Watchwallet zeigt nur eingehende Transaktionen an. Das angezeigte Guthaben ist möglicherweise falsch.</string>
     <!--Manage Account-->
-    <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Manuelle Sicherung</string>
     <string name="ManageAccount_LocalBackup">Lokale Sicherung</string>
@@ -1270,6 +1308,7 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Vertragsadresse nicht in %s Blockchain gefunden</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für den Empfang von Zahlungen. Beim Wiederherstellen einer bestehenden Wallet sollte ein korrektes Format gewählt werden.</string>
+    <string name="AddressFormatSettings_Subtitle">Wählen Sie das Adressformat für die Münze.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativ</string>
     <!-- Blockchain Settings -->
@@ -1308,7 +1347,6 @@
     <string name="CoinPage_FundsInvested">Investierte Gelder</string>
     <string name="CoinPage_Overview">Übersicht</string>
     <string name="CoinPage_Contracts">Verträge</string>
-    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Münztypen</string>
     <string name="CoinPage_Links">Links</string>
@@ -1470,7 +1508,6 @@
     <string name="Coin_Analytics_Indicators_StrongSell">Stark Verkaufen</string>
     <string name="Coin_Analytics_Indicators_Sell">Verkaufen</string>
     <string name="Coin_Analytics_Indicators_Buy">Kaufen</string>
-    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
     <string name="CoinAnalytics_SmartContractAnalysis">Analyse von Smart Contracts</string>
     <string name="CoinAnalytics_HighRiskItems">Hochrisiko-Positionen</string>
     <string name="CoinAnalytics_MediumRiskItems">Mittlere Risiko-Positionen</string>
@@ -1510,7 +1547,6 @@
     <string name="TechnicalAdvice_HideDetails">Details ausblenden</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Stark Kaufen</string>
     <string name="TechnicalAdvice_Indicators_Buy">Kaufen</string>
-    <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
     <string name="TechnicalAdvice_Indicators_Sell">Verkaufen</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Stark Verkaufen</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Riskant</string>
@@ -1519,7 +1555,6 @@
     <string name="Detectors_GeneralDetectors">Allgemeine Detektoren</string>
     <string name="Detectors_IssuesCount">Probleme %d</string>
     <string name="ActivateSubscription_Title">Aktivieren</string>
-    <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Adresse</string>
     <string name="ActivateSubscription_NoSubscriptionError">Ihre Wallet-Adresse hat kein Abonnement für Premium-Funktionen, Sie müssen sie kaufen, um das Abonnement zu aktivieren.</string>
     <string name="SubscriptionInfo_Title">Premium-Funktionen</string>
@@ -1545,6 +1580,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Quelle ändern</string>
     <string name="BalanceSyncError_ButtonReport">Bericht</string>
     <string name="BalanceSyncError_Text">Sync-Fehler</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Sie können erneut versuchen oder zu einer anderen Sync-Quelle wechseln.</string>
+    <string name="BalanceSyncError_ErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Bitte versuchen Sie es später erneut.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">UNSTOPPABLEN JOIN</string>
     <string name="ProUsersInfo_UnstoppablePass">Unaufhaltsamer Pass</string>
@@ -1603,7 +1640,6 @@
     <string name="Contacts_AddressesCount">Adresse: %s</string>
     <string name="Contacts_NewContact">Neuer Kontakt</string>
     <string name="Contacts_AddNewContact">Neuen Kontakt hinzufügen</string>
-    <string name="Contacts_NameHint">Name</string>
     <string name="Contacts_AddAddress">Adresse hinzufügen</string>
     <string name="Contacts_AddAddress_NewContact">Neuen Kontakt erstellen</string>
     <string name="Contacts_AddAddress_ExistingContact">Zu vorhandenem Kontakt hinzufügen</string>

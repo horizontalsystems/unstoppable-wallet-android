@@ -18,9 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,17 +48,17 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
@@ -80,48 +78,40 @@ fun TransactionsScreen(
     val syncing = uiState.syncing
     val transactions = uiState.transactions
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                title = {
-                    title3_leah(
-                        text = stringResource(R.string.Transactions_Title),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                stateIcon = {
-                    if (syncing) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = ComposeAppTheme.colors.grey,
-                            strokeWidth = 2.dp
-                        )
-                    }
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Transactions_Filter),
-                        icon = R.drawable.ic_manage_2_24,
-                        showAlertDot = showFilterAlertDot,
-                        onClick = {
-                            navController.slideFromRight(R.id.transactionFilterFragment)
+    HSScaffold(
+        title = stringResource(R.string.Transactions_Title),
+        menuItems = buildList {
+            if (syncing) {
+                add(MenuItemLoading)
+            }
+            add(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Transactions_Filter),
+                    icon = R.drawable.ic_manage_2_24,
+                    showAlertDot = showFilterAlertDot,
+                    onClick = {
+                        navController.slideFromRight(R.id.transactionFilterFragment)
 
-                            stat(
-                                page = StatPage.Transactions,
-                                event = StatEvent.Open(StatPage.TransactionFilter)
-                            )
-                        },
-                    )
+                        stat(
+                            page = StatPage.Transactions,
+                            event = StatEvent.Open(StatPage.TransactionFilter)
+                        )
+                    },
                 )
             )
+        }
+    ) {
+        Column {
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
                     filterTypes = filterTypes,
                     onTransactionTypeClick = {
                         viewModel.setFilterTransactionType(it)
 
-                        stat(page = StatPage.Transactions, event = StatEvent.SwitchTab(it.statTab))
+                        stat(
+                            page = StatPage.Transactions,
+                            event = StatEvent.SwitchTab(it.statTab)
+                        )
                     }
                 )
             }
@@ -264,7 +254,9 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     is TransactionViewItem.Icon.Platform -> {
                         Icon(
                             modifier = Modifier.size(32.dp),
-                            painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
+                            painter = painterResource(
+                                icon.iconRes ?: R.drawable.coin_placeholder
+                            ),
                             tint = ComposeAppTheme.colors.leah,
                             contentDescription = null
                         )

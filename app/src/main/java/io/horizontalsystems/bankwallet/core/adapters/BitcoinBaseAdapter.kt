@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -33,8 +35,6 @@ import io.horizontalsystems.bitcoincore.storage.FullTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutput
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.marketkit.models.Token
@@ -222,9 +222,6 @@ abstract class BitcoinBaseAdapter(
                     BackgroundManagerState.EnterBackground -> {
                         kit.onEnterBackground()
                     }
-                    BackgroundManagerState.AllActivitiesDestroyed -> {
-
-                    }
                 }
             }
         }
@@ -271,7 +268,7 @@ abstract class BitcoinBaseAdapter(
                 val progress = (kitState.progress * 100).toInt()
                 val lastBlockDate = if (syncMode is BitcoinCore.SyncMode.Blockchair) null else kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
-                AdapterState.Syncing(progress, lastBlockDate)
+                AdapterState.Syncing(progress, lastBlockDate, kitState.blocksRemaining?.toLong())
             }
         }
     }

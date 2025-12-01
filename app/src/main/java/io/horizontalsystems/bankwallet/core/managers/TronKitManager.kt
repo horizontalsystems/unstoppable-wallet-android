@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.network.Network

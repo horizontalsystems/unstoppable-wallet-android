@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.MigrationManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.NetworkManager
@@ -115,10 +116,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionSt
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState.AllActivitiesDestroyed
-import io.horizontalsystems.core.BackgroundManagerState.EnterBackground
-import io.horizontalsystems.core.BackgroundManagerState.EnterForeground
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
@@ -129,6 +126,7 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.security.MessageDigest
@@ -139,7 +137,7 @@ import androidx.work.Configuration as WorkConfiguration
 class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     companion object : ICoreApp by CoreApp {
-
+        lateinit var backgroundManager: BackgroundManager
         lateinit var preferences: SharedPreferences
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
@@ -257,7 +255,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         priceManager = PriceManager(localStorage)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
-        backgroundManager = BackgroundManager(this)
+        backgroundManager = BackgroundManager()
 
         appDatabase = AppDatabase.getInstance(this)
 
@@ -399,10 +397,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         feeCoinProvider = FeeTokenProvider(marketKit)
 
         pinComponent = PinComponent(
+            context = this,
             pinSettingsStorage = pinSettingsStorage,
             userManager = userManager,
             pinDbStorage = PinDbStorage(appDatabase.pinDao()),
-            backgroundManager = backgroundManager
+            backgroundManager = backgroundManager,
+            localStorage = localStorage
         )
 
         statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider, backgroundManager)
@@ -626,11 +626,17 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 when (state) {
-                    EnterForeground -> UserSubscriptionManager.onResume()
-                    EnterBackground -> UserSubscriptionManager.pause()
-                    AllActivitiesDestroyed -> Unit
+                    BackgroundManagerState.EnterForeground -> UserSubscriptionManager.onResume()
+                    BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()
                 }
             }
+        }
+
+        coroutineScope.launch(Dispatchers.IO) {
+            delay(3000)
+            val termsManager = TermsManager(localStorage)
+            val migrationManager = MigrationManager(localStorage, termsManager)
+            migrationManager.runMigrations()
         }
     }
 }

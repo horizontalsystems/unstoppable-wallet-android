@@ -4,6 +4,8 @@ import android.content.Context
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -15,8 +17,6 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.monerokit.Balance
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.Seed
@@ -205,10 +205,13 @@ fun Long.scaledDown(decimals: Int): BigDecimal {
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> AdapterState.NotSynced(error)
     is SyncState.Synced -> AdapterState.Synced
-    is SyncState.Connecting -> AdapterState.Syncing(connecting = true)
-    is SyncState.Syncing -> AdapterState.Syncing(progress?.let {
-        (it * 100).roundToInt().coerceAtMost(100)
-    })
+    is SyncState.Connecting -> AdapterState.Connecting
+    is SyncState.Syncing -> AdapterState.Syncing(
+        progress = progress?.let {
+            (it * 100).roundToInt().coerceAtMost(100)
+        },
+        blocksRemained = remainingBlocks
+    )
 }
 
 fun AccountType.toMoneroSeed() = when (this) {

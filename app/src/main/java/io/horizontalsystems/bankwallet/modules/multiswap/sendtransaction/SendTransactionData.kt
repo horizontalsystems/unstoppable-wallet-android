@@ -32,7 +32,16 @@ sealed class SendTransactionData {
     }
 
     sealed class Solana : SendTransactionData() {
-        data class WithRawTransaction(val rawTransactionStr: String) : Solana()
+        data class WithRawTransaction(val rawTransaction: ByteArray) : Solana() {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (other !is WithRawTransaction) return false
+
+                return rawTransaction.contentEquals(other.rawTransaction)
+            }
+
+            override fun hashCode() = rawTransaction.contentHashCode()
+        }
     }
 
     sealed class Stellar : SendTransactionData() {

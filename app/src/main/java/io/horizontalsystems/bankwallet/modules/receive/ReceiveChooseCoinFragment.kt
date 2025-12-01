@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.B
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.COIN_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.DERIVATION_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.NETWORK_SELECT_SCREEN
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.ZCASH_ADDRESS_TYPE_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ui.AddressFormatSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.NetworkSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveTokenSelectScreen
@@ -45,6 +46,7 @@ object ReceiveChooseCoinRoutes {
     const val BCH_ADDRESS_FORMAT_SCREEN = "bch_address_format_screen"
     const val DERIVATION_SELECT_SCREEN = "derivation_select_screen"
     const val NETWORK_SELECT_SCREEN = "network_select_screen"
+    const val ZCASH_ADDRESS_TYPE_SELECT_SCREEN = "zcash_address_type_select_screen"
 }
 
 @Composable
@@ -69,6 +71,7 @@ fun ReceiveChooseCoinScreen(
                     return@composablePage
                 }
                 ReceiveTokenSelectScreen(
+                    navController = fragmentNavController,
                     activeAccount = activeAccount,
                     onMultipleAddressesClick = { coinUid ->
                         viewModel.coinUid = coinUid
@@ -81,6 +84,10 @@ fun ReceiveChooseCoinScreen(
                     onMultipleBlockchainsClick = { coinUid ->
                         viewModel.coinUid = coinUid
                         navController.navigate(NETWORK_SELECT_SCREEN)
+                    },
+                    onMultipleZcashAddressTypeClick = { wallet ->
+                        viewModel.wallet = wallet
+                        navController.navigate(ZCASH_ADDRESS_TYPE_SELECT_SCREEN)
                     },
                     onCoinClick = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
@@ -104,6 +111,7 @@ fun ReceiveChooseCoinScreen(
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     },
+                    closeModule = { fragmentNavController.popBackStack() },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
             }
@@ -123,6 +131,7 @@ fun ReceiveChooseCoinScreen(
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     },
+                    closeModule = { fragmentNavController.popBackStack() },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
             }
@@ -138,22 +147,53 @@ fun ReceiveChooseCoinScreen(
                     navController = navController,
                     activeAccount = activeAccount,
                     fullCoin = fullCoin,
+                    closeModule = { fragmentNavController.popBackStack() },
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     }
+                )
+            }
+            composablePage(ZCASH_ADDRESS_TYPE_SELECT_SCREEN) { entry ->
+                val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
+                val wallet = viewModel.wallet
+                if (wallet == null) {
+                    CloseWithMessage(fragmentNavController)
+                    return@composablePage
+                }
+
+                ZcashAddressTypeSelectScreen(
+                    onZcashAddressTypeClick = { isTransparent ->
+                        onSelectWallet(wallet, fragmentNavController, isTransparent)
+                    },
+                    onBackPress = navigateBack(fragmentNavController, navController),
+                    closeModule = { fragmentNavController.popBackStack() }
                 )
             }
         }
     }
 }
 
-private fun onSelectWallet(wallet: Wallet, fragmentNavController: NavController) {
-    fragmentNavController.slideFromRight(R.id.receiveFragment, ReceiveFragment.Input(wallet, R.id.receiveChooseCoinFragment))
+private fun onSelectWallet(
+    wallet: Wallet,
+    fragmentNavController: NavController,
+    isTransparentAddress: Boolean = false,
+) {
+    fragmentNavController.slideFromRight(
+        R.id.receiveFragment,
+        ReceiveFragment.Input(
+            wallet,
+            R.id.receiveChooseCoinFragment,
+            isTransparentAddress
+        )
+    )
 
     stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))
 }
 
-fun navigateBack(fragmentNavController: NavController, navController: NavHostController): () -> Unit = {
+fun navigateBack(
+    fragmentNavController: NavController,
+    navController: NavHostController
+): () -> Unit = {
     val result = navController.popBackStack()
     if (!result) {
         fragmentNavController.popBackStack()

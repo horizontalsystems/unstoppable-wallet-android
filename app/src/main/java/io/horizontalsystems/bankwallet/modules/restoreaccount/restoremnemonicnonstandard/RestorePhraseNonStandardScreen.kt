@@ -30,7 +30,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -78,7 +77,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
@@ -86,7 +84,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CustomKeyboardWarni
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -95,6 +92,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
@@ -138,27 +136,19 @@ fun RestorePhraseNonStandard(
     }
 
     val coroutineScope = rememberCoroutineScope()
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Restore_NonStandardRestore),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Next),
-                        onClick = viewModel::onProceed,
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                )
+    HSScaffold(
+        title = stringResource(R.string.Restore_NonStandardRestore),
+        onBack = onBackClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Next),
+                onClick = viewModel::onProceed,
+                tint = ComposeAppTheme.colors.jacob
             )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        )
     ) {
         Box(
             modifier = Modifier
-                .padding(it)
                 .fillMaxSize()
                 .imePadding()
         ) {
@@ -221,7 +211,7 @@ fun RestorePhraseNonStandard(
                             textStyle = ComposeAppTheme.typography.body
                         ),
                         maxLines = 6,
-                        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                         visualTransformation = {
                             try {
                                 val annotatedString = buildAnnotatedString {
@@ -365,7 +355,13 @@ fun RestorePhraseNonStandard(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletNonStandard)
+        mainViewModel.setAccountData(
+            accountType,
+            viewModel.accountName,
+            true,
+            false,
+            StatPage.ImportWalletNonStandard
+        )
         openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
 
@@ -430,14 +426,15 @@ private fun BottomSection(
     }
 
     CellSingleLineLawrenceSection(
-        listOf({
-            MnemonicLanguageCell(
-                language = uiState.language,
-                showLanguageSelectorDialog = {
-                    showLanguageSelectorDialog = true
-                }
-            )
-        },
+        listOf(
+            {
+                MnemonicLanguageCell(
+                    language = uiState.language,
+                    showLanguageSelectorDialog = {
+                        showLanguageSelectorDialog = true
+                    }
+                )
+            },
             {
                 Row(
                     modifier = Modifier

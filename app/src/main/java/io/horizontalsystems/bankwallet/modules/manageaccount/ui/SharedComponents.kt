@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,17 +27,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.C2
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
@@ -46,10 +46,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.D7
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 
 @Composable
 fun ActionButton(title: Int, onClick: () -> Unit) {
@@ -131,41 +135,38 @@ fun KeyActionItem(
     Spacer(Modifier.height(20.dp))
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfirmCopyBottomSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
-    BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_attention_24),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-        title = stringResource(R.string.RecoveryPhrase_CopyWarning_Title),
-        onCloseClick = onCancel
-    ) {
-        Spacer(modifier = Modifier.height(12.dp))
-        TextImportantWarning(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Text)
+fun ConfirmCopyBottomSheet(
+    sheetState: SheetState,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    BottomSheetContent(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
+                modifier = Modifier.fillMaxWidth(),
+                variant = ButtonVariant.Secondary,
+                onClick = onConfirm
+            )
+            HSButton(
+                title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Cancel),
+                modifier = Modifier.fillMaxWidth(),
+                style = ButtonStyle.Transparent,
+                variant = ButtonVariant.Secondary,
+                onClick = onDismiss
+            )
+        }
+    ){
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.warning_filled_24),
+            imageTint = ComposeAppTheme.colors.lucian,
+            title = stringResource(R.string.RecoveryPhrase_CopyWarning_Title)
         )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        ButtonPrimaryRed(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
-            onClick = onConfirm
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        ButtonPrimaryTransparent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Cancel),
-            onClick = onCancel
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
+        TextBlock(text = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Text), textAlign = TextAlign.Center)
     }
 }
 

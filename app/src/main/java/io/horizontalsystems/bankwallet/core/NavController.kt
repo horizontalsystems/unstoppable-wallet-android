@@ -10,8 +10,9 @@ import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
-import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionFragment
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -64,12 +65,11 @@ fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
     if (UserSubscriptionManager.isActionAllowed(paidAction)) {
         block.invoke()
     } else {
-        slideFromBottomForResult<BuySubscriptionFragment.Result>(
-            R.id.buySubscriptionFragment,
-            BuySubscriptionFragment.Input(paidAction)
-        ) {
-            block.invoke()
-        }
+        val premiumFeature = PremiumFeature.getFeature(paidAction)
+        slideFromBottom(
+            R.id.defenseSystemFeatureDialog,
+            DefenseSystemFeatureDialog.Input(premiumFeature, true)
+        )
     }
 }
 

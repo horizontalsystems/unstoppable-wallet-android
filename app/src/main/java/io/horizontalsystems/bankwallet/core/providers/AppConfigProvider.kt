@@ -31,6 +31,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val accountsBackupFileSalt by lazy { Translator.getString(R.string.accountsBackupFileSalt) }
     val simplexSupportChat = "https://smp11.simplex.im/g#yTrDh716RZCNYsdPSDrqMMlHnqZlW4XJGnFTugBrsAI"
     val nymVpnLink = "https://nymtechnologies.pxf.io/N9vnr1"
+    val telegramSupportChat = "https://t.me/m/1TNZ9JE4MTNi"
 
     val blocksDecodedEthereumRpc by lazy {
         Translator.getString(R.string.blocksDecodedEthereumRpc)

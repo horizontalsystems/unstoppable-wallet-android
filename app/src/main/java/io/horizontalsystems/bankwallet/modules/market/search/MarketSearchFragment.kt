@@ -214,6 +214,7 @@ fun MarketSearchScreen(
                 BottomSearchBar(
                     searchQuery = searchQuery,
                     isSearchActive = isSearchActive,
+                    keepCancelButton = true,
                     onActiveChange = { active ->
                         isSearchActive = active
                     },

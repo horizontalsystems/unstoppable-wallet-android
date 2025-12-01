@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.os.Parcelable
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
@@ -78,6 +79,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var zcashUnshieldedBalanceAlerts: Map<String, BigDecimal>
     var selectedPeriods: List<HsTimePeriod>
     var roiPerformanceCoins: List<PerformanceCoin>
     var marketSearchRecentCoinUids: List<String>
@@ -107,6 +109,7 @@ interface ILocalStorage {
     var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
+    var checkedTerms: List<String>
     var mainShowedOnce: Boolean
     var notificationId: String?
     var notificationServerTime: Long
@@ -143,6 +146,7 @@ interface ILocalStorage {
     var priceChangeInterval: PriceChangeInterval
     val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
     var donateUsLastShownDate: Long?
+    var lastMigrationVersion: Int?
 
     fun clear()
 }
@@ -244,14 +248,22 @@ interface IWordsManager {
 
 sealed class AdapterState {
     object Synced : AdapterState()
-    data class Syncing(val progress: Int? = null, val lastBlockDate: Date? = null, val connecting: Boolean = false) : AdapterState()
+    object Connecting : AdapterState()
+    data class Downloading(val progress: Int? = null) : AdapterState()
+    data class Syncing(
+        val progress: Int? = null,
+        val lastBlockDate: Date? = null,
+        val blocksRemained: Long? = null,
+    ) : AdapterState()
     data class SearchingTxs(val count: Int) : AdapterState()
     data class NotSynced(val error: Throwable) : AdapterState()
 
     override fun toString(): String {
         return when (this) {
             is Synced -> "Synced"
-            is Syncing -> "Syncing ${progress?.let { "${it * 100}" } ?: ""} lastBlockDate: $lastBlockDate connecting: $connecting"
+            is Connecting -> "Connecting"
+            is Downloading -> "Downloading"
+            is Syncing -> "Syncing ${progress?.let { "${it * 100}" } ?: ""} lastBlockDate: $lastBlockDate"
             is SearchingTxs -> "SearchingTxs count: $count"
             is NotSynced -> "NotSynced ${error.javaClass.simpleName} - message: ${error.message}"
         }
@@ -296,26 +308,40 @@ interface IBalanceAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
 
-    val balanceData: BalanceData
+    val balanceData: BalanceData?
     val balanceUpdatedFlowable: Flowable<Unit>
 }
 
-open class BalanceData(
+data class BalanceData(
     val available: BigDecimal,
     val timeLocked: BigDecimal = BigDecimal.ZERO,
     val notRelayed: BigDecimal = BigDecimal.ZERO,
     val pending: BigDecimal = BigDecimal.ZERO,
     val minimumBalance: BigDecimal = BigDecimal.ZERO,
-    val stellarAssets: List<StellarAsset.Asset> = listOf()
+    val stellarAssets: List<StellarAsset.Asset> = listOf(),
+    val unshielded: BigDecimal = BigDecimal.ZERO
 ) {
-    val total get() = available + timeLocked + notRelayed + pending + minimumBalance
-}
+    val total: BigDecimal
+        get() = available + timeLocked + notRelayed + pending + minimumBalance + unshielded
 
-class ZcashBalanceData(available: BigDecimal, pending: BigDecimal, val unshielded: BigDecimal): BalanceData(available, pending = pending)
+    fun serialize(gson: Gson): String {
+        // no need to cache stellarAssets in cache, so we exclude it
+        return gson.toJson(this.copy(stellarAssets = listOf()))
+    }
+
+    companion object {
+        fun deserialize(v: String, gson: Gson): BalanceData? {
+            return gson.fromJson(v, BalanceData::class.java)
+        }
+    }
+}
 
 interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
+
+    val receiveAddressTransparent: String?
+        get() = null
 
     suspend fun isAddressActive(address: String): Boolean {
         return true
@@ -553,9 +579,10 @@ interface ICoinManager {
 }
 
 interface ITermsManager {
-    val termsAcceptedSignalFlow: Flow<Boolean>
+    val termsAcceptedSharedFlow: SharedFlow<Boolean>
     val terms: List<TermsModule.TermType>
     val allTermsAccepted: Boolean
+    val checkedTermIds: List<String>
     fun acceptTerms()
 }
 

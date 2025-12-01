@@ -20,10 +20,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,11 +46,9 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.banners.BlackFridayBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
-import io.horizontalsystems.bankwallet.modules.settings.banners.GameBanner
-import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
-import io.horizontalsystems.bankwallet.modules.settings.vipsupport.VipSupportBottomSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -71,15 +65,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.subscriptions.core.AddressBlacklist
-import io.horizontalsystems.subscriptions.core.VIPSupport
+import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
     navController: NavController,
     viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
-    var isVipSupportVisible by remember { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -92,16 +85,10 @@ fun SettingsScreen(
                 SettingSections(
                     viewModel = viewModel,
                     navController = navController,
-                    openVipSupport = {
-                        isVipSupportVisible = true
-                    })
+                    )
                 SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
             }
         }
-        VipSupportBottomSheet(
-            isBottomSheetVisible = isVipSupportVisible,
-            close = { isVipSupportVisible = false }
-        )
     }
 }
 
@@ -109,7 +96,6 @@ fun SettingsScreen(
 private fun SettingSections(
     viewModel: MainSettingsViewModel,
     navController: NavController,
-    openVipSupport: () -> Unit
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -118,7 +104,7 @@ private fun SettingSections(
     val banners = buildList<@Composable () -> Unit> {
         if (uiState.showPremiumBanner) {
             add {
-                SubscriptionBanner(
+                BlackFridayBanner(
                     onClick = {
                         navController.slideFromBottom(R.id.buySubscriptionFragment)
                         stat(
@@ -137,13 +123,6 @@ private fun SettingSections(
                     }
                 )
             }
-        }
-        add {
-            GameBanner(
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot/app")
-                }
-            )
         }
     }
 
@@ -202,7 +181,7 @@ private fun SettingSections(
             )
         }, {
             HsSettingCell(
-                R.string.Settings_WalletConnect,
+                R.string.DAppConnection_Title,
                 R.drawable.ic_wallet_connect_20,
                 value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
                 counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
@@ -338,8 +317,8 @@ private fun SettingSections(
                 if (isFDroidBuild) {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
                 } else {
-                    navController.paidAction(VIPSupport) {
-                        openVipSupport.invoke()
+                    navController.paidAction(PrioritySupport) {
+                        LinkHelper.openLinkInAppBrowser(context, viewModel.vipSupportLink)
                     }
                 }
 
@@ -355,7 +334,7 @@ private fun SettingSections(
             icon = R.drawable.ic_radar_24,
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
-                navController.paidAction(AddressBlacklist) {
+                navController.paidAction(SecureSend) {
                     navController.slideFromRight(R.id.addressCheckerFragment)
                 }
                 stat(

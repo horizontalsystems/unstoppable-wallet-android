@@ -15,6 +15,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,16 +35,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PinUnlock(
+    showPinLockScreen: Boolean,
     onSuccess: () -> Unit,
 ) {
     val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
     val uiState = viewModel.uiState
-    var showBiometricPrompt by remember {
-        mutableStateOf(
-            uiState.fingerScannerEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled
-        )
-    }
+
+    var showBiometricPrompt by remember { mutableStateOf(false) }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
+    LaunchedEffect(showPinLockScreen, uiState.fingerScannerEnabled, uiState.inputState) {
+        if (showPinLockScreen &&
+            uiState.fingerScannerEnabled &&
+            uiState.inputState is PinUnlockModule.InputState.Enabled) {
+            showBiometricPrompt = true
+        }
+    }
 
     if (uiState.unlocked) {
         onSuccess.invoke()
@@ -63,6 +69,10 @@ fun PinUnlock(
                 showBiometricPrompt = false
             }
         )
+    }
+
+    if (!showPinLockScreen) {
+        return
     }
 
     if (showBiometricDisabledAlert) {

@@ -16,12 +16,18 @@ object TermsModule {
 
     enum class TermType(val key: String) {
         Backup("term_backup"),
-        DisablingPin("term_disablingpin");
+        DisablingPin("term_disabling_pin"),
+        PrivacyNotice("term_privacy_notice"),
+        MonetizationDisclosure("term_monetization_disclosure"),
+        OpenSource("term_open_source");
 
         val description: Int
             get() = when (this) {
                 Backup -> R.string.SettingsTerms_Backup
                 DisablingPin -> R.string.SettingsTerms_DisablingPin
+                PrivacyNotice -> R.string.SettingsTerms_PrivacyNotice
+                MonetizationDisclosure -> R.string.SettingsTerms_MonetizationDisclosure
+                OpenSource -> R.string.SettingsTerms_OpenSource
             }
     }
 

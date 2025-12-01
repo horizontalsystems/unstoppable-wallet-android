@@ -1,26 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -36,19 +31,24 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
@@ -75,7 +75,24 @@ private fun ManageWalletsScreen(
     viewModel: ManageWalletsViewModel,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {
-    val coinItems by viewModel.viewItemsLiveData.observeAsState()
+    val uiState = viewModel.uiState
+    var searchQuery by remember { mutableStateOf(uiState.searchQuery) }
+    var isSearchActive by remember { mutableStateOf(false) }
+
+    val lazyListState = rememberSaveable(
+        uiState.items.size,
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+
+    LaunchedEffect(lazyListState.isScrollInProgress) {
+        if (lazyListState.isScrollInProgress) {
+            if (isSearchActive) {
+                isSearchActive = false
+            }
+        }
+    }
 
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
@@ -94,84 +111,104 @@ private fun ManageWalletsScreen(
         stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
-    Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-    ) {
-        SearchBar(
-            title = stringResource(R.string.ManageCoins_title),
-            searchHintText = stringResource(R.string.ManageCoins_Search),
-            menuItems = if (viewModel.addTokenEnabled) {
-                listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
-                        icon = R.drawable.ic_add_24,
-                        onClick = {
-                            navController.slideFromRight(R.id.addTokenFragment)
+    HSScaffold(
+        title = stringResource(id = R.string.ManageCoins_title),
+        onBack = { navController.popBackStack() },
+        menuItems = if (viewModel.addTokenEnabled) {
+            listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
+                    icon = R.drawable.ic_add_24,
+                    onClick = {
+                        navController.slideFromRight(R.id.addTokenFragment)
 
-                            stat(
-                                page = StatPage.CoinManager,
-                                event = StatEvent.Open(StatPage.AddToken)
-                            )
-                        }
-                    ))
-            } else {
-                listOf()
-            },
-            onClose = { navController.popBackStack() },
-            onSearchTextChanged = { text ->
-                viewModel.updateFilter(text)
-            }
-        )
-
-        coinItems?.let {
-            if (it.isEmpty()) {
-                ListEmptyView(
-                    text = stringResource(R.string.ManageCoins_NoResults),
-                    icon = R.drawable.ic_not_found
-                )
-            } else {
-                LazyColumn {
-                    item {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        HsDivider()
-                    }
-                    items(it) { viewItem ->
-                        CoinCell(
-                            viewItem = viewItem,
-                            onItemClick = {
-                                if (viewItem.enabled) {
-                                    viewModel.disable(viewItem.item)
-
-                                    stat(
-                                        page = StatPage.CoinManager,
-                                        event = StatEvent.DisableToken(viewItem.item)
-                                    )
-                                } else {
-                                    viewModel.enable(viewItem.item)
-
-                                    stat(
-                                        page = StatPage.CoinManager,
-                                        event = StatEvent.EnableToken(viewItem.item)
-                                    )
-                                }
-                            },
-                            onInfoClick = {
-                                navController.slideFromBottom(
-                                    R.id.configuredTokenInfo,
-                                    viewItem.item
-                                )
-
-                                stat(
-                                    page = StatPage.CoinManager,
-                                    event = StatEvent.OpenTokenInfo(viewItem.item)
-                                )
-                            }
+                        stat(
+                            page = StatPage.CoinManager,
+                            event = StatEvent.Open(StatPage.AddToken)
                         )
                     }
-                    item {
-                        VSpacer(height = 32.dp)
+                ))
+        } else {
+            listOf()
+        },
+    ) {
+        Column {
+            val tabItems: List<TabItem<SelectChainTab>> = uiState.tabs.map { chainTab ->
+                TabItem(
+                    title = chainTab.title,
+                    selected = chainTab == uiState.selectedTab,
+                    item = chainTab,
+                )
+            }
+            if (tabItems.isNotEmpty()) {
+                TabsTop(TabsTopType.Scrolled, tabItems) {
+                    viewModel.onTabSelected(it)
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
+                if (uiState.items.isEmpty()) {
+                    ListEmptyView(
+                        text = stringResource(R.string.Search_NotFounded),
+                        icon = R.drawable.warning_filled_24
+                    )
+                } else {
+                    LazyColumn(
+                        state = lazyListState
+                    ) {
+                        items(uiState.items) { viewItem ->
+                            CoinCell(
+                                viewItem = viewItem,
+                                onItemClick = {
+                                    if (viewItem.enabled) {
+                                        viewModel.disable(viewItem.item)
+
+                                        stat(
+                                            page = StatPage.CoinManager,
+                                            event = StatEvent.DisableToken(viewItem.item)
+                                        )
+                                    } else {
+                                        viewModel.enable(viewItem.item)
+
+                                        stat(
+                                            page = StatPage.CoinManager,
+                                            event = StatEvent.EnableToken(viewItem.item)
+                                        )
+                                    }
+                                },
+                                onInfoClick = {
+                                    navController.slideFromBottom(
+                                        R.id.configuredTokenInfo,
+                                        viewItem.item
+                                    )
+
+                                    stat(
+                                        page = StatPage.CoinManager,
+                                        event = StatEvent.OpenTokenInfo(viewItem.item)
+                                    )
+                                }
+                            )
+                            HsDivider()
+                        }
+                        item {
+                            VSpacer(72.dp)
+                        }
                     }
                 }
+                BottomSearchBar(
+                    searchQuery = searchQuery,
+                    isSearchActive = isSearchActive,
+                    onActiveChange = { active ->
+                        isSearchActive = active
+                    },
+                    onSearchQueryChange = { query ->
+                        viewModel.updateFilter(query)
+                        searchQuery = query
+                    }
+                )
             }
         }
     }
@@ -183,82 +220,28 @@ private fun CoinCell(
     onItemClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {
-    Column {
-        RowUniversal(
-            onClick = onItemClick,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalPadding = 0.dp
-        ) {
-            Image(
+    CellPrimary(
+        left = {
+            CellLeftImage(
                 painter = viewItem.imageSource.painter(),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
-                    .size(32.dp)
-                    .clip(CircleShape)
+                type = ImageType.Ellipse,
+                size = 32
             )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 12.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    body_leah(
-                        text = viewItem.title,
-                        maxLines = 1,
-                    )
-                    viewItem.label?.let { labelText ->
-                        Badge(
-                            text = labelText,
-                            modifier = Modifier.padding(start = 6.dp)
-                        )
-                    }
-                }
-                subhead2_grey(
-                    text = viewItem.subtitle,
-                    maxLines = 1,
-                    modifier = Modifier.padding(top = 1.dp)
-                )
-            }
-            Spacer(Modifier.width(12.dp))
-            if (viewItem.hasInfo) {
-                HsIconButton(onClick = onInfoClick) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_info_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-            }
-            HsSwitch(
-                modifier = Modifier.padding(0.dp),
+        },
+        middle = {
+            CellMiddleInfo(
+                title = viewItem.title.hs,
+                badge = viewItem.label?.hs,
+                subtitle = viewItem.subtitle.hs,
+            )
+        },
+        right = {
+            CellRightControlsSwitcher(
                 checked = viewItem.enabled,
-                onCheckedChange = { onItemClick.invoke() },
+                onInfoClick = if (viewItem.hasInfo) onInfoClick else null,
+                onCheckedChange = { onItemClick.invoke() }
             )
-        }
-        HsDivider()
-    }
+        },
+        onClick = onItemClick
+    )
 }
-
-//@Preview
-//@Composable
-//fun PreviewCoinCell() {
-//    val viewItem = CoinViewItem(
-//        item = "ethereum",
-//        imageSource = ImageSource.Local(R.drawable.logo_ethereum_24),
-//        title = "ETH",
-//        subtitle = "Ethereum",
-//        enabled = true,
-//        hasSettings = true,
-//        hasInfo = true,
-//        label = "Ethereum"
-//    )
-//    ComposeAppTheme {
-//        CoinCell(
-//            viewItem,
-//            {},
-//            {},
-//            {}
-//        )
-//    }
-//}

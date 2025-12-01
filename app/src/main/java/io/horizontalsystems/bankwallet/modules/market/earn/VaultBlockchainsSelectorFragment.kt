@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -28,17 +27,16 @@ import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.parcelize.Parcelize
 
 class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
@@ -99,31 +97,20 @@ private fun FilterByBlockchainsScreen(
         onDone.invoke(selectedBlockchains)
     }
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Market_Filter_Blockchains),
-                navigationIcon = {
-                    HsBackButton(onClick = {
-                        onDone.invoke(selectedBlockchains)
-                    })
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Reset),
-                        enabled = selectedBlockchains.isNotEmpty(),
-                        onClick = {
-                            onDone.invoke(emptyList())
-                        }
-                    )
-                ),
+    HSScaffold(
+        title = stringResource(R.string.Market_Filter_Blockchains),
+        onBack = { onDone.invoke(selectedBlockchains) },
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                enabled = selectedBlockchains.isNotEmpty(),
+                onClick = {
+                    onDone.invoke(emptyList())
+                }
             )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        ),
     ) {
-        Column(
-            modifier = Modifier.padding(it)
-        ) {
+        Column {
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -141,7 +128,7 @@ private fun FilterByBlockchainsScreen(
                             blockchain = item,
                             checked = item in selectedBlockchains,
                         ) {
-                            navController.paidAction(AdvancedSearch) {
+                            navController.paidAction(TokenInsights) {
                                 if (item in selectedBlockchains) {
                                     selectedBlockchains.remove(item)
                                 } else {

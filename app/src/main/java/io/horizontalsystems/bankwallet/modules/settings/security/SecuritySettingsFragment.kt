@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,14 +27,13 @@ import io.horizontalsystems.bankwallet.modules.settings.security.passcode.Securi
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class SecuritySettingsFragment : BaseComposeFragment() {
 
@@ -63,21 +61,13 @@ private fun SecurityCenterScreen(
     }
 
     val uiState = securitySettingsViewModel.uiState
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Settings_SecurityCenter),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-            )
-        }
+
+    HSScaffold(
+        title = stringResource(R.string.Settings_SecurityCenter),
+        onBack = navController::popBackStack,
     ) {
         Column(
-            Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            Modifier.verticalScroll(rememberScrollState())
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,

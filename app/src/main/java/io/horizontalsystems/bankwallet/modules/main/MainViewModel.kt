@@ -112,7 +112,7 @@ class MainViewModel(
             syncNavigation()
         }
 
-        termsManager.termsAcceptedSignalFlow.collectWith(viewModelScope) {
+        termsManager.termsAcceptedSharedFlow.collectWith(viewModelScope) {
             updateSettingsBadge()
         }
 
@@ -132,7 +132,7 @@ class MainViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.pinSetFlowable.asFlow().collect {
+            pinComponent.pinSetFlow.collect {
                 updateSettingsBadge()
             }
         }

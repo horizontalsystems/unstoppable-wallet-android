@@ -273,15 +273,17 @@ fun ContactsScreen(
                     })
             }
 
-            BottomSearchBar(
-                searchQuery = searchQuery,
-                isSearchActive = isSearchActive,
-                onActiveChange = { isSearchActive = it },
-                onSearchQueryChange = { query ->
-                    searchQuery = query
-                    viewModel.onEnterQuery(query)
-                },
-            )
+            if (uiState.contacts.isNotEmpty()) {
+                BottomSearchBar(
+                    searchQuery = searchQuery,
+                    isSearchActive = isSearchActive,
+                    onActiveChange = { isSearchActive = it },
+                    onSearchQueryChange = { query ->
+                        searchQuery = query
+                        viewModel.onEnterQuery(query)
+                    },
+                )
+            }
         }
         bottomSheetType?.let { type ->
             ModalBottomSheet(

@@ -2,18 +2,19 @@ package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.subscriptions.core.AddressBlacklist
-import io.horizontalsystems.subscriptions.core.AddressPhishing
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.BasePlan
-import io.horizontalsystems.subscriptions.core.DuressMode
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.MevProtection
+import io.horizontalsystems.subscriptions.core.LossProtection
 import io.horizontalsystems.subscriptions.core.PricingPhase
+import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.RobberyProtection
+import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
-import io.horizontalsystems.subscriptions.core.VIPSupport
 import java.time.Period
+import kotlin.math.ceil
 
 object BuySubscriptionModel {
 
@@ -22,11 +23,11 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals
-            DuressMode -> R.string.Premium_UpgradeFeature_DuressMode
-            AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing
-            AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist
-            VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport
-            MevProtection -> R.string.Premium_UpgradeFeature_MevProtection
+            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection
+            SecureSend -> R.string.Premium_UpgradeFeature_SecureSend
+            ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection
+            PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport
+            LossProtection -> R.string.Premium_UpgradeFeature_LossProtection
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -35,37 +36,24 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_Description
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_Description
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_Description
-            DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_Description
-            AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing_Description
-            AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist_Description
-            VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_Description
-            MevProtection -> R.string.Premium_UpgradeFeature_MevProtection_Description
-            else -> throw IllegalArgumentException("Unknown IPaidAction")
-        }
-
-    val IPaidAction.bigDescriptionStringRes: Int
-        get() = when (this) {
-            TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_BigDescription
-            AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_BigDescription
-            TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_BigDescription
-            DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_BigDescription
-            AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing_BigDescription
-            AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist_BigDescription
-            VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
-            MevProtection -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
+            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection_Description
+            SecureSend -> R.string.Premium_UpgradeFeature_SecureSend_Description
+            ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection_Description
+            PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport_Description
+            LossProtection -> R.string.Premium_UpgradeFeature_LossProtection_Description
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
     val IPaidAction.iconRes: Int
         get() = when (this) {
-            TokenInsights -> R.drawable.prem_portfolio_24
-            AdvancedSearch -> R.drawable.prem_search_discovery_24
-            TradeSignals -> R.drawable.prem_ring_24
-            DuressMode -> R.drawable.prem_duress_24
-            AddressPhishing -> R.drawable.prem_shield_24
-            AddressBlacklist -> R.drawable.prem_warning_24
-            VIPSupport -> R.drawable.prem_vip_support_24
-            MevProtection -> R.drawable.prem_shield_24
+            TokenInsights -> R.drawable.prem_binocular_24
+            AdvancedSearch -> R.drawable.prem_search_24
+            TradeSignals -> R.drawable.prem_bell_24
+            RobberyProtection -> R.drawable.prem_fraud_24
+            SecureSend -> R.drawable.prem_wallet_in_24
+            ScamProtection -> R.drawable.prem_radar_24
+            PrioritySupport -> R.drawable.prem_message_24
+            LossProtection -> R.drawable.prem_usd_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -87,10 +75,54 @@ object BuySubscriptionModel {
     }
 
     fun BasePlan.badge(): String? {
-        return when (pricingPhases.last().period.years) {
-            1 -> Translator.getString(R.string.Premium_SubscriptionPeriod_AnnuallySave)
+        return when {
+            pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_AnnuallySave)
+            pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_MonthlySave)
             else -> null
         }
+    }
+
+    //Black Friday discounts
+    //Yearly 50%
+    //Monthly 20%
+    val BasePlan.noteAmount: String?
+        get() {
+            val phase = pricingPhases.last()
+            return when {
+                phase.period.years > 0 -> getOriginalPrice(phase, 50.toDouble())
+                phase.period.months > 0 -> getOriginalPrice(phase, 20.toDouble())
+                else -> null
+            }
+        }
+
+    val BasePlan.noteText: String?
+        get() {
+            return when {
+                pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerYear)
+                pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerMonth)
+                else -> null
+            }
+        }
+
+    val BasePlan.gradientBadge: Boolean
+        get() {
+            return when {
+                pricingPhases.last().period.years > 0 -> true
+                else -> false
+            }
+        }
+
+    fun getOriginalPrice(phase: PricingPhase, discountPercent: Double): String {
+        val currencySymbol = phase.formattedPrice.takeWhile { !it.isDigit() }
+        val discountedPrice = phase.priceAmountMicros / 1_000_000.0
+
+        val originalPrice = discountedPrice / (1 - discountPercent / 100)
+
+        val rounded = ceil(originalPrice * 10) / 10.0
+
+        val priceStr =  rounded.toString().trimEnd('0').trimEnd('.')
+
+        return currencySymbol + priceStr
     }
 
     //billing periods: P1M, P3M, P6M, P1Y

@@ -3,10 +3,8 @@ package io.horizontalsystems.bankwallet.modules.coin.treasuries
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -23,16 +21,14 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
@@ -70,20 +66,12 @@ private fun CoinTreasuriesScreen(
         TvlModule.SelectorDialogState.Closed
     )
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.CoinPage_Treasuries),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                }
-            )
-        }
-    ) { paddingValues ->
+    HSScaffold(
+        title = stringResource(R.string.CoinPage_Treasuries),
+        onBack = onBackClick,
+    ) {
         HSSwipeRefresh(
             refreshing = isRefreshing,
-            modifier = Modifier.padding(paddingValues),
             onRefresh = {
                 viewModel.refresh()
             },

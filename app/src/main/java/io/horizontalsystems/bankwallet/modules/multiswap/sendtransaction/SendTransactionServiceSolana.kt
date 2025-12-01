@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
-import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
@@ -77,10 +76,8 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
 
         when (data) {
             is SendTransactionData.Solana.WithRawTransaction -> {
-                val rawTransaction = data.rawTransactionStr.hexToByteArray()
-                this.rawTransaction = rawTransaction
-
-                fee = adapter.estimateFee(rawTransaction)
+                this.rawTransaction = data.rawTransaction
+                fee = adapter.estimateFee(data.rawTransaction)
 
                 emitState()
             }

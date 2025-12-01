@@ -5,13 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,12 +25,12 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class BlockchainSettingsFragment : BaseComposeFragment() {
 
@@ -51,33 +49,24 @@ private fun BlockchainSettingsScreen(
     viewModel: BlockchainSettingsViewModel = viewModel(factory = BlockchainSettingsModule.Factory()),
 ) {
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
+    HSScaffold(
+        title = stringResource(R.string.BlockchainSettings_Title),
+        onBack = navController::popBackStack,
+    ) {
         Column(
-            modifier = Modifier.navigationBarsPadding()
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
         ) {
-            AppBar(
-                title = stringResource(R.string.BlockchainSettings_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
+            VSpacer(12.dp)
+            BlockchainSettingsBlock(
+                btcLikeChains = viewModel.btcLikeChains,
+                otherChains = viewModel.otherChains,
+                navController = navController
             )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                Spacer(Modifier.height(12.dp))
-                BlockchainSettingsBlock(
-                    btcLikeChains = viewModel.btcLikeChains,
-                    otherChains = viewModel.otherChains,
-                    navController = navController
-                )
-                Spacer(Modifier.height(44.dp))
-            }
+            VSpacer(44.dp)
         }
     }
-
 }
 
 @Composable
@@ -105,7 +94,10 @@ private fun onClick(
 ) {
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
-            navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, item.blockchainItem.blockchain)
+            navController.slideFromBottom(
+                R.id.btcBlockchainSettingsFragment,
+                item.blockchainItem.blockchain
+            )
 
             stat(
                 page = StatPage.BlockchainSettings,

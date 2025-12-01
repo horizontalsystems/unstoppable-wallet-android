@@ -32,6 +32,9 @@ class MainSettingsViewModel(
     val fdroidSupportLink by lazy {
         appConfigProvider.simplexSupportChat
     }
+    val vipSupportLink by lazy {
+        appConfigProvider.telegramSupportChat
+    }
 
     val appVersion: String
         get() {
@@ -81,13 +84,13 @@ class MainSettingsViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.pinSetFlowable.asFlow().collect {
+            pinComponent.pinSetFlow.collect {
                 emitState()
             }
         }
 
         viewModelScope.launch {
-            termsManager.termsAcceptedSignalFlow.collect {
+            termsManager.termsAcceptedSharedFlow.collect {
                 emitState()
             }
         }

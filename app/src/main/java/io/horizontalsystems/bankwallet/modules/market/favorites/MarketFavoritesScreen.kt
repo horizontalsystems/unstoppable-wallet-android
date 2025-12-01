@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -122,6 +123,7 @@ fun MarketFavoritesScreen(
                                 stickyHeader {
                                     HeaderSorting(
                                         borderBottom = true,
+                                        backgroundColor = ComposeAppTheme.colors.lawrence
                                     ) {
                                         HSpacer(width = 16.dp)
                                         HSDropdownButton(

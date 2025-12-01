@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
@@ -103,5 +104,17 @@ class DatabaseConverters {
     @TypeConverter
     fun toMap(v: String): Map<String, String?> {
         return gson.fromJson(v, object : TypeToken<Map<String, String?>>() {}.type)
+    }
+
+    @TypeConverter
+    fun fromBalanceData(v: BalanceData?): String? {
+        return v?.serialize(gson)
+    }
+
+    @TypeConverter
+    fun toBalanceData(v: String?): BalanceData? {
+        v ?: return null
+
+        return BalanceData.deserialize(v, gson)
     }
 }

@@ -6,14 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -63,65 +61,64 @@ fun TopPairsScreen() {
         LazyListState(0, 0)
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-    ) {
-        Column(modifier = Modifier.padding(it)) {
-            HSSwipeRefresh(
-                topPadding = 44,
-                refreshing = uiState.isRefreshing,
-                onRefresh = viewModel::refresh
-            ) {
-                Crossfade(uiState.viewState, label = "") { viewState ->
-                    when (viewState) {
-                        ViewState.Loading -> {
-                            Loading()
-                        }
+    Column {
+        HSSwipeRefresh(
+            topPadding = 44,
+            refreshing = uiState.isRefreshing,
+            onRefresh = viewModel::refresh
+        ) {
+            Crossfade(uiState.viewState, label = "") { viewState ->
+                when (viewState) {
+                    ViewState.Loading -> {
+                        Loading()
+                    }
 
-                        is ViewState.Error -> {
-                            ListErrorView(
-                                stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
-                            )
-                        }
+                    is ViewState.Error -> {
+                        ListErrorView(
+                            stringResource(R.string.SyncError),
+                            viewModel::onErrorClick
+                        )
+                    }
 
-                        ViewState.Success -> {
-                            LazyColumn(
-                                state = state,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                stickyHeader {
-                                    HeaderSorting(borderBottom = true) {
-                                        HSpacer(width = 16.dp)
-                                        HSButton(
-                                            variant = ButtonVariant.Secondary,
-                                            size = ButtonSize.Small,
-                                            title = stringResource(R.string.Market_Volume),
-                                            icon = painterResource(if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
-                                            onClick = { viewModel.toggleSorting() }
-                                        )
-                                        HSpacer(width = 16.dp)
-                                    }
+                    ViewState.Success -> {
+                        LazyColumn(
+                            state = state,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            stickyHeader {
+                                HeaderSorting(
+                                    borderBottom = true,
+                                    backgroundColor = ComposeAppTheme.colors.lawrence
+                                ) {
+                                    HSpacer(width = 16.dp)
+                                    HSButton(
+                                        variant = ButtonVariant.Secondary,
+                                        size = ButtonSize.Small,
+                                        title = stringResource(R.string.Market_Volume),
+                                        icon = painterResource(if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
+                                        onClick = { viewModel.toggleSorting() }
+                                    )
+                                    HSpacer(width = 16.dp)
                                 }
-                                itemsIndexed(uiState.items) { _, item ->
-                                    BoxBordered(bottom = true) {
-                                        TopPairItem(item) {
-                                            it.tradeUrl?.let {
-                                                LinkHelper.openLinkInAppBrowser(context, it)
+                            }
+                            itemsIndexed(uiState.items) { _, item ->
+                                BoxBordered(bottom = true) {
+                                    TopPairItem(item) {
+                                        it.tradeUrl?.let {
+                                            LinkHelper.openLinkInAppBrowser(context, it)
 
-                                                stat(
-                                                    page = StatPage.Markets,
-                                                    event = StatEvent.Open(StatPage.ExternalMarketPair),
-                                                    section = StatSection.Pairs
-                                                )
-                                            }
+                                            stat(
+                                                page = StatPage.Markets,
+                                                event = StatEvent.Open(StatPage.ExternalMarketPair),
+                                                section = StatSection.Pairs
+                                            )
                                         }
                                     }
+                                }
 
-                                }
-                                item {
-                                    VSpacer(height = 72.dp)
-                                }
+                            }
+                            item {
+                                VSpacer(height = 72.dp)
                             }
                         }
                     }
@@ -142,7 +139,7 @@ fun TopPairItem(
 
                 val targetCoinModifier = Modifier
                     .size(32.dp)
-                    .background(ComposeAppTheme.colors.tyler)
+                    .background(ComposeAppTheme.colors.lawrence)
                     .clip(CircleShape)
                     .align(Alignment.TopEnd)
 
@@ -162,7 +159,7 @@ fun TopPairItem(
                 val baseCoinModifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape)
-                    .background(ComposeAppTheme.colors.tyler)
+                    .background(ComposeAppTheme.colors.lawrence)
                     .align(Alignment.TopStart)
 
                 if (item.baseCoin != null) {

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'io.horizontalsystems.subscriptions.googleplay'
-    compileSdk compile_sdk_version
+    compileSdkVersion compile_sdk_version
 
     defaultConfig {
         minSdk min_sdk_version
@@ -31,14 +31,14 @@ android {
 
 dependencies {
     implementation project(':subscriptions-core')
-    implementation "androidx.startup:startup-runtime:1.1.1"
-    def billing_version = "7.0.0"
+    implementation "androidx.startup:startup-runtime:1.2.0"
+    def billing_version = "8.0.0"
 
     implementation "com.android.billingclient:billing-ktx:$billing_version"
 
-    implementation 'androidx.core:core-ktx:1.15.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'

@@ -66,7 +66,10 @@ fun HSTopAppBar(
                             .align(Alignment.Center)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
+                                indication = ripple(
+                                    bounded = false,
+                                    color = ComposeAppTheme.colors.leah
+                                ),
                                 onClick = onBack
                             ),
                         painter = painterResource(id = R.drawable.arrow_m_left_24),
@@ -93,7 +96,10 @@ fun HSTopAppBar(
                                             .size(24.dp)
                                             .clickable(
                                                 interactionSource = remember { MutableInteractionSource() },
-                                                indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
+                                                indication = ripple(
+                                                    bounded = false,
+                                                    color = ComposeAppTheme.colors.leah
+                                                ),
                                                 onClick = menuItem.onClick
                                             ),
                                         painter = painterResource(menuItem.icon),
@@ -111,8 +117,24 @@ fun HSTopAppBar(
                                             content = { }
                                         )
                                     }
-
                                 }
+                            } else {
+                                Text(
+                                    text = menuItem.title.getString().uppercase(),
+                                    style = ComposeAppTheme.typography.headline2,
+                                    color = if (menuItem.enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                                    modifier = Modifier
+                                        .padding(end = 16.dp)
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = ripple(
+                                                bounded = false,
+                                                color = ComposeAppTheme.colors.leah
+                                            ),
+                                            enabled = menuItem.enabled,
+                                            onClick = menuItem.onClick
+                                        ),
+                                )
                             }
                         }
 

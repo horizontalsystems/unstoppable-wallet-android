@@ -28,7 +28,6 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
         return when (request.method) {
             "stellar_signAndSubmitXDR" -> WCActionStellarSignAndSubmitXdr(
                 request.params,
-                peerMetaData?.name ?: "",
                 stellarKit
             )
 
@@ -59,7 +58,13 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
             else -> method
         }
 
-        return MethodData(title, "Stellar")
+        val shortTitle = when (method) {
+            "stellar_signAndSubmitXDR" -> "Sign"
+            "stellar_signXDR" -> "Sign"
+            else -> method
+        }
+
+        return MethodData(title, shortTitle, "Stellar")
     }
 
     override fun getChainName(chainInternalId: String) = "Stellar"

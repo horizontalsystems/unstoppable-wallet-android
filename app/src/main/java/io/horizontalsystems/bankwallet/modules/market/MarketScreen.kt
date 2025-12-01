@@ -54,9 +54,8 @@ import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScree
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_andy
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
@@ -83,7 +82,6 @@ fun MarketScreen(navController: NavController) {
                 Crossfade(uiState.marketGlobal, label = "") {
                     MetricsBoard(navController, it, uiState.currency)
                 }
-                HsDivider()
                 TabsSection(navController, tabs, uiState.selectedTab) { tab ->
                     viewModel.onSelect(tab)
                 }
@@ -113,11 +111,11 @@ fun MarketScreen(navController: NavController) {
                     Icon(
                         painter = painterResource(R.drawable.ic_search),
                         contentDescription = "Search",
-                        tint = ComposeAppTheme.colors.andy,
+                        tint = ComposeAppTheme.colors.grey,
                         modifier = Modifier.size(24.dp)
                     )
                     HSpacer(8.dp)
-                    body_andy(
+                    body_grey(
                         text = stringResource(R.string.Balance_ReceiveHint_Search),
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -157,7 +155,10 @@ fun TabsSection(
 
     HorizontalPager(
         state = pagerState,
-        userScrollEnabled = false
+        userScrollEnabled = false,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(ComposeAppTheme.colors.lawrence)
     ) { page ->
         when (tabs[page]) {
             Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navController) })
