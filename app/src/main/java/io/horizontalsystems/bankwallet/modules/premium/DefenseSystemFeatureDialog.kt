@@ -87,42 +87,42 @@ enum class PremiumFeature(
     SecureSendFeature(
         R.string.Premium_UpgradeFeature_SecureSend,
         R.string.Premium_UpgradeFeature_SecureSend_BigDescription,
-        R.drawable.defense_secure_send
+        R.drawable.prem_securesend
     ),
     LossProtectionFeature(
         R.string.Premium_UpgradeFeature_LossProtection,
         R.string.Premium_UpgradeFeature_LossProtection_BigDescription,
-        R.drawable.defense_loss_protection
+        R.drawable.prem_lossprotection
     ),
     ScamProtectionFeature(
         R.string.Premium_UpgradeFeature_ScamProtection,
         R.string.Premium_UpgradeFeature_ScamProtection_BigDescription,
-        R.drawable.defense_scam_protection
+        R.drawable.prem_scamprotection
     ),
     RobberyProtectionFeature(
         R.string.Premium_UpgradeFeature_RobberyProtection,
         R.string.Premium_UpgradeFeature_RobberyProtection_BigDescription,
-        R.drawable.defense_robbery_protection
+        R.drawable.prem_robberyprotection
     ),
     TokenInsightsFeature(
         R.string.Premium_UpgradeFeature_TokenInsights,
         R.string.Premium_UpgradeFeature_TokenInsights_BigDescription,
-        R.drawable.defense_token_insights
+        R.drawable.prem_tokeninsight
     ),
     AdvancedSearchFeature(
         R.string.Premium_UpgradeFeature_AdvancedSearch,
         R.string.Premium_UpgradeFeature_AdvancedSearch_BigDescription,
-        R.drawable.defense_advanced_search
+        R.drawable.prem_advancedsearch
     ),
     TradeSignalsFeature(
         R.string.Premium_UpgradeFeature_TradeSignals,
         R.string.Premium_UpgradeFeature_TradeSignals_BigDescription,
-        R.drawable.defense_trade_signals
+        R.drawable.prem_tradesignals
     ),
     PrioritySupportFeature(
         R.string.Premium_UpgradeFeature_PrioritySupport,
         R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
-        R.drawable.defense_priority_support
+        R.drawable.prem_prioritysupport
     );
 
     companion object {
@@ -159,6 +159,7 @@ private fun DefenseSystemFeatureScreen(
         Column {
             BottomSheetHeaderV3(
                 image400 = painterResource(feature.imageRes),
+                image400Background = painterResource(R.drawable.prem_background),
                 title = stringResource(feature.titleRes),
                 onCloseClick = {
                     navController.popBackStack()
