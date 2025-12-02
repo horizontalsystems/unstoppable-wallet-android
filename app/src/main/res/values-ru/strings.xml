@@ -391,7 +391,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
     <string name="Balance_Zcash_Unified">Единый</string>
     <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
-    <string name="Balance_Zcash_Transparent">Transparent</string>
+    <string name="Balance_Zcash_Transparent">Прозрачный</string>
     <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или служб, не поддерживающих единые адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
