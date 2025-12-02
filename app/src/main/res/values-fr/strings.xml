@@ -39,7 +39,7 @@
     <string name="Button_Continue">Continuer</string>
     <string name="Button_Search">Chercher</string>
     <string name="Button_Back">Précédent</string>
-    <string name="Button_Copy">Copier</string>
+    <string name="Button_Copy">Copie</string>
     <string name="Button_Browser">Navigateur</string>
     <string name="Button_Delete">Supprimez</string>
     <string name="Button_LearnMore">En savoir plus</string>
@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuer quand même</string>
     <string name="Button_CopyAddress">Copier l\'adresse</string>
     <string name="Button_HideCoin">Cacher la pièce</string>
+    <string name="Button_Approve">Approuver</string>
     <string name="Attention_Title">Attention</string>
     <string name="Error_OutOfRange">Ne peut pas être inférieur à %1$s ou supérieur à %2$s</string>
     <string name="Error_NotInteger">Mauvais nombre entier</string>
@@ -73,7 +74,7 @@
     <string name="Intro_Wallet_Screen4Title">Rester privé</string>
     <string name="Intro_Wallet_Screen4Description">Ne divulguez pas vos données privées et financières au monde.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">J’ai Compris</string>
+    <string name="RootedDevice_Button_Understand">Je comprends</string>
     <!--Welcome-->
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Avancé</string>
@@ -81,7 +82,7 @@
     <string name="CreateWallet_Wordlist">Liste de mots</string>
     <string name="Passphrase">Phrase de passe</string>
     <string name="Password">Mot de passe</string>
-    <string name="ConfirmPassphrase">Confirmer</string>
+    <string name="ConfirmPassphrase">Valider</string>
     <string name="CreateWallet_N_WordsRecommended">Mots %s (recommandé)</string>
     <string name="CreateWallet_N_Words">Mots %s</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase de passe ne peut pas être vide</string>
@@ -107,12 +108,12 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">Avancé</string>
     <string name="Restore_Error_MnemonicWordCount">Mauvais nombre de mots. Il doit être compris entre 12 ou 24 mots. Vous avez saisi : %d</string>
-    <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
+    <string name="Restore_Error_EmptyPassphrase">La phrase de passe ne peut pas être vide</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
     <string name="Restore_PassphraseDescription">Entrez la phrase de passe que vous avez utilisée lors de la création de cette phrase de récupération. La restauration d\'un portefeuille existant avec une nouvelle phrase de passe générera un tout nouveau portefeuille.</string>
     <string name="Restore_Title">Choisir les Blockchains</string>
     <string name="Restore_By">Importer par</string>
-    <string name="Restore_RestoreBy">Restaurer par</string>
+    <string name="Restore_RestoreBy">Importer par</string>
     <string name="Restore_RecoveryPhrase">Phrase de récupération</string>
     <string name="Restore_PrivateKey">Clé privée</string>
     <string name="Restore_PrivateKeyHint">Entrez la clé privée EVM, la clé racine BIP32, la clé secrète Stellar ou la clé privée étendue du compte</string>
@@ -140,7 +141,7 @@
     <string name="Market_Field_PriceDiff">Prix</string>
     <string name="Market_Title">Marchés</string>
     <string name="Market_Search">Chercher</string>
-    <string name="Market_All">Tout</string>
+    <string name="Market_All">Tous</string>
     <string name="Market_Search_Sections_RecentTitle">RÉCENTE</string>
     <string name="Market_Search_Sections_PopularTitle">POPULAIRE</string>
     <string name="Market_FilterSection_MarketParameters">PARAMETRES DE MARCHÉ</string>
@@ -191,15 +192,15 @@
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">Total Cap</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Plafond total du marché</string>
-    <string name="MarketGlobalMetrics_Volume">Vol. 24h</string>
+    <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_VolumeShort">24h Vol.</string>
-    <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
     <string name="MarketGlobalMetrics_EtfInflow">FNB</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur marchande totale de toutes les cryptomonnaies</string>
     <string name="MarketGlobalMetrics_VolumeDescription">Le volume de trading de 24h du marché des cryptomonnaies</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Valeur Totale Verrouillée (TVL) en DeFi</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrer par chaîne</string>
-    <string name="MarketGlobalMetrics_ChainSelectorAll">Tout</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">Tous</string>
     <string name="MarketGlobalMetrics_NoCoin">Ce projet n\'a pas de pièce de monnaie</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Entrées nettes totales</string>
@@ -218,7 +219,7 @@
     <string name="Market_AdvancedSearch_Results">Résultats</string>
     <string name="Market_Search_Hint">Chercher</string>
     <string name="Market_Filter_ChooseSet">Choisir un ensemble</string>
-    <string name="Market_Filter_MarketCap">Cap. marché</string>
+    <string name="Market_Filter_MarketCap">Plafond du Marché</string>
     <string name="Market_Filter_Volume">Volume de trading</string>
     <string name="Market_Filter_Volume24h">Volume de négociation (24h)</string>
     <string name="Market_Filter_PricePeriod">Période de prix</string>
@@ -251,6 +252,10 @@
     <string name="Market_Filter_RiskToTrade">Risque</string>
     <string name="Market_Filter_ATH_Description">(Tous les temps élevés)</string>
     <string name="Market_Filter_ATL_Description">(Tout le temps faible)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_Top_2000">Top 2000</string>
@@ -294,8 +299,8 @@
     <string name="Market_Sorting_Manual">Manuelle</string>
     <string name="Market_Sorting_Gainers">Gagnants</string>
     <string name="Market_Sorting_Losers">Les perdants</string>
-    <string name="Market_Sorting_HighestCap">Cap. marché la plus forte</string>
-    <string name="Market_Sorting_LowestCap">Cap. marché la plus basse</string>
+    <string name="Market_Sorting_HighestCap">Casquette la plus haute</string>
+    <string name="Market_Sorting_LowestCap">Casquette la plus basse</string>
     <string name="Market_Filters_Select">Sélectionnez %d</string>
     <!--Vaults-->
     <string name="Market_Vaults_WantToUnlockPremium">Explorez les meilleurs retours de staking DeFI, tous en un seul endroit.</string>
@@ -308,10 +313,12 @@
     <string name="Market_Vaults_Filter_USDYield">Rendement en USD</string>
     <string name="Market_Vaults_OpenDapp">Ouvrir dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">Chaînes %d</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Réseau</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Jeton sous-jacent</string>
     <string name="Market_Vaults_Vault_Holders">Titres</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-chaîne</string>
@@ -335,7 +342,7 @@
     <string name="Balance_Sort_Balance">Solde</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
-    <string name="Balance_Sort_24hPriceChange">Variation de prix</string>
+    <string name="Balance_Sort_24hPriceChange">Changement de prix</string>
     <string name="Balance_NoCoinsAlert">Vous n\'avez ajouté aucune pièce à ce portefeuille.</string>
     <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
     <string name="Balance_Network">Réseau</string>
@@ -378,10 +385,11 @@
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparence</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">ZEC transparent détecté</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Montant transparent</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Le solde transparent ne peut pas être utilisé dans notre portefeuille pour le moment. Mais cet argent peut être dépensé par d\'autres portefeuilles avec le support des t-address</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Vous avez un solde ZEC maintenu dans une adresse transparente. Pour l\'utiliser dans Unstoppable, il doit être protégé pour une vie privée totale.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Bouclier</string>
     <string name="Balance_Zcash_Unified">Unifié</string>
     <string name="Balance_Zcash_UnifiedDescription">Utiliser pour les transferts personnels et privés entre portefeuilles.</string>
+    <string name="Balance_Zcash_Transparent">Transparence</string>
     <string name="Balance_Zcash_TransparentDescription">Utilisé pour recevoir des échanges ou des services qui ne prennent pas en charge les adresses unifiées.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
@@ -404,7 +412,7 @@
     <string name="Send_Utxo_AvailableBalance">Solde disponible</string>
     <string name="Send_Utxo_UnselectAll">Tout désintéresser</string>
     <string name="Send_Utxo_SelectAll">Tout Sellect</string>
-    <string name="Send_Confirmation_Title">Confirmer</string>
+    <string name="Send_Confirmation_Title">Valider</string>
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
     <string name="Send_Confirmation_YouReceive">Vous recevez</string>
     <string name="Send_Confirmation_Mint">Médicaments</string>
@@ -467,7 +475,7 @@
     <string name="Send_Error_LowFee">Erreur de frais</string>
     <string name="Send_Error_LowFee_Description">Le taux de frais est trop faible.</string>
     <string name="Send_Warning_LowFee_Description">La transaction peut être bloquée ou échouée</string>
-    <string name="Send_Error_FetchFeeRateFailed">Frais erronés</string>
+    <string name="Send_Error_FetchFeeRateFailed">Erreur de frais</string>
     <string name="Send_Error_FetchFeeRateFailed_Description">La connexion au serveur a été perdue. Pour continuer, configurez les frais manuellement en utilisant les données sur le site.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avancé</string>
@@ -489,9 +497,9 @@
     <string name="FeeSettings_MaxFee_Info">Il s\'agit du prix total maximum par gaz que l\'utilisateur est prêt à payer. Il doit couvrir le tarif de base du réseau et le tarif maximal des frais prioritaires. La valeur montrée ici est suggérée sur la base d\'une estimation du taux de frais de base du bloc suivant plus le taux de frais de priorité max choisi par l\'utilisateur. Le taux réel des frais payés sera normalement inférieur. Définir ceci inférieur au taux actuel des frais de base limitera les frais payés, mais cela entraînera des temps d\'attente plus longs pour que la transaction soit confirmée, ou même dans une transaction bloquée.</string>
     <string name="FeeSettings_MaxMinerTips">Frais de priorité max</string>
     <string name="FeeSettings_MaxMinerTips_Info">Les utilisateurs paient des frais de priorité pour encourager une transaction à être confirmée plus rapidement. Ils sont parfois appelés conseils. Le taux de frais de priorité max est le prix supplémentaire maximum par gaz que l\'utilisateur est prêt à payer en plus du taux de frais de base. La valeur montrée ici est suggérée en fonction des conditions de réseau prévues. Les frais de priorité réels seront normalement inférieurs. Le fait de le définir à zéro peut entraîner un long délai d\'attente pour la confirmation de la transaction, car il est placé à la fin de la file d\'attente des transactions en attente de tous les utilisateurs.</string>
-    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risque</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction peut rester en attente pendant un certain temps ou échouer entièrement.</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risqué</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risque</string>
     <string name="FeeSettings_RiskOfGettingStuck">Pour assurer une exécution rapide de la transaction le taux de frais max (soustrait max. Astuce de mineur) devrait être plus élevé que le taux actuel des frais de base. Si ce n\'est pas le cas, la transaction peut rester en attente jusqu\'à ce que la condition soit remplie.</string>
     <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que nécessaire pour traiter cette transaction maintenant.</string>
@@ -501,7 +509,7 @@
         \n\nLe portefeuille Unstoppable suggère des frais optimaux pour aider à confirmer votre transaction dans un délai raisonnable. Vous pouvez augmenter ou diminuer cette valeur.
         \n\nDéfinir les frais trop bas peut faire en sorte que votre transaction reste en attente pendant une longue période ou même être rejetée. Pour une confirmation plus rapide, utilisez des frais plus élevés.</string>
     <!--Fee Info -->
-    <string name="FeeInfo_Title">Vitesse de transaction</string>
+    <string name="FeeInfo_Title">Vitesse de la transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
     <string name="FeeInfo_Slow">Bas</string>
     <string name="FeeInfo_SlowDescription">La sélection d\'une valeur de cette plage peut entraîner une transaction en attente pendant des heures, ou être rejetée. Plus la valeur est basse, plus il faudra de temps pour que la transaction soit confirmée.</string>
@@ -522,7 +530,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer TRX à vous-même</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Impossible de transférer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Compte non actif</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON nécessitent un dépôt d\'au moins 1 TRX pour devenir actifs. Les portefeuilles inactifs peuvent contenir et recevoir des jetons mais ne corrigeront pas les soldes tant qu\'ils ne seront pas activés.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON ont besoin d\'au moins 1 TRX pour être activés. D\'ici là, ils peuvent recevoir des jetons mais ne montreront pas les bons soldes.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Nouvelle connexion</string>
     <string name="TonConnect_Error_InvalidUrl">Adresse URL invalide</string>
@@ -925,6 +933,7 @@
     <string name="Period_Days">%s jours</string>
     <string name="Premium_TitleForDroid">Premium (gratuit pour F-Droid)</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Choisir le plan</string>
     <string name="Premium_EnjoyFreePeriod">Profitez des premiers %s GRATUITS.</string>
     <string name="Premium_CancelSubscriptionInfo">Vous pouvez annuler votre abonnement à tout moment.</string>
@@ -951,6 +960,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Mode Contrainte</string>
     <string name="Premium_UpgradeFeature_SecureSend">Protection Anti-arnaques</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Vérification Liste Noire</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">Support VIP</string>
     <string name="Premium_UpgradeFeature_LossProtection">Protection contre la perte</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Accès aux listes top-100 selon des critères clés</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrage multi-niveaux sur plusieurs paramètres</string>
@@ -966,6 +976,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Vos cryptos. Votre sécurité. Le Mode sous Contrainte vous permet de créer plusieurs configurations alternatives de portefeuille, chacune avec un code PIN distinct, offrant une échappatoire cachée dans les situations à haut risque. Si vous êtes forcé de déverrouiller votre portefeuille, utilisez simplement le code PIN de contrainte pour accéder à un portefeuille secondaire sans exposer vos actifs critiques. Vos fonds réels restent cachés. Votre sécurité reste intacte.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Une seule adresse erronée, et vos cryptos disparaissent à jamais. Unstoppable analyse automatiquement les adresses des destinataires pour détecter les modèles suspects et vous protège contre les dernières menaces d\'hameçonnage, vous empêchant d\'envoyer des fonds à un pirate informatique. Bloquez les transferts frauduleux avant qu\'ils ne se produisent.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Protégez-vous des entités à risque et sous sanctions. Le Vérificateur de Liste Noire filtre automatiquement les adresses des destinataires par rapport aux bases de données à haut risque, signalant les arnaques, fraudes et entités sanctionnées avant tout envoi. Si une adresse est sur liste noire, vous le saurez avant de commettre une erreur coûteuse. Sécurisez vos transactions. Gardez vos cryptos propres. Restez conforme.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Obtenez un accès prioritaire à notre équipe. Discutez directement avec le support Unstoppable pour une aide plus rapide, des aperçus précoces et des conseils sur les fonctionnalités à venir. Vos commentaires entraînent l\'évolution du portefeuille — et nous sommes là pour vous soutenir à chaque étape du chemin.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Protection MEV</string>
     <string name="Premium_DefenseSystem">Système de défense</string>
     <string name="Premium_MarketInsights">Aperçus du marché</string>
@@ -1100,6 +1111,7 @@
     <string name="DuressPin_Notes_PasscodeChange_Description">La modification du code d\'accès en mode Duress modifiera également le code d\'accès actuel pour ce mode.</string>
     <string name="DuressPinSelectAccounts_Title">Sélectionnez les portefeuilles</string>
     <string name="DuressPinSelectAccounts_Description">Sélectionnez les portefeuilles qui seront affichés en mode Duresse.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Sauvegarde sécurisée des phrases de récupération pour chaque portefeuille. C\'est le seul moyen de récupérer l\'accès aux fonds si l\'application ne fonctionne pas.</string>
@@ -1630,6 +1642,7 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Contacts-->
+    <string name="Contacts">Contacts</string>
     <string name="Contacts_Backup">Sauvegarder les contacts</string>
     <string name="Contacts_Restore">Restaurer les contacts</string>
     <string name="Contacts_Restore_Warning">Cette action écrasera complètement vos contacts et supprimera votre liste de contacts existante. Voulez-vous remplacer votre liste de contacts ? </string>
