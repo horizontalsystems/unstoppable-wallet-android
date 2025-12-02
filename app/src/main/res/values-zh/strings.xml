@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">仍然繼續</string>
     <string name="Button_CopyAddress">复制地址</string>
     <string name="Button_HideCoin">隐藏硬币</string>
+    <string name="Button_Approve">批准</string>
     <string name="Attention_Title">注意事项</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
@@ -312,10 +313,12 @@
     <string name="Market_Vaults_Filter_USDYield">美元收益</string>
     <string name="Market_Vaults_OpenDapp">打开 dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d 链接</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">網絡</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">底部令牌</string>
     <string name="Market_Vaults_Vault_Holders">持有者</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">多链</string>
@@ -385,6 +388,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
     <string name="Balance_Zcash_Unified">统一的</string>
     <string name="Balance_Zcash_UnifiedDescription">用于钱包之间的个人和私人转账。</string>
+    <string name="Balance_Zcash_Transparent">透明的</string>
     <string name="Balance_Zcash_TransparentDescription">用于接收来自交易所或不支持统一地址的服务。</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
