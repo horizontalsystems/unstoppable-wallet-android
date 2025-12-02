@@ -5,33 +5,48 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.settings.banners.TextWithDynamicScale
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.DynamicSliderIndicator
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.IPaidAction
@@ -141,7 +156,7 @@ enum class PremiumFeature(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun DefenseSystemFeatureScreen(
     navController: NavController,
@@ -149,6 +164,8 @@ private fun DefenseSystemFeatureScreen(
     showAllFeaturesButton: Boolean
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val features = remember { PremiumFeature.entries.toTypedArray() }
+    val pagerState = rememberPagerState(initialPage = features.indexOf(feature)) { features.size }
 
     BottomSheetContent(
         onDismissRequest = {
@@ -156,19 +173,87 @@ private fun DefenseSystemFeatureScreen(
         },
         sheetState = sheetState
     ) {
-        Column {
-            BottomSheetHeaderV3(
-                image400 = painterResource(feature.imageRes),
-                image400Background = painterResource(R.drawable.prem_background),
-                title = stringResource(feature.titleRes),
-                onCloseClick = {
-                    navController.popBackStack()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { page ->
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box {
+                            Image(
+                                modifier = Modifier.fillMaxWidth(),
+                                painter = painterResource(R.drawable.prem_background),
+                                contentScale = ContentScale.FillWidth,
+                                contentDescription = null,
+                            )
+                            Image(
+                                painter = painterResource(id = features[page].imageRes),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxWidth(),
+                                contentScale = ContentScale.FillWidth,
+                            )
+                        }
+
+                        val currentFeature = features[page]
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            body_leah(
+                                text = stringResource(currentFeature.titleRes),
+                                modifier = Modifier.padding(top = 16.dp),
+                                textAlign = TextAlign.Center
+                            )
+                            val lineHeight = 24.sp
+                            val threeLinesHeight = with(LocalDensity.current) {
+                                (lineHeight * 3).toDp()
+                            }
+                            VSpacer(12.dp)
+                            Box(
+                                modifier = Modifier.height(threeLinesHeight)
+                            ) {
+                                TextWithDynamicScale(
+                                    maxLines = 3,
+                                    text = stringResource(currentFeature.descriptionRes),
+                                    style = ComposeAppTheme.typography.body,
+                                    color = ComposeAppTheme.colors.leah,
+                                    textAlignment = TextAlign.Center,
+                                )
+                            }
+                        }
+                    }
                 }
-            )
-            TextBlock(
-                text = stringResource(feature.descriptionRes),
-                textAlign = TextAlign.Center
-            )
+                Box(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.TopEnd)
+                ) {
+                    HSIconButton(
+                        icon = painterResource(id = R.drawable.ic_close),
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
+                        onClick = { navController.popBackStack() }
+                    )
+                }
+            }
+
+            VSpacer(16.dp)
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                DynamicSliderIndicator(
+                    total = features.size,
+                    current = pagerState.currentPage
+                )
+            }
+
             if (showAllFeaturesButton) {
                 subhead1_jacob(
                     modifier = Modifier

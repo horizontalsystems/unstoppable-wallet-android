@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,7 +91,8 @@ fun TextWithDynamicScale(
     maxLines: Int,
     text: String,
     color: Color,
-    style: TextStyle
+    style: TextStyle,
+    textAlignment: TextAlign = TextAlign.Start,
 ) {
     var currentFontSize by remember { mutableStateOf(style.fontSize) }
     var readyToDraw by remember { mutableStateOf(false) }
@@ -100,6 +102,7 @@ fun TextWithDynamicScale(
         color = color,
         maxLines = maxLines,
         softWrap = true,
+        textAlign = textAlignment,
         onTextLayout = { textLayoutResult ->
             if (textLayoutResult.didOverflowHeight && !readyToDraw) {
                 if (currentFontSize.value > 10f) {
