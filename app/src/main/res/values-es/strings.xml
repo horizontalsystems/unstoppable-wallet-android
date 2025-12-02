@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuar de todos modos</string>
     <string name="Button_CopyAddress">Copiar dirección</string>
     <string name="Button_HideCoin">Moneda de Piel</string>
+    <string name="Button_Approve">Aprobar</string>
     <string name="Attention_Title">Atención</string>
     <string name="Error_OutOfRange">No puede ser menor que %1$s o mayor que %2$s</string>
     <string name="Error_NotInteger">Número entero incorrecto</string>
@@ -251,6 +252,9 @@
     <string name="Market_Filter_RiskToTrade">Arriesgado</string>
     <string name="Market_Filter_ATH_Description">(Altura de todo el tiempo)</string>
     <string name="Market_Filter_ATL_Description">(Todo el tiempo bajo)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
     <string name="Market_Filter_Top_500">500 mejores</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
@@ -309,10 +313,12 @@
     <string name="Market_Vaults_Filter_USDYield">Rendimiento USD</string>
     <string name="Market_Vaults_OpenDapp">Abrir dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">Cadenas %d</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">La red</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Token subyacente</string>
     <string name="Market_Vaults_Vault_Holders">Titulares</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Cadena múltiple</string>
@@ -383,6 +389,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudo</string>
     <string name="Balance_Zcash_Unified">Unificado</string>
     <string name="Balance_Zcash_UnifiedDescription">Uso para transferencias personales y privadas entre billeteras.</string>
+    <string name="Balance_Zcash_Transparent">Transparente</string>
     <string name="Balance_Zcash_TransparentDescription">Utilizar para recibir desde intercambios o servicios que no soporten direcciones unificadas.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
@@ -927,6 +934,7 @@
     <string name="Period_Days">%s días</string>
     <string name="Premium_TitleForDroid">Premium (Gratuito para F-Droid)</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Elige el plan</string>
     <string name="Premium_EnjoyFreePeriod">Disfruta de los primeros %s GRATIS.</string>
     <string name="Premium_CancelSubscriptionInfo">Puedes cancelar tu suscripción en cualquier momento.</string>
@@ -1505,6 +1513,7 @@
     <string name="Coin_Analytics_Indicators_StrongSell">Vender fuerte</string>
     <string name="Coin_Analytics_Indicators_Sell">Vender</string>
     <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
+    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
     <string name="CoinAnalytics_SmartContractAnalysis">Análisis de contratos inteligente</string>
     <string name="CoinAnalytics_HighRiskItems">Elementos de Alto Riesgo</string>
     <string name="CoinAnalytics_MediumRiskItems">Elementos de Riesgo Medio</string>
@@ -1544,6 +1553,7 @@
     <string name="TechnicalAdvice_HideDetails">Ocultar Detalles</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Compra fuerte</string>
     <string name="TechnicalAdvice_Indicators_Buy">Comprar</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
     <string name="TechnicalAdvice_Indicators_Sell">Vender</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Vender fuerte</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Arriesgado</string>
