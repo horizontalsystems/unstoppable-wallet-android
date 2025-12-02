@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
     <string name="Button_CopyAddress">Copiar Endereço</string>
     <string name="Button_HideCoin">Ocultar moeda</string>
+    <string name="Button_Approve">Aprovar</string>
     <string name="Attention_Title">Atenção</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
@@ -251,6 +252,10 @@
     <string name="Market_Filter_RiskToTrade">Arriscado</string>
     <string name="Market_Filter_ATH_Description">(Maior Alta Histórica)</string>
     <string name="Market_Filter_ATL_Description">(Maior Baixa Histórica)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_Top_2000">Top 2000</string>
@@ -384,6 +389,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudos</string>
     <string name="Balance_Zcash_Unified">Unificado</string>
     <string name="Balance_Zcash_UnifiedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
+    <string name="Balance_Zcash_Transparent">Transparente</string>
     <string name="Balance_Zcash_TransparentDescription">Use para receber de trocas ou serviços que não suportam endereços unificados.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
@@ -1088,6 +1094,7 @@
     <string name="SettingsSecurity_SyncModeBlockchair">API Blockchair</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Sem Privado</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">Devagar, Sem Privado</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado.</string>
     <string name="SetDuressPin_Title">Senha do Modo Coação</string>
     <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
@@ -1301,6 +1308,7 @@
     <string name="AddToken_CoinCode">Código da Moeda</string>
     <string name="AddToken_Decimals">Decimais</string>
     <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
     <string name="AddToken_InvalidContractAddress">Endereço do contrato inválido</string>
     <string name="AddToken_InvalidBep2Symbol">Símbolo BEP2 inválido</string>
@@ -1347,6 +1355,7 @@
     <string name="CoinPage_FundsInvested">Fundos Investidos</string>
     <string name="CoinPage_Overview">Visão Geral</string>
     <string name="CoinPage_Contracts">Contratos</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Tipos de moeda</string>
     <string name="CoinPage_Links">Links</string>
