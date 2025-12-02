@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Trotzdem fortfahren</string>
     <string name="Button_CopyAddress">Adresse kopieren</string>
     <string name="Button_HideCoin">Münze ausblenden</string>
+    <string name="Button_Approve">Bestätigen</string>
     <string name="Attention_Title">Aufmerksamkeit</string>
     <string name="Error_OutOfRange">Kann nicht kleiner als %1$s oder mehr als %2$s sein</string>
     <string name="Error_NotInteger">Falsche Ganzzahl</string>
@@ -251,6 +252,10 @@
     <string name="Market_Filter_RiskToTrade">Riskant</string>
     <string name="Market_Filter_ATH_Description">(Alle Zeiten hoch)</string>
     <string name="Market_Filter_ATL_Description">(Alle Zeiten niedrig)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_Top_2000">Top 2000</string>
@@ -308,10 +313,12 @@
     <string name="Market_Vaults_Filter_USDYield">USD Rendite</string>
     <string name="Market_Vaults_OpenDapp">Öffne dap</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d Ketten</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Netzwerk</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Unteres Token</string>
     <string name="Market_Vaults_Vault_Holders">Halter</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Mehrere Ketten</string>
@@ -382,6 +389,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Schild</string>
     <string name="Balance_Zcash_Unified">Einheitlich</string>
     <string name="Balance_Zcash_UnifiedDescription">Für private und private Überweisungen zwischen Brieftaschen verwenden.</string>
+    <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Verwenden Sie zum Empfangen von Börsen oder Diensten, die keine einheitlichen Adressen unterstützen.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
@@ -527,6 +535,7 @@
     <string name="TonConnect_NewConnect">Neue Verbindung</string>
     <string name="TonConnect_Error_InvalidUrl">Ungültige URL Adresse</string>
     <string name="TonConnect_Unnamed">Unbenannt</string>
+    <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Wallet auswählen</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
@@ -554,6 +563,7 @@
     <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
     <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
+    <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Brieftyp %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
     <string name="WalletConnect_Pairings">Pairings</string>
@@ -747,6 +757,7 @@
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Sie haben keine passenden Kontakte </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktionsinfo</string>
+    <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Date">Datum</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Service</string>
@@ -754,6 +765,7 @@
     <string name="TransactionInfo_ContactName">Kontaktname</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
+    <string name="TransactionInfo_Spender">Spender</string>
     <string name="TransactionInfo_LockedUntil">Gesperrt bis %s</string>
     <string name="TransactionInfo_UnlockedAt">Freigeschaltet ab %s</string>
     <string name="TransactionInfo_RecipientHash">Empfänger</string>
@@ -1199,6 +1211,7 @@
     <string name="Watch_Error_InvalidAddressFormat">Adressformat wird nicht unterstützt</string>
     <string name="Watch_Monero_Warning">Monero Watchwallet zeigt nur eingehende Transaktionen an. Das angezeigte Guthaben ist möglicherweise falsch.</string>
     <!--Manage Account-->
+    <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Manuelle Sicherung</string>
     <string name="ManageAccount_LocalBackup">Lokale Sicherung</string>
@@ -1347,6 +1360,7 @@
     <string name="CoinPage_FundsInvested">Investierte Gelder</string>
     <string name="CoinPage_Overview">Übersicht</string>
     <string name="CoinPage_Contracts">Verträge</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Münztypen</string>
     <string name="CoinPage_Links">Links</string>
@@ -1508,6 +1522,7 @@
     <string name="Coin_Analytics_Indicators_StrongSell">Stark Verkaufen</string>
     <string name="Coin_Analytics_Indicators_Sell">Verkaufen</string>
     <string name="Coin_Analytics_Indicators_Buy">Kaufen</string>
+    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
     <string name="CoinAnalytics_SmartContractAnalysis">Analyse von Smart Contracts</string>
     <string name="CoinAnalytics_HighRiskItems">Hochrisiko-Positionen</string>
     <string name="CoinAnalytics_MediumRiskItems">Mittlere Risiko-Positionen</string>
@@ -1547,6 +1562,7 @@
     <string name="TechnicalAdvice_HideDetails">Details ausblenden</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Stark Kaufen</string>
     <string name="TechnicalAdvice_Indicators_Buy">Kaufen</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
     <string name="TechnicalAdvice_Indicators_Sell">Verkaufen</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Stark Verkaufen</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Riskant</string>
@@ -1555,6 +1571,7 @@
     <string name="Detectors_GeneralDetectors">Allgemeine Detektoren</string>
     <string name="Detectors_IssuesCount">Probleme %d</string>
     <string name="ActivateSubscription_Title">Aktivieren</string>
+    <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Adresse</string>
     <string name="ActivateSubscription_NoSubscriptionError">Ihre Wallet-Adresse hat kein Abonnement für Premium-Funktionen, Sie müssen sie kaufen, um das Abonnement zu aktivieren.</string>
     <string name="SubscriptionInfo_Title">Premium-Funktionen</string>
@@ -1640,6 +1657,7 @@
     <string name="Contacts_AddressesCount">Adresse: %s</string>
     <string name="Contacts_NewContact">Neuer Kontakt</string>
     <string name="Contacts_AddNewContact">Neuen Kontakt hinzufügen</string>
+    <string name="Contacts_NameHint">Name</string>
     <string name="Contacts_AddAddress">Adresse hinzufügen</string>
     <string name="Contacts_AddAddress_NewContact">Neuen Kontakt erstellen</string>
     <string name="Contacts_AddAddress_ExistingContact">Zu vorhandenem Kontakt hinzufügen</string>
