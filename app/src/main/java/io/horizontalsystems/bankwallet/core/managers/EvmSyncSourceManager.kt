@@ -38,6 +38,7 @@ class EvmSyncSourceManager(
             BlockchainType.ArbitrumOne -> TransactionSource.arbitrumOne(appConfigProvider.etherscanApiKey)
             BlockchainType.Gnosis -> TransactionSource.gnosis(appConfigProvider.etherscanApiKey)
             BlockchainType.Base -> TransactionSource.base(appConfigProvider.etherscanApiKey)
+            BlockchainType.Fantom -> TransactionSource.fantom(appConfigProvider.etherscanApiKey)
             BlockchainType.ZkSync -> TransactionSource.zkSync(appConfigProvider.otherScanApiKey)
             else -> throw Exception("Non-supported EVM blockchain")
         }

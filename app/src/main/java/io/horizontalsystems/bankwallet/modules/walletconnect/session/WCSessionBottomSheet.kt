@@ -307,13 +307,6 @@ fun IconsFromUrls(
     }
 }
 
-enum class DefenseSystemState {
-    WARNING,
-    CHECKING,
-    DANGER,
-    SAFE
-}
-
 @Composable
 fun DefenseSystemMessage(
     activated: Boolean,
@@ -326,13 +319,6 @@ fun DefenseSystemMessage(
         whiteListState == WCWhiteListState.InWhiteList -> DefenseSystemState.SAFE
         whiteListState == WCWhiteListState.InProgress -> DefenseSystemState.CHECKING
         else -> DefenseSystemState.CHECKING
-    }
-
-    val bubbleColor = when (state) {
-        DefenseSystemState.WARNING -> ComposeAppTheme.colors.jacob
-        DefenseSystemState.CHECKING -> ComposeAppTheme.colors.andy
-        DefenseSystemState.DANGER -> ComposeAppTheme.colors.lucian
-        DefenseSystemState.SAFE -> ComposeAppTheme.colors.remus
     }
 
     val clickableModifier = when (state) {
@@ -353,7 +339,7 @@ fun DefenseSystemMessage(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(bubbleColor)
+                .background(state.bubbleColor)
                 .then(clickableModifier)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
@@ -451,7 +437,7 @@ fun DefenseSystemMessage(
                 .offset(x = 48.dp, y = (-8).dp)
                 .size(16.dp)
                 .rotate(45f)
-                .background(bubbleColor)
+                .background(state.bubbleColor)
         )
     }
 
@@ -470,4 +456,22 @@ fun DefenseSystemMessage(
             )
         }
     }
+}
+
+enum class DefenseSystemState {
+    WARNING,
+    CHECKING,
+    DANGER,
+    SAFE;
+
+    val bubbleColor: Color
+        @Composable
+        get() {
+            return when (this) {
+                WARNING -> ComposeAppTheme.colors.yellowD
+                CHECKING -> ComposeAppTheme.colors.andy
+                DANGER -> ComposeAppTheme.colors.redL
+                SAFE -> ComposeAppTheme.colors.greenD
+            }
+        }
 }
