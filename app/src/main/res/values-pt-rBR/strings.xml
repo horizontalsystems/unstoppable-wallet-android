@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
     <string name="Button_CopyAddress">Copiar Endereço</string>
     <string name="Button_HideCoin">Ocultar moeda</string>
+    <string name="Button_Approve">Aprovar</string>
     <string name="Attention_Title">Atenção</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
@@ -251,6 +252,10 @@
     <string name="Market_Filter_RiskToTrade">Arriscado</string>
     <string name="Market_Filter_ATH_Description">(Maior Alta Histórica)</string>
     <string name="Market_Filter_ATL_Description">(Maior Baixa Histórica)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_Top_2000">Top 2000</string>
@@ -384,6 +389,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudos</string>
     <string name="Balance_Zcash_Unified">Unificado</string>
     <string name="Balance_Zcash_UnifiedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
+    <string name="Balance_Zcash_Transparent">Transparente</string>
     <string name="Balance_Zcash_TransparentDescription">Use para receber de trocas ou serviços que não suportam endereços unificados.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
@@ -800,6 +806,7 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Incapaz de substituir</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
+    <string name="Info_LockTime_NoDateDescription">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
     <string name="Info_Reserved_Title">Reservado</string>
     <string name="Info_Reserved_Description">A rede Stellar bloqueia 1 XLM para ativar a carteira e 0.5 XLM como uma reserva para cada token ativado na sua carteira.</string>
     <string name="Info_Reserved_CurrentlyLocked">Bloqueado atualmente:</string>
@@ -963,15 +970,15 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Proteção automática eficaz contra fraudes e ataques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantia de legalidade para suas operações com criptomoedas</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Proteção MEV</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Sua ferramenta tudo-em-um para análise profunda. Navegue pelas listas de tokens Top 250 selecionados com base no volume de negociação, liquidez da corretora, comportamento do holder e tendências on-chain — tudo de uma vez. Filtre, analise e fique à frente.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Abandone o ruído e concentre-se em tokens de alto potencial com precisão. Use a Pesquisa Avançada para filtrar milhares de tokens por volume de negociação, blockchain, capitalização de mercado, tendências de preço, setor e desempenho — e muito mais. Poderoso, preciso e criado para descobrir.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Nunca mais perca uma oportunidade de negociação. O Monitoramento de Tendências fornece alertas em tempo real com base em análises técnicas avançadas, ajudando você a identificar tendências, detectar rompimentos e evitar armadilhas antes que elas aconteçam. Aja rápido, negocie de forma inteligente e maximize os ganhos.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Sua cripto. Sua segurança. O Modo Coação permite que você crie várias configurações de carteira alternativas, cada uma com um PIN separado, fornecendo uma rota de fuga oculta em situações de alto risco. Se for forçado a desbloquear sua carteira, basta usar o PIN de coação (alternativo) para acessar uma carteira secundária sem ativos críticos expostos. Seus fundos reais permanecem ocultos. Sua segurança permanece intacta.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Um endereço errado e sua cripto se vai para sempre. A Unstoppable verifica automaticamente os endereços dos destinatários em busca de padrões suspeitos e defende contra as últimas ameaças de phishing, impedindo que você envie fundos para um hacker. Bloqueie transferências fraudulentas antes que elas aconteçam.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Proteja-se de entidades arriscadas e sancionadas. A Verificação de Lista Negra verifica automaticamente os endereços dos destinatários em relação a bancos de dados de alto risco, sinalizando golpes, fraudes e entidades sancionadas antes de você enviar. Se um endereço estiver na lista negra, você saberá antes de cometer um erro caro. Proteja suas transações. Mantenha sua criptomoeda limpa. Mantenha a conformidade.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Tenha prioridade no acesso à nossa equipe. Converse diretamente com suporte Iparável para obter ajuda mais rápida, dicas e orientações em próximas funcionalidades. O seu feedback conduz à evolução da carteira — e estamos aqui para te apoiar a cada passo do caminho.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Proteção MEV</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">Impede que bots roubem fundos durante swaps.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Mostra dados do token - volume, liquidez e tendências, ajudando você a investir melhor.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Permite criar uma carteira-isca com PIN separado, mantendo seus ativos reais ocultos em situações de risco.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Verifica carteiras de destino para detectar phishing ou fraude. Avisa você antes de enviar para endereços de risco.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detecta aplicativos falsos ou maliciosos antes de se conectar. Impede o phishing e mantém seus ativos seguros.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Bloqueia bots e ataques de front-running durante swaps. Mantém suas transações justas e seguras.</string>
     <string name="Premium_DefenseSystem">Sistema de defesa</string>
     <string name="Premium_MarketInsights">Insights de mercado</string>
     <string name="Premium_Vip">VIP</string>
@@ -1088,6 +1095,7 @@
     <string name="SettingsSecurity_SyncModeBlockchair">API Blockchair</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Sem Privado</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">Devagar, Sem Privado</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado.</string>
     <string name="SetDuressPin_Title">Senha do Modo Coação</string>
     <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
@@ -1301,6 +1309,7 @@
     <string name="AddToken_CoinCode">Código da Moeda</string>
     <string name="AddToken_Decimals">Decimais</string>
     <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
     <string name="AddToken_InvalidContractAddress">Endereço do contrato inválido</string>
     <string name="AddToken_InvalidBep2Symbol">Símbolo BEP2 inválido</string>
@@ -1347,6 +1356,7 @@
     <string name="CoinPage_FundsInvested">Fundos Investidos</string>
     <string name="CoinPage_Overview">Visão Geral</string>
     <string name="CoinPage_Contracts">Contratos</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Tipos de moeda</string>
     <string name="CoinPage_Links">Links</string>

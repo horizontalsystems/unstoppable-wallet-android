@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">仍然繼續</string>
     <string name="Button_CopyAddress">复制地址</string>
     <string name="Button_HideCoin">隐藏硬币</string>
+    <string name="Button_Approve">批准</string>
     <string name="Attention_Title">注意事项</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
@@ -312,10 +313,12 @@
     <string name="Market_Vaults_Filter_USDYield">美元收益</string>
     <string name="Market_Vaults_OpenDapp">打开 dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d 链接</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">網絡</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">底部令牌</string>
     <string name="Market_Vaults_Vault_Holders">持有者</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">多链</string>
@@ -335,6 +338,7 @@
     <string name="Balance_Downloading">正在下载…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
+    <string name="Balance_BlocksRemaining">剩余区块数 - %d</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序</string>
     <string name="Balance_Sort_Az">名称</string>
@@ -385,6 +389,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
     <string name="Balance_Zcash_Unified">统一的</string>
     <string name="Balance_Zcash_UnifiedDescription">用于钱包之间的个人和私人转账。</string>
+    <string name="Balance_Zcash_Transparent">透明的</string>
     <string name="Balance_Zcash_TransparentDescription">用于接收来自交易所或不支持统一地址的服务。</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
@@ -801,6 +806,7 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">无法替换</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的加密货币已经属于您，但在锁定期限结束前，您无法在网络上消费它们。</string>
+    <string name="Info_LockTime_NoDateDescription">汇款人通过将在所显示日期失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
     <string name="Info_Reserved_Title">保留</string>
     <string name="Info_Reserved_Description">Stellar 网络锁定了 1 XLM 以激活钱包和 0.5 XLM 作为您钱包中激活的每个令牌的储备。</string>
     <string name="Info_Reserved_CurrentlyLocked">当前锁定：</string>
@@ -909,7 +915,7 @@
     <string name="SettingsBanner_DonateYourSupportIsCommitment">您的支持不仅仅是关于解锁功能 — — 这是对所有人隐私、自由和开放访问权限的承诺。</string>
     <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">它有助于使钱包免费、安全和真正独立——对你和全世界成千上万依靠钱包的人来说是如此。</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">仅在 F-Droid 上</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">不可阻挡的钱包给你高级功能——没有订阅，没有限制：</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">不可阻挡的钱包给你高级功能—没有订阅，没有限制：</string>
     <string name="SettingsBanner_DonateFeatureFullAnalytics">关于令牌的完整分析和数据</string>
     <string name="SettingsBanner_DonateFeaturePrivacy">隐私模式 &amp; 冒险模式</string>
     <string name="SettingsBanner_DonateFeatureSignals">充满信心的贸易信号</string>
@@ -964,15 +970,15 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">有效自動防護詐騙和釣魚攻擊</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">確保您的加密貨幣操作合法性</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">直接聯繫錢包團隊獲取快速技術支援。</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">MEV 保护</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">您的一站式深度分析工具。瀏覽根據交易量、交易所流動性、持有者行為和鏈上趨勢策劃的前250名代幣列表—一目了然。篩選、分析並保持領先。</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">摒棄雜訊，精準鎖定高潛力代幣。使用進階搜尋功能，通過交易量、區塊鏈、市值、價格趨勢、行業和表現等條件篩選數千種代幣。強大、精準且專為發現而設計。</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">不再錯過任何交易機會。觀察趨勢提供由先進技術分析驅動的實時警報，幫助您在趨勢發生前識別、發現突破點並避免陷阱。快速行動，智能交易，最大化收益。</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">您的加密貨幣。您的安全。脅迫模式讓您創建多個備用錢包設置，每個都有單獨的PIN碼，在高風險情況下提供隱藏的逃生路線。如果被迫解鎖您的錢包，只需使用脅迫PIN碼訪問次要錢包，不會暴露關鍵資產。您的真實資金保持隱藏。您的安全完好無損。</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">一個錯誤的地址，您的加密貨幣將永遠消失。Unstoppable自動掃描接收地址的可疑模式，防禦最新的網絡釣魚威脅，防止您向駭客發送資金。在詐騙交易發生前阻止它們。</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">保護自己免受風險和受制裁實體的侵害。黑名單檢查自動對照高風險數據庫篩選接收地址，在您發送前標記詐騙、欺詐和受制裁實體。如果一個地址被列入黑名單，您將在犯下代價高昂的錯誤前知道。保護您的交易。保持您的加密貨幣清潔。保持合規。</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">获得优先访问我们团队的权限。直接与不可阻挡的支持聊天以获得更快的帮助、早期洞察力和即将到来的功能指导。 你的反馈推动钱包的进化——我们在这里支持你走路的每一步。</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">MEV 保护</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">阻止机器人在兑换过程中窃取资产。</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">显示代币的详细数据—包括交易量、流动性和趋势，帮助您做出更明智的投资决策。</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">通过交易量、区块链或行业等筛选条件查找代币，并包含 CEX/DEX 活跃度及上架相关指标。</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">实时发送交易机会提醒，立即突出潜在盈利机会或市场风险。</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">允许您创建-个带独立 PIN 的诱饵钱包，在高风险情况下隐藏真实资产。</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">检查收款钱包是否存在钓鱼或欺诈风险，并在您向高风险地址转账前发出提醒。</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">在连接前检测伪造或恶意 dApp，防止钓鱼攻击，保护您的资产安全。</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">为您提供直接访问的优先支持服务，可快速获得 Unstoppable 团队的个性化协助。</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">在兑换过程中阻止机器人和抢跑攻击，确保您的交易公平且安全。</string>
     <string name="Premium_DefenseSystem">防御系统</string>
     <string name="Premium_MarketInsights">市场洞察力</string>
     <string name="Premium_Vip">VIP</string>
@@ -1096,7 +1102,7 @@
     <string name="EditDuressPin_Title">编辑货币密码</string>
     <string name="EditDuressPin_Description">输入新的密码来复位模式</string>
     <string name="DuressPin_Title">服用模式</string>
-    <string name="DuressPin_Description">此模式允许用户设置多个解锁应用密码，当需要的密码只显示指定的钱包。 设计用来使选定的钱包在胁迫或威胁下安全。</string>
+    <string name="DuressPin_Description">此模式允许用户设置多个应用解锁密码，每个密码仅显示指定的钱包。在受到胁迫或威胁的情况下，可通过使用特定密码保护选定钱包的安全。</string>
     <string name="DuressPin_Notes">注意事项</string>
     <string name="DuressPin_Notes_Biometrics_Title">生物认证</string>
     <string name="DuressPin_Notes_Biometrics_Description">生物鉴别认证功能可以解锁时尚模式。您可以禁用生物鉴别认证以方便。</string>

@@ -391,7 +391,7 @@
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
     <string name="Balance_Zcash_Unified">Единый</string>
     <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
-    <string name="Balance_Zcash_Transparent">Transparent</string>
+    <string name="Balance_Zcash_Transparent">Прозрачный</string>
     <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или служб, не поддерживающих единые адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
@@ -973,18 +973,14 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Сообщает, если сайт dApp - фальшивый.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Быстрый и удобный доступ к команде.</string>
     <string name="Premium_UpgradeFeature_LossProtection_Description">Блокирует действия ботов, ворующих средства во время свапов.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокой аналитики.
-Просматривайте отобранные списки топ-250 токенов на основе торгового объёма, ликвидности на биржах, поведения держателей и ончейн-трендов - всё в одном месте. Фильтруйте, анализируйте и оставайтесь на шаг впереди</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отбросьте лишний шум и сосредоточьтесь на токенах с высоким потенциалом. Используйте расширенный поиск, чтобы отфильтровать тысячи токенов по торговому объёму, блокчейну, рыночной капитализации, ценовым трендам, сектору и эффективности - и не только. Мощный, точный инструмент, созданный для поиска новых возможностей.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Больше никаких упущенных возможностей для торговли.
-Watch Trends отправляет уведомления в реальном времени, основанные на продвинутом техническом анализе, помогая вовремя замечать тренды, определять пробои и избегать рисков до того, как они возникнут. Действуйте быстро, торгуйте умно и максимизируйте прибыль.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ваша крипта. Ваша безопасность. Режим принуждения (Duress Mode) позволяет создавать несколько альтернативных конфигураций кошелька - каждая со своим собственным PIN-кодом. Это обеспечивает скрытый выход в экстренных ситуациях. Если вас заставят разблокировать кошелёк, просто используйте PIN режима принуждения - он откроет вторичный кошелёк без доступа к вашим основным активам. Ваши реальные средства останутся в безопасности и скрыты. Ваша защита останется надёжной.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса получателей на фишинг и мошенничество.
-Предупреждает перед отправкой средств на подозрительные адреса.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Защитите себя от рискованных и санкционированных адресов.
-Проверка по чёрным спискам (Blacklist Checker) автоматически сверяет адреса получателей с базами данных высокого риска, выявляя мошеннические, подозрительные и санкционированные адреса до отправки транзакции. Если адрес находится в чёрном списке - вы узнаете об этом заранее и избежите дорогостоящей ошибки. Обеспечьте безопасность своих переводов.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Получите приоритетный доступ к нашей команде. Общайтесь напрямую с неостановимой поддержкой для более быстрой помощи, ранних знаний и рекомендаций по предстоящим функциям. Ваша обратная связь ведет к эволюции кошелька — и мы здесь, чтобы поддержать вас на каждом шаге пути.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Останавливает ботов и атак на передний план во время подкачки. Сохраняет ваши транзакции честно и безопасно.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Показывает данные токена - объём, ликвидность и тренды. Помогает принимать более точные инвестиционные решения.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Находите токены с фильтрами по объёму, сети, сектору и CEX/DEX активности.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Отправляет уведомления о торговых возможностях в реальном времени. </string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Позволяет создать ложный кошелёк с отдельным PIN. Скрывает реальные активы в рискованных ситуациях.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса на фишинг. Предупреждает о рисках при отправке.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Обнаруживает поддельные dApp до подключения. Предотвращает фишинг и защищает активы.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Предоставляет прямой доступ к поддержке.Получайте быструю персональную помощь от команды Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Блокирует ботов и атаки при свапах. Делает транзакции честными и безопасными.</string>
     <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Рынки</string>
     <string name="Premium_Vip">VIP</string>

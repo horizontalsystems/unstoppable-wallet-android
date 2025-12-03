@@ -52,6 +52,7 @@
     <string name="Button_ContinueAnyway">Continuer quand même</string>
     <string name="Button_CopyAddress">Copier l\'adresse</string>
     <string name="Button_HideCoin">Cacher la pièce</string>
+    <string name="Button_Approve">Approuver</string>
     <string name="Attention_Title">Attention</string>
     <string name="Error_OutOfRange">Ne peut pas être inférieur à %1$s ou supérieur à %2$s</string>
     <string name="Error_NotInteger">Mauvais nombre entier</string>
@@ -251,6 +252,10 @@
     <string name="Market_Filter_RiskToTrade">Risque</string>
     <string name="Market_Filter_ATH_Description">(Tous les temps élevés)</string>
     <string name="Market_Filter_ATL_Description">(Tout le temps faible)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_Top_2000">Top 2000</string>
@@ -308,10 +313,12 @@
     <string name="Market_Vaults_Filter_USDYield">Rendement en USD</string>
     <string name="Market_Vaults_OpenDapp">Ouvrir dapp</string>
     <string name="Market_Vaults_Filter_MultipleChains">Chaînes %d</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Réseau</string>
     <string name="Market_Vaults_Vault_Protocol">Protocol</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Jeton sous-jacent</string>
     <string name="Market_Vaults_Vault_Holders">Titres</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-chaîne</string>
@@ -378,10 +385,11 @@
     <string name="Balance_Zcash_UnshieldedBalance_Title">Transparence</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">ZEC transparent détecté</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Montant transparent</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Le solde transparent ne peut pas être utilisé dans notre portefeuille pour le moment. Mais cet argent peut être dépensé par d\'autres portefeuilles avec le support des t-address</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Vous avez un solde ZEC maintenu dans une adresse transparente. Pour l\'utiliser dans Unstoppable, il doit être protégé pour une vie privée totale.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Bouclier</string>
     <string name="Balance_Zcash_Unified">Unifié</string>
     <string name="Balance_Zcash_UnifiedDescription">Utiliser pour les transferts personnels et privés entre portefeuilles.</string>
+    <string name="Balance_Zcash_Transparent">Transparence</string>
     <string name="Balance_Zcash_TransparentDescription">Utilisé pour recevoir des échanges ou des services qui ne prennent pas en charge les adresses unifiées.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
@@ -501,7 +509,7 @@
         \n\nLe portefeuille Unstoppable suggère des frais optimaux pour aider à confirmer votre transaction dans un délai raisonnable. Vous pouvez augmenter ou diminuer cette valeur.
         \n\nDéfinir les frais trop bas peut faire en sorte que votre transaction reste en attente pendant une longue période ou même être rejetée. Pour une confirmation plus rapide, utilisez des frais plus élevés.</string>
     <!--Fee Info -->
-    <string name="FeeInfo_Title">Vitesse de transaction</string>
+    <string name="FeeInfo_Title">Vitesse de la transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
     <string name="FeeInfo_Slow">Bas</string>
     <string name="FeeInfo_SlowDescription">La sélection d\'une valeur de cette plage peut entraîner une transaction en attente pendant des heures, ou être rejetée. Plus la valeur est basse, plus il faudra de temps pour que la transaction soit confirmée.</string>
@@ -522,7 +530,7 @@
     <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer TRX à vous-même</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Impossible de transférer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Compte non actif</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON nécessitent un dépôt d\'au moins 1 TRX pour devenir actifs. Les portefeuilles inactifs peuvent contenir et recevoir des jetons mais ne corrigeront pas les soldes tant qu\'ils ne seront pas activés.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON ont besoin d\'au moins 1 TRX pour être activés. D\'ici là, ils peuvent recevoir des jetons mais ne montreront pas les bons soldes.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Nouvelle connexion</string>
     <string name="TonConnect_Error_InvalidUrl">Adresse URL invalide</string>
@@ -532,8 +540,8 @@
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Statut</string>
     <string name="WalletConnect_Approve_Hint">En cliquant sur la connexion, vous autorisez cette application à afficher votre adresse publique. Il s\'agit d\'une étape importante de sécurité pour protéger vos données contre les risques potentiels d\'hameçonnage.</string>
-    <string name="WalletConnect_Reconnect_Hint">Impossible d\'établir la connexion. Réessayez de vous reconnecter.</string>
-    <string name="WalletConnect_Error_InvalidUrl">Adresse URL invalide</string>
+    <string name="WalletConnect_Reconnect_Hint">Impossible de se connecter en utilisant ce lien. Veuillez le vérifier et réessayer.</string>
+    <string name="WalletConnect_Error_InvalidUrl">URL invalide</string>
     <string name="WalletConnect_Status_Offline">Hors ligne</string>
     <string name="WalletConnect_Status_Online">En ligne</string>
     <string name="WalletConnect_Status_Connecting">Connexion à…</string>
@@ -558,9 +566,9 @@
     <string name="WalletConnect_ActiveWallet">Portefeuille</string>
     <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
     <string name="WalletConnect_Unnamed">Inconnu</string>
-    <string name="WalletConnect_Pairings">Paires de Devises</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Tout Supprimer</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Tout supprimer</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
     <string name="WalletConnect_Pairings_Delete">Supprimer</string>
     <string name="WalletConnect_DeleteAllPairs">Supprimer toutes les paires</string>
@@ -582,6 +590,7 @@
     <string name="WalletConnect_Value">Valeur</string>
     <string name="WalletConnect_TokenAllowance">Allocation de jeton</string>
     <string name="WalletConnect_ConfirmTransaction">Confirmer la transaction</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s pourra déplacer ces tokens en votre nom.</string>
     <string name="WalletConnect_RequestFailedDescription">Une erreur s\'est produite et la demande n\'a pas pu être complétée</string>
     <string name="WalletConnect_DisconnectWarning">Êtes-vous sûr de vouloir supprimer cette connexion ?</string>
     <string name="WalletConnect_DefenseMessage_Warning">Vous pouvez vous connecter à un faux site et perdre des fonds. Activez-moi pour rester protégé.</string>
@@ -925,6 +934,7 @@
     <string name="Period_Days">%s jours</string>
     <string name="Premium_TitleForDroid">Premium (gratuit pour F-Droid)</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Choisir le plan</string>
     <string name="Premium_EnjoyFreePeriod">Profitez des premiers %s GRATUITS.</string>
     <string name="Premium_CancelSubscriptionInfo">Vous pouvez annuler votre abonnement à tout moment.</string>
@@ -951,6 +961,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Mode Contrainte</string>
     <string name="Premium_UpgradeFeature_SecureSend">Protection Anti-arnaques</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Vérification Liste Noire</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">Support VIP</string>
     <string name="Premium_UpgradeFeature_LossProtection">Protection contre la perte</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Accès aux listes top-100 selon des critères clés</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrage multi-niveaux sur plusieurs paramètres</string>
@@ -959,14 +970,15 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Protection automatique efficace contre les arnaques et attaques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie de légalité pour vos opérations crypto</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Accès à l\'équipe du portefeuille pour un support technique rapide.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Protection MEV</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Votre outil tout-en-un pour une analyse approfondie. Parcourez des listes sélectionnées des 250 meilleurs jetons selon le volume d\'échanges, la liquidité des plateformes, le comportement des détenteurs et les tendances on-chain—le tout en un coup d\'œil. Filtrez, analysez et gardez une longueur d\'avance.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Éliminez le bruit et concentrez-vous avec précision sur les jetons à fort potentiel. Utilisez la Recherche Avancée pour filtrer des milliers de jetons par volume d\'échanges, blockchain, capitalisation boursière, tendances de prix, secteur et performance—et bien plus encore. Puissant, précis et conçu pour la découverte.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Ne manquez plus jamais une opportunité de trading. Le Suivi des Tendances vous livre des alertes en temps réel alimentées par une analyse technique avancée, vous aidant à identifier les tendances, repérer les percées et éviter les pièges avant qu\'ils ne surviennent. Agissez vite, tradez intelligemment et maximisez vos gains.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Vos cryptos. Votre sécurité. Le Mode sous Contrainte vous permet de créer plusieurs configurations alternatives de portefeuille, chacune avec un code PIN distinct, offrant une échappatoire cachée dans les situations à haut risque. Si vous êtes forcé de déverrouiller votre portefeuille, utilisez simplement le code PIN de contrainte pour accéder à un portefeuille secondaire sans exposer vos actifs critiques. Vos fonds réels restent cachés. Votre sécurité reste intacte.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Une seule adresse erronée, et vos cryptos disparaissent à jamais. Unstoppable analyse automatiquement les adresses des destinataires pour détecter les modèles suspects et vous protège contre les dernières menaces d\'hameçonnage, vous empêchant d\'envoyer des fonds à un pirate informatique. Bloquez les transferts frauduleux avant qu\'ils ne se produisent.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Protégez-vous des entités à risque et sous sanctions. Le Vérificateur de Liste Noire filtre automatiquement les adresses des destinataires par rapport aux bases de données à haut risque, signalant les arnaques, fraudes et entités sanctionnées avant tout envoi. Si une adresse est sur liste noire, vous le saurez avant de commettre une erreur coûteuse. Sécurisez vos transactions. Gardez vos cryptos propres. Restez conforme.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Protection MEV</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">Bloque les bots lors des échanges.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Affiche des données clés sur les tokens: volume, liquidité, tendances — pour faciliter vos décisions.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Envoie des alertes en temps réel sur les opportunités et les risques de marché.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Envoie des alertes en temps réel sur les opportunités et les risques de marché.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Permet de créer un portefeuille de leurre avec un PIN séparé pour cacher vos vrais actifs en situation à risque.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Vérifie le risque de phishing du destinataire et vous alerte.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Détecte les dApps malveillantes et prévient le phishing.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Vous donne un accès direct au support prioritaire. Obtenez une aide personnelle et rapide de l\'équipe Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Bloque bots et front-running pour des échanges sûrs.</string>
     <string name="Premium_DefenseSystem">Système de défense</string>
     <string name="Premium_MarketInsights">Aperçus du marché</string>
     <string name="Premium_Vip">Vip</string>
@@ -1100,6 +1112,7 @@
     <string name="DuressPin_Notes_PasscodeChange_Description">La modification du code d\'accès en mode Duress modifiera également le code d\'accès actuel pour ce mode.</string>
     <string name="DuressPinSelectAccounts_Title">Sélectionnez les portefeuilles</string>
     <string name="DuressPinSelectAccounts_Description">Sélectionnez les portefeuilles qui seront affichés en mode Duresse.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Sauvegarde sécurisée des phrases de récupération pour chaque portefeuille. C\'est le seul moyen de récupérer l\'accès aux fonds si l\'application ne fonctionne pas.</string>
@@ -1630,6 +1643,7 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Contacts-->
+    <string name="Contacts">Contacts</string>
     <string name="Contacts_Backup">Sauvegarder les contacts</string>
     <string name="Contacts_Restore">Restaurer les contacts</string>
     <string name="Contacts_Restore_Warning">Cette action écrasera complètement vos contacts et supprimera votre liste de contacts existante. Voulez-vous remplacer votre liste de contacts ? </string>
