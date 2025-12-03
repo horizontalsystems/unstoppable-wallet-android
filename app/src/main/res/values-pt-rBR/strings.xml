@@ -806,6 +806,7 @@
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Incapaz de substituir</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
+    <string name="Info_LockTime_NoDateDescription">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
     <string name="Info_Reserved_Title">Reservado</string>
     <string name="Info_Reserved_Description">A rede Stellar bloqueia 1 XLM para ativar a carteira e 0.5 XLM como uma reserva para cada token ativado na sua carteira.</string>
     <string name="Info_Reserved_CurrentlyLocked">Bloqueado atualmente:</string>
@@ -969,15 +970,15 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Proteção automática eficaz contra fraudes e ataques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantia de legalidade para suas operações com criptomoedas</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Proteção MEV</string>
+    <string name="Premium_UpgradeFeature_LossProtection_Description">Impede que bots roubem fundos durante swaps.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Mostra dados do token - volume, liquidez e tendências, ajudando você a investir melhor.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Permite criar uma carteira-isca com PIN separado, mantendo seus ativos reais ocultos em situações de risco.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Um endereço errado e sua cripto se vai para sempre. A Unstoppable verifica automaticamente os endereços dos destinatários em busca de padrões suspeitos e defende contra as últimas ameaças de phishing, impedindo que você envie fundos para um hacker. Bloqueie transferências fraudulentas antes que elas aconteçam.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Proteja-se de entidades arriscadas e sancionadas. A Verificação de Lista Negra verifica automaticamente os endereços dos destinatários em relação a bancos de dados de alto risco, sinalizando golpes, fraudes e entidades sancionadas antes de você enviar. Se um endereço estiver na lista negra, você saberá antes de cometer um erro caro. Proteja suas transações. Mantenha sua criptomoeda limpa. Mantenha a conformidade.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Verifica carteiras de destino para detectar phishing ou fraude. Avisa você antes de enviar para endereços de risco.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detecta aplicativos falsos ou maliciosos antes de se conectar. Impede o phishing e mantém seus ativos seguros.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Proteção MEV</string>
+    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Bloqueia bots e ataques de front-running durante swaps. Mantém suas transações justas e seguras.</string>
     <string name="Premium_DefenseSystem">Sistema de defesa</string>
     <string name="Premium_MarketInsights">Insights de mercado</string>
     <string name="Premium_Vip">VIP</string>
