@@ -971,13 +971,13 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie der Rechtmäßigkeit für Ihre Kryptooperationen</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Zugang zum Brieftaschen-Team für schnellen technischen Support.</string>
     <string name="Premium_UpgradeFeature_LossProtection_Description">MEV-Schutz</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ihr All-In-One-Werkzeug für eine gründliche Analyse. Durchsuchen Sie kuratierte Top 250 Tokenlisten basierend auf Handelsvolumen, Börsenliquidität, Halterungsverhalten und On-Ketten-Trends – alles auf einen Blick. Filtern, analysieren und halten Sie voraus.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Schalten Sie das Rauschen und Null mit Präzision auf Token mit hohem Potential. Benutzen Sie die erweiterte Suche, um Tausende von Tokens nach Handelsvolumen, Blockchain, Marktkappe, Preistrends, Branche und Leistung zu filtern – und mehr. Leistungsstark, präzise und zur Entdeckung gebaut.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Verpassen Sie nie wieder eine Handelsmöglichkeit. Watch Trends liefert Echtzeit-Alarme mit moderner technischer Analyse, die Ihnen helfen, Trends, Spot-Ausbrüche zu erkennen und Fallstricke zu vermeiden, bevor diese passieren. Tun Sie schnell, handeln Sie intelligent und maximieren Sie die Gewinne.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Ihr Krypto. Ihre Sicherheit. Mit dem Duress Mode können Sie mehrere alternative Wallet-Setups mit jeweils separater PIN erstellen, die eine versteckte Fluchtroute in hochriskanten Situationen bietet. Wenn Sie Ihre Brieftasche entsperren müssen, verwenden Sie einfach die erzwungene PIN, um auf eine sekundäre Brieftasche zuzugreifen, die keine kritischen Dateien enthüllt. Ihr echtes Geld bleibt verborgen. Ihre Sicherheit bleibt intakt.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Zeigt detaillierte Token-Daten - Volumen, Liquidität, Trends – und unterstützt smartere Anlageentscheidungen.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Finden Sie Tokens per Volumen-, Chain- oder Sektorfilter – inklusive CEX/DEX-Aktivität und Listings.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Direkter Zugang zum Prioritäts-Support — schnelle, persönliche Hilfe vom Unstoppable-Team.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Erstellt eine Tarn-Wallet mit eigener PIN - hält echte Werte in Risikosituationen verborgen.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Eine falsche Adresse und Ihre Kryptographie ist für immer verschwunden. Unaufhaltsam scannt die Empfängeradressen automatisch nach verdächtigen Mustern und verteidigt sich gegen die neuesten Phishing-Bedrohungen, was verhindert, dass Sie Geld an einen Hacker schicken. Blockieren Sie betrügerische Überweisungen, bevor sie passieren.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der schwarze Listen-Checker prüft die Empfängeradressen automatisch auf hochriskante Datenbanken, meldet Betrügereien, Betrügereien und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der schwarzen Liste steht, wissen Sie, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Krypto sauber.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Erhalten Sie bevorzugten Zugriff auf unser Team. Chatten Sie direkt mit unaufhaltsamem Support für schnellere Hilfe, frühzeitige Einblicke und Anleitung zu kommenden Features. Ihr Feedback treibt die Entwicklung der Brieftasche an – und wir sind hier, um Sie in jedem Schritt des Weges zu unterstützen.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Direkter Zugang zum Prioritäts-Support - schnelle, persönliche Hilfe vom Unstoppable-Team.</string>
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">MEV-Schutz</string>
     <string name="Premium_DefenseSystem">Abwehrsystem</string>
     <string name="Premium_MarketInsights">Markteinsichten</string>
@@ -1106,7 +1106,7 @@
     <string name="EditDuressPin_Title">Duress Code bearbeiten</string>
     <string name="EditDuressPin_Description">Neues Passwort für Duress Modus eingeben</string>
     <string name="DuressPin_Title">Duress-Modus</string>
-    <string name="DuressPin_Description">Dieser Modus erlaubt es dem Benutzer, mehrere Entsperr-App-Passcodes einzurichten, bei denen ein gewünschter Passcode nur bestimmte Wallets anzeigt. Entwickelt um ausgewählte Brieftaschen vor Zwang oder Bedrohungen zu schützen.</string>
+    <string name="DuressPin_Description">In diesem Modus können Benutzer mehrere Entsperr-App-Passcodes einrichten, bei denen ein gewünschter Passcode nur bestimmte Wallets anzeigt. Entwickelt um ausgewählte Brieftaschen vor Zwang oder Bedrohungen zu schützen.</string>
     <string name="DuressPin_Notes">HINWEISE</string>
     <string name="DuressPin_Notes_Biometrics_Title">Biometrie-Authentifizierung</string>
     <string name="DuressPin_Notes_Biometrics_Description">Mit der biometrischen Authentifizierung wird der Duress-Modus freigeschaltet. Sie können die biometrische Authentifizierung für Bequemlichkeit deaktivieren.</string>
