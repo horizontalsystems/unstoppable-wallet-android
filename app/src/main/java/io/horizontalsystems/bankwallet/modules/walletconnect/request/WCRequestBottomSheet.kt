@@ -46,6 +46,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.DefenseSystemState
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionButtonStates
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionViewModel
@@ -296,13 +297,6 @@ fun IconsFromUrls(
     }
 }
 
-enum class DefenseSystemState {
-    WARNING,
-    CHECKING,
-    DANGER,
-    SAFE
-}
-
 @Composable
 fun DefenseSystemMessage(
     activated: Boolean,
@@ -315,13 +309,6 @@ fun DefenseSystemMessage(
         whiteListState == WCWhiteListState.InWhiteList -> DefenseSystemState.SAFE
         whiteListState == WCWhiteListState.InProgress -> DefenseSystemState.CHECKING
         else -> DefenseSystemState.CHECKING
-    }
-
-    val bubbleColor = when (state) {
-        DefenseSystemState.WARNING -> ComposeAppTheme.colors.jacob
-        DefenseSystemState.CHECKING -> ComposeAppTheme.colors.andy
-        DefenseSystemState.DANGER -> ComposeAppTheme.colors.lucian
-        DefenseSystemState.SAFE -> ComposeAppTheme.colors.remus
     }
 
     val clickableModifier = when (state) {
@@ -342,7 +329,7 @@ fun DefenseSystemMessage(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(bubbleColor)
+                .background(state.bubbleColor)
                 .then(clickableModifier)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
@@ -440,7 +427,7 @@ fun DefenseSystemMessage(
                 .offset(x = 48.dp, y = (-8).dp)
                 .size(16.dp)
                 .rotate(45f)
-                .background(bubbleColor)
+                .background(state.bubbleColor)
         )
     }
 

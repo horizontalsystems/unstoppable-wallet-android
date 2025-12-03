@@ -310,7 +310,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:stellar-kit-android:519533b'
     implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:2bfdc13'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:2d8c713'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:fa7b72e'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:7d01e63'
     implementation 'com.github.horizontalsystems:market-kit-android:8bd85cc'
     implementation 'com.github.horizontalsystems:solana-kit-android:eae6858'
