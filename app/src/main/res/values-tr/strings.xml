@@ -739,8 +739,10 @@
     <string name="Premium_YouHaveActivatedPlan">%s planını etkinleştirdiniz.</string>
     <string name="Premium_GoToApp">Uygulamaya Git</string>
     <string name="Premium_UpgradeText">Premium özelliklerle deneyiminizi yükseltin!</string>
+    <string name="Premium_Banner_BlackFridayText">Yılın en büyük indirimiyle Premium’a yükseltin</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
     <string name="Premium_SelectSubscription">Abonelik Seçin</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Tek bir satın alım tüm Premium özelliklerin kilidini açar.</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Token Analitiği</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Gelişmiş Arama</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Sinyaller ve Trendler</string>
@@ -765,6 +767,7 @@
     <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
     <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
     <string name="Premium_WhatUsersSay">Kullanıcılar ne diyor:</string>
+    <string name="Premium_BlackFridayOfferEnds">Black Friday teklifi 7 Aralık’ta sona eriyor</string>
     <string name="Premium_SubscriptionPeriod_Month">ay</string>
     <string name="Premium_SubscriptionPeriod_Year">yıl</string>
     <string name="Premium_SubscriptionPeriod_Annually">Yıllık</string>
@@ -808,11 +811,13 @@
     <string name="EvmNetwork_AddNew">Yeni ekle</string>
     <string name="EvmNetwork_Added">Eklendi</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
     <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Node Ekle</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Kaynak değiştirdikten sonra cüzdanın kendini yeniden senkronize etmesi gerekecek.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">İşlemler yapılmış cüzdanı geri yüklemek için veri kaynağını seçin.</string>
