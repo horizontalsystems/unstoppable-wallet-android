@@ -806,6 +806,7 @@
     <string name="Settings_Contact_ViaEmail">이메일로</string>
     <string name="Settings_AutoLock">자동 잠금</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_VipSupport">VIP 그룹</string>
     <string name="Settings_JoinUnstoppables_Description">독점 비디오로 암호화폐를 배우고 정복하세요. 비공식적으로 우리를 알아가세요. 우리가 작업하는 것들을 가장 먼저 보실 수 있습니다.</string>
     <string name="Settings_PersonalSupport">개인 지원</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
@@ -831,14 +832,23 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15분</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30분</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1시간</string>
+    <string name="Mev_Protection">MEV 보호</string>
     <!--Address Checker-->
+    <string name="SettingsAddressChecker_Title">주소 확인 도구</string>
+    <string name="SettingsAddressChecker_RecipientCheck">수신자 확인</string>
+    <string name="SettingsAddressChecker_CheckTheRecipientInfo">전송 전에 수신 주소의 위험 여부를 확인합니다.</string>
+    <string name="SettingsAddressChecker_SanctionsCheck">제재 목록 확인</string>
+    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s 블랙리스트 확인</string>
     <!--Banners-->
     <string name="SettingsBanner_Premium">프리미엄</string>
     <string name="SettingsBanner_PremiumBannerDescription">프리미엄 기능으로 경험을 업그레이드하세요!</string>
     <string name="SettingsBanner_PremiumTryFee">업그레이드</string>
     <!--Why Donate Page-->
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">주요 기준별 상위 100개 목록 접근</string>
+    <string name="SettingsBanner_DonateFeatureSignals">보유 토큰의 시장 트렌드 자동 모니터링</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">활성</string>
+    <string name="SettingsSubscription_GetPremium">프리미엄 가입</string>
     <string name="SettingsSubscription_RestorePurchase">구매 복원</string>
     <string name="SettingsSubscription_SubscriptionPlan">구독 플랜</string>
     <string name="SettingsSubscription_SubscriptionInfo">다음 결제일: %s. 구독 관리 섹션에서 구독을 관리할 수 있습니다.</string>
@@ -861,8 +871,10 @@
     <string name="Premium_YouHaveActivatedPlan">%s 플랜이 활성화되었습니다.</string>
     <string name="Premium_GoToApp">앱으로 이동</string>
     <string name="Premium_UpgradeText">프리미엄 기능으로 경험을 업그레이드하세요!</string>
+    <string name="Premium_Banner_BlackFridayText">올해 최대 할인으로 프리미엄으로 업그레이드하세요</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">앱의 모든 기능을 마음껏 즐기세요.</string>
     <string name="Premium_SelectSubscription">구독 선택</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">한 번의 결제로 모든 프리미엄 기능을 이용할 수 있습니다.</string>
     <string name="Premium_UpgradeFeature_TokenInsights">토큰 분석</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">고급 검색</string>
     <string name="Premium_UpgradeFeature_TradeSignals">신호 및 트렌드</string>
@@ -893,10 +905,12 @@
     <string name="Premium_HighlyRatedSecurity">높은 평가를 받는 보안, 탁월한 개인 정보 보호, 그리고 진정한 비수탁형 지갑.</string>
     <string name="Premium_ApprovedBy">다음 기관에서 승인 및 감사:</string>
     <string name="Premium_WhatUsersSay">사용자들의 평가:</string>
+    <string name="Premium_BlackFridayOfferEnds">블랙프라이데이 할인은 12월 7일에 종료됩니다</string>
     <string name="Premium_SubscriptionPeriod_Month">월</string>
     <string name="Premium_SubscriptionPeriod_Year">년</string>
     <string name="Premium_SubscriptionPeriod_Annually">연간</string>
     <string name="Premium_SubscriptionPeriod_Monthly">월간</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">50% 절약</string>
     <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
     <string name="Premium_SubscriptionPeriod_PerYear">연간</string>
     <string name="Premium_SubscriptionPeriod_PerMonth">월별</string>
