@@ -200,7 +200,7 @@ class SwapConfirmViewModel(
         fetchFinalQuoteJob?.cancel()
         fetchFinalQuoteJob = viewModelScope.launch(Dispatchers.Default) {
             try {
-                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings, swapQuote)
+                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
 
                 ensureActive()
 

@@ -265,7 +265,6 @@ object AllBridgeProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
         val cautions = mutableListOf<HSCaution>()
 

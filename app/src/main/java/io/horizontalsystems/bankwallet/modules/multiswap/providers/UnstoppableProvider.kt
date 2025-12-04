@@ -296,10 +296,7 @@ object UnstoppableProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
-        check(swapQuote is SwapQuoteThorChain)
-
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.value
