@@ -2,12 +2,14 @@ package io.horizontalsystems.bankwallet.core.utils
 
 import android.net.Uri
 import io.horizontalsystems.bankwallet.core.IAddressParser
+import io.horizontalsystems.bankwallet.core.blockchainTypeFromChainId
 import io.horizontalsystems.bankwallet.core.factories.removeScheme
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
+import java.math.BigDecimal
 import java.net.URI
 
 
@@ -47,7 +49,7 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
         val schemeSpecificPart = uri.schemeSpecificPart
 
         val pathEndIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it else schemeSpecificPart.length }
-        val path = schemeSpecificPart.substring(0, pathEndIndex)
+        val path = schemeSpecificPart.take(pathEndIndex)
 
         val scheme = uri.scheme ?: return AddressUriResult.NoUri
 
@@ -59,19 +61,41 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
 
         val parsedUri = AddressUri(scheme = scheme)
 
+        // EIP-681 fix: Ethereum addresses sometimes come as address@chainId
+        var rawPath = path
+
+        if (scheme == "ethereum" && rawPath.contains("@")) {
+            val parts = rawPath.split("@")
+            if (parts.size == 2) {
+                rawPath = parts[0]
+                val chainIdFromPath = parts[1]
+                chainIdFromPath.toLongOrNull()?.blockchainTypeFromChainId?.uid?.let  {
+                    parsedUri.parameters[AddressUri.Field.BlockchainUid] = it
+                }
+            }
+        }
+
         val queryStartIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it + 1 else schemeSpecificPart.length }
         val query = schemeSpecificPart.substring(queryStartIndex)
 
         val parameters = parseQueryParameters(query)
         if (parameters.isEmpty()) {
-            parsedUri.address = fullAddress(scheme, path)
+            parsedUri.address = fullAddress(scheme, rawPath, parsedUri.value(AddressUri.Field.BlockchainUid))
+
             return AddressUriResult.Uri(parsedUri)
         }
 
         for (parameter in parameters) {
             val (key, value) = parameter
-            AddressUri.Field.values().firstOrNull { it.value == key }?.let { field ->
-                parsedUri.parameters[field] = value
+            AddressUri.Field.entries.firstOrNull { it.value == key }?.let { field ->
+                if (field == AddressUri.Field.Value && scheme == "ethereum") {
+                    //convert from wei to amount
+                    value.toBigDecimalOrNull()?.divide(BigDecimal.TEN.pow(18))?.let {
+                        parsedUri.parameters[field] = it.toPlainString()
+                    }
+                } else {
+                    parsedUri.parameters[field] = value
+                }
             }
         }
 
@@ -87,7 +111,7 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
             }
         }
 
-        parsedUri.address = fullAddress(scheme, path, parsedUri.value(AddressUri.Field.BlockchainUid))
+        parsedUri.address = fullAddress(scheme, rawPath, parsedUri.value(AddressUri.Field.BlockchainUid))
         return AddressUriResult.Uri(parsedUri)
     }
 
@@ -97,8 +121,10 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
         if (!query.isNullOrBlank()) {
             val keyValuePairs = query.split("&")
             for (pair in keyValuePairs) {
-                val (key, value) = pair.split("=")
-                parameters[key] = value
+                val parts = pair.split("=")
+                if (parts.size == 2) {
+                    parameters[parts[0]] = parts[1]
+                }
             }
         }
 
@@ -106,9 +132,10 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     }
 
     fun uri(addressUri: AddressUri): String {
+        val path = addressUri.address.removePrefix(blockchainType?.uriScheme ?: "").removePrefix(":")
         val uriBuilder = Uri.Builder()
             .scheme(blockchainType?.uriScheme)
-            .path(addressUri.address.removePrefix(blockchainType?.uriScheme ?: "").removePrefix(":"))
+            .encodedPath(path)
 
         for ((key, value) in addressUri.parameters) {
             uriBuilder.appendQueryParameter(key.value, value)
