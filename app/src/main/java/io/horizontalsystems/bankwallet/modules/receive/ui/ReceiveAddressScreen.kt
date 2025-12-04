@@ -336,7 +336,7 @@ private fun QrCodeImage(address: String) {
         )
     val qrcodePainter: Painter =
         rememberQrCodePainter(address) {
-            errorCorrectionLevel = QrErrorCorrectionLevel.Medium
+            errorCorrectionLevel = QrErrorCorrectionLevel.MediumHigh
             logo {
                 painter = logoPainter
                 padding = QrLogoPadding.Natural(.3f)
