@@ -316,6 +316,27 @@ val BlockchainType.feePriceScale: FeePriceScale
         else -> FeePriceScale.Gwei
     }
 
+val Long.blockchainTypeFromChainId: BlockchainType?
+    get() {
+        return chainIdBlockchainTypeMap[this]
+    }
+
+val BlockchainType.chainId: Long?
+    get() = chainIdBlockchainTypeMap.entries.firstOrNull { it.value == this }?.key
+
+private val chainIdBlockchainTypeMap: Map<Long, BlockchainType> = mapOf(
+    1L to BlockchainType.Ethereum,
+    56L to BlockchainType.BinanceSmartChain,
+    137L to BlockchainType.Polygon,
+    43114L to BlockchainType.Avalanche,
+    10L to BlockchainType.Optimism,
+    42161L to BlockchainType.ArbitrumOne,
+    100L to BlockchainType.Gnosis,
+    250L to BlockchainType.Fantom,
+    8453L to BlockchainType.Base,
+    324L to BlockchainType.ZkSync,
+)
+
 val BlockchainType.isEvm: Boolean
     get() = when (this) {
         BlockchainType.ArbitrumOne,
