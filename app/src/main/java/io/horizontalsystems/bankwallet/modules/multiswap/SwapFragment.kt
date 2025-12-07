@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,11 +26,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,7 +64,6 @@ import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -94,9 +97,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -107,6 +114,7 @@ class SwapFragment : BaseComposeFragment() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
@@ -152,13 +160,14 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         },
         onTimeout = viewModel::reQuote,
         onClickNext = {
-            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                if (it.success) {
-                    navController.popBackStack()
-                }
-            }
-
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+            viewModel.next()
+//            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+//                if (it.success) {
+//                    navController.popBackStack()
+//                }
+//            }
+//
+//            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -168,8 +177,47 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         },
         navController = navController
     )
+
+    val sheetState = rememberModalBottomSheetState()
+
+    LaunchedEffect(sheetState.isVisible) {
+        if (!sheetState.isVisible) {
+            viewModel.reject()
+        }
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(true) }
+
+    if (uiState.currentStep == SwapStep.Confirm) {
+        BottomSheetContent(
+            onDismissRequest = {
+                Log.e("AAA", "onDismissRequest")
+                showBottomSheet = false
+            },
+            sheetState = sheetState,
+            buttons = {
+                HSButton(
+                    title = "Close",
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    }
+                )
+            }
+        ) {
+            title3_leah("Yahoo")
+        }
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SwapScreenInner(
     uiState: SwapUiState,
@@ -336,6 +384,17 @@ private fun SwapScreenInner(
                                 .fillMaxWidth(),
                             title = stringResource(R.string.Swap_Proceed),
                             onClick = onClickNext
+                        )
+                    }
+
+                    SwapStep.Confirm -> {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = "Waiting for confirm",
+                            enabled = false,
+                            onClick = {}
                         )
                     }
                 }

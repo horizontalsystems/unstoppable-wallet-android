@@ -14,7 +14,9 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -36,6 +38,7 @@ class SwapViewModel(
 
     private var networkState = networkAvailabilityService.stateFlow.value
     private var quoteState = quoteService.stateFlow.value
+    private var finalQuoteState: SwapFinalQuoteService.State? = null
     private var balanceState = balanceService.stateFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
     private var timerState = timerService.stateFlow.value
@@ -44,6 +47,9 @@ class SwapViewModel(
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
     private var cautionViewItems = listOf<CautionViewItem>()
+
+    private var finalQuoteService: SwapFinalQuoteService? = null
+    private var collectFinalQuoteStateJob: Job? = null
 
     init {
         quoteService.start()
@@ -109,33 +115,37 @@ class SwapViewModel(
         }
     }
 
-    override fun createState() = SwapUiState(
-        amountIn = quoteState.amountIn,
-        tokenIn = quoteState.tokenIn,
-        tokenOut = quoteState.tokenOut,
-        quoting = quoteState.quoting,
-        initializing = quoteState.initializing,
-        quotes = quoteState.quotes,
-        preferredProvider = quoteState.preferredProvider,
-        quote = quoteState.quote,
-        error = networkState.error ?: quoteState.error ?: balanceState.error ?: priceImpactState.error,
-        availableBalance = balanceState.balance,
-        priceImpact = priceImpactState.priceImpact,
-        priceImpactLevel = priceImpactState.priceImpactLevel,
-        priceImpactCaution = priceImpactState.priceImpactCaution,
-        fiatPriceImpact = priceImpactState.fiatPriceImpact,
-        fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
-        fiatAmountIn = fiatAmountIn,
-        fiatAmountOut = fiatAmountOut,
-        currency = currency,
-        fiatAmountInputEnabled = fiatAmountInputEnabled,
-        timeRemaining = timerState.remaining,
-        timeout = timerState.timeout,
-        timeRemainingProgress = timerState.remaining?.let { remaining ->
-            remaining / quoteLifetime.toFloat()
-        },
-        cautions = cautionViewItems
-    )
+    override fun createState(): SwapUiState {
+        return SwapUiState(
+            amountIn = quoteState.amountIn,
+            tokenIn = quoteState.tokenIn,
+            tokenOut = quoteState.tokenOut,
+            quoting = quoteState.quoting,
+            initializing = quoteState.initializing,
+            quotes = quoteState.quotes,
+            preferredProvider = quoteState.preferredProvider,
+            quote = quoteState.quote,
+            error = networkState.error ?: quoteState.error ?: balanceState.error
+            ?: priceImpactState.error,
+            availableBalance = balanceState.balance,
+            priceImpact = priceImpactState.priceImpact,
+            priceImpactLevel = priceImpactState.priceImpactLevel,
+            priceImpactCaution = priceImpactState.priceImpactCaution,
+            fiatPriceImpact = priceImpactState.fiatPriceImpact,
+            fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
+            fiatAmountIn = fiatAmountIn,
+            fiatAmountOut = fiatAmountOut,
+            currency = currency,
+            fiatAmountInputEnabled = fiatAmountInputEnabled,
+            timeRemaining = timerState.remaining,
+            timeout = timerState.timeout,
+            timeRemainingProgress = timerState.remaining?.let { remaining ->
+                remaining / quoteLifetime.toFloat()
+            },
+            cautions = cautionViewItems,
+            finalQuoteState = finalQuoteState
+        )
+    }
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
         this.networkState = networkState
@@ -149,6 +159,14 @@ class SwapViewModel(
 
     private fun handleUpdatedBalanceState(balanceState: TokenBalanceService.State) {
         this.balanceState = balanceState
+
+        emitState()
+    }
+
+    private fun handleUpdatedFinalQuoteState(state: SwapFinalQuoteService.State) {
+        this.finalQuoteState = state
+
+        priceImpactService.setPriceImpact(state.priceImpact, quoteState.quote?.provider?.title)
 
         emitState()
     }
@@ -226,6 +244,35 @@ class SwapViewModel(
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
 
+    fun next() {
+        val quote = quoteState.quote ?: return
+
+        collectFinalQuoteStateJob?.cancel()
+        finalQuoteService?.stop()
+
+        val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
+        finalQuoteService = SwapFinalQuoteService(
+            quote.swapQuote,
+            sendTransactionService,
+            quote.provider,
+            quoteService.getSwapSettings()
+        )
+
+        collectFinalQuoteStateJob = viewModelScope.launch {
+            finalQuoteService?.stateFlow?.collect {
+                handleUpdatedFinalQuoteState(it)
+            }
+        }
+
+        finalQuoteService?.start()
+    }
+
+    fun reject() {
+        finalQuoteState = null
+
+        emitState()
+    }
+
     class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -273,6 +320,7 @@ data class SwapUiState(
     val timeout: Boolean,
     val timeRemainingProgress: Float?,
     val cautions: List<CautionViewItem>,
+    val finalQuoteState: SwapFinalQuoteService.State?,
 ) {
     val currentStep: SwapStep = when {
         initializing -> SwapStep.Initializing
@@ -282,6 +330,7 @@ data class SwapUiState(
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
+        finalQuoteState != null -> SwapStep.Confirm
         else -> SwapStep.Proceed
     }
 }
@@ -292,6 +341,7 @@ sealed class SwapStep {
     object Quoting : SwapStep()
     data class Error(val error: Throwable) : SwapStep()
     object Proceed : SwapStep()
+    object Confirm : SwapStep()
     data class ActionRequired(val action: ISwapProviderAction) : SwapStep()
 }
 
