@@ -160,7 +160,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         },
         onTimeout = viewModel::reQuote,
         onClickNext = {
-            viewModel.next()
+            viewModel.startConfirmation()
 //            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
 //                if (it.success) {
 //                    navController.popBackStack()
@@ -181,19 +181,21 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(sheetState.isVisible) {
+        Log.e("AAA", "sheetState.isVisible: ${sheetState.isVisible}")
         if (!sheetState.isVisible) {
-            viewModel.reject()
+            viewModel.cancelConfirmation()
         }
     }
 
     val coroutineScope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(true) }
 
-    if (uiState.currentStep == SwapStep.Confirm) {
+    if (uiState.confirmInProgress) {
         BottomSheetContent(
             onDismissRequest = {
                 Log.e("AAA", "onDismissRequest")
                 showBottomSheet = false
+                viewModel.cancelConfirmation()
             },
             sheetState = sheetState,
             buttons = {

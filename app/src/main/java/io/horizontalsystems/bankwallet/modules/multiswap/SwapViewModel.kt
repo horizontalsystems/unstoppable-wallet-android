@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,9 +15,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -34,11 +33,13 @@ class SwapViewModel(
     tokenIn: Token?
 ) : ViewModelUiState<SwapUiState>() {
 
+    private val finalQuoteService2 = SwapFinalQuoteService2()
+
     private val quoteLifetime = 20
 
     private var networkState = networkAvailabilityService.stateFlow.value
     private var quoteState = quoteService.stateFlow.value
-    private var finalQuoteState: SwapFinalQuoteService.State? = null
+    private var finalQuoteState = finalQuoteService2.stateFlow.value
     private var balanceState = balanceService.stateFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
     private var timerState = timerService.stateFlow.value
@@ -47,9 +48,6 @@ class SwapViewModel(
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
     private var cautionViewItems = listOf<CautionViewItem>()
-
-    private var finalQuoteService: SwapFinalQuoteService? = null
-    private var collectFinalQuoteStateJob: Job? = null
 
     init {
         quoteService.start()
@@ -62,6 +60,11 @@ class SwapViewModel(
         viewModelScope.launch {
             quoteService.stateFlow.collect {
                 handleUpdatedQuoteState(it)
+            }
+        }
+        viewModelScope.launch {
+            finalQuoteService2.stateFlow.collect {
+                handleUpdatedFinalQuoteState(it)
             }
         }
         viewModelScope.launch {
@@ -116,7 +119,7 @@ class SwapViewModel(
     }
 
     override fun createState(): SwapUiState {
-        return SwapUiState(
+        val state = SwapUiState(
             amountIn = quoteState.amountIn,
             tokenIn = quoteState.tokenIn,
             tokenOut = quoteState.tokenOut,
@@ -143,8 +146,12 @@ class SwapViewModel(
                 remaining / quoteLifetime.toFloat()
             },
             cautions = cautionViewItems,
-            finalQuoteState = finalQuoteState
+            confirmInProgress = finalQuoteState.confirmInProgress
         )
+
+        Log.w("AAA", "state: $state")
+
+        return state
     }
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -163,16 +170,18 @@ class SwapViewModel(
         emitState()
     }
 
-    private fun handleUpdatedFinalQuoteState(state: SwapFinalQuoteService.State) {
-        this.finalQuoteState = state
+    private fun handleUpdatedFinalQuoteState(finalQuoteState: SwapFinalQuoteService2.State) {
+        this.finalQuoteState = finalQuoteState
 
-        priceImpactService.setPriceImpact(state.priceImpact, quoteState.quote?.provider?.title)
+        // todo
 
         emitState()
     }
 
     private fun handleUpdatedQuoteState(quoteState: SwapQuoteService.State) {
         this.quoteState = quoteState
+
+        finalQuoteService2.setSwapProviderQuote(quoteState.quote)
 
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
@@ -235,7 +244,11 @@ class SwapViewModel(
         stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
     }
 
-    fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
+    fun onUpdateSettings(settings: Map<String, Any?>) {
+        quoteService.setSwapSettings(settings)
+        finalQuoteService2.setSwapSettings(settings)
+    }
+
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()
     fun onActionStarted() = quoteService.onActionStarted()
@@ -244,33 +257,15 @@ class SwapViewModel(
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
 
-    fun next() {
-        val quote = quoteState.quote ?: return
+    fun startConfirmation() {
+        finalQuoteService2.start()
 
-        collectFinalQuoteStateJob?.cancel()
-        finalQuoteService?.stop()
+//        val sendTransactionService = SendTransactionServiceFactory.create(quoteState.quote.tokenIn)
 
-        val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
-        finalQuoteService = SwapFinalQuoteService(
-            quote.swapQuote,
-            sendTransactionService,
-            quote.provider,
-            quoteService.getSwapSettings()
-        )
-
-        collectFinalQuoteStateJob = viewModelScope.launch {
-            finalQuoteService?.stateFlow?.collect {
-                handleUpdatedFinalQuoteState(it)
-            }
-        }
-
-        finalQuoteService?.start()
     }
 
-    fun reject() {
-        finalQuoteState = null
-
-        emitState()
+    fun cancelConfirmation() {
+        finalQuoteService2.stop()
     }
 
     class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
@@ -320,7 +315,7 @@ data class SwapUiState(
     val timeout: Boolean,
     val timeRemainingProgress: Float?,
     val cautions: List<CautionViewItem>,
-    val finalQuoteState: SwapFinalQuoteService.State?,
+    val confirmInProgress: Boolean,
 ) {
     val currentStep: SwapStep = when {
         initializing -> SwapStep.Initializing
@@ -330,7 +325,7 @@ data class SwapUiState(
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
-        finalQuoteState != null -> SwapStep.Confirm
+        confirmInProgress -> SwapStep.Confirm
         else -> SwapStep.Proceed
     }
 }
