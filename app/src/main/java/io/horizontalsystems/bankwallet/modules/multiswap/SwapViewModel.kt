@@ -34,6 +34,8 @@ class SwapViewModel(
 ) : ViewModelUiState<SwapUiState>() {
 
     private val finalQuoteService2 = SwapFinalQuoteService2()
+    private val swapTransactionService = SwapTransactionService()
+    private var swapTransactionState = swapTransactionService.stateFlow.value
 
     private val quoteLifetime = 20
 
@@ -108,6 +110,15 @@ class SwapViewModel(
                 it.tokenOut?.let { quoteService.setTokenOut(it) }
             }
         }
+        viewModelScope.launch {
+            swapTransactionService.stateFlow.collect {
+                swapTransactionState = it
+
+                finalQuoteService2.setSendTransactionSettings(it.sendTransactionSettings)
+
+                emitState()
+            }
+        }
 
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
@@ -146,7 +157,8 @@ class SwapViewModel(
                 remaining / quoteLifetime.toFloat()
             },
             cautions = cautionViewItems,
-            confirmInProgress = finalQuoteState.confirmInProgress
+            finalQuoteState = finalQuoteState,
+            swapTransactionState = swapTransactionState
         )
 
         Log.w("AAA", "state: $state")
@@ -170,10 +182,11 @@ class SwapViewModel(
         emitState()
     }
 
-    private fun handleUpdatedFinalQuoteState(finalQuoteState: SwapFinalQuoteService2.State) {
+    private suspend fun handleUpdatedFinalQuoteState(finalQuoteState: SwapFinalQuoteService2.State) {
         this.finalQuoteState = finalQuoteState
 
-        // todo
+        priceImpactService.setPriceImpact(finalQuoteState.priceImpact, null)
+        swapTransactionService.setSendTransactionData(finalQuoteState.sendTransactionData)
 
         emitState()
     }
@@ -182,6 +195,7 @@ class SwapViewModel(
         this.quoteState = quoteState
 
         finalQuoteService2.setSwapProviderQuote(quoteState.quote)
+        swapTransactionService.setToken(quoteState.tokenIn)
 
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
@@ -259,13 +273,12 @@ class SwapViewModel(
 
     fun startConfirmation() {
         finalQuoteService2.start()
-
-//        val sendTransactionService = SendTransactionServiceFactory.create(quoteState.quote.tokenIn)
-
+        swapTransactionService.start()
     }
 
     fun cancelConfirmation() {
         finalQuoteService2.stop()
+        swapTransactionService.stop()
     }
 
     class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
@@ -315,8 +328,11 @@ data class SwapUiState(
     val timeout: Boolean,
     val timeRemainingProgress: Float?,
     val cautions: List<CautionViewItem>,
-    val confirmInProgress: Boolean,
+    val finalQuoteState: SwapFinalQuoteService2.State,
+    val swapTransactionState: SwapTransactionService.State,
 ) {
+    val confirmInProgress = finalQuoteState.confirmInProgress
+
     val currentStep: SwapStep = when {
         initializing -> SwapStep.Initializing
         quoting -> SwapStep.Quoting

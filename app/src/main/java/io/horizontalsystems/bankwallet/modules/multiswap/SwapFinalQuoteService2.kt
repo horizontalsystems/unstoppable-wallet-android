@@ -70,14 +70,16 @@ class SwapFinalQuoteService2(
 
     fun setSwapSettings(settings: Map<String, Any?>) {
         this.swapSettings = settings
+    }
 
-//        runQuotation()
+    fun setSendTransactionSettings(sendTransactionSettings: SendTransactionSettings?) {
+        this.sendTransactionSettings = sendTransactionSettings
+
+        fetchFinalQuote()
     }
 
     fun setSwapProviderQuote(quote: SwapProviderQuote?) {
         this.quote = quote
-
-//        runQuotation()
     }
 
     fun start() {
