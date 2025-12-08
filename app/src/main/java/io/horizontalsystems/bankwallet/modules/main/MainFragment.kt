@@ -8,16 +8,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BadgedBox
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,8 +30,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,8 +72,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSup
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigation
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigationItem
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -142,93 +144,106 @@ private fun MainScreen(
     }
 
     val uiState = viewModel.uiState
-    val selectedPage = uiState.selectedTabIndex
-    val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
-
     val coroutineScope = rememberCoroutineScope()
 
-    val modalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val modalBottomSheetState =
+        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
+    val currentTab = remember(uiState.selectedTabIndex) {
+        uiState.mainNavItems.getOrNull(uiState.selectedTabIndex)?.mainNavItem
+    }
+
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         bottomBar = {
             Column {
                 if (uiState.torEnabled) {
                     TorStatusView()
                 }
-                HsBottomNavigation(
-                    backgroundColor = ComposeAppTheme.colors.blade,
-                    elevation = 0.dp
+                NavigationBar(
+                    modifier = Modifier.height(70.dp),
+                    containerColor = ComposeAppTheme.colors.blade,
+                    windowInsets = NavigationBarDefaults.windowInsets,
                 ) {
-                    uiState.mainNavItems.forEach { item ->
-                        HsBottomNavigationItem(
+                    uiState.mainNavItems.forEachIndexed { index, destination ->
+                        NavigationBarItem(
+                            selected = destination.selected,
+                            onClick = {
+                                viewModel.onSelect(destination.mainNavItem)
+                                stat(
+                                    page = StatPage.Main,
+                                    event = StatEvent.SwitchTab(destination.mainNavItem.statTab)
+                                )
+                            },
+                            enabled = destination.enabled,
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = ComposeAppTheme.colors.jacob,
+                                unselectedIconColor = ComposeAppTheme.colors.grey,
+                                indicatorColor = ComposeAppTheme.colors.transparent,
+                                selectedTextColor = ComposeAppTheme.colors.jacob,
+                                unselectedTextColor = ComposeAppTheme.colors.grey,
+                            ),
                             icon = {
-                                BadgedIcon(item.badge) {
+                                BadgedIcon(destination.badge) {
                                     Icon(
-                                        painter = painterResource(item.mainNavItem.iconRes),
-                                        contentDescription = stringResource(item.mainNavItem.titleRes)
+                                        painter = painterResource(destination.mainNavItem.iconRes),
+                                        contentDescription = stringResource(destination.mainNavItem.titleRes)
                                     )
                                 }
                             },
-                            selected = item.selected,
-                            enabled = item.enabled,
-                            selectedContentColor = ComposeAppTheme.colors.jacob,
-                            unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.andy,
-                            onClick = {
-                                viewModel.onSelect(item.mainNavItem)
-
-                                stat(
-                                    page = StatPage.Main,
-                                    event = StatEvent.SwitchTab(item.mainNavItem.statTab)
-                                )
-                            },
-                            onLongClick = {
-                                if (item.mainNavItem == MainNavigation.Balance) {
-                                    coroutineScope.launch {
-                                        modalBottomSheetState.show()
-                                        isBottomSheetVisible = true
-
-                                        stat(
-                                            page = StatPage.Main,
-                                            event = StatEvent.Open(StatPage.SwitchWallet)
-                                        )
-                                    }
-                                }
-                            }
                         )
                     }
                 }
             }
         }
-    ) {
+    ) { paddingValues ->
         BackHandler(enabled = modalBottomSheetState.isVisible) {
             coroutineScope.launch {
                 modalBottomSheetState.hide()
                 isBottomSheetVisible = false
             }
         }
-        Column(modifier = Modifier.padding(it)) {
-            LaunchedEffect(key1 = selectedPage, block = {
-                pagerState.scrollToPage(selectedPage)
-            })
+        Box(modifier = Modifier.padding(paddingValues)) {
+            MarketScreen(
+                fragmentNavController,
+                modifier = Modifier.then(
+                    if (currentTab == MainNavigation.Market) Modifier else Modifier.alpha(0f)
+                )
+            )
 
-            HorizontalPager(
-                modifier = Modifier.weight(1f),
-                state = pagerState,
-                userScrollEnabled = false,
-                verticalAlignment = Alignment.Top
-            ) { page ->
-                when (uiState.mainNavItems[page].mainNavItem) {
-                    MainNavigation.Market -> MarketScreen(fragmentNavController)
-                    MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                    MainNavigation.Transactions -> TransactionsScreen(
-                        fragmentNavController,
-                        transactionsViewModel
-                    )
+            BalanceScreen(
+                fragmentNavController,
+                modifier = Modifier.then(
+                    if (currentTab == MainNavigation.Balance) Modifier else Modifier.alpha(0f)
+                )
+            )
 
-                    MainNavigation.Settings -> SettingsScreen(fragmentNavController)
-                }
+            TransactionsScreen(
+                fragmentNavController,
+                transactionsViewModel,
+                modifier = Modifier.then(
+                    if (currentTab == MainNavigation.Transactions) Modifier else Modifier.alpha(0f)
+                )
+            )
+
+            SettingsScreen(
+                fragmentNavController,
+                modifier = Modifier.then(
+                    if (currentTab == MainNavigation.Settings) Modifier else Modifier.alpha(0f)
+                )
+            )
+        }
+        Column {
+            when (uiState.mainNavItems[uiState.selectedTabIndex].mainNavItem) {
+                MainNavigation.Market -> MarketScreen(fragmentNavController)
+                MainNavigation.Balance -> BalanceScreen(fragmentNavController)
+                MainNavigation.Transactions -> TransactionsScreen(
+                    fragmentNavController,
+                    transactionsViewModel
+                )
+
+                MainNavigation.Settings -> SettingsScreen(fragmentNavController)
             }
         }
     }
@@ -374,6 +389,7 @@ private fun BadgedIcon(
                     Box(
                         modifier = Modifier
                             .size(8.dp)
+                            .offset(x = 7.dp, y = (-9).dp)
                             .background(
                                 ComposeAppTheme.colors.lucian,
                                 shape = RoundedCornerShape(4.dp)
