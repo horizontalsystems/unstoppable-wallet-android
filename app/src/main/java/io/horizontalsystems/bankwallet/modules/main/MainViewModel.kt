@@ -218,11 +218,32 @@ class MainViewModel(
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
+        val newIndex = items.indexOf(mainNavItem)
+
+        if (newIndex == selectedTabIndex) {
+            return
+        }
+
         if (mainNavItem != MainNavigation.Settings) {
             currentMainTab = mainNavItem
         }
-        selectedTabIndex = items.indexOf(mainNavItem)
-        syncNavigation()
+
+        updateSelectedTab(selectedTabIndex, newIndex)
+        selectedTabIndex = newIndex
+        emitState()
+    }
+
+    private fun updateSelectedTab(oldIndex: Int, newIndex: Int) {
+        mainNavItems = mainNavItems.toMutableList().apply {
+            // Deselect old tab
+            if (oldIndex in indices) {
+                this[oldIndex] = this[oldIndex].copy(selected = false)
+            }
+            // Select new tab
+            if (newIndex in indices) {
+                this[newIndex] = this[newIndex].copy(selected = true)
+            }
+        }
     }
 
     private fun updateTransactionsTabEnabled() {
@@ -372,11 +393,26 @@ class MainViewModel(
     }
 
     private fun syncNavigation() {
-        mainNavItems = navigationItems()
-        if (selectedTabIndex >= mainNavItems.size) {
-            selectedTabIndex = mainNavItems.size - 1
+        val newNavItems = navigationItems()
+        val newSelectedIndex = if (selectedTabIndex >= newNavItems.size) {
+            newNavItems.size - 1
+        } else {
+            selectedTabIndex
         }
-        emitState()
+
+        // Only update if structure changed (items added/removed/badges changed)
+        val structureChanged = mainNavItems.size != newNavItems.size ||
+                mainNavItems.zip(newNavItems).any { (old, new) ->
+                    old.mainNavItem != new.mainNavItem ||
+                            old.enabled != new.enabled ||
+                            old.badge != new.badge
+                }
+
+        if (structureChanged || selectedTabIndex != newSelectedIndex) {
+            mainNavItems = newNavItems
+            selectedTabIndex = newSelectedIndex
+            emitState()
+        }
     }
 
     private suspend fun showWhatsNew() {

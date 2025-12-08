@@ -71,10 +71,14 @@ import io.horizontalsystems.subscriptions.core.SecureSend
 @Composable
 fun SettingsScreen(
     navController: NavController,
+    modifier: Modifier = Modifier,
     viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
+    Surface(
+        modifier = modifier,
+        color = ComposeAppTheme.colors.tyler
+    ) {
         Column {
             AppBar(
                 stringResource(R.string.Settings_Title),

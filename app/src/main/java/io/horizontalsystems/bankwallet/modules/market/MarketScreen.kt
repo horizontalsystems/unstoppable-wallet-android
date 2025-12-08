@@ -69,13 +69,17 @@ import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
 
 @Composable
-fun MarketScreen(navController: NavController) {
+fun MarketScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
 
     HSScaffold(
         title = stringResource(R.string.Market_Title),
+        modifier = modifier,
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column() {

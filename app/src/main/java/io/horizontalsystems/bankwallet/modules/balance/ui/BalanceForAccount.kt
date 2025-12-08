@@ -52,7 +52,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
+fun BalanceForAccount(
+    navController: NavController,
+    accountViewItem: AccountViewItem,
+    modifier: Modifier = Modifier
+) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     val context = LocalContext.current
@@ -95,6 +99,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
 
     HSScaffold(
         title = accountViewItem.name,
+        modifier = modifier,
         menuItems = buildList {
             if (uiState.loading) {
                 add(MenuItemLoading)
