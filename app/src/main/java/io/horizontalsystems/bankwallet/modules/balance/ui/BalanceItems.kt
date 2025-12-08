@@ -487,6 +487,9 @@ fun BalanceItems(
 
                 }
             }
+            item{
+                VSpacer(70.dp)
+            }
         }
     }
     uiState.openSend?.let { openSend ->

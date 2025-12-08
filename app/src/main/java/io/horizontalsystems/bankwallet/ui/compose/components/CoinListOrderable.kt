@@ -150,7 +150,7 @@ fun CoinListOrderable(
             }
         }
         item {
-            VSpacer(72.dp)
+            VSpacer(140.dp)
         }
         if (scrollToTop) {
             coroutineScope.launch {

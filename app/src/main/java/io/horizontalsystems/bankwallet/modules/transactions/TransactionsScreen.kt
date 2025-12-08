@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -152,7 +153,10 @@ fun TransactionsScreen(
                                 }
                             }
 
-                            LazyColumn(state = listState) {
+                            LazyColumn(
+                                state = listState,
+                                modifier = Modifier.background(ComposeAppTheme.colors.lawrence)
+                            ) {
                                 transactionList(
                                     transactionsMap = transactionItems,
                                     willShow = { viewModel.willShow(it) },
@@ -211,7 +215,8 @@ fun LazyListScope.transactionList(
     }
 
     item {
-        Spacer(modifier = Modifier.height(20.dp))
+        VSpacer(20.dp)
+        VSpacer(70.dp)
     }
 }
 

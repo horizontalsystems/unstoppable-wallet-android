@@ -71,7 +71,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                             }
                         }
                         item {
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(140.dp))
                         }
                     }
                 }
