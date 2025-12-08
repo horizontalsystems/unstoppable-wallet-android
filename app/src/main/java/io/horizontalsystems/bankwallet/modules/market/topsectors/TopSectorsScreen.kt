@@ -127,7 +127,7 @@ fun TopSectorsScreen(
                                 }
                             }
                             item {
-                                VSpacer(height = 72.dp)
+                                VSpacer(height = 140.dp)
                             }
                         }
                     }

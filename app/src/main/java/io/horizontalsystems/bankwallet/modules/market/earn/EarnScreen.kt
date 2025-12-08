@@ -283,13 +283,14 @@ fun VaultList(
                 PremiumContentMessage(blurredItems) {
                     onGetPremiumClick.invoke()
                 }
+                VSpacer(70.dp)
             }
         }
         item {
             //Add bottom space only when all items are visible
             //and don't show bottom space when Premium banner is shown
             if (!noPremium) {
-                VSpacer(72.dp)
+                VSpacer(140.dp)
             }
         }
         if (scrollToTop) {

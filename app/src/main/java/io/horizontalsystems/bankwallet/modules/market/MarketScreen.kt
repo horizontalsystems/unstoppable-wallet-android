@@ -93,7 +93,8 @@ fun MarketScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .padding(bottom = 70.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(

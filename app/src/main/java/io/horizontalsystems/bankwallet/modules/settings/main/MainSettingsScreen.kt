@@ -91,6 +91,7 @@ fun SettingsScreen(
                     navController = navController,
                     )
                 SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
+                VSpacer(70.dp)
             }
         }
     }

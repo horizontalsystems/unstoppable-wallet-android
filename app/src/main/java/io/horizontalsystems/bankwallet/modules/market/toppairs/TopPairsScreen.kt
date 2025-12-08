@@ -118,7 +118,7 @@ fun TopPairsScreen() {
 
                             }
                             item {
-                                VSpacer(height = 72.dp)
+                                VSpacer(height = 140.dp)
                             }
                         }
                     }
