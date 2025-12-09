@@ -167,7 +167,7 @@ fun PremiumFeaturesScreen(
             ) {
                 VSpacer(24.dp)
                 Image(
-                    painter = painterResource(id = R.drawable.blackfriday_200),
+                    painter = painterResource(id = R.drawable.prem_star_launch),
                     contentDescription = null,
                     modifier = Modifier
                         .height(200.dp)
