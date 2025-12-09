@@ -774,6 +774,7 @@
     <string name="SwapWarning_SlippageNotApplicable_Description">Minimum slippage applicable  for this quote is %s%%</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">No Slippage Control</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Cross-chain swaps depend on third-party liquidity and delays, which may affect the final amount.</string>
+    <string name="SwapConfirm_Title">Confirm Swap</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>

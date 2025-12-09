@@ -97,13 +97,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -191,30 +187,22 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
     var showBottomSheet by remember { mutableStateOf(true) }
 
     if (uiState.confirmInProgress) {
-        BottomSheetContent(
-            onDismissRequest = {
-                Log.e("AAA", "onDismissRequest")
-                showBottomSheet = false
-                viewModel.cancelConfirmation()
-            },
-            sheetState = sheetState,
-            buttons = {
-                HSButton(
-                    title = "Close",
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                        }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                    }
-                )
-            }
-        ) {
-            title3_leah("Yahoo")
+        val currentQuote = remember { viewModel.getCurrentQuote() }
+        val settings = remember { viewModel.getSettings() }
+
+        if (currentQuote != null) {
+            SwapConfirmBottomSheet(
+                onDismissRequest = {
+                    Log.e("AAA", "onDismissRequest")
+                    showBottomSheet = false
+                    viewModel.cancelConfirmation()
+                },
+                sheetState = sheetState,
+                navController = navController,
+                currentQuote = currentQuote,
+                settings = settings,
+                uiState = uiState
+            )
         }
     }
 }
