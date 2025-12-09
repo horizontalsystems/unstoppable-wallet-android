@@ -41,7 +41,6 @@ import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -72,7 +71,9 @@ import java.math.BigDecimal
 class EnterAddressFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        EnterAddressScreen(navController, navController.requireInput())
+        withInput<Input>(navController) { input ->
+            EnterAddressScreen(navController, input)
+        }
     }
 
     @Parcelize
