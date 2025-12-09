@@ -107,8 +107,16 @@ class MainViewModel(
         get() = accountManager.accounts.filter { it.isWatchAccount }
 
     init {
-        localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
-            marketsTabEnabled = it
+        localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) { enabled ->
+            var navItemSize = items.size
+            marketsTabEnabled = enabled
+            if (navItemSize != items.size) {
+                if (enabled) {
+                    selectedTabIndex += 1
+                } else {
+                    selectedTabIndex -= 1
+                }
+            }
             syncNavigation()
         }
 
@@ -394,13 +402,8 @@ class MainViewModel(
 
     private fun syncNavigation() {
         val newNavItems = navigationItems()
-        val newSelectedIndex = if (selectedTabIndex >= newNavItems.size) {
-            newNavItems.size - 1
-        } else {
-            selectedTabIndex
-        }
 
-        // Only update if structure changed (items added/removed/badges changed)
+        // Only update if structure changed
         val structureChanged = mainNavItems.size != newNavItems.size ||
                 mainNavItems.zip(newNavItems).any { (old, new) ->
                     old.mainNavItem != new.mainNavItem ||
@@ -408,9 +411,8 @@ class MainViewModel(
                             old.badge != new.badge
                 }
 
-        if (structureChanged || selectedTabIndex != newSelectedIndex) {
+        if (structureChanged) {
             mainNavItems = newNavItems
-            selectedTabIndex = newSelectedIndex
             emitState()
         }
     }
