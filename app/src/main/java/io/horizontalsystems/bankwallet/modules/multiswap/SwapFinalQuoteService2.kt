@@ -29,6 +29,8 @@ class SwapFinalQuoteService2(
     )
 
     private fun fetchFinalQuote() {
+        if (!confirmInProgress) return
+
         fetchFinalQuoteJob?.cancel()
         fetchFinalQuoteJob = coroutineScope.launch(Dispatchers.Default) {
             try {
