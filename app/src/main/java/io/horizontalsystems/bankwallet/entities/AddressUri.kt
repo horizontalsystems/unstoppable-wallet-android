@@ -45,9 +45,6 @@ class AddressUri(
         companion object {
             fun amountField(blockchainType: BlockchainType): Field {
                 return when {
-                    EvmBlockchainManager.blockchainTypes.contains(blockchainType) -> {
-                        Value
-                    }
                     blockchainType == BlockchainType.Monero -> {
                         TxAmount
                     }
