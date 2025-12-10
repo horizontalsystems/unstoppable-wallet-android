@@ -72,6 +72,11 @@ class SwapTransactionService : ServiceState<SwapTransactionService.State>() {
         sendTransactionService?.sendTransaction(mevProtectionEnabled)
     }
 
+    fun toggleMevProtection(enabled: Boolean) {
+        mevProtectionEnabled = enabled
+
+        emitState()
+    }
 
     override fun createState() = State(
         sendTransactionSettings = sendTransactionSettings,

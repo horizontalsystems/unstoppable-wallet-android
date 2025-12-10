@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.marketkit.models.Token
@@ -185,10 +186,19 @@ class SwapViewModel(
     private suspend fun handleUpdatedFinalQuoteState(finalQuoteState: SwapFinalQuoteService2.State) {
         this.finalQuoteState = finalQuoteState
 
-        priceImpactService.setPriceImpact(finalQuoteState.priceImpact, null)
-        swapTransactionService.setSendTransactionData(finalQuoteState.sendTransactionData)
+        priceImpactService.setPriceImpact(finalQuoteState.finalQuote?.priceImpact, null)
+        swapTransactionService.setSendTransactionData(finalQuoteState.finalQuote?.sendTransactionData)
 
         emitState()
+
+        if (finalQuoteState.finalQuote != null) {
+//            val elapsedMillis = System.currentTimeMillis() - quoteState.quote.createdAt
+            val elapsedMillis = 0L
+            val remainingSeconds = (quoteLifetime - elapsedMillis / 1000).coerceAtLeast(0)
+            timerService.start(remainingSeconds)
+        } else {
+            timerService.reset()
+        }
     }
 
     private fun handleUpdatedQuoteState(quoteState: SwapQuoteService.State) {
@@ -264,7 +274,13 @@ class SwapViewModel(
     }
 
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
-    fun reQuote() = quoteService.reQuote()
+    fun reQuote() {
+        if (finalQuoteState.confirmInProgress) {
+            finalQuoteService2.refresh()
+        } else {
+            quoteService.reQuote()
+        }
+    }
     fun onActionStarted() = quoteService.onActionStarted()
     fun onActionCompleted() = quoteService.onActionCompleted()
 
@@ -279,6 +295,14 @@ class SwapViewModel(
     fun cancelConfirmation() {
         finalQuoteService2.stop()
         swapTransactionService.stop()
+    }
+
+    fun toggleMevProtection(enabled: Boolean) = swapTransactionService.toggleMevProtection(enabled)
+
+    suspend fun swap() = swapTransactionService.swap()
+
+    fun refresh() {
+        TODO("Not yet implemented")
     }
 
     class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
@@ -343,6 +367,36 @@ data class SwapUiState(
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
         confirmInProgress -> SwapStep.Confirm
         else -> SwapStep.Proceed
+    }
+
+    val expiresIn = timeRemaining
+    val expired = timeout
+    val loading = swapTransactionState.loading
+    val amountOut = finalQuoteState.finalQuote?.amountOut
+    val amountOutMin = finalQuoteState.finalQuote?.amountOutMin
+//    val fiatAmountOutMin = fiatAmountOutMin
+//    val currency = currency
+    val networkFee = swapTransactionState.sendTransactionState?.networkFee
+    val extraFees = swapTransactionState.sendTransactionState?.extraFees ?: mapOf()
+//    val cautions = cautions
+    val validQuote = swapTransactionState.sendTransactionState?.sendable ?: false
+    val quoteFields = finalQuoteState.finalQuote?.fields ?: listOf()
+    val transactionFields = swapTransactionState.sendTransactionState?.fields ?: listOf()
+    val hasSettings = swapTransactionState.hasSettings
+    val mevProtectionAvailable = swapTransactionState.mevProtectionAvailable
+    val mevProtectionEnabled = swapTransactionState.mevProtectionEnabled
+
+    val totalFee by lazy {
+        val networkFiatValue = networkFee?.secondary  ?: return@lazy null
+        val networkFee = networkFiatValue.value
+        val extraFeeValues = extraFees.mapNotNull { it.value.secondary?.value }
+        if (extraFeeValues.isEmpty()) return@lazy null
+        val totalValue = networkFee + extraFeeValues.sumOf { it }
+
+        CurrencyValue(
+            networkFiatValue.currencyValue.currency,
+            totalValue
+        )
     }
 }
 

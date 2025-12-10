@@ -18,9 +18,8 @@ fun SwapConfirmBottomSheet(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     navController: NavController,
-    currentQuote: SwapProviderQuote,
-    settings: Map<String, Any?>,
-    uiState: SwapUiState
+    uiState: SwapUiState,
+    viewModel: SwapViewModel
 ) {
     BottomSheetContent(
         onDismissRequest = onDismissRequest,
@@ -43,8 +42,8 @@ fun SwapConfirmBottomSheet(
     ) {
         SwapConfirmScreen2(
             navController = navController,
-            currentQuote = currentQuote,
-            settings = settings
+            uiState = uiState,
+            viewModel = viewModel
         )
     }
 

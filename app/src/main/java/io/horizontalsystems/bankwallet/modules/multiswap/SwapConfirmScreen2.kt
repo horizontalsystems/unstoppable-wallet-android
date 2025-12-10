@@ -14,14 +14,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
@@ -49,20 +47,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun SwapConfirmScreen2(
     navController: NavController,
-    currentQuote: SwapProviderQuote,
-    settings: Map<String, Any?>
+    uiState: SwapUiState,
+    viewModel: SwapViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
-
-    val currentBackStackEntry = remember { navController.currentBackStackEntry }
-    val viewModel = viewModel<SwapConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
-        initializer = SwapConfirmViewModel.init(currentQuote, settings)
-    )
-
-    val uiState = viewModel.uiState
-
 
     val onClickSettings = if (uiState.hasSettings) {
         {
@@ -146,34 +135,21 @@ fun SwapConfirmScreen2(
         SectionUniversalLawrence {
             PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
             uiState.amountOutMin?.let { amountOutMin ->
-                val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
-                    CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
-                } ?: "---"
+//                val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
+//                    CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
+//                } ?: "---"
+                val subvalue = null
 
                 SwapInfoRow(
                     borderTop = true,
                     title = stringResource(id = R.string.Swap_MinimumReceived),
-                    value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
+                    value = CoinValue(uiState.tokenOut!!, amountOutMin).getFormattedFull(),
                     subvalue = subvalue
                 )
             }
             uiState.quoteFields.forEach {
                 it.GetContent(navController, true)
             }
-        }
-
-        val transactionFields = uiState.transactionFields
-        if (transactionFields.isNotEmpty()) {
-            VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
-                transactionFields.forEachIndexed { index, field ->
-                    field.GetContent(navController, index != 0)
-                }
-            }
-        }
-
-        VSpacer(height = 16.dp)
-        SectionUniversalLawrence {
             DataFieldFee(
                 navController,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
@@ -188,16 +164,22 @@ fun SwapConfirmScreen2(
                     infoText = null
                 )
             }
-        }
-
-        uiState.totalFee?.let { totalFee ->
-            VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
+            uiState.totalFee?.let { totalFee ->
                 SwapInfoRow(
                     borderTop = true,
                     title = stringResource(id = R.string.Fee_Total),
                     value = totalFee.getFormattedFull(),
                 )
+            }
+        }
+
+        val transactionFields = uiState.transactionFields
+        if (transactionFields.isNotEmpty()) {
+            VSpacer(height = 16.dp)
+            SectionUniversalLawrence {
+                transactionFields.forEachIndexed { index, field ->
+                    field.GetContent(navController, index != 0)
+                }
             }
         }
 

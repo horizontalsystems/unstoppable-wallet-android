@@ -33,7 +33,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -183,27 +182,17 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         }
     }
 
-    val coroutineScope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(true) }
-
-    if (uiState.confirmInProgress) {
-        val currentQuote = remember { viewModel.getCurrentQuote() }
-        val settings = remember { viewModel.getSettings() }
-
-        if (currentQuote != null) {
-            SwapConfirmBottomSheet(
-                onDismissRequest = {
-                    Log.e("AAA", "onDismissRequest")
-                    showBottomSheet = false
-                    viewModel.cancelConfirmation()
-                },
-                sheetState = sheetState,
-                navController = navController,
-                currentQuote = currentQuote,
-                settings = settings,
-                uiState = uiState
-            )
-        }
+    if (uiState.confirmInProgress && uiState.finalQuoteState.finalQuote != null) {
+        SwapConfirmBottomSheet(
+            onDismissRequest = {
+                Log.e("AAA", "onDismissRequest")
+                viewModel.cancelConfirmation()
+            },
+            sheetState = sheetState,
+            navController = navController,
+            uiState = uiState,
+            viewModel = viewModel
+        )
     }
 }
 
@@ -256,12 +245,15 @@ private fun SwapScreenInner(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 VSpacer(height = 12.dp)
+
+                val amountOut = uiState.finalQuoteState.finalQuote?.amountOut ?: quote?.amountOut
+
                 SwapInput(
                     amountIn = uiState.amountIn,
                     fiatAmountIn = uiState.fiatAmountIn,
                     fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                     onSwitchPairs = onSwitchPairs,
-                    amountOut = quote?.amountOut,
+                    amountOut = amountOut,
                     fiatAmountOut = uiState.fiatAmountOut,
                     fiatPriceImpact = uiState.fiatPriceImpact,
                     fiatPriceImpactLevel = uiState.fiatPriceImpactLevel,
