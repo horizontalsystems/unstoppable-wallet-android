@@ -4,9 +4,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteEvm
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteOneInch
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -113,7 +112,7 @@ object OneInchProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-    ): ISwapFinalQuote {
+    ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
         checkNotNull(sendTransactionSettings.gasPriceInfo)
 
@@ -151,7 +150,7 @@ object OneInchProvider : IMultiSwapProvider {
             add(DataFieldSlippage(settingSlippage.value))
         }
 
-        return SwapFinalQuoteEvm(
+        return SwapFinalQuote(
             tokenIn,
             tokenOut,
             amountIn,
