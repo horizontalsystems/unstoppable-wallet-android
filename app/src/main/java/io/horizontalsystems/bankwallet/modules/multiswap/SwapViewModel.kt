@@ -192,8 +192,7 @@ class SwapViewModel(
         emitState()
 
         if (finalQuoteState.finalQuote != null) {
-//            val elapsedMillis = System.currentTimeMillis() - quoteState.quote.createdAt
-            val elapsedMillis = 0L
+            val elapsedMillis = System.currentTimeMillis() - finalQuoteState.finalQuoteCreatedAt!!
             val remainingSeconds = (quoteLifetime - elapsedMillis / 1000).coerceAtLeast(0)
             timerService.start(remainingSeconds)
         } else {

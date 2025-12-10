@@ -15,7 +15,8 @@ class SwapFinalQuoteService2(
     private var quote: SwapProviderQuote? = null
 
     private var sendTransactionSettings: SendTransactionSettings? = null
-    private var finalQuote: ISwapFinalQuote? = null
+    private var finalQuote: SwapFinalQuote? = null
+    private var finalQuoteCreatedAt: Long? = null
     private var confirmInProgress = false
     private var fetchFinalQuoteJob: Job? = null
 
@@ -23,7 +24,8 @@ class SwapFinalQuoteService2(
 
     override fun createState() = State(
         confirmInProgress = confirmInProgress,
-        finalQuote = finalQuote
+        finalQuote = finalQuote,
+        finalQuoteCreatedAt = finalQuoteCreatedAt
     )
 
     private fun fetchFinalQuote() {
@@ -33,6 +35,7 @@ class SwapFinalQuoteService2(
                 val quote = quote ?: return@launch
 
                 finalQuote = quote.provider.fetchFinalQuote(quote.tokenIn, quote.tokenOut, quote.amountIn, swapSettings, sendTransactionSettings)
+                finalQuoteCreatedAt = System.currentTimeMillis()
 
                 ensureActive()
                 emitState()
@@ -80,6 +83,7 @@ class SwapFinalQuoteService2(
 
     data class State(
         val confirmInProgress: Boolean,
-        val finalQuote: ISwapFinalQuote?
+        val finalQuote: SwapFinalQuote?,
+        val finalQuoteCreatedAt: Long?
     )
 }
