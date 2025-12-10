@@ -6,11 +6,9 @@ import io.horizontalsystems.bankwallet.core.factories.uriScheme
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.AddressUri
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class AddressUriService(val token: Token) : ServiceState<AddressUriService.State>() {
     private var address = ""
@@ -29,12 +27,7 @@ class AddressUriService(val token: Token) : ServiceState<AddressUriService.State
     }
 
     fun setAmount(amount: BigDecimal?) {
-        if (token.blockchainType.isEvm) {
-            // set amount in wei and remove any fractional part
-            this.amount = amount?.movePointRight(18)?.setScale(0, RoundingMode.DOWN)
-        } else {
-            this.amount = amount
-        }
+        this.amount = amount
 
         refreshUri()
 
@@ -51,13 +44,11 @@ class AddressUriService(val token: Token) : ServiceState<AddressUriService.State
             //if blockchainType of token is EVM we need to attach chainId with prefix @ after address
             //else we should use old method to add Field.BlockchainUid parameter
             var address = this.address
-            if (token.blockchainType !is BlockchainType.Ethereum) {
-                if (token.blockchainType.isEvm) {
-                    // attach chain id after address with '@' prefix
-                    address += token.blockchainType.chainId?.let { "@${it}" }
-                } else {
-                    addressUri.parameters[AddressUri.Field.BlockchainUid] = token.blockchainType.uid
-                }
+            if (token.blockchainType.isEvm) {
+                // attach chain id after address with '@' prefix
+                address += token.blockchainType.chainId?.let { "@${it}" }
+            } else {
+                addressUri.parameters[AddressUri.Field.BlockchainUid] = token.blockchainType.uid
             }
 
             addressUri.address = address
