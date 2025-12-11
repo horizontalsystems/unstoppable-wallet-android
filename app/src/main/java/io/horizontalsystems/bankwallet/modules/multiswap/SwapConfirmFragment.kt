@@ -57,6 +57,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonTextTextGroup
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -300,6 +304,23 @@ fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subvalue: Stri
             }
         }
     }
+}
+
+@Composable
+fun SwapInfoRow2(title: HSString, value: HSString, subvalue: HSString? = null) {
+    CellSecondary(
+        middle = {
+            CellMiddleInfoTextIcon(
+                text = title,
+            )
+        },
+        right = {
+            CellRightControlsButtonTextTextGroup(
+                subtitle = value,
+                description = subvalue,
+            )
+        }
+    )
 }
 
 @Composable

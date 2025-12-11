@@ -173,7 +173,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         navController = navController
     )
 
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(sheetState.isVisible) {
         Log.e("AAA", "sheetState.isVisible: ${sheetState.isVisible}")

@@ -17,9 +17,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonTextTextGroup
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
 fun DataFieldFee(
@@ -33,6 +38,37 @@ fun DataFieldFee(
         secondary = secondary,
         title = stringResource(id = R.string.FeeSettings_NetworkFee),
         infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+    )
+}
+
+@Composable
+fun DataFieldFee2(
+    navController: NavController,
+    primary: String,
+    secondary: String,
+) {
+    CellSecondary(
+        middle = {
+            val title = stringResource(id = R.string.FeeSettings_NetworkFee)
+            val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+            CellMiddleInfoTextIcon(
+                text = title.hs,
+                icon = painterResource(R.drawable.info_filled_24),
+                iconTint = ComposeAppTheme.colors.grey,
+                onIconClick = {
+                    navController.slideFromBottom(
+                        R.id.feeSettingsInfoDialog,
+                        FeeSettingsInfoDialog.Input(title, infoText)
+                    )
+                }
+            )
+        },
+        right = {
+            CellRightControlsButtonTextTextGroup(
+                subtitle = primary.hs,
+                description = secondary.hs,
+            )
+        }
     )
 }
 

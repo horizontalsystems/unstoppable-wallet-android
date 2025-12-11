@@ -106,8 +106,6 @@ fun SwapConfirmBottomSheet(
                         }
                     },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
             }
         }
     ) {
@@ -117,19 +115,6 @@ fun SwapConfirmBottomSheet(
             viewModel = viewModel
         )
     }
-
-//
-//    CellSecondary(
-//        middle = {
-//            CellMiddleInfoTextIcon(
-//                text = stringResource(R.string.Swap_Slippage).hs,
-//
-//            )
-//        },
-//        right = {
-//
-//        }
-//    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
