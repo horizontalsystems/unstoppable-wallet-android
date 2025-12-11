@@ -19,8 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -73,6 +71,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportSt
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
+import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
+import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -162,12 +162,12 @@ private fun MainScreen(
                     TorStatusView()
                 }
                 NavigationBar(
-                    modifier = Modifier.height(70.dp),
+                    modifier = Modifier.height(72.dp),
                     containerColor = ComposeAppTheme.colors.blade,
                     windowInsets = NavigationBarDefaults.windowInsets,
                 ) {
-                    uiState.mainNavItems.forEachIndexed { index, destination ->
-                        NavigationBarItem(
+                    uiState.mainNavItems.forEach { destination ->
+                        HsNavigationBarItem(
                             selected = destination.selected,
                             onClick = {
                                 viewModel.onSelect(destination.mainNavItem)
@@ -176,8 +176,21 @@ private fun MainScreen(
                                     event = StatEvent.SwitchTab(destination.mainNavItem.statTab)
                                 )
                             },
+                            onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
+                                {
+                                    coroutineScope.launch {
+                                        modalBottomSheetState.show()
+                                        isBottomSheetVisible = true
+
+                                        stat(
+                                            page = StatPage.Main,
+                                            event = StatEvent.Open(StatPage.SwitchWallet)
+                                        )
+                                    }
+                                }
+                            } else null,
                             enabled = destination.enabled,
-                            colors = NavigationBarItemDefaults.colors(
+                            colors = HsNavigationBarItemDefaults.colors(
                                 selectedIconColor = ComposeAppTheme.colors.jacob,
                                 unselectedIconColor = ComposeAppTheme.colors.grey,
                                 indicatorColor = ComposeAppTheme.colors.transparent,
