@@ -64,22 +64,12 @@ fun SwapConfirmBottomSheet(
                 )
                 VSpacer(height = 12.dp)
                 subhead1_leah(text = "Quote is invalid")
-            } else if (uiState.expired) {
-                ButtonPrimaryDefault(
-                    modifier = Modifier.Companion.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Refresh),
-                    onClick = {
-                        viewModel.refresh()
-                    },
-                )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
                 ButtonPrimaryYellow(
                     modifier = Modifier.Companion.fillMaxWidth(),
                     title = stringResource(R.string.Swap),
-                    enabled = buttonEnabled,
+                    enabled = buttonEnabled && !uiState.expired,
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
