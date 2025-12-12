@@ -1,13 +1,15 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 
 class MigrationManager(
     private val localStorage: ILocalStorage,
-    private val termsManager: TermsManager,
+    private val termsManager: ITermsManager,
 ) {
 
-    private val latestMigrationVersion = 1
+    private val latestMigrationVersion = 2
 
     fun runMigrations() {
         val lastMigrationVersion = localStorage.lastMigrationVersion
@@ -19,7 +21,11 @@ class MigrationManager(
         }
 
         if ((lastMigrationVersion ?: 0) < 1) {
-            termsManager.migrateToTermsV2()
+            migrateToTermsV2()
+        }
+
+        if ((lastMigrationVersion ?: 0) < 2) {
+            migrateToTermsV3()
         }
 
         // --- Template for Future Migrations ---
@@ -28,5 +34,25 @@ class MigrationManager(
         // }
 
         localStorage.lastMigrationVersion = latestMigrationVersion
+    }
+
+    private fun migrateToTermsV2() {
+        if(localStorage.termsAccepted) {
+            localStorage.termsAccepted = false
+
+            val initialChecked = listOf(
+                TermsModule.TermType.Backup.key,
+                TermsModule.TermType.DisablingPin.key,
+            )
+            termsManager.broadcastTermsAccepted(false)
+            localStorage.checkedTerms = initialChecked
+        }
+    }
+
+    private fun migrateToTermsV3() {
+        if(localStorage.termsAccepted) {
+            localStorage.termsAccepted = false
+            termsManager.broadcastTermsAccepted(false)
+        }
     }
 }

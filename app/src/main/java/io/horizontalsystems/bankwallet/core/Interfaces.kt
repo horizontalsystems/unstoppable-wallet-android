@@ -584,6 +584,7 @@ interface ITermsManager {
     val allTermsAccepted: Boolean
     val checkedTermIds: List<String>
     fun acceptTerms()
+    fun broadcastTermsAccepted(accepted: Boolean)
 }
 
 interface Clearable {

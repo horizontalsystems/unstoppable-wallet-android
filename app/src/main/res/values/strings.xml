@@ -1330,11 +1330,14 @@
 
     <!--Setting_Terms-->
 
-    <string name="SettingsTerms_Backup">Securely back up the recovery phrase for each wallet. It’s the only way to regain access to your funds if the app is deleted, lost, or malfunctions. No one can restore it for you.</string>
-    <string name="SettingsTerms_DisablingPin">Disabling your smartphone’s unlock PIN (or passcode) wipes all wallets from the app. You’ll need your recovery phrases to restore access.</string>
-    <string name="SettingsTerms_PrivacyNotice">The app doesn’t spy or collect data about your balances or transactions - we don’t even know how many people use it. It only tracks anonymous usage patterns (pages opened, buttons tapped) to improve usability. You can turn this off in Settings → Privacy.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">As part of its monetization model, the app earns small commissions from DEX swaps executed within the wallet. This helps us stay independent, open source, and free of VC money.</string>
-    <string name="SettingsTerms_OpenSource">The app is verifiably open source, with all source code published online. Everything stated above can be publicly verified by anyone.</string>
+    <string name="SettingsTerms_Backup">This is a self-custody wallet. You remain in full control of your funds at all times. Each wallet you create or import is secured solely by its recovery phrase. You are responsible for backing up this phrase. We do not store it, do not have access to it, and cannot restore your wallet if the phrase is lost.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling or changing your smartphone’s unlock PIN or password may result in all wallets being removed from the app. While rare, software or device-level issues may cause data loss. Always back up all your recovery phrase.</string>
+    <string name="SettingsTerms_PrivacyNotice">We do not track or store your balances, transaction history, wallet addresses, or contacts. The app may collect anonymous, non-identifying usage statistics (such as pages opened or feature usage) to improve usability. You can disable this in Settings → Privacy.</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">We do not hold your assets, access your private keys, or execute transactions on your behalf. The app does not provide brokerage, exchange, custody, escrow, or money-transmission services. All transactions are initiated, signed, and broadcast directly by you to public blockchain networks. We do not control, relay, modify, or process your transactions.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">To support ongoing development and remain open source, the app may receive a small commission from certain swap integrations. Any such commission does not involve custody of user funds and does not give us access to or control over your assets.</string>
+    <string name="SettingsTerms_TransactionsIrreversible">Blockchain transactions are irreversible. Always review transaction details before confirming.</string>
+    <string name="SettingsTerms_OpenSource">The app is provided “as is.” While it is built with care, software may contain unintended bugs or vulnerabilities that could result in loss of funds. The app is open source and can be independently reviewed and audited by anyone.</string>
+    <string name="SettingsTerms_LegalObligations">You are solely responsible for the security of your funds, your conduct, and compliance with applicable laws in your jurisdiction. Use of the app does not exempt you from tax, financial reporting, or other legal obligations.</string>
 
     <!--Setting_Tell Friends-->
 
