@@ -634,7 +634,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         coroutineScope.launch(Dispatchers.IO) {
             delay(3000)
-            val termsManager = TermsManager(localStorage)
             val migrationManager = MigrationManager(localStorage, termsManager)
             migrationManager.runMigrations()
         }
