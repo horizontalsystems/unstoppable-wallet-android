@@ -295,10 +295,6 @@ class SwapViewModel(
 
     suspend fun swap() = swapTransactionService.swap()
 
-    fun refresh() {
-        TODO("Not yet implemented")
-    }
-
     class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

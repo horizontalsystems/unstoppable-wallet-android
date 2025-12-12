@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -54,7 +53,7 @@ fun SwapConfirmBottomSheet(
                     modifier = Modifier.Companion.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),
                     onClick = {
-                        viewModel.refresh()
+                        viewModel.reQuote()
                     },
                 )
             } else {
@@ -72,20 +71,18 @@ fun SwapConfirmBottomSheet(
                                 SnackbarDuration.INDEFINITE
                             )
 
-                            val result = try {
+                            try {
                                 viewModel.swap()
 
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
-                                SwapConfirmFragment.Result(true)
+
+                                navController.popBackStack()
                             } catch (t: Throwable) {
                                 HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                                SwapConfirmFragment.Result(false)
                             }
 
                             buttonEnabled = true
-                            navController.setNavigationResultX(result)
-                            navController.popBackStack()
                         }
                     },
                 )
