@@ -14,15 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
@@ -52,8 +49,6 @@ fun SwapConfirmBottomSheet(
                     enabled = false,
                     onClick = { },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
             } else if (!uiState.validQuote) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.Companion.fillMaxWidth(),
@@ -62,8 +57,6 @@ fun SwapConfirmBottomSheet(
                         viewModel.refresh()
                     },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = "Quote is invalid")
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
                 ButtonPrimaryYellow(
