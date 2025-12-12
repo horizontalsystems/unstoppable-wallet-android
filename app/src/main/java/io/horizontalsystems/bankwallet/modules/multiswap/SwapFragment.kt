@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -176,7 +175,6 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(sheetState.isVisible) {
-        Log.e("AAA", "sheetState.isVisible: ${sheetState.isVisible}")
         if (!sheetState.isVisible) {
             viewModel.cancelConfirmation()
         }
@@ -184,10 +182,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
     if (uiState.confirmInProgress && uiState.finalQuoteState.finalQuote != null) {
         SwapConfirmBottomSheet(
-            onDismissRequest = {
-                Log.e("AAA", "onDismissRequest")
-                viewModel.cancelConfirmation()
-            },
+            onDismissRequest = viewModel::cancelConfirmation,
             sheetState = sheetState,
             navController = navController,
             uiState = uiState,

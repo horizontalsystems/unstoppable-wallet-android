@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -130,42 +129,38 @@ class SwapViewModel(
         }
     }
 
-    override fun createState(): SwapUiState {
-        val state = SwapUiState(
-            amountIn = quoteState.amountIn,
-            tokenIn = quoteState.tokenIn,
-            tokenOut = quoteState.tokenOut,
-            quoting = quoteState.quoting,
-            initializing = quoteState.initializing,
-            quotes = quoteState.quotes,
-            preferredProvider = quoteState.preferredProvider,
-            quote = quoteState.quote,
-            error = networkState.error ?: quoteState.error ?: balanceState.error
+    override fun createState() = SwapUiState(
+        amountIn = quoteState.amountIn,
+        tokenIn = quoteState.tokenIn,
+        tokenOut = quoteState.tokenOut,
+        quoting = quoteState.quoting,
+        initializing = quoteState.initializing,
+        quotes = quoteState.quotes,
+        preferredProvider = quoteState.preferredProvider,
+        quote = quoteState.quote,
+        error = networkState.error
+            ?: quoteState.error
+            ?: balanceState.error
             ?: priceImpactState.error,
-            availableBalance = balanceState.balance,
-            priceImpact = priceImpactState.priceImpact,
-            priceImpactLevel = priceImpactState.priceImpactLevel,
-            priceImpactCaution = priceImpactState.priceImpactCaution,
-            fiatPriceImpact = priceImpactState.fiatPriceImpact,
-            fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
-            fiatAmountIn = fiatAmountIn,
-            fiatAmountOut = fiatAmountOut,
-            currency = currency,
-            fiatAmountInputEnabled = fiatAmountInputEnabled,
-            timeRemaining = timerState.remaining,
-            timeout = timerState.timeout,
-            timeRemainingProgress = timerState.remaining?.let { remaining ->
-                remaining / quoteLifetime.toFloat()
-            },
-            cautions = cautionViewItems,
-            finalQuoteState = finalQuoteState,
-            swapTransactionState = swapTransactionState
-        )
-
-        Log.w("AAA", "state: $state")
-
-        return state
-    }
+        availableBalance = balanceState.balance,
+        priceImpact = priceImpactState.priceImpact,
+        priceImpactLevel = priceImpactState.priceImpactLevel,
+        priceImpactCaution = priceImpactState.priceImpactCaution,
+        fiatPriceImpact = priceImpactState.fiatPriceImpact,
+        fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
+        fiatAmountIn = fiatAmountIn,
+        fiatAmountOut = fiatAmountOut,
+        currency = currency,
+        fiatAmountInputEnabled = fiatAmountInputEnabled,
+        timeRemaining = timerState.remaining,
+        timeout = timerState.timeout,
+        timeRemainingProgress = timerState.remaining?.let { remaining ->
+            remaining / quoteLifetime.toFloat()
+        },
+        cautions = cautionViewItems,
+        finalQuoteState = finalQuoteState,
+        swapTransactionState = swapTransactionState
+    )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
         this.networkState = networkState
