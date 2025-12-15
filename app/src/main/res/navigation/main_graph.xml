@@ -198,7 +198,7 @@
     <fragment
         android:id="@+id/addTokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
-    <fragment
+    <dialog
         android:id="@+id/eip20ApproveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveFragment" />
     <fragment
