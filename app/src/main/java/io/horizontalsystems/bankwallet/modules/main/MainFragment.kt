@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BadgedBox
@@ -20,6 +19,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -146,13 +145,8 @@ private fun MainScreen(
     val uiState = viewModel.uiState
     val coroutineScope = rememberCoroutineScope()
 
-    val modalBottomSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isBottomSheetVisible by remember { mutableStateOf(false) }
-
-    val currentTab = remember(uiState.selectedTabIndex) {
-        uiState.mainNavItems.getOrNull(uiState.selectedTabIndex)?.mainNavItem
-    }
 
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
@@ -216,36 +210,6 @@ private fun MainScreen(
                 modalBottomSheetState.hide()
                 isBottomSheetVisible = false
             }
-        }
-        Box(modifier = Modifier.padding(paddingValues)) {
-            MarketScreen(
-                fragmentNavController,
-                modifier = Modifier.then(
-                    if (currentTab == MainNavigation.Market) Modifier else Modifier.alpha(0f)
-                )
-            )
-
-            BalanceScreen(
-                fragmentNavController,
-                modifier = Modifier.then(
-                    if (currentTab == MainNavigation.Balance) Modifier else Modifier.alpha(0f)
-                )
-            )
-
-            TransactionsScreen(
-                fragmentNavController,
-                transactionsViewModel,
-                modifier = Modifier.then(
-                    if (currentTab == MainNavigation.Transactions) Modifier else Modifier.alpha(0f)
-                )
-            )
-
-            SettingsScreen(
-                fragmentNavController,
-                modifier = Modifier.then(
-                    if (currentTab == MainNavigation.Settings) Modifier else Modifier.alpha(0f)
-                )
-            )
         }
         Column {
             when (uiState.mainNavItems[uiState.selectedTabIndex].mainNavItem) {

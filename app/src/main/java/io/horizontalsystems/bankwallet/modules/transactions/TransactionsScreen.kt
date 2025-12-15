@@ -68,7 +68,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 fun TransactionsScreen(
     navController: NavController,
     viewModel: TransactionsViewModel,
-    modifier: Modifier = Modifier
 ) {
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
@@ -81,7 +80,6 @@ fun TransactionsScreen(
     val transactions = uiState.transactions
 
     HSScaffold(
-        modifier = modifier,
         title = stringResource(R.string.Transactions_Title),
         menuItems = buildList {
             if (syncing) {
