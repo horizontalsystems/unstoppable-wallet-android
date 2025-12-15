@@ -82,6 +82,8 @@ class Eip20ApproveViewModel(
         }
 
         sendTransactionService.start(viewModelScope)
+
+        freeze()
     }
 
     fun setAllowanceMode(allowanceMode: AllowanceMode) {
@@ -90,7 +92,7 @@ class Eip20ApproveViewModel(
         emitState()
     }
 
-    fun freeze() {
+    private fun freeze() {
         viewModelScope.launch {
             if (token.blockchainType.isEvm) {
                 freezeEvm()
