@@ -55,7 +55,6 @@ import kotlinx.coroutines.launch
 fun BalanceForAccount(
     navController: NavController,
     accountViewItem: AccountViewItem,
-    modifier: Modifier = Modifier
 ) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
@@ -99,7 +98,6 @@ fun BalanceForAccount(
 
     HSScaffold(
         title = accountViewItem.name,
-        modifier = modifier,
         menuItems = buildList {
             if (uiState.loading) {
                 add(MenuItemLoading)

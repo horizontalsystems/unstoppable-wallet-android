@@ -71,7 +71,6 @@ import java.math.BigDecimal
 @Composable
 fun MarketScreen(
     navController: NavController,
-    modifier: Modifier = Modifier
 ) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
@@ -79,7 +78,6 @@ fun MarketScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_Title),
-        modifier = modifier,
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column() {

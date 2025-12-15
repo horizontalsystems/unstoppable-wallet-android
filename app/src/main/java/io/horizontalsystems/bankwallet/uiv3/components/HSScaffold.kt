@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.bars.HSTopAppBar
 @Composable
 fun HSScaffold(
     title: String,
-    modifier: Modifier = Modifier,
     menuItems: List<IMenuItem> = listOf(),
     onBack: (() -> Unit)? = null,
     bottomBar: @Composable () -> Unit = {},
@@ -26,7 +25,6 @@ fun HSScaffold(
         },
         bottomBar = bottomBar,
         backgroundColor = ComposeAppTheme.colors.tyler,
-        modifier = modifier
     ) {
         Box(
             modifier = Modifier.padding(it).fillMaxSize(),
