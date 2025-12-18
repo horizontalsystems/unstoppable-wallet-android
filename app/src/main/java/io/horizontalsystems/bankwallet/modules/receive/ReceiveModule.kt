@@ -24,7 +24,6 @@ object ReceiveModule {
     sealed class AdditionalData {
         class Amount(val value: String) : AdditionalData()
         class Memo(val value: String) : AdditionalData()
-        object AccountNotActive : AdditionalData()
     }
 
     abstract class AbstractUiState {
@@ -36,7 +35,6 @@ object ReceiveModule {
         abstract val blockchainName: String?
         abstract val addressType: String?
         abstract val addressFormat: String?
-        abstract val additionalItems: List<AdditionalData>
         abstract val watchAccount: Boolean
         abstract val amount: BigDecimal?
         abstract val amountString: String?
@@ -48,13 +46,11 @@ object ReceiveModule {
         override val mainNet: Boolean,
         val usedAddresses: List<UsedAddress>,
         val usedChangeAddresses: List<UsedAddress>,
-        val showTronAlert: Boolean,
         override val uri: String,
         override val blockchainName: String?,
         override val addressType: String?,
         override val addressFormat: String?,
         override val watchAccount: Boolean,
-        override val additionalItems: List<AdditionalData>,
         override val amount: BigDecimal?,
         override val amountString: String?,
         override val alertText: AlertText?,

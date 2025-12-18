@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.AddressUriService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -136,7 +135,6 @@ data class ReceiveStellarAssetUiState(
     val coinCode: String,
     val trustlineEstablished: Boolean?,
 ) : ReceiveModule.AbstractUiState() {
-    override val additionalItems = listOf<AdditionalData>()
     override val addressFormat = null
     override val addressType = null
     override val alertText = null

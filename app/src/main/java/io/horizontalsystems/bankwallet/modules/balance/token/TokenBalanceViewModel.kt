@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIcon
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
@@ -49,11 +50,12 @@ class TokenBalanceViewModel(
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var addressForAccount: String? = null
     private var error: TokenBalanceModule.TokenBalanceError? = null
-    private var failedIconVisible = false
     private var failedErrorMessage: String? = null
     private var waringMessage: String? = null
     private var loadingTransactions = true
     private var alertUnshieldedBalance: BigDecimal? = null
+    private var attentionIcon: AttentionIcon? = null
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -96,11 +98,11 @@ class TokenBalanceViewModel(
         balanceViewItem = balanceViewItem,
         transactions = transactions,
         receiveAddress = addressForAccount,
-        failedIconVisible = failedIconVisible,
         failedErrorMessage = failedErrorMessage,
         error = error,
         warningMessage = waringMessage,
         alertUnshieldedBalance = alertUnshieldedBalance,
+        attentionIcon = attentionIcon
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -129,7 +131,7 @@ class TokenBalanceViewModel(
             connectivityManager.isConnected
         )
 
-        failedIconVisible = balanceViewItem.failedIconVisible
+        attentionIcon = balanceViewItem.attentionIcon
         failedErrorMessage = balanceViewItem.errorMessage
 
         if (wallet.account.isWatchAccount) {
@@ -182,7 +184,8 @@ class TokenBalanceViewModel(
                 balanceViewItem?.warning?.let{
                     TokenBalanceModule.TokenBalanceError(
                         message = it.text.toString(),
-                        errorTitle = it.title.toString()
+                        errorTitle = it.title?.toString(),
+                        icon = it.icon ?: R.drawable.warning_filled_24
                     )
                 }
             } else {
