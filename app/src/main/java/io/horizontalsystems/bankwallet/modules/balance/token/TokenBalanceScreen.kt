@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
@@ -37,6 +38,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
@@ -98,11 +100,14 @@ fun TokenBalanceScreen(
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val tronBottomSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isTronAlertVisible by remember { mutableStateOf(false) }
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
-    LaunchedEffect(uiState.failedIconVisible) {
-        if (uiState.failedIconVisible) {
+    LaunchedEffect(uiState.attentionIcon?.type == AttentionIconType.SyncError) {
+        if (uiState.attentionIcon?.type == AttentionIconType.SyncError) {
             openSyncErrorDialog(uiState, navController)
         }
     }
@@ -131,14 +136,23 @@ fun TokenBalanceScreen(
                     add(MenuItemLoading)
                 }
 
-                uiState.failedIconVisible -> {
+                uiState.attentionIcon != null -> {
+                    val color = if (uiState.attentionIcon.caution.type == Caution.Type.Error) {
+                        ComposeAppTheme.colors.lucian
+                    } else {
+                        ComposeAppTheme.colors.jacob
+                    }
                     add(
                         MenuItem(
                             icon = R.drawable.ic_warning_filled_24,
-                            title = TranslatableString.ResString(R.string.BalanceSyncError_Title),
-                            tint = ComposeAppTheme.colors.lucian,
+                            title = TranslatableString.PlainString(uiState.attentionIcon.caution.text),
+                            tint = color,
                             onClick = {
-                                openSyncErrorDialog(uiState, navController)
+                                if(uiState.attentionIcon.type == AttentionIconType.SyncError) {
+                                    openSyncErrorDialog(uiState, navController)
+                                } else if (uiState.attentionIcon.type == AttentionIconType.TronNotActive) {
+                                    isTronAlertVisible = true
+                                }
                             }
                         )
                     )
@@ -256,7 +270,7 @@ fun TokenBalanceScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 64.dp),
-                            icon = painterResource(R.drawable.warning_filled_24),
+                            icon = painterResource(it.icon),
                             iconTint = ComposeAppTheme.colors.grey,
                             title = it.errorTitle,
                             text = it.message,
@@ -335,6 +349,23 @@ fun TokenBalanceScreen(
         }
 
     }
+    if (isTronAlertVisible) {
+        TronAlertBottomSheet(
+            hideBottomSheet = {
+                coroutineScope.launch { tronBottomSheetState.hide() }
+                isTronAlertVisible = false
+            },
+            onActionButtonClick = {
+                coroutineScope.launch { tronBottomSheetState.hide() }
+                isTronAlertVisible = false
+                navController.slideFromRight(
+                    R.id.receiveFragment,
+                    ReceiveFragment.Input(viewModel.getWalletForReceive())
+                )
+            },
+            bottomSheetState = tronBottomSheetState,
+        )
+    }
 
 }
 
@@ -393,6 +424,18 @@ private fun TokenBalanceHeader(
         } else {
             val color = if (loading) {
                 ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
+                ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.primaryValue.dimmed) {
+                ComposeAppTheme.colors.grey
+            } else {
+                null
+            }
+
+            val bodyColor = if (loading) {
+                ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
+                ComposeAppTheme.colors.jacob
             } else if (balanceViewItem.primaryValue.dimmed) {
                 ComposeAppTheme.colors.grey
             } else {
@@ -400,10 +443,14 @@ private fun TokenBalanceHeader(
             }
 
             title = balanceViewItem.primaryValue.value.hs(color = color)
-            body =
-                (balanceViewItem.syncingTextValue ?: balanceViewItem.secondaryValue?.value ?: "").hs(
-                    color = color
-                )
+            val bodyText = when {
+                balanceViewItem.syncingTextValue != null -> balanceViewItem.syncingTextValue
+                balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive -> balanceViewItem.attentionIcon.caution.text
+                balanceViewItem.secondaryValue?.value != null -> balanceViewItem.secondaryValue.value
+                else -> ""
+            }
+
+            body = bodyText.hs(color = bodyColor)
         }
 
         CardsElementAmountText(
@@ -434,6 +481,37 @@ private fun TokenBalanceHeader(
         LockedBalanceSection(
             balanceViewItem = balanceViewItem,
             showBottomSheet = showBottomSheet,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TronAlertBottomSheet(
+    hideBottomSheet: () -> Unit,
+    onActionButtonClick: () -> Unit,
+    bottomSheetState: SheetState,
+) {
+    BottomSheetContent(
+        onDismissRequest = hideBottomSheet,
+        sheetState = bottomSheetState,
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Button_ViewMyAddress),
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onActionButtonClick
+            )
+        }
+    ) {
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.warning_filled_24),
+            imageTint = ComposeAppTheme.colors.jacob,
+            title = stringResource(R.string.Tron_TokenPage_AddressNotActive_Title)
+        )
+        TextBlock(
+            text = stringResource(R.string.Tron_TokenPage_AddressNotActive_Info),
+            textAlign = TextAlign.Center
         )
     }
 }

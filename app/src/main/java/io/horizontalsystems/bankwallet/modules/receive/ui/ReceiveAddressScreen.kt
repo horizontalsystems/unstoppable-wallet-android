@@ -23,16 +23,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -91,7 +86,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
@@ -99,14 +93,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 
@@ -123,22 +110,6 @@ fun ReceiveAddressScreen(
 ) {
     val localView = LocalView.current
     val openAmountDialog = remember { mutableStateOf(false) }
-    val tronAlertSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-    var isTronAlertVisible by remember { mutableStateOf(false) }
-
-    if (uiState is ReceiveModule.UiState) {
-        LaunchedEffect(uiState.showTronAlert) {
-            if (uiState.showTronAlert) {
-                isTronAlertVisible = true
-                scope.launch {
-                    delay(2000)
-                    tronAlertSheetState.show()
-                }
-            }
-        }
-    }
 
     HSScaffold(
         title = title,
@@ -263,7 +234,6 @@ fun ReceiveAddressScreen(
                                     VSpacer(32.dp)
                                 }
                                 val additionalItems = buildList {
-                                    addAll(uiState.additionalItems)
                                     uiState.amountString?.let { amount ->
                                         add(ReceiveModule.AdditionalData.Amount(amount))
                                     }
@@ -280,9 +250,6 @@ fun ReceiveAddressScreen(
                                                 event = StatEvent.RemoveAmount
                                             )
                                         },
-                                        showAccountNotActiveWarningDialog = {
-                                            isTronAlertVisible = true
-                                        }
                                     )
                                 }
 
@@ -315,15 +282,6 @@ fun ReceiveAddressScreen(
                 }
             )
         }
-    }
-    if (isTronAlertVisible) {
-        TronAlertBottomSheet(
-            hideBottomSheet = {
-                scope.launch { tronAlertSheetState.hide() }
-                isTronAlertVisible = false
-            },
-            bottomSheetState = tronAlertSheetState,
-        )
     }
 }
 
@@ -434,7 +392,6 @@ private fun ActionButtonsRow(
 private fun AdditionalDataSection(
     items: List<ReceiveModule.AdditionalData>,
     onClearAmount: () -> Unit,
-    showAccountNotActiveWarningDialog: () -> Unit,
 ) {
     val localView = LocalView.current
 
@@ -492,30 +449,6 @@ private fun AdditionalDataSection(
                             TextHelper.copyText(item.value)
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
                         }
-                    )
-                }
-
-                is ReceiveModule.AdditionalData.AccountNotActive -> {
-                    subhead2_grey(
-                        modifier = Modifier.padding(start = 16.dp),
-                        text = stringResource(R.string.Balance_Receive_Account),
-                    )
-                    HSpacer(8.dp)
-                    HsIconButton(
-                        modifier = Modifier.size(20.dp),
-                        onClick = showAccountNotActiveWarningDialog
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_info_20),
-                            contentDescription = null
-                        )
-                    }
-                    subhead1_jacob(
-                        text = stringResource(R.string.Balance_Receive_NotActive),
-                        textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .weight(1f)
                     )
                 }
             }
@@ -629,36 +562,6 @@ fun AmountInputDialog(
                 }
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TronAlertBottomSheet(
-    hideBottomSheet: () -> Unit,
-    bottomSheetState: SheetState,
-) {
-    BottomSheetContent(
-        onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState,
-        buttons = {
-            HSButton(
-                title = stringResource(R.string.Button_Understand),
-                variant = ButtonVariant.Secondary,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = hideBottomSheet
-            )
-        }
-    ) {
-        BottomSheetHeaderV3(
-            image72 = painterResource(R.drawable.warning_filled_24),
-            imageTint = ComposeAppTheme.colors.jacob,
-            title = stringResource(R.string.Tron_TokenPage_AddressNotActive_Title)
-        )
-        TextBlock(
-            text = stringResource(R.string.Tron_TokenPage_AddressNotActive_Info),
-            textAlign = TextAlign.Center
-        )
     }
 }
 

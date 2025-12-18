@@ -60,6 +60,7 @@
     <string name="Button_CopyAddress">Copy Address</string>
     <string name="Button_HideCoin">Hide Coin</string>
     <string name="Button_Approve">Approve</string>
+    <string name="Button_ViewMyAddress">View my Address</string>
 
     <string name="Attention_Title">Attention</string>
 
@@ -631,7 +632,9 @@
     <string name="Tron_AddressNotActive_Info">Newly created accounts on the TRON blockchain are inactive and cannot be queried or explored. They need to be activated.\n\nTransferring TRX or TRC-10 tokens to an inactive account address will activate the account. Activating a new account on the Tron chain requires a fee of 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Cannot transfer 0 %s</string>
-    <string name="Tron_TokenPage_AddressNotActive_Title">Account Not Active</string>
+    <string name="Tron_TokenPage_AddressNotActivated">Not Activated</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">TRON Not Activated</string>
+    <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Transactions will appear after activation</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">New TRON wallets need at least 1 TRX to activate. Until then, they can receive tokens but won’t show correct balances.</string>
 
     <!--TonConnect-->

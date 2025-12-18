@@ -66,8 +66,8 @@ object BalanceModule {
     val BalanceWarning.warningText: WarningText
         get() = when (this) {
             BalanceWarning.TronInactiveAccountWarning -> WarningText(
-                title = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Title),
-                text = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Info),
+                text = TranslatableString.ResString(R.string.Tron_TokenPage_TransactionWillAppearAfterActivation),
+                icon = R.drawable.outgoingraw__24
             )
         }
 }
