@@ -78,20 +78,23 @@ fun BalanceCardInner2(
             )
         },
         right = {
-            val title = if (viewItem.balanceHidden || viewItem.primaryValue == null) {
+            val title = if (viewItem.notActivated) {
                 null
+            } else if (viewItem.balanceHidden || viewItem.primaryValue == null) {
+                "* * *".hs
             } else {
                 viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
             }
 
             val subtitle = when {
                 viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue.hs
+                viewItem.notActivated -> stringResource(R.string.Tron_TokenPage_AddressNotActivated).hs(color = ComposeAppTheme.colors.jacob)
                 viewItem.balanceHidden || viewItem.secondaryValue == null -> null
                 else -> viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
             }
 
             CellRightInfo(
-                title = title ?: "* * *".hs,
+                title = title,
                 subtitle = subtitle
             )
         },
