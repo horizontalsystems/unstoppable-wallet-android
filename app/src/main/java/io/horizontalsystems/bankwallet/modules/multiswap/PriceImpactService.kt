@@ -11,8 +11,9 @@ import java.math.RoundingMode
 
 class PriceImpactService {
     private val normalPriceImpact = BigDecimal(1)
-    private val warningPriceImpact = BigDecimal(5)
-    private val forbiddenPriceImpact = BigDecimal(20)
+    private val warningPriceImpact = BigDecimal(6)
+    private val highPriceImpact = BigDecimal(11)
+    private val forbiddenPriceImpact = BigDecimal(50)
 
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
@@ -46,7 +47,8 @@ class PriceImpactService {
 
             priceImpactLevel = when {
                 priceImpact < warningPriceImpact -> PriceImpactLevel.Normal
-                priceImpact < forbiddenPriceImpact -> PriceImpactLevel.Warning
+                priceImpact < highPriceImpact -> PriceImpactLevel.Warning
+                priceImpact < forbiddenPriceImpact -> PriceImpactLevel.High
                 else -> PriceImpactLevel.Forbidden
             }
 
@@ -72,7 +74,7 @@ class PriceImpactService {
         }
 
         error = if (priceImpactLevel == PriceImpactLevel.Forbidden) {
-            PriceImpactTooHigh(providerTitle)
+            PriceImpactForbidden(providerTitle)
         } else {
             null
         }
@@ -107,7 +109,8 @@ class PriceImpactService {
             this.fiatPriceImpact = fiatPriceImpact
             fiatPriceImpactLevel = when {
                 fiatPriceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
-                fiatPriceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.Warning
+                fiatPriceImpactAbs < highPriceImpact -> PriceImpactLevel.Warning
+                fiatPriceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.High
                 else -> PriceImpactLevel.Forbidden
             }
         }
@@ -149,4 +152,4 @@ class PriceImpactService {
     )
 }
 
-data class PriceImpactTooHigh(val providerTitle: String?) : Exception()
+data class PriceImpactForbidden(val providerTitle: String?) : Exception()
