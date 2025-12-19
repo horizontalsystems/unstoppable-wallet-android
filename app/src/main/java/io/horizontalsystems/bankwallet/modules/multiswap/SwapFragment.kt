@@ -290,7 +290,7 @@ private fun SwapScreenInner(
                             SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
-                            is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
+                            is PriceImpactForbidden -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
                             is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
                             is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
                             is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
@@ -352,13 +352,21 @@ private fun SwapScreenInner(
                     }
                 }
 
-                if (uiState.error is PriceImpactTooHigh) {
+                if (uiState.error is PriceImpactForbidden) {
                     VSpacer(height = 12.dp)
                     TextImportantError(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         icon = R.drawable.ic_attention_20,
                         title = stringResource(id = R.string.Swap_PriceImpact),
                         text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
+                    )
+                } else if (uiState.priceImpactLevel == PriceImpactLevel.High) {
+                    VSpacer(height = 12.dp)
+                    TextImportantError(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        icon = R.drawable.ic_attention_20,
+                        title = stringResource(id = R.string.Swap_PriceImpact),
+                        text = stringResource(id = R.string.Swap_PriceImpactHigh)
                     )
                 } else if (uiState.currentStep is SwapStep.ActionRequired) {
                     uiState.currentStep.action.getDescription()?.let { actionDescription ->
@@ -871,6 +879,7 @@ fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
         PriceImpactLevel.Normal -> ComposeAppTheme.colors.grey
         PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.High -> ComposeAppTheme.colors.lucian
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
         else -> ComposeAppTheme.colors.grey
