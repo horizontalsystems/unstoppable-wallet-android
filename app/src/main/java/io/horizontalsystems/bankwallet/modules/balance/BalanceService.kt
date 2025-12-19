@@ -104,14 +104,14 @@ class BalanceService(
         }
     }
 
-    @Synchronized
-    private fun handleAdaptersReady() {
+    private suspend fun handleAdaptersReady() {
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
             allBalanceItems[i] = balanceItem.copy(
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet),
+                warning = adapterRepository.warning(balanceItem.wallet)
             )
         }
 

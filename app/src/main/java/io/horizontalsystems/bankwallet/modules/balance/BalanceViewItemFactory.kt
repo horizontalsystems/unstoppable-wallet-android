@@ -90,6 +90,7 @@ data class BalanceViewItem2(
     val errorMessage: String?,
     val isWatchAccount: Boolean,
     val balanceHidden: Boolean,
+    val notActivated: Boolean,
     val loading: Boolean
 )
 
@@ -450,6 +451,7 @@ class BalanceViewItemFactory {
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
             balanceHidden = hideBalance,
+            notActivated = item.warning is BalanceModule.BalanceWarning.TronInactiveAccountWarning,
             loading = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         )
     }
