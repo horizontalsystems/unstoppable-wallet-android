@@ -6,9 +6,8 @@ import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteThorChain
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
@@ -202,7 +201,7 @@ abstract class BaseThorChainProvider(
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: ISwapQuote,
-    ): ISwapFinalQuote {
+    ): SwapFinalQuote {
         check(swapQuote is SwapQuoteThorChain)
 
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
@@ -224,7 +223,7 @@ abstract class BaseThorChainProvider(
             add(DataFieldSlippage(slippage))
         }
 
-        return SwapFinalQuoteThorChain(
+        return SwapFinalQuote(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
