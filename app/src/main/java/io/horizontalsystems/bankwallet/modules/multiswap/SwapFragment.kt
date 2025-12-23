@@ -273,18 +273,6 @@ private fun SwapScreenInner(
                         )
                     }
 
-                    SwapStep.Initializing -> {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Swap_Initializing),
-                            enabled = false,
-                            loadingIndicator = true,
-                            onClick = {}
-                        )
-                    }
-
                     is SwapStep.Error -> {
                         val errorText = when (val error = currentStep.error) {
                             SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)

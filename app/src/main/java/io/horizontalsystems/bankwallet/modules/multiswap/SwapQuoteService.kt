@@ -44,7 +44,6 @@ class SwapQuoteService {
     private var tokenIn: Token? = null
     private var tokenOut: Token? = null
     private var quoting = false
-    private var initializing = true
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: IMultiSwapProvider? = null
     private var error: Throwable? = null
@@ -55,7 +54,6 @@ class SwapQuoteService {
             amountIn = amountIn,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
-            initializing = initializing,
             quoting = quoting,
             quotes = quotes,
             preferredProvider = preferredProvider,
@@ -79,10 +77,7 @@ class SwapQuoteService {
                 }
             }
 
-            initializing = false
-            emitState()
-
-            runQuotation()
+            runQuotation(silent = true)
         }
     }
 
@@ -92,7 +87,6 @@ class SwapQuoteService {
                 amountIn = amountIn,
                 tokenIn = tokenIn,
                 tokenOut = tokenOut,
-                initializing = initializing,
                 quoting = quoting,
                 quotes = quotes,
                 preferredProvider = preferredProvider,
@@ -112,8 +106,6 @@ class SwapQuoteService {
         if (!silent) {
             emitState()
         }
-
-        if (initializing) return
 
         val tokenIn = tokenIn
         val tokenOut = tokenOut
@@ -256,7 +248,6 @@ class SwapQuoteService {
         val amountIn: BigDecimal?,
         val tokenIn: Token?,
         val tokenOut: Token?,
-        val initializing: Boolean,
         val quoting: Boolean,
         val quotes: List<SwapProviderQuote>,
         val preferredProvider: IMultiSwapProvider?,
