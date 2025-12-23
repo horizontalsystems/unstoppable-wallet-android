@@ -15,7 +15,7 @@ import java.math.BigDecimal
 
 data class DataFieldAllowance(val allowance: BigDecimal, val token: Token) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(navController: NavController) {
         val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
         val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
 

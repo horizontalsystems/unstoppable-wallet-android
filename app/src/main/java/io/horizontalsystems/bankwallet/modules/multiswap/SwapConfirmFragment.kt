@@ -253,11 +253,11 @@ fun SwapConfirmScreen(navController: NavController) {
                     )
                 }
                 uiState.quoteFields.forEach {
-                    it.GetContent(navController, true)
+                    it.GetContent(navController)
                 }
             }
             uiState.transactionFields.forEachIndexed { index, field ->
-                field.GetContent(navController, index != 0)
+                field.GetContent(navController)
             }
             DataFieldFee(
                 navController,

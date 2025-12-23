@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 data class DataFieldNonce(val nonce: Long) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(navController: NavController) {
         QuoteInfoRow(
             title = stringResource(R.string.Send_Confirmation_Nonce),
             value = nonce.toString().hs
