@@ -452,4 +452,7 @@
     <dialog
         android:id="@+id/wcRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
+    <dialog
+        android:id="@+id/swapInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog" />
 </navigation>
