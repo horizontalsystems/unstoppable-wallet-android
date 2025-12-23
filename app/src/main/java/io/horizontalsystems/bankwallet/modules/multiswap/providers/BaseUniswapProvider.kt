@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteEvm
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteUniswap
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -66,7 +65,7 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: ISwapQuote,
-    ): ISwapFinalQuote {
+    ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 
         val bestTrade = fetchBestTrade(
@@ -93,7 +92,7 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
             add(DataFieldSlippage(bestTrade.settingSlippage.value))
         }
 
-        return SwapFinalQuoteEvm(
+        return SwapFinalQuote(
             tokenIn,
             tokenOut,
             amountIn,

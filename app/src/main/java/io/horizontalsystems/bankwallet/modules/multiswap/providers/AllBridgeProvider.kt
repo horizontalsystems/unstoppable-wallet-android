@@ -6,8 +6,8 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
@@ -266,7 +266,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: ISwapQuote,
-    ): ISwapFinalQuote {
+    ): SwapFinalQuote {
         val cautions = mutableListOf<HSCaution>()
 
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
@@ -302,17 +302,17 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
         }
 
-        return object : ISwapFinalQuote {
-            override val tokenIn: Token = tokenIn
-            override val tokenOut: Token = tokenOut
-            override val amountIn: BigDecimal = amountIn
-            override val amountOut: BigDecimal = amountOut
-            override val amountOutMin: BigDecimal? = amountOutMin
-            override val sendTransactionData: SendTransactionData = sendTransactionData
-            override val priceImpact: BigDecimal? = null
-            override val fields: List<DataField> = fields
-            override val cautions: List<HSCaution> = cautions
-        }
+        return SwapFinalQuote(
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            amountOut = amountOut,
+            amountOutMin = amountOutMin,
+            sendTransactionData = sendTransactionData,
+            priceImpact = null,
+            fields = fields,
+            cautions = cautions
+        )
     }
 
     private suspend fun getSendTransactionData(
