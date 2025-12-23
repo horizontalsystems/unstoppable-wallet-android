@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 data class DataFieldRecipient(val address: Address) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(navController: NavController) {
         QuoteInfoRow(
             title = stringResource(R.string.Swap_Recipient),
             value = address.hex.hs

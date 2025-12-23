@@ -75,7 +75,7 @@ fun SendEvmTransactionView(
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
                 transactionFields.forEachIndexed { index, field ->
-                    field.GetContent(navController, index != 0)
+                    field.GetContent(navController)
                 }
             }
         }

@@ -14,7 +14,7 @@ import java.math.BigDecimal
 
 data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
     @Composable
-    override fun GetContent(navController: NavController, borderTop: Boolean) {
+    override fun GetContent(navController: NavController) {
         val color = if (slippage > BigDecimal(50)) {
             ComposeAppTheme.colors.lucian
         } else if (slippage > BigDecimal(5)) {
