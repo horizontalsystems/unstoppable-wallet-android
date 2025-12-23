@@ -1,9 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.os.Parcelable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -29,6 +35,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -55,8 +62,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -148,7 +158,11 @@ fun SwapConfirmScreen(navController: NavController) {
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
-                            HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
+                            HudHelper.showInProcessMessage(
+                                view,
+                                R.string.Swap_Swapping,
+                                SnackbarDuration.INDEFINITE
+                            )
 
                             val result = try {
                                 viewModel.swap()
@@ -172,60 +186,79 @@ fun SwapConfirmScreen(navController: NavController) {
             }
         }
     ) {
-        SectionUniversalLawrence {
-            TokenRow(
-                token = uiState.tokenIn,
-                amount = uiState.amountIn,
-                fiatAmount = uiState.fiatAmountIn,
-                currency = uiState.currency,
-                borderTop = false,
-                title = stringResource(R.string.Send_Confirmation_YouSend),
-                amountColor = ComposeAppTheme.colors.leah,
-            )
-            TokenRow(
-                token = uiState.tokenOut,
-                amount = uiState.amountOut,
-                fiatAmount = uiState.fiatAmountOut,
-                currency = uiState.currency,
-                title = stringResource(R.string.Swap_ToAmountTitle),
-                amountColor = ComposeAppTheme.colors.remus,
+        Box() {
+            SectionUniversalLawrence {
+                TokenRow(
+                    token = uiState.tokenIn,
+                    amount = uiState.amountIn,
+                    fiatAmount = uiState.fiatAmountIn,
+                    currency = uiState.currency,
+                    borderTop = false,
+                    title = stringResource(R.string.Send_Confirmation_YouSend),
+                    amountColor = ComposeAppTheme.colors.leah,
+                )
+                TokenRow(
+                    token = uiState.tokenOut,
+                    amount = uiState.amountOut,
+                    fiatAmount = uiState.fiatAmountOut,
+                    currency = uiState.currency,
+                    title = stringResource(R.string.Swap_ToAmountTitle),
+                    amountColor = ComposeAppTheme.colors.remus,
+                )
+            }
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_down_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.lawrence)
             )
         }
-        uiState.amountOut?.let { amountOut ->
-            VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
-                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
+        VSpacer(height = 16.dp)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .padding(vertical = 8.dp)
+        ) {
+            uiState.amountOut?.let { amountOut ->
+                PriceField(
+                    tokenIn = uiState.tokenIn,
+                    tokenOut = uiState.tokenOut,
+                    amountIn = uiState.amountIn,
+                    amountOut = amountOut,
+                    statPage = StatPage.SwapConfirmation,
+                )
                 PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                 uiState.amountOutMin?.let { amountOutMin ->
                     val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
                         CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
                     } ?: "---"
+                    val infoTitle = stringResource(id = R.string.Swap_MinimumReceived)
+                    val infoText = stringResource(id = R.string.Swap_MinimumReceivedDescription)
 
                     SwapInfoRow(
-                        borderTop = true,
                         title = stringResource(id = R.string.Swap_MinimumReceived),
                         value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
-                        subvalue = subvalue
+                        subvalue = subvalue,
+                        onInfoClick = {
+                            navController.slideFromBottom(
+                                R.id.swapInfoDialog,
+                                SwapInfoDialog.Input(infoTitle, infoText)
+                            )
+                        }
                     )
                 }
                 uiState.quoteFields.forEach {
                     it.GetContent(navController, true)
                 }
             }
-        }
-
-        val transactionFields = uiState.transactionFields
-        if (transactionFields.isNotEmpty()) {
-            VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
-                transactionFields.forEachIndexed { index, field ->
-                    field.GetContent(navController, index != 0)
-                }
+            uiState.transactionFields.forEachIndexed { index, field ->
+                field.GetContent(navController, index != 0)
             }
-        }
-
-        VSpacer(height = 16.dp)
-        SectionUniversalLawrence {
             DataFieldFee(
                 navController,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
@@ -240,13 +273,8 @@ fun SwapConfirmScreen(navController: NavController) {
                     infoText = null
                 )
             }
-        }
-
-        uiState.totalFee?.let { totalFee ->
-            VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
+            uiState.totalFee?.let { totalFee ->
                 SwapInfoRow(
-                    borderTop = true,
                     title = stringResource(id = R.string.Fee_Total),
                     value = totalFee.getFormattedFull(),
                 )
@@ -288,18 +316,27 @@ fun SwapConfirmScreen(navController: NavController) {
 }
 
 @Composable
-private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subvalue: String? = null) {
-    CellUniversal(borderTop = borderTop) {
-        subhead2_grey(text = title)
-        HFillSpacer(minWidth = 16.dp)
-        Column(horizontalAlignment = Alignment.End) {
-            subhead2_leah(text = value)
-            subvalue?.let {
-                VSpacer(height = 1.dp)
-                caption_grey(text = it)
-            }
-        }
-    }
+private fun SwapInfoRow(
+    title: String,
+    value: String,
+    subvalue: String? = null,
+    onInfoClick: (() -> Unit)? = null,
+) {
+    CellSecondary(
+        middle = {
+            CellMiddleInfoTextIcon(
+                text = title.hs(color = ComposeAppTheme.colors.grey),
+                icon = painterResource(R.drawable.ic_info_filled_20),
+                iconTint = ComposeAppTheme.colors.grey,
+                onIconClick = onInfoClick
+            )
+        },
+        right = {
+            CellRightInfo(
+                titleSubheadSb = value.hs(ComposeAppTheme.colors.leah),
+            )
+        },
+    )
 }
 
 @Composable

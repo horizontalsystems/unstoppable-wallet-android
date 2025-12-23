@@ -67,7 +67,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -92,10 +91,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -430,33 +428,13 @@ fun PriceImpactField(
     val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
 
     QuoteInfoRow(
-        title = {
-            subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
-
-            Image(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable(
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
-                            )
-                        },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = ""
-            )
-        },
-        value = {
-            Text(
-                text = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString()),
-                style = ComposeAppTheme.typography.subheadR,
-                color = getPriceImpactColor(priceImpactLevel),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+        title = stringResource(R.string.Swap_PriceImpact),
+        value = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString())
+            .hs(color = getPriceImpactColor(priceImpactLevel)),
+        onInfoClick = {
+            navController.slideFromBottom(
+                R.id.swapInfoDialog,
+                SwapInfoDialog.Input(infoTitle, infoText)
             )
         }
     )
@@ -501,45 +479,30 @@ private fun ProviderField(
 }
 
 @Composable
-fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
+fun PriceField(
+    tokenIn: Token,
+    tokenOut: Token,
+    amountIn: BigDecimal,
+    amountOut: BigDecimal,
+    statPage: StatPage,
+) {
     if (amountIn <= BigDecimal.ZERO || amountOut <= BigDecimal.ZERO) return
 
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
     QuoteInfoRow(
-        title = {
-            subhead2_grey(text = stringResource(R.string.Swap_Price))
+        title = stringResource(R.string.Swap_Price),
+        value = if (showRegularPrice) {
+            swapPriceUIHelper.priceStr.hs(color = ComposeAppTheme.colors.leah)
+        } else {
+            swapPriceUIHelper.priceInvStr.hs(color = ComposeAppTheme.colors.leah)
         },
-        value = {
-            Row(
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = {
-                            showRegularPrice = !showRegularPrice
+        onCellClick = {
+            showRegularPrice = !showRegularPrice
 
-                            stat(page = statPage, event = StatEvent.TogglePrice)
-                        }
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                subhead2_leah(
-                    text = if (showRegularPrice) {
-                        swapPriceUIHelper.priceStr
-                    } else {
-                        swapPriceUIHelper.priceInvStr
-                    }
-                )
-                HSpacer(width = 8.dp)
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
-                    contentDescription = "invert price",
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
-        }
+            stat(page = statPage, event = StatEvent.TogglePrice)
+        },
     )
 }
 

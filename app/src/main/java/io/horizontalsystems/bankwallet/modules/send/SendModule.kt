@@ -49,7 +49,7 @@ object SendModule {
                 }
 
                 is CurrencyValueInfo -> {
-                    App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
+                    App.numberFormatter.formatFiatShort(currencyValue.value, currencyValue.currency.symbol, 4)
                 }
             }
         }

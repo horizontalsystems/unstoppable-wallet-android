@@ -744,6 +744,7 @@
     <string name="Swap_PriceImpactTooHigh">Unstoppable has disabled swap action for this trade because you\'re getting an extremely unfavorable price. This is due to extremely low liquidity.\nIf you still want to swap please use %s website instead.</string>
     <string name="Swap_PriceImpactWarning">Important! You\'re getting an extremely unfavorable price. This is due to extremely low liquidity.</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
+    <string name="Swap_MinimumReceivedDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going </string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
     <string name="Swap_ErrorNoProviders">No Providers</string>
@@ -778,6 +779,7 @@
     <string name="SwapWarning_SlippageNotApplicable_Description">Minimum slippage applicable  for this quote is %s%%</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">No Slippage Control</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Cross-chain swaps depend on third-party liquidity and delays, which may affect the final amount.</string>
+    <string name="Swap_SlippageDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coinsThe minimum amount a user is going </string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>
