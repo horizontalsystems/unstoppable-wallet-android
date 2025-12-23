@@ -102,14 +102,16 @@ class SwapQuoteService {
         }
     }
 
-    private fun runQuotation() {
+    private fun runQuotation(silent: Boolean = false) {
         quotingJob?.cancel()
         quoting = false
         quotes = listOf()
         quote = null
         error = null
 
-        emitState()
+        if (!silent) {
+            emitState()
+        }
 
         if (initializing) return
 
@@ -124,8 +126,10 @@ class SwapQuoteService {
                 error = NoSupportedSwapProvider()
                 emitState()
             } else if (amountIn != null && amountIn > BigDecimal.ZERO) {
-                quoting = true
-                emitState()
+                if (!silent) {
+                    quoting = true
+                    emitState()
+                }
 
                 quotingJob = coroutineScope.launch {
                     quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
@@ -229,7 +233,7 @@ class SwapQuoteService {
     }
 
     fun reQuote() {
-        runQuotation()
+        runQuotation(silent = true)
     }
 
     fun setSwapSettings(settings: Map<String, Any?>) {
@@ -243,7 +247,7 @@ class SwapQuoteService {
     }
 
     fun onActionCompleted() {
-        reQuote()
+        runQuotation()
     }
 
     fun getSwapSettings() = settings
