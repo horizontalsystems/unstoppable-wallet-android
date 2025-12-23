@@ -114,7 +114,6 @@ class SwapViewModel(
         tokenIn = quoteState.tokenIn,
         tokenOut = quoteState.tokenOut,
         quoting = quoteState.quoting,
-        initializing = quoteState.initializing,
         quotes = quoteState.quotes,
         preferredProvider = quoteState.preferredProvider,
         quote = quoteState.quote,
@@ -254,7 +253,6 @@ data class SwapUiState(
     val tokenIn: Token?,
     val tokenOut: Token?,
     val quoting: Boolean,
-    val initializing: Boolean,
     val quotes: List<SwapProviderQuote>,
     val preferredProvider: IMultiSwapProvider?,
     val quote: SwapProviderQuote?,
@@ -275,7 +273,6 @@ data class SwapUiState(
     val cautions: List<CautionViewItem>,
 ) {
     val currentStep: SwapStep = when {
-        initializing -> SwapStep.Initializing
         quoting -> SwapStep.Quoting
         error != null -> SwapStep.Error(error)
         tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
@@ -288,7 +285,6 @@ data class SwapUiState(
 
 sealed class SwapStep {
     data class InputRequired(val inputType: InputType) : SwapStep()
-    object Initializing : SwapStep()
     object Quoting : SwapStep()
     data class Error(val error: Throwable) : SwapStep()
     object Proceed : SwapStep()
