@@ -780,6 +780,14 @@
     <string name="SwapWarning_SlippageNotAvailable_Title">No Slippage Control</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Cross-chain swaps depend on third-party liquidity and delays, which may affect the final amount.</string>
     <string name="Swap_SlippageDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coinsThe minimum amount a user is going </string>
+    <string name="SwapConfirm_DefenseMessage_Safe_Title">Protected</string>
+    <string name="SwapConfirm_DefenseMessage_Warning_Title">Attention</string>
+    <string name="SwapConfirm_DefenseMessage_Danger_Title">Too expensive!</string>
+    <string name="SwapConfirm_DefenseMessage_NotAvailable_Title">Not Available </string>
+    <string name="SwapConfirm_DefenseMessage_Safe_Description">I’m blocking bots from taking value in your swap.</string>
+    <string name="SwapConfirm_DefenseMessage_Warning_Description">Protection is off. Bots may interfere with your swap and make you lose money.</string>
+    <string name="SwapConfirm_DefenseMessage_Danger_Description">You’ll lose a big part (-21%) of your funds on this swap.</string>
+    <string name="SwapConfirm_DefenseMessage_NotAvailable_Description">Sorry, but this network doesn’t support bot protection.</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>
