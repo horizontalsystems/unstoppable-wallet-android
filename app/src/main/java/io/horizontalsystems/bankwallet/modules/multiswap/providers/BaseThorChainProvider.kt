@@ -6,9 +6,8 @@ import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
@@ -126,7 +125,7 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
-    ): ISwapQuote {
+    ): SwapQuote {
         val settingRecipient = SwapSettingRecipient(settings, tokenOut)
 
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
@@ -157,7 +156,7 @@ abstract class BaseThorChainProvider(
             }
         }
 
-        return SwapQuoteThorChain(
+        return SwapQuote(
             amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
             priceImpact = null,
             fields = fields,
@@ -200,10 +199,8 @@ abstract class BaseThorChainProvider(
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
+        swapQuote: SwapQuote,
     ): SwapFinalQuote {
-        check(swapQuote is SwapQuoteThorChain)
-
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.value

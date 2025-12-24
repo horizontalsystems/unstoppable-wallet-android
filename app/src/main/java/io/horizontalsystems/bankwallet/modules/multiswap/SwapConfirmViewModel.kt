@@ -30,7 +30,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
-    private val swapQuote: ISwapQuote,
+    private val swapQuote: SwapQuote,
     private val swapSettings: Map<String, Any?>,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,

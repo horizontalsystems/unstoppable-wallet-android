@@ -4,9 +4,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteOneInch
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
@@ -58,7 +57,7 @@ object OneInchProvider : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         settings: Map<String, Any?>
-    ): ISwapQuote {
+    ): SwapQuote {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
@@ -88,15 +87,15 @@ object OneInchProvider : IMultiSwapProvider {
         }
 
         val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuoteOneInch(
-            amountOut,
-            null,
-            fields,
-            listOf(settingRecipient, settingSlippage),
-            tokenIn,
-            tokenOut,
-            amountIn,
-            EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
+        return SwapQuote(
+            amountOut = amountOut,
+            priceImpact = null,
+            fields = fields,
+            settings = listOf(settingRecipient, settingSlippage),
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
         )
     }
 
@@ -112,7 +111,7 @@ object OneInchProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
+        swapQuote: SwapQuote,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
         checkNotNull(sendTransactionSettings.gasPriceInfo)

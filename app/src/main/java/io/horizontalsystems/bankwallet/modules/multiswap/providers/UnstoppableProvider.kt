@@ -9,9 +9,8 @@ import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
@@ -201,7 +200,7 @@ object UnstoppableProvider : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
-    ): ISwapQuote {
+    ): SwapQuote {
         val settingRecipient = SwapSettingRecipient(settings, tokenOut)
         val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
@@ -239,7 +238,7 @@ object UnstoppableProvider : IMultiSwapProvider {
             }
         }
 
-        return SwapQuoteThorChain(
+        return SwapQuote(
             amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO,
             priceImpact = null,
             fields = fields,
@@ -295,10 +294,8 @@ object UnstoppableProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
+        swapQuote: SwapQuote,
     ): SwapFinalQuote {
-        check(swapQuote is SwapQuoteThorChain)
-
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.value
