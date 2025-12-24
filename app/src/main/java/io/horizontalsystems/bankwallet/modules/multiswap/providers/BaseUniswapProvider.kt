@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteUniswap
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingDeadline
@@ -31,7 +30,7 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         settings: Map<String, Any?>
-    ): ISwapQuote {
+    ): SwapQuote {
         val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, settings)
 
         val routerAddress = uniswapKit.routerAddress(bestTrade.chain)
@@ -47,14 +46,15 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
             }
         }
 
-        return SwapQuoteUniswap(
-            bestTrade.tradeData,
-            fields,
-            listOf(bestTrade.settingRecipient, bestTrade.settingSlippage, bestTrade.settingDeadline),
-            tokenIn,
-            tokenOut,
-            amountIn,
-            EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
+        return SwapQuote(
+            amountOut = bestTrade.tradeData.amountOut!!,
+            priceImpact = bestTrade.tradeData.priceImpact,
+            fields = fields,
+            settings = listOf(bestTrade.settingRecipient, bestTrade.settingSlippage, bestTrade.settingDeadline),
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
         )
     }
 
@@ -64,7 +64,7 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
+        swapQuote: SwapQuote,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 

@@ -6,16 +6,14 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.ISwapSetting
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
@@ -150,7 +148,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
-    ): ISwapQuote {
+    ): SwapQuote {
         val settingRecipient = SwapSettingRecipient(settings, tokenOut)
         var settingSlippage: SwapSettingSlippage? = null
 
@@ -194,17 +192,17 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
         }
 
-        return object : ISwapQuote {
-            override val amountOut: BigDecimal = amountOut
-            override val priceImpact: BigDecimal? = null
-            override val fields: List<DataField> = fields
-            override val settings: List<ISwapSetting> = listOfNotNull(settingRecipient, settingSlippage)
-            override val tokenIn: Token = tokenIn
-            override val tokenOut: Token = tokenOut
-            override val amountIn: BigDecimal = amountIn
-            override val actionRequired: ISwapProviderAction? = actionRequired
-            override val cautions: List<HSCaution> = cautions
-        }
+        return SwapQuote(
+            amountOut = amountOut,
+            priceImpact = null,
+            fields = fields,
+            settings = listOfNotNull(settingRecipient, settingSlippage),
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            actionRequired = actionRequired,
+            cautions = cautions,
+        )
     }
 
     private suspend fun estimateAmountOut(
@@ -265,7 +263,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
+        swapQuote: SwapQuote,
     ): SwapFinalQuote {
         val cautions = mutableListOf<HSCaution>()
 
