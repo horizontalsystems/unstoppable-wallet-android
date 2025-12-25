@@ -62,15 +62,15 @@ fun FormsInputAddress(
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
 
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
-            } else {
-                ComposeAppTheme.colors.red50
-            }
-        }
-        else -> ComposeAppTheme.colors.blade
+    val borderColor = if (state is DataState.Error && state.error is FormsInputStateWarning) {
+        ComposeAppTheme.colors.yellow50
+    } else {
+        ComposeAppTheme.colors.blade
+    }
+
+    val textColor = when (state) {
+        is DataState.Error -> ComposeAppTheme.colors.lucian
+        else -> ComposeAppTheme.colors.leah
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -102,7 +102,7 @@ fun FormsInputAddress(
                     onValueChange.invoke(text)
                 },
                 textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
+                    color = textColor,
                     textStyle = ComposeAppTheme.typography.body
                 ),
                 singleLine = false,
