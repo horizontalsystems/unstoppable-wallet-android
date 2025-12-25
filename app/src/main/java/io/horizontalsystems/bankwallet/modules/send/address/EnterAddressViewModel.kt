@@ -68,6 +68,14 @@ class EnterAddressViewModel(
         initialAddress?.let {
             onEnterAddress(initialAddress)
         }
+
+        viewModelScope.launch {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                if (value.isNotEmpty()) {
+                    processAddress(value)
+                }
+            }
+        }
     }
 
     override fun createState() = EnterAddressUiState(

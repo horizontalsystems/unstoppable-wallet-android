@@ -338,7 +338,7 @@ private fun WCDefenseSystemMessage(
         title = stringResource(title),
         content = content?.let { stringResource(it) },
         icon = icon,
-        actionText = stringResource(R.string.Button_Activate),
-        onClick = if (state == DefenseSystemState.WARNING) onActivateClick else null
+        actionText = if (state == DefenseSystemState.WARNING) stringResource(R.string.Button_Activate) else null,
+        onClick = onActivateClick
     )
 }

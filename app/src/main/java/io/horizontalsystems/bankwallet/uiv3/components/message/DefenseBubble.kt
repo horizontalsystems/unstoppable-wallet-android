@@ -37,6 +37,7 @@ fun DefenseSystemMessage(
     state: DefenseSystemState,
     title: String,
     content: String?,
+    above: Boolean = true,
     icon: Int? = null,
     actionText: String? = null,
     onClick: (() -> Unit)? = null,
@@ -59,6 +60,23 @@ fun DefenseSystemMessage(
         else -> Color.White
     }
 
+    if (above) {
+        DefenseView(state, clickableModifier, icon, contentColor, title, content, actionText)
+    } else {
+        DefenseViewBelow(state, clickableModifier, icon, contentColor, title, content, actionText)
+    }
+}
+
+@Composable
+private fun DefenseView(
+    state: DefenseSystemState,
+    clickableModifier: Modifier,
+    icon: Int?,
+    contentColor: Color,
+    title: String,
+    content: String?,
+    actionText: String?
+) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
@@ -70,7 +88,9 @@ fun DefenseSystemMessage(
                 .then(clickableModifier)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            Column {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -91,13 +111,11 @@ fun DefenseSystemMessage(
                     )
                 }
 
-                content?.let {
-                    Text(
-                        text = content,
-                        style = ComposeAppTheme.typography.subheadR,
-                        color = contentColor
-                    )
-                }
+                Text(
+                    text = content ?: "",
+                    style = ComposeAppTheme.typography.subheadR,
+                    color = contentColor
+                )
 
                 actionText?.let { action ->
                     VSpacer(12.dp)
@@ -128,6 +146,92 @@ fun DefenseSystemMessage(
         )
     }
 
+    DefenseSystemTextCell()
+}
+
+@Composable
+private fun DefenseViewBelow(
+    state: DefenseSystemState,
+    clickableModifier: Modifier,
+    icon: Int?,
+    contentColor: Color,
+    title: String,
+    content: String?,
+    actionText: String?
+) {
+    DefenseSystemTextCell()
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        // Speech bubble tail
+        Box(
+            modifier = Modifier
+                .offset(x = 48.dp, y = (8).dp)
+                .size(16.dp)
+                .rotate(45f)
+                .background(state.bubbleColor)
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(state.bubbleColor)
+                .then(clickableModifier)
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    icon?.let { iconRes ->
+                        Icon(
+                            painter = painterResource(iconRes),
+                            contentDescription = null,
+                            tint = contentColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    HSpacer(8.dp)
+                    Text(
+                        text = title,
+                        style = ComposeAppTheme.typography.headline2,
+                        color = contentColor
+                    )
+                }
+
+                Text(
+                    text = content ?: "",
+                    style = ComposeAppTheme.typography.subheadR,
+                    color = contentColor
+                )
+
+                actionText?.let { action ->
+                    VSpacer(12.dp)
+                    Row(modifier = Modifier.align(Alignment.End)) {
+                        Text(
+                            text = action,
+                            style = ComposeAppTheme.typography.subheadSB,
+                            color = contentColor
+                        )
+                        HSpacer(8.dp)
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_m_right_24),
+                            contentDescription = null,
+                            tint = contentColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DefenseSystemTextCell() {
     CellSecondary(
         left = {
             Image(
@@ -137,7 +241,7 @@ fun DefenseSystemMessage(
         },
         middle = {
             CellMiddleInfo(
-                subtitle = stringResource(R.string.Premium_DefenseSystem).hs
+                subtitle = stringResource(R.string.Premium_DefenseSystem).hs(color = ComposeAppTheme.colors.leah)
             )
         },
     )
