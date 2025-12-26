@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
@@ -161,6 +161,12 @@ class SolanaKitManager(
                 handleUpdateNetwork()
             }
         }
+    }
+
+    fun getAddress(accountType: AccountType) = when (accountType) {
+        is AccountType.Mnemonic -> Signer.address(accountType.seed)
+        is AccountType.SolanaAddress -> accountType.address
+        else -> throw UnsupportedAccountException()
     }
 
 }

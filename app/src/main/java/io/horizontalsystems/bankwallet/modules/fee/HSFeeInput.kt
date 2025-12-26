@@ -23,7 +23,8 @@ fun HSFee(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: NavController
+    navController: NavController,
+    viewState: ViewState? = null
 ) {
     CellUniversalLawrenceSection(
         listOf {
@@ -33,7 +34,8 @@ fun HSFee(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = rate,
-                navController = navController
+                navController = navController,
+                viewState = viewState
             )
         })
 }
@@ -47,7 +49,8 @@ fun HSFeeRaw(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: NavController
+    navController: NavController,
+    viewState: ViewState? = null
 ) {
 
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
@@ -60,7 +63,7 @@ fun HSFeeRaw(
         title = title,
         info = info,
         value = formatted,
-        viewState = null,
+        viewState = viewState,
         navController = navController
     )
 }

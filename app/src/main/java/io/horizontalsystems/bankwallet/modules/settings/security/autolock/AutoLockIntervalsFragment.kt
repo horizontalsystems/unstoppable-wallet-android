@@ -3,12 +3,10 @@ package io.horizontalsystems.bankwallet.modules.settings.security.autolock
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,13 +18,12 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class AutoLockIntervalsFragment : BaseComposeFragment() {
 
@@ -46,33 +43,24 @@ private fun AutoLockIntervalsScreen(
         factory = AutoLockModule.Factory()
     )
 ) {
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Settings_AutoLock),
-                navigationIcon = {
-                    HsBackButton(onClick = close)
-                },
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.Settings_AutoLock),
+        onBack = close,
     ) {
-        Column(modifier = Modifier.padding(it)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
-            ) {
-                VSpacer(12.dp)
-                CellUniversalLawrenceSection(viewModel.intervals) { item ->
-                    IntervalCell(item.interval, item.selected) { interval ->
-                        viewModel.onSelectAutoLockInterval(interval)
-                        close.invoke()
-                    }
+        Column(
+            modifier = Modifier
+                .verticalScroll(
+                    rememberScrollState()
+                )
+        ) {
+            VSpacer(12.dp)
+            CellUniversalLawrenceSection(viewModel.intervals) { item ->
+                IntervalCell(item.interval, item.selected) { interval ->
+                    viewModel.onSelectAutoLockInterval(interval)
+                    close.invoke()
                 }
             }
+            VSpacer(24.dp)
         }
     }
 }

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.contacts.model
 import android.os.Parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Objects
 
 @Parcelize
 data class Contact(
@@ -25,3 +25,8 @@ data class ContactAddress(
         return Objects.hash(blockchain, address.lowercase())
     }
 }
+
+data class ContactNameAddress(
+    val name: String,
+    val contactAddress: ContactAddress
+)

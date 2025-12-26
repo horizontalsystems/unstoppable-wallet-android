@@ -14,7 +14,11 @@ object CoinMajorHoldersModule {
     class Factory(private val coinUid: String, private val blockchain: Blockchain) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val factory = CoinViewFactory(App.currencyManager.baseCurrency, App.numberFormatter)
+            val factory = CoinViewFactory(
+                App.currencyManager.baseCurrency,
+                App.numberFormatter,
+                App.roiManager
+            )
             return CoinMajorHoldersViewModel(coinUid, blockchain, App.marketKit, factory) as T
         }
     }

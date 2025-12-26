@@ -46,10 +46,6 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
             }
 
-            BlockchainType.BinanceChain -> {
-                addressHandlers.add(AddressHandlerBinanceChain())
-            }
-
             BlockchainType.Zcash -> {
                 addressHandlers.add(AddressHandlerZcash())
             }
@@ -60,6 +56,7 @@ class AddressHandlerFactory(
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
@@ -78,6 +75,14 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerTon())
             }
 
+            BlockchainType.Stellar -> {
+                addressHandlers.add(AddressHandlerStellar())
+            }
+
+            BlockchainType.Monero -> {
+                addressHandlers.add(AddressHandlerMonero())
+            }
+
             is BlockchainType.Unsupported -> {
             }
         }
@@ -94,6 +99,7 @@ class AddressHandlerFactory(
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {

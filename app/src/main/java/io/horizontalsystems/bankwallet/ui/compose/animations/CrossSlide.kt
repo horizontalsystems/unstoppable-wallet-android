@@ -1,9 +1,21 @@
 package io.horizontalsystems.bankwallet.ui.compose.animations
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.animateOffset
+import androidx.compose.animation.core.rememberTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
@@ -34,7 +46,7 @@ fun <T> CrossSlide(
     val transitionState = remember { MutableTransitionState(targetState) }
     val targetChanged = (targetState != transitionState.targetState)
     transitionState.targetState = targetState
-    val transition: Transition<T> = updateTransition(transitionState, label = "transition")
+    val transition: Transition<T> = rememberTransition(transitionState, label = "transition")
 
     if (targetChanged || items.isEmpty()) {
         // Only manipulate the list when the state is changed, or in the first run.

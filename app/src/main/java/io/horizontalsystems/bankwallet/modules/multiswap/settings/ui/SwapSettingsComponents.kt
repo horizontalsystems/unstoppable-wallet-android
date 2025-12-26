@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
@@ -38,9 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarn
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.Token
 
 @Composable
 fun SlippageAmount(
@@ -48,6 +45,7 @@ fun SlippageAmount(
     initial: String?,
     buttons: List<InputButton>,
     error: Throwable?,
+    readOnly: Boolean,
     onValueChange: (String) -> Unit
 ) {
     HeaderText(
@@ -59,6 +57,7 @@ fun SlippageAmount(
         initial = initial,
         buttons = buttons,
         state = error?.let { DataState.Error(it) },
+        readOnly = readOnly,
         onValueChange = onValueChange
     )
     InfoText(
@@ -92,30 +91,27 @@ fun TransactionDeadlineInput(
 
 @Composable
 fun RecipientAddress(
-    blockchainType: BlockchainType,
+    token: Token,
     navController: NavController,
     initial: Address?,
     onError: (Throwable?) -> Unit,
     onValueChange: (Address?) -> Unit,
 ) {
-    val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
-    App.marketKit.token(tokenQuery)?.let { token ->
-        HeaderText(
-            text = stringResource(R.string.SwapSettings_RecipientAddressTitle)
-        )
-        HSAddressInput(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            initial = initial,
-            tokenQuery = token.tokenQuery,
-            coinCode = token.coin.code,
-            navController = navController,
-            onError = onError,
-            onValueChange = onValueChange,
-        )
-        InfoText(
-            text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
-        )
-    }
+    HeaderText(
+        text = stringResource(R.string.SwapSettings_RecipientAddressTitle)
+    )
+    HSAddressInput(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        initial = initial,
+        tokenQuery = token.tokenQuery,
+        coinCode = token.coin.code,
+        navController = navController,
+        onError = onError,
+        onValueChange = onValueChange,
+    )
+    InfoText(
+        text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
+    )
 }
 
 @Composable
@@ -125,6 +121,7 @@ fun InputWithButtons(
     initial: String? = null,
     buttons: List<InputButton>,
     state: DataState<Any>? = null,
+    readOnly: Boolean = false,
     onValueChange: (String) -> Unit,
 ) {
     val borderColor = when (state) {
@@ -135,7 +132,7 @@ fun InputWithButtons(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -148,8 +145,8 @@ fun InputWithButtons(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
                 .height(44.dp)
                 .padding(horizontal = 16.dp),
@@ -174,8 +171,9 @@ fun InputWithButtons(
                     textState = textValue
                     onValueChange.invoke(textValue.text)
                 },
+                enabled = !readOnly,
                 textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
+                    color = if (readOnly) { ComposeAppTheme.colors.andy } else { ComposeAppTheme.colors.leah},
                     textStyle = ComposeAppTheme.typography.body
                 ),
                 maxLines = 1,
@@ -191,28 +189,30 @@ fun InputWithButtons(
                 },
             )
 
-            if (textState.text.isNotEmpty()) {
-                ButtonSecondaryCircle(
-                    icon = R.drawable.ic_delete_20,
-                    onClick = {
-                        val text = ""
-                        textState = textState.copy(text = text, selection = TextRange(0))
-                        onValueChange.invoke(text)
-                    }
-                )
-            } else {
-                buttons.forEachIndexed { index, button ->
-                    ButtonSecondaryDefault(
-                        modifier = Modifier.padding(end = if (index == buttons.size - 1) 0.dp else 8.dp),
-                        title = button.title,
+            if (!readOnly) {
+                if (textState.text.isNotEmpty()) {
+                    ButtonSecondaryCircle(
+                        icon = R.drawable.ic_delete_20,
                         onClick = {
-                            textState = textState.copy(
-                                text = button.rawValue,
-                                selection = TextRange(button.rawValue.length)
-                            )
-                            onValueChange.invoke(button.rawValue)
-                        },
+                            val text = ""
+                            textState = textState.copy(text = text, selection = TextRange(0))
+                            onValueChange.invoke(text)
+                        }
                     )
+                } else {
+                    buttons.forEachIndexed { index, button ->
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(end = if (index == buttons.size - 1) 0.dp else 8.dp),
+                            title = button.title,
+                            onClick = {
+                                textState = textState.copy(
+                                    text = button.rawValue,
+                                    selection = TextRange(button.rawValue.length)
+                                )
+                                onValueChange.invoke(button.rawValue)
+                            },
+                        )
+                    }
                 }
             }
 

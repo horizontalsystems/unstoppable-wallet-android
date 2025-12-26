@@ -19,13 +19,13 @@ class NumberRoundingTest {
 
     @Test
     fun getShort_lessThen1_show4SignificantDecimals() {
-        assertShortRegular("0.123456789", "0.1235")
-        assertShortRegular("0.012345678", "0.01235")
-        assertShortRegular("0.001234567", "0.001235")
-        assertShortRegular("0.000123456", "0.0001235")
-        assertShortRegular("0.000012345", "0.00001235")
+        assertShortRegular("0.123456789", "0.1234")
+        assertShortRegular("0.012345678", "0.01234")
+        assertShortRegular("0.001234567", "0.001234")
+        assertShortRegular("0.000123456", "0.0001234")
+        assertShortRegular("0.000012345", "0.00001234")
         assertShortRegular("0.000001234", "0.00000123")
-        assertShortRegular("0.999999999", "1")
+        assertShortRegular("0.999999999", "0.9999")
 
         // noTrailingZeros
         assertShortRegular("0.10001", "0.1")
@@ -38,7 +38,7 @@ class NumberRoundingTest {
         assertShortRegular("1", "1")
         assertShortRegular("1.00123456789", "1.0012")
         assertShortRegular("1.00994", "1.0099")
-        assertShortRegular("1.00995", "1.01")
+        assertShortRegular("1.00995", "1.0099")
     }
 
     @Test
@@ -48,7 +48,7 @@ class NumberRoundingTest {
         assertShortRegular("1.01", "1.01")
         assertShortRegular("1.0123456789", "1.012")
         assertShortRegular("1.0994", "1.099")
-        assertShortRegular("1.0995", "1.1")
+        assertShortRegular("1.0995", "1.099")
     }
 
     @Test
@@ -58,7 +58,7 @@ class NumberRoundingTest {
         assertShortRegular("1.1", "1.1")
         assertShortRegular("1.123456789", "1.12")
         assertShortRegular("19.994", "19.99")
-        assertShortRegular("19.995", "20")
+        assertShortRegular("19.995", "19.99")
     }
 
     @Test
@@ -67,9 +67,9 @@ class NumberRoundingTest {
 
         assertShortRegular("20", "20")
         assertShortRegular("20.123456789", "20.1")
-        assertShortRegular("20.456789", "20.5")
+        assertShortRegular("20.456789", "20.4")
         assertShortRegular("199.94", "199.9")
-        assertShortRegular("199.95", "200")
+        assertShortRegular("199.95", "199.9")
     }
 
     @Test
@@ -78,7 +78,7 @@ class NumberRoundingTest {
 
         assertShortRegular("200", "200")
         assertShortRegular("200.1", "200")
-        assertShortRegular("200.5", "201")
+        assertShortRegular("200.5", "200")
 
         assertShortRegular("19999.1", "19999")
         assertShortLarge("19999.5", "20", LargeNumberName.Thousand)
@@ -135,6 +135,52 @@ class NumberRoundingTest {
         expectedValue: String,
     ) {
         val actual = numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.Regular
+
+        assertEquals(expectedValue, actual.value.toPlainString())
+    }
+
+    @Test
+    fun getFull_belowMinimum_returnsZero() {
+        // When value is smaller than the minimum representable value (10^-maximumFractionDigits)
+        assertFullRegular("0.000000001", 0, 8, "0")
+        assertFullRegular("0.0000000001", 0, 6, "0")
+    }
+
+    @Test
+    fun getFull_smallNumbers_respectsMinimumDigits() {
+        // Test minimum fraction digits enforcement
+        assertFullRegular("0.1", 4, 8, "0.1")
+        assertFullRegular("0.123", 6, 8, "0.123")
+        assertFullRegular("1.5", 2, 8, "1.5")
+    }
+
+    @Test
+    fun getFull_smallNumbers_showCorrectPrecision() {
+        // Values less than 1 - should show zero count + up to 8 significant digits
+        assertFullRegular("0.123456789", 0, 8, "0.12345678")
+        assertFullRegular("0.012345678", 0, 8, "0.01234567")
+        assertFullRegular("0.001234567", 0, 8, "0.00123456")
+        assertFullRegular("0.000123456", 0, 8, "0.00012345")
+        assertFullRegular("0.000012345", 0, 8, "0.00001234")
+        assertFullRegular("0.000001234", 0, 8, "0.00000123")
+        assertFullRegular("0.001506812962699895", 4, 18, "0.0015068129")
+
+        // Test with limited maximum digits
+        assertFullRegular("0.123456789", 0, 4, "0.1234")
+        assertFullRegular("0.012345678", 0, 6, "0.012345")
+    }
+
+    private fun assertFullRegular(
+        value: String,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int,
+        expectedValue: String
+    ) {
+        val actual = numberRounding.getRoundedFull(
+            BigDecimal(value),
+            minimumFractionDigits,
+            maximumFractionDigits
+        ) as BigDecimalRounded.Regular
 
         assertEquals(expectedValue, actual.value.toPlainString())
     }

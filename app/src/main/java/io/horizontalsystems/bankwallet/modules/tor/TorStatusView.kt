@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -37,11 +37,7 @@ fun TorStatusView(
         animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
     )
 
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
-        modifier = Modifier.fillMaxWidth()
-    )
+    HsDivider(modifier = Modifier.fillMaxWidth())
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,7 +80,7 @@ fun TorStatusView(
                     text = stringResource(viewModel.torViewState.stateText),
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
-                    style = ComposeAppTheme.typography.subhead2,
+                    style = ComposeAppTheme.typography.subheadR,
                     color = if (viewModel.torViewState.showRetryButton) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
                 )
                 if (viewModel.torViewState.showRetryButton) {

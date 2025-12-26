@@ -11,7 +11,8 @@ import io.horizontalsystems.marketkit.models.Token
 
 class RestoreSettingsManager(
         private val storage: IRestoreSettingsStorage,
-        private val zcashBirthdayProvider: ZcashBirthdayProvider
+        private val zcashBirthdayProvider: ZcashBirthdayProvider,
+        private val moneroBirthdayProvider: MoneroBirthdayProvider
 ) {
     fun settings(account: Account, blockchainType: BlockchainType): RestoreSettings {
         val records = storage.restoreSettings(account.id, blockchainType.uid)
@@ -49,6 +50,9 @@ class RestoreSettingsManager(
                 when (blockchainType) {
                     BlockchainType.Zcash -> {
                         return zcashBirthdayProvider.getLatestCheckpointBlockHeight().toString()
+                    }
+                    BlockchainType.Monero -> {
+                        return moneroBirthdayProvider.restoreHeightForNewWallet().toString()
                     }
                     else -> null
                 }

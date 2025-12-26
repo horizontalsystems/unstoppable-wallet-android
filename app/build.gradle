@@ -1,27 +1,22 @@
-// NB: Android Studio can't find the imports; this does not affect the
-// actual build since Gradle can find them just fine.
-// remove after upgrading to 'com.android.tools.build:gradle:8.1.0' (AGP 8.1)
-import com.android.tools.profgen.ArtProfileKt
-import com.android.tools.profgen.ArtProfileSerializer
-import com.android.tools.profgen.DexFile
-
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
 
     defaultConfig {
         applicationId "io.horizontalsystems.bankwallet"
-        compileSdk compile_sdk_version
+        compileSdkVersion compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 126
-        versionName "0.41.3"
+        versionCode 153
+        versionName "0.46.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resourceConfigurations += ['de', 'es', 'en', 'fa', 'fr', 'ko', 'pt', 'pt-rBR', 'ru', 'tr', 'zh']
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas".toString())
@@ -44,6 +39,8 @@ android {
         resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"
         resValue "string", "accountsBackupFileSalt", "unstoppable"
 
+        buildConfigField "boolean", "FDROID_BUILD", "false"
+
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a"
         }
@@ -52,6 +49,7 @@ android {
     buildFeatures {
         compose true
         viewBinding true
+        buildConfig true
     }
 
     signingConfigs {
@@ -64,24 +62,48 @@ android {
         }
     }
 
+    flavorDimensions += "distribution"
+    productFlavors {
+        base {
+            dimension = "distribution"
+            signingConfig signingConfigs.debug
+        }
+
+        fdroid {
+            dimension = "distribution"
+            buildConfigField "boolean", "FDROID_BUILD", "true"
+        }
+
+        fdroidCi {
+            dimension = "distribution"
+            applicationIdSuffix ".fdroidci"
+            buildConfigField "boolean", "FDROID_BUILD", "true"
+            signingConfig signingConfigs.appCenter
+        }
+
+        ci {
+            dimension = "distribution"
+
+            applicationIdSuffix ".appcenter"
+            versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
+            signingConfig signingConfigs.appCenter
+        }
+    }
+
     buildTypes {
         debug {
+            signingConfig null
             debuggable true
             minifyEnabled false
             applicationIdSuffix ".dev"
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
-            resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
-            resValue "string", "polygonscanKey", "TNQ44BCF1MS3S75Y6A2B6SN88I8UYFJFRM"
-            resValue "string", "snowtraceApiKey", "DD8VX77TQ73KSNDFGBQQ31J7K5B51CXXPH"
-            resValue "string", "optimisticEtherscanApiKey", "A4E6DAX46FFFW4CGZP6IMZ64ADI3TIRBTS"
-            resValue "string", "arbiscanApiKey", "Z43JN5434XVNA5D73UGPWKF26G5D9MGDPZ"
-            resValue "string", "gnosisscanApiKey", "V2J8YU15ZX9S1W3GTUV2HXM11TP2TUBRW4"
-            resValue "string", "ftmscanApiKey", "57YQ2GIRAZNV6M5HIJYYG3XQGGNIPVV8MF"
-            resValue "string", "basescanApiKey", "AKEWS351FN9P9E2CFPWRWQVGHYUP7W8SUF"
+            resValue "string", "bscscanKey", "R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN"
+            resValue "string", "otherScanKey", "FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP"
             resValue "string", "is_release", "false"
-            resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
+            resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
+            resValue "string", "eduUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json"
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json"
@@ -94,14 +116,10 @@ android {
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq"
             resValue "string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet"
-        }
-
-        appcenterdebug {
-            initWith debug
-            defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
-            applicationIdSuffix ".dev.appcenter"
-            signingConfig signingConfigs.appCenter
-            matchingFallbacks = ['debug']
+            resValue "string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/"
+            resValue "string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4"
+            resValue "string", "hashDitBaseUrl", "https://api.diting.pro/v2/hashdit/"
+            resValue "string", "hashDitApiKey", "KuyxZfvJXFrpAcztshhYqeWaRusxyGRDDhFYkeIw"
         }
 
         release {
@@ -111,16 +129,11 @@ android {
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "etherscanKey", "IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM"
-            resValue "string", "bscscanKey", "HRV1ET55UFXJQMQ3HUBC1JT8XT3ZT2QU6M,IE9KAXM6Q8KKK1VAZQCPP2H8Q9DSCXH4NM,ITVTJ6PB99DMHIQWSM4TKPWNYGVGVIIDHS"
-            resValue "string", "polygonscanKey", "P9QEQHXSYFKM9KHR2TH8BGRAQU6T3M7UA4,DMGHPTPSZCE4V4SYMWTIK29CC1RIDTN7U9"
-            resValue "string", "snowtraceApiKey", "47IXTRAAFT1E1J4RNSPZPNB5EWUIQR16FG"
-            resValue "string", "optimisticEtherscanApiKey", "745EUI4781T147M9QJRNS5G3Q5NFF2SJXP"
-            resValue "string", "arbiscanApiKey", "4QWW522BV13BJCZMXH1JIB2ESJ7MZTSJYI"
-            resValue "string", "gnosisscanApiKey", "KEXFAQKDUENZ5U9CW3ZKYJEJ84ZIHH9QTY"
-            resValue "string", "ftmscanApiKey", "JAWRPW27KEMVXMJJ9UKY63CVPH3X5V9SMP"
-            resValue "string", "basescanApiKey", "QU4RJVJXQCW812J3234EW9EV815TA6XC55"
+            resValue "string", "bscscanKey", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,"
+            resValue "string", "otherScanKey", "Y855XHV4XKUC9DTRM2ZQG8XAQ96EJV221Q,43DEJEEMA1P81YAU555A1TECRY5FPIWCFH"
             resValue "string", "is_release", "true"
-            resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
+            resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
+            resValue "string", "eduUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json"
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json"
@@ -133,16 +146,11 @@ android {
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq"
             resValue "string", "blocksDecodedEthereumRpc", "https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet"
+            resValue "string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/"
+            resValue "string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4"
+            resValue "string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/"
+            resValue "string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF"
         }
-
-        appcenterrelease {
-            initWith release
-            defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
-            applicationIdSuffix ".appcenter"
-            signingConfig signingConfigs.appCenter
-            matchingFallbacks = ['release']
-        }
-
     }
 
     compileOptions {
@@ -153,8 +161,17 @@ android {
 
     packagingOptions {
         resources {
-            pickFirsts += ['META-INF/atomicfu.kotlin_module']
-            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE.md', 'META-INF/NOTICE.md']
+            pickFirsts += [
+                'META-INF/atomicfu.kotlin_module',
+                'META-INF/FastDoubleParser-LICENSE',
+                'META-INF/FastDoubleParser-NOTICE',
+                'META-INF/io.netty.versions.properties'
+            ]
+            excludes += [
+                'META-INF/INDEX.LIST',
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE.md'
+            ]
         }
         jniLibs {
             useLegacyPackaging true
@@ -195,6 +212,12 @@ android {
 
 }
 
+configurations {
+    // Initializes a placeholder for the freeDebugImplementation dependency configuration.
+    baseDebugImplementation {}
+    baseReleaseImplementation {}
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$appcompat_version"
@@ -218,10 +241,10 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
 
     //AppWidgets
-    implementation 'androidx.glance:glance-appwidget:1.0.0'
+    implementation 'androidx.glance:glance-appwidget:1.1.1'
 
     // Room
-    def room_version = '2.6.1'
+    def room_version = '2.8.1'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -231,7 +254,7 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 
     implementation "com.google.android.material:material:$material_version"
 
@@ -240,12 +263,12 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.11.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.1.0'
+    implementation 'com.google.code.gson:gson:2.13.2'
     implementation "androidx.biometric:biometric:$biometric_version"
 
     implementation 'com.atlassian.commonmark:commonmark:0.17.0'
@@ -255,7 +278,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     //Custom tabs, chrome
-    implementation "androidx.browser:browser:1.8.0"
+    implementation "androidx.browser:browser:1.9.0"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
@@ -271,29 +294,39 @@ dependencies {
     implementation("io.github.alexzhirkevich:qrose:1.0.1")
 
     // WorkManager Kotlin
-    def work_version = "2.9.0"
+    def work_version = "2.10.5"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
 
     def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.14'
-    appcenterdebugImplementation leakCanary
     debugImplementation leakCanary
 
+    //Logging
+    implementation "com.jakewharton.timber:timber:5.0.1"
+
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-android:763a5c3'
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:4a34f53'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0c770e3'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
-    implementation 'com.github.horizontalsystems:market-kit-android:4201f8f'
-    implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
-    implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
+    implementation 'com.github.horizontalsystems:monero-kit-android:303909b'
+    implementation 'com.github.horizontalsystems:stellar-kit-android:519533b'
+    implementation 'com.github.horizontalsystems:ton-kit-android:dcddd90'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:2bfdc13'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:fa7b72e'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:7d01e63'
+    implementation 'com.github.horizontalsystems:market-kit-android:8bd85cc'
+    implementation 'com.github.horizontalsystems:solana-kit-android:eae6858'
+    implementation 'com.github.horizontalsystems:tron-kit-android:16ae04a'
     // Zcash SDK
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-    implementation "cash.z.ecc.android:zcash-android-sdk:2.2.6"
-    implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation "cash.z.ecc.android:zcash-android-sdk:2.4.0"
+    implementation("io.github.binance:binance-connector-java:3.4.1") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+    }
+
+
+    // Exclude old version from wherever it's coming
+    configurations.configureEach {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+        exclude group: "org.bouncycastle", module: "bcutil-jdk18on"
     }
 
     // WalletConnect V2
@@ -309,8 +342,8 @@ dependencies {
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2'
 
     // UI modules
 
@@ -318,8 +351,17 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
 
+    implementation project(':subscriptions-core')
+
+    baseDebugImplementation project(':subscriptions-dev')
+    baseReleaseImplementation project(':subscriptions-google-play')
+
+    fdroidImplementation project(':subscriptions-fdroid')
+    fdroidCiImplementation project(':subscriptions-fdroid')
+    ciImplementation project(':subscriptions-dev')
+
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.9.0'
+    implementation 'androidx.activity:activity-compose:1.11.0'
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
@@ -333,7 +375,11 @@ dependencies {
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
-    def coil_version = "2.5.0"
+    //Material 3
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation "androidx.compose.material3:material3:1.4.0"
+
+    def coil_version = "2.7.0"
     implementation "io.coil-kt:coil-compose:$coil_version"
     implementation "io.coil-kt:coil-svg:$coil_version"
     implementation("io.coil-kt:coil-gif:$coil_version")
@@ -341,7 +387,7 @@ dependencies {
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:$accompanist_version"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-permissions:0.37.3"
 
     // UI Tests
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
@@ -363,44 +409,20 @@ dependencies {
     testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     //Android Tor
-    implementation 'info.guardianproject:tor-android:0.4.7.14'
+    implementation 'info.guardianproject:tor-android:0.4.8.17.2'
     implementation 'info.guardianproject:jtorctl:0.4.5.7'
 
     api 'com.jaredrummler:android-shell:1.0.0'
-    api 'com.offbynull.portmapper:portmapper:2.0.5'
+    api 'com.offbynull.portmapper:portmapper:2.0.6'
 }
 
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
-    }
-}
 
-// fixes reproducible builds (fixes difference in assets/dexopt/baseline.profm)
-// more info https://issuetracker.google.com/issues/231837768
-// remove after upgrading to 'com.android.tools.build:gradle:8.1.0' (AGP 8.1)
-project.afterEvaluate {
-    tasks.each { task ->
-        if (task.name.startsWith("compile") && task.name.endsWith("ReleaseArtProfile")) {
-            task.doLast {
-                outputs.files.each { file ->
-                    if (file.name.endsWith(".profm")) {
-                        println("Sorting ${file} ...")
-                        def version = ArtProfileSerializer.valueOf("METADATA_0_0_2")
-                        def profile = ArtProfileKt.ArtProfile(file)
-                        def keys = new ArrayList(profile.profileData.keySet())
-                        def sortedData = new LinkedHashMap()
-                        // xxx ignore not resolved classes; gradle can manage
-                        Collections.sort keys, new DexFile.Companion()
-                        keys.each { key -> sortedData[key] = profile.profileData[key] }
-                        new FileOutputStream(file).with {
-                            write(version.magicBytes$profgen)
-                            write(version.versionBytes$profgen)
-                            version.write$profgen(it, sortedData, "")
-                        }
-                    }
-                }
-            }
-        }
+        // Force Ktor version for TonKit
+        force "io.ktor:ktor-utils:2.3.7"
+        force "io.ktor:ktor-io:2.3.7"
+        force "io.ktor:ktor-client-core:2.3.7"
     }
 }

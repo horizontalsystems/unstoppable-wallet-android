@@ -46,13 +46,14 @@ object MarketModule {
         val currency: Currency
     )
 
-    enum class Tab(@StringRes val titleResId: Int) {
+    enum class Tab(@StringRes val titleResId: Int, val premium: Boolean = false)  {
         Coins(R.string.Market_Tab_Coins),
         Watchlist(R.string.Market_Tab_Watchlist),
+        Earn(R.string.Market_Tab_Earn, true),
+        Sectors(R.string.Market_Tab_Sectors),
         Posts(R.string.Market_Tab_Posts),
         Platform(R.string.Market_Tab_Platform),
         Pairs(R.string.Market_Tab_Pairs);
-//        Sectors(R.string.Market_Tab_Sectors);
 
         companion object {
             private val map = entries.associateBy(Tab::name)
@@ -190,8 +191,7 @@ sealed class Value {
 sealed class MarketDataValue {
     class MarketCap(val value: String) : MarketDataValue()
     class Volume(val value: String) : MarketDataValue()
-    class Diff(val value: BigDecimal?) : MarketDataValue()
-    class DiffNew(val value: Value) : MarketDataValue()
+    class Diff(val value: Value) : MarketDataValue()
 }
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
@@ -215,6 +215,10 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
     TimePeriod.TimePeriod_3M -> priceChange90d
     TimePeriod.TimePeriod_6M -> priceChange200d
     TimePeriod.TimePeriod_1Y -> priceChange1y
+    TimePeriod.TimePeriod_2Y -> priceChange2y
+    TimePeriod.TimePeriod_3Y -> priceChange3y
+    TimePeriod.TimePeriod_4Y -> priceChange4y
+    TimePeriod.TimePeriod_5Y -> priceChange5y
 }
 
 @Parcelize

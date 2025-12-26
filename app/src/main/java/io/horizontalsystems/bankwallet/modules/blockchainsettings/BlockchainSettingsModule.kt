@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.blockchainsettings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
@@ -19,7 +20,8 @@ object BlockchainSettingsModule {
                     App.btcBlockchainManager,
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
-                    App.solanaRpcSourceManager
+                    App.solanaRpcSourceManager,
+                    App.moneroNodeManager
                 )
             return BlockchainSettingsViewModel(service) as T
         }
@@ -48,6 +50,11 @@ object BlockchainSettingsModule {
         class Solana(
             override val blockchain: Blockchain,
             val rpcSource: RpcSource
+        ) : BlockchainItem()
+
+        class Monero(
+            override val blockchain: Blockchain,
+            val node: MoneroNode
         ) : BlockchainItem()
 
         val order

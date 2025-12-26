@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -56,8 +57,12 @@ object SendEvmModule {
     }
 
 
-    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
+    class Factory(
+        private val wallet: Wallet,
+        private val address: Address,
+        private val hideAddress: Boolean,
+    ) : ViewModelProvider.Factory {
+        val adapter = App.adapterManager.getAdapterForWallet<ISendEthereumAdapter>(wallet) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -72,7 +77,7 @@ object SendEvmModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative
                     )
-                    val addressService = SendEvmAddressService(predefinedAddress)
+                    val addressService = SendEvmAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendEvmViewModel(
@@ -83,8 +88,9 @@ object SendEvmModule {
                         amountService,
                         addressService,
                         coinMaxAllowedDecimals,
-                        predefinedAddress == null,
+                        !hideAddress,
                         App.connectivityManager,
+                        address
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

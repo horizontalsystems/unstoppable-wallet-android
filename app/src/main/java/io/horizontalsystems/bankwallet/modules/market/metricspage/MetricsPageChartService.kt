@@ -25,6 +25,7 @@ class MetricsPageChartService(
     override val chartIntervals = listOf(
         HsTimePeriod.Day1,
         HsTimePeriod.Week1,
+        HsTimePeriod.Week2,
         HsTimePeriod.Month1,
         HsTimePeriod.Month3,
         HsTimePeriod.Month6,
@@ -50,6 +51,9 @@ class MetricsPageChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = metricsType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = metricsType.statPage,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod)
+        )
     }
 }

@@ -10,17 +10,24 @@ import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.parcelable
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 
-fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
-    val navOptions = NavOptions.Builder()
+fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null, xxx: NavOptions.Builder.() -> Unit = { }) {
+    val builder = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
         .setExitAnim(android.R.anim.fade_out)
         .setPopEnterAnim(android.R.anim.fade_in)
         .setPopExitAnim(R.anim.slide_to_right)
-        .build()
+
+    xxx(builder)
+
+    val navOptions = builder.build()
 
     val args = input?.let {
         bundleOf("input" to it)
@@ -51,6 +58,18 @@ fun NavController.authorizedAction(action: () -> Unit) {
         }
     } else {
         action.invoke()
+    }
+}
+
+fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
+    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
+        block.invoke()
+    } else {
+        val premiumFeature = PremiumFeature.getFeature(paidAction)
+        slideFromBottom(
+            R.id.defenseSystemFeatureDialog,
+            DefenseSystemFeatureDialog.Input(premiumFeature, true)
+        )
     }
 }
 

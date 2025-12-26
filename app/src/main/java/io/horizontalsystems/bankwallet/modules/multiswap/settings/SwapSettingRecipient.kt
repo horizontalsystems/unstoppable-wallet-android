@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.ui.RecipientAddress
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 
 data class SwapSettingRecipient(
     val settings: Map<String, Any?>,
-    val blockchainType: BlockchainType
+    val tokenOut: Token
 ) : ISwapSetting {
-    override val id = "recipient"
+    override val id = "recipient_${tokenOut.blockchainType.uid}"
 
     val value = settings[id] as? Address
 
@@ -21,7 +21,7 @@ data class SwapSettingRecipient(
         onValueChange: (Any?) -> Unit
     ) {
         RecipientAddress(
-            blockchainType = blockchainType,
+            token = tokenOut,
             navController = navController,
             initial = value,
             onError = onError,

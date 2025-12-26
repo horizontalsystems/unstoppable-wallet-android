@@ -16,7 +16,8 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
                 ethEvmUrl = appConfig.blocksDecodedEthereumRpc,
                 ethEvmAuth = null,
                 bscEvmUrl = FeeProviderConfig.defaultBscEvmUrl(),
-                mempoolSpaceUrl = appConfig.mempoolSpaceUrl
+                mempoolSpaceUrl = appConfig.mempoolSpaceUrl,
+                blockCypherUrl = appConfig.blockCypherUrl
             )
         )
     }
@@ -50,8 +51,7 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
 
 class LitecoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override suspend fun getFeeRates(): FeeRates {
-        val feeRate = feeRateProvider.litecoinFeeRate().await()
-        return FeeRates(feeRate.toInt())
+        return FeeRates(2)
     }
 }
 
@@ -71,7 +71,7 @@ class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRa
 
 class ECashFeeRateProvider : IFeeRateProvider {
     override suspend fun getFeeRates(): FeeRates {
-        return FeeRates(1)
+        return FeeRates(2)
     }
 }
 

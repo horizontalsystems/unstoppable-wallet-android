@@ -14,6 +14,7 @@ class SendAmountService(
 ) {
     private var amount: BigDecimal? = null
     private var amountCaution: HSCaution? = null
+    private var minimumSendAmount: BigDecimal? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -48,12 +49,21 @@ class SendAmountService(
             coinAmount = amount,
             coinCode = coinCode,
             availableBalance = availableBalance,
+            minimumSendAmount = minimumSendAmount,
             leaveSomeBalanceForFee = leaveSomeBalanceForFee
         )
     }
 
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
+
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setMinimumSendAmount(minimumSendAmount: BigDecimal?) {
+        this.minimumSendAmount = minimumSendAmount
 
         validateAmount()
 

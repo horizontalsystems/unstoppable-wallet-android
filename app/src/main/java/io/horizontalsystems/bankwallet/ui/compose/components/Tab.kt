@@ -1,12 +1,17 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun TabBalance(
@@ -41,19 +46,11 @@ fun BarSingleLine(
             .height(44.dp)
     ) {
         if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
         }
 
         if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+            HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
         }
 
         Row(

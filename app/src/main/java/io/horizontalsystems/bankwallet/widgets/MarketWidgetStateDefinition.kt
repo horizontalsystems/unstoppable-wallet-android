@@ -9,6 +9,7 @@ import androidx.datastore.dataStoreFile
 import androidx.glance.state.GlanceStateDefinition
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
+import com.google.gson.Strictness
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -30,7 +31,7 @@ object MarketWidgetStateDefinition : GlanceStateDefinition<MarketWidgetState> {
     object MarketWidgetStateSerializer : Serializer<MarketWidgetState> {
         private val gson by lazy {
             GsonBuilder()
-                .setLenient()
+                .setStrictness(Strictness.LENIENT)
                 .registerTypeAdapter(MarketWidgetType::class.java, MarketWidgetTypeAdapter())
                 .create()
         }

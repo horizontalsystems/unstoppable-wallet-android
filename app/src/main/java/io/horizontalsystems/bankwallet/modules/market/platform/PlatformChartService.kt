@@ -65,7 +65,10 @@ class PlatformChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        stat(page = StatPage.TopPlatform, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        stat(
+            page = StatPage.TopPlatform,
+            event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod)
+        )
     }
 
     private fun getChartPointsWrapper(

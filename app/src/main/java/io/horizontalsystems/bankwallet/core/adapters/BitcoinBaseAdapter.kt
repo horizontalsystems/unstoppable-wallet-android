@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedFilterException
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -20,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.bitcoincore.models.Address
 import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
 import io.horizontalsystems.bitcoincore.models.TransactionFilterType
@@ -31,8 +34,7 @@ import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.bitcoincore.storage.FullTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutput
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.marketkit.models.Token
@@ -46,7 +48,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.Date
 
 abstract class BitcoinBaseAdapter(
@@ -54,13 +55,11 @@ abstract class BitcoinBaseAdapter(
     open val syncMode: BitcoinCore.SyncMode,
     private val backgroundManager: BackgroundManager,
     val wallet: Wallet,
-    private val confirmationsThreshold: Int,
     protected val decimal: Int = 8
-) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter {
 
     private val scope = CoroutineScope(Dispatchers.Default)
-
-    abstract val satoshisInBitcoin: BigDecimal
+    private var transactionConfirmationsThreshold = 3
 
     //
     // Adapter implementation
@@ -104,6 +103,9 @@ abstract class BitcoinBaseAdapter(
 
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    final override val unspentOutputs: List<UnspentOutputInfo>
+        get() = kit.getUnspentOutputs(UtxoFilters())
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
@@ -220,9 +222,6 @@ abstract class BitcoinBaseAdapter(
                     BackgroundManagerState.EnterBackground -> {
                         kit.onEnterBackground()
                     }
-                    BackgroundManagerState.AllActivitiesDestroyed -> {
-
-                    }
                 }
             }
         }
@@ -269,12 +268,12 @@ abstract class BitcoinBaseAdapter(
                 val progress = (kitState.progress * 100).toInt()
                 val lastBlockDate = if (syncMode is BitcoinCore.SyncMode.Blockchair) null else kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
-                AdapterState.Syncing(progress, lastBlockDate)
+                AdapterState.Syncing(progress, lastBlockDate, kitState.blocksRemaining?.toLong())
             }
         }
     }
 
-    fun send(
+    override fun send(
         amount: BigDecimal,
         address: String,
         memo: String?,
@@ -283,64 +282,78 @@ abstract class BitcoinBaseAdapter(
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
-        logger: AppLogger
-    ): Single<Unit> {
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters
+    ): BitcoinTransactionRecord? {
         val sortingType = getTransactionSortingType(transactionSorting)
-        return Single.create { emitter ->
-            try {
-                logger.info("call btc-kit.send")
-                kit.send(
-                    address = address,
-                    memo = memo,
-                    value = (amount * satoshisInBitcoin).toLong(),
-                    senderPay = true,
-                    feeRate = feeRate,
-                    sortType = sortingType,
-                    unspentOutputs = unspentOutputs,
-                    pluginData = pluginData ?: mapOf(),
-                    rbfEnabled = rbfEnabled
-                )
-                emitter.onSuccess(Unit)
-            } catch (ex: Exception) {
-                emitter.onError(ex)
-            }
-        }
+
+        val fullTransaction = kit.send(
+            address = address,
+            memo = memo,
+            value = amount.movePointRight(decimal).toLong(),
+            senderPay = true,
+            feeRate = feeRate,
+            sortType = sortingType,
+            unspentOutputs = unspentOutputs,
+            pluginData = pluginData ?: mapOf(),
+            rbfEnabled = rbfEnabled,
+            changeToFirstInput = changeToFirstInput,
+            filters = utxoFilters,
+        )
+
+        val transaction = kit.getTransaction(fullTransaction.header.hash.toReversedHex())
+
+//        val list = kit.transactions(limit = 1).blockingGet()
+//        val transaction = list.first()
+
+        return transaction?.let { transactionRecord(it) }
     }
 
-    fun availableBalance(
+    override fun availableBalance(
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        changeToFirstInput: Boolean,
+        utxoFilters: UtxoFilters
     ): BigDecimal {
         return try {
-            val maximumSpendableValue = kit.maximumSpendableValue(address, memo, feeRate, unspentOutputs, pluginData
-                    ?: mapOf())
-            satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
+            val maximumSpendableValue = kit.maximumSpendableValue(
+                address = address,
+                memo = memo,
+                feeRate = feeRate,
+                unspentOutputInfos = unspentOutputs,
+                pluginData = pluginData ?: mapOf(),
+                changeToFirstInput = changeToFirstInput,
+                filters = utxoFilters,
+            )
+            satoshiToBTC(maximumSpendableValue)
         } catch (e: Exception) {
             BigDecimal.ZERO
         }
     }
 
-    fun minimumSendAmount(address: String?): BigDecimal? {
+    override fun minimumSendAmount(address: String?): BigDecimal? {
         return try {
-            satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
+            satoshiToBTC(kit.minimumSpendableValue(address).toLong())
         } catch (e: Exception) {
             null
         }
     }
 
-    fun bitcoinFeeInfo(
+    override fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
         memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
-        pluginData: Map<Byte, IPluginData>?
+        pluginData: Map<Byte, IPluginData>?,
+        changeToFirstInput: Boolean,
+        filters: UtxoFilters
     ): BitcoinFeeInfo? {
         return try {
-            val satoshiAmount = (amount * satoshisInBitcoin).toLong()
+            val satoshiAmount = amount.movePointRight(decimal).toLong()
             kit.sendInfo(
                 value = satoshiAmount,
                 address = address,
@@ -348,12 +361,14 @@ abstract class BitcoinBaseAdapter(
                 senderPay = true,
                 feeRate = feeRate,
                 unspentOutputs = unspentOutputs,
-                pluginData = pluginData ?: mapOf()
+                pluginData = pluginData ?: mapOf(),
+                changeToFirstInput = changeToFirstInput,
+                filters = filters
             ).let {
                 BitcoinFeeInfo(
                     unspentOutputs = it.unspentOutputs,
                     fee = satoshiToBTC(it.fee),
-                    changeValue = satoshiToBTC(it.changeValue),
+                    changeValue = it.changeValue?.let { satoshiToBTC(it) },
                     changeAddress = it.changeAddress
                 )
             }
@@ -362,7 +377,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
+    override fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
         kit.validateAddress(address, pluginData ?: mapOf())
     }
 
@@ -396,9 +411,9 @@ abstract class BitcoinBaseAdapter(
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
                         blockHeight = transaction.blockHeight,
-                        confirmationsThreshold = confirmationsThreshold,
+                        confirmationsThreshold = transactionConfirmationsThreshold,
                         timestamp = transaction.timestamp,
-                        fee = satoshiToBTC(transaction.fee),
+                        fee = transaction.fee?.let { satoshiToBTC(it) },
                         failed = transaction.status == TransactionStatus.INVALID,
                         lockInfo = transactionLockInfo,
                         conflictingHash = transaction.conflictingTxHash,
@@ -417,9 +432,9 @@ abstract class BitcoinBaseAdapter(
                     transactionHash = transaction.transactionHash,
                     transactionIndex = transaction.transactionIndex,
                     blockHeight = transaction.blockHeight,
-                    confirmationsThreshold = confirmationsThreshold,
+                    confirmationsThreshold = transactionConfirmationsThreshold,
                     timestamp = transaction.timestamp,
-                    fee = satoshiToBTC(transaction.fee),
+                    fee = transaction.fee?.let { satoshiToBTC(it) },
                     failed = transaction.status == TransactionStatus.INVALID,
                     lockInfo = transactionLockInfo,
                     conflictingHash = transaction.conflictingTxHash,
@@ -440,9 +455,9 @@ abstract class BitcoinBaseAdapter(
                     transactionHash = transaction.transactionHash,
                     transactionIndex = transaction.transactionIndex,
                     blockHeight = transaction.blockHeight,
-                    confirmationsThreshold = confirmationsThreshold,
+                    confirmationsThreshold = transactionConfirmationsThreshold,
                     timestamp = transaction.timestamp,
-                    fee = satoshiToBTC(transaction.fee),
+                    fee = transaction.fee?.let { satoshiToBTC(it) },
                     failed = transaction.status == TransactionStatus.INVALID,
                     lockInfo = transactionLockInfo,
                     conflictingHash = transaction.conflictingTxHash,
@@ -461,18 +476,15 @@ abstract class BitcoinBaseAdapter(
     val statusInfo: Map<String, Any>
         get() = kit.statusInfo()
 
-    private fun satoshiToBTC(value: Long, roundingMode: RoundingMode = RoundingMode.HALF_EVEN): BigDecimal {
-        return BigDecimal(value).divide(satoshisInBitcoin, decimal, roundingMode)
-    }
-
-    private fun satoshiToBTC(value: Long?): BigDecimal? {
-        return satoshiToBTC(value ?: return null)
+    override fun satoshiToBTC(value: Long): BigDecimal {
+        return BigDecimal(value).movePointLeft(decimal)
     }
 
     companion object {
         fun getTransactionSortingType(sortType: TransactionDataSortMode?): TransactionDataSortType = when (sortType) {
             TransactionDataSortMode.Bip69 -> TransactionDataSortType.Bip69
-            else -> TransactionDataSortType.Shuffle
+            TransactionDataSortMode.Shuffle -> TransactionDataSortType.Shuffle
+            null -> TransactionDataSortType.None
         }
     }
 

@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
+import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
@@ -153,7 +154,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private fun emitState() {
         viewModelScope.launch {
             uiState = SwapSelectCoinUiState(
-                coinBalanceItems = coinBalanceItems
+                coinBalanceItems = coinBalanceItems.filter { it.token.swappable }
             )
         }
     }

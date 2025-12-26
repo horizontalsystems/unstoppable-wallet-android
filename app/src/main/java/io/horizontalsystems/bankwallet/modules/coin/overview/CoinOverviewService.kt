@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -21,7 +22,8 @@ class CoinOverviewService(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val appConfigProvider: AppConfigProvider,
-    private val languageManager: LanguageManager
+    private val languageManager: LanguageManager,
+    private val roiManager: RoiManager
 ) {
     val currency get() = currencyManager.baseCurrency
 
@@ -52,6 +54,13 @@ class CoinOverviewService(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     fun start() {
+        coroutineScope.launch {
+            roiManager.dataUpdatedFlow.collect {
+                job?.cancel()
+                fetchCoinOverview()
+            }
+        }
+
         fetchCoinOverview()
     }
 
@@ -61,7 +70,9 @@ class CoinOverviewService(
                 val marketInfoOverview = marketKit.marketInfoOverviewSingle(
                     fullCoin.coin.uid,
                     currencyManager.baseCurrency.code,
-                    languageManager.currentLanguage
+                    languageManager.currentLanguage,
+                    roiManager.getSelectedCoins().map { it.uid },
+                    roiManager.getSelectedPeriods()
                 ).await()
                 coinOverviewSubject.onNext(
                     DataState.Success(

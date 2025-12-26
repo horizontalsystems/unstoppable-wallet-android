@@ -8,8 +8,8 @@ import java.math.BigDecimal
 
 data class SendConfirmationData(
     val amount: BigDecimal,
-    val fee: BigDecimal,
-    val address: Address,
+    val fee: BigDecimal?,
+    val address: Address?,
     val contact: Contact?,
     val coin: Coin,
     val feeCoin: Coin,

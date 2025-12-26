@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -167,7 +168,7 @@ fun EvmSettingsInput(
     val borderColor = when {
         errors.isNotEmpty() -> ComposeAppTheme.colors.red50
         warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     EvmSettingsInput(
@@ -198,7 +199,7 @@ fun EvmSettingsInput(
     val borderColor = when (caution?.type) {
         HSCaution.Type.Error -> ComposeAppTheme.colors.red50
         HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     EvmSettingsInput(
@@ -257,8 +258,8 @@ private fun NumberInputWithButtons(
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .defaultMinSize(minHeight = 44.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -289,7 +290,7 @@ private fun NumberInputWithButtons(
                 textStyle = ComposeAppTheme.typography.body
             ),
             singleLine = true,
-            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
 
@@ -312,7 +313,9 @@ fun ButtonsGroupWithShade(
     ButtonsContent: @Composable (() -> Unit)
 ) {
     Column(
-        modifier = Modifier.offset(y = -(24.dp))
+        modifier = Modifier
+            .offset(y = -(24.dp))
+            .navigationBarsPadding()
     ) {
         Box(
             modifier = Modifier
@@ -325,9 +328,7 @@ fun ButtonsGroupWithShade(
                 )
         )
         Box(
-            modifier = Modifier
-                .background(ComposeAppTheme.colors.tyler)
-                .padding(bottom = 8.dp) // With 24dp offset actual padding will be 32dp
+            modifier = Modifier.background(ComposeAppTheme.colors.tyler)
         ) {
             ButtonsContent()
         }

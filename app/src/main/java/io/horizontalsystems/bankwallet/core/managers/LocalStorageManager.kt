@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -17,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
+import io.horizontalsystems.bankwallet.modules.roi.PerformanceCoin
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
@@ -24,9 +26,16 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.IThirdKeyboard
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.util.UUID
 
 class LocalStorageManager(
@@ -43,7 +52,6 @@ class LocalStorageManager(
     private val BASE_LITECOIN_PROVIDER = "base_litecoin_provider"
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
-    private val BASE_BINANCE_PROVIDER = "base_binance_provider"
     private val BASE_ZCASH_PROVIDER = "base_zcash_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
@@ -56,6 +64,7 @@ class LocalStorageManager(
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val TERMS_AGREED = "terms_agreed"
+    private val CHECKED_TERMS = "checked_terms"
     private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
@@ -86,11 +95,27 @@ class LocalStorageManager(
     private val STATS_SYNC_TIME = "stats_sync_time"
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
+    private val LAST_MIGRATION_VERSION = "last_migration_version"
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
 
+    private val _marketSignalsStateChangedFlow =  MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    override val marketSignalsStateChangedFlow = _marketSignalsStateChangedFlow
+
     private val gson by lazy { Gson() }
+
+    override var zcashUnshieldedBalanceAlerts: Map<String, BigDecimal>
+        get() {
+            val jsonStr = preferences.getString("zcashUnshieldedBalanceAlerts", null) ?: return mapOf()
+            val type = object : TypeToken<Map<String, BigDecimal>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit { putString("zcashUnshieldedBalanceAlerts", jsonStr) }
+        }
 
     override var chartIndicatorsEnabled: Boolean
         get() = preferences.getBoolean("chartIndicatorsEnabled", false)
@@ -174,12 +199,6 @@ class LocalStorageManager(
             preferences.edit().putString(BASE_DASH_PROVIDER, value).apply()
         }
 
-    override var baseBinanceProvider: String?
-        get() = preferences.getString(BASE_BINANCE_PROVIDER, null)
-        set(value) {
-            preferences.edit().putString(BASE_BINANCE_PROVIDER, value).apply()
-        }
-
     override var baseZcashProvider: String?
         get() = preferences.getString(BASE_ZCASH_PROVIDER, null)
         set(value) {
@@ -205,6 +224,28 @@ class LocalStorageManager(
         set(value) {
             val versionsString = gson.toJson(value)
             preferences.edit().putString(APP_VERSIONS, versionsString).apply()
+        }
+
+    override var selectedPeriods: List<HsTimePeriod>
+        get() {
+            val jsonStr = preferences.getString("selectedPeriods", null) ?: return listOf()
+            val type = object : TypeToken<ArrayList<HsTimePeriod>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit().putString("selectedPeriods", jsonStr).apply()
+        }
+
+    override var roiPerformanceCoins: List<PerformanceCoin>
+        get() {
+            val jsonStr = preferences.getString("roiPerformanceCoins", null) ?: return listOf()
+            val type = object : TypeToken<ArrayList<PerformanceCoin>>() {}.type
+            return gson.fromJson(jsonStr, type)
+        }
+        set(value) {
+            val jsonStr = gson.toJson(value)
+            preferences.edit().putString("roiPerformanceCoins", jsonStr).apply()
         }
 
     override var isAlertNotificationOn: Boolean
@@ -362,7 +403,13 @@ class LocalStorageManager(
     override var termsAccepted: Boolean
         get() = preferences.getBoolean(TERMS_AGREED, false)
         set(value) {
-            preferences.edit().putBoolean(TERMS_AGREED, value).apply()
+            preferences.edit().putBoolean(TERMS_AGREED, value).commit()
+        }
+
+    override var checkedTerms: List<String>
+        get() = preferences.getString(CHECKED_TERMS, null)?.split(",") ?: listOf()
+        set(value) {
+            preferences.edit().putString(CHECKED_TERMS, value.joinToString(",")).apply()
         }
 
     override var currentMarketTab: MarketModule.Tab?
@@ -439,6 +486,9 @@ class LocalStorageManager(
         get() = preferences.getBoolean(MARKET_FAVORITES_SHOW_SIGNALS, false)
         set(value) {
             preferences.edit().putBoolean(MARKET_FAVORITES_SHOW_SIGNALS, value).apply()
+            coroutineScope.launch {
+                _marketSignalsStateChangedFlow.emit(value)
+            }
         }
 
     override var marketFavoritesManualSortingOrder: List<String>
@@ -477,7 +527,15 @@ class LocalStorageManager(
             balanceTabButtonsEnabledFlow.update { value }
         }
 
+    override var amountRoundingEnabled: Boolean
+        get() = preferences.getBoolean("amountRoundingEnabled", true)
+        set(value) {
+            preferences.edit().putBoolean("amountRoundingEnabled", value).apply()
+            amountRoundingEnabledFlow.update { value }
+        }
+
     override val balanceTabButtonsEnabledFlow = MutableStateFlow(balanceTabButtonsEnabled)
+    override val amountRoundingEnabledFlow = MutableStateFlow(amountRoundingEnabled)
 
     override var personalSupportEnabled: Boolean
         get() = preferences.getBoolean(PERSONAL_SUPPORT_ENABLED, false)
@@ -500,18 +558,18 @@ class LocalStorageManager(
     private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)
     override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
 
-    override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
-        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()
-        set(value) {
-            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
-        }
-
     override var autoLockInterval: AutoLockInterval
         get() = preferences.getString(APP_AUTO_LOCK_INTERVAL, null)?.let {
             AutoLockInterval.fromRaw(it)
         } ?: AutoLockInterval.AFTER_1_MIN
         set(value) {
             preferences.edit().putString(APP_AUTO_LOCK_INTERVAL, value.raw).apply()
+        }
+
+    override var recipientAddressCheckEnabled: Boolean
+        get() = preferences.getBoolean("recipientAddressCheckEnabled", true)
+        set(value) {
+            preferences.edit().putBoolean("recipientAddressCheckEnabled", value).apply()
         }
 
     override var utxoExpertModeEnabled: Boolean
@@ -560,6 +618,28 @@ class LocalStorageManager(
                 editor.remove(UI_STATS_ENABLED).apply()
             } else {
                 editor.putBoolean(UI_STATS_ENABLED, value).apply()
+            }
+        }
+
+    override var donateUsLastShownDate: Long?
+        get() {
+            val timestamp = preferences.getLong("donate_us_last_shown_time", 0L)
+            return when (timestamp) {
+                0L -> null
+                else -> timestamp
+            }
+        }
+        set(value) {
+            value?.let {
+                preferences.edit().putLong("donate_us_last_shown_time", it).apply()
+            }
+        }
+
+    override var lastMigrationVersion: Int?
+        get() = if (preferences.contains(LAST_MIGRATION_VERSION)) preferences.getInt(LAST_MIGRATION_VERSION, 0) else null
+        set(value) {
+            value?.let {
+                preferences.edit().putInt(LAST_MIGRATION_VERSION, it).apply()
             }
         }
 }

@@ -28,7 +28,7 @@ class ManageAccountViewModel(
             newName = account.name,
             canSave = false,
             closeScreen = false,
-            headerNote = account.headerNote(false),
+            headerNote = account.headerNote(),
             keyActions = getKeyActions(account),
             backupActions = getBackupItems(account),
         )
@@ -69,7 +69,7 @@ class ManageAccountViewModel(
         }
         if (account.type is AccountType.HdExtendedKey
             || account.type is AccountType.EvmPrivateKey
-            || account.type is AccountType.Cex
+            || account.type is AccountType.StellarSecretKey
         ) {
             return listOf(BackupItem.LocalBackup(false))
         }
@@ -104,10 +104,15 @@ class ManageAccountViewModel(
                 KeyAction.PublicKeys,
             )
 
+            is AccountType.StellarSecretKey -> listOf(
+                KeyAction.PrivateKeys
+            )
+
             is AccountType.EvmAddress -> listOf()
             is AccountType.SolanaAddress -> listOf()
             is AccountType.TronAddress -> listOf()
             is AccountType.TonAddress -> listOf()
+            is AccountType.StellarAddress -> listOf()
             is AccountType.BitcoinAddress -> listOf()
             is AccountType.HdExtendedKey -> {
                 if (account.type.hdExtendedKey.isPublic) {
@@ -116,8 +121,7 @@ class ManageAccountViewModel(
                     listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)
                 }
             }
-
-            is AccountType.Cex -> listOf()
+            is AccountType.MoneroWatchAccount -> listOf()
         }
     }
 

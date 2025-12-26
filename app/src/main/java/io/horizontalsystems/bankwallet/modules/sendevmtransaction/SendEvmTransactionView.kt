@@ -68,6 +68,7 @@ fun SendEvmTransactionView(
     Column {
         items.forEach { sectionViewItem ->
             SectionView(sectionViewItem.viewItems, navController, statPage)
+            Spacer(Modifier.height(16.dp))
         }
 
         if (transactionFields.isNotEmpty()) {
@@ -113,7 +114,7 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
                 Text(
                     text = nonce.toString(),
                     maxLines = 1,
-                    style = ComposeAppTheme.typography.subhead1,
+                    style = ComposeAppTheme.typography.subhead,
                     color = setColorByType(ValueType.Regular)
                 )
             }
@@ -122,8 +123,7 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
 }
 
 @Composable
-private fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
-    Spacer(Modifier.height(16.dp))
+fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
             is ViewItem.Subhead -> Subhead(item)
@@ -141,19 +141,36 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                     blockchainType = item.blockchainType,
                     navController = navController,
                     onCopy = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Copy(StatEntity.Address))
+                        stat(
+                            page = statPage,
+                            event = StatEvent.Copy(StatEntity.Address),
+                            section = item.statSection
+                        )
                     },
                     onAddToExisting = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                        stat(
+                            page = statPage,
+                            event = StatEvent.Open(StatPage.ContactAddToExisting),
+                            section = item.statSection
+                        )
                     },
                     onAddToNew = {
-                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                        stat(
+                            page = statPage,
+                            event = StatEvent.Open(StatPage.ContactNew),
+                            section = item.statSection
+                        )
                     }
                 )
             }
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
-            is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
+            is ViewItem.Input -> TitleValueHex(item.title, item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)
+            is ViewItem.Fee -> DataFieldFee(
+                navController,
+                item.networkFee.primary.getFormattedPlain() ?: "---",
+                item.networkFee.secondary?.getFormattedPlain() ?: "---"
+            )
         }
     }
 }
@@ -193,7 +210,7 @@ fun TitleValue(item: ViewItem.Value) {
         Text(
             text = item.value,
             maxLines = 1,
-            style = ComposeAppTheme.typography.subhead1,
+            style = ComposeAppTheme.typography.subhead,
             color = setColorByType(item.type)
         )
     }
@@ -212,7 +229,7 @@ private fun TitleValueMulti(item: ViewItem.ValueMulti) {
             Text(
                 text = item.primaryValue,
                 maxLines = 1,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = setColorByType(item.type)
             )
             Text(
@@ -245,7 +262,7 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
                 Text(
                     text = item.amounts[0].coinAmount,
                     maxLines = 1,
-                    style = ComposeAppTheme.typography.subhead1,
+                    style = ComposeAppTheme.typography.subhead,
                     color = setColorByType(item.type)
                 )
                 Spacer(Modifier.weight(1f))
@@ -283,7 +300,7 @@ private fun Amount(item: ViewItem.Amount) {
         Text(
             text = item.coinAmount,
             maxLines = 1,
-            style = ComposeAppTheme.typography.subhead1,
+            style = ComposeAppTheme.typography.subhead,
             color = setColorByType(item.type)
         )
         Spacer(Modifier.weight(1f))
@@ -313,7 +330,7 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
             Text(
                 text = item.coinAmount,
                 maxLines = 1,
-                style = ComposeAppTheme.typography.subhead1,
+                style = ComposeAppTheme.typography.subhead,
                 color = setColorByType(item.type)
             )
             item.fiatAmount?.let {
@@ -336,7 +353,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
         Text(
             text = item.amount,
             maxLines = 1,
-            style = ComposeAppTheme.typography.subhead2,
+            style = ComposeAppTheme.typography.subheadR,
             color = setColorByType(item.type)
         )
     }
@@ -383,7 +400,7 @@ private fun TitleValueHex(
 @Composable
 private fun setColorByType(type: ValueType) =
     when (type) {
-        ValueType.Regular -> ComposeAppTheme.colors.bran
+        ValueType.Regular -> ComposeAppTheme.colors.leah
         ValueType.Disabled -> ComposeAppTheme.colors.grey
         ValueType.Outgoing -> ComposeAppTheme.colors.leah
         ValueType.Incoming -> ComposeAppTheme.colors.remus

@@ -34,7 +34,7 @@ fun ProFeaturesBanner(
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp)),
+                .clip(RoundedCornerShape(16.dp)),
             painter = painterResource(R.drawable.ic_pro_nft_banner),
             contentDescription = null,
             contentScale = ContentScale.Crop

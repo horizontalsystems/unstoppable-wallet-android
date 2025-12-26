@@ -12,11 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Ruby v3
+      - name: Setup Ruby v3.2
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.2
+          ruby-version: 3.2.2
           bundler-cache: true
+
+      - name: Install Ruby Gems (Bundler)
+        run: |
+          bundle install --jobs 4 --retry 3
+        working-directory: fastlane/
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -30,11 +35,24 @@ jobs:
         run: |
           echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
 
+      - name: Create service account key file
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json  
+
       - name: Fastlane Build
         uses: maierj/fastlane-action@v3.0.0
         with:
-          lane: 'app_build'
-          options: '{ "app_name": "Unstoppable-Dev", "api_token": "${{secrets.API_TOKEN_DEV}}" }'
+          lane: 'app_build_dev'
+          options: '{ "app_name": "Unstoppable-Dev" }'
+          subdirectory: 'fastlane'
         env:
           BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
 
+      - name: Build F-Droid APK (F-Droid Debug)
+        uses: maierj/fastlane-action@v3.0.0
+        with:
+          lane: 'app_build_fdroid'
+          options: '{ "app_name": "Unstoppable-FDroid" }'
+          subdirectory: 'fastlane'
+        env:
+          BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}

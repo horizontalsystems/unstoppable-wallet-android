@@ -11,19 +11,23 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceModule
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceScreen
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
+import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
+import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
+import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
+import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarModule
+import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarScreen
+import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarViewModel
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonModule
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonScreen
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
@@ -33,10 +37,10 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 class SendFragment : BaseFragment() {
 
@@ -55,8 +59,11 @@ class SendFragment : BaseFragment() {
                 val wallet = input.wallet
                 val title = input.title
                 val sendEntryPointDestId = input.sendEntryPointDestId
-                val predefinedAddress = input.predefinedAddress
-                val prefilledData = input.prefilledAddressData
+                val address = input.address
+                val riskyAddress = input.riskyAddress
+                val hideAddress = input.hideAddress
+                val amount = input.amount
+                val memo = input.memo
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
@@ -68,52 +75,37 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dash -> {
-                        val factory = SendBitcoinModule.Factory(wallet, predefinedAddress)
+                        val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {
                             factory
                         }
                         setContent {
                             SendBitcoinNavHost(
-                                title,
-                                findNavController(),
-                                sendBitcoinViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
-                        }
-                    }
-
-                    is BlockchainType.BinanceChain -> {
-                        val factory = SendBinanceModule.Factory(wallet, predefinedAddress)
-                        val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
-                            factory
-                        }
-                        setContent {
-                            SendBinanceScreen(
-                                title,
-                                findNavController(),
-                                sendBinanceViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
+                                title = title,
+                                fragmentNavController = findNavController(),
+                                viewModel = sendBitcoinViewModel,
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                sendEntryPointDestId = sendEntryPointDestId,
+                                amount = amount,
+                                riskyAddress = riskyAddress
                             )
                         }
                     }
 
                     BlockchainType.Zcash -> {
-                        val factory = SendZCashModule.Factory(wallet, predefinedAddress)
+                        val factory = SendZCashModule.Factory(wallet, address, hideAddress)
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
                             factory
                         }
                         setContent {
                             SendZCashScreen(
-                                title,
-                                findNavController(),
-                                sendZCashViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
+                                title = title,
+                                navController = findNavController(),
+                                viewModel = sendZCashViewModel,
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                sendEntryPointDestId = sendEntryPointDestId,
+                                amount = amount,
+                                riskyAddress = riskyAddress
                             )
                         }
                     }
@@ -124,38 +116,43 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Avalanche,
                     BlockchainType.Optimism,
                     BlockchainType.Base,
+                    BlockchainType.ZkSync,
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
                         setContent {
                             SendEvmScreen(
-                                title,
-                                findNavController(),
-                                amountInputModeViewModel,
-                                prefilledData,
-                                wallet,
-                                predefinedAddress
+                                title = title,
+                                navController = findNavController(),
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                address = address,
+                                wallet = wallet,
+                                amount = amount,
+                                hideAddress = hideAddress,
+                                riskyAddress = riskyAddress,
+                                sendEntryPointDestId = sendEntryPointDestId
                             )
                         }
                     }
 
                     BlockchainType.Solana -> {
-                        val factory = SendSolanaModule.Factory(wallet, predefinedAddress)
+                        val factory = SendSolanaModule.Factory(wallet, address, hideAddress)
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendSolanaScreen(
-                                title,
-                                findNavController(),
-                                sendSolanaViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
+                                title = title,
+                                navController = findNavController(),
+                                viewModel = sendSolanaViewModel,
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                sendEntryPointDestId = sendEntryPointDestId,
+                                amount = amount,
+                                riskyAddress = riskyAddress
                             )
                         }
                     }
 
                     BlockchainType.Ton -> {
-                        val factory = SendTonModule.Factory(wallet, predefinedAddress)
+                        val factory = SendTonModule.Factory(wallet, address, hideAddress)
                         val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTonScreen(
@@ -164,25 +161,61 @@ class SendFragment : BaseFragment() {
                                 sendTonViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount,
+                                riskyAddress = riskyAddress
                             )
                         }
                     }
 
                     BlockchainType.Tron -> {
-                        val factory = SendTronModule.Factory(wallet, predefinedAddress)
+                        val factory = SendTronModule.Factory(wallet, address, hideAddress)
                         val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTronScreen(
-                                title,
-                                findNavController(),
-                                sendTronViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
+                                title = title,
+                                navController = findNavController(),
+                                viewModel = sendTronViewModel,
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                sendEntryPointDestId = sendEntryPointDestId,
+                                amount = amount,
+                                riskyAddress = riskyAddress
                             )
                         }
                     }
+
+                    BlockchainType.Stellar -> {
+                        val factory = SendStellarModule.Factory(wallet, address, hideAddress)
+                        val sendStellarViewModel by navGraphViewModels<SendStellarViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendStellarScreen(
+                                title,
+                                findNavController(),
+                                sendStellarViewModel,
+                                amountInputModeViewModel,
+                                sendEntryPointDestId,
+                                amount,
+                                riskyAddress = riskyAddress
+                            )
+                        }
+                    }
+
+                    BlockchainType.Monero -> {
+                        val factory = SendMoneroModule.Factory(wallet, address, hideAddress)
+                        val sendMoneroViewModel by navGraphViewModels<SendMoneroViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendMoneroScreen(
+                                title,
+                                findNavController(),
+                                sendMoneroViewModel,
+                                amountInputModeViewModel,
+                                sendEntryPointDestId,
+                                amount,
+                                memo,
+                                riskyAddress = riskyAddress
+                            )
+                        }
+                    }
+
 
                     else -> {}
                 }
@@ -196,8 +229,11 @@ class SendFragment : BaseFragment() {
     data class Input(
         val wallet: Wallet,
         val title: String,
-        val sendEntryPointDestId: Int = 0,
-        val predefinedAddress: String? = null,
-        val prefilledAddressData: PrefilledData? = null
+        val sendEntryPointDestId: Int,
+        val address: Address,
+        val riskyAddress: Boolean = false,
+        val amount: BigDecimal? = null,
+        val hideAddress: Boolean = false,
+        val memo: String? = null,
     ) : Parcelable
 }

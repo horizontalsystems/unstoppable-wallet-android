@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
-import io.horizontalsystems.bankwallet.entities.CexType
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -18,13 +17,15 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         // account type codes stored in db
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
+        private const val SECRET_KEY = "secret_key"
         private const val ADDRESS = "address"
         private const val SOLANA_ADDRESS = "solana_address"
         private const val TRON_ADDRESS = "tron_address"
         private const val TON_ADDRESS = "ton_address"
+        private const val STELLAR_ADDRESS = "stellar_address"
         private const val BITCOIN_ADDRESS = "bitcoin_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
-        private const val CEX = "cex"
+        private const val MONERO_WATCH_ACCOUNT = "monero_watch_account"
     }
 
     override fun getActiveAccountId(level: Int): String? {
@@ -49,17 +50,15 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
+                            SECRET_KEY -> AccountType.StellarSecretKey(record.key!!.value)
                             ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                             TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
                             TON_ADDRESS -> AccountType.TonAddress(record.key!!.value)
+                            STELLAR_ADDRESS -> AccountType.StellarAddress(record.key!!.value)
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
-                            CEX -> {
-                                CexType.deserialize(record.key!!.value)?.let {
-                                    AccountType.Cex(it)
-                                }
-                            }
+                            MONERO_WATCH_ACCOUNT -> AccountType.MoneroWatchAccount.fromSerialized(record.key!!.value)
                             else -> null
                         }
                         Account(
@@ -129,6 +128,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.key.toString())
                 accountType = PRIVATE_KEY
             }
+            is AccountType.StellarSecretKey -> {
+                key = SecretString(account.type.key)
+                accountType = SECRET_KEY
+            }
             is AccountType.EvmAddress -> {
                 key = SecretString(account.type.address)
                 accountType = ADDRESS
@@ -145,6 +148,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.address)
                 accountType = TON_ADDRESS
             }
+            is AccountType.StellarAddress -> {
+                key = SecretString(account.type.address)
+                accountType = STELLAR_ADDRESS
+            }
             is AccountType.BitcoinAddress -> {
                 key = SecretString(account.type.serialized)
                 accountType = BITCOIN_ADDRESS
@@ -153,9 +160,9 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.keySerialized)
                 accountType = HD_EXTENDED_LEY
             }
-            is AccountType.Cex -> {
-                key = SecretString(account.type.cexType.serialized())
-                accountType = CEX
+            is AccountType.MoneroWatchAccount -> {
+                key = SecretString(account.type.serialized)
+                accountType = MONERO_WATCH_ACCOUNT
             }
         }
 

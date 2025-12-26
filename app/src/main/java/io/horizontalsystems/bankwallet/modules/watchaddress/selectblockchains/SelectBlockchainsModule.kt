@@ -10,7 +10,14 @@ object SelectBlockchainsModule {
     class Factory(val accountType: AccountType, val accountName: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WatchAddressService(App.accountManager, App.walletActivator, App.accountFactory, App.marketKit, App.evmBlockchainManager)
+            val service = WatchAddressService(
+                App.accountManager,
+                App.walletActivator,
+                App.accountFactory,
+                App.marketKit,
+                App.evmBlockchainManager,
+                App.restoreSettingsManager
+            )
             return SelectBlockchainsViewModel(accountType, accountName, service) as T
         }
     }

@@ -70,24 +70,28 @@ class TransactionRecordRepository(
                 BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-                BlockchainType.Zcash,
-                BlockchainType.BinanceChain -> mergedWallets.add(wallet)
+                BlockchainType.Zcash -> mergedWallets.add(wallet)
+
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.Base,
+                BlockchainType.ZkSync,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.Solana,
                 BlockchainType.Tron,
+                BlockchainType.Stellar,
+                BlockchainType.Monero,
                 BlockchainType.Ton -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
                 }
+
                 is BlockchainType.Unsupported -> Unit
             }
         }

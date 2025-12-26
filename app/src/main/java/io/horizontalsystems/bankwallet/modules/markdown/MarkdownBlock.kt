@@ -21,5 +21,5 @@ sealed class MarkdownBlock {
         }
     }
     data class Image(val destination: String, val title: String?, val mainImage: Boolean) : MarkdownBlock()
-    class Footer: MarkdownBlock()
+    data class Footer(val text: String): MarkdownBlock()
 }

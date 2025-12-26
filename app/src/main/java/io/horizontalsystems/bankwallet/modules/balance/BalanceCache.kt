@@ -13,9 +13,12 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
     }
 
     private fun convertToCacheMap(list: List<EnabledWalletCache>): Map<String, BalanceData> {
-        return list.map {
-            val key = listOf(it.tokenQueryId, it.accountId).joinToString()
-            key to BalanceData(it.balance, it.balanceLocked)
+        return list.mapNotNull {
+            it.balanceData?.let { balanceData ->
+                val key = listOf(it.tokenQueryId, it.accountId).joinToString()
+
+                key to balanceData
+            }
         }.toMap()
     }
 
@@ -33,8 +36,7 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
             EnabledWalletCache(
                 wallet.token.tokenQuery.id,
                 wallet.account.id,
-                balanceData.available,
-                balanceData.timeLocked
+                balanceData
             )
         }
         cacheMap = cacheMap + convertToCacheMap(list)

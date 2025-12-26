@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
 import java.net.URI
-import java.net.URISyntaxException
 
 class AddRpcViewModel(
     private val blockchain: Blockchain,
@@ -69,7 +68,10 @@ class AddRpcViewModel(
 
         viewState = AddRpcViewState(null, true)
 
-        stat(page = StatPage.BlockchainSettingsEvmAdd, event = StatEvent.AddEvmSource(blockchain.uid))
+        stat(
+            page = StatPage.BlockchainSettingsEvmAdd,
+            event = StatEvent.AddEvmSource(blockchain.uid)
+        )
     }
 
     private fun syncState() {

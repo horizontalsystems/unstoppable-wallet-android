@@ -28,12 +28,13 @@ object CoinOverviewModule {
                         App.marketKit,
                         App.currencyManager,
                         App.appConfigProvider,
-                        App.languageManager
+                        App.languageManager,
+                        App.roiManager
                     )
 
                     CoinOverviewViewModel(
                         service,
-                        CoinViewFactory(currency, App.numberFormatter),
+                        CoinViewFactory(currency, App.numberFormatter, App.roiManager),
                         App.walletManager,
                         App.accountManager,
                         App.chartIndicatorManager

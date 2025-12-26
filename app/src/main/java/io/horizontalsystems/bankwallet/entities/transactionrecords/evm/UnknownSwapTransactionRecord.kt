@@ -12,4 +12,5 @@ class UnknownSwapTransactionRecord(
     val exchangeAddress: String,
     val valueIn: TransactionValue?,
     val valueOut: TransactionValue?,
-) : EvmTransactionRecord(transaction, baseToken, source)
+    protected: Boolean
+) : EvmTransactionRecord(transaction, baseToken, source, protected)

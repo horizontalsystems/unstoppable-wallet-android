@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters.zcash
 
+import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.TransactionOverview
+import cash.z.ecc.android.sdk.model.TransactionRecipient
 import cash.z.ecc.android.sdk.model.TransactionState
 import cash.z.ecc.android.sdk.model.Zatoshi
 import java.util.Date
@@ -10,7 +12,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val rawId: FirstClassByteArray
     val transactionHash: ByteArray
     val transactionIndex: Int
-    val toAddress: String?
+    val recipients: List<TransactionRecipient>?
     val expiryHeight: Int?
     val minedHeight: Long?
     val timestamp: Long
@@ -19,21 +21,37 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val memo: String?
     val failed: Boolean
     val isIncoming: Boolean
+    val shieldDirection: ShieldDirection?
 
-    constructor(confirmedTransaction: TransactionOverview, recipient: String?, memo: String?) {
+    constructor(accountId: AccountUuid, confirmedTransaction: TransactionOverview, recipients: List<TransactionRecipient>?, memo: String?) {
         confirmedTransaction.let {
-            rawId = it.rawId
-            transactionHash = it.rawId.byteArray
+            val hasSpentAndReceived = it.totalSpent.value > 0 && it.totalReceived.value > 0
+
+            val internalTransaction = hasSpentAndReceived &&
+                    !recipients.isNullOrEmpty() &&
+                    it.isSentTransaction &&
+                    recipients.all { recipient -> recipient.accountUuid == accountId }
+
+            if (it.isShielding || internalTransaction) {
+                shieldDirection = if (it.isShielding) ShieldDirection.Shield else ShieldDirection.Unshield
+                feePaid = it.totalSpent - it.totalReceived
+                value = it.totalReceived
+            } else {
+                shieldDirection = null
+                feePaid = it.feePaid
+                value = it.netValue
+            }
+
+            rawId = it.txId.value
+            transactionHash = it.txId.value.byteArray
             transactionIndex = it.index?.toInt() ?: -1
-            toAddress = recipient
+            this.recipients = recipients
             expiryHeight = it.expiryHeight?.value?.toInt()
             minedHeight = it.minedHeight?.value
             timestamp = it.blockTimeEpochSeconds ?: when (it.transactionState) {
                 TransactionState.Pending -> Date().time / 1000
                 else -> 0
             }
-            value = it.netValue
-            feePaid = it.feePaid
             this.memo = memo
             failed = false
             isIncoming = !it.isSentTransaction
@@ -49,7 +67,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
         return transactionHash.hashCode()
     }
 
-    override fun compareTo(other: ZcashTransaction): Int = when  {
+    override fun compareTo(other: ZcashTransaction): Int = when {
         transactionHash.contentEquals(other.transactionHash) -> 0
         timestamp == other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
         else -> timestamp.compareTo(other.timestamp)
@@ -66,6 +84,10 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             } catch (t: Throwable) {
                 "Unable to parse memo."
             }
+    }
+
+    enum class ShieldDirection {
+        Shield, Unshield
     }
 
 }

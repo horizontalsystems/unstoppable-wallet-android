@@ -56,6 +56,7 @@ class TransactionAdapterManager(
                     BlockchainType.Avalanche,
                     BlockchainType.Optimism,
                     BlockchainType.Base,
+                    BlockchainType.ZkSync,
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
@@ -69,6 +70,9 @@ class TransactionAdapterManager(
                     }
                     BlockchainType.Ton -> {
                         adapterFactory.tonTransactionsAdapter(wallet.transactionSource)
+                    }
+                    BlockchainType.Stellar -> {
+                        adapterFactory.stellarTransactionsAdapter(wallet.transactionSource)
                     }
                     else -> adapter as? ITransactionsAdapter
                 }

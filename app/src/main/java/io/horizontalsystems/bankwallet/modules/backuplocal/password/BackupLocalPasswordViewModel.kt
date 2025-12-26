@@ -120,7 +120,10 @@ class BackupLocalPasswordViewModel(
                             accountManager.update(account.copy(isFileBackedUp = true))
                         }
 
-                        stat(page = StatPage.ExportWalletToFiles, event = StatEvent.ExportWallet(account.type.statAccountType))
+                        stat(
+                            page = StatPage.ExportWalletToFiles,
+                            event = StatEvent.ExportWallet(account.type.statAccountType)
+                        )
                     }
                 }
 

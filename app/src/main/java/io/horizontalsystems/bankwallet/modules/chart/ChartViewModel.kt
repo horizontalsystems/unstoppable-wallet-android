@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.SelectedItem
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -138,11 +138,18 @@ open class ChartViewModel(
                     diff
                 )
             }
+
+            val diff = if (chartPointsWrapper.customHint == null) {
+                Value.Percent(service.chartPointsDiff(chartData.items))
+            } else {
+                null
+            }
+
             ChartModule.ChartHeaderView(
                 value = currentValue,
-                valueHint = null,
+                valueHint = chartPointsWrapper.customHint,
                 date = null,
-                diff = Value.Percent(chartData.diff()),
+                diff = diff,
                 extraData = dominanceData
             )
         }
@@ -177,7 +184,7 @@ open class ChartViewModel(
     }
 
     private fun getFormattedValue(value: Float, currency: Currency): String {
-        return valueFormatter.formatValue(currency,  value.toBigDecimal())
+        return valueFormatter.formatMinMaxValue(currency,  value.toBigDecimal())
     }
 
     override fun onCleared() {
@@ -202,7 +209,7 @@ open class ChartViewModel(
         val rsi = item.rsi
         val macd = item.macd
         val dominance = item.dominance
-        val volume = item.volume
+        val chartVolume = item.volume
 
         return when {
             movingAverages.isNotEmpty() || rsi != null || macd != null -> {
@@ -214,8 +221,13 @@ open class ChartViewModel(
                     null
                 )
             }
-            volume != null -> ChartModule.ChartHeaderExtraData.Volume(
-                App.numberFormatter.formatFiatShort(volume.toBigDecimal(), service.currency.symbol, 2)
+            chartVolume != null -> ChartModule.ChartHeaderExtraData.Volume(
+                volume = App.numberFormatter.formatFiatShort(
+                    chartVolume.value.toBigDecimal(),
+                    service.currency.symbol,
+                    2
+                ),
+                type = chartVolume.type
             )
             else -> null
         }

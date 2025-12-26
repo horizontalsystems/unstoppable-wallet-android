@@ -30,6 +30,7 @@ object MarketFiltersModule {
         PriceChange(R.string.Market_Filter_PriceChange),
         PricePeriod(R.string.Market_Filter_PricePeriod),
         TradingSignals(R.string.Market_Filter_TradingSignals),
+        PriceCloseTo(R.string.Market_Filter_PriceCloseTo),
     }
 
     data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)
@@ -55,12 +56,19 @@ enum class FilterTradingSignal(@StringRes val titleResId: Int) {
     }
 }
 
-enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
-    Top100(100, R.string.Market_Filter_Top_100),
-    Top250(250, R.string.Market_Filter_Top_250),
-    Top500(500, R.string.Market_Filter_Top_500),
-    Top1000(1000, R.string.Market_Filter_Top_1000),
-    Top1500(1500, R.string.Market_Filter_Top_1500),
+enum class CoinList(
+    val itemsCount: Int,
+    @StringRes val titleResId: Int,
+    @StringRes val descriptionResId: Int
+) {
+    Top100(100, R.string.Market_Filter_Top_100, R.string.Market_Filter_Top_100_Description),
+    Top200(200, R.string.Market_Filter_Top_200, R.string.Market_Filter_Top_200_Description),
+    Top300(300, R.string.Market_Filter_Top_300, R.string.Market_Filter_Top_300_Description),
+    Top500(500, R.string.Market_Filter_Top_500, R.string.Market_Filter_Top_300_Description),
+    Top1000(1000, R.string.Market_Filter_Top_1000, R.string.Market_Filter_Top_1000_Description),
+    Top1500(1500, R.string.Market_Filter_Top_1500, R.string.Market_Filter_Top_1500_Description),
+    Top2000(2000, R.string.Market_Filter_Top_2000, R.string.Market_Filter_Top_2000_Description),
+    Top2500(2500, R.string.Market_Filter_Top_2500, R.string.Market_Filter_Top_2500_Description),
 }
 
 enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>) {
@@ -158,10 +166,19 @@ enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
     TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M),
     TimePeriod_3M(R.string.Market_Filter_TimePeriod_3M),
     TimePeriod_6M(R.string.Market_Filter_TimePeriod_6M),
-    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y);
+    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y),
+    TimePeriod_2Y(R.string.Market_Filter_TimePeriod_2Y),
+    TimePeriod_3Y(R.string.Market_Filter_TimePeriod_3Y),
+    TimePeriod_4Y(R.string.Market_Filter_TimePeriod_4Y),
+    TimePeriod_5Y(R.string.Market_Filter_TimePeriod_5Y);
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)
+}
+
+enum class PriceCloseTo(val titleResId: Int, val descriptionResId: Int) {
+    Ath(R.string.Market_Filter_ATH, R.string.Market_Filter_ATH_Description),
+    Atl(R.string.Market_Filter_ATL, R.string.Market_Filter_ATL_Description),
 }
 
 enum class PriceChange(
@@ -214,6 +231,8 @@ enum class PriceChange(
 enum class TextColor{
     Remus, Lucian, Grey, Leah
 }
+
+data class SectorItem(val id: Int, val title: String)
 
 class FilterViewItemWrapper<T>(val title: String?, val item: T) {
     override fun equals(other: Any?) = when {

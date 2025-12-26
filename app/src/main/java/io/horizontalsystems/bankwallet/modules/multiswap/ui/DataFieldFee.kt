@@ -27,30 +27,45 @@ fun DataFieldFee(
     primary: String,
     secondary: String,
 ) {
+    DataFieldFeeTemplate(
+        navController = navController,
+        primary = primary,
+        secondary = secondary,
+        title = stringResource(id = R.string.FeeSettings_NetworkFee),
+        infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+    )
+}
+
+@Composable
+fun DataFieldFeeTemplate(
+    navController: NavController,
+    primary: String,
+    secondary: String,
+    title: String,
+    infoText: String?,
+) {
     QuoteInfoRow(
         title = {
-            val title = stringResource(id = R.string.FeeSettings_NetworkFee)
-            val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-
             subhead2_grey(text = title)
 
-            Image(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable(
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(title, infoText)
-                            )
-                        },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = ""
-            )
-
+            infoText?.let {
+                Image(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .clickable(
+                            onClick = {
+                                navController.slideFromBottom(
+                                    R.id.feeSettingsInfoDialog,
+                                    FeeSettingsInfoDialog.Input(title, infoText)
+                                )
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ),
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = ""
+                )
+            }
         },
         value = {
             Column(horizontalAlignment = Alignment.End) {

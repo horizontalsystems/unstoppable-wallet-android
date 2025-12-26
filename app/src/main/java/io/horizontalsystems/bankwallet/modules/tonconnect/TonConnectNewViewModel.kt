@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.tonconnect
 import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
+import com.tonapps.wallet.data.tonconnect.entities.reply.DAppConnectEventError
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
@@ -80,8 +81,32 @@ class TonConnectNewViewModel(
     }
 
     fun reject() {
-        finish = true
-        emitState()
+        viewModelScope.launch {
+            try {
+                val manifest = manifest ?: throw NoManifestError()
+                val account = account ?: throw IllegalArgumentException("Empty account")
+                val dapp = tonConnectKit.newApp(
+                    manifest,
+                    account.id,
+                    false,
+                    requestEntity.id,
+                    account.id,
+                    false
+                )
+
+                val error = DAppConnectEventError(
+                    id = System.currentTimeMillis().toString(),
+                    errorCode = 300,
+                    errorMessage = "User declined the transaction"
+                )
+
+                tonConnectKit.send(dapp, error.toJSON())
+                finish = true
+            } catch (e: Throwable) {
+                toast = e.message?.nullIfBlank() ?: e.javaClass.simpleName
+            }
+            emitState()
+        }
     }
 
     fun onToastShow() {
