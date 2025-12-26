@@ -162,18 +162,16 @@ fun WCSendEthRequestScreen(
                     sessionRequestUI.walletName
                 )
 
-                uiState.networkFee?.let { fee ->
-                    FeeCell(
-                        primaryValue = fee.primary.getFormatted(),
-                        secondaryValue = fee.secondary?.getFormatted(),
-                        onInfoClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(feeText, feeInfoText)
-                            )
-                        }
-                    )
-                }
+                FeeCell(
+                    primaryValue = uiState.networkFee?.primary?.getFormatted(),
+                    secondaryValue = uiState.networkFee?.secondary?.getFormatted(),
+                    onInfoClick = {
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                        )
+                    }
+                )
             }
             ButtonsGroupHorizontal {
                 HSButton(
@@ -190,7 +188,7 @@ fun WCSendEthRequestScreen(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    enabled = buttonEnabled,
+                    enabled = buttonEnabled && uiState.sendEnabled,
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
