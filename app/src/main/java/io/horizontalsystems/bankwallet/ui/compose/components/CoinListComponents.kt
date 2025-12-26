@@ -11,7 +11,6 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,24 +18,25 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -65,11 +65,19 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSCellButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun CoinList(
+fun CoinListSlidable(
     listState: LazyListState = rememberLazyListState(),
     items: List<MarketViewItem>,
     scrollToTop: Boolean,
@@ -82,7 +90,10 @@ fun CoinList(
     val coroutineScope = rememberCoroutineScope()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
-    LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
+    LazyColumn(
+        state = listState,
+        userScrollEnabled = userScrollEnabled
+    ) {
         preItems.invoke(this)
         itemsIndexed(items, key = { _, item -> item.coinUid }) { _, item ->
             Box(
@@ -90,31 +101,23 @@ fun CoinList(
                     .fillMaxWidth()
                     .height(IntrinsicSize.Max)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
-                        .align(Alignment.CenterEnd)
-                        .width(100.dp)
-                        .clickable {
-                            if (item.favorited) {
-                                onRemoveFavorite(item.coinUid)
-                            } else {
-                                onAddFavorite(item.coinUid)
-                            }
-                            coroutineScope.launch {
-                                delay(200)
-                                revealedCardId = null
-                            }
-                        },
-                    contentAlignment = Alignment.Center
+                HSCellButton(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                    iconTint = ComposeAppTheme.colors.blade,
+                    backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
                 ) {
-                    Icon(
-                        painter = painterResource(id = if (item.favorited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
-                        tint = ComposeAppTheme.colors.claude,
-                        contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
-                    )
+                    if (item.favorited) {
+                        onRemoveFavorite(item.coinUid)
+                    } else {
+                        onAddFavorite(item.coinUid)
+                    }
+                    coroutineScope.launch {
+                        delay(200)
+                        revealedCardId = null
+                    }
                 }
+
                 DraggableCardSimple(
                     key = item.coinUid,
                     isRevealed = revealedCardId == item.coinUid,
@@ -142,11 +145,108 @@ fun CoinList(
                         )
                     }
                 )
-                Divider(
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
-                    modifier = Modifier.align(Alignment.BottomCenter)
-                )
+                HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
+            }
+        }
+        item {
+            VSpacer(36.dp)
+        }
+        if (scrollToTop) {
+            coroutineScope.launch {
+                listState.scrollToItem(0)
+            }
+        }
+    }
+}
+
+@Composable
+fun CoinList(
+    listState: LazyListState = rememberLazyListState(),
+    items: List<MarketViewItem>,
+    scrollToTop: Boolean,
+    onAddFavorite: (String) -> Unit,
+    onRemoveFavorite: (String) -> Unit,
+    onCoinClick: (String) -> Unit,
+    userScrollEnabled: Boolean = true,
+    preItems: LazyListScope.() -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
+        preItems.invoke(this)
+        itemsIndexed(items, key = { _, item -> item.coinUid }) { _, item ->
+            BoxBordered(bottom = true) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onCoinClick.invoke(item.fullCoin.coin.uid) },
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        CellPrimary(
+                            left = {
+                                CellLeftImage(
+                                    type = ImageType.Ellipse,
+                                    size = 32,
+                                    painter = rememberAsyncImagePainter(
+                                        model = item.fullCoin.coin.imageUrl,
+                                        error = item.fullCoin.coin.alternativeImageUrl?.let { alternativeUrl ->
+                                            rememberAsyncImagePainter(
+                                                model = alternativeUrl,
+                                                error = painterResource(item.fullCoin.iconPlaceholder)
+                                            )
+                                        } ?: painterResource(item.fullCoin.iconPlaceholder)
+                                    ),
+                                )
+                            },
+                            middle = {
+                                CellMiddleInfo(
+                                    title = item.fullCoin.coin.code.hs,
+                                    badge = item.signal?.name?.hs,
+                                    subtitle = item.subtitle.hs,
+                                    subtitleBadge = item.rank?.hs,
+                                )
+                            },
+                            right = {
+                                CellRightInfo(
+                                    title = item.value.hs,
+                                    subtitle = marketDataValueComponent(item.marketDataValue)
+                                )
+                            },
+                        )
+                    }
+                    if (item.favorited) {
+                        HsIconButton(
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .size(20.dp),
+                            onClick = {
+                                onRemoveFavorite(item.coinUid)
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_heart_filled_20),
+                                contentDescription = "heart icon button",
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                        }
+                    } else {
+                        HsIconButton(
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .size(20.dp),
+                            onClick = {
+                                onAddFavorite(item.coinUid)
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_heart_20),
+                                contentDescription = "heart icon button",
+                                tint = ComposeAppTheme.colors.grey
+                            )
+                        }
+                    }
+                }
             }
         }
         item {
@@ -216,27 +316,23 @@ fun ScreenMessageWithAction(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.ime)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(
-                    color = ComposeAppTheme.colors.raina,
-                    shape = CircleShape
-                ),
+            modifier = Modifier.size(104.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(72.dp),
                 painter = painterResource(icon),
                 contentDescription = text,
                 tint = ComposeAppTheme.colors.grey
             )
         }
-        Spacer(Modifier.height(32.dp))
+        VSpacer(16.dp)
         subhead2_grey(
             modifier = Modifier.padding(horizontal = 48.dp),
             text = text,
@@ -244,9 +340,10 @@ fun ScreenMessageWithAction(
             overflow = TextOverflow.Ellipsis,
         )
         actionsComposable?.let { composable ->
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
             composable.invoke()
         }
+        VSpacer(62.dp)
     }
 }
 
@@ -260,64 +357,29 @@ fun SortMenu(title: TranslatableString, onClick: () -> Unit) {
 }
 
 @Composable
-fun SortMenu(titleRes: Int, onClick: () -> Unit) {
-    SortMenu(TranslatableString.ResString(titleRes), onClick)
-}
-
-@Composable
-fun TopCloseButton(
-    onCloseButtonClick: () -> Unit
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Box(
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onCloseButtonClick.invoke()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_close),
-                contentDescription = "close icon",
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp),
-                tint = ComposeAppTheme.colors.jacob
-            )
-        }
-    }
-}
-
-@Composable
-fun DescriptionCard(title: String, description: String, image: ImageSource) {
+fun DescriptionCard(title: String?, description: String, image: ImageSource) {
     Column {
         Row(
             modifier = Modifier
                 .height(108.dp)
-                .background(ComposeAppTheme.colors.tyler)
+                .background(ComposeAppTheme.colors.tyler),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 12.dp, end = 8.dp)
+                    .padding(start = 16.dp, end = 8.dp)
                     .weight(1f)
             ) {
-                Text(
-                    text = title,
-                    style = ComposeAppTheme.typography.headline1,
-                    color = ComposeAppTheme.colors.leah,
-                )
+                title?.let {
+                    Text(
+                        text = it,
+                        style = ComposeAppTheme.typography.headline1,
+                        color = ComposeAppTheme.colors.leah,
+                    )
+                    VSpacer(6.dp)
+                }
                 subhead2_grey(
                     text = description,
-                    modifier = Modifier.padding(top = 6.dp),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -341,7 +403,7 @@ fun CategoryCard(
 ) {
     Card(
         modifier = Modifier.height(128.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = 0.dp,
         backgroundColor = ComposeAppTheme.colors.lawrence,
         onClick = onClick
@@ -367,6 +429,7 @@ fun CategoryCard(
                         )
                     }
                 }
+
                 is DiscoveryItem.Category -> {
                     Crossfade(
                         targetState = type.coinCategory.imageUrl,
@@ -374,7 +437,8 @@ fun CategoryCard(
                         modifier = Modifier
                             .height(108.dp)
                             .width(76.dp)
-                            .align(Alignment.TopEnd)) { imageRes ->
+                            .align(Alignment.TopEnd)
+                    ) { imageRes ->
                         Image(
                             painter = rememberAsyncImagePainter(imageRes),
                             contentDescription = "category image",
@@ -420,6 +484,17 @@ fun CategoryCard(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewScreenMessageWithAction() {
+    ComposeAppTheme {
+        ScreenMessageWithAction(
+            text = "Sync error. Try again",
+            icon = R.drawable.warning_filled_24
+        )
     }
 }
 

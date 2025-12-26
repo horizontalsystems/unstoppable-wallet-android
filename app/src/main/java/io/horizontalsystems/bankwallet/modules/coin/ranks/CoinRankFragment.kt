@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,8 +16,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +34,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -46,49 +42,30 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class CoinRankFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val type = navController.getInput<RankType>()
-
-        type?.let { rankType ->
-            CoinRankScreen(
-                rankType,
-                navController,
-            )
-        } ?: run {
-            ScreenMessageWithAction(
-                text = stringResource(R.string.Error),
-                icon = R.drawable.ic_error_48
-            ) {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(horizontal = 48.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(R.string.Button_Close),
-                    onClick = { navController.popBackStack() }
-                )
-            }
+        withInput<RankType>(navController) { type ->
+            CoinRankScreen(type, navController)
         }
     }
 }
@@ -105,23 +82,18 @@ private fun CoinRankScreen(
     val uiState = viewModel.uiState
     val viewItems = viewModel.uiState.rankViewItems
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+    HSScaffold(
+        title = "",
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = { navController.popBackStack() }
             )
-        }
-    ) { padding ->
+        )
+    ) {
         Crossfade(
             targetState = uiState.viewState,
-            modifier = Modifier.padding(padding),
             label = ""
         ) { viewItemState ->
             when (viewItemState) {
@@ -187,10 +159,7 @@ private fun LazyListScope.coinRankList(
     navController: NavController
 ) {
     item {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-        )
+        HsDivider()
     }
     items(items) { item ->
         CoinRankCell(
@@ -245,7 +214,7 @@ private fun CoinRankCell(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                body_leah(
+                headline2_leah(
                     text = name,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
@@ -263,9 +232,6 @@ private fun CoinRankCell(
             }
             HSpacer(16.dp)
         }
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-        )
+        HsDivider()
     }
 }

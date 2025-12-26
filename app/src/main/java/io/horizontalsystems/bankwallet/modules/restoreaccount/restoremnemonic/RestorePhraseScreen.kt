@@ -16,13 +16,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -39,7 +44,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -80,7 +84,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BoxTyler44
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -91,16 +94,17 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CustomKeyboardWarni
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -119,7 +123,8 @@ fun RestorePhrase(
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
-    val statPage = if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
+    val statPage =
+        if (advanced) StatPage.ImportWalletFromKeyAdvanced else StatPage.ImportWalletFromKey
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
@@ -128,43 +133,46 @@ fun RestorePhrase(
     var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
     val keyboardState by observeKeyboardState()
 
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-            viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+                textState =
+                    textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+                viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+            }
         }
-    }
 
     val borderColor = if (uiState.error != null) {
         ComposeAppTheme.colors.red50
     } else {
-        ComposeAppTheme.colors.steel20
+        ComposeAppTheme.colors.blade
     }
 
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(R.string.ManageAccounts_ImportWallet),
-            navigationIcon = {
-                HsBackButton(onClick = onBackClick)
-            },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Next),
-                    onClick = viewModel::onProceed
-                )
+    HSScaffold(
+        title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(
+            R.string.ManageAccounts_ImportWallet
+        ),
+        onBack = onBackClick,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Next),
+                onClick = viewModel::onProceed,
+                tint = ComposeAppTheme.colors.jacob
             )
         )
-        Column {
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding()
+        ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Spacer(Modifier.height(12.dp))
+                VSpacer(12.dp)
 
                 HeaderText(stringResource(id = R.string.ManageAccount_Name))
                 FormsInput(
@@ -174,19 +182,19 @@ fun RestorePhrase(
                     hint = viewModel.defaultName,
                     onValueChange = viewModel::onEnterName
                 )
-                Spacer(Modifier.height(32.dp))
+                VSpacer(32.dp)
 
                 if (advanced) {
                     RestoreByMenu(restoreMenuViewModel)
-                    Spacer(Modifier.height(32.dp))
+                    VSpacer(32.dp)
                 }
 
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                         .background(ComposeAppTheme.colors.lawrence),
                 ) {
 
@@ -222,7 +230,7 @@ fun RestorePhrase(
                             textStyle = ComposeAppTheme.typography.body
                         ),
                         maxLines = 6,
-                        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                         visualTransformation = {
                             try {
                                 val annotatedString = buildAnnotatedString {
@@ -263,10 +271,14 @@ fun RestorePhrase(
                                 modifier = Modifier.padding(end = 16.dp),
                                 icon = R.drawable.ic_delete_20,
                                 onClick = {
-                                    textState = textState.copy(text = "", selection = TextRange(0))
+                                    textState =
+                                        textState.copy(text = "", selection = TextRange(0))
                                     viewModel.onEnterMnemonicPhrase("", "".length)
 
-                                    stat(page = statPage, event = StatEvent.Clear(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.Clear(StatEntity.RecoveryPhrase)
+                                    )
                                 }
                             )
                         } else {
@@ -278,7 +290,10 @@ fun RestorePhrase(
                                         QRScannerActivity.getScanQrIntent(context)
                                     )
 
-                                    stat(page = statPage, event = StatEvent.ScanQr(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.ScanQr(StatEntity.RecoveryPhrase)
+                                    )
                                 }
                             )
 
@@ -298,25 +313,27 @@ fun RestorePhrase(
                                         )
                                     }
 
-                                    stat(page = statPage, event = StatEvent.Paste(StatEntity.RecoveryPhrase))
+                                    stat(
+                                        page = statPage,
+                                        event = StatEvent.Paste(StatEntity.RecoveryPhrase)
+                                    )
                                 },
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                    VSpacer(4.dp)
                 }
 
-                Spacer(Modifier.height(8.dp))
-
                 uiState.error?.let { errorText ->
+                    VSpacer(8.dp)
                     caption_lucian(
                         modifier = Modifier.padding(horizontal = 32.dp),
                         text = errorText
                     )
                 }
 
-                Spacer(Modifier.height(32.dp))
+                VSpacer(32.dp)
 
                 if (advanced) {
                     BottomSection(
@@ -326,6 +343,26 @@ fun RestorePhrase(
                         coroutineScope
                     )
                 } else {
+                    CellUniversalLawrenceSection(
+                        listOf(
+                            {
+                                PassphraseCell(
+                                    enabled = uiState.passphraseEnabled,
+                                    onCheckedChange = viewModel::onTogglePassphrase
+                                )
+                            }
+                        )
+                    )
+                    if (uiState.passphraseEnabled) {
+                        VSpacer(16.dp)
+                        PassPhraseBlock(
+                            error = uiState.passphraseError,
+                            onEnterPassphrase = {
+                                viewModel.onEnterPassphrase(it)
+                            }
+                        )
+                    }
+                    VSpacer(32.dp)
                     CellSingleLineLawrenceSection {
                         Row(
                             modifier = Modifier
@@ -346,12 +383,18 @@ fun RestorePhrase(
                         }
                     }
 
-                    Spacer(Modifier.height(32.dp))
+                    VSpacer(72.dp)
                 }
             }
 
-            Column {
-                if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
+            if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        // Add IME (keyboard) padding to push content above keyboard
+                        .windowInsetsPadding(WindowInsets.ime)
+                        .systemBarsPadding()
+                ) {
                     SuggestionsBar(wordSuggestions = uiState.wordSuggestions) { wordItem, suggestion ->
                         HudHelper.vibrate(context)
 
@@ -402,7 +445,6 @@ fun RestorePhrase(
 
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun BottomSection(
     viewModel: RestoreMnemonicViewModel,
@@ -412,13 +454,12 @@ private fun BottomSection(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var showLanguageSelectorDialog by remember { mutableStateOf(false) }
-    var hidePassphrase by remember { mutableStateOf(true) }
 
     if (showLanguageSelectorDialog) {
-        SelectorDialogCompose(
+        MenuGroup(
             title = stringResource(R.string.CreateWallet_Wordlist),
             items = viewModel.mnemonicLanguages.map {
-                SelectorItem(
+                MenuItemX(
                     stringResource(it.displayNameStringRes),
                     it == uiState.language,
                     it
@@ -458,22 +499,12 @@ private fun BottomSection(
     )
 
     if (uiState.passphraseEnabled) {
-        Spacer(modifier = Modifier.height(24.dp))
-        FormsInputPassword(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            hint = stringResource(R.string.Passphrase),
-            state = uiState.passphraseError?.let { DataState.Error(Exception(it)) },
-            onValueChange = viewModel::onEnterPassphrase,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            hide = hidePassphrase,
-            onToggleHide = {
-                hidePassphrase = !hidePassphrase
+        VSpacer(24.dp)
+        PassPhraseBlock(
+            error = uiState.passphraseError,
+            onEnterPassphrase = {
+                viewModel.onEnterPassphrase(it)
             }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextImportantWarning(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Restore_PassphraseDescription)
         )
     }
 
@@ -498,7 +529,31 @@ private fun BottomSection(
             )
         }
     }
-    Spacer(Modifier.height(32.dp))
+    Spacer(Modifier.height(62.dp))
+}
+
+@Composable
+private fun PassPhraseBlock(
+    error: String? = null,
+    onEnterPassphrase: (String) -> Unit = {}
+) {
+    var hidePassphrase by remember { mutableStateOf(true) }
+    FormsInputPassword(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        hint = stringResource(R.string.Passphrase),
+        state = error?.let { DataState.Error(Exception(it)) },
+        onValueChange = onEnterPassphrase,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        hide = hidePassphrase,
+        onToggleHide = {
+            hidePassphrase = !hidePassphrase
+        }
+    )
+    Spacer(modifier = Modifier.height(16.dp))
+    TextImportantWarning(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        text = stringResource(R.string.Restore_PassphraseDescription)
+    )
 }
 
 @Composable

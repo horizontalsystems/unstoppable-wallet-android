@@ -12,7 +12,7 @@ abstract class BaseTonAdapter(
     val decimals: Int
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter {
 
-    val tonKit = tonKitWrapper.tonKit
+    protected val tonKit = tonKitWrapper.tonKit
 
     override val debugInfo: String
         get() = ""

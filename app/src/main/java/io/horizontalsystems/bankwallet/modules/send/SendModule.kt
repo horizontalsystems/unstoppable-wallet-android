@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import java.math.BigDecimal
 
@@ -60,7 +61,7 @@ object SendModule {
 
 sealed class SendResult {
     object Sending : SendResult()
-    object Sent : SendResult()
+    class Sent(val transactionRecord: TransactionRecord? = null) : SendResult()
     class Failed(val caution: HSCaution) : SendResult()
 }
 

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,14 +25,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -47,10 +44,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_bran
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
@@ -59,13 +58,13 @@ class CoinMajorHoldersFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-
-        CoinMajorHoldersScreen(
-            input.coinUid,
-            input.blockchain,
-            navController,
-        )
+        withInput<Input>(navController) { input ->
+            CoinMajorHoldersScreen(
+                input.coinUid,
+                input.blockchain,
+                navController,
+            )
+        }
     }
 
     @Parcelize
@@ -82,19 +81,17 @@ private fun CoinMajorHoldersScreen(
     )
 ) {
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                title = blockchain.name,
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
-                )
+    HSScaffold(
+        title = blockchain.name,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = { navController.popBackStack() }
             )
-
+        )
+    ) {
+        Column {
             Crossfade(viewModel.uiState.viewState) { viewState ->
                 when (viewState) {
                     ViewState.Loading -> {
@@ -214,7 +211,7 @@ private fun TopWalletCell(item: MajorHolderItem) {
         )
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
-            body_leah(text = item.sharePercent)
+            headline2_leah(text = item.sharePercent)
             VSpacer(1.dp)
             subhead2_grey(text = item.balance)
         }

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitWrapper
 import io.horizontalsystems.solanakit.SolanaKit
 import io.horizontalsystems.solanakit.models.Address
@@ -14,7 +13,7 @@ import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper, decimal), ISendSolanaAdapter {
+class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper, decimal) {
 
     // IAdapter
 

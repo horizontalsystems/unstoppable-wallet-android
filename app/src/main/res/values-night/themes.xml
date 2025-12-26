@@ -8,8 +8,6 @@
     <style name="Theme.AppTheme.DarkModeAppTheme" parent="Theme.AppTheme">
         <item name="colorAccent">@color/yellow_d</item>
         <item name="android:windowBackground">@color/dark</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="actionMenuTextAppearance">@style/Headline2</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_d</item>
@@ -44,7 +42,6 @@
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
         <item name="SecondaryButtonStartGradient">#33ffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
-        <item name="SplashScreenBackground">@drawable/ic_intro_background</item>
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white_20</item>

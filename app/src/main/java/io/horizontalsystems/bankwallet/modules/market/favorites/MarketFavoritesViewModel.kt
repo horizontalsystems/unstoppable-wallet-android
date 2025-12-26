@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
-import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -37,7 +37,6 @@ class MarketFavoritesViewModel(
 
     private var isRefreshing = false
     private var viewState: ViewState = ViewState.Loading
-    private var showSignalsInfo = false
 
     init {
         viewModelScope.launch {
@@ -58,6 +57,12 @@ class MarketFavoritesViewModel(
             }
         }
 
+        viewModelScope.launch {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                refresh()
+            }
+        }
+
         service.start()
     }
 
@@ -71,7 +76,6 @@ class MarketFavoritesViewModel(
             sortingField = service.watchlistSorting,
             period = service.timeDuration,
             showSignal = service.showSignals,
-            showSignalsInfo = showSignalsInfo
         )
     }
 
@@ -111,26 +115,24 @@ class MarketFavoritesViewModel(
         emitState()
     }
 
-    fun onToggleSignal() {
-        if (service.showSignals) {
-            service.hideSignals()
+    fun hideSignals() {
+        service.hideSignals()
 
-            stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(false))
-        } else {
-            showSignalsInfo = true
-            emitState()
-        }
-    }
-
-    fun onSignalsInfoShown() {
-        showSignalsInfo = false
-        emitState()
+        stat(
+            page = StatPage.Markets,
+            event = StatEvent.ShowSignals(false),
+            section = StatSection.Watchlist
+        )
     }
 
     fun showSignals() {
         service.showSignals()
 
-        stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(true))
+        stat(
+            page = StatPage.Markets,
+            event = StatEvent.ShowSignals(true),
+            section = StatSection.Watchlist
+        )
     }
 
     fun reorder(from: Int, to: Int) {

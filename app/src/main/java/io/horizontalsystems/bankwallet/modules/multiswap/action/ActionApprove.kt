@@ -18,10 +18,10 @@ class ActionApprove(
 ) : ISwapProviderAction {
 
     @Composable
-    override fun getTitle() = stringResource(R.string.Swap_Unlock)
+    override fun getTitle() = stringResource(R.string.Swap_Approve)
 
     @Composable
-    override fun getTitleInProgress() = stringResource(R.string.Swap_Unlocking)
+    override fun getTitleInProgress() = stringResource(R.string.Swap_Approving)
 
     override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
         val approveData = Eip20ApproveFragment.Input(

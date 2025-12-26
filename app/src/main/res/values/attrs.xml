@@ -36,5 +36,4 @@
     <attr name="ColorWindowBackground" format="reference" />
 
     <!--  Customise the class that is used to determine that the app is running in a test environment for LeakCanary -->
-    <string name="leak_canary_test_class_name">org.mockito.Mockito</string>
 </resources>

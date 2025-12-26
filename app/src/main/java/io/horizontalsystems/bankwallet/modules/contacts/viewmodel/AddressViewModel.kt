@@ -51,10 +51,10 @@ class AddressViewModel(
                 BlockchainType.Litecoin,
                 BlockchainType.Zcash,
                 BlockchainType.Solana,
-                BlockchainType.BinanceChain,
                 BlockchainType.ECash,
                 BlockchainType.Tron,
                 BlockchainType.Ton,
+                BlockchainType.Stellar,
             )
             val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
             val availableBlockchainUids =

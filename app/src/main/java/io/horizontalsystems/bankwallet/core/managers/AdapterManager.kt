@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -25,24 +23,19 @@ class AdapterManager(
     private val adapterFactory: AdapterFactory,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
-    private val tonKitManager: TonKitManager
-) : IAdapterManager, HandlerThread("A") {
+    private val tonKitManager: TonKitManager,
+    private val stellarKitManager: StellarKitManager,
+    private val moneroNodeManager: MoneroNodeManager
+) : IAdapterManager {
 
-    private val handler: Handler
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
     override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
         adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    init {
-        start()
-        handler = Handler(looper)
-    }
 
     override fun startAdapterManager() {
         coroutineScope.launch {
@@ -66,6 +59,11 @@ class AdapterManager(
                     .collect {
                         handleUpdatedKit(blockchain.type)
                     }
+            }
+        }
+        coroutineScope.launch {
+            moneroNodeManager.currentNodeUpdatedFlow.collect {
+                handleUpdatedKit(BlockchainType.Monero)
             }
         }
     }
@@ -101,18 +99,16 @@ class AdapterManager(
     }
 
     override suspend fun refresh() {
-        handler.post {
-            adaptersMap.values.forEach { it.refresh() }
-        }
+        adaptersMap.values.forEach { it.refresh() }
 
         for (blockchain in evmBlockchainManager.allBlockchains) {
             evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
         }
 
-        binanceKitManager.binanceKit?.refresh()
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
         tonKitManager.tonKitWrapper?.tonKit?.refresh()
+        stellarKitManager.stellarKitWrapper?.stellarKit?.refresh()
     }
 
     @Synchronized
@@ -143,38 +139,6 @@ class AdapterManager(
         }
     }
 
-    /**
-     * Partial refresh of adapters
-     * For the given list of wallets do:
-     * - remove corresponding adapters from adaptersMap and stop them
-     * - create new adapters, start and add them to adaptersMap
-     * - trigger adaptersReadySubject
-     */
-    @Synchronized
-    override fun refreshAdapters(wallets: List<Wallet>) {
-        handler.post {
-            val walletsToRefresh = wallets.filter { adaptersMap.containsKey(it) }
-
-            //remove and stop adapters
-            walletsToRefresh.forEach { wallet ->
-                adaptersMap.remove(wallet)?.let { previousAdapter ->
-                    previousAdapter.stop()
-                    adapterFactory.unlinkAdapter(wallet)
-                }
-            }
-
-            //add and start new adapters
-            walletsToRefresh.forEach { wallet ->
-                adapterFactory.getAdapterOrNull(wallet)?.let { adapter ->
-                    adaptersMap[wallet] = adapter
-                    adapter.start()
-                }
-            }
-
-            adaptersReadySubject.onNext(adaptersMap)
-        }
-    }
-
     override fun refreshByWallet(wallet: Wallet) {
         val blockchain = evmBlockchainManager.getBlockchain(wallet.token)
 
@@ -185,15 +149,9 @@ class AdapterManager(
         }
     }
 
-    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
-        return adaptersMap[wallet]
-    }
-
-    override fun getAdapterForToken(token: Token): IAdapter? {
+    override fun <T> getAdapterForToken(token: Token): T? {
         return walletManager.activeWallets.firstOrNull { it.token == token }
-            ?.let { wallet ->
-                adaptersMap[wallet]
-            }
+            ?.let { getAdapterForWallet(it) }
     }
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
@@ -204,4 +162,8 @@ class AdapterManager(
         return adaptersMap[wallet]?.let { it as? IReceiveAdapter }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getAdapterForWallet(wallet: Wallet): T? {
+        return adaptersMap[wallet] as? T
+    }
 }

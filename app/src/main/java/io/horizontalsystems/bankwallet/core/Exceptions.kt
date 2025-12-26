@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
@@ -24,6 +25,15 @@ open class HSCaution(
 
     fun isError() = type == Type.Error
     fun isWarning() = type == Type.Warning
+
+    fun toCautionViewItem() = CautionViewItem(
+        s.toString(),
+        description?.toString() ?: "",
+        when (type) {
+            Type.Error -> CautionViewItem.Type.Error
+            Type.Warning -> CautionViewItem.Type.Warning
+        }
+    )
 }
 class NotEnoughData() : Exception()
 class UnsupportedException(override val message: String?) : Exception()

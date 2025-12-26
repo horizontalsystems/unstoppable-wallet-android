@@ -3,7 +3,7 @@ package io.horizontalsystems.chartview.models
 class ChartPoint(
     val value: Float,
     val timestamp: Long,
-    val volume: Float? = null,
+    val chartVolume: ChartVolume? = null,
     val dominance: Float? = null,
 )
 
@@ -15,4 +15,14 @@ sealed class ChartIndicator {
         val signalLine: LinkedHashMap<Long, Float>,
         val histogram: LinkedHashMap<Long, Float>
     ) : ChartIndicator()
+}
+
+data class ChartVolume(
+    val value: Float,
+    val type: ChartVolumeType = ChartVolumeType.Volume,
+)
+
+enum class ChartVolumeType {
+    Volume,
+    Tvl
 }

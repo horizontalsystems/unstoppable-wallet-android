@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,10 +40,25 @@ abstract class BaseComposeFragment(
     }
 
     @Composable
+    protected inline fun <reified T : Parcelable> withInput(
+        navController: NavController,
+        content: @Composable (T) -> Unit
+    ) {
+        val input = try {
+            navController.requireInput<T>()
+        } catch (e: NullPointerException) {
+            navController.popBackStack()
+            return
+        }
+        content(input)
+    }
+
+    @Composable
     abstract fun GetContent(navController: NavController)
 
     override fun onResume() {
         super.onResume()
+        Log.i("AAA", "Fragment: ${this.javaClass.simpleName}")
         if (screenshotEnabled) {
             allowScreenshot()
         } else {

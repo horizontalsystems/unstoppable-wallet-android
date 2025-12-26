@@ -16,7 +16,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
@@ -29,8 +28,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.BoxBorderedTop
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -42,7 +41,9 @@ import java.math.BigDecimal
 class Eip20RevokeConfirmFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        Eip20RevokeScreen(navController, navController.requireInput())
+        withInput<Input>(navController) { input ->
+            Eip20RevokeScreen(navController, input)
+        }
     }
 
     @Parcelize
@@ -130,7 +131,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                 amountColor = ComposeAppTheme.colors.leah
             )
 
-            BoxBorderedTop {
+            BoxBordered(top = true) {
                 TransactionInfoAddressCell(
                     title = stringResource(R.string.Approve_Spender),
                     value = uiState.spenderAddress,
@@ -141,7 +142,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
             }
 
             uiState.contact?.let {
-                BoxBorderedTop {
+                BoxBordered(top = true) {
                     TransactionInfoContactCell(it.name)
                 }
             }

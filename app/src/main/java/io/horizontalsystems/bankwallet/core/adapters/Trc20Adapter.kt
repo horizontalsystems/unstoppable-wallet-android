@@ -2,11 +2,15 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendTronAdapter
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.TronKit.SyncState
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.TriggerSmartContract
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
@@ -14,14 +18,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.math.BigInteger
 
 class Trc20Adapter(
     tronKitWrapper: TronKitWrapper,
     contractAddress: String,
-    wallet: Wallet
-) : BaseTronAdapter(tronKitWrapper, wallet.decimal), ISendTronAdapter {
+    wallet: Wallet,
+    coinManager: ICoinManager,
+    baseToken: Token,
+    evmLabelManager: EvmLabelManager
+) : BaseTronAdapter(tronKitWrapper, wallet.decimal) {
 
     private val contractAddress: Address = Address.fromBase58(contractAddress)
+    private val transactionConverter = TronTransactionConverter(coinManager, tronKitWrapper, wallet.transactionSource, baseToken, evmLabelManager)
 
     // IAdapter
 
@@ -76,4 +85,29 @@ class Trc20Adapter(
         is SyncState.Syncing -> AdapterState.Syncing()
     }
 
+    suspend fun allowance(spenderAddress: String): BigDecimal {
+        val tronAddress = Address.fromBase58(spenderAddress)
+
+        return balanceInBigDecimal(tronKit.getTrc20Allowance(contractAddress, tronAddress), decimal)
+    }
+
+    fun approveTrc20TriggerSmartContract(spenderAddress: String, requiredAllowance: BigDecimal): TriggerSmartContract {
+        val tronAddress = Address.fromBase58(spenderAddress)
+        val amountBigInt = requiredAllowance.movePointRight(decimal).toBigInteger()
+
+        return tronKit.approveTrc20TriggerSmartContract(contractAddress, tronAddress, amountBigInt)
+    }
+
+    fun approveTrc20TriggerSmartContractUnlim(spenderAddress: String): TriggerSmartContract {
+        val tronAddress = Address.fromBase58(spenderAddress)
+        val max = BigInteger.ONE.shiftLeft(256).subtract(BigInteger.ONE)
+
+        return tronKit.approveTrc20TriggerSmartContract(contractAddress, tronAddress, max)
+    }
+
+    suspend fun getPendingTransactions(): List<TronTransactionRecord> {
+        return tronKit.getPendingTransactions(listOf(listOf(contractAddress.base58))).map {
+            transactionConverter.transactionRecord(it)
+        }
+    }
 }

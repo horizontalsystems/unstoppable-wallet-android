@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -42,6 +43,7 @@ class LanguageSettingsViewModel(
         if (localeType.tag == currentLocaleTag) {
             closeScreen = true
         } else {
+            App.pinComponent.keepUnlocked()
             localStorage.relaunchBySettingChange = true
             currentLocaleTag = localeType.tag
             reloadApp = true

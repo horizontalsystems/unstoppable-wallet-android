@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.UsedAddress
@@ -11,18 +12,15 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
-import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ecash.ECashKit
 import io.horizontalsystems.marketkit.models.BlockchainType
-import java.math.BigDecimal
 
 class ECashAdapter(
         override val kit: ECashKit,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold, 2), ECashKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, 2), ECashKit.Listener, ISendBitcoinAdapter {
 
     constructor(
         wallet: Wallet,
@@ -33,12 +31,6 @@ class ECashAdapter(
     init {
         kit.listener = this
     }
-
-    //
-    // BitcoinBaseAdapter
-    //
-
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // ECashKit Listener
@@ -79,9 +71,6 @@ class ECashAdapter(
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
     }
-
-    override val unspentOutputs: List<UnspentOutputInfo>
-        get() = kit.unspentOutputs
 
     override val blockchainType = BlockchainType.ECash
 

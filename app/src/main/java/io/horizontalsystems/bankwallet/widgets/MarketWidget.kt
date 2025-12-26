@@ -169,10 +169,6 @@ class MarketWidget : GlanceAppWidget() {
             "$deeplinkScheme://coin-page?uid=${item.uid}".toUri()
         }
 
-        MarketWidgetType.TopNfts -> {
-            "$deeplinkScheme://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
-        }
-
         MarketWidgetType.TopPlatforms -> {
             "$deeplinkScheme://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
         }
@@ -189,7 +185,6 @@ class MarketWidget : GlanceAppWidget() {
            val modifier =  when(type) {
                 MarketWidgetType.Watchlist,
                 MarketWidgetType.TopGainers -> GlanceModifier.size(32.dp).cornerRadius(16.dp)
-                MarketWidgetType.TopNfts,
                 MarketWidgetType.TopPlatforms -> GlanceModifier.size(32.dp)
             }
 
@@ -284,7 +279,7 @@ class MarketWidget : GlanceAppWidget() {
                 .background(ImageProvider(R.drawable.widget_list_item_badge_background))
                 .padding(horizontal = 4.dp, vertical = 2.dp),
             text = text,
-            style = TextStyle(color = AppWidgetTheme.colors.bran, fontSize = 10.sp, fontWeight = FontWeight.Medium),
+            style = TextStyle(color = AppWidgetTheme.colors.leah, fontSize = 10.sp, fontWeight = FontWeight.Medium),
         )
     }
 

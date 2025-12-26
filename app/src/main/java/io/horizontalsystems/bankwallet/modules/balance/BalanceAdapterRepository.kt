@@ -102,14 +102,10 @@ class BalanceAdapterRepository(
             ?: BalanceData(BigDecimal.ZERO)
     }
 
-    fun sendAllowed(wallet: Wallet): Boolean {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.sendAllowed() ?: false
-    }
-
     suspend fun warning(wallet: Wallet): BalanceWarning? {
         try {
             if (wallet.token.blockchainType is BlockchainType.Tron) {
-                (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.let { adapter ->
+                adapterManager.getAdapterForWallet<BaseTronAdapter>(wallet)?.let { adapter ->
                     if (!adapter.isAddressActive(adapter.receiveAddress))
                         return BalanceWarning.TronInactiveAccountWarning
                 }

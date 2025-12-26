@@ -8,19 +8,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -61,12 +66,12 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -75,12 +80,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
@@ -89,6 +95,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -191,35 +198,24 @@ private fun SwapScreenInner(
 
     val quote = uiState.quote
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Swap),
-                navigationIcon = {
-                    HsBackButton(onClick = onClickClose)
-                },
-                menuItems = buildList {
-                    uiState.timeRemainingProgress?.let { timeRemainingProgress ->
-                        add(
-                            MenuItemTimeoutIndicator(timeRemainingProgress)
-                        )
-                    }
-                }
-            )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+    HSScaffold(
+        title = stringResource(R.string.Swap),
+        onBack = onClickClose,
+        menuItems = buildList {
+            uiState.timeRemainingProgress?.let { timeRemainingProgress ->
+                add(
+                    MenuItemTimeoutIndicator(timeRemainingProgress)
+                )
+            }
+        }
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
         var amountInputHasFocus by remember { mutableStateOf(false) }
 
-        Box(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 VSpacer(height = 12.dp)
                 SwapInput(
@@ -242,6 +238,8 @@ private fun SwapScreenInner(
                         amountInputHasFocus = it.hasFocus
                     },
                 )
+                VSpacer(height = 8.dp)
+                AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
 
                 VSpacer(height = 12.dp)
 
@@ -269,6 +267,18 @@ private fun SwapScreenInner(
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
                             title = stringResource(R.string.Swap_Quoting),
+                            enabled = false,
+                            loadingIndicator = true,
+                            onClick = {}
+                        )
+                    }
+
+                    SwapStep.Initializing -> {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.Swap_Initializing),
                             enabled = false,
                             loadingIndicator = true,
                             onClick = {}
@@ -340,10 +350,6 @@ private fun SwapScreenInner(
                             it.GetContent(navController, false)
                         }
                     }
-                } else {
-                    CardsSwapInfo {
-                        AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
-                    }
                 }
 
                 if (uiState.error is PriceImpactTooHigh) {
@@ -364,6 +370,10 @@ private fun SwapScreenInner(
                     }
                 }
 
+                if (uiState.cautions.isNotEmpty()) {
+                    Cautions(cautions = uiState.cautions)
+                }
+
                 VSpacer(height = 32.dp)
             }
 
@@ -371,19 +381,28 @@ private fun SwapScreenInner(
             if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
                 val hasNonZeroBalance =
                     uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-
-                SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    onDelete = {
-                        onEnterAmount.invoke(null)
-                    },
-                    onSelect = {
-                        focusManager.clearFocus()
-                        onEnterAmountPercentage.invoke(it)
-                    },
-                    selectEnabled = hasNonZeroBalance,
-                    deleteEnabled = uiState.amountIn != null,
-                )
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        // Add IME (keyboard) padding to push content above keyboard
+                        .windowInsetsPadding(
+                            WindowInsets.ime
+                        )
+                        .systemBarsPadding()
+                ) {
+                    SuggestionsBar(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        onDelete = {
+                            onEnterAmount.invoke(null)
+                        },
+                        onSelect = {
+                            focusManager.clearFocus()
+                            onEnterAmountPercentage.invoke(it)
+                        },
+                        selectEnabled = hasNonZeroBalance,
+                        deleteEnabled = uiState.amountIn != null,
+                    )
+                }
             }
         }
     }
@@ -391,20 +410,16 @@ private fun SwapScreenInner(
 
 @Composable
 private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
-    QuoteInfoRow(
-        title = {
-            subhead2_grey(text = stringResource(R.string.Swap_AvailableBalance))
-        },
-        value = {
-            val text = if (tokenIn != null && availableBalance != null) {
-                CoinValue(tokenIn, availableBalance).getFormattedFull()
-            } else {
-                "-"
-            }
-
-            subhead2_leah(text = text)
+    Row(modifier = Modifier.padding(horizontal = 32.dp)) {
+        caption_grey(text = stringResource(R.string.Swap_AvailableBalance))
+        val text = if (tokenIn != null && availableBalance != null) {
+            CoinValue(tokenIn, availableBalance).getFormattedFull()
+        } else {
+            "---"
         }
-    )
+        Spacer(modifier = Modifier.weight(1f))
+        caption_grey(text = text)
+    }
 }
 
 @Composable
@@ -434,8 +449,7 @@ fun PriceImpactField(
                         },
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    )
-                ,
+                    ),
                 painter = painterResource(id = R.drawable.ic_info_20),
                 contentDescription = ""
             )
@@ -443,7 +457,7 @@ fun PriceImpactField(
         value = {
             Text(
                 text = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString()),
-                style = ComposeAppTheme.typography.subhead2,
+                style = ComposeAppTheme.typography.subheadR,
                 color = getPriceImpactColor(priceImpactLevel),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -492,6 +506,8 @@ private fun ProviderField(
 
 @Composable
 fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
+    if (amountIn <= BigDecimal.ZERO || amountOut <= BigDecimal.ZERO) return
+
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
@@ -580,11 +596,7 @@ private fun SwapInput(
                 onClickCoin = onClickCoinTo
             )
         }
-        Divider(
-            modifier = Modifier.align(Alignment.Center),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
+        HsDivider(modifier = Modifier.align(Alignment.Center))
         ButtonSecondaryCircle(
             modifier = Modifier.align(Alignment.Center),
             icon = R.drawable.ic_arrow_down_20,
@@ -706,7 +718,7 @@ private fun CoinSelector(
 }
 
 @Composable
-private fun FiatAmountInput(
+fun FiatAmountInput(
     value: BigDecimal?,
     currency: Currency,
     onValueChange: (BigDecimal?) -> Unit,
@@ -741,7 +753,7 @@ private fun FiatAmountInput(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal
             ),
-            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
                     body_grey(text = "0")
@@ -779,9 +791,10 @@ private fun Selector(
 }
 
 @Composable
-private fun AmountInput(
+fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
+    focusRequester: FocusRequester = FocusRequester()
 ) {
     var amount by rememberSaveable {
         mutableStateOf(value)
@@ -806,6 +819,7 @@ private fun AmountInput(
     BasicTextField(
         modifier = Modifier
             .fillMaxWidth()
+            .focusRequester(focusRequester)
             .onFocusChanged {
                 setCursorToEndOnFocused = it.isFocused
 
@@ -842,7 +856,7 @@ private fun AmountInput(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Decimal
         ),
-        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
                 headline1_grey(text = "0")
@@ -855,8 +869,8 @@ private fun AmountInput(
 @Composable
 fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
-        PriceImpactLevel.Warning,
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.grey
+        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
         else -> ComposeAppTheme.colors.grey

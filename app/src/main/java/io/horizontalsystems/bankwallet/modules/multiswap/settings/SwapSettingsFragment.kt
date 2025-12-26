@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,11 +15,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class SwapSettingsFragment : BaseComposeFragment() {
     @Composable
@@ -36,19 +33,14 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
         viewModelStoreOwner = previousBackStackEntry!!,
     )
 
-    val viewModel = viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory(swapViewModel.getSettings()))
+    val viewModel =
+        viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory(swapViewModel.getSettings()))
 
     val uiState = viewModel.uiState
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.SwapSettings_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-            )
-        },
+    HSScaffold(
+        title = stringResource(R.string.SwapSettings_Title),
+        onBack = navController::popBackStack,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -64,11 +56,8 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                 )
             }
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
-        LazyColumn(
-            modifier = Modifier.padding(it),
-        ) {
+        LazyColumn {
             item {
                 VSpacer(height = 12.dp)
             }

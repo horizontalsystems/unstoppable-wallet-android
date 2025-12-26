@@ -6,7 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -35,28 +34,32 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoin
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 
 class MetricsPageFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val metricsType = navController.requireInput<MetricsType>()
-        val factory = MetricsPageModule.Factory(metricsType)
-        val chartViewModel by viewModels<ChartViewModel> { factory }
-        val viewModel by viewModels<MetricsPageViewModel> { factory }
-        MetricsPage(viewModel, chartViewModel, navController) {
-            onCoinClick(it, navController)
+        withInput<MetricsType>(navController) { metricsType ->
+            val factory = MetricsPageModule.Factory(metricsType)
+            val chartViewModel by viewModels<ChartViewModel> { factory }
+            val viewModel by viewModels<MetricsPageViewModel> { factory }
+            MetricsPage(viewModel, chartViewModel, navController) {
+                onCoinClick(it, navController)
 
-            stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
+                stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
+            }
         }
     }
 
@@ -76,84 +79,97 @@ class MetricsPageFragment : BaseComposeFragment() {
     ) {
         val uiState = viewModel.uiState
 
-        Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
+        HSScaffold(
+            title = "",
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Close),
+                    icon = R.drawable.ic_close,
+                    onClick = {
+                        navController.popBackStack()
+                    }
                 )
             )
+        ) {
+            Column(Modifier.navigationBarsPadding()) {
+                HSSwipeRefresh(
+                    refreshing = uiState.isRefreshing,
+                    onRefresh = {
+                        viewModel.refresh()
+                        chartViewModel.refresh()
+                    }
+                ) {
+                    Crossfade(uiState.viewState, label = "") { viewState ->
+                        when (viewState) {
+                            ViewState.Loading -> {
+                                Loading()
+                            }
 
-            HSSwipeRefresh(
-                refreshing = uiState.isRefreshing,
-                onRefresh = {
-                    viewModel.refresh()
-                }
-            ) {
-                Crossfade(uiState.viewState, label = "") { viewState ->
-                    when (viewState) {
-                        ViewState.Loading -> {
-                            Loading()
-                        }
+                            is ViewState.Error -> {
+                                ListErrorView(
+                                    errorText = stringResource(R.string.SyncError),
+                                    onClick = {
+                                        viewModel.onErrorClick()
+                                        chartViewModel.refresh()
+                                    }
+                                )
+                            }
 
-                        is ViewState.Error -> {
-                            ListErrorView(
-                                stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
-                            )
-                        }
-
-                        ViewState.Success -> {
-                            val listState = hsRememberLazyListState(2, uiState.sortDescending)
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize(),
-                                state = listState,
-                                contentPadding = PaddingValues(bottom = 32.dp),
-                            ) {
-                                item {
-                                    uiState.header.let { header ->
-                                        DescriptionCard(
-                                            header.title,
-                                            header.description,
-                                            header.icon
+                            ViewState.Success -> {
+                                val listState = hsRememberLazyListState(2, uiState.sortDescending)
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(ComposeAppTheme.colors.lawrence),
+                                    state = listState,
+                                    contentPadding = PaddingValues(bottom = 32.dp),
+                                ) {
+                                    item {
+                                        uiState.header.let { header ->
+                                            DescriptionCard(
+                                                header.title,
+                                                header.description,
+                                                header.icon
+                                            )
+                                        }
+                                    }
+                                    item {
+                                        Chart(
+                                            chartViewModel = chartViewModel,
+                                            modifier = Modifier.background(ComposeAppTheme.colors.tyler)
                                         )
                                     }
-                                }
-                                item {
-                                    Chart(chartViewModel = chartViewModel)
-                                }
-                                stickyHeader {
-                                    HeaderSorting(borderBottom = true, borderTop = true) {
-                                        HSpacer(width = 16.dp)
-                                        ButtonSecondaryWithIcon(
-                                            modifier = Modifier.height(28.dp),
-                                            onClick = {
-                                                viewModel.toggleSorting()
-                                            },
-                                            title =uiState.toggleButtonTitle,
-                                            iconRight = painterResource(
-                                                if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
-                                            ),
-                                        )
-                                        HSpacer(width = 16.dp)
+                                    stickyHeader {
+                                        HeaderSorting(
+                                            borderBottom = true,
+                                            borderTop = true,
+                                            backgroundColor = ComposeAppTheme.colors.lawrence
+                                        ) {
+                                            HSpacer(width = 16.dp)
+                                            HSButton(
+                                                variant = ButtonVariant.Secondary,
+                                                size = ButtonSize.Small,
+                                                title = uiState.toggleButtonTitle,
+                                                icon = painterResource(if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
+                                                onClick = { viewModel.toggleSorting() }
+                                            )
+                                            HSpacer(width = 16.dp)
+                                        }
                                     }
-                                }
-                                items(uiState.viewItems) { viewItem ->
-                                    MarketCoinClear(
-                                        title = viewItem.fullCoin.coin.code,
-                                        subtitle = viewItem.subtitle,
-                                        coinIconUrl = viewItem.fullCoin.coin.imageUrl,
-                                        alternativeCoinIconUrl = viewItem.fullCoin.coin.alternativeImageUrl,
-                                        coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
-                                        value = viewItem.coinRate,
-                                        marketDataValue = viewItem.marketDataValue,
-                                        label = viewItem.rank,
-                                    ) { onCoinClick(viewItem.fullCoin.coin.uid) }
+                                    items(uiState.viewItems) { viewItem ->
+                                        BoxBordered(bottom = true) {
+                                            MarketCoin(
+                                                title = viewItem.fullCoin.coin.code,
+                                                subtitle = viewItem.subtitle,
+                                                coinIconUrl = viewItem.fullCoin.coin.imageUrl,
+                                                alternativeCoinIconUrl = viewItem.fullCoin.coin.alternativeImageUrl,
+                                                coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
+                                                value = viewItem.coinRate,
+                                                marketDataValue = viewItem.marketDataValue,
+                                                label = viewItem.rank,
+                                            ) { onCoinClick(viewItem.fullCoin.coin.uid) }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -162,5 +178,5 @@ class MetricsPageFragment : BaseComposeFragment() {
             }
         }
     }
-
 }
+

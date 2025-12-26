@@ -8,14 +8,13 @@
     <style name="Theme.AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorAccent">@color/yellow_l</item>
         <item name="android:windowBackground">@color/light</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:actionMenuTextAppearance">@style/Headline2</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_l</item>
         <item name="colorControlHighlight">#6E7899</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
+        <item name="android:statusBarColor">@color/transparent</item>
 
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
@@ -43,7 +42,6 @@
         <item name="AddCoinButtonPlaceholder">@color/light</item>
         <item name="SecondaryButtonStartGradient">#ffffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
-        <item name="SplashScreenBackground">@drawable/ic_intro_background_light</item>
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
@@ -55,6 +53,5 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.AppTheme.DayNight</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

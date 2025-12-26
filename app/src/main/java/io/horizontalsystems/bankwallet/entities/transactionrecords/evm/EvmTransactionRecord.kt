@@ -12,8 +12,9 @@ open class EvmTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
+    val protected: Boolean,
     val foreignTransaction: Boolean = false,
-    spam: Boolean = false
+    spam: Boolean = false,
 ) :
     TransactionRecord(
         uid = transaction.hashString,

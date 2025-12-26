@@ -7,20 +7,21 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +33,8 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
+import io.horizontalsystems.bankwallet.ui.compose.components.SliderIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import kotlinx.coroutines.launch
@@ -52,7 +55,6 @@ class IntroActivity : BaseActivity() {
         setContent {
             IntroScreen(viewModel, nightMode) { finish() }
         }
-        setStatusBarTransparent()
     }
 
     companion object {
@@ -64,20 +66,12 @@ class IntroActivity : BaseActivity() {
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
     val pageCount = 3
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }
     ComposeAppTheme {
-        Box {
-            Image(
-                painter = painterResource(if (nightMode) R.drawable.ic_intro_background else R.drawable.ic_intro_background_light),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
+        RadialBackground()
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
             state = pagerState,
@@ -90,7 +84,6 @@ private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActi
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun StaticContent(
     viewModel: IntroViewModel,
@@ -107,7 +100,10 @@ private fun StaticContent(
         Spacer(Modifier.weight(2f))
         Spacer(Modifier.height(326.dp))
         Spacer(Modifier.weight(1f))
-        SliderIndicator(viewModel.slides, pagerState.currentPage)
+        SliderIndicator(
+            total = pageCount,
+            current = pagerState.currentPage
+        )
         Spacer(Modifier.weight(1f))
         //Text
         Column(
@@ -157,29 +153,6 @@ private fun StaticContent(
             })
         Spacer(Modifier.height(60.dp))
     }
-}
-
-@Composable
-private fun SliderIndicator(slides: List<IntroModule.IntroSliderData>, currentPage: Int) {
-    Row(
-        modifier = Modifier.height(30.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        slides.forEachIndexed { index, _ ->
-            SliderCell(index == currentPage)
-        }
-    }
-}
-
-@Composable
-private fun SliderCell(highlighted: Boolean) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(2.dp))
-            .background(if (highlighted) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20)
-            .size(width = 20.dp, height = 4.dp),
-    )
 }
 
 @Composable

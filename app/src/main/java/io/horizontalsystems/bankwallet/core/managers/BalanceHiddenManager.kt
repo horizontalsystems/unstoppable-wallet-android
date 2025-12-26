@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

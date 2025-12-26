@@ -129,6 +129,24 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
         fun hasUriPrefix(text: String): Boolean {
             return text.split(":").size > 1
         }
+
+        fun addressUri(text: String): AddressUri? {
+            if (hasUriPrefix(text)) {
+                val abstractUriParse = AddressUriParser(null, null)
+                return when (val result = abstractUriParse.parse(text)) {
+                    is AddressUriResult.Uri -> {
+                        if (BlockchainType.supported.map { it.uriScheme }
+                                .contains(result.addressUri.scheme))
+                            result.addressUri
+                        else
+                            null
+                    }
+
+                    else -> null
+                }
+            }
+            return null
+        }
     }
 }
 

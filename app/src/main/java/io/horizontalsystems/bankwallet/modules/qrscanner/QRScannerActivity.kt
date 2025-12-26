@@ -53,9 +53,9 @@ import com.journeyapps.barcodescanner.ScanOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.ui.compose.Bright
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Dark
-import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -78,7 +78,6 @@ class QRScannerActivity : BaseActivity() {
                 onCameraPermissionSettingsClick = { openCameraPermissionSettings() }
             )
         }
-        setStatusBarTransparent()
     }
 
     private fun onScan(address: String?) {
@@ -184,10 +183,10 @@ private fun QRScannerScreen(
                         )
                     },
                     buttonColors = ButtonPrimaryDefaults.textButtonColors(
-                        backgroundColor = SteelLight,
+                        backgroundColor = Bright,
                         contentColor = ComposeAppTheme.colors.dark,
-                        disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-                        disabledContentColor = ComposeAppTheme.colors.grey50,
+                        disabledBackgroundColor = ComposeAppTheme.colors.blade,
+                        disabledContentColor = ComposeAppTheme.colors.andy,
                     ),
                     onClick = onCloseClick
                 )
@@ -212,7 +211,7 @@ private fun ScannerView(onScan: (String) -> Unit) {
         }
     }
     AndroidView(factory = { barcodeView })
-    LifecycleResumeEffect {
+    LifecycleResumeEffect(Unit) {
         barcodeView.resume()
 
         onPauseOrDispose {
@@ -248,7 +247,7 @@ private fun TextPrimaryButton(
 
     Surface(
         color = ComposeAppTheme.colors.transparent,
-        contentColor = SteelLight,
+        contentColor = Bright,
     ) {
         Row(
             Modifier

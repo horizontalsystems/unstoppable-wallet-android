@@ -6,8 +6,6 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
-import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
@@ -15,9 +13,10 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.subscriptions.core.AdvancedSearch
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.asFlow
 
 class MainSettingsViewModel(
     private val backupManager: IBackupManager,
@@ -28,9 +27,14 @@ class MainSettingsViewModel(
     private val wcManager: WCManager,
     private val accountManager: IAccountManager,
     private val appConfigProvider: AppConfigProvider,
-    private val languageManager: LanguageManager,
-    private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<MainSettingUiState>() {
+
+    val fdroidSupportLink by lazy {
+        appConfigProvider.simplexSupportChat
+    }
+    val vipSupportLink by lazy {
+        appConfigProvider.telegramSupportChat
+    }
 
     val appVersion: String
         get() {
@@ -46,12 +50,6 @@ class MainSettingsViewModel(
 
     val walletConnectSupportState: WCManager.SupportState
         get() = wcManager.getWalletConnectSupportState()
-
-    private val currentLanguageDisplayName: String
-        get() = languageManager.currentLanguageName
-
-    private val baseCurrencyCode: String
-        get() = currencyManager.baseCurrency.code
 
     private val appWebPageLink = appConfigProvider.appWebPageLink
     private val hasNonStandardAccount: Boolean
@@ -70,6 +68,8 @@ class MainSettingsViewModel(
     private var wcCounterType: CounterType? = null
     private var wcSessionsCount = walletConnectSessionCount
     private var wcPendingRequestCount = 0
+    private var showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
+    private var hasSubscription = false
 
     init {
         viewModelScope.launch {
@@ -84,13 +84,13 @@ class MainSettingsViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.pinSetFlowable.asFlow().collect {
+            pinComponent.pinSetFlow.collect {
                 emitState()
             }
         }
 
         viewModelScope.launch {
-            termsManager.termsAcceptedSignalFlow.collect {
+            termsManager.termsAcceptedSharedFlow.collect {
                 emitState()
             }
         }
@@ -101,8 +101,11 @@ class MainSettingsViewModel(
                 syncCounter()
             }
         }
+
         viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
+                hasSubscription = it != null
                 emitState()
             }
         }
@@ -111,8 +114,6 @@ class MainSettingsViewModel(
 
     override fun createState(): MainSettingUiState {
         return MainSettingUiState(
-            currentLanguage = currentLanguageDisplayName,
-            baseCurrencyCode = baseCurrencyCode,
             appWebPageLink = appWebPageLink,
             hasNonStandardAccount = hasNonStandardAccount,
             allBackedUp = allBackedUp,
@@ -121,7 +122,9 @@ class MainSettingsViewModel(
             manageWalletShowAlert = !allBackedUp || hasNonStandardAccount,
             securityCenterShowAlert = !isPinSet,
             aboutAppShowAlert = !termsManager.allTermsAccepted,
-            wcCounterType = wcCounterType
+            wcCounterType = wcCounterType,
+            showPremiumBanner = showPremiumBanner,
+            hasSubscription = hasSubscription,
         )
     }
 
@@ -138,8 +141,6 @@ class MainSettingsViewModel(
 }
 
 data class MainSettingUiState(
-    val currentLanguage: String,
-    val baseCurrencyCode: String,
     val appWebPageLink: String,
     val hasNonStandardAccount: Boolean,
     val allBackedUp: Boolean,
@@ -148,5 +149,7 @@ data class MainSettingUiState(
     val manageWalletShowAlert: Boolean,
     val securityCenterShowAlert: Boolean,
     val aboutAppShowAlert: Boolean,
-    val wcCounterType: CounterType?
+    val wcCounterType: CounterType?,
+    val showPremiumBanner: Boolean,
+    val hasSubscription: Boolean,
 )

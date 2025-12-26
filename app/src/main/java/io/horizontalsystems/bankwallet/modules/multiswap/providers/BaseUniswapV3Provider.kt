@@ -24,7 +24,7 @@ import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.v3.TradeDataV3
 import java.math.BigDecimal
 
-abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
+abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
     final override suspend fun fetchQuote(
@@ -36,15 +36,13 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
         val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, settings)
 
         val routerAddress = uniswapV3Kit.routerAddress(bestTrade.chain)
-        val allowance = getAllowance(tokenIn, routerAddress)
+        val allowance = EvmSwapHelper.getAllowance(tokenIn, routerAddress)
 
         val fields = buildList {
             bestTrade.settingRecipient.value?.let {
                 add(DataFieldRecipient(it))
             }
-            bestTrade.settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(bestTrade.settingSlippage.value))
             if (allowance != null && allowance < amountIn) {
                 add(DataFieldAllowance(allowance, tokenIn))
             }
@@ -57,7 +55,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             tokenIn,
             tokenOut,
             amountIn,
-            actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
         )
     }
 
@@ -67,6 +65,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: ISwapQuote,
     ): ISwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 
@@ -83,7 +82,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             bestTrade.tradeDataV3
         )
 
-        val slippage = bestTrade.settingSlippage.valueOrDefault()
+        val slippage = bestTrade.settingSlippage.value
         val amountOut = bestTrade.tradeDataV3.tokenAmountOut.decimalAmount!!
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
@@ -91,9 +90,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             bestTrade.settingRecipient.value?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
-            bestTrade.settingSlippage.value?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(bestTrade.settingSlippage.value))
         }
 
         return SwapFinalQuoteEvm(
@@ -119,12 +116,12 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
         val chain = evmBlockchainHelper.chain
         val rpcSourceHttp = evmBlockchainHelper.getRpcSourceHttp()
 
-        val settingRecipient = SwapSettingRecipient(settings, blockchainType)
+        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
         val settingSlippage = SwapSettingSlippage(settings, TradeOptions.defaultAllowedSlippage)
         val settingDeadline = SwapSettingDeadline(settings, TradeOptions.defaultTtl)
 
         val tradeOptions = TradeOptions(
-            allowedSlippagePercent = settingSlippage.valueOrDefault(),
+            allowedSlippagePercent = settingSlippage.value,
             ttl = settingDeadline.valueOrDefault(),
             recipient = settingRecipient.getEthereumKitAddress(),
         )
@@ -155,6 +152,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             BlockchainType.Polygon,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.ArbitrumOne -> uniswapV3Kit.etherToken(chain)
             else -> throw Exception("Invalid coin for swap: $token")
         }

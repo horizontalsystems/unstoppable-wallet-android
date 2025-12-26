@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.tokenselect
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
-import io.horizontalsystems.bankwallet.core.swappable
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceService
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -30,94 +31,133 @@ class TokenSelectViewModel(
     private val balanceSorter: BalanceSorter,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val blockchainTypes: List<BlockchainType>?,
-    private val tokenTypes: List<TokenType>?
-) : ViewModel() {
+    private val tokenTypes: List<TokenType>?,
+    private val localStorage: ILocalStorage,
+) : ViewModelUiState<TokenSelectUiState>() {
 
     private var noItems = false
+    private var hasAssets = false
     private var query: String? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
-    var uiState by mutableStateOf(
-        TokenSelectUiState(
+    private var availableBlockchainTypes: List<BlockchainType>? = blockchainTypes
+    private val allTab = SelectChainTab(title = Translator.getString(R.string.Market_All), null)
+    private var selectedChainTab: SelectChainTab = allTab
+
+    override fun createState(): TokenSelectUiState {
+        return TokenSelectUiState(
             items = balanceViewItems,
-            noItems = noItems
+            noItems = noItems,
+            hasAssets = hasAssets,
+            selectedTab = selectedChainTab,
+            tabs = getTabs()
         )
-    )
-        private set
+    }
+
+    override fun onCleared() {
+        service.clear()
+    }
 
     init {
         service.start()
 
         viewModelScope.launch {
             service.balanceItemsFlow.collect { items ->
+                val initialFilteredItems = items?.filter { item ->
+                    blockchainTypes?.contains(item.wallet.token.blockchainType) ?: true
+                }
+
+                availableBlockchainTypes = initialFilteredItems
+                    ?.map { it.wallet.token.blockchainType }
+                    ?.distinct()
+
                 refreshViewItems(items)
             }
         }
     }
 
+    fun updateFilter(q: String) {
+        query = q
+        viewModelScope.launch {
+            refreshViewItems(service.balanceItemsFlow.value)
+        }
+    }
+
+    fun onTabSelected(tab: SelectChainTab) {
+        selectedChainTab = tab
+        viewModelScope.launch {
+            refreshViewItems(service.balanceItemsFlow.value)
+        }
+    }
+
+
     private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
         withContext(Dispatchers.IO) {
-            if (balanceItems != null) {
-                var itemsFiltered: List<BalanceModule.BalanceItem> = balanceItems
-                blockchainTypes?.let { types ->
-                    itemsFiltered = itemsFiltered.filter { item ->
-                        types.contains(item.wallet.token.blockchainType)
-                    }
-                }
-                tokenTypes?.let { types ->
-                    itemsFiltered = itemsFiltered.filter { item ->
-                        types.contains(item.wallet.token.type)
-                    }
-                }
-                itemsFilter?.let {
-                    itemsFiltered = itemsFiltered.filter(it)
-                }
-                noItems = itemsFiltered.isEmpty()
+            if (balanceItems == null) {
+                balanceViewItems = emptyList()
+                hasAssets = false
+                noItems = true
+                emitState()
+                return@withContext
+            }
+            hasAssets = balanceItems.isNotEmpty()
 
-                val tmpQuery = query
-                if (!tmpQuery.isNullOrBlank()) {
-                    itemsFiltered = itemsFiltered.filter {
-                        val coin = it.wallet.coin
-                        coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
+            val currentQuery = query // Local copy for thread safety
+            val currentSelectedChainTab = selectedChainTab // Local copy
+
+            val filteredItems = balanceItems.asSequence()
+                .filter { item ->
+                    blockchainTypes?.contains(item.wallet.token.blockchainType) ?: true
+                }
+                .filter { item ->
+                    currentSelectedChainTab.blockchainType?.let { it == item.wallet.token.blockchainType }
+                        ?: true
+                }
+                .filter { item -> tokenTypes?.contains(item.wallet.token.type) ?: true }
+                .filter { item -> itemsFilter?.invoke(item) ?: true }
+                .filter { item ->
+                    if (!currentQuery.isNullOrBlank()) {
+                        val coin = item.wallet.coin
+                        coin.code.contains(currentQuery, true) || coin.name.contains(
+                            currentQuery,
+                            true
+                        )
+                    } else {
+                        true
                     }
                 }
+                .toList()
 
-                val itemsSorted = balanceSorter.sort(itemsFiltered, BalanceSortType.Value)
-                balanceViewItems = itemsSorted.map { balanceItem ->
-                    balanceViewItemFactory.viewItem2(
-                        item = balanceItem,
-                        currency = service.baseCurrency,
-                        hideBalance = balanceHiddenManager.balanceHidden,
-                        watchAccount = service.isWatchAccount,
-                        balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
-                        networkAvailable = service.networkAvailable
-                    )
-                }
-            } else {
-                balanceViewItems = listOf()
+            noItems = filteredItems.isEmpty()
+
+            val itemsSorted = balanceSorter.sort(filteredItems, BalanceSortType.Value)
+            balanceViewItems = itemsSorted.map { balanceItem ->
+                balanceViewItemFactory.viewItem2(
+                    item = balanceItem,
+                    currency = service.baseCurrency,
+                    hideBalance = balanceHiddenManager.balanceHidden,
+                    watchAccount = service.isWatchAccount,
+                    balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
+                    networkAvailable = service.networkAvailable,
+                    amountRoundingEnabled = localStorage.amountRoundingEnabled
+                )
             }
 
             emitState()
         }
     }
 
-    fun updateFilter(q: String) {
-        viewModelScope.launch {
-            query = q
-            refreshViewItems(service.balanceItemsFlow.value)
+    private fun getTabs(): List<SelectChainTab> {
+        val currentAvailableBlockchainTypes = availableBlockchainTypes
+        if (currentAvailableBlockchainTypes.isNullOrEmpty() || currentAvailableBlockchainTypes.size == 1) {
+            return emptyList()
         }
-    }
 
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = TokenSelectUiState(
-                items = balanceViewItems,
-                noItems = noItems,
+        return listOf(allTab) + currentAvailableBlockchainTypes.map { blockchainType ->
+            SelectChainTab(
+                title = blockchainType.title,
+                blockchainType = blockchainType
             )
         }
-    }
-
-    override fun onCleared() {
-        service.clear()
     }
 
     class FactoryForSend(
@@ -135,24 +175,7 @@ class TokenSelectViewModel(
                 balanceHiddenManager = App.balanceHiddenManager,
                 blockchainTypes = blockchainTypes,
                 tokenTypes = tokenTypes,
-            ) as T
-        }
-    }
-
-    class FactoryForSwap : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TokenSelectViewModel(
-                service = BalanceService.getInstance("wallet"),
-                balanceViewItemFactory = BalanceViewItemFactory(),
-                balanceViewTypeManager = App.balanceViewTypeManager,
-                itemsFilter = {
-                    it.wallet.token.swappable
-                },
-                balanceSorter = BalanceSorter(),
-                balanceHiddenManager = App.balanceHiddenManager,
-                blockchainTypes = null,
-                tokenTypes = null,
+                localStorage = App.localStorage
             ) as T
         }
     }
@@ -161,4 +184,12 @@ class TokenSelectViewModel(
 data class TokenSelectUiState(
     val items: List<BalanceViewItem2>,
     val noItems: Boolean,
+    val hasAssets: Boolean,
+    val selectedTab: SelectChainTab,
+    val tabs: List<SelectChainTab>,
+)
+
+data class SelectChainTab(
+    val title: String,
+    val blockchainType: BlockchainType?,
 )

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -31,19 +30,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
+import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
+import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -51,14 +56,17 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
@@ -74,7 +82,10 @@ fun SettingsScreen(
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(12.dp))
-                SettingSections(viewModel, navController)
+                SettingSections(
+                    viewModel = viewModel,
+                    navController = navController,
+                    )
                 SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
             }
         }
@@ -84,42 +95,40 @@ fun SettingsScreen(
 @Composable
 private fun SettingSections(
     viewModel: MainSettingsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
+    val isFDroidBuild = BuildConfig.FDROID_BUILD
 
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_Donate,
-                R.drawable.ic_heart_filled_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    navController.slideFromRight(R.id.donateTokenSelectFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
-                }
-            )
+    val banners = buildList<@Composable () -> Unit> {
+        if (uiState.showPremiumBanner) {
+            add {
+                SubscriptionBanner(
+                    onClick = {
+                        navController.slideFromBottom(R.id.buySubscriptionFragment)
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
+                        )
+                    }
+                )
+            }
         }
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_GetYourTokens,
-                R.drawable.ic_uwt2_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot")
-                }
-            )
+        if (isFDroidBuild) {
+            add {
+                DonateBanner(
+                    onClick = {
+                        navController.slideFromBottom(R.id.whyDonateFragment)
+                    }
+                )
+            }
         }
-    )
+    }
 
-    VSpacer(32.dp)
+    BannerCarousel(banners = banners)
+
+    VSpacer(12.dp)
 
     CellUniversalLawrenceSection(
         listOf({
@@ -151,7 +160,28 @@ private fun SettingSections(
             )
         }, {
             HsSettingCell(
-                R.string.Settings_WalletConnect,
+                R.string.Settings_SecurityCenter,
+                R.drawable.ic_security,
+                showAlert = uiState.securityCenterShowAlert,
+                onClick = {
+                    navController.slideFromRight(R.id.securitySettingsFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Privacy,
+                R.drawable.ic_eye_20,
+                onClick = {
+                    navController.slideFromRight(R.id.privacySettingsFragment)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.DAppConnection_Title,
                 R.drawable.ic_wallet_connect_20,
                 value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
                 counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
@@ -192,7 +222,8 @@ private fun SettingSections(
                     }
                 }
             )
-//        }, {
+        },
+//            {
 //            HsSettingCell(
 //                title = R.string.Settings_TonConnect,
 //                icon = R.drawable.ic_ton_connect_24,
@@ -207,37 +238,38 @@ private fun SettingSections(
 //                    )
 //                }
 //            )
-        }, {
-            HsSettingCell(
-                R.string.BackupManager_Title,
-                R.drawable.ic_file_24,
-                onClick = {
-                    navController.slideFromRight(R.id.backupManagerFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BackupManager))
-                }
-            )
-        }
+//        }
         )
     )
 
     VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
-        listOf(
-            {
+        buildList {
+            add {
                 HsSettingCell(
-                    R.string.Settings_SecurityCenter,
-                    R.drawable.ic_security,
-                    showAlert = uiState.securityCenterShowAlert,
+                    R.string.Settings_AppSettings,
+                    R.drawable.ic_unstoppable_icon_20,
                     onClick = {
-                        navController.slideFromRight(R.id.securitySettingsFragment)
+                        navController.slideFromRight(R.id.appearanceFragment)
 
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
                     }
                 )
-            },
-            {
+            }
+            if (!BuildConfig.FDROID_BUILD) {
+                add {
+                    HsSettingCell(
+                        R.string.Settings_Subscription,
+                        R.drawable.ic_star_24,
+                        value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
+                        onClick = {
+                            navController.slideFromRight(R.id.subscriptionFragment)
+                        }
+                    )
+                }
+            }
+            add {
                 HsSettingCell(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
@@ -250,43 +282,121 @@ private fun SettingSections(
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
                     }
                 )
-            },
-            {
+            }
+            add {
                 HsSettingCell(
-                    R.string.Settings_Appearance,
-                    R.drawable.ic_brush_20,
+                    R.string.BackupManager_Title,
+                    R.drawable.ic_file_24,
                     onClick = {
-                        navController.slideFromRight(R.id.appearanceFragment)
+                        navController.slideFromRight(R.id.backupManagerFragment)
 
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
-                    }
-                )
-            },
-            {
-                HsSettingCell(
-                    R.string.Settings_BaseCurrency,
-                    R.drawable.ic_currency,
-                    value = uiState.baseCurrencyCode,
-                    onClick = {
-                        navController.slideFromRight(R.id.baseCurrencySettingsFragment)
-
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BaseCurrency))
-                    }
-                )
-            },
-            {
-                HsSettingCell(
-                    R.string.Settings_Language,
-                    R.drawable.ic_language,
-                    value = uiState.currentLanguage,
-                    onClick = {
-                        navController.slideFromRight(R.id.languageSettingsFragment)
-
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Language))
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.Open(StatPage.BackupManager)
+                        )
                     }
                 )
             }
+        }
+    )
+
+    VSpacer(24.dp)
+
+    if (isFDroidBuild) {
+        PremiumHeader(R.string.Premium_TitleForDroid)
+    } else {
+        PremiumHeader()
+    }
+
+    SectionPremiumUniversalLawrence {
+        HsSettingCell(
+            title = if(isFDroidBuild) R.string.Settings_Support else R.string.Settings_VipSupport,
+            icon = R.drawable.ic_support_yellow_24,
+            iconTint = ComposeAppTheme.colors.jacob,
+            onClick = {
+                if (isFDroidBuild) {
+                    LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
+                } else {
+                    navController.paidAction(PrioritySupport) {
+                        LinkHelper.openLinkInAppBrowser(context, viewModel.vipSupportLink)
+                    }
+                }
+
+                stat(
+                    page = StatPage.Settings,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.VipSupport)
+                )
+            }
         )
+        HsDivider()
+        HsSettingCell(
+            title = R.string.SettingsAddressChecker_Title,
+            icon = R.drawable.ic_radar_24,
+            iconTint = ComposeAppTheme.colors.jacob,
+            onClick = {
+                navController.paidAction(SecureSend) {
+                    navController.slideFromRight(R.id.addressCheckerFragment)
+                }
+                stat(
+                    page = StatPage.Settings,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
+                )
+            }
+        )
+    }
+
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.SettingsAboutApp_Title,
+                R.drawable.ic_info_20,
+                showAlert = uiState.aboutAppShowAlert,
+                onClick = {
+                    navController.slideFromRight(R.id.aboutAppFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_RateUs,
+                R.drawable.ic_rateus_24,
+                onClick = {
+                    RateAppManager.openPlayMarket(context)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.RateUs))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_ShareThisWallet,
+                R.drawable.ic_share_24,
+                onClick = {
+                    shareAppLink(uiState.appWebPageLink, context)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Faq,
+                R.drawable.ic_faq_20,
+                onClick = {
+                    navController.slideFromRight(R.id.faqListFragment)
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Guides_Title,
+                R.drawable.ic_academy_20,
+                onClick = {
+                    navController.slideFromRight(R.id.academyFragment)
+                }
+            )
+        })
     )
 
     VSpacer(24.dp)
@@ -298,14 +408,13 @@ private fun SettingSections(
             .height(32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        subhead1_jacob(text = stringResource(id = R.string.Settings_JoinUnstoppables).uppercase())
+        subhead1_grey(text = stringResource(id = R.string.Settings_JoinUnstoppables).uppercase())
     }
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.Settings_Telegram,
-                R.drawable.ic_telegram_filled_24,
-                ComposeAppTheme.colors.jacob,
+                R.drawable.ic_telegram_24,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
 
@@ -318,8 +427,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_Twitter,
-                R.drawable.ic_twitter_filled_24,
-                ComposeAppTheme.colors.jacob,
+                R.drawable.ic_twitter_24,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
 
@@ -328,81 +436,21 @@ private fun SettingSections(
             )
         })
     )
-    InfoText(
-        text = stringResource(R.string.Settings_JoinUnstoppables_Description),
-    )
 
     VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
-        listOf({
+        listOf {
             HsSettingCell(
-                R.string.Settings_Faq,
-                R.drawable.ic_faq_20,
+                R.string.Settings_Donate,
+                R.drawable.ic_heart_24,
                 onClick = {
-                    navController.slideFromRight(R.id.faqListFragment)
+                    navController.slideFromRight(R.id.donateTokenSelectFragment)
 
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Faq))
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.Guides_Title,
-                R.drawable.ic_academy_20,
-                onClick = {
-                    navController.slideFromRight(R.id.academyFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Academy))
-                }
-            )
-        })
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.SettingsAboutApp_Title,
-                R.drawable.ic_about_app_20,
-                showAlert = uiState.aboutAppShowAlert,
-                onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_RateUs,
-                R.drawable.ic_star_20,
-                onClick = {
-                    RateAppManager.openPlayMarket(context)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.RateUs))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_ShareThisWallet,
-                R.drawable.ic_share_20,
-                onClick = {
-                    shareAppLink(uiState.appWebPageLink, context)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.SettingsContact_Title,
-                R.drawable.ic_mail_24,
-                onClick = {
-                    navController.slideFromBottom(R.id.contactOptionsDialog)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ContactUs))
-                },
-            )
-        })
+        }
     )
 
     VSpacer(32.dp)
@@ -477,13 +525,11 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
                 appVersion
             ).uppercase()
         )
-        Divider(
+        HsDivider(
             modifier = Modifier
                 .width(100.dp)
-                .padding(top = 8.dp, bottom = 4.5.dp),
-            thickness = 0.5.dp,
-            color = ComposeAppTheme.colors.steel20
-        )
+                .padding(top = 8.dp, bottom = 4.5.dp)
+            )
         Text(
             text = stringResource(R.string.Settings_InfoSubtitle),
             style = ComposeAppTheme.typography.micro,

@@ -27,14 +27,17 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -56,10 +59,11 @@ fun TopCoins(
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
+        topPadding = 44,
         onRefresh = {
             viewModel.refresh()
 
-            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.Refresh)
+            stat(page = StatPage.Markets, event = StatEvent.Refresh, section = StatSection.Coins)
         }
     ) {
         Crossfade(uiState.viewState, label = "") { viewState ->
@@ -79,45 +83,57 @@ fun TopCoins(
                         listState.scrollToItem(0)
                     }
 
-                    CoinList(
+                    CoinListSlidable(
                         listState = listState,
                         items = uiState.viewItems,
                         scrollToTop = false,
                         onAddFavorite = { uid ->
                             viewModel.onAddFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.AddToWatchlist(uid))
+                            stat(
+                                page = StatPage.Markets,
+                                event = StatEvent.AddToWatchlist(uid),
+                                section = StatSection.Coins
+                            )
 
                         },
                         onRemoveFavorite = { uid ->
                             viewModel.onRemoveFavorite(uid)
 
-                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.RemoveFromWatchlist(uid))
+                            stat(
+                                page = StatPage.Markets,
+                                event = StatEvent.RemoveFromWatchlist(uid),
+                                section = StatSection.Coins
+                            )
                         },
                         onCoinClick = onCoinClick,
                         preItems = {
                             stickyHeader {
                                 HeaderSorting(
                                     borderBottom = true,
+                                    backgroundColor = ComposeAppTheme.colors.lawrence
                                 ) {
                                     HSpacer(width = 16.dp)
-                                    OptionController(
-                                        uiState.sortingField.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.sortingField.titleResId),
+                                        onClick = {
                                             openSortingSelector = true
                                         }
                                     )
                                     HSpacer(width = 12.dp)
-                                    OptionController(
-                                        uiState.topMarket.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.topMarket.titleResId),
+                                        onClick = {
                                             openTopSelector = true
                                         }
                                     )
                                     HSpacer(width = 12.dp)
-                                    OptionController(
-                                        uiState.period.titleResId,
-                                        onOptionClick = {
+                                    HSDropdownButton(
+                                        variant = ButtonVariant.Secondary,
+                                        title = stringResource(uiState.period.titleResId),
+                                        onClick = {
                                             openPeriodSelector = true
                                         }
                                     )
@@ -133,13 +149,17 @@ fun TopCoins(
 
     if (openSortingSelector) {
         AlertGroup(
-            title = R.string.Market_Sort_PopupTitle,
+            title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortingField, uiState.sortingFields),
             onSelect = { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchSortType(selected.statSortType))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchSortType(selected.statSortType),
+                    section = StatSection.Coins
+                )
             },
             onDismiss = {
                 openSortingSelector = false
@@ -148,13 +168,17 @@ fun TopCoins(
     }
     if (openTopSelector) {
         AlertGroup(
-            title = R.string.Market_Tab_Coins,
+            title = stringResource(R.string.Market_Tab_Coins),
             select = Select(uiState.topMarket, uiState.topMarkets),
             onSelect = {
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchMarketTop(it.statMarketTop))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchMarketTop(it.statMarketTop),
+                    section = StatSection.Coins
+                )
             },
             onDismiss = {
                 openTopSelector = false
@@ -163,13 +187,17 @@ fun TopCoins(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.CoinPage_Period,
+            title = stringResource(R.string.CoinPage_Period),
             select = Select(uiState.period, uiState.periods),
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
 
-                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
+                stat(
+                    page = StatPage.Markets,
+                    event = StatEvent.SwitchPeriod(selected.statPeriod),
+                    section = StatSection.Coins
+                )
             },
             onDismiss = {
                 openPeriodSelector = false

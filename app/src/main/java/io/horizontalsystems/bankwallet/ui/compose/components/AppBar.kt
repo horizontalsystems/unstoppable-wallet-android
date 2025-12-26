@@ -3,14 +3,18 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +27,8 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 sealed class IMenuItem
+
+data object MenuItemLoading : IMenuItem()
 
 data class MenuItemTimeoutIndicator(
     val progress: Float
@@ -76,7 +82,6 @@ fun AppBar(
     title: String? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
-    showSpinner: Boolean = false,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     val titleComposable: @Composable () -> Unit = {
@@ -93,21 +98,24 @@ fun AppBar(
         title = titleComposable,
         navigationIcon = navigationIcon,
         menuItems = menuItems,
-        showSpinner = showSpinner,
         backgroundColor = backgroundColor
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
-    showSpinner: Boolean = false,
+    stateIcon: @Composable (() -> Unit)? = null,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     TopAppBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier
+            .windowInsetsPadding(windowInsets)
+            .height(64.dp),
         title = title,
         backgroundColor = backgroundColor,
         navigationIcon = navigationIcon?.let {
@@ -116,14 +124,15 @@ fun AppBar(
             }
         },
         actions = {
-            if (showSpinner) {
-                CircularProgressIndicator(
+            stateIcon?.let{
+                Box(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
                         .size(24.dp),
-                    color = ComposeAppTheme.colors.jacob,
-                    strokeWidth = 2.dp
-                )
+                    contentAlignment = Alignment.Center
+                ) {
+                    it()
+                }
             }
             menuItems.forEach { menuItem ->
                 when (menuItem) {
@@ -141,7 +150,7 @@ fun AppBar(
                                 CircularProgressIndicator(
                                     progress = 1f,
                                     modifier = Modifier.size(16.dp),
-                                    color = ComposeAppTheme.colors.steel20,
+                                    color = ComposeAppTheme.colors.blade,
                                     strokeWidth = 1.5.dp
                                 )
                                 CircularProgressIndicator(
@@ -149,12 +158,14 @@ fun AppBar(
                                     modifier = Modifier
                                         .size(16.dp)
                                         .scale(scaleX = -1f, scaleY = 1f),
-                                    color = ComposeAppTheme.colors.jacob,
+                                    color = ComposeAppTheme.colors.grey,
                                     strokeWidth = 1.5.dp
                                 )
                             }
                         }
                     }
+
+                    is MenuItemLoading -> TODO()
                 }
             }
         },
@@ -163,14 +174,14 @@ fun AppBar(
 }
 
 @Composable
-private fun MenuItemSimple(menuItem: MenuItem) {
+fun MenuItemSimple(menuItem: MenuItem) {
     val color = if (menuItem.enabled) {
         if (menuItem.tint == Color.Unspecified)
-            ComposeAppTheme.colors.jacob
+            ComposeAppTheme.colors.grey
         else
             menuItem.tint
     } else {
-        ComposeAppTheme.colors.grey50
+        ComposeAppTheme.colors.andy
     }
 
     val icon = menuItem.icon

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -38,7 +38,7 @@ fun HsIconButton(
                 enabled = enabled,
                 role = Role.Button,
                 interactionSource = interactionSource,
-                indication = rememberRipple(bounded = false, radius = RippleRadius, color = rippleColor)
+                indication = ripple(bounded = false, radius = RippleRadius, color = rippleColor)
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -51,9 +51,9 @@ fun HsIconButton(
 fun HsBackButton(onClick: () -> Unit) {
     HsIconButton(onClick = onClick) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_back),
+            painter = painterResource(id = R.drawable.ic_arrow_left_24),
             contentDescription = stringResource(R.string.Button_Back),
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.grey
         )
     }
 }

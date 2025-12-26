@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +36,7 @@ fun DraggableCardSimple(
             targetState = !isRevealed
         }
     }
-    val transition = updateTransition(transitionState, "cardTransition")
+    val transition = rememberTransition(transitionState, "cardTransition")
 
     val offsetInPx = with(LocalDensity.current) { cardOffset.dp.toPx() }
 

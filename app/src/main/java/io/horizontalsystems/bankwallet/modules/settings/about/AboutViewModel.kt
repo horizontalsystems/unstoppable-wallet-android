@@ -35,7 +35,7 @@ class AboutViewModel(
 
     init {
         viewModelScope.launch {
-            termsManager.termsAcceptedSignalFlow.collect {
+            termsManager.termsAcceptedSharedFlow.collect {
                 termsShowAlert = !it
             }
         }

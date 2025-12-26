@@ -4,13 +4,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,30 +23,19 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsModule
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
-import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import kotlin.system.exitProcess
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class SecuritySettingsFragment : BaseComposeFragment() {
-
-    private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
-        SecurityTorSettingsModule.Factory()
-    }
 
     private val securitySettingsViewModel by viewModels<SecuritySettingsViewModel> {
         SecurityPasscodeSettingsModule.Factory()
@@ -56,91 +45,29 @@ class SecuritySettingsFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SecurityCenterScreen(
             securitySettingsViewModel = securitySettingsViewModel,
-            torViewModel = torViewModel,
             navController = navController,
-            showAppRestartAlert = { showAppRestartAlert() },
-            restartApp = { restartApp() },
         )
     }
 
-    private fun showAppRestartAlert() {
-        val warningTitle = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Tor_Connection_Enable)
-        } else {
-            getString(R.string.Tor_Connection_Disable)
-        }
-
-        val actionButton = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Button_Enable)
-        } else {
-            getString(R.string.Button_Disable)
-        }
-
-        ConfirmationDialog.show(
-            icon = R.drawable.ic_tor_connection_24,
-            title = getString(R.string.Tor_Alert_Title),
-            warningTitle = warningTitle,
-            warningText = getString(R.string.SettingsSecurity_AppRestartWarning),
-            actionButtonTitle = actionButton,
-            transparentButtonTitle = getString(R.string.Alert_Cancel),
-            fragmentManager = childFragmentManager,
-            listener = object : ConfirmationDialog.Listener {
-                override fun onActionButtonClick() {
-                    torViewModel.setTorEnabled()
-                }
-
-                override fun onTransparentButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-
-                override fun onCancelButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-            }
-        )
-    }
-
-    private fun restartApp() {
-        activity?.let {
-            MainModule.startAsNewTask(it)
-            exitProcess(0)
-        }
-    }
 }
 
 @Composable
 private fun SecurityCenterScreen(
     securitySettingsViewModel: SecuritySettingsViewModel,
-    torViewModel: SecurityTorSettingsViewModel,
     navController: NavController,
-    showAppRestartAlert: () -> Unit,
-    restartApp: () -> Unit,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
     }
 
-    if (torViewModel.restartApp) {
-        restartApp()
-        torViewModel.appRestarted()
-    }
-
     val uiState = securitySettingsViewModel.uiState
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Settings_SecurityCenter),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-            )
-        }
+
+    HSScaffold(
+        title = stringResource(R.string.Settings_SecurityCenter),
+        onBack = navController::popBackStack,
     ) {
         Column(
-            Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
+            Modifier.verticalScroll(rememberScrollState())
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,
@@ -181,16 +108,14 @@ private fun SecurityCenterScreen(
                 paddingBottom = 32.dp
             )
 
-            TorBlock(
-                torViewModel,
-                showAppRestartAlert,
-            )
-
             DuressPasscodeBlock(
                 securitySettingsViewModel,
                 navController
             )
-            InfoText(text = stringResource(R.string.SettingsSecurity_DuressPinDescription))
+            InfoText(
+                text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
+                paddingBottom = 32.dp
+            )
 
             VSpacer(height = 32.dp)
         }
@@ -205,7 +130,10 @@ fun SecurityCenterCell(
     onClick: (() -> Unit)? = null,
 ) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalPadding = 0.dp,
         onClick = onClick
     ) {
         start.invoke(this)

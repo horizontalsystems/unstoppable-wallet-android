@@ -21,7 +21,8 @@ object CreateAccountModule {
                 PassphraseValidator(),
                 PredefinedBlockchainSettingsProvider(
                     App.restoreSettingsManager,
-                    App.zcashBirthdayProvider
+                    App.zcashBirthdayProvider,
+                    App.moneroBirthdayProvider
                 )
             ) as T
         }

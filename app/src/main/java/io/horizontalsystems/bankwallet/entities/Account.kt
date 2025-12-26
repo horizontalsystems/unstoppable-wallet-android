@@ -39,6 +39,10 @@ data class Account(
         get() = type.isWatchAccountType
 
     @IgnoredOnParcel
+    val watchAccountAddress: String?
+        get() = type.watchAccountAddress
+
+    @IgnoredOnParcel
     val nonStandard: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val words = type.words.joinToString(separator = " ")
@@ -123,8 +127,6 @@ sealed class CexType : Parcelable {
 
 @Parcelize
 sealed class AccountType : Parcelable {
-    @Parcelize
-    data class Cex(val cexType: CexType) : AccountType()
 
     @Parcelize
     data class EvmAddress(val address: String) : AccountType()
@@ -137,6 +139,9 @@ sealed class AccountType : Parcelable {
 
     @Parcelize
     data class TonAddress(val address: String) : AccountType()
+
+    @Parcelize
+    data class StellarAddress(val address: String) : AccountType()
 
     @Parcelize
     data class BitcoinAddress(val address: String, val blockchainType: BlockchainType, val tokenType: TokenType) : AccountType() {
@@ -157,6 +162,29 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    data class MoneroWatchAccount(
+        val address: String,
+        val privateViewKey: String,
+        val restoreHeight: Long
+    ) : AccountType() {
+
+        val serialized: String
+            get() = "$address|$privateViewKey|$restoreHeight"
+
+        companion object {
+            fun fromSerialized(serialized: String): MoneroWatchAccount {
+                val split = serialized.split("|")
+                require(split.size == 3) { "Invalid Monero watch wallet serialization format" }
+                return MoneroWatchAccount(
+                    address = split[0],
+                    privateViewKey = split[1],
+                    restoreHeight = split[2].toLong()
+                )
+            }
+        }
+    }
+
+    @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         @IgnoredOnParcel
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
@@ -169,6 +197,17 @@ sealed class AccountType : Parcelable {
 
         override fun hashCode(): Int {
             return words.toTypedArray().contentHashCode() + passphrase.hashCode()
+        }
+    }
+
+    @Parcelize
+    data class StellarSecretKey(val key: String) : AccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is StellarSecretKey && key == other.key
+        }
+
+        override fun hashCode(): Int {
+            return key.hashCode()
         }
     }
 
@@ -266,7 +305,10 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> "Solana Address"
             is TronAddress -> "Tron Address"
             is TonAddress -> "Ton Address"
+            is StellarAddress -> "Stellar Address"
             is EvmPrivateKey -> "EVM Private Key"
+            is StellarSecretKey -> "Stellar Secret Key"
+            is MoneroWatchAccount -> "Monero Watch Wallet"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master -> "BIP32 Root Key"
@@ -280,7 +322,6 @@ sealed class AccountType : Parcelable {
                     else -> ""
                 }
             }
-            is Cex -> "Cex"
         }
 
     val supportedDerivations: List<Derivation>
@@ -303,7 +344,9 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> this.address.shorten()
             is TronAddress -> this.address.shorten()
             is TonAddress -> this.address.shorten()
+            is StellarAddress -> this.address.shorten()
             is BitcoinAddress -> this.address.shorten()
+            is MoneroWatchAccount -> this.address.shorten()
             else -> this.description
         }
 
@@ -325,9 +368,24 @@ sealed class AccountType : Parcelable {
             is SolanaAddress -> true
             is TronAddress -> true
             is TonAddress -> true
+            is StellarAddress -> true
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
+            is MoneroWatchAccount -> true
             else -> false
+        }
+
+    val watchAccountAddress: String?
+        get() = when (this) {
+            is EvmAddress -> address
+            is SolanaAddress -> address
+            is TronAddress -> address
+            is TonAddress -> address
+            is StellarAddress -> address
+            is BitcoinAddress -> address
+            is HdExtendedKey -> keySerialized
+            is MoneroWatchAccount -> address
+            else -> null
         }
 
     fun evmAddress(chain: Chain) = when (this) {

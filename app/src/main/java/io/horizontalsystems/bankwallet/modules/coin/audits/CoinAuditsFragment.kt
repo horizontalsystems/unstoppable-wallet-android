@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,36 +20,36 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
 class CoinAuditsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        val viewModel = viewModel<CoinAuditsViewModel>(
-            factory = CoinAuditsModule.Factory(input.audits)
-        )
-        CoinAuditsScreen(
-            viewModel = viewModel,
-            onPressBack = {
-                navController.popBackStack()
-            },
-            onClickReportUrl = {
-                LinkHelper.openLinkInAppBrowser(requireContext(), it)
-            }
-        )
+        withInput<Input>(navController) { input ->
+            val viewModel = viewModel<CoinAuditsViewModel>(
+                factory = CoinAuditsModule.Factory(input.audits)
+            )
+            CoinAuditsScreen(
+                viewModel = viewModel,
+                onPressBack = {
+                    navController.popBackStack()
+                },
+                onClickReportUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                }
+            )
+        }
     }
 
     @Parcelize
@@ -66,22 +64,11 @@ private fun CoinAuditsScreen(
 ) {
     val uiState = viewModel.uiState
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.SendNft_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onPressBack)
-                },
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.SendNft_Title),
+        onBack = onPressBack,
     ) {
-        Column(
-            Modifier
-                .padding(it)
-                .fillMaxSize()
-        ) {
+        Column(Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.weight(1f)) {
                 uiState.auditors.forEach { viewItem ->
                     item {
@@ -109,10 +96,7 @@ private fun CoinAuditsScreen(
 
 @Composable
 fun CoinAuditHeader(name: String, logoUrl: String) {
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
-    )
+    HsDivider()
     VSpacer(height = 14.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -139,7 +123,7 @@ fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            body_leah(text = auditViewItem.date ?: "")
+            headline2_leah(text = auditViewItem.date ?: "")
             subhead2_grey(
                 text = auditViewItem.name,
                 maxLines = 1,

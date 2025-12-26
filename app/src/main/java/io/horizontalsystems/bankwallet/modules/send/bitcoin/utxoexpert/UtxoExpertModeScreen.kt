@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,18 +25,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.marketkit.models.Token
 
@@ -59,21 +59,14 @@ fun UtxoExpertModeScreen(
     val uiState = viewModel.uiState
 
     ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Send_Utxos),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
-                    },
-                )
-            }
+        HSScaffold(
+            title = stringResource(R.string.Send_Utxos),
+            onBack = onBackClick,
         ) {
             Column(
                 modifier = Modifier
-                    .padding(it)
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
                 CellUniversalLawrenceSection {
                     UtxoInfoCell(
@@ -97,12 +90,8 @@ fun UtxoExpertModeScreen(
                     modifier = Modifier
                         .height(62.dp)
                         .fillMaxWidth()
-                ){
-                    Divider(
-                        modifier = Modifier.fillMaxWidth(),
-                        thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10
-                    )
+                ) {
+                    HsDivider(modifier = Modifier.fillMaxWidth())
                     Row(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
@@ -210,9 +199,9 @@ private fun UtxoCell(
     bottomRoundedCorners: Boolean
 ) {
     val shape = when {
-        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(12.dp)
-        topRoundedCorners -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
+        topRoundedCorners && bottomRoundedCorners -> RoundedCornerShape(16.dp)
+        topRoundedCorners -> RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        bottomRoundedCorners -> RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
         else -> RoundedCornerShape(0.dp)
     }
     Box(

@@ -52,6 +52,7 @@ fun FormsInputAddress(
     value: String,
     hint: String,
     state: DataState<Address>? = null,
+    showStateIcon: Boolean = true,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     navController: NavController,
     chooseContactEnable: Boolean,
@@ -69,7 +70,7 @@ fun FormsInputAddress(
                 ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.blade
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -83,8 +84,8 @@ fun FormsInputAddress(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 44.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -105,14 +106,14 @@ fun FormsInputAddress(
                     textStyle = ComposeAppTheme.typography.body
                 ),
                 singleLine = false,
-                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
                         Text(
                             hint,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            color = ComposeAppTheme.colors.grey50,
+                            color = ComposeAppTheme.colors.andy,
                             style = ComposeAppTheme.typography.body
                         )
                     }
@@ -127,20 +128,28 @@ fun FormsInputAddress(
                     HSCircularProgressIndicator()
                 }
                 is DataState.Error -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_20),
-                        contentDescription = null,
-                        tint = cautionColor
-                    )
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_20),
+                            contentDescription = null,
+                            tint = cautionColor
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
                 }
                 is DataState.Success -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_check_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.remus
-                    )
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_check_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.remus
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
                 }
                 else -> {
                     Spacer(modifier = Modifier.width(28.dp))

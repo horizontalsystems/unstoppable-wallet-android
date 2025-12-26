@@ -13,7 +13,10 @@ import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.NftTopCollection
+import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.Vault
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.HttpException
@@ -24,8 +27,9 @@ class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
     hsApiKey: String,
-    private val subscriptionManager: SubscriptionManager
 ) {
+    val userSubscriptionManager = UserSubscriptionManager
+
     private val marketKit: MarketKit by lazy {
         MarketKit.getInstance(
             context = context,
@@ -35,10 +39,10 @@ class MarketKitWrapper(
     }
 
     private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
-        subscriptionManager.authToken?.let { authToken ->
+        userSubscriptionManager.authToken?.let { authToken ->
             f.invoke(authToken).onErrorResumeNext { error ->
                 if (error is HttpException && (error.code() == 401 || error.code() == 403)) {
-                    subscriptionManager.authToken = null
+                    userSubscriptionManager.authToken = null
 
                     Single.error(InvalidAuthTokenException())
                 } else {
@@ -54,9 +58,13 @@ class MarketKitWrapper(
     val fullCoinsUpdatedObservable: Observable<Unit>
         get() = marketKit.fullCoinsUpdatedObservable
 
+    fun topFullCoins(limit: Int = 20) = marketKit.topFullCoins(limit)
+
     fun fullCoins(filter: String, limit: Int = 20) = marketKit.fullCoins(filter, limit)
 
     fun fullCoins(coinUids: List<String>) = marketKit.fullCoins(coinUids)
+
+    fun fullCoinsByCoinCode(coinCodes: List<String>) = marketKit.fullCoinsByCoinCodes(coinCodes)
 
     fun allCoins() = marketKit.allCoins()
 
@@ -76,6 +84,8 @@ class MarketKitWrapper(
 
     fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean) = marketKit.marketInfosSingle(top, currencyCode, defi)
 
+    fun categoriesSingle() = marketKit.categoriesSingle()
+
     fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
     fun marketInfosSingle(coinUids: List<String>, currencyCode: String): Single<List<MarketInfo>> =
@@ -83,8 +93,13 @@ class MarketKitWrapper(
 
     fun marketInfosSingle(categoryUid: String, currencyCode: String) = marketKit.marketInfosSingle(categoryUid, currencyCode)
 
-    fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String) =
-        marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language)
+    fun marketInfoOverviewSingle(
+        coinUid: String,
+        currencyCode: String,
+        language: String,
+        roiUids: List<String>,
+        roiPeriods: List<HsTimePeriod>
+    ) = marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language, roiUids, roiPeriods)
 
     fun analyticsSingle(coinUid: String, currencyCode: String) =
         requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode) }
@@ -274,6 +289,11 @@ class MarketKitWrapper(
     fun requestPersonalSupport(username: String): Single<Response<Void>> =
         requestWithAuthToken { marketKit.requestPersonalSupport(it, username) }
 
+    fun requestVipSupport(subscriptionId: String): Single<Map<String, String>> =
+        requestWithAuthToken { marketKit.requestVipSupport(it, subscriptionId) }
+
+    fun getStocks(currencyCode: String): Single<List<Stock>> = marketKit.getStocks(currencyCode)
+
     // Stats
 
     fun sendStats(stats: String, appVersion: String, appId: String?): Single<Unit> {
@@ -282,8 +302,18 @@ class MarketKitWrapper(
 
     // Etf
 
-    fun etfs(currencyCode: String) = marketKit.etfSingle(currencyCode)
+    fun etfs(category: String, currencyCode: String) = marketKit.etfSingle(category, currencyCode)
 
-    fun etfPoints(currencyCode: String) = marketKit.etfPointSingle(currencyCode)
+    fun etfPoints(category: String, currencyCode: String, period: String) = marketKit.etfPointSingle(category, currencyCode, period)
+
+    // Vaults
+
+    fun vaults(currencyCode: String): Single<List<Vault>> {
+        return requestWithAuthToken { marketKit.vaultsSingle(currencyCode) }
+    }
+
+    fun vault(address: String, currencyCode: String, periodType: HsTimePeriod): Single<Vault> {
+        return requestWithAuthToken { marketKit.vaultSingle(address, currencyCode, periodType) }
+    }
 
 }

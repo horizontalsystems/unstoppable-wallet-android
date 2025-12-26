@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.theme
 
 import androidx.appcompat.app.AppCompatDelegate
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ class ThemeService(private val localStorage: ILocalStorage) {
     val optionsFlow = _optionsFlow.asStateFlow()
 
     fun setThemeType(themeType: ThemeType) {
+        App.pinComponent.keepUnlocked()
         localStorage.currentTheme = themeType
 
         _optionsFlow.update {

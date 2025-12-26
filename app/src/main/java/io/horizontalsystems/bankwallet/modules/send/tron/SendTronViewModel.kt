@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -21,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +44,8 @@ class SendTronViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
+    private val address: Address,
+    private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendUiState>() {
     val logger: AppLogger = AppLogger("send-tron")
 
@@ -84,6 +88,10 @@ class SendTronViewModel(
                 feeCoinRate = it
             }
         }
+
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     override fun createState() = SendUiState(
@@ -95,6 +103,7 @@ class SendTronViewModel(
         feeViewState = feeState.viewState,
         cautions = cautions,
         showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -248,8 +257,10 @@ class SendTronViewModel(
             val amount = confirmationData.amount
             adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
             logger.info("success")
+
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)

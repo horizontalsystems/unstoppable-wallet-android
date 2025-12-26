@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SyncErrorService(
     private val wallet: Wallet,
@@ -14,11 +15,15 @@ class SyncErrorService(
 ) {
 
     val blockchainWrapper by lazy {
-        btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
-            SyncErrorModule.BlockchainWrapper(it, SyncErrorModule.BlockchainWrapper.Type.Bitcoin)
-        } ?: run {
-            evmBlockchainManager.getBlockchain(wallet.token)?.let {
-                SyncErrorModule.BlockchainWrapper(it, SyncErrorModule.BlockchainWrapper.Type.Evm)
+        if (wallet.token.blockchainType == BlockchainType.Monero) {
+            SyncErrorModule.BlockchainWrapper.Monero
+        } else {
+            btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
+                SyncErrorModule.BlockchainWrapper.Bitcoin(it)
+            } ?: run {
+                evmBlockchainManager.getBlockchain(wallet.token)?.let {
+                    SyncErrorModule.BlockchainWrapper.Evm(it)
+                }
             }
         }
     }

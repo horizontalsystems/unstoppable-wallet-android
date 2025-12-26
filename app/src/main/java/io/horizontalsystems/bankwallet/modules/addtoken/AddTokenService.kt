@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -29,12 +28,12 @@ class AddTokenService(
         BlockchainType.Ton,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
-        BlockchainType.BinanceChain,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Solana
     )
 
@@ -48,10 +47,6 @@ class AddTokenService(
         if (reference.isEmpty()) return null
 
         val blockchainService = when (blockchain.type) {
-            BlockchainType.BinanceChain -> AddBep2TokenBlockchainService(
-                blockchain,
-                App.networkManager
-            )
             BlockchainType.Tron -> {
                 AddTronTokenBlockchainService.getInstance(blockchain)
             }

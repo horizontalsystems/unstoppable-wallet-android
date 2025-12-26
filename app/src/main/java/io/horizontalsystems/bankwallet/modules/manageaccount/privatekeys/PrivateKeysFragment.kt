@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,10 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -26,22 +21,18 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 class PrivateKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account = navController.getInput<Account>()
-        if (account == null) {
-            Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-            return
+        withInput<Account>(navController) { account ->
+            ManageAccountScreen(navController, account)
         }
-        ManageAccountScreen(navController, account)
     }
 
 }
@@ -50,20 +41,12 @@ class PrivateKeysFragment : BaseComposeFragment() {
 fun ManageAccountScreen(navController: NavController, account: Account) {
     val viewModel = viewModel<PrivateKeysViewModel>(factory = PrivateKeysModule.Factory(account))
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.PrivateKeys_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.PrivateKeys_Title),
+        onBack = { navController.popBackStack() },
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
@@ -78,7 +61,28 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             EvmPrivateKeyFragment.Input(key)
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.EvmPrivateKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.EvmPrivateKey)
+                        )
+                    }
+                }
+            }
+            viewModel.viewState.stellarSecretKey?.let { key ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
+                    description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription)
+                ) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.stellarSecretKeyFragment,
+                            StellarSecretKeyFragment.Input(key)
+                        )
+
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.StellarSecretKey)
+                        )
                     }
                 }
             }
@@ -96,7 +100,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             )
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.Bip32RootKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.Bip32RootKey)
+                        )
                     }
                 }
             }
@@ -111,7 +118,28 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
                         )
 
-                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.AccountExtendedPrivateKey))
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.AccountExtendedPrivateKey)
+                        )
+                    }
+                }
+            }
+            viewModel.viewState.moneroKeys?.let { moneroKeys ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PrivateKeys_MoneroPrivateKey),
+                    description = stringResource(id = R.string.PrivateKeys_MoneroPrivateKeyDescription),
+                ) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.showMoneroKeyFragment,
+                            ShowMoneroKeyFragment.Input(moneroKeys)
+                        )
+
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.MoneroPrivateKey)
+                        )
                     }
                 }
             }

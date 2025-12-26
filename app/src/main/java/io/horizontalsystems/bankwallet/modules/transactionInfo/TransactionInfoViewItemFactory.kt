@@ -1,11 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.TonHelper
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -26,9 +25,11 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExte
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Transaction
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Value
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -54,6 +55,83 @@ class TransactionInfoViewItemFactory(
         }
 
         when (transaction) {
+            is StellarTransactionRecord -> {
+                when (val transactionType = transaction.type) {
+                    is StellarTransactionRecord.Type.Receive -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transactionType.value,
+                                fromAddress = transactionType.from,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+
+                        if (transactionType.accountCreated) {
+                            itemSections.add(
+                                listOf(
+                                    Value(
+                                        Translator.getString(R.string.Transactions_OperationType),
+                                        Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                    is StellarTransactionRecord.Type.Send -> {
+                        sentToSelf = transactionType.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transactionType.value,
+                                toAddress = transactionType.to,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transactionType.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+
+                        if (transactionType.accountCreated) {
+                            itemSections.add(
+                                listOf(
+                                    Value(
+                                        Translator.getString(R.string.Transactions_OperationType),
+                                        Translator.getString(R.string.Transactions_OperationType_CreateAccount)
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                    is StellarTransactionRecord.Type.ChangeTrust -> {
+                        itemSections.add(
+                            listOf(
+                                Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    Translator.getString(R.string.Transactions_OperationType_ChangeTrust)
+                                )
+                            )
+                        )
+                    }
+
+                    is StellarTransactionRecord.Type.Unsupported -> {
+                        itemSections.add(
+                            listOf(
+                                Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    transactionType.type
+                                )
+                            )
+                        )
+                    }
+                }
+
+                addMemoItem(transaction.memo, miscItemsSection)
+            }
+
             is ContractCreationTransactionRecord -> {
                 itemSections.add(TransactionViewItemFactoryHelper.getContractCreationItems(transaction))
             }
@@ -61,12 +139,19 @@ class TransactionInfoViewItemFactory(
             is TonTransactionRecord -> {
                 transaction.actions.forEach { action ->
                     itemSections.add(
-                        TonHelper.getViewItemsForAction(action, rates, blockchainType, transactionItem.hideAmount)
+                        TonHelper.getViewItemsForAction(
+                            action,
+                            rates,
+                            blockchainType,
+                            transactionItem.hideAmount,
+                            true
+                        )
                     )
                 }
 
 //            feeViewItem = record.fee.map { .fee(title: "tx_info.fee".localized, value: feeString(transactionValue: $0, rate: _rate($0))) }
             }
+
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     TransactionViewItemFactoryHelper.getReceiveSectionItems(
@@ -334,6 +419,7 @@ class TransactionInfoViewItemFactory(
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
                         blockchainType = blockchainType,
+                        toAddress = transaction.to
                     )
                 )
 
@@ -368,33 +454,34 @@ class TransactionInfoViewItemFactory(
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
-            is BinanceChainIncomingTransactionRecord -> {
+            is ZcashShieldingTransactionRecord -> {
                 itemSections.add(
-                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
-                        value = transaction.value,
-                        fromAddress = transaction.from,
-                        coinPrice = rates[transaction.value.coinUid],
-                        hideAmount = transactionItem.hideAmount,
-                        blockchainType = blockchainType,
+                    listOf(
+                        Transaction(
+                            Translator.getString(transaction.direction.title),
+                            "",
+                            transaction.direction.icon
+                        )
                     )
                 )
-
-                addMemoItem(transaction.memo, miscItemsSection)
-            }
-
-            is BinanceChainOutgoingTransactionRecord -> {
-                sentToSelf = transaction.sentToSelf
+                sentToSelf = true
                 itemSections.add(
                     TransactionViewItemFactoryHelper.getSendSectionItems(
                         value = transaction.value,
-                        toAddress = transaction.to,
+                        toAddress = null,
                         coinPrice = rates[transaction.value.coinUid],
                         hideAmount = transactionItem.hideAmount,
-                        sentToSelf = transaction.sentToSelf,
+                        sentToSelf = true,
                         blockchainType = blockchainType,
                     )
                 )
 
+                miscItemsSection.addAll(
+                    TransactionViewItemFactoryHelper.getBitcoinSectionItems(
+                        transaction,
+                        transactionItem.lastBlockInfo
+                    )
+                )
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
@@ -464,26 +551,37 @@ class TransactionInfoViewItemFactory(
         }
 
         itemSections.add(TransactionViewItemFactoryHelper.getStatusSectionItems(transaction, status, rates, blockchainType))
-        if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
-            itemSections.add(
-                listOf(
-                    SpeedUpCancel(
-                        transactionHash = transaction.transactionHash,
-                        blockchainType = transaction.blockchainType
-                    )
-                )
-            )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
-        } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
-            itemSections.add(
-                listOf(
-                    SpeedUpCancel(
-                        transactionHash = transaction.transactionHash,
-                        blockchainType = transaction.blockchainType
-                    )
-                )
-            )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+
+        if (resendEnabled) {
+            when (transaction) {
+                is EvmTransactionRecord -> {
+                    if (!transaction.foreignTransaction && status == TransactionStatus.Pending && !transaction.protected) {
+                        itemSections.add(
+                            listOf(
+                                SpeedUpCancel(
+                                    transactionHash = transaction.transactionHash,
+                                    blockchainType = transaction.blockchainType
+                                )
+                            )
+                        )
+                        itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+                    }
+                }
+
+                is BitcoinOutgoingTransactionRecord -> {
+                    if (transaction.replaceable) {
+                        itemSections.add(
+                            listOf(
+                                SpeedUpCancel(
+                                    transactionHash = transaction.transactionHash,
+                                    blockchainType = transaction.blockchainType
+                                )
+                            )
+                        )
+                        itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+                    }
+                }
+            }
         }
         itemSections.add(TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData))
 

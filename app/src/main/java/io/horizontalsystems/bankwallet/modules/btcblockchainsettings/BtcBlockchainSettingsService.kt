@@ -28,7 +28,10 @@ class BtcBlockchainSettingsService(
         if (restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
             btcBlockchainManager.save(restoreMode, blockchain.type)
 
-            stat(page = StatPage.BlockchainSettingsBtc, event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode))
+            stat(
+                page = StatPage.BlockchainSettingsBtc,
+                event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode)
+            )
         }
     }
 

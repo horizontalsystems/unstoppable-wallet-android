@@ -202,7 +202,7 @@ class ResendBitcoinViewModel(
 
             logger.info("success")
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
             emitState()
         } catch (e: Throwable) {
             logger.warning("failed", e)
